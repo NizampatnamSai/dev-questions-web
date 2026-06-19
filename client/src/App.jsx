@@ -96,16 +96,33 @@ function NotificationBanner() {
   useEffect(() => {
     if (!user) return;
     if (!("Notification" in window)) return;
-    if (Notification.permission === "default") {
-      // Show banner after 2s so user has landed on the page
-      const t = setTimeout(() => setShow(true), 2000);
-      return () => clearTimeout(t);
+
+    // If already granted — silently re-register token for this user (handles login switch)
+    if (Notification.permission === "granted") {
+      requestAndRegisterToken(api);
+      return;
     }
-  }, [user]);
+
+    // If denied — don't bother the user
+    if (Notification.permission === "denied") return;
+
+    // permission === 'default' — show banner only if user hasn't dismissed it this session
+    const dismissed = sessionStorage.getItem("notif_dismissed");
+    if (dismissed) return;
+
+    const t = setTimeout(() => setShow(true), 2000);
+    return () => clearTimeout(t);
+  }, [user?.id]); // re-run when user changes (login/logout switch)
 
   const allow = async () => {
     setShow(false);
     await requestAndRegisterToken(api);
+  };
+
+  const dismiss = () => {
+    setShow(false);
+    // Remember dismissal for this browser session only — shows again next login
+    sessionStorage.setItem("notif_dismissed", "1");
   };
 
   if (!show) return null;
@@ -125,7 +142,7 @@ function NotificationBanner() {
         >
           Allow
         </button>
-        <button onClick={() => setShow(false)} className="opacity-70 hover:opacity-100 text-lg leading-none">×</button>
+        <button onClick={dismiss} className="opacity-70 hover:opacity-100 text-lg leading-none">×</button>
       </motion.div>
     </AnimatePresence>
   );
