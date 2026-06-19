@@ -66,9 +66,7 @@ export default function Sidebar() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 flex items-center justify-center text-lg shadow-lg shadow-indigo-500/30">
-          🧠
-        </div>
+        <img src="/logo192.png" alt="DevQuiz" className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30" />
         <div>
           <p className="text-base font-bold tracking-tight gradient-text">DevQuiz</p>
           <p className="text-[10px] text-slate-400 -mt-0.5">AI Interview Platform</p>

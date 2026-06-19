@@ -39,9 +39,9 @@ export default function Login() {
         className="glass-card w-full max-w-md p-8"
       >
         <div className="text-center mb-6">
-          <span className="text-3xl">🧠</span>
-          <h1 className="text-2xl font-bold mt-2">DevQuiz</h1>
-          <p className="text-sm text-slate-400">AI Frontend Interview Questions</p>
+          <img src="/logo192.png" alt="DevQuiz" className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-indigo-500/30" />
+          <h1 className="text-2xl font-bold mt-3">DevQuiz</h1>
+          <p className="text-sm text-slate-400">AI Interview Prep</p>
         </div>
 
         <form onSubmit={submit} className="space-y-4">
