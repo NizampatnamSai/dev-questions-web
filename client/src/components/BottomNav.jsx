@@ -6,8 +6,8 @@ const links = [
   { to: "/dashboard",    label: "Home",     icon: "📊" },
   { to: "/generate",     label: "Generate", icon: "✨" },
   { to: "/quiz",         label: "Quiz",     icon: "🧠" },
+  { to: "/study",        label: "Study",    icon: "📚" },
   { to: "/community",    label: "Feed",     icon: "🌍" },
-  { to: "/leaderboard",  label: "Ranks",    icon: "🏆" },
 ];
 
 export default function BottomNav() {

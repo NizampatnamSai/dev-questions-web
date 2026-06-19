@@ -26,6 +26,7 @@ import Leaderboard from "./pages/Leaderboard";
 import Admin from "./pages/Admin";
 import Quiz from "./pages/Quiz";
 import QuestionDetail from "./pages/QuestionDetail";
+import StudyGuide from "./pages/StudyGuide";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -177,6 +178,7 @@ function AppInner() {
         <Route path="/leaderboard"  element={<ProtectedPage><Leaderboard /></ProtectedPage>} />
         <Route path="/admin"           element={<ProtectedPage><Admin /></ProtectedPage>} />
         <Route path="/quiz"            element={<ProtectedPage><Quiz /></ProtectedPage>} />
+        <Route path="/study"           element={<ProtectedPage><StudyGuide /></ProtectedPage>} />
         <Route path="/question/:id"    element={<ProtectedPage><QuestionDetail /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
