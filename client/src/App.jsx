@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
@@ -11,7 +12,7 @@ import ScrollToTopBtn from "./components/ScrollToTopBtn";
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
 import { WeatherProvider, useWeather } from "./context/WeatherContext";
-import { requestAndRegisterToken } from "./firebase";
+import { requestAndRegisterToken, onForegroundMessage } from "./firebase";
 import api from "./api/axios";
 
 import Login from "./pages/Login";
@@ -132,6 +133,26 @@ function NotificationBanner() {
 function AppInner() {
   const { user } = useAuth();
   const { theme } = useTheme();
+
+  // Show foreground FCM notifications as a toast (browser doesn't show them automatically when app is open)
+  useEffect(() => {
+    if (!user) return;
+    const unsub = onForegroundMessage(({ notification, data }) => {
+      const title = notification?.title ?? "DevQuiz";
+      const body  = notification?.body  ?? "";
+      toast(
+        <div className="flex items-start gap-2">
+          <img src="/logo192.png" className="w-8 h-8 rounded-lg flex-shrink-0" alt="" />
+          <div>
+            <p className="font-semibold text-sm">{title}</p>
+            {body && <p className="text-xs opacity-80 mt-0.5">{body}</p>}
+          </div>
+        </div>,
+        { duration: 6000, style: { padding: "10px 14px" } }
+      );
+    });
+    return () => unsub?.();
+  }, [user]);
 
   const toastStyle = theme === "dark"
     ? { background: "#1e293b", color: "#f1f5f9", border: "1px solid rgba(255,255,255,0.08)" }

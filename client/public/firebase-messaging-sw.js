@@ -17,8 +17,8 @@ messaging.onBackgroundMessage(payload => {
   const { title, body } = payload.notification ?? {};
   self.registration.showNotification(title ?? 'DevQuiz', {
     body:  body ?? '',
-    icon:  '/vite.svg',
-    badge: '/vite.svg',
+    icon:  '/logo192.png',
+    badge: '/logo192.png',
     data:  payload.data,
   });
 });
