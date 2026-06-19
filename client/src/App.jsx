@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -11,6 +11,8 @@ import ScrollToTopBtn from "./components/ScrollToTopBtn";
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
 import { WeatherProvider, useWeather } from "./context/WeatherContext";
+import { requestAndRegisterToken } from "./firebase";
+import api from "./api/axios";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -83,6 +85,48 @@ function WeatherEffects() {
   );
 }
 
+function NotificationBanner() {
+  const { user } = useAuth();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "default") {
+      // Show banner after 2s so user has landed on the page
+      const t = setTimeout(() => setShow(true), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [user]);
+
+  const allow = async () => {
+    setShow(false);
+    await requestAndRegisterToken(api);
+  };
+
+  if (!show) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ y: -60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -60, opacity: 0 }}
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-xl text-sm font-medium"
+      >
+        <span>🔔 Enable notifications to get alerts on new questions & comments</span>
+        <button
+          onClick={allow}
+          className="bg-white text-indigo-600 px-3 py-1 rounded-lg text-xs font-bold hover:bg-indigo-50 transition"
+        >
+          Allow
+        </button>
+        <button onClick={() => setShow(false)} className="opacity-70 hover:opacity-100 text-lg leading-none">×</button>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function AppInner() {
   const { user } = useAuth();
   const { theme } = useTheme();
@@ -94,6 +138,7 @@ function AppInner() {
   return (
     <>
       <WeatherEffects />
+      <NotificationBanner />
       <Toaster
         position="top-right"
         toastOptions={{ style: toastStyle, borderRadius: "12px" }}
