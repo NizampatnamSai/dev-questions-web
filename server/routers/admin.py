@@ -145,26 +145,43 @@ class NotifyBody(BaseModel):
 
 @router.post("/notify")
 async def send_notification(nb: NotifyBody, admin=Depends(_require_admin)):
+    target_name = None
     if nb.user_id:
         rows = await col_fcm_tokens().find({"userId": nb.user_id}).to_list(length=100)
+        # Resolve user name for the log
+        try:
+            u = await col_users().find_one({"_id": oid(nb.user_id)})
+            target_name = u.get("name") if u else nb.user_id
+        except Exception:
+            target_name = nb.user_id
     else:
         rows = await col_fcm_tokens().find({}).to_list(length=1000)
     tokens = [r["token"] for r in rows]
     sent   = await send_to_tokens(tokens, nb.title, nb.body, {})
     await col_notifications().insert_one({
-        "title":    nb.title,
-        "body":     nb.body,
-        "sentBy":   admin["id"],
-        "sentCount": sent,
-        "createdAt": now(),
+        "title":      nb.title,
+        "body":       nb.body,
+        "sentBy":     admin["id"],
+        "sentByName": admin.get("name", "Admin"),
+        "target":     "user" if nb.user_id else "all",
+        "targetName": target_name,
+        "sentCount":  sent,
+        "createdAt":  now(),
     })
+    # Keep only the latest 100 log entries to avoid storage bloat
+    col = col_notifications()
+    total = await col.count_documents({})
+    if total > 100:
+        oldest = await col.find({}).sort("createdAt", 1).limit(total - 100).to_list(length=total - 100)
+        ids = [d["_id"] for d in oldest]
+        await col.delete_many({"_id": {"$in": ids}})
     return {"message": "Sent", "sent_count": sent}
 
 
 @router.get("/notify/history")
 async def notify_history(admin=Depends(_require_admin)):
-    cursor = col_notifications().find({}).sort("createdAt", -1).limit(50)
-    docs   = await cursor.to_list(length=50)
+    cursor = col_notifications().find({}).sort("createdAt", -1).limit(100)
+    docs   = await cursor.to_list(length=100)
     result = []
     for d in docs:
         d["id"]        = str(d.pop("_id"))

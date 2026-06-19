@@ -91,25 +91,25 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
   );
 }
 
-function NotifyModal({ onClose }) {
-  const [title, setTitle] = useState("");
-  const [body,  setBody]  = useState("");
+function NotifyModal({ onClose, users, onSent }) {
+  const [title, setTitle]     = useState("");
+  const [body,  setBody]      = useState("");
+  const [target, setTarget]   = useState("all"); // "all" | "user"
+  const [userId, setUserId]   = useState("");
   const [sending, setSending] = useState(false);
-  const [history, setHistory] = useState([]);
-
-  useEffect(() => {
-    api.get("/admin/notify/history").then(r => setHistory(r.data)).catch(() => {});
-  }, []);
 
   const send = async (e) => {
     e.preventDefault();
     if (!title.trim() || !body.trim()) return toast.error("Title and message required");
+    if (target === "user" && !userId) return toast.error("Select a user");
     setSending(true);
     try {
-      const { data } = await api.post("/admin/notify", { title: title.trim(), body: body.trim() });
+      const payload = { title: title.trim(), body: body.trim() };
+      if (target === "user") payload.user_id = userId;
+      const { data } = await api.post("/admin/notify", payload);
       toast.success(`Sent to ${data.sent_count} device(s)`);
-      setTitle(""); setBody("");
-      setHistory(h => [{ title: title.trim(), body: body.trim(), sent_count: data.sent_count, created_at: new Date().toISOString() }, ...h]);
+      onSent();
+      onClose();
     } catch {
       toast.error("Failed to send notification");
     }
@@ -122,7 +122,7 @@ function NotifyModal({ onClose }) {
         initial={{ opacity: 0, scale: 0.92, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.92 }}
-        className="glass-card w-full max-w-lg p-6 space-y-5 max-h-[90vh] overflow-y-auto"
+        className="glass-card w-full max-w-md p-6 space-y-4"
       >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">🔔 Send Push Notification</h2>
@@ -130,40 +130,83 @@ function NotifyModal({ onClose }) {
         </div>
 
         <form onSubmit={send} className="space-y-3">
+          {/* Target */}
+          <div>
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 block">Send To</label>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setTarget("all")}
+                className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition ${target === "all" ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-500 hover:border-indigo-400"}`}>
+                🌍 All Users
+              </button>
+              <button type="button" onClick={() => setTarget("user")}
+                className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition ${target === "user" ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-500 hover:border-indigo-400"}`}>
+                👤 One User
+              </button>
+            </div>
+          </div>
+          {target === "user" && (
+            <select value={userId} onChange={e => setUserId(e.target.value)} className="input-light w-full">
+              <option value="">— Select user —</option>
+              {users.map(u => <option key={u.id} value={u.id}>{u.name} ({u.email})</option>)}
+            </select>
+          )}
           <div>
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Title</label>
-            <input value={title} onChange={e => setTitle(e.target.value)} className="input-light" placeholder="Notification title…" maxLength={100} />
+            <input value={title} onChange={e => setTitle(e.target.value)} className="input-light w-full" placeholder="Notification title…" maxLength={100} />
           </div>
           <div>
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Message</label>
-            <textarea value={body} onChange={e => setBody(e.target.value)} className="input-light resize-none" rows={3} placeholder="Notification body message…" maxLength={300} />
+            <textarea value={body} onChange={e => setBody(e.target.value)} className="input-light w-full resize-none" rows={3} placeholder="Notification body…" maxLength={300} />
           </div>
-          <div className="flex gap-2">
-            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">Cancel</button>
-            <button type="submit" disabled={sending} className="flex-1 btn-primary py-2.5">
-              {sending ? "Sending…" : "📤 Send to All Users"}
+          <div className="flex gap-2 pt-1">
+            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 transition">Cancel</button>
+            <button type="submit" disabled={sending} className="flex-1 btn-primary py-2.5 disabled:opacity-60">
+              {sending ? "Sending…" : "📤 Send"}
             </button>
           </div>
         </form>
-
-        {history.length > 0 && (
-          <div className="space-y-2 border-t border-black/5 dark:border-white/10 pt-4">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Recent History</p>
-            {history.slice(0, 5).map((h, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-black/3 dark:bg-white/3">
-                <span className="text-lg">🔔</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{h.title}</p>
-                  <p className="text-xs text-slate-400 truncate">{h.body}</p>
-                  <p className="text-[10px] text-slate-300 dark:text-slate-500 mt-0.5">
-                    {h.sent_count} sent · {new Date(h.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </motion.div>
+    </div>
+  );
+}
+
+function NotifyLogs({ logs, loading }) {
+  if (loading) return <p className="text-sm text-slate-400">Loading logs…</p>;
+  if (!logs.length) return (
+    <div className="glass-card p-8 text-center text-slate-400 text-sm">No notifications sent yet.</div>
+  );
+  return (
+    <div className="glass-card overflow-hidden">
+      <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">🔔 Notification Logs</p>
+        <p className="text-xs text-slate-400">Last {logs.length} · max 100 stored</p>
+      </div>
+      <div className="divide-y divide-black/5 dark:divide-white/5 max-h-96 overflow-y-auto">
+        {logs.map((h, i) => (
+          <div key={h.id ?? i} className="flex items-start gap-3 px-4 py-3 hover:bg-black/2 dark:hover:bg-white/2 transition-colors">
+            <span className="text-base mt-0.5">🔔</span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{h.title}</p>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  h.target === "user"
+                    ? "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300"
+                    : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
+                }`}>
+                  {h.target === "user" ? `👤 ${h.targetName ?? "1 user"}` : "🌍 All"}
+                </span>
+                <span className="text-[10px] bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300 px-2 py-0.5 rounded-full font-bold">
+                  {h.sentCount ?? 0} delivered
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{h.body}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                by {h.sentByName ?? "Admin"} · {new Date(h.createdAt).toLocaleString()}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -175,6 +218,13 @@ export default function Admin() {
   const [editing, setEditing] = useState(null);
   const [search, setSearch] = useState("");
   const [showNotify, setShowNotify] = useState(false);
+  const [logs, setLogs] = useState([]);
+  const [logsLoading, setLogsLoading] = useState(true);
+
+  const loadLogs = async () => {
+    setLogsLoading(true);
+    api.get("/admin/notify/history").then(r => setLogs(r.data)).catch(() => {}).finally(() => setLogsLoading(false));
+  };
 
   const load = async () => {
     setLoading(true);
@@ -188,7 +238,7 @@ export default function Admin() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); loadLogs(); }, []);
 
   const createUser = async (form) => {
     const { data } = await api.post("/admin/users", form);
@@ -366,6 +416,9 @@ export default function Admin() {
         </div>
       )}
 
+      {/* Notification Logs */}
+      <NotifyLogs logs={logs} loading={logsLoading} />
+
       {/* Modals */}
       <AnimatePresence>
         {creating && (
@@ -378,7 +431,13 @@ export default function Admin() {
             <UserForm initial={editing} onSave={updateUser} onClose={() => setEditing(null)} />
           </Modal>
         )}
-        {showNotify && <NotifyModal onClose={() => setShowNotify(false)} />}
+        {showNotify && (
+          <NotifyModal
+            onClose={() => setShowNotify(false)}
+            users={users}
+            onSent={loadLogs}
+          />
+        )}
       </AnimatePresence>
     </motion.div>
   );
