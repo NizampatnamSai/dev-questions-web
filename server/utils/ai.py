@@ -266,6 +266,45 @@ async def ai_text_action(action: str, text: str) -> str:
             return text  # fallback: return input unchanged
 
 
+async def check_answer(question: str, ideal_answer: str, user_answer: str) -> dict:
+    """Score user's answer vs ideal answer. Returns score 0-100, feedback, and missed points."""
+    prompt = (
+        f"You are a senior frontend interviewer evaluating a candidate's answer.\n\n"
+        f"Question: {question}\n\n"
+        f"Ideal Answer: {ideal_answer}\n\n"
+        f"Candidate's Answer: {user_answer}\n\n"
+        "Evaluate the candidate's answer and respond ONLY with valid JSON in this exact format:\n"
+        '{"score": <0-100>, "grade": "<Excellent|Good|Partial|Poor>", '
+        '"feedback": "<2-3 sentence overall feedback>", '
+        '"strengths": ["<point1>", "<point2>"], '
+        '"missed": ["<missed point1>", "<missed point2>"]}'
+    )
+    system = "You are a strict but fair technical interviewer. Always respond with valid JSON only."
+    try:
+        r = await _groq_call({
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user",   "content": prompt},
+            ],
+            "temperature": 0.3,
+            "max_tokens": 500,
+        })
+        import json as _json
+        raw = r.json()["choices"][0]["message"]["content"].strip()
+        # Extract JSON if wrapped in markdown
+        if "```" in raw:
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        return _json.loads(raw.strip())
+    except Exception as e:
+        return {
+            "score": 0, "grade": "Poor",
+            "feedback": "Could not evaluate answer. Please try again.",
+            "strengths": [], "missed": [],
+        }
+
+
 async def generate_answer(question: str, category: str, level: str, q_type: str) -> dict:
     prompt = _answer_prompt(question, category, level, q_type)
     try:

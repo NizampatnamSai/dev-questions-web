@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
 from db_mongo import col_questions, col_comments, col_ai_usage, sid, oid, now
 from deps import current_user
-from utils.ai import generate_questions, generate_answer, ai_text_action
+from utils.ai import generate_questions, generate_answer, ai_text_action, check_answer
 from utils.firebase import send_to_all
 
 router = APIRouter()
@@ -329,3 +329,53 @@ async def highlight(qid: str, user=Depends(current_user)):
         await col_questions().update_one({"_id": oid(qid)}, {"$addToSet": {"highlights": uid}})
     updated = await col_questions().find_one({"_id": oid(qid)})
     return _ser(updated, uid)
+
+
+# ── Single question (for detail page & quiz) ──────────────────────────────────
+
+@router.get("/{qid}")
+async def get_question(qid: str, user=Depends(current_user)):
+    doc = await col_questions().find_one({"_id": oid(qid)})
+    if not doc: raise HTTPException(404, "Not found")
+    return _ser(doc, user["id"])
+
+
+# ── Quiz: random questions ────────────────────────────────────────────────────
+
+@router.get("/quiz/random")
+async def quiz_random(
+    category: Optional[str] = None,
+    level:    Optional[str] = None,
+    count:    int = 10,
+    user=Depends(current_user),
+):
+    if count > 20: count = 20
+    filt: dict = {"status": "published"}
+    if category: filt["category"] = category
+    if level:    filt["level"]    = level
+    pipeline = [
+        {"$match": filt},
+        {"$sample": {"size": count}},
+    ]
+    docs = [d async for d in col_questions().aggregate(pipeline)]
+    return [_ser(d, user["id"]) for d in docs]
+
+
+# ── AI Answer Checker ─────────────────────────────────────────────────────────
+
+class CheckAnswerBody(BaseModel):
+    user_answer: str
+
+
+@router.post("/{qid}/check-answer")
+async def check_answer_endpoint(qid: str, body: CheckAnswerBody, user=Depends(current_user)):
+    if not body.user_answer.strip():
+        raise HTTPException(400, "Answer cannot be empty")
+    doc = await col_questions().find_one({"_id": oid(qid)})
+    if not doc: raise HTTPException(404, "Not found")
+    result = await check_answer(
+        question=doc.get("question", ""),
+        ideal_answer=doc.get("answer", ""),
+        user_answer=body.user_answer.strip(),
+    )
+    return result

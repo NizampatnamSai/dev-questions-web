@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import AnswerBlock from "./AnswerBlock";
 import api from "../api/axios";
 
@@ -150,7 +151,9 @@ export default function QuestionCard({
       </div>
 
       {/* Question text */}
-      <p className="font-semibold leading-snug text-slate-800 dark:text-slate-100">{q.question}</p>
+      <Link to={`/question/${q.id}`} className="font-semibold leading-snug text-slate-800 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-cyan-300 transition-colors line-clamp-3 block">
+        {q.question}
+      </Link>
 
       {/* Reveal answer */}
       <button

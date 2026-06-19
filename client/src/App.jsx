@@ -23,6 +23,8 @@ import MyQuestions from "./pages/MyQuestions";
 import Bookmarks from "./pages/Bookmarks";
 import Leaderboard from "./pages/Leaderboard";
 import Admin from "./pages/Admin";
+import Quiz from "./pages/Quiz";
+import QuestionDetail from "./pages/QuestionDetail";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -152,7 +154,9 @@ function AppInner() {
         <Route path="/my-questions" element={<ProtectedPage><MyQuestions /></ProtectedPage>} />
         <Route path="/bookmarks"    element={<ProtectedPage><Bookmarks /></ProtectedPage>} />
         <Route path="/leaderboard"  element={<ProtectedPage><Leaderboard /></ProtectedPage>} />
-        <Route path="/admin"        element={<ProtectedPage><Admin /></ProtectedPage>} />
+        <Route path="/admin"           element={<ProtectedPage><Admin /></ProtectedPage>} />
+        <Route path="/quiz"            element={<ProtectedPage><Quiz /></ProtectedPage>} />
+        <Route path="/question/:id"    element={<ProtectedPage><QuestionDetail /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
     </>

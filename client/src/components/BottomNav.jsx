@@ -5,8 +5,8 @@ import MobileSettingsSheet from "./MobileSettingsSheet";
 const links = [
   { to: "/dashboard",    label: "Home",     icon: "📊" },
   { to: "/generate",     label: "Generate", icon: "✨" },
+  { to: "/quiz",         label: "Quiz",     icon: "🧠" },
   { to: "/community",    label: "Feed",     icon: "🌍" },
-  { to: "/my-questions", label: "Mine",     icon: "📝" },
   { to: "/leaderboard",  label: "Ranks",    icon: "🏆" },
 ];
 
