@@ -1,0 +1,43 @@
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+
+const firebaseConfig = {
+  apiKey:            'AIzaSyANlzRxM4nOUA3TkUxvx4Yp1JjI_FyirGE',
+  authDomain:        'ai-questions-889d2.firebaseapp.com',
+  projectId:         'ai-questions-889d2',
+  storageBucket:     'ai-questions-889d2.firebasestorage.app',
+  messagingSenderId: '794467830267',
+  appId:             '1:794467830267:web:89e39e4302e2a4ed1e235e',
+  measurementId:     'G-HKLB55WT6V',
+};
+
+const app = initializeApp(firebaseConfig);
+
+export const messaging = getMessaging(app);
+
+// VAPID key from Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY ?? '';
+
+export async function requestAndRegisterToken(apiClient) {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return null;
+
+    const token = await getToken(messaging, {
+      vapidKey: VAPID_KEY,
+      serviceWorkerRegistration: await navigator.serviceWorker.register('/firebase-messaging-sw.js'),
+    });
+
+    if (token && apiClient) {
+      await apiClient.post('/admin/fcm-token', { token, platform: 'web' });
+    }
+    return token;
+  } catch (e) {
+    console.warn('FCM web token registration failed:', e);
+    return null;
+  }
+}
+
+export function onForegroundMessage(callback) {
+  return onMessage(messaging, callback);
+}

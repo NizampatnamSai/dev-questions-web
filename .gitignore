@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+
+# Firebase service account (never commit — use FIREBASE_CREDENTIALS_JSON env var on Render)
+firebase-service-account.json
+
+# Node
+node_modules/
+dist/
+
+# Env files
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+devquiz.apk/
+# APK builds
+client/public/*.apk
+client/public/*.aab
