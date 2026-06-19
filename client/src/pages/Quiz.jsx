@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -6,6 +6,13 @@ import api from "../api/axios";
 
 const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"];
 const LEVELS     = ["Low", "Medium", "High"];
+const TIME_OPTS  = [
+  { label: "No Limit", value: 0 },
+  { label: "30s",      value: 30 },
+  { label: "60s",      value: 60 },
+  { label: "90s",      value: 90 },
+  { label: "2 min",    value: 120 },
+];
 
 const GRADE_COLOR = { Excellent: "#22c55e", Good: "#3b82f6", Partial: "#eab308", Poor: "#ef4444" };
 
@@ -25,11 +32,54 @@ function ScoreRing({ score, size = 80 }) {
   );
 }
 
-// ── Setup screen ──────────────────────────────────────────────────────────────
+// ── Countdown Timer ────────────────────────────────────────────────────────────
+function Timer({ seconds, onExpire }) {
+  const [left, setLeft] = useState(seconds);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    setLeft(seconds);
+    ref.current = setInterval(() => {
+      setLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(ref.current);
+          onExpire();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(ref.current);
+  }, [seconds]);
+
+  const pct = (left / seconds) * 100;
+  const color = left > seconds * 0.5 ? "#22c55e" : left > seconds * 0.25 ? "#eab308" : "#ef4444";
+  const r = 16;
+  const circ = 2 * Math.PI * r;
+
+  return (
+    <div className="flex items-center gap-2">
+      <svg width={40} height={40} viewBox="0 0 40 40">
+        <circle cx={20} cy={20} r={r} fill="none" stroke="#e2e8f020" strokeWidth="4" />
+        <circle cx={20} cy={20} r={r} fill="none" stroke={color} strokeWidth="4"
+          strokeDasharray={`${(pct/100)*circ} ${circ}`} strokeLinecap="round"
+          transform="rotate(-90 20 20)" style={{ transition: "stroke-dasharray 1s linear, stroke 0.5s" }} />
+        <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle"
+          fontSize="11" fontWeight="bold" fill={color}>{left}</text>
+      </svg>
+      <span className="text-xs font-semibold" style={{ color }}>
+        {left > 0 ? `${left}s left` : "Time's up!"}
+      </span>
+    </div>
+  );
+}
+
+// ── Setup screen ───────────────────────────────────────────────────────────────
 function QuizSetup({ onStart }) {
   const [category, setCategory] = useState("");
   const [level, setLevel]       = useState("");
   const [count, setCount]       = useState(10);
+  const [timeLimit, setTimeLimit] = useState(60);
 
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto space-y-6">
@@ -66,8 +116,28 @@ function QuizSetup({ onStart }) {
           </div>
         </div>
 
+        {/* Time per question */}
+        <div>
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">
+            ⏱ Time per Question
+          </label>
+          <div className="flex gap-2 flex-wrap">
+            {TIME_OPTS.map(opt => (
+              <button key={opt.value}
+                onClick={() => setTimeLimit(opt.value)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+                  timeLimit === opt.value
+                    ? "bg-indigo-500 border-indigo-500 text-white"
+                    : "border-slate-200 dark:border-slate-700 text-slate-500 hover:border-indigo-400 hover:text-indigo-400"
+                }`}>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <button
-          onClick={() => onStart({ category, level, count })}
+          onClick={() => onStart({ category, level, count, timeLimit })}
           className="btn-primary w-full text-base py-3 mt-2"
         >
           Start Quiz →
@@ -77,13 +147,22 @@ function QuizSetup({ onStart }) {
   );
 }
 
-// ── Quiz card ─────────────────────────────────────────────────────────────────
-function QuizCard({ q, index, total, onAnswer }) {
-  const [showAnswer, setShowAnswer]   = useState(false);
-  const [userAnswer, setUserAnswer]   = useState("");
-  const [checking, setChecking]       = useState(false);
-  const [result, setResult]           = useState(null);
-  const [mode, setMode]               = useState("self"); // "self" | "ai"
+// ── Quiz card ──────────────────────────────────────────────────────────────────
+function QuizCard({ q, index, total, timeLimit, onAnswer }) {
+  const [showAnswer, setShowAnswer]     = useState(false);
+  const [showIdeal, setShowIdeal]       = useState(false);
+  const [userAnswer, setUserAnswer]     = useState("");
+  const [checking, setChecking]         = useState(false);
+  const [result, setResult]             = useState(null);
+  const [mode, setMode]                 = useState("self");
+  const [timedOut, setTimedOut]         = useState(false);
+  const timerKey = `${q.id}-${index}`;
+
+  const handleExpire = useCallback(() => {
+    setTimedOut(true);
+    toast("⏰ Time's up! Moving on...", { icon: "⏰" });
+    setTimeout(() => onAnswer({ qid: q.id, rating: "timeout", score: 0 }), 1200);
+  }, [q.id, onAnswer]);
 
   const selfRate = (rating) => onAnswer({ qid: q.id, rating, score: rating === "correct" ? 100 : rating === "partial" ? 50 : 0 });
 
@@ -101,12 +180,15 @@ function QuizCard({ q, index, total, onAnswer }) {
     <motion.div key={q.id} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}
       className="space-y-4 max-w-2xl mx-auto">
 
-      {/* Progress */}
+      {/* Progress + timer row */}
       <div className="flex items-center gap-3">
         <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
           <div className="bg-indigo-500 h-2 rounded-full transition-all" style={{ width: `${(index / total) * 100}%` }} />
         </div>
         <span className="text-xs text-slate-400 font-medium">{index + 1} / {total}</span>
+        {timeLimit > 0 && !timedOut && !result && !showAnswer && (
+          <Timer key={timerKey} seconds={timeLimit} onExpire={handleExpire} />
+        )}
       </div>
 
       {/* Badges */}
@@ -129,10 +211,12 @@ function QuizCard({ q, index, total, onAnswer }) {
 
       {/* Mode tabs */}
       <div className="flex gap-2">
-        <button onClick={() => setMode("self")} className={`flex-1 py-2 rounded-xl text-sm font-medium transition ${mode === "self" ? "bg-indigo-500 text-white" : "glass-card text-slate-500 hover:text-slate-700"}`}>
+        <button onClick={() => { setMode("self"); setResult(null); }}
+          className={`flex-1 py-2 rounded-xl text-sm font-medium transition ${mode === "self" ? "bg-indigo-500 text-white" : "glass-card text-slate-500 hover:text-slate-700"}`}>
           🙋 Self Rate
         </button>
-        <button onClick={() => setMode("ai")} className={`flex-1 py-2 rounded-xl text-sm font-medium transition ${mode === "ai" ? "bg-indigo-500 text-white" : "glass-card text-slate-500 hover:text-slate-700"}`}>
+        <button onClick={() => { setMode("ai"); setShowAnswer(false); }}
+          className={`flex-1 py-2 rounded-xl text-sm font-medium transition ${mode === "ai" ? "bg-indigo-500 text-white" : "glass-card text-slate-500 hover:text-slate-700"}`}>
           🤖 AI Check
         </button>
       </div>
@@ -148,7 +232,7 @@ function QuizCard({ q, index, total, onAnswer }) {
             {showAnswer && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
                   {q.answer}
                 </div>
                 <p className="text-xs text-slate-400 mt-3 mb-2 font-medium">How did you do?</p>
@@ -183,26 +267,58 @@ function QuizCard({ q, index, total, onAnswer }) {
             </>
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+              {/* Score + grade */}
               <div className="flex items-center gap-4">
                 <ScoreRing score={result.score} size={72} />
                 <div>
-                  <p className="font-bold text-lg" style={{ color: GRADE_COLOR[result.grade] }}>{result.grade}</p>
+                  <p className="font-bold text-xl" style={{ color: GRADE_COLOR[result.grade] }}>{result.grade}</p>
                   <p className="text-sm text-slate-500">{result.score}/100</p>
                 </div>
               </div>
-              <p className="text-sm text-slate-700 dark:text-slate-300">{result.feedback}</p>
+
+              {/* Feedback */}
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{result.feedback}</p>
+
+              {/* Strengths */}
               {result.strengths?.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold text-green-600 mb-1">✅ Strengths</p>
-                  {result.strengths.map((s, i) => <p key={i} className="text-sm text-slate-600 dark:text-slate-300">• {s}</p>)}
+                <div className="bg-green-50 dark:bg-green-900/10 rounded-xl p-3">
+                  <p className="text-xs font-bold text-green-600 mb-2">✅ What you got right</p>
+                  {result.strengths.map((s, i) => (
+                    <p key={i} className="text-sm text-slate-700 dark:text-slate-300">• {s}</p>
+                  ))}
                 </div>
               )}
+
+              {/* Missed points */}
               {result.missed?.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold text-red-500 mb-1">❌ Missed</p>
-                  {result.missed.map((m, i) => <p key={i} className="text-sm text-slate-600 dark:text-slate-300">• {m}</p>)}
+                <div className="bg-red-50 dark:bg-red-900/10 rounded-xl p-3">
+                  <p className="text-xs font-bold text-red-500 mb-2">❌ Key points you missed</p>
+                  {result.missed.map((m, i) => (
+                    <p key={i} className="text-sm text-slate-700 dark:text-slate-300">• {m}</p>
+                  ))}
                 </div>
               )}
+
+              {/* Ideal answer toggle */}
+              <div className="border border-dashed border-indigo-300 dark:border-indigo-700 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setShowIdeal(v => !v)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-semibold text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                  <span>📖 See Ideal Answer</span>
+                  <span>{showIdeal ? "▲" : "▼"}</span>
+                </button>
+                <AnimatePresence>
+                  {showIdeal && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                      <div className="px-4 pb-4 pt-1 text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed bg-indigo-50/50 dark:bg-indigo-900/10">
+                        {q.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               <button onClick={() => onAnswer({ qid: q.id, rating: "ai", score: result.score, grade: result.grade })}
                 className="btn-primary w-full">Next Question →</button>
             </motion.div>
@@ -213,10 +329,10 @@ function QuizCard({ q, index, total, onAnswer }) {
   );
 }
 
-// ── Results screen ────────────────────────────────────────────────────────────
+// ── Results screen ─────────────────────────────────────────────────────────────
 function QuizResults({ answers, total, onRestart, onExit }) {
-  const avg   = Math.round(answers.reduce((s, a) => s + (a.score ?? 0), 0) / (answers.length || 1));
-  const got   = answers.filter(a => a.score >= 80).length;
+  const avg     = Math.round(answers.reduce((s, a) => s + (a.score ?? 0), 0) / (answers.length || 1));
+  const got     = answers.filter(a => a.score >= 80).length;
   const partial = answers.filter(a => a.score >= 40 && a.score < 80).length;
   const missed  = answers.filter(a => a.score < 40).length;
 
@@ -259,17 +375,19 @@ function QuizResults({ answers, total, onRestart, onExit }) {
   );
 }
 
-// ── Main Quiz page ────────────────────────────────────────────────────────────
+// ── Main Quiz page ─────────────────────────────────────────────────────────────
 export default function Quiz() {
   const navigate = useNavigate();
-  const [phase, setPhase]       = useState("setup");   // setup | playing | results
+  const [phase, setPhase]         = useState("setup");
   const [questions, setQuestions] = useState([]);
-  const [current, setCurrent]   = useState(0);
-  const [answers, setAnswers]   = useState([]);
-  const [loading, setLoading]   = useState(false);
+  const [current, setCurrent]     = useState(0);
+  const [answers, setAnswers]     = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [timeLimit, setTimeLimit] = useState(60);
 
-  const startQuiz = async ({ category, level, count }) => {
+  const startQuiz = async ({ category, level, count, timeLimit: tl }) => {
     setLoading(true);
+    setTimeLimit(tl);
     try {
       const params = { count };
       if (category) params.category = category;
@@ -287,9 +405,7 @@ export default function Quiz() {
   const handleAnswer = useCallback((ans) => {
     setAnswers(prev => [...prev, ans]);
     setCurrent(c => {
-      if (c + 1 >= questions.length) {
-        setPhase("results");
-      }
+      if (c + 1 >= questions.length) setPhase("results");
       return c + 1;
     });
   }, [questions.length]);
@@ -313,6 +429,7 @@ export default function Quiz() {
             q={questions[current]}
             index={current}
             total={questions.length}
+            timeLimit={timeLimit}
             onAnswer={handleAnswer}
           />
         )}
