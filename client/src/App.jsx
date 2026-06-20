@@ -27,6 +27,9 @@ import Admin from "./pages/Admin";
 import Quiz from "./pages/Quiz";
 import QuestionDetail from "./pages/QuestionDetail";
 import StudyGuide from "./pages/StudyGuide";
+import MockInterview from "./pages/MockInterview";
+import Flashcards from "./pages/Flashcards";
+import Progress from "./pages/Progress";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -91,61 +94,19 @@ function WeatherEffects() {
 
 function NotificationBanner() {
   const { user } = useAuth();
-  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (!user) return;
     if (!("Notification" in window)) return;
-
-    // If already granted — silently re-register token for this user (handles login switch)
+    // Already granted — silently re-register (handles login switch)
     if (Notification.permission === "granted") {
       requestAndRegisterToken(api);
-      return;
     }
+    // permission "default" or "denied" — do nothing; we no longer show a custom banner
+    // to avoid the double-prompt (our banner + browser dialog) that confused users.
+  }, [user?.id]);
 
-    // If denied — don't bother the user
-    if (Notification.permission === "denied") return;
-
-    // permission === 'default' — show banner only if user hasn't dismissed it this session
-    const dismissed = sessionStorage.getItem("notif_dismissed");
-    if (dismissed) return;
-
-    const t = setTimeout(() => setShow(true), 2000);
-    return () => clearTimeout(t);
-  }, [user?.id]); // re-run when user changes (login/logout switch)
-
-  const allow = async () => {
-    setShow(false);
-    await requestAndRegisterToken(api);
-  };
-
-  const dismiss = () => {
-    setShow(false);
-    // Remember dismissal for this browser session only — shows again next login
-    sessionStorage.setItem("notif_dismissed", "1");
-  };
-
-  if (!show) return null;
-
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -60, opacity: 0 }}
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-xl text-sm font-medium"
-      >
-        <span>🔔 Enable notifications to get alerts on new questions & comments</span>
-        <button
-          onClick={allow}
-          className="bg-white text-indigo-600 px-3 py-1 rounded-lg text-xs font-bold hover:bg-indigo-50 transition"
-        >
-          Allow
-        </button>
-        <button onClick={dismiss} className="opacity-70 hover:opacity-100 text-lg leading-none">×</button>
-      </motion.div>
-    </AnimatePresence>
-  );
+  return null;
 }
 
 function AppInner() {
@@ -196,6 +157,9 @@ function AppInner() {
         <Route path="/admin"           element={<ProtectedPage><Admin /></ProtectedPage>} />
         <Route path="/quiz"            element={<ProtectedPage><Quiz /></ProtectedPage>} />
         <Route path="/study"           element={<ProtectedPage><StudyGuide /></ProtectedPage>} />
+        <Route path="/mock-interview"  element={<ProtectedPage><MockInterview /></ProtectedPage>} />
+        <Route path="/flashcards"      element={<ProtectedPage><Flashcards /></ProtectedPage>} />
+        <Route path="/progress"        element={<ProtectedPage><Progress /></ProtectedPage>} />
         <Route path="/question/:id"    element={<ProtectedPage><QuestionDetail /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>

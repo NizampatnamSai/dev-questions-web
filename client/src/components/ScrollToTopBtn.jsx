@@ -19,7 +19,7 @@ export default function ScrollToTopBtn() {
           exit={{ opacity: 0, scale: 0.6, y: 20 }}
           transition={{ type: "spring", stiffness: 400, damping: 28 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-6 z-[9998] w-11 h-11 rounded-2xl shadow-lg
+          className="fixed bottom-[80px] right-4 z-[9998] w-11 h-11 rounded-2xl shadow-lg
             bg-gradient-to-br from-indigo-500 to-purple-500
             hover:from-indigo-400 hover:to-purple-400
             flex items-center justify-center text-white text-lg

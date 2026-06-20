@@ -7,14 +7,17 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 
 const BASE_LINKS = [
-  { to: "/dashboard",    label: "Dashboard",    icon: "📊" },
-  { to: "/generate",     label: "AI Generator", icon: "✨" },
-  { to: "/quiz",         label: "Quiz Mode",    icon: "🧠" },
-  { to: "/study",        label: "Study Hub",    icon: "📚" },
-  { to: "/community",    label: "Community",    icon: "🌍" },
-  { to: "/my-questions", label: "My Questions", icon: "📝" },
-  { to: "/bookmarks",    label: "Bookmarks",    icon: "🔖" },
-  { to: "/leaderboard",  label: "Leaderboard",  icon: "🏆" },
+  { to: "/dashboard",      label: "Dashboard",       icon: "📊" },
+  { to: "/generate",       label: "AI Generator",    icon: "✨" },
+  { to: "/quiz",           label: "Quiz Mode",       icon: "🧠" },
+  { to: "/study",          label: "Study Hub",       icon: "📚" },
+  { to: "/mock-interview", label: "Mock Interview",  icon: "🎯" },
+  { to: "/flashcards",     label: "Flashcards",      icon: "🃏" },
+  { to: "/progress",       label: "My Progress",     icon: "📈" },
+  { to: "/community",      label: "Community",       icon: "🌍" },
+  { to: "/my-questions",   label: "My Questions",    icon: "📝" },
+  { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
+  { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
 ];
 const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑" };
 

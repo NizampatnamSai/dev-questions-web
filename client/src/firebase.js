@@ -23,9 +23,12 @@ export async function requestAndRegisterToken(apiClient) {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') return null;
 
+    // Register SW then wait for it to become active — getToken fails if SW isn't active yet
+    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    await navigator.serviceWorker.ready;
     const token = await getToken(messaging, {
       vapidKey: VAPID_KEY,
-      serviceWorkerRegistration: await navigator.serviceWorker.register('/firebase-messaging-sw.js'),
+      serviceWorkerRegistration: registration,
     });
 
     if (token && apiClient) {

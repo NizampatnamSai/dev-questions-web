@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
+
+const FEATURE_LINKS = [
+  { to: "/mock-interview", icon: "🎯", label: "Mock Interview",  sub: "AI-scored interview simulation" },
+  { to: "/flashcards",     icon: "🃏", label: "Flashcards",      sub: "Flip & swipe to review topics" },
+  { to: "/progress",       icon: "📈", label: "My Progress",     sub: "Streak, weak areas & readiness" },
+  { to: "/my-questions",   icon: "📝", label: "My Questions",    sub: "Questions you created" },
+  { to: "/bookmarks",      icon: "🔖", label: "Bookmarks",       sub: "Saved questions" },
+  { to: "/leaderboard",    icon: "🏆", label: "Leaderboard",     sub: "Top contributors" },
+];
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   return (
@@ -24,6 +34,7 @@ function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
 export default function MobileSettingsSheet({ open, onClose }) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
+  const navigate = useNavigate();
   const {
     enabled, toggleEnabled,
     manual, setManualCondition,
@@ -66,6 +77,29 @@ export default function MobileSettingsSheet({ open, onClose }) {
             </div>
 
             <div className="px-5 pb-8 pt-2 space-y-1">
+              {/* Features section */}
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest px-1 mb-2">
+                Features
+              </p>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                {FEATURE_LINKS.map((f) => (
+                  <button
+                    key={f.to}
+                    onClick={() => { onClose(); navigate(f.to); }}
+                    className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 text-left transition-all cursor-pointer"
+                  >
+                    <span className="text-xl flex-shrink-0">{f.icon}</span>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">{f.label}</p>
+                      <p className="text-[10px] text-slate-400 truncate">{f.sub}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-black/5 dark:border-white/10 mb-3" />
+
               {/* Header */}
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest px-1 mb-3">
                 Settings
