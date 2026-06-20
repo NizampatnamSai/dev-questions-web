@@ -5,7 +5,7 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db_mongo import init_mongo
-from routers import auth, questions, stats, admin, comments
+from routers import auth, questions, stats, admin, comments, study
 
 app = FastAPI(title="DevQuiz API")
 
@@ -28,6 +28,7 @@ app.include_router(questions.router, prefix="/api/questions")
 app.include_router(stats.router,     prefix="/api/stats")
 app.include_router(admin.router,     prefix="/api/admin")
 app.include_router(comments.router,  prefix="/api/questions")
+app.include_router(study.router,     prefix="/api/study")
 
 
 @app.get("/")

@@ -149,8 +149,14 @@ async def community(
     type:      Optional[str] = None,
     tag:       Optional[str] = None,
     search:    Optional[str] = None,
+    page:      int = 1,
+    page_size: int = 15,
     x_user_id: Optional[str] = Header(default=None),
 ):
+    page      = max(1, page)
+    page_size = max(1, min(page_size, 50))
+    skip      = (page - 1) * page_size
+
     filt: dict = {"status": "published"}
     if category: filt["category"] = category
     if level:    filt["level"]    = level
@@ -161,9 +167,16 @@ async def community(
             {"question": {"$regex": search, "$options": "i"}},
             {"answer":   {"$regex": search, "$options": "i"}},
         ]
-    cursor = col_questions().find(filt).sort("createdAt", -1).limit(200)
-    docs   = await cursor.to_list(length=200)
-    return [_ser(d, x_user_id) for d in docs]
+    total  = await col_questions().count_documents(filt)
+    cursor = col_questions().find(filt).sort("createdAt", -1).skip(skip).limit(page_size)
+    docs   = await cursor.to_list(length=page_size)
+    return {
+        "items":    [_ser(d, x_user_id) for d in docs],
+        "total":    total,
+        "page":     page,
+        "pages":    (total + page_size - 1) // page_size,
+        "has_more": page * page_size < total,
+    }
 
 
 # ── My questions ──────────────────────────────────────────────────────────────

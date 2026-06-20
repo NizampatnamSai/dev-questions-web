@@ -35,6 +35,8 @@ def col_comments():      return mdb()["comments"]
 def col_ai_usage():      return mdb()["ai_usage"]
 def col_fcm_tokens():    return mdb()["fcm_tokens"]
 def col_notifications(): return mdb()["push_notifications"]
+def col_streaks():       return mdb()["streaks"]
+def col_progress():      return mdb()["study_progress"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
