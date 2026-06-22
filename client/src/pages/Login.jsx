@@ -4,12 +4,6 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
-const DEMO_ACCOUNTS = [
-  { label: "Admin", email: "admin@devquiz.com", password: "Admin@123" },
-  { label: "John (User)", email: "john@devquiz.com", password: "User@123" },
-  { label: "Jane (User)", email: "jane@devquiz.com", password: "User@123" },
-];
-
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +21,7 @@ export default function Login() {
       toast.success("Welcome back!", { id: "welcome" });
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.detail || err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -101,22 +95,6 @@ export default function Login() {
           )}
         </p>
 
-        <div className="mt-6 border-t border-white/10 pt-4">
-          <p className="text-xs text-slate-500 mb-2">Demo accounts (click to autofill):</p>
-          <div className="flex flex-wrap gap-2">
-            {DEMO_ACCOUNTS.map((acc) => (
-              <button
-                key={acc.email}
-                type="button"
-                disabled={loading}
-                onClick={() => { setEmail(acc.email); setPassword(acc.password); }}
-                className="text-xs px-2.5 py-1 rounded-full border border-white/10 hover:bg-white/10 text-slate-300 disabled:opacity-50"
-              >
-                {acc.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </motion.div>
     </div>
   );

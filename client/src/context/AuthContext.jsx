@@ -42,11 +42,8 @@ export function AuthProvider({ children }) {
 
   const register = async (name, email, password) => {
     const { data } = await api.post("/auth/register", { name, email, password });
-    localStorage.setItem("devquiz_token", data.token);
-    localStorage.setItem("devquiz_user", JSON.stringify(data.user));
-    setUser(data.user);
-    requestAndRegisterToken(api).catch(() => {});
-    return data.user;
+    // registration now requires admin approval — no token returned
+    return data;
   };
 
   const logout = async () => {

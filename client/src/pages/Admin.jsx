@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import ConfirmModal from "../components/ConfirmModal";
 
 const ROLES = ["user", "sub_admin", "admin"];
 
@@ -33,6 +34,7 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
     role:        initial.role        || "user",
     daily_limit: initial.dailyLimit  ?? 10,
   });
+  const [showPw, setShowPw] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -66,7 +68,23 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
         <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
           {isCreate ? "Password" : "New Password (leave blank to keep)"}
         </label>
-        <input value={form.password} onChange={e => set("password", e.target.value)} type="password" className="input-light" placeholder={isCreate ? "Min 6 chars" : "Leave blank to keep current"} />
+        <div className="relative">
+          <input
+            value={form.password}
+            onChange={e => set("password", e.target.value)}
+            type={showPw ? "text" : "password"}
+            className="input-light !pr-10"
+            placeholder={isCreate ? "Min 6 chars" : "Leave blank to keep current"}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPw(p => !p)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            tabIndex={-1}
+          >
+            {showPw ? "🙈" : "👁"}
+          </button>
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -196,10 +214,102 @@ function parseUtcTime(utcTime) {
   return { hour: h, minute: m || 0 };
 }
 
+function ScheduleRow({ u, saved, onSave, onRemove }) {
+  const [draft, setDraft] = useState({
+    day:     saved.day     || "monday",
+    hour:    saved.hour    ?? 10,
+    minute:  saved.minute  ?? 0,
+    message: saved.message || "",
+  });
+  const [saving, setSaving] = useState(false);
+  const hasSchedule = !!saved.userId;
+
+  // keep draft in sync if parent reloads saved data
+  useEffect(() => {
+    setDraft({
+      day:     saved.day     || "monday",
+      hour:    saved.hour    ?? 10,
+      minute:  saved.minute  ?? 0,
+      message: saved.message || "",
+    });
+  }, [saved.day, saved.hour, saved.minute, saved.message, saved.userId]);
+
+  const isDirty = hasSchedule && (
+    draft.day !== (saved.day || "monday") ||
+    draft.hour !== (saved.hour ?? 10) ||
+    draft.minute !== (saved.minute ?? 0) ||
+    draft.message !== (saved.message || "")
+  );
+
+  const handleSave = async () => {
+    setSaving(true);
+    await onSave(u.id, draft);
+    setSaving(false);
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-black/2 dark:hover:bg-white/2">
+      <div className="w-36 min-w-0">
+        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{u.name}</p>
+        <p className="text-[10px] text-slate-400 truncate">{u.email}</p>
+      </div>
+      <select value={draft.day} onChange={e => setDraft(d => ({ ...d, day: e.target.value }))}
+        className="input-light !py-1.5 !text-xs !w-auto">
+        {DAYS.map(d => <option key={d} value={d}>{DAY_LABEL[d]}</option>)}
+      </select>
+      <div className="flex items-center gap-1.5">
+        <select value={draft.hour} onChange={e => setDraft(d => ({ ...d, hour: parseInt(e.target.value) }))}
+          className="input-light !py-1 !text-xs !w-[68px]">
+          {Array.from({ length: 24 }, (_, h) => (
+            <option key={h} value={h}>{String(h).padStart(2, "0")}</option>
+          ))}
+        </select>
+        <span className="text-slate-400 font-bold text-sm leading-none select-none">:</span>
+        <select value={draft.minute} onChange={e => setDraft(d => ({ ...d, minute: parseInt(e.target.value) }))}
+          className="input-light !py-1 !text-xs !w-[68px]">
+          {Array.from({ length: 60 }, (_, m) => (
+            <option key={m} value={m}>{String(m).padStart(2, "0")}</option>
+          ))}
+        </select>
+        <span className="text-[10px] text-slate-400 font-medium leading-none">UTC</span>
+        <span className="text-[10px] text-indigo-500 dark:text-indigo-400 font-semibold leading-none whitespace-nowrap">
+          = {toIST(draft.hour, draft.minute)}
+        </span>
+      </div>
+      <input
+        value={draft.message}
+        onChange={e => setDraft(d => ({ ...d, message: e.target.value }))}
+        placeholder="Custom message (optional)"
+        className="input-light !py-1.5 !text-xs flex-1 min-w-[160px]"
+      />
+      <div className="flex gap-2">
+        {hasSchedule ? (
+          <>
+            {isDirty && (
+              <button onClick={handleSave} disabled={saving}
+                className="text-xs px-2.5 py-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-800/40 font-semibold transition-colors">
+                {saving ? "…" : "💾 Save"}
+              </button>
+            )}
+            <button onClick={() => onRemove(u.id)}
+              className="text-xs px-2.5 py-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700 hover:bg-red-200 dark:hover:bg-red-800/40 transition-colors">
+              Remove
+            </button>
+          </>
+        ) : (
+          <button onClick={handleSave} disabled={saving}
+            className="text-xs px-2.5 py-1.5 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors">
+            {saving ? "…" : "Enable"}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function WeeklySchedules({ users, usersLoading }) {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading]     = useState(true);
-  const [saving, setSaving]       = useState({});
 
   useEffect(() => {
     api.get("/admin/schedules").then(r => setSchedules(r.data)).catch(() => {}).finally(() => setLoading(false));
@@ -207,10 +317,9 @@ function WeeklySchedules({ users, usersLoading }) {
 
   const getSchedule = (uid) => schedules.find(s => s.userId === uid) || {};
 
-  const save = async (uid, patch) => {
+  const save = async (uid, draft) => {
     const cur = getSchedule(uid);
-    const payload = { user_id: uid, day: cur.day || "monday", hour: cur.hour ?? 10, minute: cur.minute ?? 0, enabled: true, ...patch };
-    setSaving(p => ({ ...p, [uid]: true }));
+    const payload = { user_id: uid, day: draft.day, hour: draft.hour, minute: draft.minute, message: draft.message || null, enabled: true };
     try {
       await api.put("/admin/schedules", payload);
       setSchedules(prev => {
@@ -220,7 +329,6 @@ function WeeklySchedules({ users, usersLoading }) {
       });
       toast.success("Schedule saved");
     } catch { toast.error("Failed to save"); }
-    setSaving(p => ({ ...p, [uid]: false }));
   };
 
   const remove = async (uid) => {
@@ -237,8 +345,8 @@ function WeeklySchedules({ users, usersLoading }) {
     <div className="glass-card overflow-hidden">
       <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">📅 Weekly Motivation Schedule</p>
-          <p className="text-xs text-slate-400 mt-0.5">Choose day + time — shown in both UTC and IST (UTC+5:30)</p>
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">🔔 Push Reminder Schedule</p>
+          <p className="text-xs text-slate-400 mt-0.5">Set a weekly nudge for each user — they'll get a push notification to keep their streak alive</p>
         </div>
       </div>
       {loading || usersLoading ? (
@@ -258,68 +366,9 @@ function WeeklySchedules({ users, usersLoading }) {
         </div>
       ) : (
         <div className="divide-y divide-black/5 dark:divide-white/5">
-          {regularUsers.map(u => {
-            const s = getSchedule(u.id);
-            const hasSchedule = !!schedules.find(x => x.userId === u.id);
-            return (
-              <div key={u.id} className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-black/2 dark:hover:bg-white/2">
-                <div className="w-36 min-w-0">
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{u.name}</p>
-                  <p className="text-[10px] text-slate-400 truncate">{u.email}</p>
-                </div>
-                <select value={s.day || "monday"} onChange={e => save(u.id, { day: e.target.value })}
-                  className="input-light !py-1.5 !text-xs !w-auto">
-                  {DAYS.map(d => <option key={d} value={d}>{DAY_LABEL[d]}</option>)}
-                </select>
-                <div className="flex items-center gap-1.5">
-                  <select
-                    value={s.hour ?? 10}
-                    onChange={e => save(u.id, { hour: parseInt(e.target.value) })}
-                    className="input-light !py-1 !text-xs !w-[58px]"
-                  >
-                    {Array.from({ length: 24 }, (_, h) => (
-                      <option key={h} value={h}>{String(h).padStart(2, "0")}</option>
-                    ))}
-                  </select>
-                  <span className="text-slate-400 font-bold text-sm leading-none select-none">:</span>
-                  <select
-                    value={s.minute ?? 0}
-                    onChange={e => save(u.id, { minute: parseInt(e.target.value) })}
-                    className="input-light !py-1 !text-xs !w-[58px]"
-                  >
-                    {Array.from({ length: 60 }, (_, m) => (
-                      <option key={m} value={m}>{String(m).padStart(2, "0")}</option>
-                    ))}
-                  </select>
-                  <span className="text-[10px] text-slate-400 font-medium leading-none">UTC</span>
-                  <span className="text-[10px] text-indigo-500 dark:text-indigo-400 font-semibold leading-none whitespace-nowrap">
-                    = {toIST(s.hour ?? 10, s.minute ?? 0)}
-                  </span>
-                </div>
-                <input value={s.message || ""} onChange={e => {
-                  setSchedules(prev => {
-                    const idx = prev.findIndex(x => x.userId === u.id);
-                    const updated = { ...(prev[idx] || { userId: u.id }), message: e.target.value };
-                    return idx >= 0 ? prev.map((x, i) => i === idx ? updated : x) : [...prev, updated];
-                  });
-                }}
-                  onBlur={e => save(u.id, { message: e.target.value || null })}
-                  placeholder="Custom message (optional)"
-                  className="input-light !py-1.5 !text-xs flex-1 min-w-[160px]" />
-                {hasSchedule ? (
-                  <button onClick={() => remove(u.id)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700 hover:bg-red-200 dark:hover:bg-red-800/40 transition-colors">
-                    Remove
-                  </button>
-                ) : (
-                  <button onClick={() => save(u.id, {})} disabled={saving[u.id]}
-                    className="text-xs px-2.5 py-1.5 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors">
-                    {saving[u.id] ? "…" : "Enable"}
-                  </button>
-                )}
-              </div>
-            );
-          })}
+          {regularUsers.map(u => (
+            <ScheduleRow key={u.id} u={u} saved={getSchedule(u.id)} onSave={save} onRemove={remove} />
+          ))}
           {regularUsers.length === 0 && (
             <p className="text-sm text-slate-400 text-center py-8">No users yet.</p>
           )}
@@ -376,6 +425,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [search, setSearch] = useState("");
   const [showNotify, setShowNotify] = useState(false);
   const [logs, setLogs] = useState([]);
@@ -398,7 +448,25 @@ export default function Admin() {
     }
   };
 
-  useEffect(() => { load(); loadLogs(); }, []);
+  const [pendingUsers, setPendingUsers] = useState([]);
+  useEffect(() => {
+    load();
+    loadLogs();
+    api.get("/admin/pending-users").then(r => setPendingUsers(r.data)).catch(() => {});
+  }, []);
+
+  const approveUser = async (u) => {
+    await api.patch(`/admin/users/${u.id}/approve`);
+    setPendingUsers(p => p.filter(x => x.id !== u.id));
+    setUsers(prev => prev.map(x => x.id === u.id ? { ...x, status: "approved" } : x));
+    toast.success(`${u.name} approved`);
+  };
+
+  const blockUser = async (u) => {
+    await api.patch(`/admin/users/${u.id}/block`);
+    setPendingUsers(p => p.filter(x => x.id !== u.id));
+    toast.success(`${u.name} blocked`);
+  };
 
   const createUser = async (form) => {
     const { data } = await api.post("/admin/users", form);
@@ -414,12 +482,13 @@ export default function Admin() {
     toast.success("User updated");
   };
 
-  const deleteUser = async (user) => {
-    if (!confirm(`Delete "${user.name}"? Their questions will remain.`)) return;
+  const deleteUser = async () => {
+    if (!deleteTarget) return;
     try {
-      await api.delete(`/admin/users/${user.id}`);
-      setUsers(u => u.filter(x => x.id !== user.id));
+      await api.delete(`/admin/users/${deleteTarget.id}`);
+      setUsers(u => u.filter(x => x.id !== deleteTarget.id));
       toast.success("User deleted");
+      setDeleteTarget(null);
     } catch (err) {
       toast.error(err?.response?.data?.detail || "Failed to delete");
     }
@@ -485,6 +554,39 @@ export default function Admin() {
         placeholder="Search by name or email…"
         className="input-light max-w-sm"
       />
+
+      {/* Pending approvals */}
+      {pendingUsers.length > 0 && (
+        <div className="glass-card overflow-hidden border border-amber-300/30 dark:border-amber-500/20">
+          <div className="px-4 py-3 border-b border-amber-200/30 dark:border-amber-500/20 flex items-center gap-2">
+            <span className="text-base">⏳</span>
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-400">Pending Approvals ({pendingUsers.length})</p>
+          </div>
+          <div className="divide-y divide-black/5 dark:divide-white/5">
+            {pendingUsers.map(u => (
+              <div key={u.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                  {u.name?.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{u.name}</p>
+                  <p className="text-xs text-slate-400 truncate">{u.email}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => approveUser(u)}
+                    className="text-xs px-3 py-1.5 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-800/40 font-semibold transition-colors">
+                    ✓ Approve
+                  </button>
+                  <button onClick={() => blockUser(u)}
+                    className="text-xs px-3 py-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700 hover:bg-red-200 dark:hover:bg-red-800/40 font-semibold transition-colors">
+                    ✕ Block
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Users table */}
       <div className="glass-card overflow-hidden">
@@ -579,7 +681,7 @@ export default function Admin() {
                           </button>
                           {u.role !== "admin" && u.id !== me?.id && (
                             <button
-                              onClick={() => deleteUser(u)}
+                              onClick={() => setDeleteTarget(u)}
                               className="text-xs px-2.5 py-1 rounded-lg border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
                             >
                               🗑
@@ -622,6 +724,15 @@ export default function Admin() {
           />
         )}
       </AnimatePresence>
+
+      <ConfirmModal
+        open={!!deleteTarget}
+        title={`Delete "${deleteTarget?.name}"?`}
+        message="Their questions will remain. This action cannot be undone."
+        confirmLabel="Delete User"
+        onConfirm={deleteUser}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </motion.div>
   );
 }

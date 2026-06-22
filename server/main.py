@@ -36,13 +36,23 @@ _msg_index = 0
 async def fire_scheduled_notifications():
     global _msg_index
     now_utc = datetime.now(timezone.utc)
-    day_name = now_utc.strftime("%A").lower()  # "monday", "tuesday", …
+    day_name = now_utc.strftime("%A").lower()
     hour   = now_utc.hour
     minute = now_utc.minute
 
-    schedules = await col_notify_schedules().find(
-        {"day": day_name, "hour": hour, "minute": minute, "enabled": True}
-    ).to_list(length=500)
+    print(f"[scheduler] tick {day_name} {hour:02d}:{minute:02d} UTC", flush=True)
+
+    schedules = await col_notify_schedules().find({
+        "day": day_name,
+        "hour": hour,
+        "$or": [
+            {"minute": minute},
+            {"minute": {"$exists": False}},  # old docs without minute field
+        ] if minute == 0 else [{"minute": minute}],
+        "enabled": {"$ne": False},  # treat missing enabled as True
+    }).to_list(length=500)
+
+    print(f"[scheduler] matched {len(schedules)} schedule(s)", flush=True)
 
     if not schedules:
         return
@@ -69,6 +79,11 @@ scheduler = AsyncIOScheduler()
 @app.on_event("startup")
 async def startup():
     await init_mongo()
+    # backfill old schedule docs that were saved before the minute field was added
+    await col_notify_schedules().update_many(
+        {"minute": {"$exists": False}},
+        {"$set": {"minute": 0}},
+    )
     scheduler.add_job(fire_scheduled_notifications, "cron", second=0)  # runs every minute at :00s
     scheduler.start()
 

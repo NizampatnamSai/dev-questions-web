@@ -271,3 +271,28 @@ async def upsert_schedule(body: ScheduleBody, admin=Depends(_require_admin)):
 async def delete_schedule(uid: str, admin=Depends(_require_admin)):
     await col_notify_schedules().delete_one({"userId": uid})
     return {"message": "Deleted"}
+
+
+# ── User approval ────────────────────────────────────────────────────────────
+
+@router.get("/pending-users")
+async def pending_users(admin=Depends(_require_admin)):
+    docs = await col_users().find({"status": "pending"}).to_list(200)
+    return [sid(d) for d in docs]
+
+
+@router.patch("/users/{uid}/approve")
+async def approve_user(uid: str, admin=Depends(_require_admin)):
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved"}})
+    user = sid(await col_users().find_one({"_id": oid(uid)}))
+    tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(20)
+    tokens = [t["token"] for t in tokens_docs]
+    if tokens:
+        await send_to_tokens(tokens, title="✅ Account Approved!", body="Your DevQuiz account has been approved. You can now log in.", data={"type": "account_approved"})
+    return {"message": "User approved"}
+
+
+@router.patch("/users/{uid}/block")
+async def block_user(uid: str, admin=Depends(_require_admin)):
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "blocked"}})
+    return {"message": "User blocked"}

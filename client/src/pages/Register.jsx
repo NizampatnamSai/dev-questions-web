@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
@@ -10,8 +10,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const { register } = useAuth();
-  const navigate = useNavigate();
 
   const submit = async (e) => {
     e.preventDefault();
@@ -19,14 +19,29 @@ export default function Register() {
     setLoading(true);
     try {
       await register(name, email, password);
-      toast.success("Account created!", { id: "register" });
-      navigate("/dashboard");
+      setSubmitted(true);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed");
+      toast.error(err.response?.data?.detail || err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card w-full max-w-md p-8 text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto text-3xl">⏳</div>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Awaiting Approval</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Your account request has been sent to the admin.<br />
+            You'll receive a notification once it's approved.
+          </p>
+          <Link to="/login" className="inline-block mt-2 text-sm text-cyan-400 hover:underline">← Back to login</Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">

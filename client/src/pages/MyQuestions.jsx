@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
+import ConfirmModal from "../components/ConfirmModal";
 
 const PAGE = 10;
 
@@ -11,6 +12,7 @@ export default function MyQuestions() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [visible, setVisible] = useState(PAGE);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -37,14 +39,16 @@ export default function MyQuestions() {
     }
   };
 
-  const handleDelete = async (q) => {
-    if (!confirm("Delete this question?")) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await api.delete(`/questions/${q.id}`);
-      setQuestions((qs) => qs.filter((x) => x.id !== q.id));
+      await api.delete(`/questions/${deleteTarget.id}`);
+      setQuestions((qs) => qs.filter((x) => x.id !== deleteTarget.id));
       toast.success("Deleted");
     } catch {
       toast.error("Failed to delete");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -88,7 +92,7 @@ export default function MyQuestions() {
                   showOwnerActions
                   onHighlight={toggleHighlight}
                   onEdit={(item) => setEditing({ ...item })}
-                  onDelete={handleDelete}
+                  onDelete={(q) => setDeleteTarget(q)}
                 />
               ))}
             </AnimatePresence>
@@ -103,6 +107,15 @@ export default function MyQuestions() {
           )}
         </>
       )}
+
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Delete question?"
+        message="This question will be permanently removed."
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
       <AnimatePresence>
         {editing && (
