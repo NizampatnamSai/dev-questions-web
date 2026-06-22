@@ -111,20 +111,37 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
 }
 
 function NotifyModal({ onClose, users, onSent }) {
-  const [title, setTitle]     = useState("");
-  const [body,  setBody]      = useState("");
-  const [target, setTarget]   = useState("all"); // "all" | "user"
-  const [userId, setUserId]   = useState("");
-  const [sending, setSending] = useState(false);
+  const [title,    setTitle]   = useState("");
+  const [body,     setBody]    = useState("");
+  const [target,   setTarget]  = useState("all"); // "all" | "pick"
+  const [selected, setSelected] = useState(new Set());
+  const [search,   setSearch]  = useState("");
+  const [sending,  setSending] = useState(false);
+
+  const filtered = users.filter(u =>
+    u.name.toLowerCase().includes(search.toLowerCase()) ||
+    u.email.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const toggle = (id) => setSelected(s => {
+    const n = new Set(s);
+    n.has(id) ? n.delete(id) : n.add(id);
+    return n;
+  });
+
+  const toggleAll = () => {
+    if (selected.size === filtered.length) setSelected(new Set());
+    else setSelected(new Set(filtered.map(u => u.id)));
+  };
 
   const send = async (e) => {
     e.preventDefault();
     if (!title.trim() || !body.trim()) return toast.error("Title and message required");
-    if (target === "user" && !userId) return toast.error("Select a user");
+    if (target === "pick" && selected.size === 0) return toast.error("Select at least one user");
     setSending(true);
     try {
       const payload = { title: title.trim(), body: body.trim() };
-      if (target === "user") payload.user_id = userId;
+      if (target === "pick") payload.user_ids = [...selected];
       const { data } = await api.post("/admin/notify", payload);
       toast.success(`Sent to ${data.sent_count} device(s)`);
       onSent();
@@ -136,51 +153,92 @@ function NotifyModal({ onClose, users, onSent }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.92, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.92 }}
-        className="glass-card w-full max-w-md p-6 space-y-4"
+        className="glass-card w-full max-w-lg p-6 space-y-4 shadow-2xl"
+        onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">🔔 Send Push Notification</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl leading-none">✕</button>
         </div>
 
-        <form onSubmit={send} className="space-y-3">
-          {/* Target */}
+        <form onSubmit={send} className="space-y-4">
+          {/* Target toggle */}
           <div>
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 block">Send To</label>
             <div className="flex gap-2">
-              <button type="button" onClick={() => setTarget("all")}
-                className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition ${target === "all" ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-500 hover:border-indigo-400"}`}>
-                🌍 All Users
-              </button>
-              <button type="button" onClick={() => setTarget("user")}
-                className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition ${target === "user" ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-500 hover:border-indigo-400"}`}>
-                👤 One User
-              </button>
+              {[["all","🌍 All Users"],["pick","👥 Choose Users"]].map(([val, label]) => (
+                <button key={val} type="button" onClick={() => setTarget(val)}
+                  className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-colors ${
+                    target === val
+                      ? "bg-indigo-500 border-indigo-500 text-white"
+                      : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-indigo-400"
+                  }`}>
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
-          {target === "user" && (
-            <select value={userId} onChange={e => setUserId(e.target.value)} className="input-light w-full">
-              <option value="">— Select user —</option>
-              {users.map(u => <option key={u.id} value={u.id}>{u.name} ({u.email})</option>)}
-            </select>
+
+          {/* User picker */}
+          {target === "pick" && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <input
+                  value={search} onChange={e => setSearch(e.target.value)}
+                  placeholder="Search users…"
+                  className="input-light !py-1.5 !text-xs flex-1 mr-2"
+                />
+                <button type="button" onClick={toggleAll}
+                  className="text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 whitespace-nowrap transition-colors">
+                  {selected.size === filtered.length && filtered.length > 0 ? "Deselect all" : "Select all"}
+                </button>
+              </div>
+              <div className="max-h-44 overflow-y-auto rounded-xl border border-slate-200 dark:border-white/10 divide-y divide-slate-100 dark:divide-white/5">
+                {filtered.length === 0 && (
+                  <p className="text-xs text-slate-400 text-center py-4">No users found</p>
+                )}
+                {filtered.map(u => (
+                  <label key={u.id} className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors">
+                    <input type="checkbox" checked={selected.has(u.id)} onChange={() => toggle(u.id)}
+                      className="rounded accent-indigo-500 w-4 h-4 flex-shrink-0" />
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                      {u.name?.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase()}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{u.name}</p>
+                      <p className="text-[10px] text-slate-400 truncate">{u.email}</p>
+                    </div>
+                  </label>
+                ))}
+              </div>
+              {selected.size > 0 && (
+                <p className="text-xs text-indigo-500 dark:text-indigo-400 font-medium">{selected.size} user{selected.size !== 1 ? "s" : ""} selected</p>
+              )}
+            </div>
           )}
+
+          {/* Title + message */}
           <div>
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Title</label>
             <input value={title} onChange={e => setTitle(e.target.value)} className="input-light w-full" placeholder="Notification title…" maxLength={100} />
           </div>
           <div>
             <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Message</label>
-            <textarea value={body} onChange={e => setBody(e.target.value)} className="input-light w-full resize-none" rows={3} placeholder="Notification body…" maxLength={300} />
+            <textarea value={body} onChange={e => setBody(e.target.value)} className="input-light w-full resize-none" rows={3} placeholder="Write your message…" maxLength={300} />
+            <p className="text-[10px] text-slate-400 mt-1 text-right">{body.length}/300</p>
           </div>
+
           <div className="flex gap-2 pt-1">
-            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 transition">Cancel</button>
+            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-sm text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+              Cancel
+            </button>
             <button type="submit" disabled={sending} className="flex-1 btn-primary py-2.5 disabled:opacity-60">
-              {sending ? "Sending…" : "📤 Send"}
+              {sending ? "Sending…" : `📤 Send${target === "pick" && selected.size > 0 ? ` (${selected.size})` : ""}`}
             </button>
           </div>
         </form>
@@ -700,6 +758,25 @@ export default function Admin() {
 
       {/* Weekly Notification Schedules */}
       <WeeklySchedules users={users} usersLoading={loading} />
+
+      {/* Manual trigger */}
+      <div className="glass-card px-4 py-3 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">🧪 Test Scheduled Notifications</p>
+          <p className="text-xs text-slate-400 mt-0.5">Fires right now for any schedule matching the current UTC day + time</p>
+        </div>
+        <button
+          onClick={async () => {
+            try {
+              await api.post("/admin/schedules/trigger-now");
+              toast.success("Trigger fired — check notification logs");
+            } catch { toast.error("Failed to trigger"); }
+          }}
+          className="text-xs px-3 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-800/40 font-semibold transition-colors whitespace-nowrap"
+        >
+          ▶ Trigger Now
+        </button>
+      </div>
 
       {/* Notification Logs */}
       <NotifyLogs logs={logs} loading={logsLoading} />

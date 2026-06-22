@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/axios";
-import { requestAndRegisterToken, onForegroundMessage } from "../firebase";
+import { messaging, requestAndRegisterToken, onForegroundMessage } from "../firebase";
 
 const AuthContext = createContext(null);
 
@@ -22,6 +22,10 @@ export function AuthProvider({ children }) {
       .then(({ data }) => {
         setUser(data.user);
         localStorage.setItem("devquiz_user", JSON.stringify(data.user));
+        // re-register FCM token on every page load (handles token refresh after logout/re-login)
+        if (Notification.permission === "granted") {
+          requestAndRegisterToken(api).catch(() => {});
+        }
       })
       .catch(() => {
         setUser(null);
@@ -49,9 +53,11 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       const { getToken, deleteToken } = await import("firebase/messaging");
-      const token = await getToken(messaging).catch(() => null);
-      if (token) await api.delete("/admin/fcm-token", { data: { token } }).catch(() => {});
-      await deleteToken(messaging).catch(() => {});
+      const fcmToken = await getToken(messaging).catch(() => null);
+      if (fcmToken) {
+        await api.delete("/admin/fcm-token", { data: { token: fcmToken } }).catch(() => {});
+        await deleteToken(messaging).catch(() => {});
+      }
     } catch {}
     localStorage.removeItem("devquiz_token");
     localStorage.removeItem("devquiz_user");

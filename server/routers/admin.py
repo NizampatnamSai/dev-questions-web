@@ -141,43 +141,49 @@ async def set_limit(uid: str, body: LimitBody, admin=Depends(_require_admin)):
 # ── Push Notifications ────────────────────────────────────────────────────────
 
 class NotifyBody(BaseModel):
-    title:   str
-    body:    str
-    user_id: Optional[str] = None
+    title:    str
+    body:     str
+    user_ids: Optional[list[str]] = None  # None = all users
 
 
 @router.post("/notify")
 async def send_notification(nb: NotifyBody, admin=Depends(_require_admin)):
-    target_name = None
-    if nb.user_id:
-        rows = await col_fcm_tokens().find({"userId": nb.user_id}).to_list(length=100)
-        # Resolve user name for the log
-        try:
-            u = await col_users().find_one({"_id": oid(nb.user_id)})
-            target_name = u.get("name") if u else nb.user_id
-        except Exception:
-            target_name = nb.user_id
+    if nb.user_ids:
+        rows = []
+        for uid in nb.user_ids:
+            rows += await col_fcm_tokens().find({"userId": uid}).to_list(length=50)
+        target = "users"
+        # resolve names
+        names = []
+        for uid in nb.user_ids:
+            try:
+                u = await col_users().find_one({"_id": oid(uid)})
+                names.append(u.get("name", uid) if u else uid)
+            except Exception:
+                names.append(uid)
+        target_name = ", ".join(names)
     else:
         rows = await col_fcm_tokens().find({}).to_list(length=1000)
-    tokens = [r["token"] for r in rows]
+        target = "all"
+        target_name = None
+
+    tokens = list({r["token"] for r in rows})  # deduplicate
     sent   = await send_to_tokens(tokens, nb.title, nb.body, {})
     await col_notifications().insert_one({
         "title":      nb.title,
         "body":       nb.body,
         "sentBy":     admin["id"],
         "sentByName": admin.get("name", "Admin"),
-        "target":     "user" if nb.user_id else "all",
+        "target":     target,
         "targetName": target_name,
         "sentCount":  sent,
         "createdAt":  now(),
     })
-    # Keep only the latest 100 log entries to avoid storage bloat
     col = col_notifications()
     total = await col.count_documents({})
     if total > 100:
         oldest = await col.find({}).sort("createdAt", 1).limit(total - 100).to_list(length=total - 100)
-        ids = [d["_id"] for d in oldest]
-        await col.delete_many({"_id": {"$in": ids}})
+        await col.delete_many({"_id": {"$in": [d["_id"] for d in oldest]}})
     return {"message": "Sent", "sent_count": sent}
 
 
@@ -296,3 +302,34 @@ async def approve_user(uid: str, admin=Depends(_require_admin)):
 async def block_user(uid: str, admin=Depends(_require_admin)):
     await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "blocked"}})
     return {"message": "User blocked"}
+
+
+# ── Debug / manual trigger ────────────────────────────────────────────────────
+
+@router.get("/schedules/debug")
+async def debug_schedules(admin=Depends(_require_admin)):
+    """Show all schedules and current UTC time — useful for diagnosing missed notifications."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    docs = await col_notify_schedules().find({}).to_list(500)
+    return {
+        "server_utc": now.isoformat(),
+        "day": now.strftime("%A").lower(),
+        "hour": now.hour,
+        "minute": now.minute,
+        "schedules": [sid(d) for d in docs],
+    }
+
+
+@router.post("/schedules/trigger-now")
+async def trigger_notifications_now(admin=Depends(_require_admin)):
+    """Manually fire the scheduler right now — sends to all enabled schedules matching current UTC day/hour/minute."""
+    from scheduler_tasks import fire_scheduled_notifications
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    await fire_scheduled_notifications()
+    return {
+        "message": "Triggered",
+        "server_utc": now.isoformat(),
+        "checked": f"{now.strftime('%A').lower()} {now.hour:02d}:{now.minute:02d}",
+    }
