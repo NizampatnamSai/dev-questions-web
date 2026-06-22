@@ -118,12 +118,12 @@ export default function Community() {
     const el = sentinelRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) loadMore(); },
-      { rootMargin: "200px" }
+      ([entry]) => { if (entry.isIntersecting && hasMore && !loadingMore) loadMore(); },
+      { rootMargin: "0px", threshold: 1.0 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [loadMore]);
+  }, [loadMore, hasMore, loadingMore]);
 
   const updateQ = useCallback((updated) =>
     setQuestions(qs => qs.map(x => x.id === updated.id ? { ...x, ...updated } : x))
@@ -193,13 +193,21 @@ export default function Community() {
             ))}
           </div>
 
-          {/* Infinite scroll sentinel */}
-          <div ref={sentinelRef} className="flex justify-center py-6">
+          {/* Load more */}
+          <div ref={sentinelRef} className="flex flex-col items-center gap-3 py-4">
             {loadingMore && (
               <div className="flex items-center gap-2 text-sm text-slate-400">
                 <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                 Loading more…
               </div>
+            )}
+            {hasMore && !loadingMore && (
+              <button
+                onClick={loadMore}
+                className="px-6 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+              >
+                Load more ({total - questions.length} remaining)
+              </button>
             )}
             {!hasMore && questions.length > 0 && (
               <p className="text-xs text-slate-400">You've seen all {total} questions 🎉</p>

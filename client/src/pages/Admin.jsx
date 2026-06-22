@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
-const ROLES = ["user", "admin"];
+const ROLES = ["user", "sub_admin", "admin"];
 
 function Modal({ title, onClose, children }) {
   return (
@@ -170,6 +171,164 @@ function NotifyModal({ onClose, users, onSent }) {
   );
 }
 
+const DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const DAY_LABEL = { monday:"Mon",tuesday:"Tue",wednesday:"Wed",thursday:"Thu",friday:"Fri",saturday:"Sat",sunday:"Sun" };
+
+// Convert UTC HH:MM → IST display string and vice-versa
+function toIST(utcHour, utcMin = 0) {
+  const totalMins = utcHour * 60 + utcMin + 330; // IST = UTC + 5:30
+  const h = Math.floor(totalMins / 60) % 24;
+  const m = totalMins % 60;
+  const ampm = h >= 12 ? "PM" : "AM";
+  const h12  = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${ampm} IST`;
+}
+
+// Convert a "HH:MM" UTC string to IST display
+function utcTimeToIST(utcTime) {
+  const [h, m] = utcTime.split(":").map(Number);
+  return toIST(h, m);
+}
+
+// "HH:MM" UTC string → { hour, minute }
+function parseUtcTime(utcTime) {
+  const [h, m] = (utcTime || "10:00").split(":").map(Number);
+  return { hour: h, minute: m || 0 };
+}
+
+function WeeklySchedules({ users, usersLoading }) {
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading]     = useState(true);
+  const [saving, setSaving]       = useState({});
+
+  useEffect(() => {
+    api.get("/admin/schedules").then(r => setSchedules(r.data)).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  const getSchedule = (uid) => schedules.find(s => s.userId === uid) || {};
+
+  const save = async (uid, patch) => {
+    const cur = getSchedule(uid);
+    const payload = { user_id: uid, day: cur.day || "monday", hour: cur.hour ?? 10, minute: cur.minute ?? 0, enabled: true, ...patch };
+    setSaving(p => ({ ...p, [uid]: true }));
+    try {
+      await api.put("/admin/schedules", payload);
+      setSchedules(prev => {
+        const idx = prev.findIndex(s => s.userId === uid);
+        const updated = { ...cur, ...payload, userId: uid };
+        return idx >= 0 ? prev.map((s, i) => i === idx ? updated : s) : [...prev, updated];
+      });
+      toast.success("Schedule saved");
+    } catch { toast.error("Failed to save"); }
+    setSaving(p => ({ ...p, [uid]: false }));
+  };
+
+  const remove = async (uid) => {
+    try {
+      await api.delete(`/admin/schedules/${uid}`);
+      setSchedules(prev => prev.filter(s => s.userId !== uid));
+      toast.success("Schedule removed");
+    } catch { toast.error("Failed to remove"); }
+  };
+
+  const regularUsers = users.filter(u => u.role !== "admin");
+
+  return (
+    <div className="glass-card overflow-hidden">
+      <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">📅 Weekly Motivation Schedule</p>
+          <p className="text-xs text-slate-400 mt-0.5">Choose day + time — shown in both UTC and IST (UTC+5:30)</p>
+        </div>
+      </div>
+      {loading || usersLoading ? (
+        <div className="p-4 space-y-3">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="flex items-center gap-3 animate-pulse">
+              <div className="w-36 space-y-1.5">
+                <div className="h-3.5 bg-slate-200 dark:bg-slate-700 rounded w-24" />
+                <div className="h-2.5 bg-slate-200 dark:bg-slate-700 rounded w-32" />
+              </div>
+              <div className="h-8 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+              <div className="h-8 w-48 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+              <div className="h-8 flex-1 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+              <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="divide-y divide-black/5 dark:divide-white/5">
+          {regularUsers.map(u => {
+            const s = getSchedule(u.id);
+            const hasSchedule = !!schedules.find(x => x.userId === u.id);
+            return (
+              <div key={u.id} className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-black/2 dark:hover:bg-white/2">
+                <div className="w-36 min-w-0">
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{u.name}</p>
+                  <p className="text-[10px] text-slate-400 truncate">{u.email}</p>
+                </div>
+                <select value={s.day || "monday"} onChange={e => save(u.id, { day: e.target.value })}
+                  className="input-light !py-1.5 !text-xs !w-auto">
+                  {DAYS.map(d => <option key={d} value={d}>{DAY_LABEL[d]}</option>)}
+                </select>
+                <div className="flex items-center gap-1.5">
+                  <select
+                    value={s.hour ?? 10}
+                    onChange={e => save(u.id, { hour: parseInt(e.target.value) })}
+                    className="input-light !py-1 !text-xs !w-[58px]"
+                  >
+                    {Array.from({ length: 24 }, (_, h) => (
+                      <option key={h} value={h}>{String(h).padStart(2, "0")}</option>
+                    ))}
+                  </select>
+                  <span className="text-slate-400 font-bold text-sm leading-none select-none">:</span>
+                  <select
+                    value={s.minute ?? 0}
+                    onChange={e => save(u.id, { minute: parseInt(e.target.value) })}
+                    className="input-light !py-1 !text-xs !w-[58px]"
+                  >
+                    {Array.from({ length: 60 }, (_, m) => (
+                      <option key={m} value={m}>{String(m).padStart(2, "0")}</option>
+                    ))}
+                  </select>
+                  <span className="text-[10px] text-slate-400 font-medium leading-none">UTC</span>
+                  <span className="text-[10px] text-indigo-500 dark:text-indigo-400 font-semibold leading-none whitespace-nowrap">
+                    = {toIST(s.hour ?? 10, s.minute ?? 0)}
+                  </span>
+                </div>
+                <input value={s.message || ""} onChange={e => {
+                  setSchedules(prev => {
+                    const idx = prev.findIndex(x => x.userId === u.id);
+                    const updated = { ...(prev[idx] || { userId: u.id }), message: e.target.value };
+                    return idx >= 0 ? prev.map((x, i) => i === idx ? updated : x) : [...prev, updated];
+                  });
+                }}
+                  onBlur={e => save(u.id, { message: e.target.value || null })}
+                  placeholder="Custom message (optional)"
+                  className="input-light !py-1.5 !text-xs flex-1 min-w-[160px]" />
+                {hasSchedule ? (
+                  <button onClick={() => remove(u.id)}
+                    className="text-xs px-2.5 py-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700 hover:bg-red-200 dark:hover:bg-red-800/40 transition-colors">
+                    Remove
+                  </button>
+                ) : (
+                  <button onClick={() => save(u.id, {})} disabled={saving[u.id]}
+                    className="text-xs px-2.5 py-1.5 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-800/40 transition-colors">
+                    {saving[u.id] ? "…" : "Enable"}
+                  </button>
+                )}
+              </div>
+            );
+          })}
+          {regularUsers.length === 0 && (
+            <p className="text-sm text-slate-400 text-center py-8">No users yet.</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function NotifyLogs({ logs, loading }) {
   if (loading) return <p className="text-sm text-slate-400">Loading logs…</p>;
   if (!logs.length) return (
@@ -212,6 +371,7 @@ function NotifyLogs({ logs, loading }) {
 }
 
 export default function Admin() {
+  const { user: me } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -303,8 +463,9 @@ export default function Admin() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: "Total Users",  value: users.length,                              icon: "👥" },
-          { label: "Admins",       value: users.filter(u => u.role === "admin").length, icon: "👑" },
-          { label: "Regular Users",value: users.filter(u => u.role === "user").length,  icon: "👤" },
+          { label: "Admins",      value: users.filter(u => u.role === "admin").length,     icon: "👑" },
+          { label: "Sub-Admins",  value: users.filter(u => u.role === "sub_admin").length, icon: "🔑" },
+          { label: "Users",       value: users.filter(u => u.role === "user").length,       icon: "👤" },
           { label: "Total Posts",  value: users.reduce((s, u) => s + (u.questionCount || 0), 0), icon: "📝" },
         ].map(s => (
           <div key={s.label} className="glass-card p-4 flex items-center gap-3">
@@ -326,20 +487,37 @@ export default function Admin() {
       />
 
       {/* Users table */}
-      {loading ? (
-        <p className="text-sm text-slate-400">Loading users…</p>
-      ) : (
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-black/5 dark:border-white/10 text-left">
-                  {["User", "Role", "Daily Limit", "Posts", "Joined", "Actions"].map(h => (
-                    <th key={h} className="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
+      <div className="glass-card overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-black/5 dark:border-white/10 text-left">
+                {["User", "Role", "Daily Limit", "Posts", "Joined", "Actions"].map(h => (
+                  <th key={h} className="px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i} className="border-b border-black/5 dark:border-white/10 animate-pulse">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700" />
+                        <div className="space-y-1.5">
+                          <div className="h-3 w-28 bg-slate-200 dark:bg-slate-700 rounded" />
+                          <div className="h-2.5 w-36 bg-slate-200 dark:bg-slate-700 rounded" />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3"><div className="h-6 w-16 bg-slate-200 dark:bg-slate-700 rounded-full" /></td>
+                    <td className="px-4 py-3"><div className="h-8 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg" /></td>
+                    <td className="px-4 py-3"><div className="h-3 w-8 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-3 w-20 bg-slate-200 dark:bg-slate-700 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-8 w-20 bg-slate-200 dark:bg-slate-700 rounded-lg" /></td>
+                  </tr>
+                ))
+              ) : (
                 <AnimatePresence>
                   {filtered.map(u => (
                     <motion.tr
@@ -362,11 +540,11 @@ export default function Admin() {
                       </td>
                       <td className="px-4 py-3">
                         <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                          u.role === "admin"
-                            ? "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300"
-                            : "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300"
+                          u.role === "admin"     ? "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300" :
+                          u.role === "sub_admin" ? "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300" :
+                                                   "bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-300"
                         }`}>
-                          {u.role === "admin" ? "👑 Admin" : "👤 User"}
+                          {u.role === "admin" ? "👑 Admin" : u.role === "sub_admin" ? "🔑 Sub-Admin" : "👤 User"}
                         </span>
                       </td>
                       <td className="px-4 py-3">
@@ -399,22 +577,27 @@ export default function Admin() {
                           >
                             ✏️ Edit
                           </button>
-                          <button
-                            onClick={() => deleteUser(u)}
-                            className="text-xs px-2.5 py-1 rounded-lg border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
-                          >
-                            🗑
-                          </button>
+                          {u.role !== "admin" && u.id !== me?.id && (
+                            <button
+                              onClick={() => deleteUser(u)}
+                              className="text-xs px-2.5 py-1 rounded-lg border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                            >
+                              🗑
+                            </button>
+                          )}
                         </div>
                       </td>
                     </motion.tr>
                   ))}
                 </AnimatePresence>
-              </tbody>
-            </table>
-          </div>
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
+
+      {/* Weekly Notification Schedules */}
+      <WeeklySchedules users={users} usersLoading={loading} />
 
       {/* Notification Logs */}
       <NotifyLogs logs={logs} loading={logsLoading} />

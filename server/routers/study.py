@@ -122,6 +122,86 @@ async def ai_explain(req: ExplainReq, _=Depends(current_user)):
     return {"explanation": text}
 
 
+# ── TypeScript Adder ──────────────────────────────────────────────────────────
+
+class CodeReq(BaseModel):
+    code: str
+
+@router.post("/ts-add")
+async def ts_add(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a TypeScript expert. The user will give you JavaScript code. "
+        "Your job is to convert it to fully typed TypeScript. Rules:\n"
+        "- Add proper type annotations to all variables, parameters, and return types\n"
+        "- Use interfaces or type aliases for object shapes\n"
+        "- Replace 'any' with specific types wherever possible\n"
+        "- Use generics where appropriate\n"
+        "- Add 'readonly' where data should not be mutated\n"
+        "- Output ONLY the converted TypeScript code, no explanation, no markdown fences.\n"
+        "If the code is already TypeScript, improve the types."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 1200)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
+# ── Error Finder ───────────────────────────────────────────────────────────────
+
+@router.post("/find-errors")
+async def find_errors(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a code reviewer specializing in JavaScript, TypeScript, React, and Node.js. "
+        "Analyze the code the user provides and find actual bugs and errors. Structure your response as:\n\n"
+        "ERRORS FOUND — list each bug with:\n"
+        "  Line/area: [where it is]\n"
+        "  Problem: [what is wrong]\n"
+        "  Fix: [the corrected code snippet]\n\n"
+        "If no errors exist, say 'NO ERRORS FOUND — Code looks correct.' "
+        "Focus on: syntax errors, logic bugs, undefined variables, wrong types, async issues, "
+        "off-by-one errors, null/undefined dereferences. Do NOT use markdown symbols like ** or ##."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 800)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
+# ── Potential Break Finder ─────────────────────────────────────────────────────
+
+@router.post("/find-breaks")
+async def find_breaks(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a senior software engineer doing a defensive code review. "
+        "The user provides code. Your job is to find parts that COULD break at runtime "
+        "under certain conditions — even if the code has no obvious syntax errors. Look for:\n"
+        "- Uncaught exceptions / missing try-catch\n"
+        "- Edge cases (empty arrays, null/undefined inputs, zero division)\n"
+        "- Race conditions or unhandled promise rejections\n"
+        "- Memory leaks (uncleared timers/listeners)\n"
+        "- Incorrect assumptions about data shape\n"
+        "- Performance bottlenecks that could timeout\n\n"
+        "Structure: For each issue write:\n"
+        "RISK [severity: High/Medium/Low]: [what could break]\n"
+        "SCENARIO: [what input or condition triggers it]\n"
+        "FIX: [how to prevent it]\n\n"
+        "If the code is solid, say 'NO BREAK RISKS FOUND.' Do NOT use ** or ## markdown."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 800)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
 # ── Mock Interview ────────────────────────────────────────────────────────────
 
 class MockStartReq(BaseModel):
@@ -144,7 +224,9 @@ async def mock_start(req: MockStartReq, user=Depends(current_user)):
     from data.study_topics import STUDY_TOPICS
     pool = STUDY_TOPICS
     if req.category:
-        pool = [t for t in pool if t["category"] == req.category]
+        cats = [c.strip() for c in req.category.split(",") if c.strip()]
+        if cats:
+            pool = [t for t in pool if t["category"] in cats]
     if req.difficulty:
         pool = [t for t in pool if t["difficulty"] == req.difficulty]
     count = max(3, min(req.count, 15))

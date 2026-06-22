@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from db_mongo import col_users, col_fcm_tokens, col_notifications, sid, oid, now
+from db_mongo import col_users, col_fcm_tokens, col_notifications, col_notify_schedules, sid, oid, now
 from deps import current_user
 from utils.firebase import send_to_tokens
 
@@ -57,8 +57,8 @@ class CreateUserBody(BaseModel):
 
 @router.post("/users")
 async def create_user(body: CreateUserBody, admin=Depends(_require_admin)):
-    if body.role not in ("user", "admin"):
-        raise HTTPException(400, "role must be user or admin")
+    if body.role not in ("user", "sub_admin", "admin"):
+        raise HTTPException(400, "role must be user, sub_admin, or admin")
     if body.dailyLimit < 1:
         raise HTTPException(400, "dailyLimit must be >= 1")
     email = body.email.lower().strip()
@@ -94,7 +94,7 @@ async def update_user(uid: str, body: UpdateUserBody, admin=Depends(_require_adm
     patch = {}
     if body.name       is not None: patch["name"]       = body.name.strip()
     if body.role       is not None:
-        if body.role not in ("user", "admin"): raise HTTPException(400, "Invalid role")
+        if body.role not in ("user", "sub_admin", "admin"): raise HTTPException(400, "Invalid role")
         patch["role"] = body.role
     if body.dailyLimit is not None:
         if body.dailyLimit < 1: raise HTTPException(400, "dailyLimit must be >= 1")
@@ -113,8 +113,11 @@ async def update_user(uid: str, body: UpdateUserBody, admin=Depends(_require_adm
 async def delete_user(uid: str, admin=Depends(_require_admin)):
     if uid == admin["id"]:
         raise HTTPException(400, "Cannot delete yourself")
-    if not await col_users().find_one({"_id": oid(uid)}):
+    target = await col_users().find_one({"_id": oid(uid)})
+    if not target:
         raise HTTPException(404, "User not found")
+    if target.get("role") == "admin":
+        raise HTTPException(403, "Cannot delete an admin account")
     await col_users().delete_one({"_id": oid(uid)})
     return {"message": "Deleted"}
 
@@ -211,3 +214,60 @@ async def register_token(body: TokenBody, user=Depends(current_user)):
 async def remove_token(body: TokenBody, user=Depends(current_user)):
     await col_fcm_tokens().delete_one({"userId": user["id"], "token": body.token})
     return {"message": "Token removed"}
+
+
+# ── Weekly Notification Schedules ─────────────────────────────────────────────
+
+DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+
+class ScheduleBody(BaseModel):
+    user_id:    str
+    day:        str        # "monday" … "sunday"
+    hour:       int        # 0-23 UTC
+    minute:     int = 0    # 0-59 UTC
+    message:    Optional[str] = None
+    enabled:    bool = True
+
+
+@router.get("/schedules")
+async def list_schedules(admin=Depends(_require_admin)):
+    docs = await col_notify_schedules().find({}).to_list(length=500)
+    result = []
+    for d in docs:
+        d["id"] = str(d.pop("_id"))
+        result.append(d)
+    return result
+
+
+@router.put("/schedules")
+async def upsert_schedule(body: ScheduleBody, admin=Depends(_require_admin)):
+    if body.day not in DAYS:
+        raise HTTPException(400, f"day must be one of {DAYS}")
+    if not (0 <= body.hour <= 23):
+        raise HTTPException(400, "hour must be 0-23")
+    if not (0 <= body.minute <= 59):
+        raise HTTPException(400, "minute must be 0-59")
+    u = await col_users().find_one({"_id": oid(body.user_id)})
+    if not u:
+        raise HTTPException(404, "User not found")
+    await col_notify_schedules().update_one(
+        {"userId": body.user_id},
+        {"$set": {
+            "userId":    body.user_id,
+            "userName":  u.get("name", ""),
+            "day":       body.day,
+            "hour":      body.hour,
+            "minute":    body.minute,
+            "message":   body.message,
+            "enabled":   body.enabled,
+            "updatedAt": now(),
+        }},
+        upsert=True,
+    )
+    return {"message": "Schedule saved"}
+
+
+@router.delete("/schedules/{uid}")
+async def delete_schedule(uid: str, admin=Depends(_require_admin)):
+    await col_notify_schedules().delete_one({"userId": uid})
+    return {"message": "Deleted"}

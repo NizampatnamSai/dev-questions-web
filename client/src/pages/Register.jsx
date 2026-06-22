@@ -8,16 +8,18 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const submit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
     try {
       await register(name, email, password);
-      toast.success("Account created!");
+      toast.success("Account created!", { id: "register" });
       navigate("/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed");
@@ -45,7 +47,8 @@ export default function Register() {
             placeholder="Full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
+            disabled={loading}
+            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
           />
           <input
             type="email"
@@ -53,31 +56,53 @@ export default function Register() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
+            disabled={loading}
+            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
           />
-          <input
-            type="password"
-            required
-            minLength={6}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
-          />
+          <div className="relative">
+            <input
+              type={showPw ? "text" : "password"}
+              required
+              minLength={6}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              className="w-full px-4 py-2.5 pr-11 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPw(v => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition text-sm select-none"
+              tabIndex={-1}
+            >
+              {showPw ? "🙈" : "👁️"}
+            </button>
+          </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold text-sm transition disabled:opacity-50"
+            className="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold text-sm transition disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading ? "Creating..." : "Create Account"}
+            {loading ? (
+              <>
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                Creating…
+              </>
+            ) : "Create Account"}
           </button>
         </form>
 
         <p className="text-center text-sm text-slate-400 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-cyan-400 hover:underline">
-            Sign in
-          </Link>
+          {loading ? (
+            <span className="text-slate-500 cursor-not-allowed">Sign in</span>
+          ) : (
+            <Link to="/login" className="text-cyan-400 hover:underline">Sign in</Link>
+          )}
         </p>
       </motion.div>
     </div>

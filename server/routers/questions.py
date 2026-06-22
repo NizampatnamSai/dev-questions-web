@@ -68,8 +68,12 @@ async def _inc_ai_usage(uid: str, count: int = 1):
 @router.get("/daily-status")
 async def daily_status(user=Depends(current_user)):
     uid = user["id"]
+    # Count AI-generated questions today (col_ai_usage tracks every generation)
+    ai_used = await _get_ai_usage(uid)
+    # Also count manually posted questions today (in case user wrote their own)
     today_start = datetime.combine(date.today(), datetime.min.time()).replace(tzinfo=timezone.utc)
-    used = await col_questions().count_documents({"userId": uid, "createdAt": {"$gte": today_start}})
+    posted = await col_questions().count_documents({"userId": uid, "createdAt": {"$gte": today_start}})
+    used  = ai_used + posted
     limit = user.get("dailyLimit", 10)
     return {"used": used, "limit": limit, "remaining": max(0, limit - used)}
 
@@ -105,19 +109,31 @@ async def question_helper(body: HelperBody, user=Depends(current_user)):
 # ── AI Generate questions ─────────────────────────────────────────────────────
 
 class GenBody(BaseModel):
-    category: str
+    category: str  # single category, comma-separated list, or empty string for random
     level:    str
     type:     str = "Technical"
     count:    int
 
 
+def resolve_category(raw: str) -> str:
+    """Accept single, comma-separated, or empty — returns one valid category."""
+    import random as _r
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    valid = [p for p in parts if p in CATEGORIES]
+    if not valid:
+        if parts:  # non-empty but nothing valid
+            raise HTTPException(400, "Invalid category")
+        return _r.choice(CATEGORIES)   # empty = pick random
+    return _r.choice(valid)
+
+
 @router.post("/generate")
 async def gen_questions(body: GenBody, user=Depends(current_user)):
-    if body.category not in CATEGORIES: raise HTTPException(400, "Invalid category")
-    if body.level    not in LEVELS:     raise HTTPException(400, "Invalid level")
-    if body.type     not in TYPES:      raise HTTPException(400, "Invalid type")
-    if body.count    not in [1,3,5,10]: raise HTTPException(400, "count must be 1, 3, 5, or 10")
-    result = await generate_questions(body.category, body.level, body.type, body.count)
+    category = resolve_category(body.category)
+    if body.level not in LEVELS: raise HTTPException(400, "Invalid level")
+    if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
+    if body.count not in [1,3,5,10]: raise HTTPException(400, "count must be 1, 3, 5, or 10")
+    result = await generate_questions(category, body.level, body.type, body.count)
     return result
 
 
@@ -133,10 +149,10 @@ class GenAnswerBody(BaseModel):
 @router.post("/generate/answer")
 async def gen_answer(body: GenAnswerBody, user=Depends(current_user)):
     if len(body.question.strip()) < 10: raise HTTPException(400, "Question too short")
-    if body.category not in CATEGORIES: raise HTTPException(400, "Invalid category")
-    if body.level    not in LEVELS:     raise HTTPException(400, "Invalid level")
-    if body.type     not in TYPES:      raise HTTPException(400, "Invalid type")
-    result = await generate_answer(body.question.strip(), body.category, body.level, body.type)
+    category = resolve_category(body.category)
+    if body.level not in LEVELS: raise HTTPException(400, "Invalid level")
+    if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
+    result = await generate_answer(body.question.strip(), category, body.level, body.type)
     return result
 
 
@@ -213,9 +229,9 @@ class CreateBody(BaseModel):
 
 @router.post("/")
 async def create(body: CreateBody, user=Depends(current_user)):
-    if body.category not in CATEGORIES: raise HTTPException(400, "Invalid category")
-    if body.level    not in LEVELS:     raise HTTPException(400, "Invalid level")
-    if body.type     not in TYPES:      raise HTTPException(400, "Invalid type")
+    body.category = resolve_category(body.category)
+    if body.level not in LEVELS: raise HTTPException(400, "Invalid level")
+    if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
     if not body.question or not body.answer: raise HTTPException(400, "question and answer required")
 
     # Enforce per-user daily post limit
@@ -364,8 +380,13 @@ async def quiz_random(
 ):
     if count > 20: count = 20
     filt: dict = {"status": "published"}
-    if category: filt["category"] = category
-    if level:    filt["level"]    = level
+    if category:
+        cats = [c.strip() for c in category.split(",") if c.strip()]
+        if len(cats) > 1:
+            filt["category"] = {"$in": cats}
+        elif cats:
+            filt["category"] = cats[0]
+    if level:    filt["level"] = level
     pipeline = [
         {"$match": filt},
         {"$sample": {"size": count}},

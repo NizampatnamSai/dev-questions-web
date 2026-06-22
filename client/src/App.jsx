@@ -30,6 +30,7 @@ import StudyGuide from "./pages/StudyGuide";
 import MockInterview from "./pages/MockInterview";
 import Flashcards from "./pages/Flashcards";
 import Progress from "./pages/Progress";
+import JsCompiler from "./pages/JsCompiler";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -161,6 +162,7 @@ function AppInner() {
         <Route path="/flashcards"      element={<ProtectedPage><Flashcards /></ProtectedPage>} />
         <Route path="/progress"        element={<ProtectedPage><Progress /></ProtectedPage>} />
         <Route path="/question/:id"    element={<ProtectedPage><QuestionDetail /></ProtectedPage>} />
+        <Route path="/js-compiler"     element={<ProtectedPage><JsCompiler /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
     </>

@@ -60,7 +60,25 @@ export default function Bookmarks() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-slate-400">Loading...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="glass-card p-5 space-y-3 animate-pulse">
+              <div className="flex gap-2">
+                <div className="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                <div className="h-4 w-14 bg-slate-200 dark:bg-slate-700 rounded-full" />
+              </div>
+              <div className="space-y-1.5">
+                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full" />
+                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-5/6" />
+                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-14" />
+                <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-14" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : questions.length === 0 ? (
         <p className="text-sm text-slate-400">No bookmarks yet. Save questions from the Community feed!</p>
       ) : (

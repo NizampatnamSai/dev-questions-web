@@ -11,6 +11,7 @@ const CATEGORIES = [
   { id: "react", label: "React" },
   { id: "reactnative", label: "React Native" },
   { id: "nextjs", label: "Next.js" },
+  { id: "git", label: "Git & GitHub" },
 ];
 
 const DIFFICULTIES = [
@@ -35,7 +36,7 @@ const SCORE_BG = (s) => {
 
 export default function MockInterview() {
   const [phase, setPhase] = useState("setup"); // setup | interview | results
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [count, setCount] = useState(7);
   const [questions, setQuestions] = useState([]);
@@ -62,6 +63,7 @@ export default function MockInterview() {
   async function startInterview() {
     setLoadingStart(true);
     try {
+      const category = categories.length === 1 ? categories[0] : categories.length > 1 ? categories.join(",") : "";
       const { data } = await api.post("/study/mock/start", { category, difficulty, count });
       setQuestions(data.questions);
       setAnswers({});
@@ -114,7 +116,7 @@ export default function MockInterview() {
   const q = questions[current];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-4 py-8 max-w-4xl mx-auto">
+    <div className="min-h-screen px-4 py-8 max-w-4xl mx-auto text-slate-800 dark:text-white">
       <AnimatePresence mode="wait">
 
         {/* ── Setup ── */}
@@ -123,28 +125,32 @@ export default function MockInterview() {
             <div className="text-center mb-10">
               <div className="text-6xl mb-4">🎯</div>
               <h1 className="text-3xl font-bold mb-2">Mock Interview</h1>
-              <p className="text-slate-400">AI-powered interview simulation. Answer questions out loud or in writing — get scored with feedback.</p>
+              <p className="text-slate-500 dark:text-slate-400">AI-powered interview simulation. Answer questions out loud or in writing — get scored with feedback.</p>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+            <div className="glass-card p-6 space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">Category</label>
+                <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">
+                  Category {categories.length > 0 && <span className="text-indigo-400 font-normal">({categories.length} selected)</span>}
+                </label>
                 <div className="flex flex-wrap gap-2">
-                  {CATEGORIES.map((c) => (
-                    <button key={c.id} onClick={() => setCategory(c.id)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${category === c.id ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>
+                  {CATEGORIES.filter(c => c.id !== "").map((c) => (
+                    <button key={c.id}
+                      onClick={() => setCategories(prev => prev.includes(c.id) ? prev.filter(x => x !== c.id) : [...prev, c.id])}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${categories.includes(c.id) ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"}`}>
                       {c.label}
                     </button>
                   ))}
                 </div>
+                <p className="text-xs text-slate-400 mt-1.5">Select multiple or none for all topics</p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">Difficulty</label>
+                <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">Difficulty</label>
                 <div className="flex flex-wrap gap-2">
                   {DIFFICULTIES.map((d) => (
                     <button key={d.id} onClick={() => setDifficulty(d.id)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${difficulty === d.id ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${difficulty === d.id ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"}`}>
                       {d.label}
                     </button>
                   ))}
@@ -152,23 +158,23 @@ export default function MockInterview() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">
+                <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">
                   Number of Questions: <span className="text-indigo-400">{count}</span>
                 </label>
                 <input type="range" min={3} max={15} value={count} onChange={(e) => setCount(+e.target.value)}
                   className="w-full accent-indigo-500" />
-                <div className="flex justify-between text-xs text-slate-500 mt-1"><span>3</span><span>15</span></div>
+                <div className="flex justify-between text-xs text-slate-400 mt-1"><span>3</span><span>15</span></div>
               </div>
 
               <button onClick={startInterview} disabled={loadingStart}
-                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-xl font-bold text-lg transition-all">
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-xl font-bold text-lg text-white transition-all">
                 {loadingStart ? "Loading questions..." : "Start Interview →"}
               </button>
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-4 text-center">
               {[["🤖", "AI Scoring", "Scored 1-10 with detailed feedback"], ["⏱️", "Timed Session", "Track how long you take per question"], ["📊", "Full Review", "See model answers after each question"]].map(([icon, title, desc]) => (
-                <div key={title} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <div key={title} className="glass-card p-4">
                   <div className="text-2xl mb-2">{icon}</div>
                   <div className="font-semibold text-sm">{title}</div>
                   <div className="text-xs text-slate-400 mt-1">{desc}</div>
@@ -183,39 +189,39 @@ export default function MockInterview() {
           <motion.div key={`q-${current}`} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}>
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <div className="text-sm text-slate-400">
-                Question <span className="text-white font-bold">{current + 1}</span> / {questions.length}
+              <div className="text-sm text-slate-500 dark:text-slate-400">
+                Question <span className="text-slate-800 dark:text-white font-bold">{current + 1}</span> / {questions.length}
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-sm font-mono text-indigo-400">{formatTime(timer)}</span>
-                <button onClick={() => setPhase("results")} className="text-xs text-slate-500 hover:text-slate-300">End early</button>
+                <button onClick={() => setPhase("results")} className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">End early</button>
               </div>
             </div>
 
             {/* Progress bar */}
-            <div className="w-full h-1.5 bg-slate-800 rounded-full mb-6">
+            <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-6">
               <motion.div className="h-full bg-indigo-500 rounded-full"
                 animate={{ width: `${((current + 1) / questions.length) * 100}%` }} />
             </div>
 
             {/* Question card */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-4">
+            <div className="glass-card p-6 mb-4">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-slate-800 rounded-full text-slate-400">{q.category}</span>
+                <span className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-500 dark:text-slate-400">{q.category}</span>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                  q.difficulty === "Basic" ? "bg-green-500/20 text-green-400" :
-                  q.difficulty === "Intermediate" ? "bg-yellow-500/20 text-yellow-400" :
-                  q.difficulty === "Advanced" ? "bg-red-500/20 text-red-400" : "bg-purple-500/20 text-purple-400"}`}>
+                  q.difficulty === "Basic" ? "bg-green-500/20 text-green-500 dark:text-green-400" :
+                  q.difficulty === "Intermediate" ? "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400" :
+                  q.difficulty === "Advanced" ? "bg-red-500/20 text-red-500 dark:text-red-400" : "bg-purple-500/20 text-purple-500 dark:text-purple-400"}`}>
                   {q.difficulty}
                 </span>
-                <span className="text-xs text-slate-500">{q.topic} → {q.title}</span>
+                <span className="text-xs text-slate-400">{q.topic} → {q.title}</span>
               </div>
-              <p className="text-lg font-semibold text-white leading-relaxed">{q.question}</p>
+              <p className="text-lg font-semibold text-slate-800 dark:text-white leading-relaxed">{q.question}</p>
             </div>
 
             {/* Answer */}
             <textarea ref={textRef}
-              className="w-full h-40 bg-slate-900 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 resize-none focus:outline-none focus:border-indigo-500 font-mono text-sm"
+              className="w-full h-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:border-indigo-500 font-mono text-sm"
               placeholder="Type your answer here... (or leave blank to see the model answer)"
               value={answers[current] || ""}
               onChange={(e) => setAnswers((prev) => ({ ...prev, [current]: e.target.value }))}
@@ -228,22 +234,22 @@ export default function MockInterview() {
                 <div className="flex items-center gap-3">
                   <span className={`text-3xl font-black ${SCORE_COLOR(scores[current].score)}`}>{scores[current].score}/10</span>
                   <div>
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-semibold text-slate-800 dark:text-white">
                       {scores[current].score >= 8 ? "Excellent! 🎉" : scores[current].score >= 5 ? "Good effort 👍" : "Needs work 📚"}
                     </div>
                   </div>
                 </div>
                 {scores[current].right && (
-                  <div><div className="text-xs font-bold text-green-400 mb-1">✅ WHAT YOU GOT RIGHT</div>
-                    <p className="text-sm text-slate-200">{scores[current].right}</p></div>
+                  <div><div className="text-xs font-bold text-green-500 dark:text-green-400 mb-1">✅ WHAT YOU GOT RIGHT</div>
+                    <p className="text-sm text-slate-700 dark:text-slate-200">{scores[current].right}</p></div>
                 )}
                 {scores[current].missed && (
-                  <div><div className="text-xs font-bold text-red-400 mb-1">❌ WHAT YOU MISSED</div>
-                    <p className="text-sm text-slate-200">{scores[current].missed}</p></div>
+                  <div><div className="text-xs font-bold text-red-500 dark:text-red-400 mb-1">❌ WHAT YOU MISSED</div>
+                    <p className="text-sm text-slate-700 dark:text-slate-200">{scores[current].missed}</p></div>
                 )}
                 {scores[current].model_answer && (
-                  <div><div className="text-xs font-bold text-indigo-400 mb-1">💡 MODEL ANSWER</div>
-                    <p className="text-sm text-slate-200">{scores[current].model_answer}</p></div>
+                  <div><div className="text-xs font-bold text-indigo-500 dark:text-indigo-400 mb-1">💡 MODEL ANSWER</div>
+                    <p className="text-sm text-slate-700 dark:text-slate-200">{scores[current].model_answer}</p></div>
                 )}
               </motion.div>
             )}
@@ -251,12 +257,12 @@ export default function MockInterview() {
             <div className="flex gap-3 mt-4">
               {!scores[current] && (
                 <button onClick={submitAnswer} disabled={loadingEval}
-                  className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 disabled:opacity-50 rounded-xl font-semibold transition-all">
+                  className="flex-1 py-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 disabled:opacity-50 rounded-xl font-semibold transition-all">
                   {loadingEval ? "Evaluating..." : "Get AI Feedback"}
                 </button>
               )}
               <button onClick={nextQuestion} disabled={loadingEval}
-                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-xl font-bold transition-all">
+                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-xl font-bold text-white transition-all">
                 {current + 1 === questions.length ? "See Results →" : "Next Question →"}
               </button>
             </div>
@@ -270,19 +276,19 @@ export default function MockInterview() {
               <div className="text-7xl mb-4">{avgScore() >= 8 ? "🏆" : avgScore() >= 5 ? "👍" : "📚"}</div>
               <h2 className="text-3xl font-bold mb-2">Interview Complete!</h2>
               <div className={`text-6xl font-black mt-2 ${SCORE_COLOR(avgScore())}`}>{avgScore()}/10</div>
-              <p className="text-slate-400 mt-2">Average score across {Object.keys(scores).length} evaluated questions</p>
-              <p className="text-slate-500 text-sm">Total time: {formatTime(timer)}</p>
+              <p className="text-slate-500 dark:text-slate-400 mt-2">Average score across {Object.keys(scores).length} evaluated questions</p>
+              <p className="text-slate-400 text-sm">Total time: {formatTime(timer)}</p>
             </div>
 
             <div className="space-y-4 mb-8">
               {questions.map((q, i) => {
                 const s = scores[i];
                 return (
-                  <div key={i} className={`rounded-xl border p-4 ${s ? SCORE_BG(s.score) : "bg-slate-900 border-slate-800"}`}>
+                  <div key={i} className={`rounded-xl border p-4 ${s ? SCORE_BG(s.score) : "glass-card"}`}>
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
                         <div className="text-xs text-slate-400 mb-1">{i + 1}. {q.topic} → {q.title}</div>
-                        <p className="text-sm text-white">{q.question}</p>
+                        <p className="text-sm text-slate-800 dark:text-white">{q.question}</p>
                         {s?.model_answer && (
                           <p className="text-xs text-slate-400 mt-2 italic">{s.model_answer}</p>
                         )}
@@ -290,7 +296,7 @@ export default function MockInterview() {
                       {s ? (
                         <span className={`text-2xl font-black flex-shrink-0 ${SCORE_COLOR(s.score)}`}>{s.score}</span>
                       ) : (
-                        <span className="text-xs text-slate-600">skipped</span>
+                        <span className="text-xs text-slate-400">skipped</span>
                       )}
                     </div>
                   </div>
@@ -300,11 +306,11 @@ export default function MockInterview() {
 
             <div className="flex gap-3">
               <button onClick={() => { setPhase("setup"); setQuestions([]); }}
-                className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-semibold transition-all">
+                className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-semibold transition-all">
                 New Interview
               </button>
               <button onClick={() => { setCurrent(0); setPhase("interview"); setTimer(0); setScores({}); setAnswers({}); }}
-                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold transition-all">
+                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-white transition-all">
                 Retry Same Questions
               </button>
             </div>

@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
 
+const PAGE = 10;
+
 export default function MyQuestions() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
+  const [visible, setVisible] = useState(PAGE);
 
   const load = async () => {
     setLoading(true);
@@ -66,24 +69,39 @@ export default function MyQuestions() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-slate-400">Loading...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-40 rounded-2xl bg-slate-100 dark:bg-white/5 animate-pulse" />
+          ))}
+        </div>
       ) : questions.length === 0 ? (
         <p className="text-sm text-slate-400">You haven't posted any questions yet. Try the AI Generator!</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AnimatePresence>
-            {questions.map((q) => (
-              <QuestionCard
-                key={q.id}
-                q={q}
-                showOwnerActions
-                onHighlight={toggleHighlight}
-                onEdit={(item) => setEditing({ ...item })}
-                onDelete={handleDelete}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
+        <>
+          <p className="text-xs text-slate-400">Showing {Math.min(visible, questions.length)} of {questions.length} questions</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <AnimatePresence>
+              {questions.slice(0, visible).map((q) => (
+                <QuestionCard
+                  key={q.id}
+                  q={q}
+                  showOwnerActions
+                  onHighlight={toggleHighlight}
+                  onEdit={(item) => setEditing({ ...item })}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+          {visible < questions.length && (
+            <button
+              onClick={() => setVisible(v => v + PAGE)}
+              className="w-full py-3 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+            >
+              Load more ({questions.length - visible} remaining)
+            </button>
+          )}
+        </>
       )}
 
       <AnimatePresence>

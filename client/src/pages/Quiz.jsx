@@ -76,8 +76,8 @@ function Timer({ seconds, onExpire }) {
 
 // ── Setup screen ───────────────────────────────────────────────────────────────
 function QuizSetup({ onStart }) {
-  const [category, setCategory] = useState("");
-  const [level, setLevel]       = useState("");
+  const [categories, setCategories] = useState([]);
+  const [level, setLevel]           = useState("");
   const [count, setCount]       = useState(10);
   const [timeLimit, setTimeLimit] = useState(60);
 
@@ -91,18 +91,33 @@ function QuizSetup({ onStart }) {
 
       <div className="glass-card p-6 space-y-4">
         <div>
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Category</label>
-          <select value={category} onChange={e => setCategory(e.target.value)} className="input-light w-full">
-            <option value="">All Categories</option>
-            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">
+            Category {categories.length > 0 && <span className="text-indigo-400 normal-case font-normal">({categories.length} selected)</span>}
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => setCategories([])}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${categories.length === 0 ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-indigo-400 hover:text-indigo-500"}`}>
+              All
+            </button>
+            {CATEGORIES.map(c => (
+              <button key={c}
+                onClick={() => setCategories(prev => prev.includes(c) ? prev.filter(x => x !== c) : [...prev, c])}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${categories.includes(c) ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-indigo-400 hover:text-indigo-500"}`}>
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
         <div>
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Difficulty</label>
-          <select value={level} onChange={e => setLevel(e.target.value)} className="input-light w-full">
-            <option value="">All Levels</option>
-            {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-          </select>
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">Difficulty</label>
+          <div className="flex flex-wrap gap-2">
+            {["", ...LEVELS].map(l => (
+              <button key={l} onClick={() => setLevel(l)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${level === l ? "bg-indigo-500 border-indigo-500 text-white" : "border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-indigo-400 hover:text-indigo-500"}`}>
+                {l || "All"}
+              </button>
+            ))}
+          </div>
         </div>
         <div>
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">
@@ -137,7 +152,7 @@ function QuizSetup({ onStart }) {
         </div>
 
         <button
-          onClick={() => onStart({ category, level, count, timeLimit })}
+          onClick={() => onStart({ category: categories.join(","), level, count, timeLimit })}
           className="btn-primary w-full text-base py-3 mt-2"
         >
           Start Quiz →
@@ -154,7 +169,7 @@ function QuizCard({ q, index, total, timeLimit, onAnswer }) {
   const [userAnswer, setUserAnswer]     = useState("");
   const [checking, setChecking]         = useState(false);
   const [result, setResult]             = useState(null);
-  const [mode, setMode]                 = useState("self");
+  const [mode, setMode]                 = useState("ai");
   const [timedOut, setTimedOut]         = useState(false);
   const timerKey = `${q.id}-${index}`;
 

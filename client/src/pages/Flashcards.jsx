@@ -23,7 +23,7 @@ function FlipCard({ topic, onKnow, onReview }) {
         onClick={() => setFlipped((f) => !f)}
       >
         {/* Front */}
-        <div className="absolute inset-0 bg-slate-900 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between cursor-pointer select-none"
+        <div className="absolute inset-0 glass-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer select-none"
           style={{ backfaceVisibility: "hidden" }}>
           <div className="flex items-center justify-between">
             <span className="text-xs text-slate-500">{topic.category} · {topic.topic}</span>
@@ -31,27 +31,27 @@ function FlipCard({ topic, onKnow, onReview }) {
           </div>
           <div className="text-center flex-1 flex flex-col items-center justify-center gap-4 py-6">
             <div className="text-4xl">❓</div>
-            <h2 className="text-xl font-bold text-white">{topic.title}</h2>
-            <p className="text-slate-300 text-sm leading-relaxed">{topic.interviewQuestion}</p>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">{topic.title}</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{topic.interviewQuestion}</p>
           </div>
-          <p className="text-center text-xs text-slate-600">Tap to flip</p>
+          <p className="text-center text-xs text-slate-400">Tap to flip</p>
         </div>
 
         {/* Back */}
-        <div className="absolute inset-0 bg-slate-800 border border-indigo-500/40 rounded-2xl p-6 flex flex-col justify-between cursor-pointer select-none"
+        <div className="absolute inset-0 bg-indigo-50 dark:bg-slate-800 border border-indigo-300/60 dark:border-indigo-500/40 rounded-2xl p-6 flex flex-col justify-between cursor-pointer select-none"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
           <div className="flex items-center justify-between">
-            <span className="text-xs text-indigo-400 font-semibold">Answer</span>
+            <span className="text-xs text-indigo-500 dark:text-indigo-400 font-semibold">Answer</span>
             <span className={`text-xs px-2 py-1 rounded-full border ${DIFF_COLORS[topic.difficulty]}`}>{topic.difficulty}</span>
           </div>
           <div className="flex-1 overflow-y-auto py-4 space-y-3">
-            <p className="text-slate-200 text-sm leading-relaxed font-semibold">{topic.summary}</p>
-            <p className="text-slate-400 text-xs leading-relaxed">{topic.explanation?.slice(0, 300)}{topic.explanation?.length > 300 ? "..." : ""}</p>
+            <p className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed font-semibold">{topic.summary}</p>
+            <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{topic.explanation?.slice(0, 300)}{topic.explanation?.length > 300 ? "..." : ""}</p>
             {topic.code && (
               <pre className="bg-slate-900 rounded-lg p-3 text-xs text-green-300 overflow-x-auto">{topic.code.slice(0, 200)}</pre>
             )}
           </div>
-          <p className="text-center text-xs text-slate-600">Tap to flip back</p>
+          <p className="text-center text-xs text-slate-400">Tap to flip back</p>
         </div>
       </motion.div>
 
@@ -76,7 +76,7 @@ function FlipCard({ topic, onKnow, onReview }) {
 }
 
 export default function Flashcards() {
-  const [category, setCategory] = useState("all");
+  const [categories, setCategories] = useState([]);
   const [deck, setDeck] = useState([]);
   const [idx, setIdx] = useState(0);
   const [progress, setProgress] = useState({});
@@ -88,7 +88,7 @@ export default function Flashcards() {
   }, []);
 
   function buildDeck(reviewOnlyMode = reviewOnly) {
-    let pool = category === "all" ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => t.category === category);
+    let pool = categories.length === 0 ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => categories.includes(t.category));
     if (reviewOnlyMode) pool = pool.filter((t) => progress[t.id] === "review" || !progress[t.id]);
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     setDeck(shuffled);
@@ -120,7 +120,7 @@ export default function Flashcards() {
   const reviewCount = Object.values(progress).filter((v) => v === "review").length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-4 py-8 max-w-2xl mx-auto">
+    <div className="min-h-screen px-4 py-8 max-w-2xl mx-auto text-slate-800 dark:text-white">
       <AnimatePresence mode="wait">
 
         {phase === "browse" && (
@@ -134,9 +134,9 @@ export default function Flashcards() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 mb-6">
               {[["📚", STUDY_TOPICS.length, "Total"], ["✅", knownCount, "Know It"], ["🔄", reviewCount, "Review"]].map(([icon, val, label]) => (
-                <div key={label} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                <div key={label} className="glass-card p-3 text-center">
                   <div className="text-xl">{icon}</div>
-                  <div className="text-2xl font-black text-white">{val}</div>
+                  <div className="text-2xl font-black">{val}</div>
                   <div className="text-xs text-slate-500">{label}</div>
                 </div>
               ))}
@@ -144,15 +144,18 @@ export default function Flashcards() {
 
             {/* Category picker */}
             <div className="mb-4">
-              <label className="text-sm font-semibold text-slate-300 block mb-2">Category</label>
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 block mb-2">
+                Category {categories.length > 0 && <span className="text-indigo-400 font-normal">({categories.length} selected)</span>}
+              </label>
               <div className="flex flex-wrap gap-2">
-                <button onClick={() => setCategory("all")}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${category === "all" ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-300"}`}>
+                <button onClick={() => setCategories([])}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${categories.length === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
                   All
                 </button>
                 {STUDY_CATEGORIES.map((c) => (
-                  <button key={c.id} onClick={() => setCategory(c.id)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${category === c.id ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-300"}`}>
+                  <button key={c.id}
+                    onClick={() => setCategories(prev => prev.includes(c.id) ? prev.filter(x => x !== c.id) : [...prev, c.id])}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${categories.includes(c.id) ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
                     {c.icon} {c.label}
                   </button>
                 ))}
@@ -160,7 +163,7 @@ export default function Flashcards() {
             </div>
 
             {/* Mode toggle */}
-            <label className="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-4 cursor-pointer mb-6">
+            <label className="flex items-center gap-3 glass-card p-4 cursor-pointer mb-6">
               <input type="checkbox" checked={reviewOnly} onChange={(e) => setReviewOnly(e.target.checked)} className="accent-indigo-500 w-4 h-4" />
               <div>
                 <div className="font-semibold text-sm">Review mode</div>
@@ -169,7 +172,7 @@ export default function Flashcards() {
             </label>
 
             <button onClick={() => buildDeck(reviewOnly)}
-              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-lg transition-all">
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-lg text-white transition-all">
               Start Flashcards →
             </button>
           </motion.div>
@@ -178,12 +181,12 @@ export default function Flashcards() {
         {phase === "session" && deck[idx] && (
           <motion.div key={`card-${idx}`} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}>
             <div className="flex items-center justify-between mb-4">
-              <button onClick={() => setPhase("browse")} className="text-sm text-slate-400 hover:text-white">← Back</button>
+              <button onClick={() => setPhase("browse")} className="text-sm text-slate-400 hover:text-slate-700 dark:hover:text-white">← Back</button>
               <span className="text-sm text-slate-400">{idx + 1} / {deck.length}</span>
               <button onClick={() => setPhase("done")} className="text-sm text-slate-500 hover:text-slate-300">Finish</button>
             </div>
 
-            <div className="w-full h-1.5 bg-slate-800 rounded-full mb-6">
+            <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-6">
               <motion.div className="h-full bg-indigo-500 rounded-full" animate={{ width: `${((idx + 1) / deck.length) * 100}%` }} />
             </div>
 
@@ -197,7 +200,7 @@ export default function Flashcards() {
             <h2 className="text-3xl font-bold mb-2">Deck Complete!</h2>
             <p className="text-slate-400 mb-8">You've gone through all {deck.length} cards.</p>
             <div className="flex gap-3 justify-center">
-              <button onClick={() => setPhase("browse")} className="px-6 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-semibold">
+              <button onClick={() => setPhase("browse")} className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-semibold">
                 Change Deck
               </button>
               <button onClick={() => { setReviewOnly(true); buildDeck(true); }}

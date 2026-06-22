@@ -1,12 +1,13 @@
 // Auto-generated — 264 topics across 7 technologies
 export const STUDY_CATEGORIES = [
-  { id: "html", label: "HTML", icon: "\ud83c\udf10", color: "#e34c26" },
-  { id: "css", label: "CSS", icon: "\ud83c\udfa8", color: "#264de4" },
-  { id: "javascript", label: "JavaScript", icon: "\u26a1", color: "#f7df1e" },
-  { id: "typescript", label: "TypeScript", icon: "\ud83d\udd37", color: "#3178c6" },
-  { id: "react", label: "React", icon: "\u269b\ufe0f", color: "#61dafb" },
-  { id: "reactnative", label: "React Native", icon: "\ud83d\udcf1", color: "#0fa5e9" },
-  { id: "nextjs", label: "Next.js", icon: "\u25b2", color: "#ffffff" },
+  { id: "html",        label: "HTML",         icon: "\ud83c\udf10", color: "#e34c26", sources: [{ label: "W3Schools",       url: "https://www.w3schools.com/html/" }, { label: "MDN",             url: "https://developer.mozilla.org/en-US/docs/Web/HTML" }] },
+  { id: "css",         label: "CSS",          icon: "\ud83c\udfa8", color: "#264de4", sources: [{ label: "W3Schools",       url: "https://www.w3schools.com/css/" },  { label: "MDN",             url: "https://developer.mozilla.org/en-US/docs/Web/CSS" }] },
+  { id: "javascript",  label: "JavaScript",   icon: "\u26a1",        color: "#f7df1e", sources: [{ label: "MDN",             url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" }, { label: "javascript.info", url: "https://javascript.info/" }] },
+  { id: "typescript",  label: "TypeScript",   icon: "\ud83d\udd37", color: "#3178c6", sources: [{ label: "TypeScript Docs", url: "https://www.typescriptlang.org/docs/" }, { label: "W3Schools",    url: "https://www.w3schools.com/typescript/" }] },
+  { id: "react",       label: "React",        icon: "\u269b\ufe0f", color: "#61dafb", sources: [{ label: "React Docs",      url: "https://react.dev/" }, { label: "W3Schools",               url: "https://www.w3schools.com/react/" }] },
+  { id: "reactnative", label: "React Native", icon: "\ud83d\udcf1", color: "#0fa5e9", sources: [{ label: "RN Docs",         url: "https://reactnative.dev/docs/getting-started" }, { label: "Expo Docs",    url: "https://docs.expo.dev/" }] },
+  { id: "nextjs",      label: "Next.js",      icon: "\u25b2",        color: "#000000", sources: [{ label: "Next.js Docs",    url: "https://nextjs.org/docs" }, { label: "Learn Next.js",          url: "https://nextjs.org/learn" }] },
+  { id: "git",         label: "Git & GitHub", icon: "🐙",             color: "#f05032", sources: [{ label: "W3Schools",       url: "https://www.w3schools.com/git/" }, { label: "Git Docs",         url: "https://git-scm.com/doc" }] },
 ];
 
 export const STUDY_TOPICS = [
@@ -4697,4 +4698,1267 @@ module.exports = withAnalyzer(nextConfig);
 ANALYZE=true npm run build`,
     interviewQuestion: `How do you use @next/bundle-analyzer?`,
   },
+
+  // ── Git & GitHub ──────────────────────────────────────────────────────────
+  {
+    id: "git-init-basics",
+    category: "git",
+    topic: "Basics",
+    title: "git init, add, commit",
+    difficulty: "Basic",
+    summary: "Three-step workflow: track files with add, snapshot with commit, share with push",
+    explanation: `Git has three areas: Working Directory (your files), Staging Area (what will be committed), and Repository (.git folder).
+
+git init — creates a new .git directory and starts tracking the folder as a repository.
+git add <file> — moves changes from Working Directory to Staging Area. Use git add . to stage everything.
+git commit -m "message" — takes a snapshot of the Staging Area and saves it to the Repository with a message.
+
+Every commit gets a unique SHA hash. You can always go back to any commit using git checkout <hash> or git reset.`,
+    code: `# Start a repo
+git init
+
+# Stage a file
+git add README.md
+
+# Stage everything
+git add .
+
+# Commit with message
+git commit -m "feat: initial commit"
+
+# See commit history
+git log --oneline`,
+    interviewQuestion: "What is the difference between git add and git commit?",
+  },
+  {
+    id: "git-branching",
+    category: "git",
+    topic: "Branching",
+    title: "Branches & Merging",
+    difficulty: "Basic",
+    summary: "Branches are lightweight pointers to commits — create, switch, and merge without copying files",
+    explanation: `A branch is just a named pointer to a commit. HEAD points to the current branch.
+
+git branch <name> — creates a new branch at the current commit.
+git checkout <name> or git switch <name> — moves HEAD to that branch.
+git checkout -b <name> — shortcut: create + switch.
+git merge <branch> — merges the target branch into the current branch.
+
+Fast-forward merge: if current branch has no new commits, Git just moves the pointer forward — no merge commit.
+Three-way merge: if both branches diverged, Git creates a merge commit combining both histories.
+
+Always pull before merging to avoid conflicts.`,
+    code: `# Create and switch to feature branch
+git checkout -b feature/login
+
+# Or newer syntax
+git switch -c feature/login
+
+# List all branches
+git branch -a
+
+# Merge feature into main
+git checkout main
+git merge feature/login
+
+# Delete branch after merge
+git branch -d feature/login`,
+    interviewQuestion: "What is the difference between a fast-forward merge and a three-way merge?",
+  },
+  {
+    id: "git-remote",
+    category: "git",
+    topic: "Remote",
+    title: "Remote, fetch, pull, push",
+    difficulty: "Basic",
+    summary: "Remote repos live on a server — push sends your commits, pull fetches + merges them",
+    explanation: `git remote add origin <url> — links your local repo to a remote URL (called 'origin' by convention).
+git push origin <branch> — sends local commits to the remote branch.
+git fetch — downloads remote changes WITHOUT merging them. Safe to run anytime.
+git pull — fetch + merge in one step. Can cause conflicts if local branch diverged.
+git pull --rebase — fetch + rebase instead of merge, keeping a cleaner linear history.
+
+git push -u origin main sets the upstream tracking so future git push / git pull work without arguments.`,
+    code: `# Link to GitHub remote
+git remote add origin https://github.com/user/repo.git
+
+# Push for first time (sets upstream)
+git push -u origin main
+
+# Subsequent pushes
+git push
+
+# Fetch without merging
+git fetch origin
+
+# Pull (fetch + merge)
+git pull origin main
+
+# Pull with rebase (cleaner history)
+git pull --rebase origin main`,
+    interviewQuestion: "What is the difference between git fetch and git pull?",
+  },
+  {
+    id: "git-stash",
+    category: "git",
+    topic: "Stash",
+    title: "git stash",
+    difficulty: "Intermediate",
+    summary: "Stash saves uncommitted work temporarily so you can switch branches without losing changes",
+    explanation: `git stash — saves all uncommitted changes (tracked files only) to a stash stack and reverts Working Directory to HEAD.
+git stash pop — applies the latest stash and removes it from the stack.
+git stash apply — applies the latest stash but keeps it in the stack.
+git stash list — shows all stashes (stash@{0} is newest).
+git stash drop stash@{0} — removes a specific stash.
+git stash push -u — also stashes untracked files.
+git stash push -m "WIP: login form" — name the stash for clarity.
+
+Common use case: you're mid-feature and need to hotfix main. Stash your changes, fix the bug, push, then pop stash to resume.`,
+    code: `# Save uncommitted work
+git stash
+
+# Include untracked files
+git stash push -u -m "WIP: login form"
+
+# List stashes
+git stash list
+# stash@{0}: WIP: login form
+# stash@{1}: On main: quick fix
+
+# Apply newest stash
+git stash pop
+
+# Apply specific stash
+git stash apply stash@{1}
+
+# Clear all stashes
+git stash clear`,
+    interviewQuestion: "When would you use git stash instead of committing?",
+  },
+  {
+    id: "git-rebase",
+    category: "git",
+    topic: "Rebase",
+    title: "git rebase & interactive rebase",
+    difficulty: "Advanced",
+    summary: "Rebase replays commits on top of another branch — cleaner history than merge but rewrites SHAs",
+    explanation: `git rebase <base> — takes all commits from your current branch that diverged from <base> and re-applies them one by one on top of <base>.
+
+Result: linear history instead of a merge commit.
+Caveat: rewrites SHA hashes — never rebase commits already pushed to a shared branch.
+
+Interactive rebase (git rebase -i HEAD~N) lets you:
+• pick — keep the commit
+• squash / fixup — combine multiple commits into one
+• reword — change the commit message
+• drop — delete a commit
+• edit — stop and amend a commit
+
+git rebase --abort cancels a rebase in progress.
+git rebase --continue after resolving conflicts to proceed.`,
+    code: `# Rebase feature onto latest main
+git checkout feature/login
+git rebase main
+
+# Interactive rebase: clean up last 3 commits
+git rebase -i HEAD~3
+
+# In the editor:
+# pick abc1234 add login form
+# squash def5678 fix typo
+# reword ghi9012 add validation
+
+# After conflict during rebase:
+git add resolved-file.js
+git rebase --continue
+
+# Abort rebase
+git rebase --abort`,
+    interviewQuestion: "What is the difference between git merge and git rebase? When would you choose each?",
+  },
+  {
+    id: "git-reset-revert",
+    category: "git",
+    topic: "Undoing",
+    title: "reset, revert, restore",
+    difficulty: "Intermediate",
+    summary: "reset rewrites history, revert adds an undo commit — revert is safe for shared branches",
+    explanation: `Three ways to undo in Git:
+
+git restore <file> — discards unstaged changes in Working Directory (safe, can't undo).
+git reset HEAD <file> — unstages a file (moves from Staging back to Working Directory).
+git reset --soft HEAD~1 — moves HEAD back 1 commit, keeps changes staged.
+git reset --mixed HEAD~1 — (default) moves HEAD back, keeps changes unstaged.
+git reset --hard HEAD~1 — moves HEAD back and DELETES changes. Irreversible.
+
+git revert <hash> — creates a new commit that undoes the changes from <hash>. Doesn't rewrite history — safe for shared branches.
+
+Rule: use reset for local, unshared commits. Use revert for commits already on remote/shared branch.`,
+    code: `# Discard uncommitted file change
+git restore src/App.js
+
+# Unstage a file
+git reset HEAD src/App.js
+
+# Undo last commit, keep changes staged
+git reset --soft HEAD~1
+
+# Undo last commit, keep changes unstaged
+git reset --mixed HEAD~1
+
+# Undo last commit, DELETE changes (dangerous!)
+git reset --hard HEAD~1
+
+# Safe undo: creates a new "undo" commit
+git revert abc1234`,
+    interviewQuestion: "What is the difference between git reset --hard and git revert?",
+  },
+  {
+    id: "git-cherry-pick",
+    category: "git",
+    topic: "Advanced",
+    title: "cherry-pick",
+    difficulty: "Advanced",
+    summary: "cherry-pick copies a specific commit from another branch without merging the whole branch",
+    explanation: `git cherry-pick <hash> — applies the changes from the specified commit onto your current branch as a new commit (new SHA).
+
+Use cases:
+• Backport a bugfix from main to a release branch without bringing along unfinished features.
+• Pull a single commit from a colleague's feature branch before it's merged.
+
+git cherry-pick <hash1>..<hash2> — applies a range of commits.
+git cherry-pick --no-commit <hash> — applies changes to Working Directory without committing (lets you review first).
+
+Conflicts are resolved the same way as merge conflicts.`,
+    code: `# Pick one commit from another branch
+git cherry-pick abc1234
+
+# Pick a range of commits
+git cherry-pick abc1234^..def5678
+
+# Apply without committing
+git cherry-pick --no-commit abc1234
+
+# After resolving conflict
+git add resolved.js
+git cherry-pick --continue`,
+    interviewQuestion: "When would you use git cherry-pick instead of merging or rebasing?",
+  },
+  {
+    id: "git-worktree",
+    category: "git",
+    topic: "Advanced",
+    title: "git worktree — work on 2 branches at once",
+    difficulty: "Advanced",
+    summary: "git worktree creates a second working directory linked to the same repo, so you can have two branches checked out simultaneously",
+    explanation: `git worktree lets you check out multiple branches of the same repo into separate folders at the same time — without stashing or switching.
+
+This is perfect when you:
+• Need to hotfix main while still developing a feature branch
+• Want to run tests on one branch while writing code on another
+• Are reviewing a PR without disturbing your current state
+
+git worktree add ../hotfix main — creates folder ../hotfix with main checked out.
+You can cd into it and work normally — git add, commit, push — it's fully independent.
+git worktree list — shows all linked worktrees.
+git worktree remove ../hotfix — removes the worktree folder and its link.
+
+The .git folder is shared, so history and objects are shared. You cannot check out the same branch in two worktrees simultaneously.`,
+    code: `# Linked worktree on a new branch
+git worktree add ../feature-b feature/new-nav
+
+# Linked worktree on existing branch
+git worktree add ../hotfix hotfix/crash-fix
+
+# List all worktrees
+git worktree list
+# /Users/me/myproject  abc1234 [main]
+# /Users/me/hotfix     def5678 [hotfix/crash-fix]
+
+# Work in the second worktree
+cd ../hotfix
+git add .
+git commit -m "fix: crash on empty state"
+git push origin hotfix/crash-fix
+
+# Back in main worktree
+cd ../myproject
+git merge hotfix/crash-fix
+
+# Remove when done
+git worktree remove ../hotfix`,
+    interviewQuestion: "What is git worktree and when would you use it instead of git stash?",
+  },
+  {
+    id: "git-github-pr",
+    category: "git",
+    topic: "GitHub",
+    title: "Pull Requests & Code Review",
+    difficulty: "Basic",
+    summary: "A Pull Request proposes merging your branch — the place for code review, discussion, and CI checks before merging",
+    explanation: `A Pull Request (PR) on GitHub is a request to merge one branch into another. It's the standard collaboration workflow:
+
+1. Create a feature branch locally: git checkout -b feature/dark-mode
+2. Make commits, push: git push -u origin feature/dark-mode
+3. Open a PR on GitHub — compare your branch against main (or another target)
+4. Teammates review the code, leave comments, request changes
+5. CI/CD runs automated tests and checks
+6. Once approved, merge the PR — squash, merge commit, or rebase
+
+Best practices:
+• Keep PRs small and focused — easier to review
+• Write a clear description explaining WHAT and WHY
+• Respond to every review comment (resolve or discuss)
+• Never force-push to a PR branch in review (rewrites history reviewers already read)
+• Delete the branch after merging`,
+    code: `# 1. Create feature branch
+git checkout -b feature/dark-mode
+
+# 2. Make commits
+git add .
+git commit -m "feat: add dark mode toggle"
+
+# 3. Push branch to GitHub
+git push -u origin feature/dark-mode
+
+# 4. GitHub CLI: open PR from terminal
+gh pr create --title "feat: dark mode" --body "Adds dark mode toggle to settings"
+
+# 5. View PR status
+gh pr status
+
+# 6. After approval, merge via CLI
+gh pr merge --squash
+
+# Or via GitHub UI: click "Merge pull request"`,
+    interviewQuestion: "What makes a good Pull Request? What do you look for in code review?",
+  },
+  {
+    id: "git-github-actions",
+    category: "git",
+    topic: "GitHub",
+    title: "GitHub Actions — CI/CD",
+    difficulty: "Intermediate",
+    summary: "GitHub Actions runs automated workflows (test, build, deploy) on events like push or PR open",
+    explanation: `GitHub Actions lets you automate workflows directly in your repository. A workflow is a YAML file in .github/workflows/.
+
+Key concepts:
+• trigger (on:) — what event starts the workflow: push, pull_request, schedule, workflow_dispatch
+• job — a group of steps that run on one runner (Ubuntu, macOS, Windows)
+• step — a single command or Action
+• Action — a reusable step from the marketplace (actions/checkout, actions/setup-node)
+
+Common CI pipeline: on every PR, checkout code → install deps → run tests → run lint → build. If any step fails, the PR is blocked.
+
+Secrets (API keys etc.) are stored in repo Settings → Secrets and accessed as env variables: \${{ secrets.MY_KEY }}.`,
+    code: `# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci && npm run build
+      - run: npx netlify-cli deploy --prod --dir=dist
+        env:
+          NETLIFY_AUTH_TOKEN: \${{ secrets.NETLIFY_AUTH_TOKEN }}`,
+    interviewQuestion: "How does GitHub Actions differ from other CI tools? What is a workflow trigger?",
+  },
+  {
+    id: "git-conflict-resolution",
+    category: "git",
+    topic: "Conflicts",
+    title: "Resolving Merge Conflicts",
+    difficulty: "Intermediate",
+    summary: "Conflicts happen when two branches change the same line — Git marks them with <<<<<<<, =======, >>>>>>>",
+    explanation: `A merge conflict occurs when two branches modified the same part of a file. Git can't auto-merge, so it marks the conflict:
+
+<<<<<<< HEAD
+your version
+=======
+their version
+>>>>>>> feature/login
+
+To resolve:
+1. Open the file and decide which version to keep (or combine them)
+2. Delete the conflict markers (<<<<<<, =======, >>>>>>>)
+3. git add <file> to mark it resolved
+4. git commit to finish the merge (or git rebase --continue for rebase)
+
+Tools: VS Code has a built-in merge editor. git mergetool opens a 3-way diff. GitHub's web editor works for simple conflicts.
+
+Prevent conflicts: keep PRs small, pull main frequently, communicate with teammates about shared files.`,
+    code: `# After git merge or git pull causes conflict:
+# Open the file — you'll see:
+# <<<<<<< HEAD
+# color: red;
+# =======
+# color: blue;
+# >>>>>>> feature/brand-colors
+
+# Edit to resolve (keep both? pick one?)
+# color: blue; /* use brand color */
+
+# Stage resolved file
+git add src/styles.css
+
+# Complete the merge
+git commit
+
+# Or for rebase:
+git rebase --continue
+
+# See all conflicted files
+git diff --name-only --diff-filter=U`,
+    interviewQuestion: "Walk me through how you would resolve a merge conflict.",
+  },
+
+  // ── Git extra topics ──────────────────────────────────────────────────────
+  {
+    id: "git-log-history",
+    category: "git",
+    topic: "History",
+    title: "Reading Git Log & History",
+    difficulty: "Basic",
+    summary: "git log shows the commit history. Use flags to format and filter it.",
+    explanation: `git log is your time machine — it lists every commit on the current branch.
+
+Useful flags:
+- --oneline: compact one-line view
+- --graph: ASCII branch/merge diagram
+- --all: show all branches
+- --author="name": filter by author
+- --since="2 weeks ago": filter by date
+- --grep="fix": search commit messages
+- -p: show diff for each commit
+- --stat: show files changed per commit
+
+git show <hash>: view a specific commit's diff and metadata.
+
+git log --oneline --graph --all is the most useful combination — shows the full repo topology at a glance.`,
+    code: `git log --oneline
+# a1b2c3d fix: login redirect
+# e4f5g6h feat: add dashboard
+
+git log --oneline --graph --all
+
+git log --author="Alice" --since="1 week ago"
+
+git log -p --follow src/auth.js   # history of one file
+
+git show a1b2c3d   # full diff of one commit`,
+    interviewQuestion: "How do you find which commit introduced a specific bug using git log?",
+  },
+  {
+    id: "git-diff",
+    category: "git",
+    topic: "Inspection",
+    title: "git diff — Comparing Changes",
+    difficulty: "Basic",
+    summary: "git diff compares working directory, staging area, and commits to show what changed.",
+    explanation: `git diff shows changes that haven't been staged yet (working directory vs. staging area).
+
+Key variants:
+- git diff: unstaged changes
+- git diff --staged (or --cached): staged changes vs. last commit
+- git diff HEAD: all uncommitted changes (staged + unstaged)
+- git diff branch1..branch2: difference between two branches
+- git diff <hash1> <hash2>: compare two commits
+- git diff HEAD~3: compare with 3 commits ago
+
+Reading a diff:
+- Lines starting with + are additions (green)
+- Lines starting with - are deletions (red)
+- @@ -10,7 +10,8 @@ shows line numbers affected
+
+Use git diff --name-only to just see which files changed without the full diff.`,
+    code: `# See unstaged changes
+git diff
+
+# See staged changes (ready to commit)
+git diff --staged
+
+# Compare main vs feature branch
+git diff main..feature/login
+
+# Only show filenames
+git diff --name-only HEAD~1`,
+    interviewQuestion: "What is the difference between git diff and git diff --staged?",
+  },
+  {
+    id: "git-tag",
+    category: "git",
+    topic: "Tags",
+    title: "Git Tags & Releases",
+    difficulty: "Basic",
+    summary: "Tags mark specific commits as releases or milestones. Lightweight and annotated tags.",
+    explanation: `Tags are pointers to specific commits — most commonly used to mark release versions (v1.0.0).
+
+Lightweight tag: just a name pointing to a commit, no extra info.
+Annotated tag: stored as a full Git object with tagger name, date, and message — preferred for releases.
+
+Commands:
+- git tag v1.0.0: create a lightweight tag
+- git tag -a v1.0.0 -m "First release": annotated tag
+- git tag: list all tags
+- git show v1.0.0: show tag details
+- git push origin v1.0.0: push a specific tag (tags don't push by default)
+- git push origin --tags: push all tags
+- git tag -d v1.0.0: delete local tag
+- git push origin :refs/tags/v1.0.0: delete remote tag
+
+Semantic versioning: MAJOR.MINOR.PATCH — bump MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes.`,
+    code: `# Create annotated tag
+git tag -a v1.2.0 -m "Add dark mode + bug fixes"
+
+# List tags
+git tag
+
+# Push tag to remote
+git push origin v1.2.0
+
+# Tag a past commit
+git tag -a v1.1.0 a1b2c3d -m "Previous release"
+
+# Delete and re-push
+git tag -d v1.2.0
+git push origin :refs/tags/v1.2.0`,
+    interviewQuestion: "What is the difference between a lightweight tag and an annotated tag in Git?",
+  },
+  {
+    id: "git-bisect",
+    category: "git",
+    topic: "Debugging",
+    title: "git bisect — Binary Search for Bugs",
+    difficulty: "Advanced",
+    summary: "git bisect does a binary search through commit history to find which commit introduced a bug.",
+    explanation: `git bisect is a powerful debugging tool. Instead of checking commits one by one, it uses binary search — O(log n) — to find the bad commit.
+
+How it works:
+1. git bisect start
+2. git bisect bad: mark current commit as broken
+3. git bisect good <hash>: mark a known-good commit
+4. Git checks out the midpoint — you test it
+5. git bisect good or git bisect bad based on result
+6. Repeat until Git identifies the exact commit
+7. git bisect reset to return to HEAD
+
+You can also automate it with a test script:
+git bisect run npm test
+Git will run your script and automatically mark commits good/bad based on exit code (0 = good, non-zero = bad).`,
+    code: `git bisect start
+git bisect bad          # current HEAD is broken
+git bisect good v1.0.0  # this tag was working
+
+# Git checks out midpoint
+# → test your app
+git bisect good   # or bad
+
+# When done:
+git bisect reset
+
+# Automated with a script:
+git bisect start
+git bisect bad HEAD
+git bisect good v1.0.0
+git bisect run npm test`,
+    interviewQuestion: "How would you use git bisect to find which commit introduced a regression?",
+  },
+  {
+    id: "git-blame",
+    category: "git",
+    topic: "Inspection",
+    title: "git blame — Line-by-Line History",
+    difficulty: "Basic",
+    summary: "git blame shows who last modified each line of a file and when.",
+    explanation: `git blame annotates every line of a file with the commit hash, author, and date that last changed it.
+
+Common uses:
+- Find who wrote a confusing piece of code
+- See when a line was last changed
+- Track down the origin of a bug
+
+git blame <file>: annotate whole file
+git blame -L 10,25 <file>: only lines 10-25
+git blame -w: ignore whitespace changes
+git blame -C: detect lines moved from other files
+
+In VS Code, the GitLens extension provides inline blame on every line automatically.
+
+Note: blame shows the last editor of a line — if someone reformatted code, they'll show up even if they didn't change the logic. Use git log -p to see the full history of a line.`,
+    code: `# Annotate whole file
+git blame src/auth.js
+
+# Only specific lines
+git blame -L 42,60 src/auth.js
+
+# Ignore whitespace
+git blame -w src/auth.js
+
+# See full history of a specific function
+git log -p -S "function login" src/auth.js`,
+    interviewQuestion: "When would you use git blame and what are its limitations?",
+  },
+  {
+    id: "git-stash-advanced",
+    category: "git",
+    topic: "Stash",
+    title: "git stash — Advanced Usage",
+    difficulty: "Intermediate",
+    summary: "Stash multiple entries, apply selectively, include untracked files, and create branches from stashes.",
+    explanation: `Beyond git stash / git stash pop, there are powerful advanced options:
+
+Multiple stashes:
+- git stash list: see all stashes (stash@{0}, stash@{1}, …)
+- git stash apply stash@{2}: apply a specific stash without removing it
+- git stash drop stash@{2}: delete a specific stash
+- git stash clear: delete all stashes
+
+Naming stashes:
+- git stash push -m "WIP: login form": give a stash a description
+
+Include untracked files:
+- git stash push -u: stash untracked files too
+- git stash push -a: stash everything including .gitignore'd files
+
+Partial stash:
+- git stash push -p: interactively choose which hunks to stash
+
+Create a branch from a stash:
+- git stash branch feature/wip stash@{0}: creates a new branch and applies the stash`,
+    code: `# Named stash
+git stash push -m "half-done auth refactor"
+
+# List all stashes
+git stash list
+# stash@{0}: On main: half-done auth refactor
+# stash@{1}: WIP on feature/login
+
+# Apply specific stash
+git stash apply stash@{1}
+
+# Stash including new (untracked) files
+git stash push -u
+
+# Partial stash — pick hunks interactively
+git stash push -p
+
+# Turn stash into a branch
+git stash branch fix/auth stash@{0}`,
+    interviewQuestion: "How would you stash only specific files or hunks in Git?",
+  },
+  {
+    id: "git-interactive-rebase",
+    category: "git",
+    topic: "Rebase",
+    title: "Interactive Rebase — Rewriting History",
+    difficulty: "Advanced",
+    summary: "git rebase -i lets you squash, reorder, edit, or drop commits before merging.",
+    explanation: `Interactive rebase (git rebase -i) opens an editor listing recent commits. You can rewrite history before pushing.
+
+Actions per commit:
+- pick: keep as-is (default)
+- reword: keep commit but edit the message
+- edit: pause and amend files + message
+- squash (s): melt into the previous commit, combine messages
+- fixup (f): like squash but discard this commit's message
+- drop (d): delete the commit entirely
+- reorder: just move lines up/down to reorder commits
+
+Common workflow:
+git rebase -i HEAD~5 (last 5 commits)
+
+Use cases:
+- Clean up "WIP" commits before a PR
+- Squash 10 tiny commits into 1 meaningful one
+- Fix a typo in an old commit message
+- Remove a accidentally committed file
+
+Never rebase commits that have already been pushed to a shared branch — it rewrites SHA hashes and causes conflicts for teammates.`,
+    code: `# Rewrite last 4 commits
+git rebase -i HEAD~4
+
+# Editor opens:
+# pick a1b2c3d feat: add login
+# pick e4f5g6h fix: typo
+# pick h7i8j9k WIP
+# pick l1m2n3o WIP 2
+
+# Change to:
+# pick a1b2c3d feat: add login
+# squash e4f5g6h fix: typo
+# fixup h7i8j9k WIP
+# fixup l1m2n3o WIP 2
+
+# Result: 1 clean commit with combined message
+
+# Abort if things go wrong
+git rebase --abort`,
+    interviewQuestion: "What is the difference between squash and fixup in interactive rebase?",
+  },
+  {
+    id: "git-reflog",
+    category: "git",
+    topic: "Recovery",
+    title: "git reflog — Recovering Lost Commits",
+    difficulty: "Intermediate",
+    summary: "reflog records every HEAD movement. Use it to recover from accidental resets or dropped commits.",
+    explanation: `The reflog (reference log) tracks every change to HEAD — commits, checkouts, resets, rebases — kept for 90 days by default.
+
+This is your safety net. Even after git reset --hard or a bad rebase, commits aren't immediately deleted — reflog can find them.
+
+Commands:
+- git reflog: show all HEAD movements with relative times
+- git reflog show branch-name: show movements for a specific branch
+- git checkout HEAD@{3}: go back to what HEAD was 3 steps ago
+- git reset --hard HEAD@{2}: restore branch to a previous state
+
+Recovery workflow:
+1. git reflog to find the hash before the mistake
+2. git checkout <hash> to inspect it
+3. git branch recovery <hash> to create a branch there
+4. Or git reset --hard <hash> to restore the current branch
+
+Objects stay in reflog for 90 days, then git gc can collect them.`,
+    code: `git reflog
+# 1a2b3c4 HEAD@{0}: reset: moving to HEAD~1
+# 5d6e7f8 HEAD@{1}: commit: feat: payment flow
+# 9g0h1i2 HEAD@{2}: commit: fix: cart total
+
+# Oh no — accidentally reset past an important commit!
+# Recover it:
+git checkout 5d6e7f8        # inspect
+git branch recovery/payment 5d6e7f8  # save it
+git switch main
+git merge recovery/payment`,
+    interviewQuestion: "How would you recover a commit that was lost after git reset --hard?",
+  },
+  {
+    id: "git-fetch-pull",
+    category: "git",
+    topic: "Remote",
+    title: "git fetch vs git pull",
+    difficulty: "Basic",
+    summary: "fetch downloads changes without merging; pull = fetch + merge (or rebase). Know the difference.",
+    explanation: `Both commands download changes from a remote, but they behave differently:
+
+git fetch:
+- Downloads commits, branches, and tags from remote
+- Does NOT change your working directory or current branch
+- Updates origin/main but leaves your local main untouched
+- Safe — you can inspect before integrating
+
+git pull:
+- Equivalent to git fetch + git merge (by default)
+- Immediately merges remote changes into your current branch
+- Can cause merge commits if you have local commits
+- git pull --rebase: fetches then rebases instead of merging (cleaner history)
+
+Best practice:
+Use git fetch first, inspect with git log origin/main, then git merge or git rebase origin/main yourself. This gives you full control.
+
+git pull origin main is fine for simple cases but can surprise you with merge commits.`,
+    code: `# Download without touching your branch
+git fetch origin
+
+# See what's new on remote main
+git log origin/main --oneline
+
+# Merge after reviewing
+git merge origin/main
+
+# OR: pull and rebase in one step
+git pull --rebase origin main
+
+# Set rebase as default for all pulls
+git config --global pull.rebase true`,
+    interviewQuestion: "What is the difference between git fetch and git pull? When would you use each?",
+  },
+  {
+    id: "git-hooks",
+    category: "git",
+    topic: "Automation",
+    title: "Git Hooks — Automate Git Events",
+    difficulty: "Intermediate",
+    summary: "Git hooks are scripts that run automatically at key Git events (commit, push, merge).",
+    explanation: `Git hooks are shell scripts stored in .git/hooks/ that fire at specific Git lifecycle events.
+
+Common hooks:
+- pre-commit: runs before a commit is created. Use to run linters, formatters, or tests. Exit non-zero to abort the commit.
+- commit-msg: validates the commit message format (e.g., enforce Conventional Commits)
+- pre-push: runs before git push — use to run full test suite
+- post-merge: runs after a successful merge — use to npm install if package.json changed
+- prepare-commit-msg: prepopulates the commit message editor
+
+Sharing hooks:
+.git/hooks/ is not committed to the repo. To share hooks:
+- Use husky (npm package) — hooks live in .husky/ and are committed
+- Use lint-staged with husky to only lint staged files
+
+Tools like Prettier, ESLint, and type-checkers are commonly run as pre-commit hooks to enforce standards automatically.`,
+    code: `# .husky/pre-commit
+#!/bin/sh
+npx lint-staged
+
+# package.json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.css": ["prettier --write"]
+  }
+}
+
+# Setup husky in a project:
+npm install --save-dev husky lint-staged
+npx husky init
+echo "npx lint-staged" > .husky/pre-commit`,
+    interviewQuestion: "How would you enforce that all commits follow the Conventional Commits format using Git hooks?",
+  },
+  {
+    id: "git-submodules",
+    category: "git",
+    topic: "Advanced",
+    title: "Git Submodules",
+    difficulty: "Advanced",
+    summary: "Submodules let you embed one Git repo inside another, pinned to a specific commit.",
+    explanation: `A submodule is a pointer from one Git repo to a specific commit in another repo. The inner repo is tracked as a dependency.
+
+When to use:
+- Shared component libraries across multiple projects
+- Vendoring third-party repos you want to pin to a specific version
+- Monorepo alternatives
+
+Key commands:
+- git submodule add <url>: add a submodule
+- git submodule init + git submodule update: initialize after cloning
+- git clone --recurse-submodules <url>: clone with all submodules
+- git submodule update --remote: pull latest from submodule's remote
+
+Gotchas:
+- Submodules are pinned to a commit, not a branch — you must manually update them
+- Forgetting git submodule update after pulling is a common mistake
+- Deleting a submodule requires editing .gitmodules, .git/config, and running git rm
+
+Many teams prefer monorepos with workspaces (npm/yarn/pnpm) or package managers over submodules.`,
+    code: `# Add a submodule
+git submodule add https://github.com/org/shared-ui components/shared-ui
+
+# Clone a repo that has submodules
+git clone --recurse-submodules https://github.com/org/myapp
+
+# If you already cloned without --recurse-submodules
+git submodule init
+git submodule update
+
+# Update submodule to latest
+git submodule update --remote components/shared-ui
+
+# See submodule status
+git submodule status`,
+    interviewQuestion: "What are Git submodules and what problems can they cause?",
+  },
+  {
+    id: "git-squash-merge",
+    category: "git",
+    topic: "Merging",
+    title: "Merge Strategies — Squash, Rebase, Merge Commit",
+    difficulty: "Intermediate",
+    summary: "Three ways to integrate a branch: merge commit, squash merge, rebase merge. Each has different history implications.",
+    explanation: `When merging a PR/branch, you choose a strategy:
+
+1. Merge Commit (--no-ff):
+- Creates a merge commit tying both histories together
+- Preserves full feature branch history
+- History can get noisy with many branches
+- git merge --no-ff feature/login
+
+2. Squash Merge:
+- Combines all feature commits into one commit on main
+- Clean linear history, but loses granular commit history
+- git merge --squash feature/login → then commit
+- GitHub "Squash and merge" button does this
+
+3. Rebase Merge:
+- Replays feature commits on top of main — no merge commit
+- Clean linear history, preserves individual commits
+- git rebase main, then fast-forward merge
+- GitHub "Rebase and merge" button
+
+Which to use:
+- Teams wanting clean history → squash or rebase
+- Teams wanting full audit trail → merge commit
+- Most teams use squash for features, merge commits for releases`,
+    code: `# Standard merge commit
+git merge --no-ff feature/login
+
+# Squash merge (manually)
+git merge --squash feature/login
+git commit -m "feat: add login page"
+
+# Rebase then fast-forward
+git checkout feature/login
+git rebase main
+git checkout main
+git merge feature/login   # fast-forward`,
+    interviewQuestion: "What is the difference between squash merge, rebase merge, and a merge commit?",
+  },
+  {
+    id: "git-gitignore",
+    category: "git",
+    topic: "Config",
+    title: ".gitignore — Excluding Files",
+    difficulty: "Basic",
+    summary: ".gitignore tells Git which files and folders to never track. Patterns use glob syntax.",
+    explanation: `The .gitignore file lists patterns for files Git should ignore. Ignored files don't appear in git status and can't be accidentally committed.
+
+Pattern syntax:
+- node_modules/: ignore a folder and all its contents
+- *.log: ignore all .log files
+- !important.log: un-ignore a specific file (exception)
+- /dist: only ignore dist at root level
+- **/*.test.js: ignore in any subdirectory
+- # comment: comments start with #
+
+Common things to ignore:
+- node_modules/, .venv/, __pycache__/
+- .env, .env.local (secrets!)
+- dist/, build/, .next/
+- .DS_Store (macOS), Thumbs.db (Windows)
+- IDE files: .vscode/, .idea/
+
+If a file was already tracked before being added to .gitignore, it keeps being tracked. Fix with:
+git rm --cached <file>
+
+Global gitignore (for IDE/OS files):
+git config --global core.excludesFile ~/.gitignore_global`,
+    code: `# .gitignore
+node_modules/
+.env
+.env.local
+dist/
+build/
+.next/
+.DS_Store
+*.log
+coverage/
+.vscode/settings.json
+
+# Un-track a file that was already committed
+git rm --cached .env
+echo ".env" >> .gitignore
+git commit -m "chore: stop tracking .env"
+
+# Check why a file is ignored
+git check-ignore -v .env`,
+    interviewQuestion: "How do you stop tracking a file that was already committed to Git?",
+  },
+  {
+    id: "git-alias",
+    category: "git",
+    topic: "Config",
+    title: "Git Aliases & Config",
+    difficulty: "Basic",
+    summary: "Create short aliases for long Git commands. Store in ~/.gitconfig for global use.",
+    explanation: `Git aliases let you create shortcuts for frequently used commands.
+
+Set globally via git config --global alias.<name> '<command>'
+
+Useful aliases:
+- git st → git status
+- git co → git checkout
+- git br → git branch
+- git lg → pretty git log
+- git undo → undo last commit but keep changes staged
+
+The .gitconfig file (at ~/.gitconfig) stores all global config: identity, aliases, default branch name, pull behavior, etc.
+
+Important config options:
+- user.name / user.email: identity for commits
+- core.editor: default editor (nvim, code --wait, nano)
+- init.defaultBranch: default branch name (main)
+- pull.rebase: use rebase for pulls by default
+- push.autoSetupRemote: automatically set upstream on push`,
+    code: `# Set up identity
+git config --global user.name "Alice"
+git config --global user.email "alice@example.com"
+
+# Useful aliases
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.lg "log --oneline --graph --all"
+git config --global alias.undo "reset --soft HEAD~1"
+
+# Use alias
+git lg
+git undo   # undo last commit, keep changes
+
+# Set VS Code as editor
+git config --global core.editor "code --wait"
+
+# Auto-set upstream on push
+git config --global push.autoSetupRemote true`,
+    interviewQuestion: "How do you create a Git alias, and what aliases do you find most useful?",
+  },
+  {
+    id: "git-fork-workflow",
+    category: "git",
+    topic: "GitHub",
+    title: "Fork & Pull Request Workflow",
+    difficulty: "Intermediate",
+    summary: "The standard open-source workflow: fork a repo, make changes on a branch, open a PR back to upstream.",
+    explanation: `The fork & PR workflow is how open source contribution works on GitHub:
+
+1. Fork: create your own copy of the upstream repo on GitHub
+2. Clone your fork locally
+3. Add upstream remote to stay in sync
+4. Create a feature branch
+5. Make commits on your branch
+6. Push to your fork
+7. Open a Pull Request from your fork/branch → upstream/main
+
+Keeping your fork in sync:
+git fetch upstream → git merge upstream/main or git rebase upstream/main
+
+In company repos (not open source), you usually just branch directly on the main repo — no fork needed.
+
+PR best practices:
+- One feature / bug fix per PR
+- Write a clear description with context and screenshots
+- Keep PRs small (< 400 lines diff)
+- Respond to review comments promptly
+- Squash trivial WIP commits before merging`,
+    code: `# Fork on GitHub, then:
+git clone https://github.com/YOUR_USERNAME/project.git
+cd project
+
+# Add upstream
+git remote add upstream https://github.com/ORIGINAL/project.git
+
+# Sync with upstream
+git fetch upstream
+git rebase upstream/main
+
+# Create branch for your change
+git checkout -b fix/broken-link
+
+# Make changes, commit
+git commit -m "fix: correct broken docs link"
+
+# Push to your fork
+git push origin fix/broken-link
+
+# Open PR on GitHub: your-fork/fix/broken-link → original/main`,
+    interviewQuestion: "Walk me through the fork and pull request workflow for contributing to an open source project.",
+  },
+  {
+    id: "git-protected-branches",
+    category: "git",
+    topic: "GitHub",
+    title: "Branch Protection & Code Review",
+    difficulty: "Intermediate",
+    summary: "GitHub branch protection rules enforce PR reviews, CI checks, and prevent force-pushes to main.",
+    explanation: `Branch protection rules (GitHub Settings → Branches → Add rule) enforce quality gates on important branches.
+
+Common protections on main/master:
+- Require pull request before merging: no direct pushes
+- Require N approving reviews: at least 1-2 reviewers must approve
+- Require status checks to pass: CI (tests, lint, build) must be green
+- Require branches to be up to date: branch must be current with main
+- Restrict who can push: only specific teams/users
+- Do not allow bypassing: even admins follow the rules
+
+Code review etiquette:
+- Reviewers: be specific ("line 42: this O(n²) loop will hurt with large datasets"), not just "looks good"
+- Authors: don't take feedback personally, explain your reasoning
+- Use "suggestion" blocks on GitHub to propose exact code changes
+- Resolve conversations before merging
+
+CODEOWNERS file: automatically request reviews from specific teams based on which files changed.`,
+    code: `# CODEOWNERS file (in root or .github/)
+# Format: path  owner(s)
+
+# Everything → backend team
+*           @org/backend-team
+
+# Frontend files → frontend team
+*.jsx       @org/frontend-team
+*.tsx       @org/frontend-team
+src/        @org/frontend-team
+
+# Specific file → lead engineer
+src/auth/   @alice @bob
+
+# Docs → anyone on docs team
+docs/       @org/docs-team`,
+    interviewQuestion: "What are branch protection rules and why are they important in a team environment?",
+  },
+  {
+    id: "git-ci-cd-basics",
+    category: "git",
+    topic: "CI/CD",
+    title: "CI/CD with Git — Pipelines on Push",
+    difficulty: "Intermediate",
+    summary: "CI runs tests on every push/PR. CD deploys automatically when main is green. Git events trigger pipelines.",
+    explanation: `Continuous Integration (CI): automatically run tests, linting, and builds on every push and PR.
+Continuous Deployment (CD): automatically deploy to staging or production when CI passes on main.
+
+Git events that trigger pipelines:
+- push to any branch → run tests
+- pull_request → run tests + post results as PR check
+- push to main → deploy to production
+- tag push (v*) → create a release
+
+Popular CI/CD platforms:
+- GitHub Actions (built into GitHub, YAML in .github/workflows/)
+- Vercel / Netlify (auto-deploy on push, preview URLs on PRs)
+- CircleCI, Jenkins, GitLab CI
+
+The workflow on a healthy team:
+1. Developer pushes a branch
+2. CI runs tests → green/red shows on PR
+3. Reviewer approves + CI is green
+4. Merge to main
+5. CD deploys main to production automatically
+
+Feature flags separate deployment from release — code ships to prod but is hidden behind a flag until ready.`,
+    code: `# .github/workflows/ci.yml
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test`,
+    interviewQuestion: "What is the difference between Continuous Integration and Continuous Deployment?",
+  },
+  {
+    id: "git-conventional-commits",
+    category: "git",
+    topic: "Workflow",
+    title: "Conventional Commits",
+    difficulty: "Basic",
+    summary: "A commit message standard: type(scope): description. Powers changelogs, semantic versioning, and tooling.",
+    explanation: `Conventional Commits is a specification for structured commit messages that humans and tools can parse.
+
+Format: <type>(<scope>): <short description>
+
+Common types:
+- feat: a new feature (triggers MINOR version bump)
+- fix: a bug fix (triggers PATCH version bump)
+- docs: documentation only
+- style: formatting, no logic change
+- refactor: code change without new feature or bug fix
+- test: adding or fixing tests
+- chore: build process, dependency updates
+- perf: performance improvement
+- ci: CI/CD changes
+- BREAKING CHANGE: (in footer) triggers MAJOR version bump
+
+Benefits:
+- Auto-generate changelogs (semantic-release, conventional-changelog)
+- Auto-bump semantic version based on commit types
+- Easier to scan history — type at a glance tells you what a commit does
+- Works well with commit-msg hooks to enforce format
+
+Tools: commitizen (interactive commit helper), @commitlint/cli (enforcer)`,
+    code: `# Good conventional commits:
+git commit -m "feat(auth): add Google OAuth login"
+git commit -m "fix(cart): prevent double-submit on checkout"
+git commit -m "docs(readme): add setup instructions"
+git commit -m "refactor(api): extract fetch logic to useApi hook"
+git commit -m "test(auth): add unit tests for token refresh"
+git commit -m "chore(deps): bump react to 19.0.0"
+
+# Breaking change:
+git commit -m "feat(api)!: rename /users to /accounts
+
+BREAKING CHANGE: /users endpoint removed, use /accounts"`,
+    interviewQuestion: "What are Conventional Commits and how do they help automate versioning?",
+  },
+  {
+    id: "git-mono-repo",
+    category: "git",
+    topic: "Architecture",
+    title: "Monorepo vs Polyrepo",
+    difficulty: "Intermediate",
+    summary: "Monorepo = all projects in one Git repo. Polyrepo = one repo per project. Each has distinct trade-offs.",
+    explanation: `Monorepo: all code (frontend, backend, mobile, shared libs) lives in one Git repository.
+
+Pros of monorepo:
+- Shared code / type definitions in one place — no versioning pain
+- Atomic commits across multiple packages
+- Single CI pipeline, consistent tooling
+- Easy refactoring across packages
+- Used by Google, Meta, Microsoft, Vercel
+
+Cons of monorepo:
+- Git history gets large — git clone is slow
+- CI must be smart (only test what changed)
+- Need tools: Turborepo, Nx, Bazel for caching/orchestration
+
+Polyrepo: each service/app is its own repo.
+
+Pros: independent release cycles, smaller repos, clear ownership.
+Cons: shared code versioning headache, harder to make cross-repo changes, duplicated tooling config.
+
+Most modern teams use monorepos with workspace tools (pnpm workspaces, npm workspaces, Turborepo).`,
+    code: `# Typical monorepo structure
+apps/
+  web/          # Next.js
+  mobile/       # React Native
+  api/          # Express or FastAPI
+packages/
+  ui/           # Shared component library
+  types/        # Shared TypeScript types
+  utils/        # Shared utilities
+turbo.json      # Turborepo pipeline
+package.json    # Root workspace config
+
+# package.json (root)
+{
+  "workspaces": ["apps/*", "packages/*"]
+}
+
+# Run all tests across packages
+npx turbo run test
+
+# Only rebuild what changed
+npx turbo run build --filter=[HEAD^1]`,
+    interviewQuestion: "What are the trade-offs between a monorepo and a polyrepo architecture?",
+  },
 ];
+

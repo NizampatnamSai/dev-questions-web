@@ -10,17 +10,24 @@ const TYPES = ["Technical", "Coding"];
 const COUNTS = [1, 3, 5, 10];
 
 // ─── Shared selector ────────────────────────────────────────────────────────
-function Selector({ label, options, value, onChange, wide = false }) {
+function Selector({ label, options, value, onChange, multi = false, wide = false }) {
+  const isSelected = (o) => multi ? value.includes(o) : value === o;
+  const handleClick = (o) => {
+    if (!multi) { onChange(o); return; }
+    onChange(isSelected(o) ? value.filter(x => x !== o) : [...value, o]);
+  };
   return (
     <div>
-      <label className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</label>
+      <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+        {label}{multi && value.length > 0 && <span className="ml-1.5 text-indigo-500">({value.length} selected)</span>}
+      </label>
       <div className="flex flex-wrap gap-2 mt-2">
         {options.map((o) => (
           <button
             key={o}
-            onClick={() => onChange(o)}
+            onClick={() => handleClick(o)}
             className={`${wide ? "px-4" : "px-3"} py-1.5 rounded-full text-sm border transition ${
-              value === o
+              isSelected(o)
                 ? "bg-indigo-600 text-white border-indigo-600 font-medium"
                 : "border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
             }`}
@@ -64,7 +71,7 @@ function UsageMeter({ usage }) {
 }
 
 // ─── Preview card ─────────────────────────────────────────────────────────────
-function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex }) {
+function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex, isPosting }) {
   return (
     <motion.div
       key={idx}
@@ -115,16 +122,26 @@ function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex }
           >
             {q.revealed ? "Hide answer ▲" : "Reveal answer ▼"}
           </button>
-          {q.revealed && (
-            <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl p-3 space-y-2">
-              <AnswerBlock text={q.answer} questionType={q.type} />
-              {q.hints?.length > 0 && (
-                <ul className="mt-1 text-xs text-slate-600 dark:text-slate-400 list-disc list-inside space-y-0.5">
-                  {q.hints.map((h, i) => <li key={i}>{h}</li>)}
-                </ul>
-              )}
-            </div>
-          )}
+          <AnimatePresence initial={false}>
+            {q.revealed && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl p-3 space-y-2">
+                  <AnswerBlock text={q.answer} questionType={q.type} />
+                  {q.hints?.length > 0 && (
+                    <ul className="mt-1 text-xs text-slate-600 dark:text-slate-400 list-disc list-inside space-y-0.5">
+                      {q.hints.map((h, i) => <li key={i}>{h}</li>)}
+                    </ul>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           {q.tags?.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {q.tags.map((t, i) => (
@@ -145,15 +162,17 @@ function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex }
         </button>
         <button
           onClick={() => onPost(idx, "draft")}
-          className="text-xs px-3 py-1.5 rounded-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
+          disabled={!!isPosting}
+          className="text-xs px-3 py-1.5 rounded-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10 disabled:opacity-50 flex items-center gap-1"
         >
-          💾 Save Draft
+          {isPosting === "draft" ? <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> : "💾"} Save Draft
         </button>
         <button
           onClick={() => onPost(idx, "published")}
-          className="ml-auto text-xs px-4 py-1.5 rounded-full bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400"
+          disabled={!!isPosting}
+          className="ml-auto text-xs px-4 py-1.5 rounded-full bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400 disabled:opacity-60 flex items-center gap-1.5"
         >
-          📤 Post to Community
+          {isPosting === "published" ? <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> : "📤"} {isPosting === "published" ? "Posting…" : "Post to Community"}
         </button>
       </div>
     </motion.div>
@@ -165,7 +184,7 @@ export default function Generator() {
   const [mode, setMode] = useState("ai"); // "ai" | "own" | "helper"
 
   // shared
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState([]);
   const [level, setLevel] = useState(LEVELS[0]);
   const [type, setType] = useState(TYPES[0]);
   const [usage, setUsage] = useState(null);
@@ -211,14 +230,12 @@ export default function Generator() {
     setLoading(true);
     setQuestions([]);
     try {
-      const { data } = await api.post("/questions/generate", { category, level, type, count });
+      const { data } = await api.post("/questions/generate", { category: category.length === 1 ? category[0] : category.length > 1 ? category.join(",") : "", level, type, count });
       setQuestions(data.questions.map((q) => ({ ...q, revealed: false })));
       setSource(data.source);
       syncUsage(data);
       if (data.source === "fallback") {
-        toast("Local AI is offline — showing sample questions", { icon: "⚠️", duration: 6000 });
-      } else if (data.source === "groq") {
-        toast.success("Generated via Groq (free cloud AI)");
+        toast("Showing sample questions — AI is temporarily offline", { icon: "⚠️", duration: 6000 });
       } else {
         toast.success("Questions generated!");
       }
@@ -240,7 +257,7 @@ export default function Generator() {
     try {
       const { data } = await api.post("/questions/generate/answer", {
         question: ownQuestion.trim(),
-        category,
+        category: category.length > 0 ? category[0] : CATEGORIES[0],
         level,
         type,
       });
@@ -251,11 +268,7 @@ export default function Generator() {
       setQuestions([{ question: ownQuestion.trim(), answer: data.answer, hints: data.hints || [], tags: data.tags || [], type, revealed: false }]);
       setSource(data.source);
       syncUsage(data);
-      if (data.source === "groq") {
-        toast.success("Answer generated via Groq!");
-      } else {
-        toast.success("Answer generated!");
-      }
+      toast.success("Answer generated!");
     } catch (err) {
       handleLimitError(err);
     } finally {
@@ -266,10 +279,14 @@ export default function Generator() {
   const updateQuestion = (idx, patch) =>
     setQuestions((qs) => qs.map((q, i) => (i === idx ? { ...q, ...patch } : q)));
 
+  const [posting, setPosting] = useState({});
+
   const postQuestion = async (idx, status) => {
     const q = questions[idx];
+    setPosting(p => ({ ...p, [idx]: status }));
     try {
-      await api.post("/questions", { category, level, type, question: q.question, answer: q.answer, hints: q.hints, tags: q.tags, status });
+      const cat = category.length > 0 ? category[0] : CATEGORIES[0];
+      await api.post("/questions", { category: cat, level, type, question: q.question, answer: q.answer, hints: q.hints, tags: q.tags, status });
       toast.success(status === "draft" ? "Saved as draft" : "Posted to community!");
       setQuestions((qs) => qs.filter((_, i) => i !== idx));
       api.get("/questions/daily-status").then(({ data }) => setDailyPost(data)).catch(() => {});
@@ -277,6 +294,8 @@ export default function Generator() {
       const detail = err.response?.data?.detail || err.response?.data?.message || "Failed to post";
       if (err.response?.status === 429) toast.error(detail, { duration: 8000 });
       else toast.error(detail);
+    } finally {
+      setPosting(p => { const n = { ...p }; delete n[idx]; return n; });
     }
   };
 
@@ -315,6 +334,9 @@ export default function Generator() {
       </div>
 
       {/* Daily post limit banner */}
+      {!dailyPost && (
+        <div className="h-12 bg-slate-100 dark:bg-slate-800 rounded-xl animate-pulse" />
+      )}
       {dailyPost && (
         <div className={`flex items-center gap-3 p-3 rounded-xl border text-sm ${
           dailyPost.remaining === 0
@@ -358,7 +380,7 @@ export default function Generator() {
         {/* Shared selectors — hidden in helper mode */}
         {mode !== "helper" && (
           <>
-            <Selector label="Category" options={CATEGORIES} value={category} onChange={setCategory} />
+            <Selector label="Category" options={CATEGORIES} value={category} onChange={setCategory} multi />
             <Selector label="Level" options={LEVELS} value={level} onChange={setLevel} />
             <Selector label="Question Type" options={TYPES} value={type} onChange={setType} />
           </>
@@ -550,6 +572,7 @@ export default function Generator() {
                 onPost={postQuestion}
                 editingIndex={editingIndex}
                 setEditingIndex={setEditingIndex}
+                isPosting={posting[idx]}
               />
             ))}
           </motion.div>
