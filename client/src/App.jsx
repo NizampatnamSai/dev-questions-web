@@ -51,6 +51,9 @@ import UserProfile from "./pages/UserProfile";
 import AdvancedSearch from "./pages/AdvancedSearch";
 import TimedChallenge from "./pages/TimedChallenge";
 import APIDocumentation from "./pages/APIDocumentation";
+import Recommendations from "./pages/Recommendations";
+import CategoryRoadmap from "./pages/CategoryRoadmap";
+import ExportData from "./pages/ExportData";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -277,6 +280,9 @@ function AppInner() {
         <Route path="/search"           element={<ProtectedPage path="/search"><AdvancedSearch /></ProtectedPage>} />
         <Route path="/timed-challenge"  element={<ProtectedPage path="/timed-challenge"><TimedChallenge /></ProtectedPage>} />
         <Route path="/api-docs"         element={<ProtectedPage path="/api-docs"><APIDocumentation /></ProtectedPage>} />
+        <Route path="/recommendations"  element={<ProtectedPage path="/recommendations"><Recommendations /></ProtectedPage>} />
+        <Route path="/roadmap"          element={<ProtectedPage path="/roadmap"><CategoryRoadmap /></ProtectedPage>} />
+        <Route path="/admin/export"     element={<ProtectedPage path="/admin/export"><ExportData /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
 

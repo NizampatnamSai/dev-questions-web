@@ -26,6 +26,8 @@ const BASE_LINKS = [
   { to: "/leaderboard",        label: "Leaderboard",     icon: "🏆" },
   { to: "/profile",            label: "My Profile",      icon: "👤" },
   { to: "/search",             label: "Advanced Search", icon: "🔎" },
+  { to: "/recommendations",    label: "Recommended",     icon: "💡" },
+  { to: "/roadmap",            label: "Learning Path",   icon: "🗺️" },
   { to: "/timed-challenge",    label: "Timed Challenge", icon: "⏱️" },
   { to: "/js-compiler",        label: "JS Compiler",     icon: "⚡" },
   { to: "/json-parser",        label: "JSON Parser",     icon: "🔍" },
@@ -38,6 +40,7 @@ const BASE_LINKS = [
   { to: "/notifications",      label: "Notifications",   icon: "🔔" },
 ];
 const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑" };
+const ADMIN_EXPORT_LINK = { to: "/admin/export", label: "Export Data", icon: "📥" };
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   return (
@@ -71,7 +74,7 @@ export default function Sidebar() {
   const [stateSearch, setStateSearch] = useState("");
 
   const GUEST_HIDDEN = ["/notifications", "/generate", "/my-questions", "/drafts", "/my-answers", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
-  const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK] : BASE_LINKS;
+  const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK, ADMIN_EXPORT_LINK] : BASE_LINKS;
   const links = user?.isGuest ? allLinks.filter(l => !GUEST_HIDDEN.includes(l.to)) : allLinks;
 
   const initials = user?.name
