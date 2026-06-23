@@ -54,6 +54,7 @@ import APIDocumentation from "./pages/APIDocumentation";
 import Recommendations from "./pages/Recommendations";
 import CategoryRoadmap from "./pages/CategoryRoadmap";
 import ExportData from "./pages/ExportData";
+import AdvancedStudyHub from "./pages/AdvancedStudyHub";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -283,6 +284,7 @@ function AppInner() {
         <Route path="/recommendations"  element={<ProtectedPage path="/recommendations"><Recommendations /></ProtectedPage>} />
         <Route path="/roadmap"          element={<ProtectedPage path="/roadmap"><CategoryRoadmap /></ProtectedPage>} />
         <Route path="/admin/export"     element={<ProtectedPage path="/admin/export"><ExportData /></ProtectedPage>} />
+        <Route path="/study-advanced"   element={<ProtectedPage path="/study-advanced"><AdvancedStudyHub /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
 

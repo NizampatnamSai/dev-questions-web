@@ -15,6 +15,7 @@ const BASE_LINKS = [
   { to: "/generate",       label: "AI Generator",    icon: "✨" },
   { to: "/quiz",           label: "Quiz Mode",       icon: "🧠" },
   { to: "/study",          label: "Study Hub",       icon: "📚" },
+  { to: "/study-advanced", label: "🧠 AI Study Lab", icon: "⭐", highlight: true },
   { to: "/mock-interview", label: "Mock Interview",  icon: "🎯" },
   { to: "/flashcards",     label: "Flashcards",      icon: "🃏" },
   { to: "/progress",       label: "My Progress",     icon: "📈" },
