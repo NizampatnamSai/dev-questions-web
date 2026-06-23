@@ -79,7 +79,7 @@ export default function UserProfile() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">{profile.name}</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{profile.role === "admin" ? "👨‍💼 Admin" : profile.role === "sub_admin" ? "👨‍💻 Sub Admin" : "👤 User"}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-400">{profile.role === "admin" ? "👨‍💼 Admin" : profile.role === "sub_admin" ? "👨‍💻 Sub Admin" : "👤 User"}</p>
               {profile.location && <p className="text-sm text-slate-500 dark:text-slate-400">📍 {profile.location}</p>}
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function UserProfile() {
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Name"
-              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <textarea
               value={formData.bio}

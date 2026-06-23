@@ -18,7 +18,7 @@ function Modal({ title, onClose, children }) {
       >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{title}</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl">✕</button>
+          <button onClick={onClose} className="text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-xl">✕</button>
         </div>
         {children}
       </motion.div>
@@ -55,17 +55,17 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
   return (
     <form onSubmit={submit} className="space-y-3">
       <div>
-        <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Name</label>
+        <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Name</label>
         <input value={form.name} onChange={e => set("name", e.target.value)} required className="input-light" placeholder="Full name" />
       </div>
       {isCreate && (
         <div>
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Email</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Email</label>
           <input value={form.email} onChange={e => set("email", e.target.value)} required type="email" className="input-light" placeholder="email@example.com" />
         </div>
       )}
       <div>
-        <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
+        <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">
           {isCreate ? "Password" : "New Password (leave blank to keep)"}
         </label>
         <div className="relative">
@@ -79,7 +79,7 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
           <button
             type="button"
             onClick={() => setShowPw(p => !p)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
             tabIndex={-1}
           >
             {showPw ? "🙈" : "👁"}
@@ -88,13 +88,13 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Role</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Role</label>
           <select value={form.role} onChange={e => set("role", e.target.value)} className="input-light">
             {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
         </div>
         <div>
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Daily Post Limit</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Daily Post Limit</label>
           <input value={form.daily_limit} onChange={e => set("daily_limit", Number(e.target.value))} type="number" min={1} max={999} className="input-light" />
         </div>
       </div>
@@ -224,11 +224,11 @@ function NotifyModal({ onClose, users, onSent }) {
 
           {/* Title + message */}
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Title</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Title</label>
             <input value={title} onChange={e => setTitle(e.target.value)} className="input-light w-full" placeholder="Notification title…" maxLength={100} />
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Message</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Message</label>
             <textarea value={body} onChange={e => setBody(e.target.value)} className="input-light w-full resize-none" rows={3} placeholder="Write your message…" maxLength={300} />
             <p className="text-[10px] text-slate-400 mt-1 text-right">{body.length}/300</p>
           </div>
@@ -812,11 +812,11 @@ function TestNotifyPanel({ users }) {
         {/* Title + body */}
         <div className="grid sm:grid-cols-2 gap-3">
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Title</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Title</label>
             <input value={title} onChange={e => setTitle(e.target.value)} className="input-light w-full text-sm" placeholder="Notification title" />
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Body (optional)</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Body (optional)</label>
             <input value={body} onChange={e => setBody(e.target.value)} className="input-light w-full text-sm" placeholder="Notification body…" />
           </div>
         </div>
@@ -824,7 +824,7 @@ function TestNotifyPanel({ users }) {
         {/* Timer picker */}
         {schedMode && (
           <div>
-            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">📅 Send at (your local time)</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">📅 Send at (your local time)</label>
             <input
               type="datetime-local"
               value={schedTime}
@@ -1455,7 +1455,7 @@ export default function Admin() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Reason <span className="text-red-400">*</span></label>
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">Reason <span className="text-red-400">*</span></label>
                 <textarea
                   rows={3}
                   value={rejectReason}

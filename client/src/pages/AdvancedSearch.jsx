@@ -66,7 +66,7 @@ export default function AdvancedSearch() {
             placeholder="Search query..."
             value={filters.query}
             onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
-            className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <input
             type="text"
@@ -81,7 +81,7 @@ export default function AdvancedSearch() {
           <select
             value={filters.category}
             onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-            className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">All Categories</option>
             {CATEGORIES.map((c) => (
@@ -183,8 +183,8 @@ export default function AdvancedSearch() {
 
       {!loading && results.length === 0 && Object.values(filters).some(v => v) && (
         <div className="text-center py-12">
-          <p className="text-slate-400 text-lg">No questions found</p>
-          <p className="text-slate-500 text-sm mt-2">Try adjusting your filters</p>
+          <p className="text-slate-700 dark:text-slate-400 text-lg">No questions found</p>
+          <p className="text-slate-600 dark:text-slate-500 text-sm mt-2">Try adjusting your filters</p>
         </div>
       )}
     </motion.div>

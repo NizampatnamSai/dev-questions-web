@@ -41,11 +41,34 @@ export function WeatherProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,temperature_2m&timezone=auto`;
-      const res  = await fetch(url);
+      // Validate coordinates
+      if (!lat || !lon || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+        setError("Invalid location coordinates");
+        setLoading(false);
+        return;
+      }
+
+      // Fetch weather with no-cache to get latest data
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=weather_code,temperature_2m&timezone=auto&cache=false`;
+      const res  = await fetch(url, { cache: 'no-store' });
+
+      if (!res.ok) {
+        setError("Weather service unavailable");
+        setLoading(false);
+        return;
+      }
+
       const data = await res.json();
-      const code = data.current?.weather_code ?? 0;
-      const t    = data.current?.temperature_2m ?? null;
+
+      if (!data.current) {
+        setError("No weather data available");
+        setLoading(false);
+        return;
+      }
+
+      const code = data.current.weather_code ?? 0;
+      const t    = data.current.temperature_2m ?? null;
+
       setCondition(codeToCondition(code));
       setTemp(t !== null ? Math.round(t) : null);
 
@@ -53,13 +76,16 @@ export function WeatherProvider({ children }) {
         setLocName(cityHint);
       } else {
         try {
-          const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+          // Use reverse geocoding to get city name
+          const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&format=json`, { cache: 'no-store' });
           const gd  = await geo.json();
-          setLocName(gd.address?.city || gd.address?.town || gd.address?.village || gd.address?.county || null);
+          const cityName = gd.address?.city || gd.address?.town || gd.address?.village || gd.address?.county || gd.address?.state || null;
+          setLocName(cityName);
         } catch { /* city name optional */ }
       }
-    } catch {
-      setError("Couldn't fetch weather");
+    } catch (err) {
+      console.error("Weather fetch error:", err);
+      setError("Couldn't fetch weather. Check your location.");
     } finally {
       setLoading(false);
     }
@@ -75,12 +101,24 @@ export function WeatherProvider({ children }) {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocDenied(false);
-        fetchWeather(pos.coords.latitude, pos.coords.longitude);
+        const { latitude, longitude, accuracy } = pos.coords;
+        console.log(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)} (accuracy: ${accuracy}m)`);
+        fetchWeather(latitude, longitude);
       },
-      () => {
+      (error) => {
         setLocDenied(true);
-        setError("Location denied");
+        console.error("Geolocation error:", error.code, error.message);
+        setError(
+          error.code === 1 ? "Location permission denied" :
+          error.code === 2 ? "Location unavailable" :
+          "Couldn't get location"
+        );
         setLoading(false);
+      },
+      {
+        enableHighAccuracy: true,  // Request high accuracy
+        timeout: 10000,             // 10 second timeout
+        maximumAge: 60000           // Use cached location if less than 1 min old
       }
     );
   }, [fetchWeather]);
