@@ -207,8 +207,8 @@ function AppInner() {
     <>
       <WeatherEffects />
       <NotificationBanner />
-      {/* Force update banner */}
-      {appConfig.force_update && !isAdmin && !updateDismissed && (
+      {/* Force update banner — only on protected pages, not auth pages */}
+      {user && !user.isGuest && appConfig.force_update && !isAdmin && !updateDismissed && (
         <div className="fixed top-0 inset-x-0 z-[9998] bg-indigo-600 text-white px-4 py-2.5 flex items-center justify-between gap-3 shadow-lg">
           <div className="flex items-center gap-2 text-sm font-medium">
             <span>🚀</span>

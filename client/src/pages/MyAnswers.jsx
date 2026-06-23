@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import ConfirmModal from "../components/ConfirmModal";
 
 const LEVEL_COLOR = {
   High:   "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
@@ -27,6 +28,7 @@ export default function MyAnswers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch]   = useState("");
   const [expanded, setExpanded] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
     api.get("/questions/my-answers/all")
@@ -34,6 +36,19 @@ export default function MyAnswers() {
       .catch(() => toast.error("Failed to load"))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await api.delete(`/questions/${deleteTarget.questionId}`);
+      setAnswers(as => as.filter(a => a.questionId !== deleteTarget.questionId));
+      toast.success("Answer deleted");
+    } catch {
+      toast.error("Failed to delete");
+    } finally {
+      setDeleteTarget(null);
+    }
+  };
 
   const filtered = answers.filter(a =>
     !search || a.question.toLowerCase().includes(search.toLowerCase()) || a.category.toLowerCase().includes(search.toLowerCase())
@@ -104,18 +119,35 @@ export default function MyAnswers() {
                   <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed bg-slate-50 dark:bg-slate-800/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700">
                     {a.latestAnswer}
                   </p>
-                  <button
-                    onClick={() => navigate(`/question/${a.questionId}`)}
-                    className="text-xs px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700/40 font-medium hover:bg-indigo-100 dark:hover:bg-indigo-800/40 transition"
-                  >
-                    Open question →
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => navigate(`/question/${a.questionId}`)}
+                      className="text-xs px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700/40 font-medium hover:bg-indigo-100 dark:hover:bg-indigo-800/40 transition"
+                    >
+                      Open question →
+                    </button>
+                    <button
+                      onClick={() => setDeleteTarget(a)}
+                      className="text-xs px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700/40 font-medium hover:bg-red-100 dark:hover:bg-red-800/40 transition"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Delete answer?"
+        message="This answer will be permanently removed."
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </motion.div>
   );
 }
