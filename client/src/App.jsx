@@ -46,6 +46,10 @@ import Notifications from "./pages/Notifications";
 import Maintenance from "./pages/Maintenance";
 import JsonParser from "./pages/JsonParser";
 import AdminFeedback from "./pages/AdminFeedback";
+import UserProfile from "./pages/UserProfile";
+import AdvancedSearch from "./pages/AdvancedSearch";
+import TimedChallenge from "./pages/TimedChallenge";
+import APIDocumentation from "./pages/APIDocumentation";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -254,8 +258,13 @@ function AppInner() {
         <Route path="/question/:id"    element={<ProtectedPage path="/question"><QuestionDetail /></ProtectedPage>} />
         <Route path="/js-compiler"  element={<ProtectedPage path="/js-compiler"><JsCompiler /></ProtectedPage>} />
         <Route path="/json-parser"  element={<ProtectedPage path="/json-parser"><JsonParser /></ProtectedPage>} />
-        <Route path="/challenge"    element={<ProtectedPage path="/challenge"><JSChallenge /></ProtectedPage>} />
-        <Route path="/workboard"    element={<ProtectedPage path="/workboard"><WorkBoard /></ProtectedPage>} />
+        <Route path="/challenge"        element={<ProtectedPage path="/challenge"><JSChallenge /></ProtectedPage>} />
+        <Route path="/workboard"        element={<ProtectedPage path="/workboard"><WorkBoard /></ProtectedPage>} />
+        <Route path="/profile/:userId"  element={<ProtectedPage path="/profile"><UserProfile /></ProtectedPage>} />
+        <Route path="/profile"          element={<ProtectedPage path="/profile"><UserProfile /></ProtectedPage>} />
+        <Route path="/search"           element={<ProtectedPage path="/search"><AdvancedSearch /></ProtectedPage>} />
+        <Route path="/timed-challenge"  element={<ProtectedPage path="/timed-challenge"><TimedChallenge /></ProtectedPage>} />
+        <Route path="/api-docs"         element={<ProtectedPage path="/api-docs"><APIDocumentation /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
 

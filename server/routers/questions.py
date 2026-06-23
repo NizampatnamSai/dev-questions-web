@@ -684,3 +684,69 @@ async def admin_auto_post(body: AutoPostBody, admin=Depends(current_user)):
     await send_to_tokens(tokens, f"New question by {display_name}", short_q,
                          {"type": "community_post", "path": "/community"})
     return {"id": str(result.inserted_id), "message": "Posted successfully"}
+
+
+@router.get("/search/advanced")
+async def advanced_search(
+    query: str = "",
+    category: str = "",
+    level: str = "",
+    author: str = "",
+    min_difficulty: float = None,
+    max_difficulty: float = None,
+    date_from: str = None,
+    date_to: str = None,
+    page: int = 1,
+    page_size: int = 20,
+    user=Depends(current_user)
+):
+    """Advanced search with filters"""
+    filters = {"status": "published"}
+
+    if query:
+        filters["$or"] = [
+            {"question": {"$regex": query, "$options": "i"}},
+            {"answer": {"$regex": query, "$options": "i"}},
+            {"tags": {"$in": [query.lower()]}},
+        ]
+
+    if category:
+        filters["category"] = category
+
+    if level:
+        filters["level"] = level
+
+    if author:
+        author_user = await col_users().find_one({"name": {"$regex": author, "$options": "i"}})
+        if author_user:
+            filters["authorId"] = str(author_user["_id"])
+
+    if min_difficulty or max_difficulty:
+        difficulty_filter = {}
+        if min_difficulty:
+            difficulty_filter["$gte"] = min_difficulty
+        if max_difficulty:
+            difficulty_filter["$lte"] = max_difficulty
+        if difficulty_filter:
+            filters["avgDifficulty"] = difficulty_filter
+
+    if date_from or date_to:
+        date_filter = {}
+        if date_from:
+            date_filter["$gte"] = date_from
+        if date_to:
+            date_filter["$lte"] = date_to
+        if date_filter:
+            filters["createdAt"] = date_filter
+
+    skip = (page - 1) * page_size
+    items = await col_questions().find(filters).skip(skip).limit(page_size).to_list(page_size)
+    total = await col_questions().count_documents(filters)
+
+    return {
+        "items": [sid(q) for q in items],
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "has_more": skip + page_size < total,
+    }

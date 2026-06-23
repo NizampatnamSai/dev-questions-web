@@ -9,7 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule
 from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_community_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask, feedback
+from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge
 
 app = FastAPI(title="DevQuiz API")
 
@@ -68,16 +68,21 @@ async def shutdown():
 async def health():
     return {"status": "ok", "time": datetime.now(timezone.utc).isoformat()}
 
-app.include_router(auth.router,      prefix="/api/auth")
-app.include_router(questions.router, prefix="/api/questions")
-app.include_router(stats.router,     prefix="/api/stats")
-app.include_router(admin.router,     prefix="/api/admin")
-app.include_router(comments.router,  prefix="/api/questions")
-app.include_router(study.router,      prefix="/api/study")
-app.include_router(challenge.router,  prefix="/api/challenge")
-app.include_router(workboard.router,  prefix="/api/workboard")
-app.include_router(ask.router,        prefix="/api/ai")
-app.include_router(feedback.router,   prefix="/api/feedback")
+app.include_router(auth.router,              prefix="/api/auth")
+app.include_router(questions.router,         prefix="/api/questions")
+app.include_router(stats.router,             prefix="/api/stats")
+app.include_router(admin.router,             prefix="/api/admin")
+app.include_router(comments.router,          prefix="/api/questions")
+app.include_router(study.router,             prefix="/api/study")
+app.include_router(challenge.router,         prefix="/api/challenge")
+app.include_router(workboard.router,         prefix="/api/workboard")
+app.include_router(ask.router,               prefix="/api/ai")
+app.include_router(feedback.router,          prefix="/api/feedback")
+app.include_router(profile.router,           prefix="/api/profile")
+app.include_router(discussion.router,        prefix="/api/discussion")
+app.include_router(difficulty.router,        prefix="/api/difficulty")
+app.include_router(gamification.router,      prefix="/api/gamification")
+app.include_router(timed_challenge.router,   prefix="/api/challenge")
 
 
 @app.get("/")
