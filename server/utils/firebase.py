@@ -16,6 +16,8 @@ log = logging.getLogger(__name__)
 
 _app = None  # firebase_admin.App, initialized lazily
 
+APP_URL = os.getenv("APP_URL", "https://ai-devquiz.netlify.app")
+
 def _init():
     global _app
     if _app is not None:
@@ -56,7 +58,8 @@ async def send_to_tokens(tokens: list[str], title: str, body: str, data: dict | 
         return 0
     try:
         from firebase_admin import messaging
-        link = "/" + str((data or {}).get("path", "/")).lstrip("/")
+        path = "/" + str((data or {}).get("path", "/")).lstrip("/")
+        link = f"{APP_URL}{path}"
         msgs = [
             messaging.Message(
                 notification=messaging.Notification(title=title, body=body),
