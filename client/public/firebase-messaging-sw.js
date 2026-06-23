@@ -12,25 +12,59 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(payload => {
+// Notification type → urgency config
+function getNotifOptions(type) {
+  const urgent = { requireInteraction: true, renotify: true };
+  const map = {
+    account_approved:   { ...urgent, tag: 'account',        vibrate: [200, 100, 200] },
+    account_rejected:   { ...urgent, tag: 'account',        vibrate: [400, 100, 400] },
+    workboard_join:     { ...urgent, tag: 'workboard',      vibrate: [200] },
+    workboard_post:     {            tag: 'workboard-post'                  },
+    js_challenge:       {            tag: 'challenge',       vibrate: [100, 50, 100] },
+    workboard_reminder: { ...urgent, tag: 'workboard',      vibrate: [200, 100, 200] },
+    weekly_motivation:  {            tag: 'motivation'                      },
+    manual:             {            tag: 'manual',          vibrate: [200] },
+    broadcast:          {            tag: 'broadcast',       vibrate: [200] },
+    community_reminder: {            tag: 'community',       vibrate: [150, 100, 150] },
+  };
+  return map[type] || {};
+}
+
+// Play custom notification sound by posting to all open clients
+async function playSound() {
+  const allClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+  for (const client of allClients) {
+    client.postMessage({ type: 'PLAY_NOTIFICATION_SOUND' });
+  }
+}
+
+messaging.onBackgroundMessage(async payload => {
   const { title, body } = payload.notification ?? {};
-  self.registration.showNotification(title ?? 'DevQuiz', {
-    body:  body ?? '',
-    icon:  '/logo192.png',
-    badge: '/logo192.png',
-    data:  payload.data,
+  const type = payload.data?.type || '';
+  const extra = getNotifOptions(type);
+
+  await self.registration.showNotification(title ?? 'DevQuiz', {
+    body:    body ?? '',
+    icon:    '/logo192.png',
+    badge:   '/logo192.png',
+    sound:   '/notification.mp3',  // supported on some platforms
+    data:    payload.data,
+    actions: payload.data?.path
+      ? [{ action: 'open', title: '👉 Open' }]
+      : [],
+    ...extra,
   });
+
+  await playSound();
 });
 
-// Notification click → redirect to the path in data payload
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   const path = event.notification.data?.path || '/';
-  const url = self.location.origin + path;
+  const url  = self.location.origin + path;
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      // If app is already open, focus it and navigate
       for (const client of list) {
         if (client.url.startsWith(self.location.origin) && 'focus' in client) {
           client.focus();
@@ -38,7 +72,6 @@ self.addEventListener('notificationclick', event => {
           return;
         }
       }
-      // Otherwise open a new window
       return clients.openWindow(url);
     })
   );

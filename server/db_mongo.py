@@ -41,6 +41,9 @@ def col_notify_schedules():     return mdb()["notify_schedules"]
 def col_challenge_progress():   return mdb()["challenge_progress"]
 def col_workboard_members():    return mdb()["workboard_members"]
 def col_workboard_posts():      return mdb()["workboard_posts"]
+def col_community_schedule():   return mdb()["community_schedule"]
+def col_user_answers():         return mdb()["user_answers"]
+def col_user_notifications():   return mdb()["user_notifications"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
@@ -95,7 +98,7 @@ async def _seed(db):
             "email":      email,
             "password":   _hash(pw),
             "role":       role,
-            "dailyLimit": 10,
+            "dailyLimit": 25,
             "createdAt":  now(),
         }
 

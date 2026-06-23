@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
@@ -11,6 +11,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login, enterGuest } = useAuth();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+
+  useEffect(() => {
+    if (params.get("disabled") === "1") {
+      toast.error("Your account has been disabled by admin. Contact support.", { duration: 6000 });
+    }
+  }, []);
 
   const submit = async (e) => {
     e.preventDefault();

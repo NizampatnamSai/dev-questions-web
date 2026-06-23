@@ -24,8 +24,8 @@ export default function Leaderboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  const maxQ = Math.max(...rows.map(r => r.questionCount || 0), 1);
-  const maxU = Math.max(...rows.map(r => r.totalUpvotes || 0), 1);
+  const maxQ = Math.max(...rows.map(r => r.questionsPosted || r.questionCount || 0), 1);
+  const maxU = Math.max(...rows.map(r => r.upvotesReceived || r.totalUpvotes || 0), 1);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
@@ -89,30 +89,30 @@ export default function Leaderboard() {
                   <div>
                     <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
                       <span>📝 Questions</span>
-                      <span className="font-bold text-indigo-500">{r.questionCount ?? 0}</span>
+                      <span className="font-bold text-indigo-500">{r.questionsPosted ?? r.questionCount ?? 0}</span>
                     </div>
                     <div className="h-1.5 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                       <motion.div className="h-full bg-indigo-500 rounded-full"
-                        initial={{ width: 0 }} animate={{ width: `${((r.questionCount || 0) / maxQ) * 100}%` }}
+                        initial={{ width: 0 }} animate={{ width: `${((r.questionsPosted || r.questionCount || 0) / maxQ) * 100}%` }}
                         transition={{ duration: 0.6, delay: i * 0.04 }} />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
                       <span>▲ Upvotes</span>
-                      <span className="font-bold text-cyan-500">{r.totalUpvotes ?? 0}</span>
+                      <span className="font-bold text-cyan-500">{r.upvotesReceived ?? r.totalUpvotes ?? 0}</span>
                     </div>
                     <div className="h-1.5 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                       <motion.div className="h-full bg-cyan-400 rounded-full"
-                        initial={{ width: 0 }} animate={{ width: `${((r.totalUpvotes || 0) / maxU) * 100}%` }}
+                        initial={{ width: 0 }} animate={{ width: `${((r.upvotesReceived || r.totalUpvotes || 0) / maxU) * 100}%` }}
                         transition={{ duration: 0.6, delay: i * 0.04 + 0.1 }} />
                     </div>
                   </div>
                 </div>
                 {/* Mobile: numbers only */}
                 <div className="sm:hidden text-right flex-shrink-0">
-                  <p className="text-sm font-bold text-indigo-500">{r.questionCount ?? 0} <span className="text-[10px] font-normal text-slate-400">Q</span></p>
-                  <p className="text-xs text-cyan-500">{r.totalUpvotes ?? 0} <span className="text-[10px] text-slate-400">▲</span></p>
+                  <p className="text-sm font-bold text-indigo-500">{r.questionsPosted ?? r.questionCount ?? 0} <span className="text-[10px] font-normal text-slate-400">Q</span></p>
+                  <p className="text-xs text-cyan-500">{r.upvotesReceived ?? r.totalUpvotes ?? 0} <span className="text-[10px] text-slate-400">▲</span></p>
                 </div>
               </motion.div>
             ))}

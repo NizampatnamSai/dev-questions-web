@@ -90,10 +90,41 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!user || user.isGuest) return;
+
+    // Listen for service-worker PLAY_NOTIFICATION_SOUND messages (background notifications)
+    const swMsgHandler = (event) => {
+      if (event.data?.type === "PLAY_NOTIFICATION_SOUND") {
+        const audio = new Audio("/notification.mp3");
+        audio.volume = 0.7;
+        audio.play().catch(() => {});
+      }
+    };
+    navigator.serviceWorker?.addEventListener("message", swMsgHandler);
+
     const unsub = onForegroundMessage(payload => {
       const { title, body } = payload.notification ?? {};
       const path = payload.data?.path;
       if (!title) return;
+
+      // Play notification sound (foreground)
+      try {
+        const audio = new Audio("/notification.mp3");
+        audio.volume = 0.7;
+        audio.play().catch(() => {});
+      } catch {}
+
+      // Show a real native browser notification even when app is open
+      if ("Notification" in window && Notification.permission === "granted") {
+        const n = new Notification(title, {
+          body: body || "",
+          icon: "/logo192.png",
+          badge: "/logo192.png",
+          tag: path || "devquiz",
+        });
+        if (path) n.onclick = () => { window.focus(); window.location.href = path; };
+      }
+
+      // Also show in-app toast as fallback
       toast(
         (t) => (
           <div
@@ -111,7 +142,10 @@ export function AuthProvider({ children }) {
         { duration: 6000, icon: "🔔" }
       );
     });
-    return () => unsub && unsub();
+    return () => {
+      unsub && unsub();
+      navigator.serviceWorker?.removeEventListener("message", swMsgHandler);
+    };
   }, [user]);
 
   return (

@@ -1,14 +1,17 @@
-import { useState, useMemo } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
+import api from "../api/axios";
+import GlobalSearch from "./GlobalSearch";
 
 const BASE_LINKS = [
   { to: "/dashboard",      label: "Dashboard",       icon: "📊" },
   { to: "/workboard",      label: "Work Board",      icon: "📋" },
+  { to: "/challenge",      label: "JS Challenge",    icon: "🧩" },
   { to: "/generate",       label: "AI Generator",    icon: "✨" },
   { to: "/quiz",           label: "Quiz Mode",       icon: "🧠" },
   { to: "/study",          label: "Study Hub",       icon: "📚" },
@@ -17,6 +20,7 @@ const BASE_LINKS = [
   { to: "/progress",       label: "My Progress",     icon: "📈" },
   { to: "/community",      label: "Community",       icon: "🌍" },
   { to: "/my-questions",   label: "My Questions",    icon: "📝" },
+  { to: "/my-answers",     label: "My Answers",      icon: "✍️" },
   { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
   { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
   { to: "/js-compiler",         label: "JS Compiler",    icon: "⚡" },
@@ -24,7 +28,7 @@ const BASE_LINKS = [
   { to: "/study?tool=errors",  label: "Error Finder",   icon: "🐛", activeMatch: "/study?tool=errors" },
   { to: "/study?tool=breaks",  label: "Break Finder",   icon: "💥", activeMatch: "/study?tool=breaks" },
   { to: "/guide",              label: "Project Guide",  icon: "🗺️" },
-  { to: "/challenge",          label: "JS Challenge",   icon: "🧩" },
+  { to: "/notifications",      label: "Notifications",  icon: "🔔" },
 ];
 const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑" };
 
@@ -54,10 +58,23 @@ export default function Sidebar() {
     activeCondition, meta, CONDITION_META,
     temp, locName, loading, error, locDenied,
   } = useWeather();
+  const navigate = useNavigate();
 
   const [stateSearch, setStateSearch] = useState("");
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  const GUEST_HIDDEN = ["/generate", "/my-questions", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
+  useEffect(() => {
+    if (!user || user.isGuest) return;
+    const fetch = () =>
+      api.get("/admin/notifications/my/unread-count")
+        .then(({ data }) => setUnreadCount(data.count || 0))
+        .catch(() => {});
+    fetch();
+    const timer = setInterval(fetch, 60000); // poll every 60s
+    return () => clearInterval(timer);
+  }, [user?.id]);
+
+  const GUEST_HIDDEN = ["/notifications", "/generate", "/my-questions", "/my-answers", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
   const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK] : BASE_LINKS;
   const links = user?.isGuest ? allLinks.filter(l => !GUEST_HIDDEN.includes(l.to)) : allLinks;
 
@@ -74,7 +91,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-64 h-screen sticky top-0 sidebar-light glass border-r border-black/5 dark:border-white/10 p-5 overflow-y-auto">
 
-      {/* Logo */}
+      {/* Logo + Bell */}
       <motion.div
         className="flex items-center gap-2.5 mb-8 px-1"
         initial={{ opacity: 0, x: -20 }}
@@ -82,10 +99,26 @@ export default function Sidebar() {
         transition={{ duration: 0.5 }}
       >
         <img src="/logo192.png" alt="DevQuiz" className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30" />
-        <div>
+        <div className="flex-1 min-w-0">
           <p className="text-base font-bold tracking-tight gradient-text">DevQuiz</p>
           <p className="text-[10px] text-slate-400 -mt-0.5">AI Interview Platform</p>
         </div>
+        {!user?.isGuest && (
+          <motion.button
+            onClick={() => { setUnreadCount(0); navigate("/notifications"); }}
+            className="relative p-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/8 transition-colors flex-shrink-0"
+            animate={unreadCount > 0 ? { rotate: [0, -12, 12, -8, 8, 0] } : {}}
+            transition={{ duration: 0.6, repeat: unreadCount > 0 ? Infinity : 0, repeatDelay: 3 }}
+            title="Notifications"
+          >
+            <span className="text-lg">🔔</span>
+            {unreadCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </motion.button>
+        )}
       </motion.div>
 
       {/* Nav */}

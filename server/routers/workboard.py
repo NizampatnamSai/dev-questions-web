@@ -163,7 +163,7 @@ async def today_posts(user=Depends(current_user)):
     for d in docs:
         d["id"] = str(d.pop("_id"))
         can_edit = d["userId"] == user["id"] and _can_edit(d)
-        d["postedAt"] = d["postedAt"].isoformat() if isinstance(d.get("postedAt"), datetime) else d.get("postedAt")
+        d["postedAt"] = d["postedAt"].strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(d.get("postedAt"), datetime) else d.get("postedAt")
         d["canEdit"] = can_edit
         result.append(d)
     return result
@@ -199,7 +199,7 @@ async def create_post(body: PostBody, user=Depends(current_user)):
         "userName": user.get("name", ""),
         "message":  body.message.strip(),
         "date":     today,
-        "postedAt": posted_at.isoformat(),
+        "postedAt": posted_at.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z",
         "canEdit":  True,
     }
     # Broadcast via WebSocket
@@ -241,7 +241,7 @@ async def edit_post(post_id: str, body: PostBody, user=Depends(current_user)):
         "userName": post["userName"],
         "message": body.message.strip(),
         "date":    post["date"],
-        "postedAt": post["postedAt"].isoformat() if isinstance(post.get("postedAt"), datetime) else post.get("postedAt"),
+        "postedAt": post["postedAt"].strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(post.get("postedAt"), datetime) else post.get("postedAt"),
         "canEdit": True,
     }
     await manager.broadcast({"type": "edit_post", "post": updated})

@@ -23,14 +23,10 @@ export default function Register() {
     try {
       await register(name, email, password);
       setSubmitted(true);
-      // Ask for notification permission so admin can push approval/rejection
-      try {
-        const perm = await Notification.requestPermission();
-        if (perm === "granted") {
-          await requestAndRegisterToken(api);
-          setNotifGranted(true);
-        }
-      } catch {}
+      // Auto-request if already granted (e.g. returning user)
+      if ("Notification" in window && Notification.permission === "granted") {
+        try { await requestAndRegisterToken(api); setNotifGranted(true); } catch {}
+      }
     } catch (err) {
       toast.error(err.response?.data?.detail || err.response?.data?.message || "Registration failed");
     } finally {
@@ -51,13 +47,26 @@ export default function Register() {
           {notifGranted ? (
             <div className="flex items-center justify-center gap-2 text-xs text-emerald-500 bg-emerald-500/10 rounded-xl px-4 py-2.5">
               <span>🔔</span>
-              <span>Push notifications enabled — we'll alert you when approved or rejected.</span>
+              <span>Notifications enabled — you'll be alerted when approved or rejected.</span>
             </div>
           ) : (
-            <div className="flex items-center justify-center gap-2 text-xs text-amber-500 bg-amber-500/10 rounded-xl px-4 py-2.5">
-              <span>⚠️</span>
-              <span>Notifications blocked — enable them in browser settings to get approval alerts.</span>
-            </div>
+            <button
+              onClick={async () => {
+                if (!("Notification" in window)) return;
+                try {
+                  const perm = await Notification.requestPermission();
+                  if (perm === "granted") {
+                    await requestAndRegisterToken(api);
+                    setNotifGranted(true);
+                  } else {
+                    toast.error("Please enable notifications in your browser settings to get approval alerts.");
+                  }
+                } catch {}
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold transition"
+            >
+              🔔 Enable Notifications to get approval alert
+            </button>
           )}
           <Link to="/login" className="inline-block mt-2 text-sm text-cyan-400 hover:underline">← Back to login</Link>
         </motion.div>

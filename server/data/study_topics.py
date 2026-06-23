@@ -3232,5 +3232,128 @@ STUDY_TOPICS = [
     "explanation": "Monorepo: all code (frontend, backend, mobile, shared libs) lives in one Git repository.\n\nPros of monorepo:\n- Shared code / type definitions in one place — no versioning pain\n- Atomic commits across multiple packages\n- Single CI pipeline, consistent tooling\n- Easy refactoring across packages\n- Used by Google, Meta, Microsoft, Vercel\n\nCons of monorepo:\n- Git history gets large — git clone is slow\n- CI must be smart (only test what changed)\n- Need tools: Turborepo, Nx, Bazel for caching/orchestration\n\nPolyrepo: each service/app is its own repo.\n\nPros: independent release cycles, smaller repos, clear ownership.\nCons: shared code versioning headache, harder to make cross-repo changes, duplicated tooling config.\n\nMost modern teams use monorepos with workspace tools (pnpm workspaces, npm workspaces, Turborepo).",
     "code": "# Typical monorepo structure\napps/\n  web/          # Next.js\n  mobile/       # React Native\n  api/          # Express or FastAPI\npackages/\n  ui/           # Shared component library\n  types/        # Shared TypeScript types\n  utils/        # Shared utilities\nturbo.json      # Turborepo pipeline\npackage.json    # Root workspace config\n\n# package.json (root)\n{\n  \"workspaces\": [\"apps/*\", \"packages/*\"]\n}\n\n# Run all tests across packages\nnpx turbo run test\n\n# Only rebuild what changed\nnpx turbo run build --filter=[HEAD^1]",
     "interviewQuestion": "What are the trade-offs between a monorepo and a polyrepo architecture?"
+  },
+
+  # ── DSA ───────────────────────────────────────────────────────────────────────
+  {
+    "id": "dsa-big-o-notation",
+    "category": "dsa",
+    "topic": "Complexity Analysis",
+    "title": "Big O Notation",
+    "difficulty": "Intermediate",
+    "summary": "Big O describes worst-case time/space growth as input size → ∞",
+    "explanation": "O(1): constant — hash map lookup. O(log n): binary search, BST balanced ops. O(n): single loop. O(n log n): merge sort, heapsort. O(n²): nested loops, bubble sort. O(2ⁿ): recursive subsets. O(n!): permutations.\n\nAlways drop constants and lower-order terms: O(2n + 5) → O(n). Amortized: dynamic array append is O(1) amortized because resize is rare.",
+    "code": "# O(n log n) — merge sort\ndef merge_sort(arr):\n    if len(arr) <= 1: return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)\n\n# O(1) average — hash lookup\nd = {}\nd[key] = value  # O(1) insert\nval = d[key]    # O(1) lookup",
+    "interviewQuestion": "Explain Big O notation and give examples of O(1), O(log n), O(n), and O(n log n) operations."
+  },
+  {
+    "id": "dsa-two-pointer",
+    "category": "dsa",
+    "topic": "Arrays",
+    "title": "Two Pointer Technique",
+    "difficulty": "Intermediate",
+    "summary": "Two pointers that move toward each other or in same direction to solve array problems in O(n)",
+    "explanation": "Opposite ends: converge toward center (pair sum, palindrome check, trapping rain water). Same direction: fast/slow pointers for sliding window, cycle detection.\n\nKey insight: eliminates the need for a nested loop when the array is sorted or has monotonic properties.",
+    "code": "# Pair that sums to target (sorted array)\ndef two_sum_sorted(arr, target):\n    l, r = 0, len(arr) - 1\n    while l < r:\n        s = arr[l] + arr[r]\n        if s == target:   return [l, r]\n        elif s < target:  l += 1\n        else:             r -= 1\n    return []\n\n# Trapping Rain Water — O(n) time, O(1) space\ndef trap(height):\n    l, r = 0, len(height) - 1\n    max_l = max_r = water = 0\n    while l < r:\n        if height[l] <= height[r]:\n            max_l = max(max_l, height[l])\n            water += max_l - height[l]; l += 1\n        else:\n            max_r = max(max_r, height[r])\n            water += max_r - height[r]; r -= 1\n    return water",
+    "interviewQuestion": "How would you use the two-pointer technique to solve the trapping rain water problem in O(n) time and O(1) space?"
+  },
+  {
+    "id": "dsa-sliding-window",
+    "category": "dsa",
+    "topic": "Arrays",
+    "title": "Sliding Window",
+    "difficulty": "Intermediate",
+    "summary": "A variable or fixed-size window that slides across data — avoids re-computing the full subarray each step",
+    "explanation": "Fixed window: keep a sum, subtract outgoing, add incoming — O(n) instead of O(nk).\nVariable window: expand right, shrink left when constraint violated. Used for longest substring without repeat, minimum window substring.\n\nTemplate: l=0, iterate r; when invalid shrink l; track answer at each valid state.",
+    "code": "# Longest substring without repeating characters\ndef length_of_longest_substring(s):\n    seen = {}\n    l = max_len = 0\n    for r, c in enumerate(s):\n        if c in seen and seen[c] >= l:\n            l = seen[c] + 1\n        seen[c] = r\n        max_len = max(max_len, r - l + 1)\n    return max_len\n\n# Max sum subarray of size k (fixed window)\ndef max_sum_k(arr, k):\n    window = sum(arr[:k])\n    best = window\n    for i in range(k, len(arr)):\n        window += arr[i] - arr[i - k]\n        best = max(best, window)\n    return best",
+    "interviewQuestion": "Explain the sliding window pattern and how you'd use it to find the minimum window substring containing all characters of a target string."
+  },
+  {
+    "id": "dsa-binary-search",
+    "category": "dsa",
+    "topic": "Searching",
+    "title": "Binary Search",
+    "difficulty": "Intermediate",
+    "summary": "Halve the search space each step — O(log n) on sorted arrays",
+    "explanation": "Classic: find exact value. Extended: find leftmost/rightmost insertion point, search in rotated array, search on answer space (minimum capacity, koko eating bananas).\n\nBug traps: mid = l + (r-l)//2 avoids integer overflow. Loop condition l < r vs l <= r depends on whether you want to handle a single-element window.",
+    "code": "# Classic binary search\ndef binary_search(arr, target):\n    l, r = 0, len(arr) - 1\n    while l <= r:\n        mid = l + (r - l) // 2\n        if arr[mid] == target:   return mid\n        elif arr[mid] < target:  l = mid + 1\n        else:                    r = mid - 1\n    return -1\n\n# Search in rotated sorted array\ndef search_rotated(nums, target):\n    l, r = 0, len(nums) - 1\n    while l <= r:\n        mid = (l + r) // 2\n        if nums[mid] == target: return mid\n        if nums[l] <= nums[mid]:   # left half sorted\n            if nums[l] <= target < nums[mid]: r = mid - 1\n            else:                             l = mid + 1\n        else:                       # right half sorted\n            if nums[mid] < target <= nums[r]: l = mid + 1\n            else:                             r = mid - 1\n    return -1",
+    "interviewQuestion": "Implement binary search on a rotated sorted array and explain how you identify which half is sorted."
+  },
+  {
+    "id": "dsa-linked-list-cycle",
+    "category": "dsa",
+    "topic": "Linked Lists",
+    "title": "Fast & Slow Pointers",
+    "difficulty": "Advanced",
+    "summary": "Floyd's tortoise-and-hare algorithm detects cycles and finds their start in O(n) time and O(1) space",
+    "explanation": "Detection: fast moves 2 steps, slow 1 step — if cycle exists they meet.\nCycle start: after meeting, reset one pointer to head; both advance 1 step — they meet at cycle entry.\nProof: if cycle length λ and entry at pos μ, the meeting point is at distance μ from entry inside the cycle.\n\nExtensions: find middle of linked list (stop when fast reaches end), palindrome linked list.",
+    "code": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val; self.next = next\n\n# Detect cycle\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast: return True\n    return False\n\n# Find cycle start\ndef detect_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            slow = head\n            while slow is not fast:\n                slow = slow.next\n                fast = fast.next\n            return slow\n    return None\n\n# Find middle\ndef middle_node(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow",
+    "interviewQuestion": "Describe Floyd's cycle detection algorithm. How do you find where the cycle starts, not just whether it exists?"
+  },
+  {
+    "id": "dsa-stack-monotonic",
+    "category": "dsa",
+    "topic": "Stacks & Queues",
+    "title": "Monotonic Stack",
+    "difficulty": "Advanced",
+    "summary": "A stack maintained in strictly increasing or decreasing order — solves next greater/smaller element in O(n)",
+    "explanation": "Decreasing monotonic stack: iterate left→right; pop everything smaller than current — those elements' 'next greater' is the current element.\n\nUsed for: Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Asteroid Collision.\n\nKey insight: each element is pushed/popped at most once → O(n) total.",
+    "code": "# Daily Temperatures — next warmer day\ndef daily_temperatures(temps):\n    res = [0] * len(temps)\n    stack = []  # stores indices\n    for i, t in enumerate(temps):\n        while stack and temps[stack[-1]] < t:\n            j = stack.pop()\n            res[j] = i - j\n        stack.append(i)\n    return res\n\n# Largest Rectangle in Histogram — O(n)\ndef largest_rectangle(heights):\n    stack = []\n    max_area = 0\n    heights = heights + [0]  # sentinel\n    for i, h in enumerate(heights):\n        start = i\n        while stack and stack[-1][1] > h:\n            idx, height = stack.pop()\n            max_area = max(max_area, height * (i - idx))\n            start = idx\n        stack.append((start, h))\n    return max_area",
+    "interviewQuestion": "How would you use a monotonic stack to solve 'Largest Rectangle in Histogram' in O(n) time?"
+  },
+  {
+    "id": "dsa-dynamic-programming",
+    "category": "dsa",
+    "topic": "Dynamic Programming",
+    "title": "DP Fundamentals",
+    "difficulty": "Advanced",
+    "summary": "Break a problem into overlapping sub-problems; memoize or tabulate their results",
+    "explanation": "Two approaches:\n1. Top-down (memoization): recursive with cache. Easy to write, natural.\n2. Bottom-up (tabulation): iterative DP array, better space control.\n\nDP is applicable when: optimal substructure (optimal solution built from optimal sub-solutions) + overlapping subproblems.\n\nCommon patterns: 0/1 knapsack, unbounded knapsack, LCS, LIS, edit distance, coin change, house robber, grid paths.",
+    "code": "# Coin change — min coins to make amount\ndef coin_change(coins, amount):\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for c in coins:\n            if c <= a:\n                dp[a] = min(dp[a], dp[a - c] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1\n\n# Longest Increasing Subsequence — O(n log n)\ndef length_of_lis(nums):\n    tails = []\n    import bisect\n    for n in nums:\n        pos = bisect.bisect_left(tails, n)\n        if pos == len(tails): tails.append(n)\n        else:                 tails[pos] = n\n    return len(tails)\n\n# 0/1 Knapsack\ndef knapsack(weights, values, capacity):\n    n = len(weights)\n    dp = [[0]*(capacity+1) for _ in range(n+1)]\n    for i in range(1, n+1):\n        for w in range(capacity+1):\n            dp[i][w] = dp[i-1][w]\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i][w], dp[i-1][w-weights[i-1]] + values[i-1])\n    return dp[n][capacity]",
+    "interviewQuestion": "Explain the difference between memoization and tabulation in dynamic programming. Walk me through solving the coin change problem with both approaches."
+  },
+  {
+    "id": "dsa-graph-bfs-dfs",
+    "category": "dsa",
+    "topic": "Graphs",
+    "title": "BFS & DFS",
+    "difficulty": "Advanced",
+    "summary": "BFS uses a queue (shortest path in unweighted graphs); DFS uses a stack/recursion (cycle detection, topological sort)",
+    "explanation": "BFS: level-order traversal, shortest path in unweighted graph, 0-1 BFS with deque for weighted variant.\nDFS: pre/in/post order, cycle detection via visited + recursion stack, topological sort (Kahn's or DFS).\n\nBoth O(V+E) where V = vertices, E = edges. BFS typically uses more memory (full level in queue). DFS can hit recursion limits on deep graphs — use explicit stack.",
+    "code": "from collections import deque\n\n# BFS — shortest path\ndef bfs(graph, start, end):\n    queue = deque([(start, [start])])\n    visited = {start}\n    while queue:\n        node, path = queue.popleft()\n        if node == end: return path\n        for nb in graph[node]:\n            if nb not in visited:\n                visited.add(nb)\n                queue.append((nb, path + [nb]))\n    return None\n\n# DFS — detect cycle in directed graph\ndef has_cycle(graph, n):\n    WHITE, GRAY, BLACK = 0, 1, 2\n    color = [WHITE] * n\n    def dfs(u):\n        color[u] = GRAY\n        for v in graph[u]:\n            if color[v] == GRAY: return True\n            if color[v] == WHITE and dfs(v): return True\n        color[u] = BLACK\n        return False\n    return any(dfs(i) for i in range(n) if color[i] == WHITE)",
+    "interviewQuestion": "When would you choose BFS over DFS? How does DFS detect a cycle in a directed graph?"
+  },
+  {
+    "id": "dsa-heap-priority-queue",
+    "category": "dsa",
+    "topic": "Heaps",
+    "title": "Heap / Priority Queue",
+    "difficulty": "Advanced",
+    "summary": "A complete binary tree where parent ≤ children (min-heap); supports O(log n) insert and O(log n) extract-min",
+    "explanation": "Min-heap: root is always the smallest. Python's heapq is a min-heap — negate values for max-heap.\n\nUsed for: top-k elements, k-th largest, merge k sorted lists, Dijkstra's shortest path, median of data stream.\n\nTwo-heap trick for median: max-heap for lower half, min-heap for upper half — median is always at heap tops.",
+    "code": "import heapq\n\n# K largest elements\ndef k_largest(nums, k):\n    return heapq.nlargest(k, nums)  # O(n log k)\n\n# K-th largest (streaming)\nclass KthLargest:\n    def __init__(self, k, nums):\n        self.k = k\n        self.heap = []\n        for n in nums: self.add(n)\n    def add(self, val):\n        heapq.heappush(self.heap, val)\n        if len(self.heap) > self.k:\n            heapq.heappop(self.heap)\n        return self.heap[0]\n\n# Merge k sorted lists\ndef merge_k_sorted(lists):\n    heap = []\n    for i, lst in enumerate(lists):\n        if lst: heapq.heappush(heap, (lst[0], i, 0))\n    result = []\n    while heap:\n        val, i, j = heapq.heappop(heap)\n        result.append(val)\n        if j + 1 < len(lists[i]):\n            heapq.heappush(heap, (lists[i][j+1], i, j+1))\n    return result",
+    "interviewQuestion": "Explain how you'd find the median of a data stream in O(log n) per insertion using two heaps."
+  },
+  {
+    "id": "dsa-trie",
+    "category": "dsa",
+    "topic": "Trees",
+    "title": "Trie (Prefix Tree)",
+    "difficulty": "Advanced",
+    "summary": "A tree where each node represents a character; enables O(m) prefix search where m = word length",
+    "explanation": "Each path from root to a 'end' node represents a word. Insert: O(m). Search: O(m). Prefix check: O(m).\n\nUsed for: autocomplete, spell checking, IP routing (radix tree), word search in board (Boggle).\n\nSpace: O(ALPHABET_SIZE × N × M) worst case. Compressed trie (Patricia trie) for space efficiency.",
+    "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word):\n        node = self.root\n        for c in word:\n            node = node.children.setdefault(c, TrieNode())\n        node.is_end = True\n\n    def search(self, word):\n        node = self.root\n        for c in word:\n            if c not in node.children: return False\n            node = node.children[c]\n        return node.is_end\n\n    def starts_with(self, prefix):\n        node = self.root\n        for c in prefix:\n            if c not in node.children: return False\n            node = node.children[c]\n        return True",
+    "interviewQuestion": "Implement a Trie and explain how you'd extend it to return all words with a given prefix (autocomplete)."
+  },
+  {
+    "id": "dsa-union-find",
+    "category": "dsa",
+    "topic": "Graphs",
+    "title": "Union-Find (Disjoint Set Union)",
+    "difficulty": "Advanced",
+    "summary": "Data structure for grouping elements; union and find each near O(1) amortized with path compression + union by rank",
+    "explanation": "find(x): follow parent pointers to root (with path compression — flatten tree). union(x,y): merge smaller tree under larger (by rank or size).\n\nWith both optimizations, operations are O(α(n)) — inverse Ackermann function, essentially constant.\n\nUsed for: number of connected components, cycle detection in undirected graph, Kruskal's MST, accounts merge.",
+    "code": "class UnionFind:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank   = [0] * n\n        self.count  = n  # number of components\n\n    def find(self, x):\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x])  # path compression\n        return self.parent[x]\n\n    def union(self, x, y):\n        rx, ry = self.find(x), self.find(y)\n        if rx == ry: return False  # already connected\n        if self.rank[rx] < self.rank[ry]: rx, ry = ry, rx\n        self.parent[ry] = rx\n        if self.rank[rx] == self.rank[ry]: self.rank[rx] += 1\n        self.count -= 1\n        return True\n\n# Number of islands using DSU\ndef num_islands(grid):\n    if not grid: return 0\n    rows, cols = len(grid), len(grid[0])\n    uf = UnionFind(rows * cols)\n    count = 0\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '1':\n                count += 1\n                for dr, dc in [(0,1),(1,0)]:\n                    nr, nc = r+dr, c+dc\n                    if 0<=nr<rows and 0<=nc<cols and grid[nr][nc]=='1':\n                        if uf.union(r*cols+c, nr*cols+nc): count -= 1\n    return count",
+    "interviewQuestion": "Explain path compression and union by rank. Why do these make Union-Find nearly O(1) per operation?"
   }
 ]

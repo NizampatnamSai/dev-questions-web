@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
+import GlobalSearch from "./components/GlobalSearch";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
@@ -35,6 +36,8 @@ import JsCompiler from "./pages/JsCompiler";
 import ProjectGuide from "./pages/ProjectGuide";
 import JSChallenge from "./pages/JSChallenge";
 import WorkBoard from "./pages/WorkBoard";
+import MyAnswers from "./pages/MyAnswers";
+import Notifications from "./pages/Notifications";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -56,9 +59,15 @@ function AppLayout({ children }) {
       <GuestBanner />
       <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl mx-auto w-full">
-          {children}
-        </main>
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Top bar — desktop only */}
+          <div className="hidden md:flex items-center justify-end px-8 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
+            <GlobalSearch />
+          </div>
+          <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl mx-auto w-full">
+            {children}
+          </main>
+        </div>
         <BottomNav />
         <ScrollToTopBtn />
       </div>
@@ -160,6 +169,8 @@ function AppInner() {
         <Route path="/generate"     element={<ProtectedPage path="/generate"><Generator /></ProtectedPage>} />
         <Route path="/community"    element={<ProtectedPage path="/community"><Community /></ProtectedPage>} />
         <Route path="/my-questions" element={<ProtectedPage path="/my-questions"><MyQuestions /></ProtectedPage>} />
+        <Route path="/my-answers"     element={<ProtectedPage path="/my-answers"><MyAnswers /></ProtectedPage>} />
+        <Route path="/notifications"  element={<ProtectedPage path="/notifications"><Notifications /></ProtectedPage>} />
         <Route path="/bookmarks"    element={<ProtectedPage path="/bookmarks"><Bookmarks /></ProtectedPage>} />
         <Route path="/leaderboard"  element={<ProtectedPage path="/leaderboard"><Leaderboard /></ProtectedPage>} />
         <Route path="/guide"        element={<ProtectedPage path="/guide"><ProjectGuide /></ProtectedPage>} />

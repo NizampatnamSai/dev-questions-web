@@ -96,10 +96,12 @@ async def leaderboard():
     for r in rows:
         uid  = r["_id"]
         udoc = await col_users().find_one({"_id": __import__("bson").ObjectId(uid)}) if uid else None
+        role = udoc.get("role", "user") if udoc else "user"
+        if role in ("admin", "sub_admin"):
+            continue
         result.append({
             "id":              uid,
             "name":            udoc["name"] if udoc else "Unknown",
-            "role":            udoc.get("role", "user") if udoc else "user",
             "upvotesReceived": r["upvotesReceived"],
             "questionsPosted": r["questionsPosted"],
         })

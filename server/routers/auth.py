@@ -50,7 +50,7 @@ async def register(body: RegisterBody):
         "password":   hash_password(body.password),
         "role":       "user",
         "status":     "pending",
-        "dailyLimit": 10,
+        "dailyLimit": 25,
         "createdAt":  now(),
     })
     # notify all admins via push

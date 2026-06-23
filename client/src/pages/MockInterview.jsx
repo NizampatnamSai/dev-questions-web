@@ -4,6 +4,7 @@ import api from "../api/axios";
 
 const CATEGORIES = [
   { id: "", label: "All Topics" },
+  { id: "dsa", label: "DSA 🧮", badge: "Advanced" },
   { id: "html", label: "HTML" },
   { id: "css", label: "CSS" },
   { id: "javascript", label: "JavaScript" },
@@ -80,7 +81,20 @@ export default function MockInterview() {
 
   async function submitAnswer() {
     const q = questions[current];
-    const ans = answers[current] || "";
+    const ans = (answers[current] || "").trim();
+    // No answer given — score 0 immediately without calling AI
+    if (!ans) {
+      setScores((prev) => ({
+        ...prev,
+        [current]: {
+          score: 0,
+          right: "Nothing, as no answer was provided.",
+          missed: "The key points for this question were not addressed.",
+          model_answer: q.hint || "",
+        },
+      }));
+      return;
+    }
     setLoadingEval(true);
     try {
       const { data } = await api.post("/study/mock/evaluate", {
@@ -137,8 +151,8 @@ export default function MockInterview() {
                   {CATEGORIES.filter(c => c.id !== "").map((c) => (
                     <button key={c.id}
                       onClick={() => setCategories(prev => prev.includes(c.id) ? prev.filter(x => x !== c.id) : [...prev, c.id])}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${categories.includes(c.id) ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"}`}>
-                      {c.label}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${categories.includes(c.id) ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"}`}>
+                      {c.label}{c.badge && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 font-semibold">{c.badge}</span>}
                     </button>
                   ))}
                 </div>

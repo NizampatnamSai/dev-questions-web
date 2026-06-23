@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnswerBlock from "./AnswerBlock";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const CATEGORY_STYLES = {
   "HTML/CSS":     "bg-red-100  text-red-700  border-red-200  dark:bg-red-500/15   dark:text-red-300   dark:border-red-500/30",
@@ -22,11 +23,12 @@ function initialsOf(name = "?") {
   return name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 }
 
-function CommentsSection({ qid }) {
+function CommentsSection({ qid, onCommentCountChange }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     api.get(`/questions/${qid}/comments`)
@@ -41,7 +43,11 @@ function CommentsSection({ qid }) {
     setPosting(true);
     try {
       const { data } = await api.post(`/questions/${qid}/comments`, { text });
-      setComments(c => [...c, data]);
+      setComments(c => {
+        const updated = [...c, data];
+        onCommentCountChange?.(updated.length);
+        return updated;
+      });
       setText("");
     } catch {}
     setPosting(false);
@@ -50,7 +56,11 @@ function CommentsSection({ qid }) {
   const del = async (cid) => {
     try {
       await api.delete(`/questions/comments/${cid}`);
-      setComments(c => c.filter(x => x.id !== cid));
+      setComments(c => {
+        const updated = c.filter(x => x.id !== cid);
+        onCommentCountChange?.(updated.length);
+        return updated;
+      });
     } catch {}
   };
 
@@ -74,9 +84,13 @@ function CommentsSection({ qid }) {
               <div className="flex-1 bg-slate-50 dark:bg-white/5 rounded-xl px-3 py-2">
                 <div className="flex items-center justify-between gap-2 mb-0.5">
                   <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">{c.author?.name}</span>
-                  <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[10px] text-slate-400">{new Date(c.createdAt).toLocaleDateString()}</span>
-                    <button onClick={() => del(c.id)} className="text-[10px] text-red-400 hover:text-red-500">✕</button>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-slate-400">
+                      {new Date(c.createdAt).toLocaleDateString()} {new Date(c.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    </span>
+                    {(user?.id === c.author?.id || user?.role === "admin" || user?.role === "sub_admin") && (
+                      <button onClick={() => del(c.id)} className="text-[10px] text-red-400 hover:text-red-500">✕</button>
+                    )}
                   </div>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{c.text}</p>
@@ -114,9 +128,11 @@ export default function QuestionCard({
   onEdit,
   onDelete,
   showOwnerActions = false,
+  isAdmin = false,
 }) {
   const [revealed, setRevealed] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [commentCount, setCommentCount] = useState(q.commentCount ?? 0);
 
   return (
     <motion.div
@@ -145,8 +161,8 @@ export default function QuestionCard({
             Draft
           </span>
         )}
-        <span className="ml-auto text-xs text-slate-400">
-          {new Date(q.createdAt).toLocaleDateString()}
+        <span className="ml-auto text-xs text-slate-400 whitespace-nowrap">
+          {new Date(q.createdAt).toLocaleDateString()} {new Date(q.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
         </span>
       </div>
 
@@ -244,7 +260,7 @@ export default function QuestionCard({
                 : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
             }`}
           >
-            💬 {q.commentCount ?? 0}
+            💬 {commentCount}
           </button>
 
           {/* Bookmark */}
@@ -261,16 +277,12 @@ export default function QuestionCard({
             </button>
           )}
 
-          {/* Owner actions */}
-          {showOwnerActions && (
-            <>
-              <button onClick={() => onEdit?.(q)} className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10">
-                ✏️ Edit
-              </button>
-              <button onClick={() => onDelete?.(q)} className="text-xs px-2.5 py-1 rounded-full border border-red-400/30 text-red-400 hover:bg-red-400/10">
-                🗑 Delete
-              </button>
-            </>
+          {/* Edit removed intentionally */}
+          {/* Delete — shown to owner (via showOwnerActions) or admin */}
+          {(showOwnerActions || isAdmin) && onDelete && (
+            <button onClick={() => onDelete(q)} className="text-xs px-2.5 py-1 rounded-full border border-red-400/30 text-red-400 hover:bg-red-400/10 transition-colors">
+              🗑 Delete
+            </button>
           )}
         </div>
       </div>
@@ -284,7 +296,7 @@ export default function QuestionCard({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <CommentsSection qid={q.id} />
+            <CommentsSection qid={q.id} onCommentCountChange={setCommentCount} />
           </motion.div>
         )}
       </AnimatePresence>

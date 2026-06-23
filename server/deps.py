@@ -14,4 +14,6 @@ async def current_user(authorization: str = Header(default="")) -> dict:
     doc = await col_users().find_one({"_id": oid(user_id)})
     if not doc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not found")
+    if doc.get("status") == "disabled":
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Account disabled")
     return sid(doc)

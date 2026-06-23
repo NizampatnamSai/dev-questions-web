@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
@@ -534,7 +534,9 @@ function DevTools() {
 }
 
 export default function StudyGuide() {
-  const [activeCat, setActiveCat]   = useState("html");
+  const location = useLocation();
+  const preCategory = location.state?.preCategory;
+  const [activeCat, setActiveCat]   = useState(preCategory || "html");
   const [activeDiff, setActiveDiff] = useState("All");
   const [search, setSearch]         = useState("");
   const [reviewed, setReviewed]     = useState(loadReviewed);

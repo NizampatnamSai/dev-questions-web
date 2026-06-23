@@ -12,6 +12,7 @@ export const STUDY_CATEGORIES = [
   { id: "pybackend",   label: "Python Backend",      icon: "⚙️", color: "#009688", sources: [{ label: "FastAPI Docs", url: "https://fastapi.tiangolo.com/" },          { label: "Django Docs",    url: "https://docs.djangoproject.com/" }] },
   { id: "pyai",        label: "Python AI/ML",        icon: "🤖", color: "#ff6f00", sources: [{ label: "scikit-learn", url: "https://scikit-learn.org/stable/" },       { label: "TensorFlow",     url: "https://www.tensorflow.org/learn" }] },
   { id: "pydata",      label: "Python Data Analysis",icon: "📊", color: "#1565c0", sources: [{ label: "Pandas Docs",  url: "https://pandas.pydata.org/docs/" },         { label: "Matplotlib",     url: "https://matplotlib.org/stable/tutorials/" }] },
+  { id: "nodejs",     label: "Node.js",             icon: "🟢", color: "#339933", sources: [{ label: "Node.js Docs", url: "https://nodejs.org/en/docs/" },             { label: "W3Schools",      url: "https://www.w3schools.com/nodejs/" }] },
 ];
 
 export const STUDY_TOPICS = [
@@ -6417,5 +6418,239 @@ sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm")
 # 5. Categorical counts
 print(df["Survived"].value_counts(normalize=True))`,
     interviewQuestion: "What is the first thing you do when you receive a new dataset?",
+  },
+
+  // ── Node.js ────────────────────────────────────────────────────────────────
+  {
+    id: "nodejs-intro",
+    category: "nodejs",
+    level: "Beginner",
+    title: "What is Node.js?",
+    summary: "Node.js is a JavaScript runtime built on Chrome's V8 engine that lets you run JS on the server side.",
+    explanation: "Node.js uses an event-driven, non-blocking I/O model which makes it lightweight and efficient for data-intensive real-time applications.",
+    codeExample: `// hello.js
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello from Node.js!');
+});
+
+server.listen(3000, () => console.log('Server running on port 3000'));`,
+    interviewQuestion: "What is the difference between Node.js and the browser JavaScript environment?",
+  },
+  {
+    id: "nodejs-modules",
+    category: "nodejs",
+    level: "Beginner",
+    title: "CommonJS vs ES Modules",
+    summary: "Node.js supports both CommonJS (`require`) and ES Modules (`import/export`).",
+    explanation: "CommonJS is the default system in Node.js. ES Modules are the standard in modern JS. Use `.mjs` extension or `\"type\": \"module\"` in package.json for ESM.",
+    codeExample: `// CommonJS
+const fs = require('fs');
+module.exports = { hello: 'world' };
+
+// ES Modules (package.json: "type": "module")
+import fs from 'fs';
+export const hello = 'world';`,
+    interviewQuestion: "When would you use ES Modules over CommonJS in Node.js?",
+  },
+  {
+    id: "nodejs-event-loop",
+    category: "nodejs",
+    level: "Intermediate",
+    title: "Node.js Event Loop",
+    summary: "The event loop is what allows Node.js to perform non-blocking I/O operations despite JavaScript being single-threaded.",
+    explanation: "Phases: timers → pending callbacks → idle/prepare → poll → check (setImmediate) → close callbacks. The poll phase waits for I/O events when the queue is empty.",
+    codeExample: `setTimeout(() => console.log('timeout'), 0);
+setImmediate(() => console.log('immediate'));
+Promise.resolve().then(() => console.log('promise'));
+console.log('sync');
+
+// Output: sync → promise → timeout → immediate
+// (setImmediate fires in check phase, after poll)`,
+    interviewQuestion: "What is the difference between `process.nextTick` and `setImmediate`?",
+  },
+  {
+    id: "nodejs-fs",
+    category: "nodejs",
+    level: "Beginner",
+    title: "File System (fs module)",
+    summary: "The `fs` module provides APIs to interact with the file system — read, write, delete, watch files.",
+    explanation: "Always prefer `fs/promises` (async/await) over the callback-based API. Use `fs.readFileSync` only in CLI scripts, never in servers.",
+    codeExample: `import { readFile, writeFile } from 'fs/promises';
+
+// Read
+const content = await readFile('data.txt', 'utf-8');
+console.log(content);
+
+// Write
+await writeFile('output.txt', 'Hello!', 'utf-8');
+
+// Stream large files
+import { createReadStream } from 'fs';
+createReadStream('large.csv').pipe(process.stdout);`,
+    interviewQuestion: "What is the difference between `fs.readFile` and `fs.createReadStream`?",
+  },
+  {
+    id: "nodejs-express",
+    category: "nodejs",
+    level: "Beginner",
+    title: "Express.js Basics",
+    summary: "Express is the most popular Node.js web framework — minimal, fast, and unopinionated.",
+    explanation: "Express handles routing, middleware, request/response objects. Middleware functions run in order and must call `next()` to pass control.",
+    codeExample: `import express from 'express';
+const app = express();
+
+app.use(express.json()); // parse JSON body
+
+app.get('/users', (req, res) => {
+  res.json([{ id: 1, name: 'Alice' }]);
+});
+
+app.post('/users', (req, res) => {
+  const { name } = req.body;
+  res.status(201).json({ id: 2, name });
+});
+
+// Error middleware (4 args)
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});
+
+app.listen(3000);`,
+    interviewQuestion: "How does middleware work in Express and what is the role of `next()`?",
+  },
+  {
+    id: "nodejs-async",
+    category: "nodejs",
+    level: "Intermediate",
+    title: "Async Patterns in Node.js",
+    summary: "Node.js handles async through callbacks, Promises, and async/await. Understanding each is essential.",
+    explanation: "Callback hell → Promises → async/await. `util.promisify` converts callback-based Node APIs to Promises. Always handle rejections.",
+    codeExample: `import { promisify } from 'util';
+import { exec } from 'child_process';
+
+const execAsync = promisify(exec);
+
+async function getFiles() {
+  try {
+    const { stdout } = await execAsync('ls -la');
+    return stdout.split('\\n');
+  } catch (err) {
+    console.error('Command failed:', err.message);
+    throw err;
+  }
+}
+
+// Running tasks in parallel
+const [users, posts] = await Promise.all([
+  fetchUsers(),
+  fetchPosts(),
+]);`,
+    interviewQuestion: "How do you convert a callback-based Node.js function to use async/await?",
+  },
+  {
+    id: "nodejs-streams",
+    category: "nodejs",
+    level: "Advanced",
+    title: "Streams & Piping",
+    summary: "Streams process data piece by piece without loading it all into memory — essential for large files or network data.",
+    explanation: "Four types: Readable, Writable, Duplex, Transform. Use `pipe()` or `pipeline()` (preferred — handles errors) to chain streams.",
+    codeExample: `import { createReadStream, createWriteStream } from 'fs';
+import { createGzip } from 'zlib';
+import { pipeline } from 'stream/promises';
+
+// Compress a file using streams — memory-efficient
+await pipeline(
+  createReadStream('large.log'),
+  createGzip(),
+  createWriteStream('large.log.gz'),
+);
+console.log('Compressed!');
+
+// Transform stream — uppercase every chunk
+import { Transform } from 'stream';
+const upper = new Transform({
+  transform(chunk, encoding, callback) {
+    callback(null, chunk.toString().toUpperCase());
+  },
+});`,
+    interviewQuestion: "Why are streams more memory-efficient than reading an entire file at once?",
+  },
+  {
+    id: "nodejs-env",
+    category: "nodejs",
+    level: "Beginner",
+    title: "Environment Variables & dotenv",
+    summary: "Store secrets and config outside your code using environment variables. Never hardcode API keys.",
+    explanation: "Use `process.env.VAR_NAME` to read env vars. In development, use the `dotenv` package to load a `.env` file. Add `.env` to `.gitignore`.",
+    codeExample: `// .env file
+// DATABASE_URL=mongodb://localhost:27017/mydb
+// JWT_SECRET=supersecret
+// PORT=3000
+
+import 'dotenv/config'; // loads .env automatically
+
+const port = process.env.PORT || 3000;
+const dbUrl = process.env.DATABASE_URL;
+
+if (!dbUrl) throw new Error('DATABASE_URL is required');
+
+console.log(\`Starting on port \${port}\`);`,
+    interviewQuestion: "Why should you never commit `.env` files to version control?",
+  },
+  {
+    id: "nodejs-websocket",
+    category: "nodejs",
+    level: "Advanced",
+    title: "WebSockets with ws",
+    summary: "WebSockets enable full-duplex, real-time communication between client and server over a single TCP connection.",
+    explanation: "Unlike HTTP, WebSocket connections stay open. The `ws` package is the most popular Node.js WebSocket library. Socket.IO adds rooms, reconnection, and fallbacks.",
+    codeExample: `import { WebSocketServer } from 'ws';
+
+const wss = new WebSocketServer({ port: 8080 });
+
+wss.on('connection', (socket) => {
+  console.log('Client connected');
+
+  socket.on('message', (data) => {
+    const msg = data.toString();
+    console.log('Received:', msg);
+    // Broadcast to all clients
+    wss.clients.forEach(client => {
+      if (client.readyState === 1) client.send(msg);
+    });
+  });
+
+  socket.on('close', () => console.log('Client disconnected'));
+});`,
+    interviewQuestion: "What is the difference between WebSockets and HTTP long-polling?",
+  },
+  {
+    id: "nodejs-cluster",
+    category: "nodejs",
+    level: "Advanced",
+    title: "Clustering & Worker Threads",
+    summary: "Node.js is single-threaded, but you can use `cluster` to fork multiple processes or `worker_threads` for CPU-intensive tasks.",
+    explanation: "Cluster forks child processes that share a server port — each gets its own event loop. Worker threads share memory (SharedArrayBuffer) and are better for CPU work.",
+    codeExample: `import cluster from 'cluster';
+import { cpus } from 'os';
+import express from 'express';
+
+if (cluster.isPrimary) {
+  const numCPUs = cpus().length;
+  console.log(\`Primary \${process.pid} — forking \${numCPUs} workers\`);
+  for (let i = 0; i < numCPUs; i++) cluster.fork();
+  cluster.on('exit', (worker) => {
+    console.log(\`Worker \${worker.process.pid} died — restarting\`);
+    cluster.fork();
+  });
+} else {
+  const app = express();
+  app.get('/', (_, res) => res.send(\`Worker \${process.pid}\`));
+  app.listen(3000);
+}`,
+    interviewQuestion: "When would you use `cluster` vs `worker_threads` in Node.js?",
   },
 ];

@@ -6,8 +6,7 @@ export default function StatsCard({ icon, label, value, accent = "from-cyan-400 
       initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay, duration: 0.35, ease: "easeOut" }}
-      whileHover={{ y: -4, scale: 1.02 }}
-      className="glass-card p-5 card-hover relative overflow-hidden group"
+      className="glass-card p-5 relative overflow-hidden group select-none"
     >
       {/* Background glow */}
       <div className={`absolute -top-6 -right-6 w-20 h-20 rounded-full bg-gradient-to-br ${accent} opacity-10 group-hover:opacity-20 transition-opacity blur-xl`} />

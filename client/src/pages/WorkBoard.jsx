@@ -31,6 +31,7 @@ export default function WorkBoard() {
   const [editSaving, setEditSaving] = useState(false);
   const [pendingMembers, setPending] = useState([]);
   const [exportDate, setExportDate] = useState("");
+  const [joining, setJoining] = useState(false);
   const wsRef = useRef(null);
   const bottomRef = useRef(null);
 
@@ -94,12 +95,15 @@ export default function WorkBoard() {
   }, [posts]);
 
   const join = async () => {
+    setJoining(true);
     try {
       await api.post("/workboard/join");
       toast.success("Join request sent! Waiting for admin approval.");
       setStatus("pending");
     } catch (err) {
       toast.error(err.response?.data?.detail || "Error");
+    } finally {
+      setJoining(false);
     }
   };
 
@@ -238,8 +242,9 @@ export default function WorkBoard() {
               <li key={t} className="flex items-center gap-2"><span className="text-indigo-500">•</span>{t}</li>
             ))}
           </ul>
-          <button onClick={join} className="btn-primary px-8 py-2.5 rounded-xl font-semibold">
-            Request to Join
+          <button onClick={join} disabled={joining} className="btn-primary px-8 py-2.5 rounded-xl font-semibold disabled:opacity-60 flex items-center gap-2 mx-auto">
+            {joining && <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
+            {joining ? "Sending…" : "Request to Join"}
           </button>
         </motion.div>
       )}

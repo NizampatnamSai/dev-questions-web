@@ -397,7 +397,27 @@ function WeeklySchedules({ users, usersLoading }) {
     } catch { toast.error("Failed to remove"); }
   };
 
-  const regularUsers = users.filter(u => u.role !== "admin");
+  const regularUsers  = users.filter(u => u.role !== "admin");
+  const activeSchedules = schedules
+    .filter(s => s.userId)
+    .map(s => {
+      const u = users.find(u => u.id === s.userId);
+      const pad = n => String(n).padStart(2, "0");
+      const timeStr = `${pad(s.hour)}:${pad(s.minute ?? 0)}`;
+      // Convert UTC to IST for display
+      const [hh, mm] = timeStr.split(":").map(Number);
+      const istMin = (hh * 60 + (mm || 0) + 330) % (24 * 60);
+      const istH = Math.floor(istMin / 60);
+      const istM = istMin % 60;
+      const istStr = `${pad(istH)}:${pad(istM)} IST`;
+      return { ...s, userName: u?.name || s.userId, istStr };
+    })
+    .sort((a, b) => {
+      const days = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+      return days.indexOf(a.day) - days.indexOf(b.day) || a.hour - b.hour;
+    });
+
+  const [showSummary, setShowSummary] = useState(true);
 
   return (
     <div className="glass-card overflow-hidden">
@@ -406,7 +426,41 @@ function WeeklySchedules({ users, usersLoading }) {
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">🔔 Push Reminder Schedule</p>
           <p className="text-xs text-slate-400 mt-0.5">Set a weekly nudge for each user — they'll get a push notification to keep their streak alive</p>
         </div>
+        <button onClick={() => setShowSummary(v => !v)} className="text-xs px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700/40 font-medium">
+          {showSummary ? "Hide Summary" : `📋 Active (${activeSchedules.length})`}
+        </button>
       </div>
+
+      {/* Active schedules summary */}
+      {showSummary && !loading && (
+        <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 bg-slate-50 dark:bg-slate-800/40">
+          <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+            Active Schedules ({activeSchedules.length})
+          </p>
+          {activeSchedules.length === 0 ? (
+            <p className="text-xs text-slate-400">No schedules set yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {activeSchedules.map(s => (
+                <div key={s.userId} className="flex items-center gap-2 bg-white dark:bg-slate-800 rounded-xl px-3 py-2 border border-slate-200 dark:border-slate-700">
+                  <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-300 flex-shrink-0">
+                    {s.userName?.[0]?.toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">{s.userName}</p>
+                    <p className="text-xs text-slate-400 capitalize">{s.day} · {s.istStr}</p>
+                    {s.message && <p className="text-[10px] text-slate-400 truncate mt-0.5">"{s.message}"</p>}
+                  </div>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${s.enabled !== false ? "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}>
+                    {s.enabled !== false ? "ON" : "OFF"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {loading || usersLoading ? (
         <div className="p-4 space-y-3">
           {[1,2,3,4].map(i => (
@@ -432,6 +486,401 @@ function WeeklySchedules({ users, usersLoading }) {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+const DAYS_LABELS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+// Convert UTC h:m → IST display string
+function utcToIst(h, m) {
+  const totalMin = h * 60 + m + 330;
+  const hh = Math.floor(totalMin / 60) % 24;
+  const mm  = totalMin % 60;
+  const ampm = hh >= 12 ? "PM" : "AM";
+  const h12  = hh % 12 || 12;
+  return `${h12}:${String(mm).padStart(2,"0")} ${ampm} IST`;
+}
+// Convert IST h:m (24h) → UTC
+function istToUtc(h, m) {
+  const totalMin = h * 60 + m - 330 + 24 * 60;
+  return { hour: Math.floor(totalMin / 60) % 24, minute: totalMin % 60 };
+}
+
+function AutoPostModal({ user: targetUser, onClose }) {
+  const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"];
+  const TYPES      = ["Technical", "Coding"];
+  const LEVELS     = ["Low", "Medium", "High"];
+  const [category, setCategory] = useState("");
+  const [type, setType]         = useState("");
+  const [level, setLevel]       = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading]   = useState(false);
+  const [posting, setPosting]   = useState(null);
+
+  const fetchSuggestions = async () => {
+    setLoading(true);
+    try {
+      const params = {};
+      if (category) params.category = category;
+      if (type)     params.type     = type;
+      if (level)    params.level    = level;
+      const { data } = await api.get("/questions/admin/random-suggestions", { params });
+      setSuggestions(data);
+    } catch { toast.error("Failed to fetch suggestions"); }
+    finally { setLoading(false); }
+  };
+
+  const post = async (q) => {
+    setPosting(q.id);
+    try {
+      await api.post("/questions/admin/auto-post", {
+        question_id: q.id,
+        on_behalf_of_user_id: targetUser.id,
+      });
+      toast.success(`Posted on behalf of ${targetUser.name}!`);
+      onClose();
+    } catch { toast.error("Failed to post"); }
+    finally { setPosting(null); }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+        className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4"
+        onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-bold text-slate-800 dark:text-slate-100">🤖 Auto Post for {targetUser.name}</p>
+            <p className="text-xs text-slate-400 mt-0.5">Select filters → pick a question → posts as "Admin on behalf of {targetUser.name}"</p>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-xl">✕</button>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          <select value={category} onChange={e => setCategory(e.target.value)} className="input-light text-xs !py-1.5">
+            <option value="">Any Category</option>
+            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <select value={type} onChange={e => setType(e.target.value)} className="input-light text-xs !py-1.5">
+            <option value="">Any Type</option>
+            {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+          <select value={level} onChange={e => setLevel(e.target.value)} className="input-light text-xs !py-1.5">
+            <option value="">Any Level</option>
+            {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+          </select>
+        </div>
+        <button onClick={fetchSuggestions} disabled={loading}
+          className="w-full py-2 rounded-xl bg-indigo-500 text-white text-sm font-semibold hover:bg-indigo-600 disabled:opacity-60 transition-colors">
+          {loading ? "Fetching…" : "🎲 Get 5 Random Questions"}
+        </button>
+        {suggestions.length > 0 && (
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {suggestions.map(q => (
+              <div key={q.id} className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="flex-1 min-w-0">
+                  <div className="flex gap-1.5 mb-1 flex-wrap">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-medium">{q.category}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 font-medium">{q.level} · {q.type}</span>
+                  </div>
+                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">{q.question}</p>
+                </div>
+                <button onClick={() => post(q)} disabled={posting === q.id}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-indigo-500 text-white font-semibold flex-shrink-0 hover:bg-indigo-600 disabled:opacity-50 transition-colors">
+                  {posting === q.id ? "…" : "Post"}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+}
+
+function CommunityScheduleEditor({ users }) {
+  const [schedule, setSchedule]     = useState([]);
+  const [saving, setSaving]         = useState(null);
+  const [reminderUtcH, setReminderUtcH] = useState(4);
+  const [reminderUtcM, setReminderUtcM] = useState(45);
+  const [timeInput, setTimeInput]   = useState("10:15"); // IST
+  const [autoPostTarget, setAutoPostTarget] = useState(null);
+
+  useEffect(() => {
+    api.get("/admin/community-schedule").then(r => {
+      setSchedule(r.data.schedule ?? r.data);
+      const h = r.data.reminderHourUTC ?? 4;
+      const m = r.data.reminderMinuteUTC ?? 45;
+      setReminderUtcH(h);
+      setReminderUtcM(m);
+      // Convert UTC → IST for display
+      const istMin = (h * 60 + m + 330) % (24 * 60);
+      const ih = Math.floor(istMin / 60), im = istMin % 60;
+      setTimeInput(`${String(ih).padStart(2,"0")}:${String(im).padStart(2,"0")}`);
+    }).catch(() => {});
+  }, []);
+
+  const save = async (weekday, email) => {
+    setSaving(weekday);
+    try {
+      await api.put("/admin/community-schedule", { weekday, email: email || null });
+      setSchedule(prev => {
+        const exists = prev.find(d => d.weekday === weekday);
+        if (exists) return prev.map(d => d.weekday === weekday ? { ...d, email: email || null } : d);
+        return [...prev, { weekday, email: email || null, muted: false }];
+      });
+      toast.success("Saved");
+    } catch { toast.error("Failed to save"); }
+    finally { setSaving(null); }
+  };
+
+  const toggleMute = async (weekday, currentMuted) => {
+    try {
+      await api.put("/admin/community-schedule", { weekday, muted: !currentMuted });
+      setSchedule(prev => prev.map(d => d.weekday === weekday ? { ...d, muted: !currentMuted } : d));
+      toast.success(currentMuted ? "Notifications re-enabled" : "Notifications muted for this day");
+    } catch { toast.error("Failed"); }
+  };
+
+  const saveTime = async () => {
+    const [ih, im] = timeInput.split(":").map(Number);
+    if (isNaN(ih) || isNaN(im)) return toast.error("Invalid time");
+    const { hour, minute } = istToUtc(ih, im);
+    setSaving("time");
+    try {
+      await api.put("/admin/community-schedule", { weekday: -1, hour, minute });
+      setReminderUtcH(hour); setReminderUtcM(minute);
+      toast.success(`Reminder set to ${utcToIst(hour, minute)}`);
+    } catch { toast.error("Failed to save time"); }
+    finally { setSaving(null); }
+  };
+
+  const regularUsers = users.filter(u => u.role !== "admin");
+
+  return (
+    <>
+    <div className="glass-card overflow-hidden">
+      <div className="px-4 pt-4 pb-3 border-b border-black/5 dark:border-white/10 space-y-3">
+        <div>
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">📅 Community Posting Schedule</p>
+          <p className="text-xs text-slate-400 mt-0.5">Set who can post each day. A reminder notification fires at the time below.</p>
+        </div>
+        {/* Reminder time row */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 whitespace-nowrap">⏰ Daily reminder time (IST)</span>
+          <input
+            type="time"
+            value={timeInput}
+            onChange={e => setTimeInput(e.target.value)}
+            className="input-light !py-1 !px-2 text-sm"
+            style={{ width: 120 }}
+          />
+          <span className="text-xs text-slate-400">
+            = {reminderUtcH.toString().padStart(2,"0")}:{(reminderUtcM||0).toString().padStart(2,"0")} UTC
+          </span>
+          <button
+            onClick={saveTime}
+            disabled={saving === "time"}
+            className="text-xs px-3 py-1.5 rounded-lg bg-indigo-500 text-white font-semibold disabled:opacity-50 transition-colors hover:bg-indigo-600"
+          >
+            {saving === "time" ? "Saving…" : "Save"}
+          </button>
+        </div>
+      </div>
+      <div className="divide-y divide-black/5 dark:divide-white/5">
+        {DAYS_LABELS.map((day, i) => {
+          const entry = schedule.find(d => d.weekday === i);
+          const currentEmail = entry?.email || "";
+          return (
+            <div key={i} className="flex items-center gap-3 px-4 py-3">
+              <div className="w-24 flex-shrink-0">
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{day}</p>
+              </div>
+              <select
+                value={currentEmail}
+                onChange={e => save(i, e.target.value)}
+                disabled={saving === i}
+                className="input-light flex-1 !py-1.5 text-sm"
+              >
+                <option value="">— Closed —</option>
+                {i === 5 && <option value="ADMIN_ONLY">Admin only</option>}
+                {regularUsers.map(u => (
+                  <option key={u.id} value={u.email}>{u.name} ({u.email})</option>
+                ))}
+              </select>
+              {saving === i && <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />}
+              {entry?.name && (
+                <span className="text-xs text-indigo-500 font-medium flex-shrink-0 hidden sm:block">{entry.name}</span>
+              )}
+              {currentEmail && currentEmail !== "ADMIN_ONLY" && (() => {
+                const u = regularUsers.find(u => u.email === currentEmail);
+                const isMuted = entry?.muted;
+                return u ? (
+                  <>
+                  <button onClick={() => setAutoPostTarget(u)}
+                    className="text-xs px-2.5 py-1 rounded-lg border border-purple-300/50 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-500/10 flex-shrink-0 transition-colors"
+                    title="Auto-post a question on behalf of this user">
+                    🤖 Auto
+                  </button>
+                  <button onClick={() => toggleMute(i, isMuted)}
+                    className={`text-xs px-2.5 py-1 rounded-lg border flex-shrink-0 transition-colors ${
+                      isMuted
+                        ? "border-green-300/50 text-green-500 hover:bg-green-50 dark:hover:bg-green-500/10"
+                        : "border-slate-300/50 text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                    }`}
+                    title={isMuted ? "Re-enable notification for this day" : "Mute notification (user resigned/left)"}>
+                    {isMuted ? "🔈 Unmute" : "🔇 Mute"}
+                  </button>
+                  </>
+                ) : null;
+              })()}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+    {autoPostTarget && <AutoPostModal user={autoPostTarget} onClose={() => setAutoPostTarget(null)} />}
+    </>
+  );
+}
+
+function TestNotifyPanel({ users }) {
+  const [title, setTitle]         = useState("👋 Hello from Admin");
+  const [body, setBody]           = useState("");
+  const [selectedIds, setSelected] = useState(["all"]);
+  const [sending, setSending]     = useState(false);
+  const [schedMode, setSchedMode] = useState(false); // false = send now, true = scheduled
+  const [schedTime, setSchedTime] = useState("");    // local datetime-local value
+
+  const regularUsers = users.filter(u => u.role !== "admin");
+
+  const toggle = (id) => {
+    if (id === "all") { setSelected(["all"]); return; }
+    setSelected(prev => {
+      const without = prev.filter(x => x !== "all" && x !== id);
+      return prev.includes(id) ? without : [...without, id];
+    });
+  };
+
+  const send = async () => {
+    if (!title.trim()) return toast.error("Title is required");
+    if (selectedIds.length === 0) return toast.error("Select at least one user");
+    if (schedMode && !schedTime) return toast.error("Pick a scheduled time");
+    setSending(true);
+    try {
+      const payload = {
+        user_ids: selectedIds.includes("all") ? ["all"] : selectedIds,
+        title: title.trim(),
+        body: body.trim() || title.trim(),
+      };
+      if (schedMode && schedTime) {
+        // Convert local datetime to ISO UTC
+        payload.schedule_at = new Date(schedTime).toISOString();
+      }
+      const { data } = await api.post("/admin/notify/send-to-users", payload);
+      if (schedMode) {
+        toast.success(`Scheduled for ${new Date(schedTime).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`);
+      } else {
+        toast.success(`Sent to ${data.users} user(s) · ${data.sent} device(s)`);
+      }
+    } catch { toast.error("Failed to send"); }
+    finally { setSending(false); }
+  };
+
+  // Min datetime = now
+  const minDateTime = new Date(Date.now() + 60000).toISOString().slice(0, 16);
+
+  return (
+    <div className="glass-card overflow-hidden">
+      <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 flex items-center justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">🧪 Send Notification</p>
+          <p className="text-xs text-slate-400 mt-0.5">Push to specific users or everyone — now or scheduled</p>
+        </div>
+        <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5">
+          <button onClick={() => setSchedMode(false)}
+            className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${!schedMode ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500"}`}>
+            ▶ Now
+          </button>
+          <button onClick={() => setSchedMode(true)}
+            className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${schedMode ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500"}`}>
+            ⏰ Schedule
+          </button>
+        </div>
+      </div>
+      <div className="p-4 space-y-4">
+        {/* Title + body */}
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Title</label>
+            <input value={title} onChange={e => setTitle(e.target.value)} className="input-light w-full text-sm" placeholder="Notification title" />
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Body (optional)</label>
+            <input value={body} onChange={e => setBody(e.target.value)} className="input-light w-full text-sm" placeholder="Notification body…" />
+          </div>
+        </div>
+
+        {/* Timer picker */}
+        {schedMode && (
+          <div>
+            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">📅 Send at (your local time)</label>
+            <input
+              type="datetime-local"
+              value={schedTime}
+              min={minDateTime}
+              onChange={e => setSchedTime(e.target.value)}
+              className="input-light w-full text-sm"
+            />
+            {schedTime && (
+              <p className="text-[10px] text-slate-400 mt-1">
+                = {new Date(schedTime).toISOString().replace("T", " ").slice(0, 16)} UTC
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* User selector */}
+        <div>
+          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 block">Send to</label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => toggle("all")}
+              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition-colors ${
+                selectedIds.includes("all")
+                  ? "bg-indigo-500 text-white border-indigo-500"
+                  : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-400"
+              }`}
+            >
+              All Users
+            </button>
+            {regularUsers.map(u => (
+              <button
+                key={u.id}
+                onClick={() => toggle(u.id)}
+                className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition-colors ${
+                  selectedIds.includes(u.id) && !selectedIds.includes("all")
+                    ? "bg-indigo-500 text-white border-indigo-500"
+                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-400"
+                }`}
+              >
+                {u.name}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-slate-400 mt-1.5">
+            {selectedIds.includes("all") ? "Will send to all users" : `${selectedIds.length} user(s) selected`}
+          </p>
+        </div>
+
+        <button
+          onClick={send}
+          disabled={sending}
+          className="btn-primary w-full disabled:opacity-60 text-sm"
+        >
+          {sending ? "Sending…" : schedMode ? "⏰ Schedule Notification" : "▶ Send Now"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -532,6 +981,7 @@ export default function Admin() {
     try {
       await api.patch(`/admin/users/${rejectTarget.id}/reject`, { reason: rejectReason.trim() });
       setPendingUsers(p => p.filter(x => x.id !== rejectTarget.id));
+      setUsers(prev => prev.filter(x => x.id !== rejectTarget.id));
       toast.success(`${rejectTarget.name} rejected`);
       setRejectTarget(null);
     } catch {
@@ -565,6 +1015,17 @@ export default function Admin() {
     } catch (err) {
       toast.error(err?.response?.data?.detail || "Failed to delete");
     }
+  };
+
+  const toggleDisable = async (u) => {
+    const isDisabled = u.status === "disabled";
+    const action = isDisabled ? "enable" : "disable";
+    if (!isDisabled && !window.confirm(`Disable ${u.name}? They will be immediately logged out and treated as a guest.`)) return;
+    try {
+      await api.patch(`/admin/users/${u.id}/${action}`);
+      setUsers(prev => prev.map(x => x.id === u.id ? { ...x, status: isDisabled ? "approved" : "disabled" } : x));
+      toast.success(isDisabled ? "User re-enabled" : "User disabled");
+    } catch { toast.error("Failed"); }
   };
 
   const setLimit = async (user, limit) => {
@@ -752,14 +1213,25 @@ export default function Admin() {
                           >
                             ✏️ Edit
                           </button>
-                          {u.role !== "admin" && u.id !== me?.id && (
+                          {u.role !== "admin" && u.id !== me?.id && (<>
+                            <button
+                              onClick={() => toggleDisable(u)}
+                              className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                                u.status === "disabled"
+                                  ? "border-green-300/50 text-green-500 hover:bg-green-50 dark:hover:bg-green-500/10"
+                                  : "border-amber-300/50 text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-500/10"
+                              }`}
+                              title={u.status === "disabled" ? "Re-enable user" : "Disable user (guest mode)"}
+                            >
+                              {u.status === "disabled" ? "✅ Enable" : "🚫 Disable"}
+                            </button>
                             <button
                               onClick={() => setDeleteTarget(u)}
                               className="text-xs px-2.5 py-1 rounded-lg border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
                             >
                               🗑
                             </button>
-                          )}
+                          </>)}
                         </div>
                       </td>
                     </motion.tr>
@@ -771,27 +1243,14 @@ export default function Admin() {
         </div>
       </div>
 
+      {/* Community Posting Schedule */}
+      <CommunityScheduleEditor users={users} />
+
       {/* Weekly Notification Schedules */}
       <WeeklySchedules users={users} usersLoading={loading} />
 
-      {/* Manual trigger */}
-      <div className="glass-card px-4 py-3 flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">🧪 Test Scheduled Notifications</p>
-          <p className="text-xs text-slate-400 mt-0.5">Fires right now for any schedule matching the current UTC day + time</p>
-        </div>
-        <button
-          onClick={async () => {
-            try {
-              await api.post("/admin/schedules/trigger-now");
-              toast.success("Trigger fired — check notification logs");
-            } catch { toast.error("Failed to trigger"); }
-          }}
-          className="text-xs px-3 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-200 dark:hover:bg-indigo-800/40 font-semibold transition-colors whitespace-nowrap"
-        >
-          ▶ Trigger Now
-        </button>
-      </div>
+      {/* Test / Send Notifications */}
+      <TestNotifyPanel users={users} />
 
       {/* Notification Logs */}
       <NotifyLogs logs={logs} loading={logsLoading} />

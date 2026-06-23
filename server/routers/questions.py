@@ -1,14 +1,68 @@
 import os
-from datetime import date, timezone, datetime
+from datetime import date, timezone, datetime, timedelta
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Header
 from pydantic import BaseModel
-from db_mongo import col_questions, col_comments, col_ai_usage, sid, oid, now
+from db_mongo import col_questions, col_comments, col_ai_usage, col_users, col_fcm_tokens, col_community_schedule, col_user_answers, sid, oid, now
 from deps import current_user
 from utils.ai import generate_questions, generate_answer, ai_text_action, check_answer
-from utils.firebase import send_to_all
+from utils.firebase import send_to_all, send_to_tokens
 
 router = APIRouter()
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+DEFAULT_COMMUNITY_SCHEDULE = {
+    0: "vikash.jangid.eps@gmail.com",
+    1: "bhavya_joshi@eplanetsoft.com",
+    2: "rishabh_swami@eplanetsoft.com",
+    3: "badal_varshney@eplanetsoft.com",
+    4: "priyanka_kumawat@eplanetsoft.com",
+    5: None,
+    6: None,
+}
+
+def _is_even_saturday(dt: datetime) -> bool:
+    if dt.weekday() != 5:
+        return False
+    return ((dt.day - 1) // 7 + 1) in (2, 4)
+
+async def _load_community_schedule() -> dict:
+    docs = await col_community_schedule().find({}).to_list(10)
+    if not docs:
+        return DEFAULT_COMMUNITY_SCHEDULE
+    schedule = dict(DEFAULT_COMMUNITY_SCHEDULE)
+    for doc in docs:
+        wd = doc.get("weekday")
+        if wd is not None:
+            schedule[int(wd)] = doc.get("email") or None
+    return schedule
+
+async def get_community_allowed_email() -> Optional[str]:
+    now_ist = datetime.now(IST)
+    wd = now_ist.weekday()
+    if wd == 6:
+        return None
+    if wd == 5:
+        return "ADMIN_ONLY" if not _is_even_saturday(now_ist) else None
+    schedule = await _load_community_schedule()
+    return schedule.get(wd)
+
+@router.get("/community-today")
+async def community_today(_user=Depends(current_user)):
+    """Returns who is allowed to post to community today."""
+    allowed_email = await get_community_allowed_email()
+    if allowed_email is None:
+        return {"allowed": False, "allowedEmail": None, "allowedName": None}
+    if allowed_email == "ADMIN_ONLY":
+        return {"allowed": True, "allowedEmail": None, "allowedName": "Admin", "adminOnly": True}
+    user_doc = await col_users().find_one({"email": allowed_email})
+    return {
+        "allowed": True,
+        "allowedEmail": allowed_email,
+        "allowedName": user_doc.get("name") if user_doc else allowed_email,
+        "adminOnly": False,
+    }
 
 CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"]
 LEVELS     = ["Low", "Medium", "High"]
@@ -195,6 +249,45 @@ async def community(
     }
 
 
+# ── My saved answers (all) — must be before /{qid} routes ───────────────────
+
+class SaveAnswerBody(BaseModel):
+    answer: str
+
+@router.get("/my-answers/all")
+async def get_all_my_answers(user=Depends(current_user)):
+    pipeline = [
+        {"$match": {"userId": user["id"]}},
+        {"$sort": {"savedAt": -1}},
+        {"$group": {
+            "_id": "$questionId",
+            "latestAnswer": {"$first": "$answer"},
+            "savedAt": {"$first": "$savedAt"},
+            "count": {"$sum": 1},
+        }},
+    ]
+    groups = [d async for d in col_user_answers().aggregate(pipeline)]
+    result = []
+    for g in groups:
+        qid = g["_id"]
+        try:
+            qdoc = await col_questions().find_one({"_id": oid(qid)})
+        except Exception:
+            continue
+        if not qdoc:
+            continue
+        result.append({
+            "questionId": qid,
+            "question": qdoc.get("question", ""),
+            "category": qdoc.get("category", ""),
+            "level": qdoc.get("level", ""),
+            "latestAnswer": g["latestAnswer"],
+            "savedAt": g["savedAt"].isoformat() + "Z",
+            "count": g["count"],
+        })
+    return result
+
+
 # ── My questions ──────────────────────────────────────────────────────────────
 
 @router.get("/mine")
@@ -234,13 +327,38 @@ async def create(body: CreateBody, user=Depends(current_user)):
     if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
     if not body.question or not body.answer: raise HTTPException(400, "question and answer required")
 
+    # Enforce community posting schedule (admins bypass)
+    if user.get("role") not in ("admin", "sub_admin"):
+        allowed_email = await get_community_allowed_email()
+        user_email = user.get("email", "")
+        if allowed_email is None:
+            raise HTTPException(403, "Community is closed today.")
+        if allowed_email == "ADMIN_ONLY":
+            raise HTTPException(403, "Only admin can post to community today.")
+        if user_email != allowed_email:
+            # Find who is allowed today
+            u_doc = await col_users().find_one({"email": allowed_email})
+            allowed_name = u_doc.get("name", allowed_email) if u_doc else allowed_email
+            raise HTTPException(403, f"Today is {allowed_name}'s day to post. Check back on your scheduled day.")
+
     # Enforce per-user daily post limit
     uid = user["id"]
     today_start = datetime.combine(date.today(), datetime.min.time()).replace(tzinfo=timezone.utc)
     today_count = await col_questions().count_documents({"userId": uid, "createdAt": {"$gte": today_start}})
-    daily_limit = user.get("dailyLimit", 10)
+    daily_limit = user.get("dailyLimit", 25)
     if today_count >= daily_limit:
-        raise HTTPException(429, f"Daily posting limit reached ({daily_limit}/day). Ask admin to increase your limit.")
+        # Notify admins that user hit their limit
+        admins = await col_users().find({"role": {"$in": ["admin", "sub_admin"]}}).to_list(20)
+        for admin_doc in admins:
+            toks = await col_fcm_tokens().find({"userId": str(admin_doc["_id"])}).to_list(10)
+            tokens = [t["token"] for t in toks]
+            if tokens:
+                await send_to_tokens(tokens,
+                    title="⚠️ User Hit Daily Limit",
+                    body=f"{user.get('name')} has reached their {daily_limit}/day limit. Tap to increase.",
+                    data={"type": "limit_exceeded", "path": "/admin"},
+                )
+        raise HTTPException(429, f"Daily limit reached ({daily_limit}/day). Admin has been notified to increase your limit.")
 
     status = "draft" if body.status == "draft" else "published"
     doc = {
@@ -269,7 +387,11 @@ async def create(body: CreateBody, user=Depends(current_user)):
         rows = await col_fcm_tokens().find({}).to_list(length=1000)
         from utils.firebase import send_to_tokens
         tokens = [r["token"] for r in rows]
-        await send_to_tokens(tokens, f"New question by {user['name']}", short_q, {"questionId": str(result.inserted_id)})
+        await send_to_tokens(tokens, f"New question by {user['name']}", short_q, {
+            "questionId": str(result.inserted_id),
+            "type": "community_post",
+            "path": "/community",
+        })
 
     return _ser(created, uid)
 
@@ -306,10 +428,23 @@ async def update(qid: str, body: UpdateBody, user=Depends(current_user)):
 async def delete(qid: str, user=Depends(current_user)):
     doc = await col_questions().find_one({"_id": oid(qid)})
     if not doc: raise HTTPException(404, "Not found")
-    if doc["userId"] != user["id"] and user.get("role") != "admin":
+    is_admin = user.get("role") in ("admin", "sub_admin")
+    if doc["userId"] != user["id"] and not is_admin:
         raise HTTPException(403, "Not allowed")
+    owner_uid = doc.get("userId")
     await col_questions().delete_one({"_id": oid(qid)})
     await col_comments().delete_many({"questionId": qid})
+    # Notify question owner if deleted by admin
+    if is_admin and owner_uid and owner_uid != user["id"]:
+        toks = await col_fcm_tokens().find({"userId": owner_uid}).to_list(10)
+        tokens = [t["token"] for t in toks]
+        if tokens:
+            q_preview = doc.get("question", "")[:60]
+            await send_to_tokens(tokens,
+                title="🗑️ Your question was removed",
+                body=f'"{q_preview}…" was removed by an admin.',
+                data={"type": "question_deleted", "path": "/my-questions"},
+            )
     return {"message": "Deleted"}
 
 
@@ -413,3 +548,91 @@ async def check_answer_endpoint(qid: str, body: CheckAnswerBody, user=Depends(cu
         user_answer=body.user_answer.strip(),
     )
     return result
+
+
+# ── User saved answers (per question) ─────────────────────────────────────────
+
+@router.post("/{qid}/my-answer")
+async def save_my_answer(qid: str, body: SaveAnswerBody, user=Depends(current_user)):
+    if not body.answer.strip():
+        raise HTTPException(400, "Answer cannot be empty")
+    doc = await col_user_answers().insert_one({
+        "questionId": qid,
+        "userId": user["id"],
+        "answer": body.answer.strip(),
+        "savedAt": now(),
+    })
+    return {"id": str(doc.inserted_id), "savedAt": now().isoformat() + "Z"}
+
+@router.get("/{qid}/my-answer")
+async def get_my_answers_for_q(qid: str, user=Depends(current_user)):
+    docs = await col_user_answers().find(
+        {"questionId": qid, "userId": user["id"]}
+    ).sort("savedAt", -1).to_list(20)
+    return [{"id": str(d["_id"]), "answer": d["answer"], "savedAt": d["savedAt"].isoformat() + "Z"} for d in docs]
+
+@router.delete("/{qid}/my-answer/{aid}")
+async def delete_my_answer(qid: str, aid: str, user=Depends(current_user)):
+    await col_user_answers().delete_one({"_id": oid(aid), "userId": user["id"]})
+    return {"ok": True}
+
+
+# ── Admin auto-post helpers ────────────────────────────────────────────────────
+
+@router.get("/admin/random-suggestions")
+async def random_suggestions(category: str = "", type: str = "", level: str = "", user=Depends(current_user)):
+    if user.get("role") not in ("admin", "sub_admin"):
+        raise HTTPException(403, "Admins only")
+    filt: dict = {}
+    if category: filt["category"] = category
+    if type:     filt["type"]     = type
+    if level:    filt["level"]    = level
+    pipeline = [{"$match": filt}, {"$sample": {"size": 5}}]
+    docs = [d async for d in col_questions().aggregate(pipeline)]
+    return [_ser(d) for d in docs]
+
+class AutoPostBody(BaseModel):
+    question_id: str
+    on_behalf_of_user_id: str  # userId to post as
+
+@router.post("/admin/auto-post")
+async def admin_auto_post(body: AutoPostBody, admin=Depends(current_user)):
+    if admin.get("role") not in ("admin", "sub_admin"):
+        raise HTTPException(403, "Admins only")
+    q_doc = await col_questions().find_one({"_id": oid(body.question_id)})
+    if not q_doc:
+        raise HTTPException(404, "Question not found")
+    behalf_user = await col_users().find_one({"_id": oid(body.on_behalf_of_user_id)})
+    if not behalf_user:
+        raise HTTPException(404, "User not found")
+
+    uid = str(behalf_user["_id"])
+    author_name = behalf_user.get("name", "Unknown")
+    display_name = f"Admin (on behalf of {author_name})"
+
+    new_doc = {
+        "userId":       uid,
+        "authorName":   display_name,
+        "category":     q_doc.get("category"),
+        "level":        q_doc.get("level"),
+        "type":         q_doc.get("type", "Technical"),
+        "question":     q_doc.get("question"),
+        "answer":       q_doc.get("answer"),
+        "hints":        q_doc.get("hints", []),
+        "tags":         q_doc.get("tags", []),
+        "status":       "published",
+        "createdAt":    now(),
+        "upvotes":      [],
+        "bookmarks":    [],
+        "highlights":   [],
+        "commentCount": 0,
+    }
+    result = await col_questions().insert_one(new_doc)
+
+    # Notify all users
+    rows = await col_fcm_tokens().find({}).to_list(1000)
+    tokens = [r["token"] for r in rows]
+    short_q = q_doc.get("question", "")[:80]
+    await send_to_tokens(tokens, f"New question by {display_name}", short_q,
+                         {"type": "community_post", "path": "/community"})
+    return {"id": str(result.inserted_id), "message": "Posted successfully"}

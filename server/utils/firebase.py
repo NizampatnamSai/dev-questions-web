@@ -60,6 +60,18 @@ async def send_to_tokens(tokens: list[str], title: str, body: str, data: dict | 
             messaging.Message(
                 notification=messaging.Notification(title=title, body=body),
                 data={k: str(v) for k, v in (data or {}).items()},
+                android=messaging.AndroidConfig(
+                    channel_id="devquiz_default",
+                    notification=messaging.AndroidNotification(
+                        sound="notification_sound",
+                        channel_id="devquiz_default",
+                    ),
+                ),
+                apns=messaging.APNSConfig(
+                    payload=messaging.APNSPayload(
+                        aps=messaging.Aps(sound="notification_sound.mp3"),
+                    ),
+                ),
                 token=token,
             )
             for token in tokens

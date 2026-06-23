@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from db_mongo import col_users, col_fcm_tokens, col_notifications, col_notify_schedules, sid, oid, now
+from db_mongo import col_users, col_fcm_tokens, col_notifications, col_notify_schedules, col_community_schedule, col_user_notifications, sid, oid, now
 from deps import current_user
 from utils.firebase import send_to_tokens
 
@@ -22,7 +22,7 @@ def _safe_user(doc: dict) -> dict:
         "name":         doc.get("name"),
         "email":        doc.get("email"),
         "role":         doc.get("role", "user"),
-        "dailyLimit":   doc.get("dailyLimit", 10),
+        "dailyLimit":   doc.get("dailyLimit", 25),
         "createdAt":    doc["createdAt"].isoformat() if isinstance(doc.get("createdAt"), datetime) else str(doc.get("createdAt", "")),
         "questionCount": doc.get("questionCount", 0),
     }
@@ -33,7 +33,7 @@ def _safe_user(doc: dict) -> dict:
 @router.get("/users")
 async def list_users(admin=Depends(_require_admin)):
     from db_mongo import col_questions
-    cursor = col_users().find({}).sort("createdAt", -1)
+    cursor = col_users().find({"status": {"$ne": "rejected"}}).sort("createdAt", -1)
     docs   = await cursor.to_list(length=500)
     result = []
     for doc in docs:
@@ -52,7 +52,7 @@ class CreateUserBody(BaseModel):
     email:       str
     password:    str
     role:        str = "user"
-    dailyLimit:  int = 10
+    dailyLimit:  int = 25
 
 
 @router.post("/users")
@@ -168,7 +168,8 @@ async def send_notification(nb: NotifyBody, admin=Depends(_require_admin)):
         target_name = None
 
     tokens = list({r["token"] for r in rows})  # deduplicate
-    sent   = await send_to_tokens(tokens, nb.title, nb.body, {})
+    ts = now()
+    sent   = await send_to_tokens(tokens, nb.title, nb.body, {"type": "broadcast", "path": "/notifications"})
     await col_notifications().insert_one({
         "title":      nb.title,
         "body":       nb.body,
@@ -177,8 +178,16 @@ async def send_notification(nb: NotifyBody, admin=Depends(_require_admin)):
         "target":     target,
         "targetName": target_name,
         "sentCount":  sent,
-        "createdAt":  now(),
+        "createdAt":  ts,
     })
+    # Log per-user
+    uid_set = set(r["userId"] for r in rows)
+    if uid_set:
+        await col_user_notifications().insert_many([
+            {"userId": uid, "title": nb.title, "body": nb.body, "type": "broadcast",
+             "sentBy": admin["id"], "sentByName": admin.get("name","Admin"), "read": False, "createdAt": ts}
+            for uid in uid_set
+        ])
     col = col_notifications()
     total = await col.count_documents({})
     if total > 100:
@@ -331,6 +340,16 @@ async def block_user(uid: str, admin=Depends(_require_admin)):
     await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "blocked"}})
     return {"message": "User blocked"}
 
+@router.patch("/users/{uid}/disable")
+async def disable_user(uid: str, admin=Depends(_require_admin)):
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "disabled"}})
+    return {"message": "User disabled"}
+
+@router.patch("/users/{uid}/enable")
+async def enable_user(uid: str, admin=Depends(_require_admin)):
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved"}})
+    return {"message": "User enabled"}
+
 
 # ── Debug / manual trigger ────────────────────────────────────────────────────
 
@@ -373,3 +392,142 @@ async def trigger_notifications_now(admin=Depends(_require_admin)):
         sent_total += sent
 
     return {"message": "Triggered", "schedules_found": len(schedules), "sent_total": sent_total}
+
+
+# ── Community posting schedule ─────────────────────────────────────────────────
+
+DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+DEFAULT_EMAILS = [
+    "vikash.jangid.eps@gmail.com",
+    "bhavya_joshi@eplanetsoft.com",
+    "rishabh_swami@eplanetsoft.com",
+    "badal_varshney@eplanetsoft.com",
+    "priyanka_kumawat@eplanetsoft.com",
+    None,
+    None,
+]
+
+@router.get("/community-schedule")
+async def get_community_schedule(admin=Depends(_require_admin)):
+    docs = {d["weekday"]: d for d in await col_community_schedule().find({}).to_list(10)}
+    # reminder time stored at weekday=-1
+    time_doc = await col_community_schedule().find_one({"weekday": -1})
+    reminder_hour   = time_doc["hour"]   if time_doc else 4
+    reminder_minute = time_doc["minute"] if time_doc else 45
+    result = []
+    for i, day in enumerate(DAYS):
+        doc = docs.get(i)
+        email = doc["email"] if doc else DEFAULT_EMAILS[i]
+        user_doc = await col_users().find_one({"email": email}) if email else None
+        result.append({
+            "weekday": i,
+            "day": day,
+            "email": email,
+            "name": user_doc.get("name") if user_doc else None,
+        })
+    return {"schedule": result, "reminderHourUTC": reminder_hour, "reminderMinuteUTC": reminder_minute}
+
+class CommunityScheduleEntry(BaseModel):
+    weekday: int  # 0=Mon…6=Sun, or -1 for time config
+    email: Optional[str] = None
+    hour: Optional[int] = None    # UTC hour for reminder (weekday=-1)
+    minute: Optional[int] = None  # UTC minute for reminder (weekday=-1)
+    muted: Optional[bool] = None  # mute reminder for this day
+
+@router.put("/community-schedule")
+async def update_community_schedule(entry: CommunityScheduleEntry, admin=Depends(_require_admin)):
+    if not (-1 <= entry.weekday <= 6):
+        raise HTTPException(400, "weekday must be -1–6")
+    if entry.weekday == -1:
+        # Update reminder time
+        await col_community_schedule().update_one(
+            {"weekday": -1},
+            {"$set": {"weekday": -1, "hour": entry.hour, "minute": entry.minute}},
+            upsert=True,
+        )
+        # Reschedule live APScheduler job
+        try:
+            from main import scheduler
+            scheduler.reschedule_job("community_reminder", trigger="cron",
+                                     hour=entry.hour, minute=entry.minute, second=0)
+        except Exception:
+            pass
+    else:
+        update_fields = {"weekday": entry.weekday}
+        if entry.email is not None or entry.muted is None:
+            update_fields["email"] = entry.email
+        if entry.muted is not None:
+            update_fields["muted"] = entry.muted
+        await col_community_schedule().update_one(
+            {"weekday": entry.weekday},
+            {"$set": update_fields},
+            upsert=True,
+        )
+    return {"ok": True}
+
+
+# ── Send notification to selected users ────────────────────────────────────────
+
+class TestNotifyPayload(BaseModel):
+    user_ids: list  # list of user id strings, or ["all"]
+    title: str
+    body: str
+
+@router.post("/notify/send-to-users")
+async def send_to_selected_users(payload: TestNotifyPayload, admin=Depends(_require_admin)):
+    from utils.firebase import send_to_tokens as _send
+    if payload.user_ids == ["all"]:
+        users = await col_users().find({"status": {"$ne": "rejected"}}).to_list(500)
+        user_ids = [str(u["_id"]) for u in users]
+    else:
+        user_ids = payload.user_ids
+
+    sent = 0
+    ts = now()
+    for uid in user_ids:
+        toks = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in toks]
+        if tokens:
+            await _send(tokens, title=payload.title, body=payload.body,
+                        data={"type": "manual", "path": "/notifications"})
+            sent += len(tokens)
+        # Log per-user notification regardless of FCM token (so inbox shows it)
+        await col_user_notifications().insert_one({
+            "userId":    uid,
+            "title":     payload.title,
+            "body":      payload.body,
+            "type":      "manual",
+            "sentBy":    admin["id"],
+            "sentByName": admin.get("name", "Admin"),
+            "read":      False,
+            "createdAt": ts,
+        })
+    return {"sent": sent, "users": len(user_ids)}
+
+
+@router.get("/notifications/my")
+async def my_notifications(user=Depends(current_user)):
+    docs = await col_user_notifications().find(
+        {"userId": user["id"]}
+    ).sort("createdAt", -1).limit(50).to_list(50)
+    result = []
+    for d in docs:
+        d["id"] = str(d.pop("_id"))
+        d["createdAt"] = d["createdAt"].isoformat() if isinstance(d.get("createdAt"), datetime) else str(d.get("createdAt", ""))
+        result.append(d)
+    return result
+
+
+@router.patch("/notifications/my/read-all")
+async def mark_all_read(user=Depends(current_user)):
+    await col_user_notifications().update_many(
+        {"userId": user["id"], "read": False},
+        {"$set": {"read": True}}
+    )
+    return {"ok": True}
+
+
+@router.get("/notifications/my/unread-count")
+async def unread_count(user=Depends(current_user)):
+    count = await col_user_notifications().count_documents({"userId": user["id"], "read": False})
+    return {"count": count}

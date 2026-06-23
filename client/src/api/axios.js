@@ -24,9 +24,16 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const status = err.response?.status;
+    if (status === 401) {
       localStorage.removeItem("devquiz_token");
       localStorage.removeItem("devquiz_user");
+      window.location.href = "/login";
+    }
+    if (status === 403 && err.response?.data?.detail === "Account disabled") {
+      localStorage.removeItem("devquiz_token");
+      localStorage.removeItem("devquiz_user");
+      window.location.href = "/login?disabled=1";
     }
     return Promise.reject(err);
   }

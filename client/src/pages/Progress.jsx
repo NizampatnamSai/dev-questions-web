@@ -5,11 +5,11 @@ import api from "../api/axios";
 
 const CAT_ICONS = {
   html: "🌐", css: "🎨", javascript: "⚡", typescript: "🔷",
-  react: "⚛️", reactnative: "📱", nextjs: "▲", git: "🐙",
+  react: "⚛️", reactnative: "📱", nextjs: "▲", git: "🐙", dsa: "🧮",
 };
 const CAT_LABELS = {
   html: "HTML", css: "CSS", javascript: "JavaScript", typescript: "TypeScript",
-  react: "React", reactnative: "React Native", nextjs: "Next.js", git: "Git & GitHub",
+  react: "React", reactnative: "React Native", nextjs: "Next.js", git: "Git & GitHub", dsa: "DSA",
 };
 
 function ScoreBar({ score }) {
@@ -18,6 +18,57 @@ function ScoreBar({ score }) {
     <div className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
       <motion.div className={`h-full ${color} rounded-full`}
         initial={{ width: 0 }} animate={{ width: `${score}%` }} transition={{ duration: 0.8, ease: "easeOut" }} />
+    </div>
+  );
+}
+
+function AIExplanation({ challenge }) {
+  const [expanded, setExpanded]   = useState(null); // null | "loading" | {content}
+  const expand = async () => {
+    if (expanded && expanded !== "loading") { setExpanded(null); return; }
+    setExpanded("loading");
+    try {
+      const { data } = await api.post("/study/challenge/expand", {
+        title: challenge.title,
+        topic: challenge.topic,
+        category: challenge.category,
+        summary: challenge.summary,
+      });
+      setExpanded(data);
+    } catch { setExpanded(null); }
+  };
+  return (
+    <div>
+      <button onClick={expand}
+        className="text-xs px-3 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-500 rounded-lg border border-indigo-500/30 transition-all font-medium">
+        {expanded === "loading" ? "⏳ Thinking…" : expanded ? "▲ Less" : "🤖 AI Explain More"}
+      </button>
+      <AnimatePresence>
+        {expanded && expanded !== "loading" && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }} className="overflow-hidden mt-2">
+            <div className="text-xs leading-relaxed space-y-2 bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-3">
+              {expanded.how_it_works && (
+                <div><p className="font-semibold text-indigo-400 mb-0.5">⚙️ How it works</p><p className="text-slate-600 dark:text-slate-300">{expanded.how_it_works}</p></div>
+              )}
+              {expanded.example && (
+                <div><p className="font-semibold text-indigo-400 mb-0.5">💡 Example</p><p className="text-slate-600 dark:text-slate-300">{expanded.example}</p></div>
+              )}
+              {expanded.interview_angle && (
+                <div><p className="font-semibold text-amber-400 mb-0.5">🎯 Interview angle</p><p className="text-slate-600 dark:text-slate-300">{expanded.interview_angle}</p></div>
+              )}
+              {expanded.key_points && expanded.key_points.length > 0 && (
+                <div>
+                  <p className="font-semibold text-green-400 mb-0.5">✅ Key points</p>
+                  <ul className="list-disc list-inside space-y-0.5">
+                    {expanded.key_points.map((p, i) => <li key={i} className="text-slate-600 dark:text-slate-300">{p}</li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -131,6 +182,7 @@ export default function Progress() {
                   </button>
                 )}
               </div>
+              {showAnswer && <AIExplanation challenge={challenge} />}
             </div>
           )}
         </motion.div>
@@ -173,7 +225,7 @@ export default function Progress() {
                   </div>
                   <ScoreBar score={a.score} />
                 </div>
-                <button onClick={() => navigate("/flashcards")}
+                <button onClick={() => navigate("/study", { state: { preCategory: a.category } })}
                   className="text-xs px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg border border-red-500/30 transition-all">
                   Study →
                 </button>

@@ -9,6 +9,18 @@ function Skeleton({ className }) {
   return <div className={`animate-pulse bg-slate-200 dark:bg-slate-700 rounded-lg ${className}`} />;
 }
 
+function fmtDate(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
+  const dDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const timeStr = d.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true }).toUpperCase();
+  if (dDay.getTime() === today.getTime())     return `Today • ${timeStr}`;
+  if (dDay.getTime() === yesterday.getTime()) return `Yesterday • ${timeStr}`;
+  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) + ` • ${timeStr}`;
+}
+
 export default function Dashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
@@ -108,7 +120,7 @@ export default function Dashboard() {
                 <p className="font-medium">{r.question}</p>
                 <p className="text-xs text-slate-400">{r.category} · {r.level} · by {r.author}</p>
               </div>
-              <span className="text-xs text-slate-400 shrink-0 ml-3">{new Date(r.createdAt).toLocaleDateString()}</span>
+              <span className="text-xs text-slate-400 shrink-0 ml-3">{fmtDate(r.createdAt)}</span>
             </Link>
           ))}
         </div>

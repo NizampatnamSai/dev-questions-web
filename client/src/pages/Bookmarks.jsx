@@ -3,10 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
+import { useAuth } from "../context/AuthContext";
 
 export default function Bookmarks() {
+  const { user } = useAuth();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
   const load = async () => {
     setLoading(true);
@@ -52,6 +55,15 @@ export default function Bookmarks() {
     }
   };
 
+  const adminDelete = async (q) => {
+    if (!window.confirm(`Delete "${q.question.slice(0, 60)}…"?\n\nThe author will be notified.`)) return;
+    try {
+      await api.delete(`/questions/${q.id}`);
+      setQuestions(qs => qs.filter(x => x.id !== q.id));
+      toast.success("Question deleted");
+    } catch { toast.error("Failed to delete"); }
+  };
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div>
@@ -85,7 +97,7 @@ export default function Bookmarks() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <AnimatePresence>
             {questions.map((q) => (
-              <QuestionCard key={q.id} q={q} onUpvote={toggleUpvote} onHighlight={toggleHighlight} onBookmark={toggleBookmark} />
+              <QuestionCard key={q.id} q={q} onUpvote={toggleUpvote} onHighlight={toggleHighlight} onBookmark={toggleBookmark} onDelete={isAdmin ? adminDelete : undefined} isAdmin={isAdmin} />
             ))}
           </AnimatePresence>
         </div>

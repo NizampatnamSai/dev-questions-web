@@ -33,12 +33,19 @@ function ScoreRing({ score, size = 80 }) {
 }
 
 // ── Countdown Timer ────────────────────────────────────────────────────────────
-function Timer({ seconds, onExpire }) {
+function Timer({ seconds, onExpire, paused = false }) {
   const [left, setLeft] = useState(seconds);
   const ref = useRef(null);
 
   useEffect(() => {
     setLeft(seconds);
+  }, [seconds]);
+
+  useEffect(() => {
+    if (paused) {
+      clearInterval(ref.current);
+      return;
+    }
     ref.current = setInterval(() => {
       setLeft(prev => {
         if (prev <= 1) {
@@ -50,7 +57,7 @@ function Timer({ seconds, onExpire }) {
       });
     }, 1000);
     return () => clearInterval(ref.current);
-  }, [seconds]);
+  }, [paused, onExpire]);
 
   const pct = (left / seconds) * 100;
   const color = left > seconds * 0.5 ? "#22c55e" : left > seconds * 0.25 ? "#eab308" : "#ef4444";
@@ -201,8 +208,8 @@ function QuizCard({ q, index, total, timeLimit, onAnswer }) {
           <div className="bg-indigo-500 h-2 rounded-full transition-all" style={{ width: `${(index / total) * 100}%` }} />
         </div>
         <span className="text-xs text-slate-400 font-medium">{index + 1} / {total}</span>
-        {timeLimit > 0 && !timedOut && !result && !showAnswer && (
-          <Timer key={timerKey} seconds={timeLimit} onExpire={handleExpire} />
+        {timeLimit > 0 && !timedOut && !result && (
+          <Timer key={timerKey} seconds={timeLimit} onExpire={handleExpire} paused={showAnswer} />
         )}
       </div>
 

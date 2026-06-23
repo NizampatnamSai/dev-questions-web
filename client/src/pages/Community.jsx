@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
+import { useAuth } from "../context/AuthContext";
 
 const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"];
 const LEVELS     = ["Low", "Medium", "High"];
@@ -23,8 +24,8 @@ function Skeleton() {
   );
 }
 
-const MemoCard = memo(({ q, onUpvote, onHighlight, onBookmark }) => (
-  <QuestionCard q={q} onUpvote={onUpvote} onHighlight={onHighlight} onBookmark={onBookmark} />
+const MemoCard = memo(({ q, onUpvote, onHighlight, onBookmark, onDelete, isAdmin }) => (
+  <QuestionCard q={q} onUpvote={onUpvote} onHighlight={onHighlight} onBookmark={onBookmark} onDelete={onDelete} isAdmin={isAdmin} />
 ), (prev, next) => (
   prev.q.id             === next.q.id &&
   prev.q.upvoteCount    === next.q.upvoteCount &&
@@ -32,10 +33,13 @@ const MemoCard = memo(({ q, onUpvote, onHighlight, onBookmark }) => (
   prev.q.isBookmarked   === next.q.isBookmarked &&
   prev.q.isHighlighted  === next.q.isHighlighted &&
   prev.q.highlightCount === next.q.highlightCount &&
-  prev.q.commentCount   === next.q.commentCount
+  prev.q.commentCount   === next.q.commentCount &&
+  prev.isAdmin          === next.isAdmin
 ));
 
 export default function Community() {
+  const { user } = useAuth();
+  const [todayPoster, setTodayPoster] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [page, setPage]           = useState(1);
   const [hasMore, setHasMore]     = useState(true);
@@ -50,8 +54,11 @@ export default function Community() {
   const sentinelRef               = useRef(null);
   const filtersRef                = useRef({ category, level, type, search });
 
-  // Keep filters ref in sync so the IntersectionObserver callback reads fresh values
   useEffect(() => { filtersRef.current = { category, level, type, search }; }, [category, level, type, search]);
+
+  useEffect(() => {
+    api.get("/questions/community-today").then(r => setTodayPoster(r.data)).catch(() => {});
+  }, []);
 
   const buildParams = (overrides = {}) => {
     const f = { ...filtersRef.current, ...overrides };
@@ -146,12 +153,46 @@ export default function Community() {
     catch { toast.error("Please log in to highlight"); }
   }, [updateQ]);
 
+  const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
+
+  const adminDelete = useCallback(async (q) => {
+    if (!window.confirm(`Delete "${q.question.slice(0, 60)}…"?\n\nThe author will be notified.`)) return;
+    try {
+      await api.delete(`/questions/${q.id}`);
+      setQuestions(qs => qs.filter(x => x.id !== q.id));
+      toast.success("Question deleted");
+    } catch { toast.error("Failed to delete"); }
+  }, []);
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">🌍 Community Feed</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">Browse questions posted by the DevQuiz community.</p>
       </div>
+
+      {/* Daily poster banner */}
+      {todayPoster && (
+        <div className={`rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2 ${
+          todayPoster.allowed
+            ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/40"
+            : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
+        }`}>
+          {todayPoster.allowed ? (
+            <>
+              <span>📅</span>
+              <span>
+                Today's post: <strong>{todayPoster.allowedName}</strong>
+                {user && user.email === todayPoster.allowedEmail
+                  ? " — that's you! 🎉"
+                  : ""}
+              </span>
+            </>
+          ) : (
+            <><span>🚫</span><span>Community is closed today — no posts scheduled.</span></>
+          )}
+        </div>
+      )}
 
       {/* Filters */}
       <div className="glass-card p-4 flex flex-col sm:flex-row gap-3 flex-wrap">
@@ -189,7 +230,7 @@ export default function Community() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {questions.map((q) => (
-              <MemoCard key={q.id} q={q} onUpvote={toggleUpvote} onHighlight={toggleHighlight} onBookmark={toggleBookmark} />
+              <MemoCard key={q.id} q={q} onUpvote={toggleUpvote} onHighlight={toggleHighlight} onBookmark={toggleBookmark} onDelete={isAdmin ? adminDelete : undefined} isAdmin={isAdmin} />
             ))}
           </div>
 

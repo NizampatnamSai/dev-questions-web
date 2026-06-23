@@ -122,6 +122,46 @@ async def ai_explain(req: ExplainReq, _=Depends(current_user)):
     return {"explanation": text}
 
 
+# ── Challenge AI Expand ───────────────────────────────────────────────────────
+
+class ChallengeExpandReq(BaseModel):
+    title:    str
+    topic:    str
+    category: str
+    summary:  str
+
+@router.post("/challenge/expand")
+async def challenge_expand(req: ChallengeExpandReq, _=Depends(current_user)):
+    system = (
+        "You are a senior developer mentor explaining a technical concept to a developer preparing for interviews. "
+        "Given a concept title and a one-line summary, produce a rich explanation in this EXACT JSON format:\n"
+        '{"how_it_works": "...", "example": "...", "interview_angle": "...", "key_points": ["...", "...", "..."]}\n'
+        "Rules:\n"
+        "- how_it_works: 2-3 sentences explaining the mechanism clearly\n"
+        "- example: one concrete real-world code example or scenario (short, practical)\n"
+        "- interview_angle: the tricky edge case or gotcha interviewers love to test\n"
+        "- key_points: exactly 3 short bullet strings (no bullet symbols)\n"
+        "Respond ONLY with valid JSON. No markdown, no extra text."
+    )
+    user = f"Category: {req.category}\nTopic: {req.topic}\nTitle: {req.title}\nSummary: {req.summary}"
+    import json as _json
+    try:
+        raw = await _groq_plain(system, user, 500)
+        # Extract JSON from response
+        start = raw.find("{")
+        end   = raw.rfind("}") + 1
+        data  = _json.loads(raw[start:end]) if start != -1 else {}
+        return data
+    except Exception:
+        try:
+            raw = await _ollama_text_action(user)
+            start = raw.find("{"); end = raw.rfind("}") + 1
+            data  = _json.loads(raw[start:end]) if start != -1 else {}
+            return data
+        except Exception:
+            return {"how_it_works": "AI is unavailable right now.", "example": "", "interview_angle": "", "key_points": []}
+
+
 # ── TypeScript Adder ──────────────────────────────────────────────────────────
 
 class CodeReq(BaseModel):

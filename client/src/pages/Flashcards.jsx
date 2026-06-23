@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import api from "../api/axios";
 import { STUDY_TOPICS, STUDY_CATEGORIES } from "../data/studyGuide";
 
@@ -76,7 +77,9 @@ function FlipCard({ topic, onKnow, onReview }) {
 }
 
 export default function Flashcards() {
-  const [categories, setCategories] = useState([]);
+  const location = useLocation();
+  const preCategory = location.state?.preCategory;
+  const [categories, setCategories] = useState(preCategory ? [preCategory] : []);
   const [deck, setDeck] = useState([]);
   const [idx, setIdx] = useState(0);
   const [progress, setProgress] = useState({});
@@ -89,7 +92,11 @@ export default function Flashcards() {
 
   function buildDeck(reviewOnlyMode = reviewOnly) {
     let pool = categories.length === 0 ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => categories.includes(t.category));
-    if (reviewOnlyMode) pool = pool.filter((t) => progress[t.id] === "review" || !progress[t.id]);
+    if (reviewOnlyMode) pool = pool.filter((t) => progress[t.id] === "review");
+    if (pool.length === 0 && reviewOnlyMode) {
+      pool = categories.length === 0 ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => categories.includes(t.category));
+      alert("No cards marked 'Need Review' in this category — showing all cards instead.");
+    }
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     setDeck(shuffled);
     setIdx(0);
@@ -167,7 +174,7 @@ export default function Flashcards() {
               <input type="checkbox" checked={reviewOnly} onChange={(e) => setReviewOnly(e.target.checked)} className="accent-indigo-500 w-4 h-4" />
               <div>
                 <div className="font-semibold text-sm">Review mode</div>
-                <div className="text-xs text-slate-400">Only show topics marked "Need Review" + unseen</div>
+                <div className="text-xs text-slate-400">Only show topics you marked "Need Review" (no unseen cards)</div>
               </div>
             </label>
 
@@ -195,17 +202,22 @@ export default function Flashcards() {
         )}
 
         {phase === "done" && (
-          <motion.div key="done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
-            <div className="text-7xl mb-4">🎉</div>
-            <h2 className="text-3xl font-bold mb-2">Deck Complete!</h2>
-            <p className="text-slate-400 mb-8">You've gone through all {deck.length} cards.</p>
-            <div className="flex gap-3 justify-center">
-              <button onClick={() => setPhase("browse")} className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-semibold">
-                Change Deck
+          <motion.div key="done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12 space-y-4">
+            <div className="text-7xl mb-2">🎉</div>
+            <h2 className="text-3xl font-bold">Deck Complete!</h2>
+            <p className="text-slate-400">You've gone through all {deck.length} cards.</p>
+            <div className="flex flex-col gap-3 max-w-xs mx-auto pt-4">
+              <button onClick={() => buildDeck(false)}
+                className="py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-white transition-all">
+                🔁 Start Again (all cards)
               </button>
               <button onClick={() => { setReviewOnly(true); buildDeck(true); }}
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold">
-                Review Weak Cards 🔄
+                className="py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-red-400 rounded-xl font-semibold transition-all">
+                😅 Review Weak Cards Only
+              </button>
+              <button onClick={() => setPhase("browse")}
+                className="py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-semibold transition-all">
+                Change Deck / Category
               </button>
             </div>
           </motion.div>
