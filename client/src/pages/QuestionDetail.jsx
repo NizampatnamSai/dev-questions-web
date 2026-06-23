@@ -162,27 +162,6 @@ export default function QuestionDetail() {
             </ul>
           </div>
         )}
-
-        {/* Show Answer toggle */}
-        <button
-          onClick={() => setShowAnswer(v => !v)}
-          className="w-full py-2.5 rounded-xl border border-dashed border-indigo-300 dark:border-indigo-700 text-indigo-500 text-sm font-medium hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition flex items-center justify-center gap-2"
-        >
-          {showAnswer ? "▲ Hide Answer" : "▼ Show Answer"}
-        </button>
-        <AnimatePresence>
-          {showAnswer && (
-            <motion.div
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.15 }}
-              className="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-4 text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap border border-slate-200 dark:border-slate-700"
-            >
-              {q.answer}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Write & Save My Answer */}

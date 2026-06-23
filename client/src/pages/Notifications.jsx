@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 
@@ -27,6 +28,7 @@ function fmtDate(iso) {
 }
 
 export default function Notifications() {
+  const navigate = useNavigate();
   const [items, setItems]     = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -49,6 +51,18 @@ export default function Notifications() {
   const markOneRead = async (id) => {
     await api.patch(`/admin/notifications/my/${id}/read`).catch(() => {});
     setItems(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  const handleCardClick = async (n) => {
+    await markOneRead(n.id);
+    // Redirect based on notification type
+    if (n.data?.path) {
+      navigate(n.data.path);
+    } else if (n.type === "comment") {
+      navigate(`/question/${n.data?.questionId}`);
+    } else if (n.type === "new_question" || n.type === "question_deleted") {
+      navigate("/community");
+    }
   };
 
   const unread = items.filter(n => !n.read).length;
@@ -89,10 +103,11 @@ export default function Notifications() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.03 }}
-                className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${
+                onClick={() => handleCardClick(n)}
+                className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer hover:shadow-md ${
                   n.read
-                    ? "glass-card opacity-70"
-                    : "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-700/40"
+                    ? "glass-card opacity-70 hover:opacity-100"
+                    : "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-700/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/30"
                 }`}
               >
                 <div className="text-2xl flex-shrink-0 mt-0.5">{TYPE_ICON[n.type] ?? "🔔"}</div>

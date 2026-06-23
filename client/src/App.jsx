@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
 import GlobalSearch from "./components/GlobalSearch";
 import NotificationBell from "./components/NotificationBell";
+import UserMenu from "./components/UserMenu";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
@@ -68,6 +69,7 @@ function AppLayout({ children }) {
           <div className="hidden md:flex items-center justify-end gap-2 px-8 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
             <GlobalSearch />
             <NotificationBell />
+            <UserMenu />
           </div>
           {/* Top bar — mobile */}
           <div className="md:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-30 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-black/5 dark:border-white/8">

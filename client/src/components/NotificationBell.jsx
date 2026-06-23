@@ -16,8 +16,13 @@ export default function NotificationBell() {
         .then(({ data }) => setUnreadCount(data.count || 0))
         .catch(() => {});
     fetch();
-    const timer = setInterval(fetch, 60000);
-    return () => clearInterval(timer);
+    const timer = setInterval(fetch, 30000);
+    const handleFocus = () => fetch();
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("focus", handleFocus);
+    };
   }, [user?.id]);
 
   if (!user || user.isGuest) return null;

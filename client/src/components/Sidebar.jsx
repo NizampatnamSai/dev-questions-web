@@ -359,34 +359,7 @@ export default function Sidebar() {
           <span className="flex-1 text-left">Android App</span>
           <span className="text-[10px] font-semibold text-indigo-500 dark:text-cyan-400 bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-md">↓ APK</span>
         </a>
-
-        {/* User */}
-        <motion.div
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer`}
-          whileHover={{ x: 2 }}
-        >
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-400 via-purple-400 to-cyan-400 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-indigo-500/20 flex-shrink-0">
-            {initials}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className={`text-sm font-medium truncate ${isStormy ? "text-slate-200" : "text-slate-700 dark:text-slate-200"}`}>
-              {user?.name}
-            </p>
-            <p className="text-[11px] text-slate-400 capitalize truncate">{user?.role}</p>
-          </div>
-          <button onClick={() => setConfirmLogout(true)} title="Logout" className="text-slate-300 hover:text-red-400 transition-colors text-lg">
-            ⎋
-          </button>
-        </motion.div>
       </div>
-      <ConfirmModal
-        open={confirmLogout}
-        title="Log out?"
-        message="You'll need to sign in again to access your account."
-        confirmLabel="Log Out"
-        onConfirm={() => { setConfirmLogout(false); logout(); }}
-        onCancel={() => setConfirmLogout(false)}
-      />
     </aside>
   );
 }

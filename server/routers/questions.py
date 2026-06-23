@@ -373,8 +373,11 @@ async def create(body: CreateBody, user=Depends(current_user)):
     if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
     if not body.question or not body.answer: raise HTTPException(400, "question and answer required")
 
-    # Enforce community posting schedule (admins bypass)
-    if user.get("role") not in ("admin", "sub_admin"):
+    # Determine status before schedule check
+    status = "draft" if body.status == "draft" else "published"
+
+    # Enforce community posting schedule (admins bypass, drafts bypass)
+    if status == "published" and user.get("role") not in ("admin", "sub_admin"):
         allowed_email = await get_community_allowed_email()
         user_email = user.get("email", "")
         if allowed_email is None:
@@ -406,7 +409,6 @@ async def create(body: CreateBody, user=Depends(current_user)):
                 )
         raise HTTPException(429, f"Daily limit reached ({daily_limit}/day). Admin has been notified to increase your limit.")
 
-    status = "draft" if body.status == "draft" else "published"
     doc = {
         "userId":       uid,
         "authorName":   user.get("name", "Unknown"),
