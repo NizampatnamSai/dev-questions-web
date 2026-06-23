@@ -1,0 +1,299 @@
+import csv
+import io
+import json
+from datetime import datetime, timezone, timedelta
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from db_mongo import col_workboard_members, col_workboard_posts, col_users, col_fcm_tokens, sid, oid, now
+from deps import current_user
+from utils.firebase import send_to_tokens
+
+router = APIRouter()
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+
+def ist_today() -> str:
+    return datetime.now(IST).strftime("%Y-%m-%d")
+
+
+# ── WebSocket connection manager ──────────────────────────────────────────────
+
+class ConnectionManager:
+    def __init__(self):
+        self.active: list[WebSocket] = []
+
+    async def connect(self, ws: WebSocket):
+        await ws.accept()
+        self.active.append(ws)
+
+    def disconnect(self, ws: WebSocket):
+        self.active.remove(ws)
+
+    async def broadcast(self, data: dict):
+        dead = []
+        for ws in self.active:
+            try:
+                await ws.send_json(data)
+            except Exception:
+                dead.append(ws)
+        for ws in dead:
+            self.active.remove(ws)
+
+
+manager = ConnectionManager()
+
+
+@router.websocket("/ws")
+async def workboard_ws(ws: WebSocket):
+    await manager.connect(ws)
+    try:
+        while True:
+            await ws.receive_text()  # keep alive
+    except WebSocketDisconnect:
+        manager.disconnect(ws)
+
+
+# ── Member endpoints ──────────────────────────────────────────────────────────
+
+def _is_admin(user) -> bool:
+    return user.get("role") in ("admin", "sub_admin")
+
+
+@router.get("/status")
+async def my_status(user=Depends(current_user)):
+    if _is_admin(user):
+        return {"status": "active"}
+    member = await col_workboard_members().find_one({"userId": user["id"]})
+    if not member:
+        return {"status": "none"}
+    return {"status": member.get("status", "pending")}
+
+
+@router.post("/join")
+async def request_join(user=Depends(current_user)):
+    existing = await col_workboard_members().find_one({"userId": user["id"]})
+    if existing:
+        raise HTTPException(400, f"Already {existing.get('status', 'pending')}")
+    await col_workboard_members().insert_one({
+        "userId":    user["id"],
+        "userName":  user.get("name", ""),
+        "userEmail": user.get("email", ""),
+        "status":    "pending",
+        "joinedAt":  now(),
+    })
+    # Notify admins
+    admins = await col_users().find({"role": {"$in": ["admin", "sub_admin"]}}).to_list(20)
+    for admin in admins:
+        tokens_docs = await col_fcm_tokens().find({"userId": str(admin["_id"])}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if tokens:
+            await send_to_tokens(tokens,
+                title="👥 Work Board Join Request",
+                body=f"{user.get('name')} wants to join the Daily Work Board.",
+                data={"type": "workboard_join", "path": "/admin"},
+            )
+    return {"message": "Join request sent. Awaiting admin approval."}
+
+
+@router.get("/pending-members")
+async def pending_members(user=Depends(current_user)):
+    if user.get("role") not in ("admin", "sub_admin"):
+        raise HTTPException(403, "Admin only")
+    docs = await col_workboard_members().find({"status": "pending"}).to_list(100)
+    return [sid(d) for d in docs]
+
+
+@router.patch("/members/{uid}/approve")
+async def approve_member(uid: str, user=Depends(current_user)):
+    if user.get("role") not in ("admin", "sub_admin"):
+        raise HTTPException(403, "Admin only")
+    await col_workboard_members().update_one({"userId": uid}, {"$set": {"status": "active"}})
+    tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+    tokens = [t["token"] for t in tokens_docs]
+    if tokens:
+        await send_to_tokens(tokens,
+            title="✅ Work Board Access Granted",
+            body="You've been approved to join the Daily Work Board!",
+            data={"type": "workboard_approved", "path": "/workboard"},
+        )
+    return {"message": "Approved"}
+
+
+@router.patch("/members/{uid}/reject")
+async def reject_member(uid: str, user=Depends(current_user)):
+    if user.get("role") not in ("admin", "sub_admin"):
+        raise HTTPException(403, "Admin only")
+    await col_workboard_members().delete_one({"userId": uid})
+    return {"message": "Rejected"}
+
+
+@router.get("/members")
+async def list_members(user=Depends(current_user)):
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+    docs = await col_workboard_members().find({"status": "active"}).to_list(200)
+    return [{"userId": d["userId"], "userName": d["userName"]} for d in docs]
+
+
+# ── Posts endpoints ───────────────────────────────────────────────────────────
+
+def _can_edit(post: dict) -> bool:
+    posted_at = post.get("postedAt")
+    if not posted_at:
+        return False
+    if posted_at.tzinfo is None:
+        posted_at = posted_at.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - posted_at).total_seconds() < 1800
+
+
+@router.get("/posts")
+async def today_posts(user=Depends(current_user)):
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+    today = ist_today()
+    docs = await col_workboard_posts().find({"date": today}).sort("postedAt", 1).to_list(200)
+    result = []
+    for d in docs:
+        d["id"] = str(d.pop("_id"))
+        can_edit = d["userId"] == user["id"] and _can_edit(d)
+        d["postedAt"] = d["postedAt"].isoformat() if isinstance(d.get("postedAt"), datetime) else d.get("postedAt")
+        d["canEdit"] = can_edit
+        result.append(d)
+    return result
+
+
+class PostBody(BaseModel):
+    message: str
+
+
+@router.post("/posts")
+async def create_post(body: PostBody, user=Depends(current_user)):
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+    if not body.message.strip():
+        raise HTTPException(400, "Message cannot be empty")
+    today = ist_today()
+    existing = await col_workboard_posts().find_one({"userId": user["id"], "date": today})
+    if existing:
+        raise HTTPException(400, "You've already posted today")
+    posted_at = now()
+    result = await col_workboard_posts().insert_one({
+        "userId":   user["id"],
+        "userName": user.get("name", ""),
+        "message":  body.message.strip(),
+        "date":     today,
+        "postedAt": posted_at,
+    })
+    post_data = {
+        "id":       str(result.inserted_id),
+        "userId":   user["id"],
+        "userName": user.get("name", ""),
+        "message":  body.message.strip(),
+        "date":     today,
+        "postedAt": posted_at.isoformat(),
+        "canEdit":  True,
+    }
+    # Broadcast via WebSocket
+    await manager.broadcast({"type": "new_post", "post": post_data})
+    # Push to all active members (except poster)
+    members = await col_workboard_members().find({"status": "active", "userId": {"$ne": user["id"]}}).to_list(200)
+    all_tokens = []
+    for m in members:
+        t_docs = await col_fcm_tokens().find({"userId": m["userId"]}).to_list(5)
+        all_tokens += [t["token"] for t in t_docs]
+    if all_tokens:
+        await send_to_tokens(
+            list(set(all_tokens)),
+            title=f"📝 {user.get('name')} posted",
+            body=body.message.strip()[:80],
+            data={"type": "workboard_post", "path": "/workboard"},
+        )
+    return post_data
+
+
+@router.put("/posts/{post_id}")
+async def edit_post(post_id: str, body: PostBody, user=Depends(current_user)):
+    post = await col_workboard_posts().find_one({"_id": oid(post_id)})
+    if not post:
+        raise HTTPException(404, "Post not found")
+    if post["userId"] != user["id"]:
+        raise HTTPException(403, "Not your post")
+    if not _can_edit(post):
+        raise HTTPException(400, "Edit window (30 min) has expired")
+    if not body.message.strip():
+        raise HTTPException(400, "Message cannot be empty")
+    await col_workboard_posts().update_one(
+        {"_id": oid(post_id)},
+        {"$set": {"message": body.message.strip(), "editedAt": now()}}
+    )
+    updated = {
+        "id":      post_id,
+        "userId":  user["id"],
+        "userName": post["userName"],
+        "message": body.message.strip(),
+        "date":    post["date"],
+        "postedAt": post["postedAt"].isoformat() if isinstance(post.get("postedAt"), datetime) else post.get("postedAt"),
+        "canEdit": True,
+    }
+    await manager.broadcast({"type": "edit_post", "post": updated})
+    return updated
+
+
+@router.get("/missing-today")
+async def missing_today(user=Depends(current_user)):
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+    today = ist_today()
+    members = await col_workboard_members().find({"status": "active"}).to_list(200)
+    posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
+    posted_ids = {d["userId"] for d in posted_docs}
+    missing = [
+        {"userId": m["userId"], "userName": m["userName"]}
+        for m in members if m["userId"] not in posted_ids
+    ]
+    return missing
+
+
+@router.get("/export")
+async def export_posts(
+    user=Depends(current_user),
+    date: Optional[str] = Query(None, description="YYYY-MM-DD for a specific day"),
+    all: bool = Query(False, description="Export all posts"),
+):
+    if not _is_admin(user):
+        raise HTTPException(403, "Admin only")
+
+    query = {}
+    if not all:
+        query["date"] = date or ist_today()
+
+    docs = await col_workboard_posts().find(query).sort([("date", 1), ("postedAt", 1)]).to_list(5000)
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Date", "Name", "Message", "Posted At", "Edited"])
+    for d in docs:
+        posted_at = d.get("postedAt")
+        if isinstance(posted_at, datetime):
+            posted_at = posted_at.astimezone(IST).strftime("%Y-%m-%d %H:%M IST")
+        edited = "Yes" if d.get("editedAt") else "No"
+        writer.writerow([d.get("date", ""), d.get("userName", ""), d.get("message", ""), posted_at, edited])
+
+    output.seek(0)
+    filename = f"workboard_{date or ('all' if all else ist_today())}.csv"
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

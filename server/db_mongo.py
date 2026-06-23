@@ -38,6 +38,9 @@ def col_notifications(): return mdb()["push_notifications"]
 def col_streaks():              return mdb()["streaks"]
 def col_progress():             return mdb()["study_progress"]
 def col_notify_schedules():     return mdb()["notify_schedules"]
+def col_challenge_progress():   return mdb()["challenge_progress"]
+def col_workboard_members():    return mdb()["workboard_members"]
+def col_workboard_posts():      return mdb()["workboard_posts"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────

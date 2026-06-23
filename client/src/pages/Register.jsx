@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
+import { requestAndRegisterToken } from "../firebase";
+import api from "../api/axios";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -11,6 +13,7 @@ export default function Register() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [notifGranted, setNotifGranted] = useState(false);
   const { register } = useAuth();
 
   const submit = async (e) => {
@@ -20,6 +23,14 @@ export default function Register() {
     try {
       await register(name, email, password);
       setSubmitted(true);
+      // Ask for notification permission so admin can push approval/rejection
+      try {
+        const perm = await Notification.requestPermission();
+        if (perm === "granted") {
+          await requestAndRegisterToken(api);
+          setNotifGranted(true);
+        }
+      } catch {}
     } catch (err) {
       toast.error(err.response?.data?.detail || err.response?.data?.message || "Registration failed");
     } finally {
@@ -35,8 +46,19 @@ export default function Register() {
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Awaiting Approval</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Your account request has been sent to the admin.<br />
-            You'll receive a notification once it's approved.
+            You'll be notified once it's reviewed.
           </p>
+          {notifGranted ? (
+            <div className="flex items-center justify-center gap-2 text-xs text-emerald-500 bg-emerald-500/10 rounded-xl px-4 py-2.5">
+              <span>🔔</span>
+              <span>Push notifications enabled — we'll alert you when approved or rejected.</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center gap-2 text-xs text-amber-500 bg-amber-500/10 rounded-xl px-4 py-2.5">
+              <span>⚠️</span>
+              <span>Notifications blocked — enable them in browser settings to get approval alerts.</span>
+            </div>
+          )}
           <Link to="/login" className="inline-block mt-2 text-sm text-cyan-400 hover:underline">← Back to login</Link>
         </motion.div>
       </div>

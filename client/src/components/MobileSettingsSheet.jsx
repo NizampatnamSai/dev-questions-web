@@ -7,12 +7,19 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 
 const FEATURE_LINKS = [
-  { to: "/mock-interview", icon: "🎯", label: "Mock Interview",  sub: "AI-scored interview simulation" },
-  { to: "/flashcards",     icon: "🃏", label: "Flashcards",      sub: "Flip & swipe to review topics" },
-  { to: "/progress",       icon: "📈", label: "My Progress",     sub: "Streak, weak areas & readiness" },
-  { to: "/my-questions",   icon: "📝", label: "My Questions",    sub: "Questions you created" },
-  { to: "/bookmarks",      icon: "🔖", label: "Bookmarks",       sub: "Saved questions" },
-  { to: "/leaderboard",    icon: "🏆", label: "Leaderboard",     sub: "Top contributors" },
+  { to: "/mock-interview",       icon: "🎯", label: "Mock Interview",  sub: "AI-scored interview simulation" },
+  { to: "/flashcards",           icon: "🃏", label: "Flashcards",      sub: "Flip & swipe to review topics" },
+  { to: "/progress",             icon: "📈", label: "My Progress",     sub: "Streak, weak areas & readiness" },
+  { to: "/my-questions",         icon: "📝", label: "My Questions",    sub: "Questions you created" },
+  { to: "/bookmarks",            icon: "🔖", label: "Bookmarks",       sub: "Saved questions" },
+  { to: "/leaderboard",          icon: "🏆", label: "Leaderboard",     sub: "Top contributors" },
+  { to: "/js-compiler",          icon: "⚡", label: "JS Compiler",     sub: "Run JavaScript in browser" },
+  { to: "/study?tool=ts",        icon: "🔷", label: "TS Adder",        sub: "Add TypeScript types to JS" },
+  { to: "/study?tool=errors",    icon: "🐛", label: "Error Finder",    sub: "Find bugs in your code" },
+  { to: "/study?tool=breaks",    icon: "💥", label: "Break Finder",    sub: "Spot runtime risks" },
+  { to: "/guide",                icon: "🗺️", label: "Project Guide",   sub: "How to use every feature" },
+  { to: "/challenge",            icon: "🧩", label: "JS Challenge",     sub: "30-day advanced JS questions" },
+  { to: "/workboard",            icon: "📋", label: "Work Board",       sub: "Daily standup board" },
 ];
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {

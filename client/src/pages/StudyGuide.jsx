@@ -1,8 +1,9 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const DIFF_STYLES = {
   Basic:        "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
@@ -147,6 +148,7 @@ function TopicCard({ topic, reviewed, onToggle }) {
   const [open, setOpen]     = useState(false);
   const [tab, setTab]       = useState("explanation");
   const [showAi, setShowAi] = useState(false);
+  const { user } = useAuth();
 
   const tabs = [
     { id: "explanation", label: "📖 Explanation" },
@@ -238,10 +240,12 @@ function TopicCard({ topic, reviewed, onToggle }) {
               </AnimatePresence>
 
               <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                <button style={{ cursor: "pointer" }}
-                  onClick={() => setShowAi(v => !v)}
-                  className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${showAi?"bg-indigo-600 text-white":"bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"}`}
-                >🤖 {showAi ? "Hide AI" : "AI Help"}</button>
+                {!user?.isGuest && (
+                  <button style={{ cursor: "pointer" }}
+                    onClick={() => setShowAi(v => !v)}
+                    className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors ${showAi?"bg-indigo-600 text-white":"bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"}`}
+                  >🤖 {showAi ? "Hide AI" : "AI Help"}</button>
+                )}
 
                 <button style={{ cursor: "pointer" }}
                   onClick={() => onToggle(topic.id)}
@@ -389,13 +393,24 @@ const DEV_TOOLS = [
 ];
 
 function DevTools() {
-  const [open, setOpen]     = useState(false);
-  const [tool, setTool]     = useState("ts");
+  const [searchParams] = useSearchParams();
+  const toolParam = searchParams.get("tool");
+  const [open, setOpen]     = useState(!!toolParam);
+  const [tool, setTool]     = useState(toolParam || "ts");
   const [code, setCode]     = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    if (toolParam) {
+      setTool(toolParam);
+      setOpen(true);
+      setTimeout(() => panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+    }
+  }, [toolParam]);
 
   const cur = DEV_TOOLS.find(t => t.id === tool);
 
@@ -433,7 +448,7 @@ function DevTools() {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 overflow-hidden">
+    <div ref={panelRef} className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 overflow-hidden">
       <button onClick={() => setOpen(v => !v)} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
         <span className="text-xl">🛠️</span>
         <div className="flex-1">

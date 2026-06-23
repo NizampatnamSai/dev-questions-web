@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
@@ -8,6 +8,7 @@ import { STATES_CAPITALS } from "../data/statesCapitals";
 
 const BASE_LINKS = [
   { to: "/dashboard",      label: "Dashboard",       icon: "📊" },
+  { to: "/workboard",      label: "Work Board",      icon: "📋" },
   { to: "/generate",       label: "AI Generator",    icon: "✨" },
   { to: "/quiz",           label: "Quiz Mode",       icon: "🧠" },
   { to: "/study",          label: "Study Hub",       icon: "📚" },
@@ -18,6 +19,12 @@ const BASE_LINKS = [
   { to: "/my-questions",   label: "My Questions",    icon: "📝" },
   { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
   { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
+  { to: "/js-compiler",         label: "JS Compiler",    icon: "⚡" },
+  { to: "/study?tool=ts",      label: "TS Adder",       icon: "🔷", activeMatch: "/study?tool=ts" },
+  { to: "/study?tool=errors",  label: "Error Finder",   icon: "🐛", activeMatch: "/study?tool=errors" },
+  { to: "/study?tool=breaks",  label: "Break Finder",   icon: "💥", activeMatch: "/study?tool=breaks" },
+  { to: "/guide",              label: "Project Guide",  icon: "🗺️" },
+  { to: "/challenge",          label: "JS Challenge",   icon: "🧩" },
 ];
 const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑" };
 
@@ -50,7 +57,9 @@ export default function Sidebar() {
 
   const [stateSearch, setStateSearch] = useState("");
 
-  const links = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK] : BASE_LINKS;
+  const GUEST_HIDDEN = ["/generate", "/my-questions", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
+  const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK] : BASE_LINKS;
+  const links = user?.isGuest ? allLinks.filter(l => !GUEST_HIDDEN.includes(l.to)) : allLinks;
 
   const initials = user?.name
     ?.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
@@ -59,6 +68,8 @@ export default function Sidebar() {
   const textMuted = isStormy
     ? "text-slate-300"
     : "text-slate-500 dark:text-slate-400";
+  const location = useLocation();
+  const fullPath = location.pathname + location.search;
 
   return (
     <aside className="hidden md:flex md:flex-col w-64 h-screen sticky top-0 sidebar-light glass border-r border-black/5 dark:border-white/10 p-5 overflow-y-auto">
@@ -88,15 +99,18 @@ export default function Sidebar() {
           >
             <NavLink
               to={link.to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
+              className={({ isActive }) => {
+                const active = link.activeMatch ? fullPath === link.activeMatch : isActive;
+                return `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  active
                     ? "nav-active-light shadow-sm"
                     : `${textMuted} hover:bg-black/5 dark:hover:bg-white/8`
-                }`
-              }
+                }`;
+              }}
             >
-              {({ isActive }) => (
+              {({ isActive }) => {
+                const active = link.activeMatch ? fullPath === link.activeMatch : isActive;
+                return (
                 <>
                   <motion.span
                     whileHover={{ scale: 1.2, rotate: 5 }}
@@ -106,14 +120,14 @@ export default function Sidebar() {
                     {link.icon}
                   </motion.span>
                   <span>{link.label}</span>
-                  {isActive && (
+                  {active && (
                     <motion.div
                       layoutId="nav-pill"
                       className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400"
                     />
                   )}
                 </>
-              )}
+              );}}
             </NavLink>
           </motion.div>
         ))}

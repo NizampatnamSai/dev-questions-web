@@ -8,6 +8,7 @@ import BottomNav from "./components/BottomNav";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
+import GuestBanner from "./components/GuestBanner";
 import ScrollToTopBtn from "./components/ScrollToTopBtn";
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
@@ -31,6 +32,9 @@ import MockInterview from "./pages/MockInterview";
 import Flashcards from "./pages/Flashcards";
 import Progress from "./pages/Progress";
 import JsCompiler from "./pages/JsCompiler";
+import ProjectGuide from "./pages/ProjectGuide";
+import JSChallenge from "./pages/JSChallenge";
+import WorkBoard from "./pages/WorkBoard";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -48,20 +52,23 @@ function PageWrapper({ children }) {
 
 function AppLayout({ children }) {
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl mx-auto w-full">
-        {children}
-      </main>
-      <BottomNav />
-      <ScrollToTopBtn />
+    <div className="flex min-h-screen flex-col">
+      <GuestBanner />
+      <div className="flex flex-1">
+        <Sidebar />
+        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl mx-auto w-full">
+          {children}
+        </main>
+        <BottomNav />
+        <ScrollToTopBtn />
+      </div>
     </div>
   );
 }
 
-function ProtectedPage({ children }) {
+function ProtectedPage({ children, path }) {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute path={path}>
       <AppLayout>
         <PageWrapper>{children}</PageWrapper>
       </AppLayout>
@@ -147,22 +154,25 @@ function AppInner() {
         toastOptions={{ style: toastStyle, borderRadius: "12px" }}
       />
       <Routes>
-        <Route path="/login"    element={user ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
-        <Route path="/dashboard"    element={<ProtectedPage><Dashboard /></ProtectedPage>} />
-        <Route path="/generate"     element={<ProtectedPage><Generator /></ProtectedPage>} />
-        <Route path="/community"    element={<ProtectedPage><Community /></ProtectedPage>} />
-        <Route path="/my-questions" element={<ProtectedPage><MyQuestions /></ProtectedPage>} />
-        <Route path="/bookmarks"    element={<ProtectedPage><Bookmarks /></ProtectedPage>} />
-        <Route path="/leaderboard"  element={<ProtectedPage><Leaderboard /></ProtectedPage>} />
-        <Route path="/admin"           element={<ProtectedPage><Admin /></ProtectedPage>} />
-        <Route path="/quiz"            element={<ProtectedPage><Quiz /></ProtectedPage>} />
-        <Route path="/study"           element={<ProtectedPage><StudyGuide /></ProtectedPage>} />
-        <Route path="/mock-interview"  element={<ProtectedPage><MockInterview /></ProtectedPage>} />
-        <Route path="/flashcards"      element={<ProtectedPage><Flashcards /></ProtectedPage>} />
-        <Route path="/progress"        element={<ProtectedPage><Progress /></ProtectedPage>} />
-        <Route path="/question/:id"    element={<ProtectedPage><QuestionDetail /></ProtectedPage>} />
-        <Route path="/js-compiler"     element={<ProtectedPage><JsCompiler /></ProtectedPage>} />
+        <Route path="/login"    element={user && !user.isGuest ? <Navigate to="/dashboard" /> : <Login />} />
+        <Route path="/register" element={user && !user.isGuest ? <Navigate to="/dashboard" /> : <Register />} />
+        <Route path="/dashboard"    element={<ProtectedPage path="/dashboard"><Dashboard /></ProtectedPage>} />
+        <Route path="/generate"     element={<ProtectedPage path="/generate"><Generator /></ProtectedPage>} />
+        <Route path="/community"    element={<ProtectedPage path="/community"><Community /></ProtectedPage>} />
+        <Route path="/my-questions" element={<ProtectedPage path="/my-questions"><MyQuestions /></ProtectedPage>} />
+        <Route path="/bookmarks"    element={<ProtectedPage path="/bookmarks"><Bookmarks /></ProtectedPage>} />
+        <Route path="/leaderboard"  element={<ProtectedPage path="/leaderboard"><Leaderboard /></ProtectedPage>} />
+        <Route path="/guide"        element={<ProtectedPage path="/guide"><ProjectGuide /></ProtectedPage>} />
+        <Route path="/admin"           element={<ProtectedPage path="/admin"><Admin /></ProtectedPage>} />
+        <Route path="/quiz"            element={<ProtectedPage path="/quiz"><Quiz /></ProtectedPage>} />
+        <Route path="/study"           element={<ProtectedPage path="/study"><StudyGuide /></ProtectedPage>} />
+        <Route path="/mock-interview"  element={<ProtectedPage path="/mock-interview"><MockInterview /></ProtectedPage>} />
+        <Route path="/flashcards"      element={<ProtectedPage path="/flashcards"><Flashcards /></ProtectedPage>} />
+        <Route path="/progress"        element={<ProtectedPage path="/progress"><Progress /></ProtectedPage>} />
+        <Route path="/question/:id"    element={<ProtectedPage path="/question"><QuestionDetail /></ProtectedPage>} />
+        <Route path="/js-compiler"  element={<ProtectedPage path="/js-compiler"><JsCompiler /></ProtectedPage>} />
+        <Route path="/challenge"    element={<ProtectedPage path="/challenge"><JSChallenge /></ProtectedPage>} />
+        <Route path="/workboard"    element={<ProtectedPage path="/workboard"><WorkBoard /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
     </>

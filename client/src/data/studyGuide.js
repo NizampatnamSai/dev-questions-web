@@ -7,7 +7,11 @@ export const STUDY_CATEGORIES = [
   { id: "react",       label: "React",        icon: "\u269b\ufe0f", color: "#61dafb", sources: [{ label: "React Docs",      url: "https://react.dev/" }, { label: "W3Schools",               url: "https://www.w3schools.com/react/" }] },
   { id: "reactnative", label: "React Native", icon: "\ud83d\udcf1", color: "#0fa5e9", sources: [{ label: "RN Docs",         url: "https://reactnative.dev/docs/getting-started" }, { label: "Expo Docs",    url: "https://docs.expo.dev/" }] },
   { id: "nextjs",      label: "Next.js",      icon: "\u25b2",        color: "#000000", sources: [{ label: "Next.js Docs",    url: "https://nextjs.org/docs" }, { label: "Learn Next.js",          url: "https://nextjs.org/learn" }] },
-  { id: "git",         label: "Git & GitHub", icon: "🐙",             color: "#f05032", sources: [{ label: "W3Schools",       url: "https://www.w3schools.com/git/" }, { label: "Git Docs",         url: "https://git-scm.com/doc" }] },
+  { id: "git",         label: "Git & GitHub",        icon: "🐙", color: "#f05032", sources: [{ label: "W3Schools",    url: "https://www.w3schools.com/git/" },         { label: "Git Docs",       url: "https://git-scm.com/doc" }] },
+  { id: "python",      label: "Python",              icon: "🐍", color: "#3776ab", sources: [{ label: "Python Docs",  url: "https://docs.python.org/3/" },             { label: "W3Schools",      url: "https://www.w3schools.com/python/" }] },
+  { id: "pybackend",   label: "Python Backend",      icon: "⚙️", color: "#009688", sources: [{ label: "FastAPI Docs", url: "https://fastapi.tiangolo.com/" },          { label: "Django Docs",    url: "https://docs.djangoproject.com/" }] },
+  { id: "pyai",        label: "Python AI/ML",        icon: "🤖", color: "#ff6f00", sources: [{ label: "scikit-learn", url: "https://scikit-learn.org/stable/" },       { label: "TensorFlow",     url: "https://www.tensorflow.org/learn" }] },
+  { id: "pydata",      label: "Python Data Analysis",icon: "📊", color: "#1565c0", sources: [{ label: "Pandas Docs",  url: "https://pandas.pydata.org/docs/" },         { label: "Matplotlib",     url: "https://matplotlib.org/stable/tutorials/" }] },
 ];
 
 export const STUDY_TOPICS = [
@@ -5960,5 +5964,458 @@ npx turbo run test
 npx turbo run build --filter=[HEAD^1]`,
     interviewQuestion: "What are the trade-offs between a monorepo and a polyrepo architecture?",
   },
-];
 
+
+  // ── Python Core ──────────────────────────────────────────────────────────
+  {
+    id: "python-basics-datatypes",
+    category: "python",
+    topic: "Core Python",
+    title: "Data Types & Variables",
+    difficulty: "Basic",
+    summary: "Python has dynamic typing — variables have no declared type",
+    explanation: "Python's built-in types: int, float, str, bool, list, tuple, set, dict, NoneType. Use type() to inspect. Everything is an object.",
+    code: `x = 42          # int
+y = 3.14        # float
+name = "Alice"  # str
+active = True   # bool
+nums = [1,2,3]  # list  — mutable
+pair = (1,2)    # tuple — immutable
+unique = {1,2}  # set   — unordered unique
+data = {"a":1}  # dict  — key-value
+
+print(type(x))  # <class 'int'>`,
+    interviewQuestion: "What is the difference between a list and a tuple in Python?",
+  },
+  {
+    id: "python-comprehensions",
+    category: "python",
+    topic: "Core Python",
+    title: "List & Dict Comprehensions",
+    difficulty: "Intermediate",
+    summary: "Concise way to build lists, dicts, and sets in one line",
+    explanation: "Comprehensions are faster than loops because they're optimized at the C level. Use them for simple transformations; avoid nesting more than 2 levels.",
+    code: `# List comprehension
+squares = [x**2 for x in range(10) if x % 2 == 0]
+# [0, 4, 16, 36, 64]
+
+# Dict comprehension
+word_len = {w: len(w) for w in ["python","is","great"]}
+# {'python': 6, 'is': 2, 'great': 5}
+
+# Set comprehension
+uniq_chars = {c.lower() for c in "Hello World" if c != " "}`,
+    interviewQuestion: "When would you use a generator expression instead of a list comprehension?",
+  },
+  {
+    id: "python-decorators",
+    category: "python",
+    topic: "Core Python",
+    title: "Decorators",
+    difficulty: "Advanced",
+    summary: "Functions that wrap other functions to add behaviour",
+    explanation: "A decorator is syntactic sugar for higher-order functions. @functools.wraps preserves the wrapped function's metadata (__name__, __doc__).",
+    code: `import functools, time
+
+def timer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} took {time.perf_counter()-start:.4f}s")
+        return result
+    return wrapper
+
+@timer
+def slow():
+    time.sleep(0.1)
+
+slow()  # slow took 0.1001s`,
+    interviewQuestion: "What does @functools.wraps do and why is it important?",
+  },
+  {
+    id: "python-generators",
+    category: "python",
+    topic: "Core Python",
+    title: "Generators & yield",
+    difficulty: "Intermediate",
+    summary: "Lazy iterators that produce values one at a time — memory efficient",
+    explanation: "A generator function uses yield instead of return. Execution suspends at each yield and resumes on next(). Great for large data streams.",
+    code: `def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+gen = fibonacci()
+print([next(gen) for _ in range(8)])
+# [0, 1, 1, 2, 3, 5, 8, 13]
+
+# Generator expression (lazy list comprehension)
+evens = (x for x in range(1_000_000) if x % 2 == 0)
+print(next(evens))  # 0 — only one value computed`,
+    interviewQuestion: "What is the memory advantage of a generator over a list?",
+  },
+  {
+    id: "python-oop",
+    category: "python",
+    topic: "Core Python",
+    title: "Classes & OOP",
+    difficulty: "Intermediate",
+    summary: "Python supports full OOP: inheritance, encapsulation, polymorphism",
+    explanation: "__init__ is the constructor. Use @property for computed attributes. __repr__ for dev-friendly string, __str__ for user-friendly. Single underscore _x = convention-private; double __x = name-mangled.",
+    code: `class Animal:
+    def __init__(self, name: str):
+        self.name = name
+
+    def speak(self) -> str:
+        raise NotImplementedError
+
+    def __repr__(self):
+        return f"Animal({self.name!r})"
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+dog = Dog("Rex")
+print(dog.speak())   # Rex says Woof!
+print(repr(dog))     # Animal('Rex')`,
+    interviewQuestion: "What is the difference between __repr__ and __str__?",
+  },
+
+  // ── Python Backend ────────────────────────────────────────────────────────
+  {
+    id: "pybackend-fastapi-basics",
+    category: "pybackend",
+    topic: "FastAPI",
+    title: "FastAPI Basics",
+    difficulty: "Basic",
+    summary: "FastAPI is a modern async Python web framework with auto docs",
+    explanation: "FastAPI uses Python type hints for request validation (via Pydantic) and auto-generates OpenAPI docs at /docs. Runs on Uvicorn (ASGI server).",
+    code: `from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Item(BaseModel):
+    name: str
+    price: float
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+@app.post("/items")
+async def create_item(item: Item):
+    return {"name": item.name, "price": item.price}
+
+# Run: uvicorn main:app --reload`,
+    interviewQuestion: "What is the difference between FastAPI and Flask?",
+  },
+  {
+    id: "pybackend-fastapi-depends",
+    category: "pybackend",
+    topic: "FastAPI",
+    title: "Dependency Injection",
+    difficulty: "Intermediate",
+    summary: "Depends() injects reusable logic like auth, DB sessions, rate limits",
+    explanation: "FastAPI's dependency injection system runs dependencies before the route handler. They can be chained, async, and have their own dependencies.",
+    code: `from fastapi import Depends, HTTPException, Header
+
+async def verify_token(x_token: str = Header(...)):
+    if x_token != "secret":
+        raise HTTPException(status_code=401, detail="Bad token")
+    return x_token
+
+@app.get("/secure")
+async def secure_route(token: str = Depends(verify_token)):
+    return {"token": token}`,
+    interviewQuestion: "How does FastAPI's Depends() differ from middleware?",
+  },
+  {
+    id: "pybackend-mongodb-motor",
+    category: "pybackend",
+    topic: "Database",
+    title: "MongoDB with Motor (Async)",
+    difficulty: "Intermediate",
+    summary: "Motor is the async MongoDB driver for Python used with FastAPI",
+    explanation: "Motor wraps PyMongo for async/await usage. Use AsyncIOMotorClient. Operations like find_one, insert_one, update_one are all awaitable.",
+    code: `from motor.motor_asyncio import AsyncIOMotorClient
+
+client = AsyncIOMotorClient("mongodb://localhost:27017")
+db = client["mydb"]
+col = db["users"]
+
+# Insert
+result = await col.insert_one({"name": "Alice", "role": "admin"})
+
+# Find one
+user = await col.find_one({"name": "Alice"})
+
+# Update
+await col.update_one({"name": "Alice"}, {"$set": {"role": "user"}})
+
+# List
+docs = await col.find({}).sort("name", 1).to_list(length=100)`,
+    interviewQuestion: "Why use Motor instead of PyMongo in a FastAPI app?",
+  },
+  {
+    id: "pybackend-django-orm",
+    category: "pybackend",
+    topic: "Django",
+    title: "Django ORM Basics",
+    difficulty: "Intermediate",
+    summary: "Django ORM maps Python classes to database tables",
+    explanation: "Each Model class maps to a DB table. Fields define columns. QuerySets are lazy — they hit DB only when evaluated. Use select_related() for JOIN, prefetch_related() for M2M.",
+    code: `from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+# QuerySet examples
+User.objects.all()                    # SELECT *
+User.objects.filter(name="Alice")     # WHERE name='Alice'
+User.objects.get(id=1)               # single row or raise
+User.objects.create(name="Bob", email="b@x.com")
+User.objects.filter(id=1).update(name="Alice2")`,
+    interviewQuestion: "What is the N+1 query problem and how does select_related() solve it?",
+  },
+
+  // ── Python AI/ML ──────────────────────────────────────────────────────────
+  {
+    id: "pyai-numpy-basics",
+    category: "pyai",
+    topic: "NumPy",
+    title: "NumPy Arrays & Operations",
+    difficulty: "Basic",
+    summary: "NumPy ndarray is the foundation of all Python ML/data libraries",
+    explanation: "NumPy arrays are contiguous memory blocks of typed values. Vectorized operations (no Python loops) make them 100x faster than lists for numerical work.",
+    code: `import numpy as np
+
+a = np.array([1, 2, 3, 4, 5])
+b = np.zeros((3, 3))          # 3x3 matrix of zeros
+c = np.arange(0, 10, 2)       # [0 2 4 6 8]
+d = np.linspace(0, 1, 5)      # [0. 0.25 0.5 0.75 1.]
+
+# Vectorized math — no loops needed
+print(a * 2)        # [2 4 6 8 10]
+print(a.mean())     # 3.0
+print(a.reshape(1, 5))  # [[1 2 3 4 5]]
+
+# Boolean masking
+print(a[a > 3])     # [4 5]`,
+    interviewQuestion: "What is broadcasting in NumPy?",
+  },
+  {
+    id: "pyai-sklearn-pipeline",
+    category: "pyai",
+    topic: "scikit-learn",
+    title: "ML Pipeline with scikit-learn",
+    difficulty: "Intermediate",
+    summary: "Pipeline chains preprocessing + model into one reusable object",
+    explanation: "Pipeline prevents data leakage by fitting transformers only on training data. fit() trains the whole pipe; predict() transforms + predicts in one call.",
+    code: `from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+pipe = Pipeline([
+    ("scaler", StandardScaler()),
+    ("clf",    LogisticRegression()),
+])
+
+pipe.fit(X_train, y_train)
+print(pipe.score(X_test, y_test))  # ~0.97`,
+    interviewQuestion: "Why is it important to fit the scaler only on training data?",
+  },
+  {
+    id: "pyai-openai-api",
+    category: "pyai",
+    topic: "AI Integration",
+    title: "OpenAI / LLM API Integration",
+    difficulty: "Intermediate",
+    summary: "Call LLM APIs with Python to build AI-powered features",
+    explanation: "Use the openai SDK (or httpx for other providers). Always stream for long responses. Store API keys in env vars, never in code.",
+    code: `from openai import OpenAI
+import os
+
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+# Basic completion
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system",  "content": "You are a helpful assistant."},
+        {"role": "user",    "content": "Explain async/await in Python."},
+    ],
+    temperature=0.7,
+)
+print(response.choices[0].message.content)
+
+# Streaming
+stream = client.chat.completions.create(model="gpt-4o-mini",
+    messages=[{"role":"user","content":"Tell me a joke"}], stream=True)
+for chunk in stream:
+    print(chunk.choices[0].delta.content or "", end="")`,
+    interviewQuestion: "What is the difference between temperature and top_p in LLM APIs?",
+  },
+  {
+    id: "pyai-langchain-basics",
+    category: "pyai",
+    topic: "AI Integration",
+    title: "LangChain Chains & Prompts",
+    difficulty: "Advanced",
+    summary: "LangChain simplifies building multi-step LLM applications",
+    explanation: "LangChain's LCEL (LangChain Expression Language) uses | pipe operator to chain prompts, models, and output parsers. Supports memory, tools, and agents.",
+    code: `from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+llm = ChatOpenAI(model="gpt-4o-mini")
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a Python expert."),
+    ("user", "Explain {concept} in simple terms."),
+])
+
+chain = prompt | llm | StrOutputParser()
+
+result = chain.invoke({"concept": "decorators"})
+print(result)`,
+    interviewQuestion: "What is RAG (Retrieval-Augmented Generation) and when would you use it?",
+  },
+
+  // ── Python Data Analysis ──────────────────────────────────────────────────
+  {
+    id: "pydata-pandas-basics",
+    category: "pydata",
+    topic: "Pandas",
+    title: "DataFrame Basics",
+    difficulty: "Basic",
+    summary: "Pandas DataFrame is a 2D table — the Excel of Python",
+    explanation: "A DataFrame is a dict of Series (columns). Index is the row label. Operations are vectorized. Use .loc[] for label-based, .iloc[] for integer-based access.",
+    code: `import pandas as pd
+
+df = pd.DataFrame({
+    "name":  ["Alice","Bob","Carol"],
+    "score": [95, 82, 88],
+    "grade": ["A","B","B"],
+})
+
+print(df.head())          # first 5 rows
+print(df.describe())      # stats summary
+print(df["score"].mean()) # 88.33
+
+# Filtering
+top = df[df["score"] >= 88]
+
+# Add column
+df["passed"] = df["score"] >= 60
+
+# GroupBy
+print(df.groupby("grade")["score"].mean())`,
+    interviewQuestion: "What is the difference between .loc[] and .iloc[]?",
+  },
+  {
+    id: "pydata-pandas-cleaning",
+    category: "pydata",
+    topic: "Pandas",
+    title: "Data Cleaning",
+    difficulty: "Intermediate",
+    summary: "Handle missing values, duplicates, and type errors in real datasets",
+    explanation: "Real data is messy. isnull(), dropna(), fillna() handle NaN. astype() fixes type mismatches. drop_duplicates() removes duplicate rows.",
+    code: `import pandas as pd
+import numpy as np
+
+df = pd.read_csv("data.csv")
+
+# Check missing values
+print(df.isnull().sum())
+
+# Drop rows where ALL columns are NaN
+df.dropna(how="all", inplace=True)
+
+# Fill missing numeric with median
+df["age"].fillna(df["age"].median(), inplace=True)
+
+# Fix types
+df["price"] = pd.to_numeric(df["price"], errors="coerce")
+
+# Remove duplicates
+df.drop_duplicates(subset=["email"], keep="first", inplace=True)
+
+# Rename columns
+df.rename(columns={"user_name": "username"}, inplace=True)`,
+    interviewQuestion: "What is the difference between dropna() and fillna()?",
+  },
+  {
+    id: "pydata-matplotlib",
+    category: "pydata",
+    topic: "Visualization",
+    title: "Matplotlib & Seaborn",
+    difficulty: "Basic",
+    summary: "Matplotlib is the base plotting library; Seaborn adds statistical plots",
+    explanation: "plt.figure() + plt.subplot() for layout control. Seaborn wraps Matplotlib with better defaults and statistical plot types like heatmap, boxplot, pairplot.",
+    code: `import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+df = pd.DataFrame({"x": range(10), "y": [i**2 for i in range(10)]})
+
+# Matplotlib
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+axes[0].plot(df["x"], df["y"], marker="o", color="steelblue")
+axes[0].set_title("Line Chart")
+
+# Seaborn
+sns.barplot(data=df, x="x", y="y", ax=axes[1])
+axes[1].set_title("Bar Chart")
+
+plt.tight_layout()
+plt.savefig("chart.png", dpi=150)
+plt.show()`,
+    interviewQuestion: "When would you use Seaborn instead of raw Matplotlib?",
+  },
+  {
+    id: "pydata-eda",
+    category: "pydata",
+    topic: "EDA",
+    title: "Exploratory Data Analysis",
+    difficulty: "Intermediate",
+    summary: "EDA is the first step in any data project — understand before modelling",
+    explanation: "EDA uncovers patterns, outliers, and relationships. Correlation heatmaps show feature relationships. Box plots reveal outliers. Always check data shape, dtypes, and null counts first.",
+    code: `import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("titanic.csv")
+
+# 1. Shape & types
+print(df.shape, df.dtypes)
+
+# 2. Null summary
+print(df.isnull().mean().sort_values(ascending=False))
+
+# 3. Distribution
+df["Age"].hist(bins=30)
+plt.title("Age Distribution")
+
+# 4. Correlation heatmap
+corr = df.select_dtypes("number").corr()
+sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm")
+
+# 5. Categorical counts
+print(df["Survived"].value_counts(normalize=True))`,
+    interviewQuestion: "What is the first thing you do when you receive a new dataset?",
+  },
+];

@@ -1,5 +1,5 @@
-from datetime import datetime, timezone
-from db_mongo import col_notify_schedules, col_fcm_tokens
+from datetime import datetime, timezone, timedelta
+from db_mongo import col_notify_schedules, col_fcm_tokens, col_challenge_progress, col_workboard_members
 from utils.firebase import send_to_tokens
 
 MOTIVATION_MESSAGES = [
@@ -13,6 +13,22 @@ MOTIVATION_MESSAGES = [
 ]
 
 _msg_index = 0
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+
+def _is_even_saturday(dt: datetime) -> bool:
+    if dt.weekday() != 5:
+        return False
+    week_number = (dt.day - 1) // 7 + 1
+    return week_number in (2, 4)
+
+
+def _is_working_day(dt: datetime) -> bool:
+    """Mon-Sat, skip even Saturdays (2nd & 4th) and Sundays."""
+    if dt.weekday() == 6:        # Sunday
+        return False
+    return not _is_even_saturday(dt)
 
 
 async def fire_scheduled_notifications():
@@ -35,7 +51,6 @@ async def fire_scheduled_notifications():
 
     print(f"[scheduler] matched {len(schedules)} schedule(s)", flush=True)
 
-    # Debug: show all schedules and why they didn't match
     if not schedules:
         all_docs = await col_notify_schedules().find({}).to_list(100)
         for d in all_docs:
@@ -54,4 +69,69 @@ async def fire_scheduled_notifications():
             title="📚 DevQuiz — Study Time!",
             body=body,
             data={"type": "weekly_motivation"},
+        )
+
+
+async def fire_challenge_notifications():
+    """10:00 AM IST daily challenge reminder — Mon-Sat, skip even Saturdays."""
+    now_ist = datetime.now(IST)
+    if not _is_working_day(now_ist):
+        print(f"[challenge] skipping — not a working day ({now_ist.strftime('%A %d')})", flush=True)
+        return
+
+    opted_in = await col_challenge_progress().find({"optedIn": True}).to_list(500)
+    print(f"[challenge] sending to {len(opted_in)} opted-in users", flush=True)
+
+    for prog in opted_in:
+        uid = prog["userId"]
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if not tokens:
+            continue
+
+        # Calculate which day they're on
+        from routers.challenge import get_user_day, JS_QUESTIONS
+        day = get_user_day(prog["joinedAt"])
+        q = JS_QUESTIONS[day - 1]
+
+        # Skip if already answered today
+        if any(a["day"] == day for a in prog.get("answers", [])):
+            continue
+
+        await send_to_tokens(
+            tokens,
+            title=f"🧩 Day {day}/30 — JS Challenge",
+            body=f"Today: {q['title']}. Tap to solve!",
+            data={"type": "js_challenge", "path": "/challenge"},
+        )
+
+
+async def fire_workboard_notifications():
+    """9:30 AM IST workboard reminder — Mon-Sat, skip even Saturdays."""
+    now_ist = datetime.now(IST)
+    if not _is_working_day(now_ist):
+        print(f"[workboard] skipping — not a working day ({now_ist.strftime('%A %d')})", flush=True)
+        return
+
+    members = await col_workboard_members().find({"status": "active"}).to_list(200)
+    print(f"[workboard] sending to {len(members)} active members", flush=True)
+
+    today = now_ist.strftime("%Y-%m-%d")
+    from db_mongo import col_workboard_posts
+    posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
+    posted_ids = {d["userId"] for d in posted_docs}
+
+    for member in members:
+        uid = member["userId"]
+        if uid in posted_ids:
+            continue  # Already posted today
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if not tokens:
+            continue
+        await send_to_tokens(
+            tokens,
+            title="📋 Daily Work Board",
+            body="Don't forget to post your daily update! Team is waiting 👀",
+            data={"type": "workboard_reminder", "path": "/workboard"},
         )

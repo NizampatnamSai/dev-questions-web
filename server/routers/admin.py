@@ -290,12 +290,40 @@ async def pending_users(admin=Depends(_require_admin)):
 @router.patch("/users/{uid}/approve")
 async def approve_user(uid: str, admin=Depends(_require_admin)):
     await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved"}})
-    user = sid(await col_users().find_one({"_id": oid(uid)}))
     tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(20)
     tokens = [t["token"] for t in tokens_docs]
     if tokens:
-        await send_to_tokens(tokens, title="✅ Account Approved!", body="Your DevQuiz account has been approved. You can now log in.", data={"type": "account_approved"})
+        await send_to_tokens(
+            tokens,
+            title="✅ Account Approved!",
+            body="Your DevQuiz account has been approved. Tap to log in.",
+            data={"type": "account_approved", "path": "/login"},
+        )
     return {"message": "User approved"}
+
+
+class RejectBody(BaseModel):
+    reason: str
+
+
+@router.patch("/users/{uid}/reject")
+async def reject_user(uid: str, body: RejectBody, admin=Depends(_require_admin)):
+    if not body.reason.strip():
+        raise HTTPException(400, "Rejection reason is required")
+    await col_users().update_one(
+        {"_id": oid(uid)},
+        {"$set": {"status": "rejected", "rejectionReason": body.reason.strip()}},
+    )
+    tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(20)
+    tokens = [t["token"] for t in tokens_docs]
+    if tokens:
+        await send_to_tokens(
+            tokens,
+            title="❌ Account Not Approved",
+            body=f"Reason: {body.reason.strip()}",
+            data={"type": "account_rejected", "path": "/register"},
+        )
+    return {"message": "User rejected"}
 
 
 @router.patch("/users/{uid}/block")
@@ -323,13 +351,25 @@ async def debug_schedules(admin=Depends(_require_admin)):
 
 @router.post("/schedules/trigger-now")
 async def trigger_notifications_now(admin=Depends(_require_admin)):
-    """Manually fire the scheduler right now — sends to all enabled schedules matching current UTC day/hour/minute."""
-    from scheduler_tasks import fire_scheduled_notifications
-    from datetime import datetime, timezone
-    now = datetime.now(timezone.utc)
-    await fire_scheduled_notifications()
-    return {
-        "message": "Triggered",
-        "server_utc": now.isoformat(),
-        "checked": f"{now.strftime('%A').lower()} {now.hour:02d}:{now.minute:02d}",
-    }
+    """Fire ALL enabled schedules immediately, ignoring day/time — for testing."""
+    from scheduler_tasks import MOTIVATION_MESSAGES
+    import random
+
+    schedules = await col_notify_schedules().find({"enabled": {"$ne": False}}).to_list(500)
+    print(f"[trigger-now] firing {len(schedules)} schedule(s)", flush=True)
+
+    sent_total = 0
+    for sched in schedules:
+        uid         = sched["userId"]
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(50)
+        tokens      = [t["token"] for t in tokens_docs]
+        if not tokens:
+            print(f"[trigger-now] no FCM tokens for userId={uid}", flush=True)
+            continue
+        body = sched.get("message") or random.choice(MOTIVATION_MESSAGES)
+        from utils.firebase import send_to_tokens
+        sent = await send_to_tokens(tokens, title="📚 DevQuiz — Study Time!", body=body, data={"type": "weekly_motivation"})
+        print(f"[trigger-now] sent to userId={uid}, tokens={len(tokens)}, delivered={sent}", flush=True)
+        sent_total += sent
+
+    return {"message": "Triggered", "schedules_found": len(schedules), "sent_total": sent_total}

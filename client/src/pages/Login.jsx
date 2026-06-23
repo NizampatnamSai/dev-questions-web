@@ -9,7 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, enterGuest } = useAuth();
   const navigate = useNavigate();
 
   const submit = async (e) => {
@@ -94,6 +94,24 @@ export default function Login() {
             <Link to="/register" className="text-cyan-400 hover:underline">Register</Link>
           )}
         </p>
+
+        <div className="relative my-5">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="px-3 text-xs text-slate-500 bg-slate-900">or</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => { enterGuest(); navigate("/community"); }}
+          className="w-full py-2.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-slate-300 text-sm font-medium transition flex items-center justify-center gap-2"
+        >
+          👁 View as Guest
+          <span className="text-xs text-slate-500 font-normal">— browse without signing in</span>
+        </button>
 
       </motion.div>
     </div>

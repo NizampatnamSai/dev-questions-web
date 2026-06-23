@@ -507,6 +507,10 @@ export default function Admin() {
   };
 
   const [pendingUsers, setPendingUsers] = useState([]);
+  const [rejectTarget, setRejectTarget] = useState(null);
+  const [rejectReason, setRejectReason] = useState("");
+  const [rejectLoading, setRejectLoading] = useState(false);
+
   useEffect(() => {
     load();
     loadLogs();
@@ -520,10 +524,21 @@ export default function Admin() {
     toast.success(`${u.name} approved`);
   };
 
-  const blockUser = async (u) => {
-    await api.patch(`/admin/users/${u.id}/block`);
-    setPendingUsers(p => p.filter(x => x.id !== u.id));
-    toast.success(`${u.name} blocked`);
+  const openReject = (u) => { setRejectTarget(u); setRejectReason(""); };
+
+  const confirmReject = async () => {
+    if (!rejectReason.trim()) { toast.error("Please enter a rejection reason"); return; }
+    setRejectLoading(true);
+    try {
+      await api.patch(`/admin/users/${rejectTarget.id}/reject`, { reason: rejectReason.trim() });
+      setPendingUsers(p => p.filter(x => x.id !== rejectTarget.id));
+      toast.success(`${rejectTarget.name} rejected`);
+      setRejectTarget(null);
+    } catch {
+      toast.error("Failed to reject user");
+    } finally {
+      setRejectLoading(false);
+    }
   };
 
   const createUser = async (form) => {
@@ -635,9 +650,9 @@ export default function Admin() {
                     className="text-xs px-3 py-1.5 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-800/40 font-semibold transition-colors">
                     ✓ Approve
                   </button>
-                  <button onClick={() => blockUser(u)}
+                  <button onClick={() => openReject(u)}
                     className="text-xs px-3 py-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700 hover:bg-red-200 dark:hover:bg-red-800/40 font-semibold transition-colors">
-                    ✕ Block
+                    ✕ Reject
                   </button>
                 </div>
               </div>
@@ -810,6 +825,53 @@ export default function Admin() {
         onConfirm={deleteUser}
         onCancel={() => setDeleteTarget(null)}
       />
+
+      {/* Reject user modal */}
+      <AnimatePresence>
+        {rejectTarget && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={() => setRejectTarget(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="glass-card w-full max-w-sm p-6 space-y-4"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg flex-shrink-0">❌</div>
+                <div>
+                  <p className="font-bold text-slate-800 dark:text-slate-100">Reject "{rejectTarget?.name}"?</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">A push notification with your reason will be sent to the user.</p>
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">Reason <span className="text-red-400">*</span></label>
+                <textarea
+                  rows={3}
+                  value={rejectReason}
+                  onChange={e => setRejectReason(e.target.value)}
+                  placeholder="e.g. Incomplete profile, duplicate account, not eligible…"
+                  className="input-light w-full resize-none text-sm"
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <button onClick={() => setRejectTarget(null)} className="px-4 py-2 text-sm rounded-xl border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmReject}
+                  disabled={rejectLoading || !rejectReason.trim()}
+                  className="px-4 py-2 text-sm rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold transition-colors disabled:opacity-50"
+                >
+                  {rejectLoading ? "Rejecting…" : "❌ Reject & Notify"}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

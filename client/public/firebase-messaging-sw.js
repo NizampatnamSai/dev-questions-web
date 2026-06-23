@@ -12,7 +12,6 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// Background notification handler
 messaging.onBackgroundMessage(payload => {
   const { title, body } = payload.notification ?? {};
   self.registration.showNotification(title ?? 'DevQuiz', {
@@ -23,13 +22,24 @@ messaging.onBackgroundMessage(payload => {
   });
 });
 
-// Notification click → focus or open the app
+// Notification click → redirect to the path in data payload
 self.addEventListener('notificationclick', event => {
   event.notification.close();
+  const path = event.notification.data?.path || '/';
+  const url = self.location.origin + path;
+
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      if (list.length > 0) return list[0].focus();
-      return clients.openWindow('/');
+      // If app is already open, focus it and navigate
+      for (const client of list) {
+        if (client.url.startsWith(self.location.origin) && 'focus' in client) {
+          client.focus();
+          client.navigate(url);
+          return;
+        }
+      }
+      // Otherwise open a new window
+      return clients.openWindow(url);
     })
   );
 });

@@ -63,7 +63,7 @@ async def register(body: RegisterBody):
                 tokens,
                 title="👤 New User Registration",
                 body=f"{body.name.strip()} ({email}) is requesting access.",
-                data={"type": "new_registration"},
+                data={"type": "new_registration", "path": "/admin"},
             )
     return {"pending": True, "message": "Registration submitted. You'll be notified once an admin approves your account."}
 

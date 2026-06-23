@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 
-const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"];
+const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native", "Python", "Python Backend", "Python AI/ML", "Python Data Analysis"];
 const LEVELS     = ["Low", "Medium", "High"];
 const TIME_OPTS  = [
   { label: "No Limit", value: 0 },
