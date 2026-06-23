@@ -160,7 +160,13 @@ function AppInner() {
   const { user } = useAuth();
   const { theme } = useTheme();
   const [appConfig, setAppConfig] = useState({ maintenance: false, force_update: false });
-  const [updateDismissed, setUpdateDismissed] = useState(false);
+  const [updateDismissed, setUpdateDismissed] = useState(() => {
+    try {
+      return localStorage.getItem("devquiz_update_dismissed") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useEffect(() => {
@@ -168,6 +174,11 @@ function AppInner() {
       .then(({ data }) => setAppConfig(data))
       .catch(() => {});
   }, []);
+
+  const handleDismissUpdate = () => {
+    localStorage.setItem("devquiz_update_dismissed", "true");
+    setUpdateDismissed(true);
+  };
 
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
@@ -226,7 +237,7 @@ function AppInner() {
             <button onClick={() => window.location.reload()} className="text-xs bg-white text-indigo-600 font-bold px-3 py-1 rounded-full hover:bg-indigo-50 transition-colors">
               Refresh Now
             </button>
-            <button onClick={() => setUpdateDismissed(true)} className="text-white/70 hover:text-white text-lg leading-none">×</button>
+            <button onClick={handleDismissUpdate} className="text-white/70 hover:text-white text-lg leading-none">×</button>
           </div>
         </div>
       )}
