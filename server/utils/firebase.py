@@ -62,7 +62,6 @@ async def send_to_tokens(tokens: list[str], title: str, body: str, data: dict | 
                 notification=messaging.Notification(title=title, body=body),
                 data={k: str(v) for k, v in (data or {}).items()},
                 android=messaging.AndroidConfig(
-                    channel_id="devquiz_default",
                     priority="high",
                     notification=messaging.AndroidNotification(
                         sound="notification_sound",
