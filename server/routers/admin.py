@@ -298,7 +298,20 @@ async def pending_users(admin=Depends(_require_admin)):
 
 @router.patch("/users/{uid}/approve")
 async def approve_user(uid: str, admin=Depends(_require_admin)):
-    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved"}})
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved", "approvedAt": now()}})
+
+    # Store notification in database
+    await col_notifications().insert_one({
+        "userId": uid,
+        "type": "account_approved",
+        "title": "✅ Account Approved!",
+        "body": "Your DevQuiz account has been approved. You can now log in!",
+        "data": {"path": "/login"},
+        "read": False,
+        "createdAt": now(),
+    })
+
+    # Send push notification
     tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(20)
     tokens = [t["token"] for t in tokens_docs]
     if tokens:
@@ -319,17 +332,31 @@ class RejectBody(BaseModel):
 async def reject_user(uid: str, body: RejectBody, admin=Depends(_require_admin)):
     if not body.reason.strip():
         raise HTTPException(400, "Rejection reason is required")
+    reason = body.reason.strip()
     await col_users().update_one(
         {"_id": oid(uid)},
-        {"$set": {"status": "rejected", "rejectionReason": body.reason.strip()}},
+        {"$set": {"status": "rejected", "rejectionReason": reason, "rejectedAt": now()}},
     )
+
+    # Store notification in database
+    await col_notifications().insert_one({
+        "userId": uid,
+        "type": "account_rejected",
+        "title": "❌ Account Not Approved",
+        "body": f"Reason: {reason}",
+        "data": {"path": "/register"},
+        "read": False,
+        "createdAt": now(),
+    })
+
+    # Send push notification
     tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(20)
     tokens = [t["token"] for t in tokens_docs]
     if tokens:
         await send_to_tokens(
             tokens,
             title="❌ Account Not Approved",
-            body=f"Reason: {body.reason.strip()}",
+            body=f"Reason: {reason}",
             data={"type": "account_rejected", "path": "/register"},
         )
     return {"message": "User rejected"}

@@ -86,3 +86,17 @@ async def register(body: RegisterBody):
 @router.get("/me")
 async def me(user=Depends(current_user)):
     return {"user": _pub(user)}
+
+
+@router.get("/registration-status/{email}")
+async def check_registration_status(email: str):
+    """Check registration status of a user (before login)"""
+    user = await col_users().find_one({"email": email.lower().strip()})
+    if not user:
+        return {"status": "not_found"}
+
+    return {
+        "status": user.get("status"),  # pending, approved, rejected, blocked, disabled
+        "rejectionReason": user.get("rejectionReason"),
+        "approvedAt": user.get("approvedAt"),
+    }

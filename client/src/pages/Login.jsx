@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -28,6 +29,35 @@ export default function Login() {
     }
     setLoading(true);
     try {
+      // Check registration status first
+      const { data: statusData } = await api.get(`/auth/registration-status/${email}`);
+
+      if (statusData.status === "not_found") {
+        toast.error("Account not found. Please register first.", { duration: 5000 });
+        setLoading(false);
+        return;
+      }
+
+      if (statusData.status === "pending") {
+        toast.error("Your account is still pending admin approval. Please wait.", { duration: 5000 });
+        setLoading(false);
+        return;
+      }
+
+      if (statusData.status === "rejected") {
+        const reason = statusData.rejectionReason || "No reason provided";
+        toast.error(`Account rejected: ${reason}`, { duration: 6000 });
+        setLoading(false);
+        return;
+      }
+
+      if (statusData.status === "disabled" || statusData.status === "blocked") {
+        toast.error("Your account has been disabled. Contact support.", { duration: 6000 });
+        setLoading(false);
+        return;
+      }
+
+      // If approved, proceed with login
       await login(email, password);
       toast.success("Welcome back!", { id: "welcome" });
       navigate("/dashboard");
