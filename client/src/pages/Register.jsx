@@ -19,6 +19,25 @@ export default function Register() {
   const submit = async (e) => {
     e.preventDefault();
     if (loading) return;
+
+    // Validation
+    if (!name.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+    if (!email.trim()) {
+      toast.error("Please enter your email");
+      return;
+    }
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     setLoading(true);
     try {
       await register(name, email, password);
@@ -28,7 +47,10 @@ export default function Register() {
         try { await requestAndRegisterToken(api); setNotifGranted(true); } catch {}
       }
     } catch (err) {
-      toast.error(err.response?.data?.detail || err.response?.data?.message || "Registration failed");
+      const detail = err.response?.data?.detail || err.response?.data?.message;
+      const message = detail || (err.message === "Network Error" ? "Network error — check your connection" : "Registration failed");
+      toast.error(message, { duration: 5000 });
+      console.error("Register error:", err.message, err.response?.status);
     } finally {
       setLoading(false);
     }
@@ -88,32 +110,40 @@ export default function Register() {
         </div>
 
         <form onSubmit={submit} className="space-y-4">
-          <input
-            required
-            placeholder="Full name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            disabled={loading}
-            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
-          />
-          <input
-            type="email"
-            required
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
-            className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
-          />
+          <div>
+            <input
+              required
+              type="text"
+              placeholder="Full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={loading}
+              autoComplete="name"
+              className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
+            />
+          </div>
+          <div>
+            <input
+              type="email"
+              required
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              autoComplete="email"
+              className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
+            />
+          </div>
           <div className="relative">
             <input
               type={showPw ? "text" : "password"}
               required
               minLength={6}
-              placeholder="Password"
+              placeholder="Password (min 6 characters)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
+              autoComplete="new-password"
               className="w-full px-4 py-2.5 pr-11 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
             />
             <button
@@ -125,9 +155,12 @@ export default function Register() {
               {showPw ? "🙈" : "👁️"}
             </button>
           </div>
+          {password && password.length < 6 && (
+            <p className="text-xs text-amber-400">Password must be at least 6 characters</p>
+          )}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !name.trim() || !email.trim() || password.length < 6}
             className="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold text-sm transition disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? (

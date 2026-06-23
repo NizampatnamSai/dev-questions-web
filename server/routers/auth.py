@@ -53,18 +53,33 @@ async def register(body: RegisterBody):
         "dailyLimit": 25,
         "createdAt":  now(),
     })
-    # notify all admins via push
+    # notify all admins via push and store notification
     admins = await col_users().find({"role": {"$in": ["admin", "sub_admin"]}}).to_list(50)
+    notif_body = f"{body.name.strip()} ({email}) is requesting access."
+
     for admin in admins:
+        # Store notification in database
+        await col_notifications().insert_one({
+            "userId": str(admin["_id"]),
+            "type": "new_registration",
+            "title": "👤 New User Registration",
+            "body": notif_body,
+            "data": {"userId": str(result.inserted_id)},
+            "read": False,
+            "createdAt": now(),
+        })
+
+        # Send push notification
         tokens_docs = await col_fcm_tokens().find({"userId": str(admin["_id"])}).to_list(20)
         tokens = [t["token"] for t in tokens_docs]
         if tokens:
             await send_to_tokens(
                 tokens,
                 title="👤 New User Registration",
-                body=f"{body.name.strip()} ({email}) is requesting access.",
+                body=notif_body,
                 data={"type": "new_registration", "path": "/admin"},
             )
+
     return {"pending": True, "message": "Registration submitted. You'll be notified once an admin approves your account."}
 
 
