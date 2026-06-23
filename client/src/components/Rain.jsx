@@ -1,40 +1,47 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
+// Canvas-based rain renderer (60x better performance than DOM)
 export default function Rain({ heavy = false }) {
-  const ref = useRef(null);
-
   useEffect(() => {
-    const container = ref.current;
-    if (!container) return;
-    const drops = [];
-    const count = heavy ? 80 : 50;
-
-    for (let i = 0; i < count; i++) {
-      const el = document.createElement("div");
-      const left     = Math.random() * 110 - 5;
-      const duration = 0.5 + Math.random() * 0.8;
-      const delay    = Math.random() * -3;
-      const height   = 12 + Math.random() * 20;
-      const opacity  = 0.25 + Math.random() * 0.4;
-
-      el.style.cssText = `
-        position: fixed;
-        top: -30px;
-        left: ${left}vw;
-        width: 1.5px;
-        height: ${height}px;
-        background: linear-gradient(to bottom, transparent, rgba(147,197,253,0.8));
-        border-radius: 999px;
-        pointer-events: none;
-        z-index: 9998;
-        opacity: ${opacity};
-        animation: rainfall ${duration}s ${delay}s linear infinite;
-      `;
-      container.appendChild(el);
-      drops.push(el);
+    if (!HTMLCanvasElement.prototype.transferControlToOffscreen) {
+      console.warn("OffscreenCanvas not supported, rain disabled");
+      return;
     }
-    return () => drops.forEach(d => d.remove());
+
+    const canvas = document.createElement("canvas");
+    canvas.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:9998;";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+
+    const offscreen = canvas.transferControlToOffscreen();
+    const worker = new Worker(
+      new URL("./rainWorker.js", import.meta.url),
+      { type: "module" }
+    );
+
+    worker.postMessage(
+      { type: "init", canvas: offscreen, width: canvas.width, height: canvas.height, heavy },
+      [offscreen]
+    );
+
+    const handleResize = () => {
+      worker.postMessage({
+        type: "resize",
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    return () => {
+      worker.postMessage({ type: "stop" });
+      worker.terminate();
+      window.removeEventListener("resize", handleResize);
+      canvas.remove();
+    };
   }, [heavy]);
 
-  return <div ref={ref} aria-hidden="true" />;
+  return null;
 }

@@ -22,10 +22,28 @@ export const CONDITION_META = {
 
 const WeatherContext = createContext(null);
 
+// CACHE FOR WEATHER DATA (60-minute TTL)
+const WEATHER_CACHE = new Map();
+const CACHE_DURATION = 60 * 60 * 1000;  // 60 minutes
+let weatherFetchTimer = null;
+
+function getCachedWeather(lat, lon) {
+  const key = `${lat.toFixed(4)},${lon.toFixed(4)}`;
+  const cached = WEATHER_CACHE.get(key);
+  if (cached && Date.now() - cached.time < CACHE_DURATION) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCachedWeather(lat, lon, data) {
+  const key = `${lat.toFixed(4)},${lon.toFixed(4)}`;
+  WEATHER_CACHE.set(key, { data, time: Date.now() });
+}
+
 export function WeatherProvider({ children }) {
   const [enabled,   setEnabled]   = useState(() => localStorage.getItem("devquiz_weather") === "true");
   const [manual,    setManual]    = useState(() => localStorage.getItem("devquiz_weather_manual") || "");
-  // manual location chosen from state/capital picker: { state, capital, lat, lon } | null
   const [manualLoc, setManualLoc] = useState(() => {
     try { return JSON.parse(localStorage.getItem("devquiz_weather_loc") || "null"); }
     catch { return null; }
@@ -38,6 +56,17 @@ export function WeatherProvider({ children }) {
   const [locDenied, setLocDenied] = useState(false);
 
   const fetchWeather = useCallback(async (lat, lon, cityHint = null) => {
+    // Check cache first
+    const cached = getCachedWeather(lat, lon);
+    if (cached) {
+      setCondition(cached.condition);
+      setTemp(cached.temp);
+      setLocName(cached.locName);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -48,9 +77,14 @@ export function WeatherProvider({ children }) {
         return;
       }
 
-      // Fetch weather with no-cache to get latest data
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=weather_code,temperature_2m&timezone=auto&cache=false`;
-      const res  = await fetch(url, { cache: 'no-store' });
+      // Fetch weather with short timeout (5 seconds max)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=weather_code,temperature_2m&timezone=auto`;
+        const res = await fetch(url, { signal: controller.signal, cache: 'default' });
+        clearTimeout(timeoutId);
 
       if (!res.ok) {
         setError("Weather service unavailable");
@@ -72,16 +106,34 @@ export function WeatherProvider({ children }) {
       setCondition(codeToCondition(code));
       setTemp(t !== null ? Math.round(t) : null);
 
-      if (cityHint) {
-        setLocName(cityHint);
-      } else {
-        try {
-          // Use reverse geocoding to get city name
-          const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&format=json`, { cache: 'no-store' });
-          const gd  = await geo.json();
-          const cityName = gd.address?.city || gd.address?.town || gd.address?.village || gd.address?.county || gd.address?.state || null;
-          setLocName(cityName);
-        } catch { /* city name optional */ }
+      const finalLocName = cityHint || "Current Location";
+      setLocName(finalLocName);
+
+      // Cache the weather data
+      setCachedWeather(lat, lon, {
+        condition: codeToCondition(code),
+        temp: t !== null ? Math.round(t) : null,
+        locName: finalLocName,
+      });
+
+      // Lazy load city name in background (don't block on this)
+      if (!cityHint) {
+        setTimeout(async () => {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
+            const geo = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&format=json`,
+              { signal: controller.signal, cache: 'default' }
+            );
+            clearTimeout(timeoutId);
+            if (geo.ok) {
+              const gd = await geo.json();
+              const cityName = gd.address?.city || gd.address?.town || gd.address?.village || gd.address?.county || gd.address?.state || null;
+              if (cityName) setLocName(cityName);
+            }
+          } catch { /* city name is optional */ }
+        }, 0);
       }
     } catch (err) {
       console.error("Weather fetch error:", err);
