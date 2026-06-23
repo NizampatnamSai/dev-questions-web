@@ -174,6 +174,9 @@ function AppInner() {
   });
   const [feedbackOpen, setFeedbackOpen] = useState(false);
 
+  // Performance optimization: disable weather effects during maintenance or force update
+  const isMaintenanceOrUpdate = appConfig.maintenance || appConfig.force_update;
+
   useEffect(() => {
     api.get("/admin/app-config/public")
       .then(({ data }) => setAppConfig(data))
@@ -229,20 +232,50 @@ function AppInner() {
 
   return (
     <>
-      <WeatherEffects />
+      {/* Disable weather effects during maintenance to save performance */}
+      {!isMaintenanceOrUpdate && <WeatherEffects />}
       <NotificationBanner />
-      {/* Force update banner — only on protected pages, not auth pages */}
+      {/* Force update banner — optimized for performance */}
       {user && !user.isGuest && appConfig.force_update && !isAdmin && !updateDismissed && (
-        <div className="fixed top-0 inset-x-0 z-[9998] bg-indigo-600 text-white px-4 py-2.5 flex items-center justify-between gap-3 shadow-lg">
+        <div className="fixed top-0 inset-x-0 z-[9998] bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3 shadow-lg">
           <div className="flex items-center gap-2 text-sm font-medium">
             <span>🚀</span>
-            <span>{appConfig.force_update_message || "A new version is available. Please refresh!"}</span>
+            <span>{appConfig.force_update_message || "A new version is available!"}</span>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <button onClick={() => window.location.reload()} className="text-xs bg-white text-indigo-600 font-bold px-3 py-1 rounded-full hover:bg-indigo-50 transition-colors">
-              Refresh Now
-            </button>
-            <button onClick={handleDismissUpdate} className="text-white/70 hover:text-white text-lg leading-none">×</button>
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Detect mobile and show APK download */}
+            {/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? (
+              <>
+                <a
+                  href="https://ai-devquiz.netlify.app/devquiz.apk"
+                  className="text-xs bg-white text-indigo-600 font-bold px-3 py-1 rounded-full hover:bg-indigo-50 transition-colors whitespace-nowrap"
+                  download="devquiz.apk"
+                >
+                  📱 Download APK
+                </a>
+                <button
+                  onClick={handleDismissUpdate}
+                  className="text-white/70 hover:text-white text-lg leading-none"
+                >
+                  ×
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs bg-white text-indigo-600 font-bold px-3 py-1 rounded-full hover:bg-indigo-50 transition-colors whitespace-nowrap"
+                >
+                  🔄 Refresh Now
+                </button>
+                <button
+                  onClick={handleDismissUpdate}
+                  className="text-white/70 hover:text-white text-lg leading-none"
+                >
+                  ×
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
