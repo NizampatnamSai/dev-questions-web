@@ -9,6 +9,7 @@ import GlobalSearch from "./components/GlobalSearch";
 import NotificationBell from "./components/NotificationBell";
 import UserMenu from "./components/UserMenu";
 import FeedbackModal from "./components/FeedbackModal";
+import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
@@ -300,8 +301,10 @@ function AppInner() {
 
 export default function App() {
   return (
-    <WeatherProvider>
-      <AppInner />
-    </WeatherProvider>
+    <ErrorBoundary>
+      <WeatherProvider>
+        <AppInner />
+      </WeatherProvider>
+    </ErrorBoundary>
   );
 }

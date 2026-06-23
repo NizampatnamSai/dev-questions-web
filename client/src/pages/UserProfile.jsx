@@ -52,7 +52,7 @@ export default function UserProfile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
+      <div className="flex items-center justify-center min-h-96">
         <div className="text-slate-400">Loading profile...</div>
       </div>
     );
