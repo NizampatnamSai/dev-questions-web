@@ -9,7 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule
 from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_community_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask
+from routers import challenge, workboard, ask, feedback
 
 app = FastAPI(title="DevQuiz API")
 
@@ -77,6 +77,7 @@ app.include_router(study.router,      prefix="/api/study")
 app.include_router(challenge.router,  prefix="/api/challenge")
 app.include_router(workboard.router,  prefix="/api/workboard")
 app.include_router(ask.router,        prefix="/api/ai")
+app.include_router(feedback.router,   prefix="/api/feedback")
 
 
 @app.get("/")

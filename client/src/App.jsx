@@ -8,6 +8,7 @@ import BottomNav from "./components/BottomNav";
 import GlobalSearch from "./components/GlobalSearch";
 import NotificationBell from "./components/NotificationBell";
 import UserMenu from "./components/UserMenu";
+import FeedbackModal from "./components/FeedbackModal";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
@@ -44,6 +45,7 @@ import MyAnswers from "./pages/MyAnswers";
 import Notifications from "./pages/Notifications";
 import Maintenance from "./pages/Maintenance";
 import JsonParser from "./pages/JsonParser";
+import AdminFeedback from "./pages/AdminFeedback";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -155,6 +157,7 @@ function AppInner() {
   const { theme } = useTheme();
   const [appConfig, setAppConfig] = useState({ maintenance: false, force_update: false });
   const [updateDismissed, setUpdateDismissed] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useEffect(() => {
     api.get("/admin/app-config/public")
@@ -242,6 +245,7 @@ function AppInner() {
         <Route path="/leaderboard"  element={<ProtectedPage path="/leaderboard"><Leaderboard /></ProtectedPage>} />
         <Route path="/guide"        element={<ProtectedPage path="/guide"><ProjectGuide /></ProtectedPage>} />
         <Route path="/admin"           element={<ProtectedPage path="/admin"><Admin /></ProtectedPage>} />
+        <Route path="/admin/feedback"  element={<ProtectedPage path="/admin/feedback"><AdminFeedback /></ProtectedPage>} />
         <Route path="/quiz"            element={<ProtectedPage path="/quiz"><Quiz /></ProtectedPage>} />
         <Route path="/study"           element={<ProtectedPage path="/study"><StudyGuide /></ProtectedPage>} />
         <Route path="/mock-interview"  element={<ProtectedPage path="/mock-interview"><MockInterview /></ProtectedPage>} />
@@ -254,6 +258,22 @@ function AppInner() {
         <Route path="/workboard"    element={<ProtectedPage path="/workboard"><WorkBoard /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
       </Routes>
+
+      {/* Feedback modal */}
+      <FeedbackModal open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
+
+      {/* Floating feedback button */}
+      {user && !user.isGuest && (
+        <motion.button
+          onClick={() => setFeedbackOpen(true)}
+          className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          title="Send feedback"
+        >
+          💭
+        </motion.button>
+      )}
     </>
   );
 }
