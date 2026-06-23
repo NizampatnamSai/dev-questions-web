@@ -926,6 +926,93 @@ function NotifyLogs({ logs, loading }) {
   );
 }
 
+function AppConfigPanel() {
+  const [config, setConfig] = useState({ maintenance: false, maintenance_message: "", force_update: false, force_update_message: "" });
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    api.get("/admin/app-config").then(({ data }) => setConfig(data)).catch(() => {});
+  }, []);
+
+  const save = async (patch) => {
+    setSaving(true);
+    try {
+      await api.put("/admin/app-config", patch);
+      setConfig(c => ({ ...c, ...patch }));
+      toast.success("Saved");
+    } catch { toast.error("Failed"); }
+    setSaving(false);
+  };
+
+  return (
+    <div className="glass-card p-6 space-y-6">
+      <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">⚙️ App Control</h2>
+
+      {/* Maintenance Mode */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">🔧 Maintenance Mode</p>
+            <p className="text-xs text-slate-400 mt-0.5">All users (except admins) will see a maintenance page. A push notification is sent when you turn it back on.</p>
+          </div>
+          <button
+            onClick={() => save({ maintenance: !config.maintenance, maintenance_message: config.maintenance_message })}
+            disabled={saving}
+            className={`relative w-12 h-6 rounded-full transition-colors ${config.maintenance ? "bg-red-500" : "bg-slate-300 dark:bg-slate-600"}`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.maintenance ? "translate-x-6" : ""}`} />
+          </button>
+        </div>
+        <textarea
+          value={config.maintenance_message}
+          onChange={e => setConfig(c => ({ ...c, maintenance_message: e.target.value }))}
+          onBlur={() => save({ maintenance_message: config.maintenance_message })}
+          placeholder="Maintenance message shown to users…"
+          rows={2}
+          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
+        />
+        {config.maintenance && (
+          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            ⚠️ Maintenance mode is ON — users cannot access the app
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Force Update */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">🚀 Force Update Banner</p>
+            <p className="text-xs text-slate-400 mt-0.5">Shows a banner on web and sends a push notification prompting users to refresh / update the app.</p>
+          </div>
+          <button
+            onClick={() => save({ force_update: !config.force_update, force_update_message: config.force_update_message })}
+            disabled={saving}
+            className={`relative w-12 h-6 rounded-full transition-colors ${config.force_update ? "bg-indigo-500" : "bg-slate-300 dark:bg-slate-600"}`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.force_update ? "translate-x-6" : ""}`} />
+          </button>
+        </div>
+        <textarea
+          value={config.force_update_message}
+          onChange={e => setConfig(c => ({ ...c, force_update_message: e.target.value }))}
+          onBlur={() => save({ force_update_message: config.force_update_message })}
+          placeholder="e.g. New content added! Please refresh to get the latest updates."
+          rows={2}
+          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
+        />
+        {config.force_update && (
+          <div className="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded-lg px-3 py-2">
+            🚀 Update banner is showing to all users
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
   const { user: me } = useAuth();
   const [users, setUsers] = useState([]);
@@ -953,6 +1040,24 @@ export default function Admin() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const [invalidUsers, setInvalidUsers] = useState([]);
+  const [invalidLoading, setInvalidLoading] = useState(false);
+  const [invalidDeleteTarget, setInvalidDeleteTarget] = useState(null);
+
+  const loadInvalidUsers = async () => {
+    setInvalidLoading(true);
+    try { const { data } = await api.get("/admin/users/invalid"); setInvalidUsers(data); }
+    catch {} finally { setInvalidLoading(false); }
+  };
+
+  const deleteInvalidUser = async (uid) => {
+    try {
+      await api.delete(`/admin/users/${uid}`);
+      setInvalidUsers(p => p.filter(u => u.id !== uid));
+      toast.success("User deleted");
+    } catch { toast.error("Failed to delete"); }
   };
 
   const [pendingUsers, setPendingUsers] = useState([]);
@@ -1243,6 +1348,38 @@ export default function Admin() {
         </div>
       </div>
 
+      {/* Invalid / Orphaned Users */}
+      <div className="glass-card p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">🧹 Invalid Users</h2>
+            <p className="text-xs text-slate-400 mt-0.5">Users with no name or invalid email (show as "Unknown" in Leaderboard)</p>
+          </div>
+          <button onClick={loadInvalidUsers} disabled={invalidLoading}
+            className="text-xs px-3 py-1.5 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 rounded-lg text-slate-600 dark:text-slate-300 transition-colors">
+            {invalidLoading ? "Loading…" : "🔍 Check Now"}
+          </button>
+        </div>
+        {invalidUsers.length > 0 ? (
+          <div className="space-y-2">
+            {invalidUsers.map(u => (
+              <div key={u.id} className="flex items-center justify-between px-4 py-2.5 bg-red-500/5 border border-red-500/20 rounded-xl">
+                <div>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{u.name}</p>
+                  <p className="text-xs text-slate-400">{u.email} · {u.role}</p>
+                </div>
+                <button onClick={() => setInvalidDeleteTarget(u)}
+                  className="text-xs px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg border border-red-500/30 transition-colors">
+                  🗑️ Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : invalidUsers.length === 0 && !invalidLoading ? (
+          <p className="text-xs text-slate-400 italic">Click "Check Now" to scan for invalid users.</p>
+        ) : null}
+      </div>
+
       {/* Community Posting Schedule */}
       <CommunityScheduleEditor users={users} />
 
@@ -1254,6 +1391,9 @@ export default function Admin() {
 
       {/* Notification Logs */}
       <NotifyLogs logs={logs} loading={logsLoading} />
+
+      {/* App Config */}
+      <AppConfigPanel />
 
       {/* Modals */}
       <AnimatePresence>
@@ -1283,6 +1423,15 @@ export default function Admin() {
         confirmLabel="Delete User"
         onConfirm={deleteUser}
         onCancel={() => setDeleteTarget(null)}
+      />
+
+      <ConfirmModal
+        open={!!invalidDeleteTarget}
+        title={`Delete "${invalidDeleteTarget?.name}"?`}
+        message={`Email: ${invalidDeleteTarget?.email}. This account will be permanently removed.`}
+        confirmLabel="Delete"
+        onConfirm={() => { deleteInvalidUser(invalidDeleteTarget.id); setInvalidDeleteTarget(null); }}
+        onCancel={() => setInvalidDeleteTarget(null)}
       />
 
       {/* Reject user modal */}

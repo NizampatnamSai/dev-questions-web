@@ -58,7 +58,12 @@ def _fallback_questions(category: str, level: str, count: int) -> list:
 
 # ── prompts ──────────────────────────────────────────────────────────────────
 
-def _gen_prompt(category: str, level: str, q_type: str, count: int) -> str:
+def _gen_prompt(category: str, level: str, q_type: str, count: int, existing: list[str] | None = None) -> str:
+    import random, time
+    # Random seed phrase injected into prompt forces different outputs each call
+    seed_words = ["unique", "fresh", "distinct", "novel", "original", "varied", "different", "new"]
+    seed = random.choice(seed_words) + f"-{int(time.time()) % 9999}"
+
     if q_type == "Coding":
         instruction = (
             "Each question must involve writing, reading, or debugging actual code.\n"
@@ -70,9 +75,18 @@ def _gen_prompt(category: str, level: str, q_type: str, count: int) -> str:
             "Each question should be conceptual/theory — no code-writing required.\n"
             "- The 'answer' should be a clear prose explanation.\n"
         )
+
+    avoid_block = ""
+    if existing:
+        avoid_block = "\nDo NOT generate any of these already-existing questions (avoid the same topic/wording):\n"
+        avoid_block += "\n".join(f"- {q}" for q in existing[:20])
+        avoid_block += "\n"
+
     return (
-        f"Generate {count} {level} level {category} interview questions for a frontend developer.\n"
-        f"Question type: {q_type}.\n{instruction}\n"
+        f"[{seed}] Generate {count} UNIQUE and DIVERSE {level} level {category} interview questions for a frontend developer.\n"
+        f"Question type: {q_type}.\n{instruction}"
+        f"{avoid_block}"
+        "Cover DIFFERENT sub-topics — do not repeat similar concepts.\n"
         "Return ONLY a raw JSON array (no markdown, no code fences):\n"
         '[{"question":"...","answer":"...","hints":["h1","h2"],"tags":["t1","t2"]}]'
     )
@@ -134,12 +148,14 @@ async def _groq_call(payload: dict) -> httpx.Response:
 
 
 async def _groq_generate(prompt: str, count: int, q_type: str) -> list:
+    import random
     r = await _groq_call({
         "messages": [
-            {"role": "system", "content": "Output only raw JSON arrays, no markdown, no commentary."},
+            {"role": "system", "content": "You are a creative interview question generator. Output ONLY a raw JSON array. Never repeat questions you've generated before. Vary topics, difficulty angles, and phrasing each time."},
             {"role": "user",   "content": prompt},
         ],
-        "temperature": 0.7,
+        "temperature": 1.0,
+        "top_p": 0.95,
     })
     content = r.json()["choices"][0]["message"]["content"]
     return _normalize(_extract_array(content), count, q_type)
@@ -229,8 +245,8 @@ async def _ollama_helper(prompt: str) -> str:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-async def generate_questions(category: str, level: str, q_type: str, count: int) -> dict:
-    prompt = _gen_prompt(category, level, q_type, count)
+async def generate_questions(category: str, level: str, q_type: str, count: int, existing: list[str] | None = None) -> dict:
+    prompt = _gen_prompt(category, level, q_type, count, existing)
     try:
         return {"source": "ollama", "questions": await _ollama_generate(prompt, count, q_type)}
     except Exception as e1:

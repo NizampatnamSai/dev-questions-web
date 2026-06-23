@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AnswerBlock from "./AnswerBlock";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import ConfirmModal from "./ConfirmModal";
 
 const CATEGORY_STYLES = {
   "HTML/CSS":     "bg-red-100  text-red-700  border-red-200  dark:bg-red-500/15   dark:text-red-300   dark:border-red-500/30",
@@ -28,6 +29,7 @@ function CommentsSection({ qid, onCommentCountChange }) {
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [posting, setPosting] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -89,7 +91,7 @@ function CommentsSection({ qid, onCommentCountChange }) {
                       {new Date(c.createdAt).toLocaleDateString()} {new Date(c.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                     {(user?.id === c.author?.id || user?.role === "admin" || user?.role === "sub_admin") && (
-                      <button onClick={() => del(c.id)} className="text-[10px] text-red-400 hover:text-red-500">✕</button>
+                      <button onClick={() => setDeleteTarget(c.id)} className="text-[10px] text-red-400 hover:text-red-500">✕</button>
                     )}
                   </div>
                 </div>
@@ -100,6 +102,14 @@ function CommentsSection({ qid, onCommentCountChange }) {
         </div>
       )}
 
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Delete comment?"
+        message="This comment will be permanently removed."
+        confirmLabel="Delete"
+        onConfirm={() => { del(deleteTarget); setDeleteTarget(null); }}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <form onSubmit={submit} className="flex gap-2 mt-2">
         <input
           value={text}

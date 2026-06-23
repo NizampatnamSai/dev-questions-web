@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
@@ -71,7 +72,7 @@ function UsageMeter({ usage }) {
 }
 
 // ─── Preview card ─────────────────────────────────────────────────────────────
-function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex, isPosting }) {
+function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex, isPosting, communityToday }) {
   return (
     <motion.div
       key={idx}
@@ -167,13 +168,40 @@ function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex, 
         >
           {isPosting === "draft" ? <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> : "💾"} Save Draft
         </button>
-        <button
-          onClick={() => onPost(idx, "published")}
-          disabled={!!isPosting}
-          className="ml-auto text-xs px-4 py-1.5 rounded-full bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400 disabled:opacity-60 flex items-center gap-1.5"
-        >
-          {isPosting === "published" ? <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> : "📤"} {isPosting === "published" ? "Posting…" : "Post to Community"}
-        </button>
+        {(() => {
+          const todayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()];
+          // Blocked when today has a specific assigned user and it's not the current user's scheduled day
+          const isBlocked = !!(communityToday?.allowed && communityToday?.allowedEmail && communityToday?.myDay !== todayName);
+
+          const postMsg = isBlocked
+            ? `Today is ${communityToday.allowedName}'s posting day.${communityToday.myDay ? ` You can post on ${communityToday.myDay}.` : " You're not scheduled this week."}`
+            : "";
+
+          return (
+            <div className="ml-auto relative group">
+              <button
+                onClick={() => {
+                  if (isBlocked) { toast(postMsg, { icon: "📅", duration: 4000 }); return; }
+                  onPost(idx, "published");
+                }}
+                disabled={!!isPosting}
+                className={`text-xs px-4 py-1.5 rounded-full font-semibold flex items-center gap-1.5 transition-colors ${
+                  isBlocked
+                    ? "bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
+                    : "bg-cyan-500 text-slate-900 hover:bg-cyan-400 disabled:opacity-60"
+                }`}
+              >
+                {isPosting === "published" ? <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> : "📤"}
+                {isPosting === "published" ? "Posting…" : "Post to Community"}
+              </button>
+              {isBlocked && (
+                <div className="absolute bottom-full right-0 mb-2 w-56 px-3 py-2 bg-slate-800 text-white text-[11px] rounded-xl shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 leading-snug">
+                  {postMsg}
+                </div>
+              )}
+            </div>
+          );
+        })()}
       </div>
     </motion.div>
   );
@@ -181,6 +209,7 @@ function PreviewCard({ q, idx, onUpdate, onPost, editingIndex, setEditingIndex, 
 
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function Generator() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState("ai"); // "ai" | "own" | "helper"
 
   // shared
@@ -207,9 +236,12 @@ export default function Generator() {
   const [helperResult, setHelperResult] = useState("");
   const [helperLoading, setHelperLoading] = useState(false);
 
+  const [communityToday, setCommunityToday] = useState(null);
+
   useEffect(() => {
     api.get("/questions/generate/usage").then(({ data }) => setUsage(data)).catch(() => {});
     api.get("/questions/daily-status").then(({ data }) => setDailyPost(data)).catch(() => {});
+    api.get("/questions/community-today").then(({ data }) => setCommunityToday(data)).catch(() => {});
   }, []);
 
   const syncUsage = (data) => {
@@ -287,7 +319,22 @@ export default function Generator() {
     try {
       const cat = category.length > 0 ? category[0] : CATEGORIES[0];
       await api.post("/questions", { category: cat, level, type, question: q.question, answer: q.answer, hints: q.hints, tags: q.tags, status });
-      toast.success(status === "draft" ? "Saved as draft" : "Posted to community!");
+      if (status === "draft") {
+        toast(
+          <div className="flex items-center gap-3">
+            <span>💾 Saved as draft</span>
+            <button
+              onClick={() => { toast.dismiss(); navigate("/drafts"); }}
+              className="text-xs font-semibold text-indigo-500 hover:underline whitespace-nowrap"
+            >
+              View Drafts →
+            </button>
+          </div>,
+          { duration: 5000 }
+        );
+      } else {
+        toast.success("Posted to community!");
+      }
       setQuestions((qs) => qs.filter((_, i) => i !== idx));
       api.get("/questions/daily-status").then(({ data }) => setDailyPost(data)).catch(() => {});
     } catch (err) {
@@ -333,11 +380,12 @@ export default function Generator() {
         </p>
       </div>
 
-      {/* Daily post limit banner */}
-      {!dailyPost && (
-        <div className="h-12 bg-slate-100 dark:bg-slate-800 rounded-xl animate-pulse" />
-      )}
-      {dailyPost && (
+      {/* Daily post limit banner — only show when user has posted today or is near/at limit, and it's their posting day */}
+      {dailyPost && (dailyPost.used > 0 || dailyPost.remaining === 0) && (() => {
+        const todayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()];
+        const isMyDay = !communityToday || !communityToday.allowedEmail || communityToday.myDay === todayName || communityToday.adminOnly;
+        return isMyDay;
+      })() && (
         <div className={`flex items-center gap-3 p-3 rounded-xl border text-sm ${
           dailyPost.remaining === 0
             ? "border-red-300/50 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400"
@@ -356,7 +404,7 @@ export default function Generator() {
       )}
 
       {/* Mode toggle */}
-      <div className="flex gap-1 p-1 rounded-xl bg-slate-200/70 dark:bg-white/5 w-fit flex-wrap">
+      <div className="flex gap-1 p-1 rounded-xl bg-slate-200/70 dark:bg-white/5 overflow-x-auto no-scrollbar w-full sm:w-fit">
         {[
           { key: "ai",     label: "🤖 AI Generate" },
           { key: "own",    label: "✍️ Write Your Own" },
@@ -573,6 +621,7 @@ export default function Generator() {
                 editingIndex={editingIndex}
                 setEditingIndex={setEditingIndex}
                 isPosting={posting[idx]}
+                communityToday={communityToday}
               />
             ))}
           </motion.div>

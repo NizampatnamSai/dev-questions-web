@@ -7,10 +7,13 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 
 const FEATURE_LINKS = [
+  { to: "/ask",                  icon: "🤖", label: "Ask AI",          sub: "Ask anything — Python, Claude…" },
+  { to: "/notifications",        icon: "🔔", label: "Notifications",   sub: "Alerts & study reminders" },
   { to: "/mock-interview",       icon: "🎯", label: "Mock Interview",  sub: "AI-scored interview simulation" },
   { to: "/flashcards",           icon: "🃏", label: "Flashcards",      sub: "Flip & swipe to review topics" },
   { to: "/progress",             icon: "📈", label: "My Progress",     sub: "Streak, weak areas & readiness" },
   { to: "/my-questions",         icon: "📝", label: "My Questions",    sub: "Questions you created" },
+  { to: "/drafts",               icon: "💾", label: "Drafts",           sub: "Saved — post when ready" },
   { to: "/bookmarks",            icon: "🔖", label: "Bookmarks",       sub: "Saved questions" },
   { to: "/leaderboard",          icon: "🏆", label: "Leaderboard",     sub: "Top contributors" },
   { to: "/js-compiler",          icon: "⚡", label: "JS Compiler",     sub: "Run JavaScript in browser" },

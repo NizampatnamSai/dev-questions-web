@@ -48,20 +48,33 @@ async def get_community_allowed_email() -> Optional[str]:
     schedule = await _load_community_schedule()
     return schedule.get(wd)
 
+DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 @router.get("/community-today")
-async def community_today(_user=Depends(current_user)):
-    """Returns who is allowed to post to community today."""
+async def community_today(user=Depends(current_user)):
+    """Returns who is allowed to post today + which day the current user is scheduled."""
     allowed_email = await get_community_allowed_email()
+    schedule = await _load_community_schedule()
+
+    # Find current user's scheduled day
+    user_email = user.get("email", "")
+    my_day = None
+    for wd, email in schedule.items():
+        if email and email.lower() == user_email.lower():
+            my_day = DAY_NAMES[wd]
+            break
+
     if allowed_email is None:
-        return {"allowed": False, "allowedEmail": None, "allowedName": None}
+        return {"allowed": False, "allowedEmail": None, "allowedName": None, "myDay": my_day}
     if allowed_email == "ADMIN_ONLY":
-        return {"allowed": True, "allowedEmail": None, "allowedName": "Admin", "adminOnly": True}
+        return {"allowed": True, "allowedEmail": None, "allowedName": "Admin", "adminOnly": True, "myDay": my_day}
     user_doc = await col_users().find_one({"email": allowed_email})
     return {
         "allowed": True,
         "allowedEmail": allowed_email,
         "allowedName": user_doc.get("name") if user_doc else allowed_email,
         "adminOnly": False,
+        "myDay": my_day,
     }
 
 CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"]
@@ -187,7 +200,13 @@ async def gen_questions(body: GenBody, user=Depends(current_user)):
     if body.level not in LEVELS: raise HTTPException(400, "Invalid level")
     if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
     if body.count not in [1,3,5,10]: raise HTTPException(400, "count must be 1, 3, 5, or 10")
-    result = await generate_questions(category, body.level, body.type, body.count)
+    # Fetch recent existing questions for this category+level to avoid duplicates
+    existing_docs = await col_questions().find(
+        {"category": category, "level": body.level},
+        {"question": 1}
+    ).sort("createdAt", -1).limit(30).to_list(30)
+    existing_titles = [d["question"][:80] for d in existing_docs]
+    result = await generate_questions(category, body.level, body.type, body.count, existing_titles)
     return result
 
 
@@ -297,6 +316,32 @@ async def mine(user=Depends(current_user)):
     return [_ser(d, user["id"]) for d in docs]
 
 
+@router.get("/mine/drafts")
+async def mine_drafts(user=Depends(current_user)):
+    cursor = col_questions().find({"userId": user["id"], "status": "draft"}).sort("createdAt", -1)
+    docs   = await cursor.to_list(length=200)
+    return [_ser(d, user["id"]) for d in docs]
+
+
+@router.patch("/{qid}/publish")
+async def publish_draft(qid: str, user=Depends(current_user)):
+    doc = await col_questions().find_one({"_id": oid(qid)})
+    if not doc: raise HTTPException(404, "Not found")
+    if doc["userId"] != user["id"]:
+        raise HTTPException(403, "Not allowed")
+    # Enforce community posting schedule
+    if user.get("role") not in ("admin", "sub_admin"):
+        allowed_email = await get_community_allowed_email()
+        user_email = user.get("email", "")
+        if allowed_email is None:
+            raise HTTPException(403, "Community is closed today — no posts scheduled.")
+        if allowed_email != "ADMIN_ONLY" and allowed_email.lower() != user_email.lower():
+            raise HTTPException(403, f"Today is not your posting day.")
+    await col_questions().update_one({"_id": oid(qid)}, {"$set": {"status": "published"}})
+    updated = await col_questions().find_one({"_id": oid(qid)})
+    return _ser(updated, user["id"])
+
+
 # ── Bookmarks ─────────────────────────────────────────────────────────────────
 
 @router.get("/bookmarks")
@@ -320,6 +365,7 @@ class CreateBody(BaseModel):
     status:   str  = "published"
 
 
+@router.post("", include_in_schema=True)
 @router.post("/")
 async def create(body: CreateBody, user=Depends(current_user)):
     body.category = resolve_category(body.category)

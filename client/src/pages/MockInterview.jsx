@@ -66,6 +66,10 @@ export default function MockInterview() {
     try {
       const category = categories.length === 1 ? categories[0] : categories.length > 1 ? categories.join(",") : "";
       const { data } = await api.post("/study/mock/start", { category, difficulty, count });
+      if (!data.questions || data.questions.length === 0) {
+        alert("No questions found for the selected filters. Try a different category or difficulty.");
+        return;
+      }
       setQuestions(data.questions);
       setAnswers({});
       setScores({});
@@ -209,6 +213,13 @@ export default function MockInterview() {
               <div className="flex items-center gap-3">
                 <span className="text-sm font-mono text-indigo-400">{formatTime(timer)}</span>
                 <button onClick={() => setPhase("results")} className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">End early</button>
+                <button
+                  onClick={() => { setPhase("setup"); setQuestions([]); setAnswers({}); setScores({}); setCurrent(0); setTimer(0); }}
+                  className="text-xs text-slate-400 hover:text-red-400 dark:hover:text-red-400 transition-colors"
+                  title="Restart from setup"
+                >
+                  ↺ Restart
+                </button>
               </div>
             </div>
 

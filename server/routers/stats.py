@@ -95,13 +95,24 @@ async def leaderboard():
     result = []
     for r in rows:
         uid  = r["_id"]
-        udoc = await col_users().find_one({"_id": __import__("bson").ObjectId(uid)}) if uid else None
-        role = udoc.get("role", "user") if udoc else "user"
+        if not uid:
+            continue
+        try:
+            udoc = await col_users().find_one({"_id": __import__("bson").ObjectId(uid)})
+        except Exception:
+            continue
+        if not udoc:
+            continue  # skip orphaned/deleted users
+        role = udoc.get("role", "user")
         if role in ("admin", "sub_admin"):
             continue
+        name = udoc.get("name", "").strip()
+        email = udoc.get("email", "").strip()
+        if not name or not email or "@" not in email:
+            continue  # skip users with no proper name/email
         result.append({
             "id":              uid,
-            "name":            udoc["name"] if udoc else "Unknown",
+            "name":            name,
             "upvotesReceived": r["upvotesReceived"],
             "questionsPosted": r["questionsPosted"],
         })

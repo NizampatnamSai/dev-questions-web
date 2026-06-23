@@ -6,7 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 import api from "../api/axios";
-import GlobalSearch from "./GlobalSearch";
+import ConfirmModal from "./ConfirmModal";
 
 const BASE_LINKS = [
   { to: "/dashboard",      label: "Dashboard",       icon: "📊" },
@@ -20,6 +20,7 @@ const BASE_LINKS = [
   { to: "/progress",       label: "My Progress",     icon: "📈" },
   { to: "/community",      label: "Community",       icon: "🌍" },
   { to: "/my-questions",   label: "My Questions",    icon: "📝" },
+  { to: "/drafts",         label: "Drafts",          icon: "💾" },
   { to: "/my-answers",     label: "My Answers",      icon: "✍️" },
   { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
   { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
@@ -27,6 +28,7 @@ const BASE_LINKS = [
   { to: "/study?tool=ts",      label: "TS Adder",       icon: "🔷", activeMatch: "/study?tool=ts" },
   { to: "/study?tool=errors",  label: "Error Finder",   icon: "🐛", activeMatch: "/study?tool=errors" },
   { to: "/study?tool=breaks",  label: "Break Finder",   icon: "💥", activeMatch: "/study?tool=breaks" },
+  { to: "/ask",                label: "Ask AI",         icon: "🤖" },
   { to: "/guide",              label: "Project Guide",  icon: "🗺️" },
   { to: "/notifications",      label: "Notifications",  icon: "🔔" },
 ];
@@ -50,6 +52,7 @@ function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
+  const [confirmLogout, setConfirmLogout] = useState(false);
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
   const {
     enabled, toggleEnabled,
@@ -61,20 +64,8 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const [stateSearch, setStateSearch] = useState("");
-  const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
-    if (!user || user.isGuest) return;
-    const fetch = () =>
-      api.get("/admin/notifications/my/unread-count")
-        .then(({ data }) => setUnreadCount(data.count || 0))
-        .catch(() => {});
-    fetch();
-    const timer = setInterval(fetch, 60000); // poll every 60s
-    return () => clearInterval(timer);
-  }, [user?.id]);
-
-  const GUEST_HIDDEN = ["/notifications", "/generate", "/my-questions", "/my-answers", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
+  const GUEST_HIDDEN = ["/notifications", "/generate", "/my-questions", "/drafts", "/my-answers", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
   const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK] : BASE_LINKS;
   const links = user?.isGuest ? allLinks.filter(l => !GUEST_HIDDEN.includes(l.to)) : allLinks;
 
@@ -103,22 +94,6 @@ export default function Sidebar() {
           <p className="text-base font-bold tracking-tight gradient-text">DevQuiz</p>
           <p className="text-[10px] text-slate-400 -mt-0.5">AI Interview Platform</p>
         </div>
-        {!user?.isGuest && (
-          <motion.button
-            onClick={() => { setUnreadCount(0); navigate("/notifications"); }}
-            className="relative p-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/8 transition-colors flex-shrink-0"
-            animate={unreadCount > 0 ? { rotate: [0, -12, 12, -8, 8, 0] } : {}}
-            transition={{ duration: 0.6, repeat: unreadCount > 0 ? Infinity : 0, repeatDelay: 3 }}
-            title="Notifications"
-          >
-            <span className="text-lg">🔔</span>
-            {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </motion.button>
-        )}
       </motion.div>
 
       {/* Nav */}
@@ -399,11 +374,19 @@ export default function Sidebar() {
             </p>
             <p className="text-[11px] text-slate-400 capitalize truncate">{user?.role}</p>
           </div>
-          <button onClick={logout} title="Logout" className="text-slate-300 hover:text-red-400 transition-colors text-lg">
+          <button onClick={() => setConfirmLogout(true)} title="Logout" className="text-slate-300 hover:text-red-400 transition-colors text-lg">
             ⎋
           </button>
         </motion.div>
       </div>
+      <ConfirmModal
+        open={confirmLogout}
+        title="Log out?"
+        message="You'll need to sign in again to access your account."
+        confirmLabel="Log Out"
+        onConfirm={() => { setConfirmLogout(false); logout(); }}
+        onCancel={() => setConfirmLogout(false)}
+      />
     </aside>
   );
 }

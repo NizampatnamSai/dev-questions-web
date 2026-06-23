@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
 import GlobalSearch from "./components/GlobalSearch";
+import NotificationBell from "./components/NotificationBell";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
@@ -23,6 +24,8 @@ import Dashboard from "./pages/Dashboard";
 import Generator from "./pages/Generator";
 import Community from "./pages/Community";
 import MyQuestions from "./pages/MyQuestions";
+import Drafts from "./pages/Drafts";
+import AskAI from "./pages/AskAI";
 import Bookmarks from "./pages/Bookmarks";
 import Leaderboard from "./pages/Leaderboard";
 import Admin from "./pages/Admin";
@@ -38,6 +41,7 @@ import JSChallenge from "./pages/JSChallenge";
 import WorkBoard from "./pages/WorkBoard";
 import MyAnswers from "./pages/MyAnswers";
 import Notifications from "./pages/Notifications";
+import Maintenance from "./pages/Maintenance";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -60,11 +64,20 @@ function AppLayout({ children }) {
       <div className="flex flex-1">
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Top bar — desktop only */}
-          <div className="hidden md:flex items-center justify-end px-8 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
+          {/* Top bar — desktop */}
+          <div className="hidden md:flex items-center justify-end gap-2 px-8 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
+            <GlobalSearch />
+            <NotificationBell />
+          </div>
+          {/* Top bar — mobile */}
+          <div className="md:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-30 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-black/5 dark:border-white/8">
+            <div className="flex items-center gap-2">
+              <img src="/logo192.png" alt="DevQuiz" className="w-7 h-7 rounded-lg" />
+              <span className="font-bold text-sm gradient-text">DevQuiz</span>
+            </div>
             <GlobalSearch />
           </div>
-          <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-5xl mx-auto w-full">
+          <main className="flex-1 p-4 md:p-8 pb-28 md:pb-8 max-w-5xl mx-auto w-full">
             {children}
           </main>
         </div>
@@ -126,16 +139,47 @@ function NotificationBanner() {
   return null;
 }
 
+function playNotificationSound() {
+  try {
+    const audio = new Audio("/notification.mp3");
+    audio.volume = 0.6;
+    audio.play().catch(() => {});
+  } catch {}
+}
+
 function AppInner() {
   const { user } = useAuth();
   const { theme } = useTheme();
+  const [appConfig, setAppConfig] = useState({ maintenance: false, force_update: false });
+  const [updateDismissed, setUpdateDismissed] = useState(false);
+
+  useEffect(() => {
+    api.get("/admin/app-config/public")
+      .then(({ data }) => setAppConfig(data))
+      .catch(() => {});
+  }, []);
+
+  const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
+
+  // Maintenance mode — block everyone except admins
+  if (appConfig.maintenance && !isAdmin) {
+    return <Maintenance message={appConfig.maintenance_message} />;
+  }
 
   // Show foreground FCM notifications as a toast (browser doesn't show them automatically when app is open)
   useEffect(() => {
     if (!user) return;
+
+    // Listen for PLAY_NOTIFICATION_SOUND from the service worker (background push while tab is open)
+    const swHandler = (event) => {
+      if (event.data?.type === "PLAY_NOTIFICATION_SOUND") playNotificationSound();
+    };
+    navigator.serviceWorker?.addEventListener("message", swHandler);
+
     const unsub = onForegroundMessage(({ notification, data }) => {
       const title = notification?.title ?? "DevQuiz";
       const body  = notification?.body  ?? "";
+      playNotificationSound();
       toast(
         <div className="flex items-start gap-2">
           <img src="/logo192.png" className="w-8 h-8 rounded-lg flex-shrink-0" alt="" />
@@ -147,7 +191,10 @@ function AppInner() {
         { duration: 6000, style: { padding: "10px 14px" } }
       );
     });
-    return () => unsub?.();
+    return () => {
+      unsub?.();
+      navigator.serviceWorker?.removeEventListener("message", swHandler);
+    };
   }, [user]);
 
   const toastStyle = theme === "dark"
@@ -158,6 +205,21 @@ function AppInner() {
     <>
       <WeatherEffects />
       <NotificationBanner />
+      {/* Force update banner */}
+      {appConfig.force_update && !isAdmin && !updateDismissed && (
+        <div className="fixed top-0 inset-x-0 z-[9998] bg-indigo-600 text-white px-4 py-2.5 flex items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <span>🚀</span>
+            <span>{appConfig.force_update_message || "A new version is available. Please refresh!"}</span>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button onClick={() => window.location.reload()} className="text-xs bg-white text-indigo-600 font-bold px-3 py-1 rounded-full hover:bg-indigo-50 transition-colors">
+              Refresh Now
+            </button>
+            <button onClick={() => setUpdateDismissed(true)} className="text-white/70 hover:text-white text-lg leading-none">×</button>
+          </div>
+        </div>
+      )}
       <Toaster
         position="top-right"
         toastOptions={{ style: toastStyle, borderRadius: "12px" }}
@@ -169,6 +231,8 @@ function AppInner() {
         <Route path="/generate"     element={<ProtectedPage path="/generate"><Generator /></ProtectedPage>} />
         <Route path="/community"    element={<ProtectedPage path="/community"><Community /></ProtectedPage>} />
         <Route path="/my-questions" element={<ProtectedPage path="/my-questions"><MyQuestions /></ProtectedPage>} />
+        <Route path="/drafts"       element={<ProtectedPage path="/drafts"><Drafts /></ProtectedPage>} />
+        <Route path="/ask"          element={<ProtectedPage path="/ask"><AskAI /></ProtectedPage>} />
         <Route path="/my-answers"     element={<ProtectedPage path="/my-answers"><MyAnswers /></ProtectedPage>} />
         <Route path="/notifications"  element={<ProtectedPage path="/notifications"><Notifications /></ProtectedPage>} />
         <Route path="/bookmarks"    element={<ProtectedPage path="/bookmarks"><Bookmarks /></ProtectedPage>} />

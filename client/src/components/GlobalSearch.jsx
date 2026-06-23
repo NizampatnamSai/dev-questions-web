@@ -19,6 +19,7 @@ const PAGES = [
   { to: "/leaderboard",       label: "Leaderboard",     icon: "🏆", keywords: "leaderboard ranking top" },
   { to: "/js-compiler",       label: "JS Compiler",     icon: "⚡", keywords: "compiler run javascript code" },
   { to: "/guide",             label: "Project Guide",   icon: "🗺️", keywords: "guide project roadmap" },
+  { to: "/ask",               label: "Ask AI",          icon: "🤖", keywords: "ask ai chat gpt claude python general query" },
   { to: "/notifications",     label: "Notifications",   icon: "🔔", keywords: "notifications alerts bell" },
   { to: "/admin",             label: "Admin Panel",     icon: "👑", keywords: "admin panel manage users" },
 ];
@@ -83,7 +84,7 @@ export default function GlobalSearch() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
               transition={{ duration: 0.15 }}
-              className="fixed top-[20%] left-1/2 -translate-x-1/2 w-full max-w-md z-50 px-4"
+              className="fixed top-[10%] sm:top-[20%] left-1/2 -translate-x-1/2 w-full max-w-md z-50 px-4"
             >
               <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden">
                 <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100 dark:border-white/10">

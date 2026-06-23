@@ -210,3 +210,6 @@ html.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
 html.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 /* Firefox */
 * { scrollbar-width: thin; scrollbar-color: rgba(148,163,184,0.25) transparent; }
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

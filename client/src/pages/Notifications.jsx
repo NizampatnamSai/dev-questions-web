@@ -46,6 +46,11 @@ export default function Notifications() {
     setItems(prev => prev.map(n => ({ ...n, read: true })));
   };
 
+  const markOneRead = async (id) => {
+    await api.patch(`/admin/notifications/my/${id}/read`).catch(() => {});
+    setItems(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
   const unread = items.filter(n => !n.read).length;
 
   return (
@@ -105,7 +110,15 @@ export default function Notifications() {
                     <p className="text-[10px] text-slate-400 mt-1">From: {n.sentByName}</p>
                   )}
                 </div>
-                {!n.read && <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0 mt-1.5" />}
+                {!n.read && (
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5" />
+                    <button onClick={() => markOneRead(n.id)}
+                      className="text-[10px] px-2 py-0.5 rounded-full border border-indigo-300/40 text-indigo-400 hover:bg-indigo-500/10 transition-colors whitespace-nowrap">
+                      Mark read
+                    </button>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

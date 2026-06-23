@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from db_mongo import col_users, col_fcm_tokens, col_notifications, col_notify_schedules, col_community_schedule, col_user_notifications, sid, oid, now
+from db_mongo import col_users, col_fcm_tokens, col_notifications, col_notify_schedules, col_community_schedule, col_user_notifications, col_app_config, sid, oid, now
 from deps import current_user
 from utils.firebase import send_to_tokens
 
@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 def _require_admin(user=Depends(current_user)):
-    if user.get("role") != "admin":
+    if user.get("role") not in ("admin", "sub_admin"):
         raise HTTPException(403, "Admin only")
     return user
 
@@ -527,7 +527,125 @@ async def mark_all_read(user=Depends(current_user)):
     return {"ok": True}
 
 
+@router.patch("/notifications/my/{notif_id}/read")
+async def mark_one_read(notif_id: str, user=Depends(current_user)):
+    from bson import ObjectId
+    await col_user_notifications().update_one(
+        {"_id": ObjectId(notif_id), "userId": user["id"]},
+        {"$set": {"read": True}}
+    )
+    return {"ok": True}
+
+
 @router.get("/notifications/my/unread-count")
 async def unread_count(user=Depends(current_user)):
     count = await col_user_notifications().count_documents({"userId": user["id"], "read": False})
     return {"count": count}
+
+
+# ── App Config (maintenance / force update) ───────────────────────────────────
+
+class AppConfigBody(BaseModel):
+    maintenance: Optional[bool] = None
+    maintenance_message: Optional[str] = None
+    force_update: Optional[bool] = None
+    force_update_message: Optional[str] = None
+
+
+@router.get("/app-config/public")
+async def get_app_config_public():
+    """Public endpoint — called by frontend on every load to check maintenance/update state."""
+    doc = await col_app_config().find_one({"_id": "config"})
+    if not doc:
+        return {"maintenance": False, "force_update": False}
+    return {
+        "maintenance":          doc.get("maintenance", False),
+        "maintenance_message":  doc.get("maintenance_message", "We're currently performing maintenance. We'll be back shortly!"),
+        "force_update":         doc.get("force_update", False),
+        "force_update_message": doc.get("force_update_message", "A new version is available. Please refresh to get the latest updates!"),
+    }
+
+
+@router.get("/app-config")
+async def get_app_config(admin=Depends(_require_admin)):
+    doc = await col_app_config().find_one({"_id": "config"})
+    if not doc:
+        return {"maintenance": False, "maintenance_message": "", "force_update": False, "force_update_message": ""}
+    doc.pop("_id", None)
+    return doc
+
+
+@router.put("/app-config")
+async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
+    doc = await col_app_config().find_one({"_id": "config"}) or {}
+    was_maintenance = doc.get("maintenance", False)
+
+    update = {}
+    if body.maintenance is not None:
+        update["maintenance"] = body.maintenance
+    if body.maintenance_message is not None:
+        update["maintenance_message"] = body.maintenance_message
+    if body.force_update is not None:
+        update["force_update"] = body.force_update
+    if body.force_update_message is not None:
+        update["force_update_message"] = body.force_update_message
+
+    await col_app_config().update_one(
+        {"_id": "config"},
+        {"$set": update},
+        upsert=True,
+    )
+
+    # If maintenance just turned OFF → notify all users
+    if was_maintenance and body.maintenance is False:
+        all_tokens = await col_fcm_tokens().find({}).to_list(1000)
+        tokens = list({t["token"] for t in all_tokens})
+        if tokens:
+            await send_to_tokens(tokens,
+                title="✅ We're back online!",
+                body="Maintenance is complete. DevQuiz is ready to use!",
+                data={"type": "broadcast", "path": "/dashboard"},
+            )
+
+    # If force_update just turned ON → notify all users with custom message
+    if body.force_update is True and not doc.get("force_update", False):
+        msg = body.force_update_message or update.get("force_update_message") or "A new version is available. Please refresh!"
+        all_tokens = await col_fcm_tokens().find({}).to_list(1000)
+        tokens = list({t["token"] for t in all_tokens})
+        if tokens:
+            await send_to_tokens(tokens,
+                title="🚀 Update Available!",
+                body=msg,
+                data={"type": "broadcast", "path": "/dashboard"},
+            )
+
+    return {"ok": True}
+
+
+# ── User cleanup ──────────────────────────────────────────────────────────────
+
+@router.get("/users/invalid")
+async def list_invalid_users(admin=Depends(_require_admin)):
+    """Returns users with no name, no email, or invalid email."""
+    docs = await col_users().find({}).to_list(500)
+    invalid = []
+    for d in docs:
+        name  = (d.get("name") or "").strip()
+        email = (d.get("email") or "").strip()
+        if not name or not email or "@" not in email:
+            invalid.append({
+                "id":    str(d["_id"]),
+                "name":  name or "(no name)",
+                "email": email or "(no email)",
+                "role":  d.get("role", "user"),
+            })
+    return invalid
+
+
+@router.delete("/users/{uid}")
+async def delete_user(uid: str, admin=Depends(_require_admin)):
+    from bson import ObjectId
+    result = await col_users().delete_one({"_id": ObjectId(uid)})
+    if result.deleted_count == 0:
+        raise HTTPException(404, "User not found")
+    return {"ok": True, "deleted": uid}

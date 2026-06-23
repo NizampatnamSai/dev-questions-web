@@ -56,21 +56,36 @@ async def send_to_tokens(tokens: list[str], title: str, body: str, data: dict | 
         return 0
     try:
         from firebase_admin import messaging
+        link = "/" + str((data or {}).get("path", "/")).lstrip("/")
         msgs = [
             messaging.Message(
                 notification=messaging.Notification(title=title, body=body),
                 data={k: str(v) for k, v in (data or {}).items()},
                 android=messaging.AndroidConfig(
                     channel_id="devquiz_default",
+                    priority="high",
                     notification=messaging.AndroidNotification(
                         sound="notification_sound",
                         channel_id="devquiz_default",
+                        icon="ic_launcher",
                     ),
                 ),
                 apns=messaging.APNSConfig(
+                    headers={"apns-priority": "10"},
                     payload=messaging.APNSPayload(
                         aps=messaging.Aps(sound="notification_sound.mp3"),
                     ),
+                ),
+                webpush=messaging.WebpushConfig(
+                    headers={"Urgency": "high"},
+                    notification=messaging.WebpushNotification(
+                        title=title,
+                        body=body,
+                        icon="/logo192.png",
+                        badge="/logo192.png",
+                        vibrate=[200, 100, 200],
+                    ),
+                    fcm_options=messaging.WebpushFCMOptions(link=link),
                 ),
                 token=token,
             )

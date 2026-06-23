@@ -267,9 +267,13 @@ async def mock_start(req: MockStartReq, user=Depends(current_user)):
         cats = [c.strip() for c in req.category.split(",") if c.strip()]
         if cats:
             pool = [t for t in pool if t["category"] in cats]
-    if req.difficulty:
-        pool = [t for t in pool if t["difficulty"] == req.difficulty]
+    if req.difficulty and pool:
+        filtered = [t for t in pool if t["difficulty"] == req.difficulty]
+        # Fall back to full category pool if difficulty yields nothing
+        pool = filtered if filtered else pool
     count = max(3, min(req.count, 15))
+    if not pool:
+        return {"questions": [], "total": 0, "warning": "No questions found for the selected filters."}
     selected = random.sample(pool, min(count, len(pool)))
     questions = [
         {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios";
 import { STUDY_TOPICS, STUDY_CATEGORIES } from "../data/studyGuide";
 
@@ -94,8 +95,11 @@ export default function Flashcards() {
     let pool = categories.length === 0 ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => categories.includes(t.category));
     if (reviewOnlyMode) pool = pool.filter((t) => progress[t.id] === "review");
     if (pool.length === 0 && reviewOnlyMode) {
-      pool = categories.length === 0 ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => categories.includes(t.category));
-      alert("No cards marked 'Need Review' in this category — showing all cards instead.");
+      toast("No cards marked 'Need Review' in this category. Mark some cards first!", {
+        icon: "🔄",
+        duration: 4000,
+      });
+      return;
     }
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     setDeck(shuffled);

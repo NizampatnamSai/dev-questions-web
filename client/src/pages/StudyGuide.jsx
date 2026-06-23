@@ -144,8 +144,9 @@ function AiPanel({ topic, onClose }) {
   );
 }
 
-function TopicCard({ topic, reviewed, onToggle }) {
-  const [open, setOpen]     = useState(false);
+function TopicCard({ topic, reviewed, onToggle, openId, setOpenId }) {
+  const open = openId === topic.id;
+  const setOpen = (val) => setOpenId(val ? topic.id : null);
   const [tab, setTab]       = useState("explanation");
   const [showAi, setShowAi] = useState(false);
   const { user } = useAuth();
@@ -540,6 +541,7 @@ export default function StudyGuide() {
   const [activeDiff, setActiveDiff] = useState("All");
   const [search, setSearch]         = useState("");
   const [reviewed, setReviewed]     = useState(loadReviewed);
+  const [openId, setOpenId]         = useState(null);
 
   const toggleReview = id => setReviewed(prev => {
     const next = new Set(prev);
@@ -550,6 +552,10 @@ export default function StudyGuide() {
 
   const cat      = STUDY_CATEGORIES.find(c => c.id === activeCat);
   const allInCat = STUDY_TOPICS.filter(t => t.category === activeCat);
+
+  // Close open card when switching category or filters
+  const handleCatChange = (id) => { setActiveCat(id); setOpenId(null); };
+  const handleDiffChange = (d) => { setActiveDiff(d); setOpenId(null); };
 
   const filtered = useMemo(() => allInCat.filter(t => {
     if (activeDiff !== "All" && t.difficulty !== activeDiff) return false;
@@ -576,7 +582,7 @@ export default function StudyGuide() {
       {/* Category tabs */}
       <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
         {STUDY_CATEGORIES.map(c => (
-          <button key={c.id} onClick={() => { setActiveCat(c.id); setSearch(""); setActiveDiff("All"); }}
+          <button key={c.id} onClick={() => { handleCatChange(c.id); setSearch(""); setActiveDiff("All"); }}
             className={`flex-shrink-0 text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${activeCat===c.id?"text-white border-transparent":"bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"}`}
             style={activeCat===c.id?{background:c.color==="#ffffff"?"#334155":c.color}:{}}
           >{c.icon} {c.label}</button>
@@ -615,7 +621,7 @@ export default function StudyGuide() {
         />
         <div className="flex gap-1.5 flex-wrap">
           {["All","Basic","Intermediate","Advanced","Tricky"].map(d => (
-            <button key={d} onClick={() => setActiveDiff(d)}
+            <button key={d} onClick={() => handleDiffChange(d)}
               className={`text-xs px-3 py-1.5 rounded-full font-medium border transition-colors whitespace-nowrap ${activeDiff===d?"bg-indigo-600 text-white border-indigo-600":"border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-indigo-400"}`}
             >{d}</button>
           ))}
@@ -629,7 +635,7 @@ export default function StudyGuide() {
 
       <div className="space-y-2">
         {filtered.map(t => (
-          <TopicCard key={t.id} topic={t} reviewed={reviewed.has(t.id)} onToggle={toggleReview} />
+          <TopicCard key={t.id} topic={t} reviewed={reviewed.has(t.id)} onToggle={toggleReview} openId={openId} setOpenId={setOpenId} />
         ))}
         {filtered.length===0 && (
           <div className="text-center py-16 text-slate-400">

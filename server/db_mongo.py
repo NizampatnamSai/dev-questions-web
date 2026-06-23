@@ -44,6 +44,7 @@ def col_workboard_posts():      return mdb()["workboard_posts"]
 def col_community_schedule():   return mdb()["community_schedule"]
 def col_user_answers():         return mdb()["user_answers"]
 def col_user_notifications():   return mdb()["user_notifications"]
+def col_app_config():           return mdb()["app_config"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
