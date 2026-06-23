@@ -200,16 +200,16 @@ export default function WorkBoard() {
     <div className="max-w-2xl space-y-5">
       {/* Header */}
       <div className="glass-card p-5">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="text-3xl">📋</div>
-            <div>
+            <div className="min-w-0">
               <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Daily Work Board</h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">Mon–Sat standups · 9:30 AM reminder · 30-min edit window</p>
             </div>
           </div>
           {activeUsers.length > 0 && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 flex-shrink-0">
               <span className="text-xs font-semibold text-green-600 dark:text-green-400">👥 {activeUsers.length} online</span>
             </div>
           )}

@@ -40,7 +40,7 @@ export default function UserMenu() {
                 initial={{ opacity: 0, scale: 0.95, y: -8 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                className="absolute top-full right-0 mt-2 w-56 glass rounded-2xl shadow-lg z-50 overflow-hidden"
+                className="absolute top-full right-0 mt-2 w-56 sm:w-64 glass rounded-2xl shadow-lg z-50 overflow-hidden"
               >
                 <div className="p-4 space-y-3">
                   <div className="flex items-center gap-3">
