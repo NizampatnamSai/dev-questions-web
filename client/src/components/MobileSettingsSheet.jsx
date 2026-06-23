@@ -17,6 +17,7 @@ const FEATURE_LINKS = [
   { to: "/bookmarks",            icon: "🔖", label: "Bookmarks",       sub: "Saved questions" },
   { to: "/leaderboard",          icon: "🏆", label: "Leaderboard",     sub: "Top contributors" },
   { to: "/js-compiler",          icon: "⚡", label: "JS Compiler",     sub: "Run JavaScript in browser" },
+  { to: "/json-parser",          icon: "🔍", label: "JSON Parser",     sub: "Format, minify & validate JSON" },
   { to: "/study?tool=ts",        icon: "🔷", label: "TS Adder",        sub: "Add TypeScript types to JS" },
   { to: "/study?tool=errors",    icon: "🐛", label: "Error Finder",    sub: "Find bugs in your code" },
   { to: "/study?tool=breaks",    icon: "💥", label: "Break Finder",    sub: "Spot runtime risks" },

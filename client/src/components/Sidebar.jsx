@@ -25,6 +25,7 @@ const BASE_LINKS = [
   { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
   { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
   { to: "/js-compiler",         label: "JS Compiler",    icon: "⚡" },
+  { to: "/json-parser",        label: "JSON Parser",    icon: "🔍" },
   { to: "/study?tool=ts",      label: "TS Adder",       icon: "🔷", activeMatch: "/study?tool=ts" },
   { to: "/study?tool=errors",  label: "Error Finder",   icon: "🐛", activeMatch: "/study?tool=errors" },
   { to: "/study?tool=breaks",  label: "Break Finder",   icon: "💥", activeMatch: "/study?tool=breaks" },

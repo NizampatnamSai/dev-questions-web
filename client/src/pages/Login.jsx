@@ -22,13 +22,20 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     if (loading) return;
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
     setLoading(true);
     try {
       await login(email, password);
       toast.success("Welcome back!", { id: "welcome" });
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.detail || err.response?.data?.message || "Login failed");
+      const detail = err.response?.data?.detail || err.response?.data?.message;
+      const message = detail || (err.message === "Network Error" ? "Network error — check your connection" : "Login failed — please try again");
+      toast.error(message, { duration: 5000 });
+      console.error("Login error:", err.message, err.response?.status);
     } finally {
       setLoading(false);
     }

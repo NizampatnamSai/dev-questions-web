@@ -137,21 +137,33 @@ export default function Community() {
   , []);
 
   const toggleUpvote   = useCallback(async (q) => {
+    if (user?.isGuest) {
+      toast.error("Create an account to upvote questions", { icon: "🔒" });
+      return;
+    }
     try { const { data } = await api.post(`/questions/${q.id}/upvote`);   updateQ(data); }
-    catch { toast.error("Please log in to upvote"); }
-  }, [updateQ]);
+    catch (err) { toast.error(err.response?.data?.detail || "Failed to upvote"); }
+  }, [updateQ, user]);
 
   const toggleBookmark = useCallback(async (q) => {
+    if (user?.isGuest) {
+      toast.error("Create an account to bookmark questions", { icon: "🔒" });
+      return;
+    }
     try {
       const { data } = await api.post(`/questions/${q.id}/bookmark`); updateQ(data);
       toast.success(data.isBookmarked ? "Saved to bookmarks" : "Removed from bookmarks");
-    } catch { toast.error("Please log in to bookmark"); }
-  }, [updateQ]);
+    } catch (err) { toast.error(err.response?.data?.detail || "Failed to bookmark"); }
+  }, [updateQ, user]);
 
   const toggleHighlight = useCallback(async (q) => {
+    if (user?.isGuest) {
+      toast.error("Create an account to highlight questions", { icon: "🔒" });
+      return;
+    }
     try { const { data } = await api.post(`/questions/${q.id}/highlight`); updateQ(data); }
-    catch { toast.error("Please log in to highlight"); }
-  }, [updateQ]);
+    catch (err) { toast.error(err.response?.data?.detail || "Failed to highlight"); }
+  }, [updateQ, user]);
 
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 

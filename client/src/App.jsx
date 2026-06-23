@@ -43,6 +43,7 @@ import WorkBoard from "./pages/WorkBoard";
 import MyAnswers from "./pages/MyAnswers";
 import Notifications from "./pages/Notifications";
 import Maintenance from "./pages/Maintenance";
+import JsonParser from "./pages/JsonParser";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -248,6 +249,7 @@ function AppInner() {
         <Route path="/progress"        element={<ProtectedPage path="/progress"><Progress /></ProtectedPage>} />
         <Route path="/question/:id"    element={<ProtectedPage path="/question"><QuestionDetail /></ProtectedPage>} />
         <Route path="/js-compiler"  element={<ProtectedPage path="/js-compiler"><JsCompiler /></ProtectedPage>} />
+        <Route path="/json-parser"  element={<ProtectedPage path="/json-parser"><JsonParser /></ProtectedPage>} />
         <Route path="/challenge"    element={<ProtectedPage path="/challenge"><JSChallenge /></ProtectedPage>} />
         <Route path="/workboard"    element={<ProtectedPage path="/workboard"><WorkBoard /></ProtectedPage>} />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />

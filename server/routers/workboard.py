@@ -23,32 +23,45 @@ def ist_today() -> str:
 
 class ConnectionManager:
     def __init__(self):
-        self.active: list[WebSocket] = []
+        self.active: dict = {}  # {ws: user_info}
 
-    async def connect(self, ws: WebSocket):
+    async def connect(self, ws: WebSocket, user_info: dict):
         await ws.accept()
-        self.active.append(ws)
+        self.active[ws] = user_info
 
     def disconnect(self, ws: WebSocket):
-        self.active.remove(ws)
+        self.active.pop(ws, None)
 
     async def broadcast(self, data: dict):
         dead = []
-        for ws in self.active:
+        for ws in list(self.active.keys()):
             try:
                 await ws.send_json(data)
             except Exception:
                 dead.append(ws)
         for ws in dead:
-            self.active.remove(ws)
+            self.disconnect(ws)
+
+    def get_active_users(self):
+        """Returns list of active users, deduped by userId"""
+        users_map = {}
+        for user_info in self.active.values():
+            uid = user_info.get("id")
+            if uid and uid not in users_map:
+                users_map[uid] = {
+                    "id": uid,
+                    "name": user_info.get("name", "Unknown"),
+                }
+        return list(users_map.values())
 
 
 manager = ConnectionManager()
 
 
 @router.websocket("/ws")
-async def workboard_ws(ws: WebSocket):
-    await manager.connect(ws)
+async def workboard_ws(ws: WebSocket, user_id: str = None, user_name: str = None):
+    user_info = {"id": user_id or "anonymous", "name": user_name or "Guest"}
+    await manager.connect(ws, user_info)
     try:
         while True:
             await ws.receive_text()  # keep alive
@@ -70,6 +83,12 @@ async def my_status(user=Depends(current_user)):
     if not member:
         return {"status": "none"}
     return {"status": member.get("status", "pending")}
+
+
+@router.get("/active-users")
+async def get_active_users(user=Depends(current_user)):
+    """Returns list of currently active users viewing the workboard"""
+    return manager.get_active_users()
 
 
 @router.post("/join")

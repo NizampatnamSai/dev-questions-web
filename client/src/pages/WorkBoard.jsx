@@ -32,6 +32,7 @@ export default function WorkBoard() {
   const [pendingMembers, setPending] = useState([]);
   const [exportDate, setExportDate] = useState("");
   const [joining, setJoining] = useState(false);
+  const [activeUsers, setActiveUsers] = useState([]);
   const wsRef = useRef(null);
   const bottomRef = useRef(null);
 
@@ -39,8 +40,22 @@ export default function WorkBoard() {
 
   useEffect(() => {
     loadStatus();
-    return () => wsRef.current?.close();
+    loadActiveUsers();
+    const timer = setInterval(loadActiveUsers, 10000);
+    return () => {
+      clearInterval(timer);
+      wsRef.current?.close();
+    };
   }, []);
+
+  const loadActiveUsers = async () => {
+    try {
+      const { data } = await api.get("/workboard/active-users");
+      setActiveUsers(data || []);
+    } catch {
+      // silently fail
+    }
+  };
 
   const loadStatus = async () => {
     setLoading(true);
@@ -70,7 +85,9 @@ export default function WorkBoard() {
 
   const connectWS = () => {
     const token = localStorage.getItem("devquiz_token");
-    const ws = new WebSocket(`${WS_BASE}/api/workboard/ws`);
+    const userId = encodeURIComponent(user?.id || "");
+    const userName = encodeURIComponent(user?.name || "");
+    const ws = new WebSocket(`${WS_BASE}/api/workboard/ws?user_id=${userId}&user_name=${userName}`);
     ws.onmessage = (e) => {
       try {
         const { type, post } = JSON.parse(e.data);
@@ -183,14 +200,38 @@ export default function WorkBoard() {
     <div className="max-w-2xl space-y-5">
       {/* Header */}
       <div className="glass-card p-5">
-        <div className="flex items-center gap-3">
-          <div className="text-3xl">📋</div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Daily Work Board</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Mon–Sat standups · 9:30 AM reminder · 30-min edit window</p>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="text-3xl">📋</div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Daily Work Board</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Mon–Sat standups · 9:30 AM reminder · 30-min edit window</p>
+            </div>
           </div>
+          {activeUsers.length > 0 && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20">
+              <span className="text-xs font-semibold text-green-600 dark:text-green-400">👥 {activeUsers.length} online</span>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Active users list */}
+      {activeUsers.length > 0 && (
+        <div className="glass-card p-4 space-y-2">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Currently Viewing</p>
+          <div className="flex flex-wrap gap-2">
+            {activeUsers.map(user => (
+              <div key={user.id} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
+                <div className="w-6 h-6 rounded-full bg-indigo-200 dark:bg-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                  {user.name?.[0]?.toUpperCase()}
+                </div>
+                <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">{user.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Admin: pending join requests */}
       {isAdmin && pendingMembers.length > 0 && (

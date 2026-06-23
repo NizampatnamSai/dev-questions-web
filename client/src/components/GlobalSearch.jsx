@@ -18,6 +18,7 @@ const PAGES = [
   { to: "/bookmarks",         label: "Bookmarks",       icon: "🔖", keywords: "bookmarks saved" },
   { to: "/leaderboard",       label: "Leaderboard",     icon: "🏆", keywords: "leaderboard ranking top" },
   { to: "/js-compiler",       label: "JS Compiler",     icon: "⚡", keywords: "compiler run javascript code" },
+  { to: "/json-parser",       label: "JSON Parser",     icon: "🔍", keywords: "json parser formatter minify validate" },
   { to: "/guide",             label: "Project Guide",   icon: "🗺️", keywords: "guide project roadmap" },
   { to: "/ask",               label: "Ask AI",          icon: "🤖", keywords: "ask ai chat gpt claude python general query" },
   { to: "/notifications",     label: "Notifications",   icon: "🔔", keywords: "notifications alerts bell" },
