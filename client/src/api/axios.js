@@ -25,7 +25,9 @@ api.interceptors.response.use(
   (res) => res,
   (err) => {
     const status = err.response?.status;
-    if (status === 401) {
+    const url = err.config?.url || "";
+    const isAuthCall = url.includes("/auth/login") || url.includes("/auth/register") || url.includes("/auth/registration-status");
+    if (status === 401 && !isAuthCall) {
       localStorage.removeItem("devquiz_token");
       localStorage.removeItem("devquiz_user");
       window.location.href = "/login";

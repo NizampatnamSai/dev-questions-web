@@ -10,12 +10,25 @@ const TYPE_COLORS = {
   other: "bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300",
 };
 
-function FeedbackCard({ feedback, onRead, onDelete }) {
+function FeedbackCard({ feedback, onRead, onDelete, onReply }) {
+  const [replying, setReplying] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const sendReply = async () => {
+    if (!replyText.trim()) return;
+    setSending(true);
+    await onReply(feedback.id, replyText.trim());
+    setSending(false);
+    setReplyText("");
+    setReplying(false);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`glass-card p-5 space-y-3 ${feedback.read ? "opacity-60" : ""}`}
+      className={`glass-card p-5 space-y-3 ${feedback.read && !replying ? "opacity-70" : ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
@@ -48,6 +61,12 @@ function FeedbackCard({ feedback, onRead, onDelete }) {
             </button>
           )}
           <button
+            onClick={() => setReplying(v => !v)}
+            className="px-2 py-1 rounded-lg text-xs font-medium bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-500/30 transition-colors"
+          >
+            {replying ? "Cancel" : "↩ Reply"}
+          </button>
+          <button
             onClick={() => onDelete(feedback.id)}
             className="px-2 py-1 rounded-lg text-xs font-medium bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 transition-colors"
           >
@@ -55,6 +74,53 @@ function FeedbackCard({ feedback, onRead, onDelete }) {
           </button>
         </div>
       </div>
+
+      {/* Existing reply */}
+      {feedback.reply && (
+        <div className="mt-2 border-l-2 border-emerald-500 pl-3 bg-emerald-50 dark:bg-emerald-500/5 rounded-r-lg py-2">
+          <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mb-1">
+            ↩ {feedback.replyBy} replied
+          </p>
+          <p className="text-sm text-slate-700 dark:text-slate-300">{feedback.reply}</p>
+        </div>
+      )}
+
+      {/* Reply input */}
+      <AnimatePresence>
+        {replying && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="pt-3 border-t border-slate-200 dark:border-white/10 space-y-2">
+              <p className="text-xs text-slate-500">
+                Replying to <span className="font-semibold text-slate-700 dark:text-slate-300">{feedback.userName}</span> — they'll get an in-app notification + push
+              </p>
+              <textarea
+                value={replyText}
+                onChange={e => setReplyText(e.target.value)}
+                placeholder="Type your reply..."
+                rows={3}
+                maxLength={500}
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              />
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-400">{replyText.length}/500</span>
+                <button
+                  onClick={sendReply}
+                  disabled={sending || !replyText.trim()}
+                  className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold disabled:opacity-50 transition-colors flex items-center gap-2"
+                >
+                  {sending && <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
+                  {sending ? "Sending…" : "Send Reply"}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -97,6 +163,16 @@ export default function AdminFeedback() {
       toast.success("Deleted");
     } catch {
       toast.error("Failed to delete");
+    }
+  };
+
+  const handleReply = async (id, message) => {
+    try {
+      await api.post(`/feedback/admin/${id}/reply`, { message });
+      setFeedback(f => f.map(item => item.id === id ? { ...item, reply: message, read: true } : item));
+      toast.success("Reply sent to user!");
+    } catch {
+      toast.error("Failed to send reply");
     }
   };
 
@@ -163,6 +239,7 @@ export default function AdminFeedback() {
                 feedback={f}
                 onRead={handleRead}
                 onDelete={handleDelete}
+                onReply={handleReply}
               />
             ))}
           </div>

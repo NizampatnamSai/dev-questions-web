@@ -30,7 +30,7 @@ class DailyChallengeQuery(BaseModel):
 # FLASHCARD ENDPOINTS - Spaced Repetition Learning
 # ============================================================================
 
-@router.post("/study/generate-flashcards")
+@router.post("/generate-flashcards")
 async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user)):
     """Generate unique flashcard questions with spaced repetition"""
     try:
@@ -85,7 +85,7 @@ async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user))
         raise HTTPException(500, f"Failed to generate flashcards: {str(e)}")
 
 
-@router.post("/study/flashcards/{card_id}/rate")
+@router.post("/flashcards/{card_id}/rate")
 async def rate_flashcard(card_id: str, rating: int, user=Depends(current_user)):
     """
     Rate flashcard difficulty (Spaced Repetition Algorithm)
@@ -128,7 +128,7 @@ async def rate_flashcard(card_id: str, rating: int, user=Depends(current_user)):
 # 30-DAY DSA CHALLENGE
 # ============================================================================
 
-@router.get("/study/dsa-challenge/daily")
+@router.get("/dsa-challenge/daily")
 async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
     """Get the daily DSA challenge question (unique, no repeats)"""
     try:
@@ -175,7 +175,7 @@ async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
         raise HTTPException(500, f"Failed to load DSA challenge: {str(e)}")
 
 
-@router.post("/study/dsa-challenge/submit")
+@router.post("/dsa-challenge/submit")
 async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
     """Submit answer to DSA challenge"""
     try:
@@ -220,7 +220,7 @@ async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
 # DAILY AI CHALLENGE - Quick Daily Question
 # ============================================================================
 
-@router.get("/study/daily-challenge")
+@router.get("/daily-challenge")
 async def get_daily_challenge(category: str = "mixed", user=Depends(current_user)):
     """Get today's unique daily challenge (no duplicates)"""
     try:

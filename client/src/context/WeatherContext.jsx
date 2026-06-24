@@ -81,10 +81,9 @@ export function WeatherProvider({ children }) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-      try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=weather_code,temperature_2m&timezone=auto`;
-        const res = await fetch(url, { signal: controller.signal, cache: 'default' });
-        clearTimeout(timeoutId);
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&current=weather_code,temperature_2m&timezone=auto`;
+      const res = await fetch(url, { signal: controller.signal, cache: 'default' });
+      clearTimeout(timeoutId);
 
       if (!res.ok) {
         setError("Weather service unavailable");
@@ -120,19 +119,21 @@ export function WeatherProvider({ children }) {
       if (!cityHint) {
         setTimeout(async () => {
           try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000);
+            const geoController = new AbortController();
+            const geoTimeoutId = setTimeout(() => geoController.abort(), 3000);
             const geo = await fetch(
               `https://nominatim.openstreetmap.org/reverse?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&format=json`,
-              { signal: controller.signal, cache: 'default' }
+              { signal: geoController.signal, cache: 'default' }
             );
-            clearTimeout(timeoutId);
+            clearTimeout(geoTimeoutId);
             if (geo.ok) {
               const gd = await geo.json();
               const cityName = gd.address?.city || gd.address?.town || gd.address?.village || gd.address?.county || gd.address?.state || null;
               if (cityName) setLocName(cityName);
             }
-          } catch { /* city name is optional */ }
+          } catch {
+            /* city name is optional */
+          }
         }, 0);
       }
     } catch (err) {

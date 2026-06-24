@@ -324,11 +324,11 @@ function AppInner() {
       {/* Feedback modal */}
       <FeedbackModal open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
 
-      {/* Floating feedback button */}
-      {user && !user.isGuest && (
+      {/* Floating feedback button — hidden for admins (they manage feedback, not submit it) */}
+      {user && !user.isGuest && user.role !== "admin" && user.role !== "sub_admin" && (
         <motion.button
           onClick={() => setFeedbackOpen(true)}
-          className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors"
+          className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           title="Send feedback"

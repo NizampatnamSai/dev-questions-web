@@ -55,7 +55,8 @@ export default function WorkBoard() {
   const loadAvailableDates = async () => {
     try {
       const { data } = await api.get("/workboard/dates");
-      setAvailableDates(data || []);
+      const todayStr = new Date().toISOString().slice(0, 10);
+      setAvailableDates((data || []).filter(item => item.date !== todayStr));
     } catch {
       // silently fail
     }
@@ -456,14 +457,23 @@ export default function WorkBoard() {
                   {user?.name?.[0]?.toUpperCase() || "?"}
                 </div>
                 <div className="flex-1 flex gap-2">
-                  <input
-                    value={message}
-                    onChange={e => setMessage(e.target.value)}
-                    onKeyDown={e => e.key === "Enter" && !e.shiftKey && submitPost()}
-                    placeholder="What are you working on today?"
-                    className="flex-1 input-light text-sm px-3 py-2 rounded-xl"
-                    maxLength={500}
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      value={message}
+                      onChange={e => setMessage(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && !e.shiftKey && submitPost()}
+                      placeholder="What are you working on today?"
+                      className="w-full input-light text-sm px-3 py-2 pr-8 rounded-xl"
+                      maxLength={500}
+                    />
+                    {message && (
+                      <button
+                        onClick={() => setMessage("")}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors text-sm"
+                        tabIndex={-1}
+                      >✕</button>
+                    )}
+                  </div>
                   <button onClick={submitPost} disabled={posting || !message.trim()} className="btn-primary px-4 py-2 rounded-xl text-sm font-semibold disabled:opacity-50">
                     {posting ? "…" : "Post"}
                   </button>
@@ -473,7 +483,7 @@ export default function WorkBoard() {
           ) : (
             <div className="text-center text-xs text-slate-400 dark:text-slate-500 py-1">
               ✓ You've posted today
-              {canStillEdit(myPost.postedAt) && <span className="ml-1">· edit window open</span>}
+              {myPost && canStillEdit(myPost.postedAt) && <span className="ml-1">· edit window open</span>}
             </div>
           )}
 

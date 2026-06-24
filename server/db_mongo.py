@@ -29,12 +29,12 @@ def mdb():
 
 # ── Collection shortcuts ──────────────────────────────────────────────────────
 
-def col_users():         return mdb()["users"]
-def col_questions():     return mdb()["questions"]
-def col_comments():      return mdb()["comments"]
-def col_ai_usage():      return mdb()["ai_usage"]
-def col_fcm_tokens():    return mdb()["fcm_tokens"]
-def col_notifications(): return mdb()["push_notifications"]
+def col_users():                return mdb()["users"]
+def col_questions():            return mdb()["questions"]
+def col_comments():             return mdb()["comments"]
+def col_ai_usage():             return mdb()["ai_usage"]
+def col_fcm_tokens():           return mdb()["fcm_tokens"]
+def col_notifications():        return mdb()["push_notifications"]
 def col_streaks():              return mdb()["streaks"]
 def col_progress():             return mdb()["study_progress"]
 def col_notify_schedules():     return mdb()["notify_schedules"]
@@ -45,6 +45,13 @@ def col_community_schedule():   return mdb()["community_schedule"]
 def col_user_answers():         return mdb()["user_answers"]
 def col_user_notifications():   return mdb()["user_notifications"]
 def col_app_config():           return mdb()["app_config"]
+def col_feedback():             return mdb()["feedback"]
+def col_user_profiles():        return mdb()["user_profiles"]
+def col_question_ratings():     return mdb()["question_ratings"]
+def col_challenges():           return mdb()["challenges"]
+def col_ai_questions():         return mdb()["ai_questions"]
+def col_dsa_challenge():        return mdb()["dsa_challenge"]
+def col_flashcards():           return mdb()["flashcards"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────

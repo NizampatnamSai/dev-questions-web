@@ -570,6 +570,54 @@ async def unread_count(user=Depends(current_user)):
     return {"count": count}
 
 
+# ── Notification WebSocket (real-time unread count) ───────────────────────────
+
+import asyncio
+from fastapi import WebSocket, WebSocketDisconnect
+
+class NotificationManager:
+    def __init__(self):
+        self.connections: dict[str, list[WebSocket]] = {}
+
+    async def connect(self, user_id: str, ws: WebSocket):
+        await ws.accept()
+        self.connections.setdefault(user_id, []).append(ws)
+
+    def disconnect(self, user_id: str, ws: WebSocket):
+        conns = self.connections.get(user_id, [])
+        if ws in conns:
+            conns.remove(ws)
+
+    async def push(self, user_id: str, data: dict):
+        for ws in list(self.connections.get(user_id, [])):
+            try:
+                await ws.send_json(data)
+            except Exception:
+                self.disconnect(user_id, ws)
+
+
+notif_manager = NotificationManager()
+
+
+@router.websocket("/notifications/ws")
+async def notifications_ws(ws: WebSocket, user_id: str = None):
+    if not user_id:
+        await ws.close(code=4001)
+        return
+    await notif_manager.connect(user_id, ws)
+    try:
+        # Send current unread count on connect
+        count = await col_user_notifications().count_documents({"userId": user_id, "read": False})
+        await ws.send_json({"type": "unread_count", "count": count})
+        while True:
+            await asyncio.sleep(60)  # keep-alive ping every 60s
+            await ws.send_json({"type": "ping"})
+    except WebSocketDisconnect:
+        notif_manager.disconnect(user_id, ws)
+    except Exception:
+        notif_manager.disconnect(user_id, ws)
+
+
 # ── App Config (maintenance / force update) ───────────────────────────────────
 
 class AppConfigBody(BaseModel):

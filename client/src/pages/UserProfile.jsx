@@ -1,9 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
+function compressImage(file, maxSize = 200) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.8));
+    };
+    img.src = url;
+  });
+}
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -13,6 +30,8 @@ export default function UserProfile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     bio: "",
@@ -26,7 +45,7 @@ export default function UserProfile() {
 
   const loadProfile = async () => {
     try {
-      const endpoint = isOwnProfile ? "/profile/my/profile" : `/profile/profile/${userId}`;
+      const endpoint = isOwnProfile ? "/profile/my/profile" : `/profile/${userId}`;
       const { data } = await api.get(endpoint);
       setProfile(data);
       if (isOwnProfile) {
@@ -47,6 +66,26 @@ export default function UserProfile() {
       toast.success("Profile updated!");
     } catch {
       toast.error("Failed to update profile");
+    }
+  };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { toast.error("Please select an image file"); return; }
+    if (file.size > 5 * 1024 * 1024) { toast.error("Image must be under 5MB"); return; }
+    setUploadingAvatar(true);
+    try {
+      const base64 = await compressImage(file, 200);
+      await api.patch("/profile/my/profile", { avatar_url: base64 });
+      setProfile(prev => ({ ...prev, avatar_url: base64 }));
+      window.dispatchEvent(new Event("avatar-updated"));
+      toast.success("Photo updated!");
+    } catch {
+      toast.error("Failed to upload photo");
+    } finally {
+      setUploadingAvatar(false);
+      e.target.value = "";
     }
   };
 
@@ -74,8 +113,47 @@ export default function UserProfile() {
       <div className="glass-card p-8 space-y-6">
         <div className="flex items-start justify-between gap-6 flex-col sm:flex-row">
           <div className="flex items-start gap-6 flex-col sm:flex-row sm:items-center">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-bold">
-              {initials}
+            {/* Avatar with upload */}
+            <div className="relative group flex-shrink-0">
+              {profile.avatar_url ? (
+                <img
+                  src={profile.avatar_url}
+                  alt={profile.name}
+                  className="w-20 h-20 rounded-full object-cover shadow-lg"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  {initials}
+                </div>
+              )}
+              {isOwnProfile && (
+                <>
+                  {/* Dark overlay on hover */}
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingAvatar}
+                    className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xl"
+                  >
+                    {uploadingAvatar ? "⏳" : "📷"}
+                  </button>
+                  {/* Always-visible camera badge at bottom-right */}
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingAvatar}
+                    className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-indigo-500 hover:bg-indigo-400 border-2 border-slate-900 flex items-center justify-center text-[11px] transition-colors"
+                    title="Change photo"
+                  >
+                    📷
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
+                </>
+              )}
             </div>
             <div>
               <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">{profile.name}</h1>

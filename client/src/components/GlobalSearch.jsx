@@ -77,7 +77,7 @@ export default function GlobalSearch() {
           <>
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
               onClick={() => setOpen(false)}
             />
             <motion.div
@@ -85,7 +85,7 @@ export default function GlobalSearch() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
               transition={{ duration: 0.15 }}
-              className="fixed top-[10%] sm:top-[20%] left-1/2 -translate-x-1/2 w-full max-w-md z-50 px-4"
+              className="fixed top-[10%] sm:top-[20%] left-0 right-0 mx-auto w-[calc(100%-32px)] max-w-md z-[9999]"
             >
               <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden">
                 <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100 dark:border-white/10">
@@ -94,12 +94,18 @@ export default function GlobalSearch() {
                     ref={inputRef}
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Search pages… (e.g. Community, Leaderboard)"
+                    placeholder="Search pages…"
                     className="flex-1 bg-transparent outline-none text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
                   />
-                  <kbd className="text-[10px] text-slate-400 bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded font-mono">ESC</kbd>
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="text-slate-400 hover:text-slate-200 transition-colors text-xl leading-none px-1"
+                    aria-label="Close search"
+                  >
+                    ✕
+                  </button>
                 </div>
-                <div className="py-1 max-h-72 overflow-y-auto">
+                <div className="py-1 max-h-60 overflow-y-auto">
                   {results.length === 0 ? (
                     <p className="text-sm text-slate-400 text-center py-6">No pages found</p>
                   ) : (
@@ -115,7 +121,7 @@ export default function GlobalSearch() {
                     ))
                   )}
                 </div>
-                <div className="px-4 py-2 border-t border-slate-100 dark:border-white/10 text-[10px] text-slate-400 flex gap-3">
+                <div className="hidden sm:flex px-4 py-2 border-t border-slate-100 dark:border-white/10 text-[10px] text-slate-400 gap-3">
                   <span>↵ to navigate</span>
                   <span>ESC to close</span>
                 </div>

@@ -9,7 +9,8 @@ export default function ConfirmModal({ open, title, message, confirmLabel = "Del
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center"
+        style={{ minHeight: "100vh" }}
         onClick={onCancel}
       >
         <motion.div
@@ -17,7 +18,7 @@ export default function ConfirmModal({ open, title, message, confirmLabel = "Del
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 16 }}
           transition={{ duration: 0.18 }}
-          className="glass-card w-full max-w-sm p-6 space-y-4 shadow-2xl"
+          className="glass-card w-full max-w-sm p-6 space-y-4 shadow-2xl mx-4"
           onClick={e => e.stopPropagation()}
         >
           <div className="flex items-start gap-3">

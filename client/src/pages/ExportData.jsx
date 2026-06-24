@@ -52,7 +52,7 @@ export default function ExportData() {
         <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Export user and question data (Admin only)</p>
       </div>
 
-      <div className="glass-card p-6 max-w-md space-y-6">
+      <div className="glass-card p-6 max-w-md mx-auto space-y-6">
         {/* Data type selector */}
         <div>
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-200 block mb-3">What to export?</label>

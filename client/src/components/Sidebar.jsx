@@ -21,27 +21,29 @@ const BASE_LINKS = [
   { to: "/progress",       label: "My Progress",     icon: "📈" },
   { to: "/community",      label: "Community",       icon: "🌍" },
   { to: "/my-questions",   label: "My Questions",    icon: "📝" },
-  { to: "/drafts",         label: "Drafts",          icon: "💾" },
   { to: "/my-answers",     label: "My Answers",      icon: "✍️" },
-  { to: "/bookmarks",          label: "Bookmarks",       icon: "🔖" },
-  { to: "/leaderboard",        label: "Leaderboard",     icon: "🏆" },
-  { to: "/profile",            label: "My Profile",      icon: "👤" },
-  { to: "/search",             label: "Advanced Search", icon: "🔎" },
-  { to: "/recommendations",    label: "Recommended",     icon: "💡" },
-  { to: "/roadmap",            label: "Learning Path",   icon: "🗺️" },
-  { to: "/timed-challenge",    label: "Timed Challenge", icon: "⏱️" },
-  { to: "/js-compiler",        label: "JS Compiler",     icon: "⚡" },
-  { to: "/json-parser",        label: "JSON Parser",     icon: "🔍" },
+  { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
+  { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
+  { to: "/profile",        label: "My Profile",      icon: "👤" },
+  { to: "/search",         label: "Advanced Search", icon: "🔎" },
+  { to: "/recommendations",label: "Recommended",     icon: "💡" },
+  { to: "/roadmap",        label: "Learning Path",   icon: "🗺️" },
+  { to: "/timed-challenge",label: "Timed Challenge", icon: "⏱️" },
+  { to: "/js-compiler",   label: "JS Compiler",     icon: "⚡" },
+  { to: "/json-parser",   label: "JSON Parser",     icon: "🔍" },
   { to: "/study?tool=ts",      label: "TS Adder",        icon: "🔷", activeMatch: "/study?tool=ts" },
   { to: "/study?tool=errors",  label: "Error Finder",    icon: "🐛", activeMatch: "/study?tool=errors" },
   { to: "/study?tool=breaks",  label: "Break Finder",    icon: "💥", activeMatch: "/study?tool=breaks" },
-  { to: "/ask",                label: "Ask AI",          icon: "🤖" },
-  { to: "/guide",              label: "Project Guide",   icon: "🗺️" },
-  { to: "/api-docs",           label: "API Docs",        icon: "📚" },
-  { to: "/notifications",      label: "Notifications",   icon: "🔔" },
+  { to: "/ask",            label: "Ask AI",          icon: "🤖" },
+  { to: "/api-docs",       label: "API Docs",        icon: "📚" },
+  { to: "/notifications",  label: "Notifications",   icon: "🔔" },
+  { to: "/drafts",         label: "Drafts",          icon: "💾" },
+  { to: "/guide",          label: "Project Guide",   icon: "🗺️" },
 ];
-const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑" };
-const ADMIN_EXPORT_LINK = { to: "/admin/export", label: "Export Data", icon: "📥" };
+// exact match prevents /admin matching /admin/export etc.
+const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑", exact: true };
+const ADMIN_EXPORT_LINK = { to: "/admin/export", label: "Export Data", icon: "📥", exact: true };
+const ADMIN_FEEDBACK_LINK = { to: "/admin/feedback", label: "Feedbacks", icon: "💬", exact: true };
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   return (
@@ -75,7 +77,7 @@ export default function Sidebar() {
   const [stateSearch, setStateSearch] = useState("");
 
   const GUEST_HIDDEN = ["/notifications", "/generate", "/my-questions", "/drafts", "/my-answers", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
-  const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK, ADMIN_EXPORT_LINK] : BASE_LINKS;
+  const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK, ADMIN_EXPORT_LINK, ADMIN_FEEDBACK_LINK] : BASE_LINKS;
   const links = user?.isGuest ? allLinks.filter(l => !GUEST_HIDDEN.includes(l.to)) : allLinks;
 
   const initials = user?.name
@@ -116,6 +118,7 @@ export default function Sidebar() {
           >
             <NavLink
               to={link.to}
+              end={!!link.exact}
               className={({ isActive }) => {
                 const active = link.activeMatch ? fullPath === link.activeMatch : isActive;
                 return `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${

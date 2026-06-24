@@ -34,34 +34,7 @@ class UserProfileResponse(BaseModel):
     stats: dict = {}
 
 
-@router.get("/profile/{user_id}")
-async def get_user_profile(user_id: str):
-    """Get public user profile"""
-    user = await col_users().find_one({"_id": oid(user_id)})
-    if not user:
-        raise HTTPException(404, "User not found")
-
-    profile = await col_user_profiles().find_one({"userId": user_id}) or {}
-
-    return {
-        "id": str(user["_id"]),
-        "name": user.get("name", ""),
-        "email": user.get("email", ""),
-        "role": user.get("role", "user"),
-        "bio": profile.get("bio", ""),
-        "avatar_url": profile.get("avatar_url"),
-        "social_links": profile.get("social_links", {}),
-        "website": profile.get("website"),
-        "location": profile.get("location"),
-        "level": profile.get("level", 1),
-        "points": profile.get("points", 0),
-        "badges": profile.get("badges", []),
-        "createdAt": user.get("createdAt", ""),
-        "stats": profile.get("stats", {}),
-    }
-
-
-@router.get("/profile/my/profile")
+@router.get("/my/profile")
 async def get_my_profile(user=Depends(current_user)):
     """Get current user's profile"""
     profile = await col_user_profiles().find_one({"userId": user["id"]}) or {}
@@ -84,7 +57,7 @@ async def get_my_profile(user=Depends(current_user)):
     }
 
 
-@router.patch("/profile/my/profile")
+@router.patch("/my/profile")
 async def update_profile(body: ProfileUpdate, user=Depends(current_user)):
     """Update user profile"""
     update_data = {}
@@ -112,7 +85,7 @@ async def update_profile(body: ProfileUpdate, user=Depends(current_user)):
     return {"message": "Profile updated", **update_data}
 
 
-@router.post("/profile/my/change-password")
+@router.post("/my/change-password")
 async def change_password(body: dict, user=Depends(current_user)):
     """Change user password"""
     from utils.auth import hash_password, verify_password
@@ -138,7 +111,7 @@ async def change_password(body: dict, user=Depends(current_user)):
     return {"message": "Password changed successfully"}
 
 
-@router.get("/profile/leaderboard")
+@router.get("/leaderboard")
 async def leaderboard(limit: int = 50, offset: int = 0):
     """Get user leaderboard by points"""
     profiles = await col_user_profiles().find({}).sort("points", -1).skip(offset).limit(limit).to_list(limit)
@@ -157,3 +130,30 @@ async def leaderboard(limit: int = 50, offset: int = 0):
             })
 
     return result
+
+
+@router.get("/{user_id}")
+async def get_user_profile(user_id: str):
+    """Get public user profile"""
+    user = await col_users().find_one({"_id": oid(user_id)})
+    if not user:
+        raise HTTPException(404, "User not found")
+
+    profile = await col_user_profiles().find_one({"userId": user_id}) or {}
+
+    return {
+        "id": str(user["_id"]),
+        "name": user.get("name", ""),
+        "email": user.get("email", ""),
+        "role": user.get("role", "user"),
+        "bio": profile.get("bio", ""),
+        "avatar_url": profile.get("avatar_url"),
+        "social_links": profile.get("social_links", {}),
+        "website": profile.get("website"),
+        "location": profile.get("location"),
+        "level": profile.get("level", 1),
+        "points": profile.get("points", 0),
+        "badges": profile.get("badges", []),
+        "createdAt": user.get("createdAt", ""),
+        "stats": profile.get("stats", {}),
+    }

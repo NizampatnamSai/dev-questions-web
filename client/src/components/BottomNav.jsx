@@ -1,37 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import MobileSettingsSheet from "./MobileSettingsSheet";
 import { useAuth } from "../context/AuthContext";
-import api from "../api/axios";
+import { useNotificationCount } from "../hooks/useNotificationCount";
 
 const links = [
   { to: "/dashboard",    label: "Home",     icon: "📊" },
-  { to: "/generate",     label: "Generate", icon: "✨" },
   { to: "/quiz",         label: "Quiz",     icon: "🧠" },
+  { to: "/generate",     label: "Generate", icon: "✨" },
   { to: "/community",    label: "Feed",     icon: "🌍" },
 ];
 
 export default function BottomNav() {
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
   const { user } = useAuth();
+  const { count: unreadCount, markRead } = useNotificationCount();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user || user.isGuest) return;
-    const fetch = () =>
-      api.get("/admin/notifications/my/unread-count")
-        .then(({ data }) => setUnreadCount(data.count || 0))
-        .catch(() => {});
-    fetch();
-    const timer = setInterval(fetch, 30000);
-    const handleFocus = () => fetch();
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      clearInterval(timer);
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [user?.id]);
 
   return (
     <>
@@ -56,7 +40,7 @@ export default function BottomNav() {
         {/* Bell */}
         {!user?.isGuest && (
           <button
-            onClick={() => { setUnreadCount(0); navigate("/notifications"); }}
+            onClick={() => { markRead(); navigate("/notifications"); }}
             className="relative flex flex-col items-center text-[11px] px-2 py-1 rounded-lg text-slate-500 dark:text-slate-400 transition-colors"
           >
             <span className="text-lg relative">

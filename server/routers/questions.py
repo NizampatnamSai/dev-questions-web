@@ -229,6 +229,44 @@ async def gen_answer(body: GenAnswerBody, user=Depends(current_user)):
     return result
 
 
+# ── Recommendations ───────────────────────────────────────────────────────────
+
+@router.get("/recommendations")
+async def get_recommendations(
+    type: Optional[str] = "trending",
+    limit: int = 20,
+    x_user_id: Optional[str] = Header(default=None),
+):
+    limit = max(1, min(limit, 50))
+    filt = {"status": "published"}
+
+    if type == "trending":
+        pipeline = [
+            {"$match": filt},
+            {"$addFields": {"score": {"$add": [{"$size": {"$ifNull": ["$upvotes", []]}}, {"$multiply": [{"$ifNull": ["$commentCount", 0]}, 2]}]}}},
+            {"$sort": {"score": -1, "createdAt": -1}},
+            {"$limit": limit},
+        ]
+        docs = await col_questions().aggregate(pipeline).to_list(limit)
+    elif type == "recent":
+        docs = await col_questions().find(filt).sort("createdAt", -1).limit(limit).to_list(limit)
+    elif type == "bookmarked" and x_user_id:
+        docs = await col_questions().find({**filt, "bookmarks": x_user_id}).sort("createdAt", -1).limit(limit).to_list(limit)
+    else:
+        docs = await col_questions().find(filt).sort("createdAt", -1).limit(limit).to_list(limit)
+
+    result = []
+    for d in docs:
+        d["id"] = str(d.pop("_id"))
+        d["upvoteCount"] = len(d.get("upvotes", []))
+        d["upvoted"] = x_user_id in d.get("upvotes", []) if x_user_id else False
+        d["bookmarked"] = x_user_id in d.get("bookmarks", []) if x_user_id else False
+        d.pop("upvotes", None)
+        d.pop("bookmarks", None)
+        result.append(d)
+    return result
+
+
 # ── Community feed ────────────────────────────────────────────────────────────
 
 @router.get("/community")
