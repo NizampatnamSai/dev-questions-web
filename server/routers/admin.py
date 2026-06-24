@@ -217,9 +217,11 @@ class TokenBody(BaseModel):
 
 @router.post("/fcm-token")
 async def register_token(body: TokenBody, user=Depends(current_user)):
+    platform = body.platform or "web"
+    # Upsert by userId+platform so a rotated token replaces the old one instead of accumulating
     await col_fcm_tokens().update_one(
-        {"userId": user["id"], "token": body.token},
-        {"$set": {"userId": user["id"], "token": body.token, "platform": body.platform, "updatedAt": now()}},
+        {"userId": user["id"], "platform": platform},
+        {"$set": {"userId": user["id"], "token": body.token, "platform": platform, "updatedAt": now()}},
         upsert=True,
     )
     return {"message": "Token registered"}
@@ -625,6 +627,8 @@ class AppConfigBody(BaseModel):
     maintenance_message: Optional[str] = None
     force_update: Optional[bool] = None
     force_update_message: Optional[str] = None
+    wb_reminder_time: Optional[str] = None        # "HH:MM" IST, e.g. "09:30"
+    wb_edit_window_minutes: Optional[int] = None
 
 
 @router.get("/app-config/public")
@@ -664,12 +668,29 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["force_update"] = body.force_update
     if body.force_update_message is not None:
         update["force_update_message"] = body.force_update_message
+    if body.wb_reminder_time is not None:
+        update["wb_reminder_time"] = body.wb_reminder_time
+    if body.wb_edit_window_minutes is not None:
+        update["wb_edit_window_minutes"] = body.wb_edit_window_minutes
 
     await col_app_config().update_one(
         {"_id": "config"},
         {"$set": update},
         upsert=True,
     )
+
+    # If WorkBoard reminder time changed, reschedule the cron job
+    if body.wb_reminder_time is not None:
+        try:
+            from main import scheduler
+            h, m = [int(x) for x in body.wb_reminder_time.split(":")]
+            # Convert IST to UTC (IST = UTC+5:30)
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            scheduler.reschedule_job("workboard_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
+        except Exception as e:
+            import logging; logging.getLogger(__name__).warning(f"Failed to reschedule workboard job: {e}")
 
     # If maintenance just turned OFF → notify all users
     if was_maintenance and body.maintenance is False:

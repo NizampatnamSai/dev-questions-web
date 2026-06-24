@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import ConfirmModal from "../components/ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
 
 const SUGGESTIONS = [
   "Explain how Python works internally",
@@ -177,6 +179,7 @@ function HistoryItem({ chat, active, onSelect, onDelete }) {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function AskAI() {
+  const { confirm, confirmProps } = useConfirm();
   const [history, setHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [activeChatId, setActiveChatId] = useState(null);
@@ -225,6 +228,7 @@ export default function AskAI() {
 
   const openChat = async (chat) => {
     setActiveChatId(chat.id);
+    activeChatIdRef.current = chat.id;  // set ref immediately — don't rely on useEffect timing
     setMessages([]);        // clear first to show loading
     setIsSaved(true);
     setSidebarOpen(false);
@@ -247,14 +251,20 @@ export default function AskAI() {
     } catch { toast.error("Failed to delete"); }
   };
 
-  const deleteAll = async () => {
-    if (!window.confirm("Delete all saved chats?")) return;
-    try {
-      await api.delete("/ai/history");
-      setHistory([]);
-      startNewChat();
-      toast.success("All history cleared");
-    } catch { toast.error("Failed"); }
+  const deleteAll = () => {
+    confirm({
+      title: "Delete all saved chats?",
+      message: "This cannot be undone.",
+      confirmLabel: "Clear all",
+      onConfirm: async () => {
+        try {
+          await api.delete("/ai/history");
+          setHistory([]);
+          startNewChat();
+          toast.success("All history cleared");
+        } catch { toast.error("Failed"); }
+      },
+    });
   };
 
   // Export all saved chats as a single JSON file
@@ -334,6 +344,7 @@ export default function AskAI() {
 
   // ── Layout: sidebar + chat side by side ───────────────────────────────────
   return (
+    <>
     <div className="flex gap-4" style={{ height: "calc(100vh - 10rem)" }}>
 
       {/* ── Sidebar ── */}
@@ -506,6 +517,8 @@ export default function AskAI() {
         </div>
       </div>
     </div>
+    <ConfirmModal {...confirmProps} />
+    </>
   );
 }
 

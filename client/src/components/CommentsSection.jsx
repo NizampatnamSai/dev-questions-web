@@ -3,8 +3,12 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import ConfirmModal from "./ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
+import { fmtDate } from "../utils/time";
 
 export default function CommentsSection({ questionId }) {
+  const { confirm, confirmProps } = useConfirm();
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -47,15 +51,19 @@ export default function CommentsSection({ questionId }) {
     }
   };
 
-  const deleteComment = async (commentId) => {
-    if (!window.confirm("Delete this comment?")) return;
-    try {
-      await api.delete(`/discussion/comments/${commentId}`);
-      setComments(prev => prev.filter(c => c.id !== commentId));
-      toast.success("Comment deleted");
-    } catch {
-      toast.error("Failed to delete comment");
-    }
+  const deleteComment = (commentId) => {
+    confirm({
+      title: "Delete this comment?",
+      message: "This cannot be undone.",
+      confirmLabel: "Delete",
+      onConfirm: async () => {
+        try {
+          await api.delete(`/discussion/comments/${commentId}`);
+          setComments(prev => prev.filter(c => c.id !== commentId));
+          toast.success("Comment deleted");
+        } catch { toast.error("Failed to delete comment"); }
+      },
+    });
   };
 
   const voteComment = async (commentId) => {
@@ -72,6 +80,7 @@ export default function CommentsSection({ questionId }) {
   };
 
   return (
+    <>
     <div className="space-y-6">
       <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">💬 Comments ({comments.length})</h3>
 
@@ -115,7 +124,7 @@ export default function CommentsSection({ questionId }) {
                 <div>
                   <p className="font-medium text-slate-800 dark:text-slate-100">{comment.userName}</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {new Date(comment.createdAt).toLocaleDateString()}
+                    {fmtDate(comment.createdAt)}
                   </p>
                 </div>
                 {user && (user.id === comment.userId || user.role === "admin") && (
@@ -139,5 +148,7 @@ export default function CommentsSection({ questionId }) {
         </div>
       )}
     </div>
+    <ConfirmModal {...confirmProps} />
+    </>
   );
 }

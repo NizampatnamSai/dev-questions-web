@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
     const raw = localStorage.getItem("devquiz_user");
     return raw ? JSON.parse(raw) : null;
   });
+  const [profile, setProfile] = useState(null); // avatar_url, bio, etc.
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export function AuthProvider({ children }) {
         if (Notification.permission === "granted") {
           requestAndRegisterToken(api).catch(() => {});
         }
+        api.get("/profile/my/profile").then(r => setProfile(r.data)).catch(() => {});
       })
       .catch(() => {
         setUser(null);
@@ -49,6 +51,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("devquiz_guest");
     setUser(data.user);
     requestAndRegisterToken(api).catch(() => {});
+    api.get("/profile/my/profile").then(r => setProfile(r.data)).catch(() => {});
     return data.user;
   };
 
@@ -63,6 +66,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
+    setProfile(null);
     if (user?.isGuest) {
       localStorage.removeItem("devquiz_guest");
       setUser(null);
@@ -149,7 +153,7 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, enterGuest }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, enterGuest, profile, setProfile }}>
       {children}
     </AuthContext.Provider>
   );

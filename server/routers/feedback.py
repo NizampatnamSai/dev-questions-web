@@ -135,7 +135,7 @@ async def reply_to_feedback(feedback_id: str, body: ReplyBody, user=Depends(curr
         "title": f"💬 Reply to your feedback: {fb.get('title', '')}",
         "body": body.message.strip()[:120],
         "type": "feedback_reply",
-        "path": "/notifications",
+        "path": "/my-feedback",
         "read": False,
         "createdAt": now(),
     })
@@ -148,7 +148,7 @@ async def reply_to_feedback(feedback_id: str, body: ReplyBody, user=Depends(curr
             tokens,
             title=f"💬 {admin_name} replied to your feedback",
             body=body.message.strip()[:100],
-            data={"type": "feedback_reply", "path": "/notifications"},
+            data={"type": "feedback_reply", "path": "/my-feedback"},
         )
 
     return {"message": "Reply sent"}

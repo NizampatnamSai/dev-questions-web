@@ -4,8 +4,11 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
 import { useAuth } from "../context/AuthContext";
+import ConfirmModal from "../components/ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
 
 export default function Bookmarks() {
+  const { confirm, confirmProps } = useConfirm();
   const { user } = useAuth();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,16 +58,23 @@ export default function Bookmarks() {
     }
   };
 
-  const adminDelete = async (q) => {
-    if (!window.confirm(`Delete "${q.question.slice(0, 60)}…"?\n\nThe author will be notified.`)) return;
-    try {
-      await api.delete(`/questions/${q.id}`);
-      setQuestions(qs => qs.filter(x => x.id !== q.id));
-      toast.success("Question deleted");
-    } catch { toast.error("Failed to delete"); }
+  const adminDelete = (q) => {
+    confirm({
+      title: "Delete this question?",
+      message: `"${q.question.slice(0, 60)}…" — The author will be notified.`,
+      confirmLabel: "Delete",
+      onConfirm: async () => {
+        try {
+          await api.delete(`/questions/${q.id}`);
+          setQuestions(qs => qs.filter(x => x.id !== q.id));
+          toast.success("Question deleted");
+        } catch { toast.error("Failed to delete"); }
+      },
+    });
   };
 
   return (
+    <>
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">🔖 Bookmarks</h1>
@@ -103,5 +113,7 @@ export default function Bookmarks() {
         </div>
       )}
     </motion.div>
+    <ConfirmModal {...confirmProps} />
+    </>
   );
 }

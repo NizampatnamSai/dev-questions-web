@@ -7,29 +7,112 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 
 const FEATURE_LINKS = [
-  { to: "/ask",                  icon: "🤖", label: "Ask AI",          sub: "Ask anything — Python, Claude…" },
-  { to: "/notifications",        icon: "🔔", label: "Notifications",   sub: "Alerts & study reminders" },
-  { to: "/mock-interview",       icon: "🎯", label: "Mock Interview",  sub: "AI-scored interview simulation" },
-  { to: "/flashcards",           icon: "🃏", label: "Flashcards",      sub: "Flip & swipe to review topics" },
-  { to: "/progress",             icon: "📈", label: "My Progress",     sub: "Streak, weak areas & readiness" },
-  { to: "/my-questions",         icon: "📝", label: "My Questions",    sub: "Questions you created" },
-  { to: "/drafts",               icon: "💾", label: "Drafts",           sub: "Saved — post when ready" },
-  { to: "/bookmarks",            icon: "🔖", label: "Bookmarks",       sub: "Saved questions" },
-  { to: "/leaderboard",          icon: "🏆", label: "Leaderboard",     sub: "Top contributors" },
-  { to: "/js-compiler",          icon: "⚡", label: "JS Compiler",     sub: "Run JavaScript in browser" },
-  { to: "/json-parser",          icon: "🔍", label: "JSON Parser",     sub: "Format, minify & validate JSON" },
-  { to: "/study?tool=ts",        icon: "🔷", label: "TS Adder",        sub: "Add TypeScript types to JS" },
-  { to: "/study?tool=errors",    icon: "🐛", label: "Error Finder",    sub: "Find bugs in your code" },
-  { to: "/study?tool=breaks",    icon: "💥", label: "Break Finder",    sub: "Spot runtime risks" },
-  { to: "/guide",                icon: "🗺️", label: "Project Guide",   sub: "How to use every feature" },
-  { to: "/challenge",            icon: "🧩", label: "JS Challenge",     sub: "30-day advanced JS questions" },
-  { to: "/workboard",            icon: "📋", label: "Work Board",       sub: "Daily standup board" },
+  {
+    to: "/ask",
+    icon: "🤖",
+    label: "Ask AI",
+    sub: "Ask anything — Python, Claude…",
+  },
+  {
+    to: "/notifications",
+    icon: "🔔",
+    label: "Notifications",
+    sub: "Alerts & study reminders",
+  },
+  {
+    to: "/mock-interview",
+    icon: "🎯",
+    label: "Mock Interview",
+    sub: "AI-scored interview simulation",
+  },
+  {
+    to: "/flashcards",
+    icon: "🃏",
+    label: "Flashcards",
+    sub: "Flip & swipe to review topics",
+  },
+  {
+    to: "/progress",
+    icon: "📈",
+    label: "My Progress",
+    sub: "Streak, weak areas & readiness",
+  },
+  {
+    to: "/my-questions",
+    icon: "📝",
+    label: "My Questions",
+    sub: "Questions you created",
+  },
+  {
+    to: "/drafts",
+    icon: "💾",
+    label: "Drafts",
+    sub: "Saved — post when ready",
+  },
+  { to: "/bookmarks", icon: "🔖", label: "Bookmarks", sub: "Saved questions" },
+  {
+    to: "/leaderboard",
+    icon: "🏆",
+    label: "Leaderboard",
+    sub: "Top contributors",
+  },
+  {
+    to: "/js-compiler",
+    icon: "⚡",
+    label: "JS Compiler",
+    sub: "Run JavaScript in browser",
+  },
+  {
+    to: "/json-parser",
+    icon: "🔍",
+    label: "JSON Parser",
+    sub: "Format, minify & validate JSON",
+  },
+  {
+    to: "/devtools?tool=ts",
+    icon: "🔷",
+    label: "TS Adder",
+    sub: "Add TypeScript types to JS",
+  },
+  {
+    to: "/devtools?tool=errors",
+    icon: "🐛",
+    label: "Error Finder",
+    sub: "Find bugs in your code",
+  },
+  {
+    to: "/devtools?tool=breaks",
+    icon: "💥",
+    label: "Break Finder",
+    sub: "Spot runtime risks",
+  },
+  {
+    to: "/guide",
+    icon: "🗺️",
+    label: "Project Guide",
+    sub: "How to use every feature",
+  },
+  {
+    to: "/challenge",
+    icon: "🧩",
+    label: "JS Challenge",
+    sub: "30-day advanced JS questions",
+  },
+  {
+    to: "/workboard",
+    icon: "📋",
+    label: "Work Board",
+    sub: "Daily standup board",
+  },
 ];
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   return (
     <button
-      onClick={(e) => { e.stopPropagation(); onToggle(); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle();
+      }}
       className={`rounded-full relative transition-colors flex-shrink-0 ${on ? color : "bg-slate-200 dark:bg-slate-700"}`}
       style={{ height: 22, width: 38 }}
     >
@@ -47,19 +130,33 @@ export default function MobileSettingsSheet({ open, onClose }) {
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
   const navigate = useNavigate();
   const {
-    enabled, toggleEnabled,
-    manual, setManualCondition,
-    manualLoc, setManualLocation,
-    activeCondition, meta, CONDITION_META,
-    temp, locName, locDenied,
+    enabled,
+    toggleEnabled,
+    manual,
+    setManualCondition,
+    manualLoc,
+    setManualLocation,
+    activeCondition,
+    meta,
+    CONDITION_META,
+    temp,
+    locName,
+    locDenied,
   } = useWeather();
 
   const [stateSearch, setStateSearch] = useState("");
 
   const initials = user?.name
-    ?.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
+    ?.split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
-  const handleLogout = () => { onClose(); logout(); };
+  const handleLogout = () => {
+    onClose();
+    logout();
+  };
 
   return (
     <AnimatePresence>
@@ -96,13 +193,20 @@ export default function MobileSettingsSheet({ open, onClose }) {
                 {FEATURE_LINKS.map((f) => (
                   <button
                     key={f.to}
-                    onClick={() => { onClose(); navigate(f.to); }}
+                    onClick={() => {
+                      onClose();
+                      navigate(f.to);
+                    }}
                     className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 text-left transition-all cursor-pointer"
                   >
                     <span className="text-xl flex-shrink-0">{f.icon}</span>
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">{f.label}</p>
-                      <p className="text-[10px] text-slate-400 truncate">{f.sub}</p>
+                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
+                        {f.label}
+                      </p>
+                      <p className="text-[10px] text-slate-400 truncate">
+                        {f.sub}
+                      </p>
                     </div>
                   </button>
                 ))}
@@ -122,8 +226,12 @@ export default function MobileSettingsSheet({ open, onClose }) {
                   {initials}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{user?.name}</p>
-                  <p className="text-xs text-slate-400 capitalize">{user?.role}</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-slate-400 capitalize">
+                    {user?.role}
+                  </p>
                 </div>
               </div>
 
@@ -132,14 +240,20 @@ export default function MobileSettingsSheet({ open, onClose }) {
                 onClick={toggleTheme}
                 className="flex items-center gap-3 px-3 py-3.5 rounded-2xl hover:bg-black/5 dark:hover:bg-white/8 cursor-pointer transition-all"
               >
-                <span className="text-xl">{theme === "dark" ? "🌙" : "☀️"}</span>
+                <span className="text-xl">
+                  {theme === "dark" ? "🌙" : "☀️"}
+                </span>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                     {theme === "dark" ? "Dark mode" : "Light mode"}
                   </p>
                   <p className="text-xs text-slate-400">Toggle appearance</p>
                 </div>
-                <Toggle on={theme === "dark"} onToggle={toggleTheme} color="bg-indigo-500" />
+                <Toggle
+                  on={theme === "dark"}
+                  onToggle={toggleTheme}
+                  color="bg-indigo-500"
+                />
               </div>
 
               {/* Snowfall */}
@@ -149,8 +263,12 @@ export default function MobileSettingsSheet({ open, onClose }) {
               >
                 <span className="text-xl">❄️</span>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Snowfall</p>
-                  <p className="text-xs text-slate-400">Animated snow overlay</p>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                    Snowfall
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    Animated snow overlay
+                  </p>
                 </div>
                 <Toggle on={snow} onToggle={toggleSnow} color="bg-cyan-400" />
               </div>
@@ -160,16 +278,24 @@ export default function MobileSettingsSheet({ open, onClose }) {
                 onClick={toggleEnabled}
                 className="flex items-center gap-3 px-3 py-3.5 rounded-2xl hover:bg-black/5 dark:hover:bg-white/8 cursor-pointer transition-all"
               >
-                <span className="text-xl">{activeCondition ? (meta?.icon ?? "🌤️") : "🌤️"}</span>
+                <span className="text-xl">
+                  {activeCondition ? (meta?.icon ?? "🌤️") : "🌤️"}
+                </span>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Weather BG</p>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                    Weather BG
+                  </p>
                   <p className="text-xs text-slate-400">
                     {enabled && activeCondition
                       ? `${meta?.label}${temp !== null ? ` · ${temp}°C` : ""}${locName ? ` · ${locName}` : ""}`
                       : "Dynamic background"}
                   </p>
                 </div>
-                <Toggle on={enabled} onToggle={toggleEnabled} color="bg-emerald-500" />
+                <Toggle
+                  on={enabled}
+                  onToggle={toggleEnabled}
+                  color="bg-emerald-500"
+                />
               </div>
 
               {/* Weather panel — city + condition when enabled */}
@@ -184,56 +310,82 @@ export default function MobileSettingsSheet({ open, onClose }) {
                     <div className="mx-1 p-3 rounded-2xl bg-black/5 dark:bg-white/5 space-y-3">
                       {/* Location */}
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">📍 Location</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">
+                          📍 Location
+                        </p>
                         {!locDenied && (locName || manualLoc) && (
                           <div className="flex items-center justify-between mb-2">
                             <p className="text-xs text-indigo-500 dark:text-cyan-400 font-medium">
-                              {manualLoc ? `📍 ${manualLoc.capital}, ${manualLoc.state}` : `📍 ${locName}`}
+                              {manualLoc
+                                ? `📍 ${manualLoc.capital}, ${manualLoc.state}`
+                                : `📍 ${locName}`}
                               {temp !== null && ` · ${temp}°C`}
                             </p>
                             {manualLoc && (
-                              <button onClick={() => setManualLocation(null)} className="text-[10px] text-slate-400 hover:text-red-400 transition-colors ml-2">
+                              <button
+                                onClick={() => setManualLocation(null)}
+                                className="text-[10px] text-slate-400 hover:text-red-400 transition-colors ml-2"
+                              >
                                 ✕ GPS
                               </button>
                             )}
                           </div>
                         )}
                         {locDenied && !manualLoc && (
-                          <p className="text-[10px] text-amber-500 font-medium mb-1.5">⚠️ GPS denied — select a city below</p>
+                          <p className="text-[10px] text-amber-500 font-medium mb-1.5">
+                            ⚠️ GPS denied — select a city below
+                          </p>
                         )}
                         <input
                           value={stateSearch}
-                          onChange={e => setStateSearch(e.target.value)}
+                          onChange={(e) => setStateSearch(e.target.value)}
                           placeholder="Search state or city…"
                           className="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
                         />
                         <div className="max-h-28 overflow-y-auto rounded-xl mt-1 space-y-0.5">
                           {!locDenied && (
                             <button
-                              onClick={() => { setManualLocation(null); setStateSearch(""); }}
+                              onClick={() => {
+                                setManualLocation(null);
+                                setStateSearch("");
+                              }}
                               className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all ${!manualLoc ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-medium" : "hover:bg-black/5 dark:hover:bg-white/10 text-slate-500 dark:text-slate-400"}`}
                             >
                               📡 Use my GPS location
                             </button>
                           )}
-                          {STATES_CAPITALS
-                            .filter(s => !stateSearch || s.state.toLowerCase().includes(stateSearch.toLowerCase()) || s.capital.toLowerCase().includes(stateSearch.toLowerCase()))
-                            .map(s => (
-                              <button
-                                key={s.state}
-                                onClick={() => { setManualLocation(s); setStateSearch(""); }}
-                                className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all ${manualLoc?.state === s.state ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-medium" : "hover:bg-black/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300"}`}
-                              >
-                                <span className="font-medium">{s.capital}</span>
-                                <span className="text-slate-400 ml-1 text-[10px]">— {s.state}</span>
-                              </button>
-                            ))}
+                          {STATES_CAPITALS.filter(
+                            (s) =>
+                              !stateSearch ||
+                              s.state
+                                .toLowerCase()
+                                .includes(stateSearch.toLowerCase()) ||
+                              s.capital
+                                .toLowerCase()
+                                .includes(stateSearch.toLowerCase()),
+                          ).map((s) => (
+                            <button
+                              key={s.state}
+                              onClick={() => {
+                                setManualLocation(s);
+                                setStateSearch("");
+                              }}
+                              className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all ${manualLoc?.state === s.state ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-medium" : "hover:bg-black/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300"}`}
+                            >
+                              <span className="font-medium">{s.capital}</span>
+                              <span className="text-slate-400 ml-1 text-[10px]">
+                                — {s.state}
+                              </span>
+                            </button>
+                          ))}
                         </div>
                       </div>
 
                       {/* Condition override */}
                       <div className="border-t border-black/5 dark:border-white/5 pt-3">
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">Condition override</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">
+                          Condition override
+                        </p>
                         <div className="grid grid-cols-4 gap-1">
                           <button
                             onClick={() => setManualCondition("")}
@@ -269,10 +421,16 @@ export default function MobileSettingsSheet({ open, onClose }) {
               >
                 <span className="text-xl">📱</span>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Download Android App</p>
-                  <p className="text-xs text-slate-400">DevQuiz.apk · Android</p>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                    Download Android App
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    DevQuiz.apk · Android
+                  </p>
                 </div>
-                <span className="text-xs font-semibold text-indigo-500 dark:text-cyan-400 bg-indigo-50 dark:bg-indigo-500/10 px-2.5 py-1 rounded-lg">↓ APK</span>
+                <span className="text-xs font-semibold text-indigo-500 dark:text-cyan-400 bg-indigo-50 dark:bg-indigo-500/10 px-2.5 py-1 rounded-lg">
+                  ↓ APK
+                </span>
               </a>
 
               {/* Logout */}
@@ -283,7 +441,9 @@ export default function MobileSettingsSheet({ open, onClose }) {
                 <span className="text-xl">⎋</span>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-red-500">Logout</p>
-                  <p className="text-xs text-slate-400">Sign out of your account</p>
+                  <p className="text-xs text-slate-400">
+                    Sign out of your account
+                  </p>
                 </div>
               </button>
             </div>

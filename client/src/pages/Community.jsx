@@ -4,6 +4,8 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
 import { useAuth } from "../context/AuthContext";
+import ConfirmModal from "../components/ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
 
 const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"];
 const LEVELS     = ["Low", "Medium", "High"];
@@ -38,6 +40,7 @@ const MemoCard = memo(({ q, onUpvote, onHighlight, onBookmark, onDelete, isAdmin
 ));
 
 export default function Community() {
+  const { confirm, confirmProps } = useConfirm();
   const { user } = useAuth();
   const [todayPoster, setTodayPoster] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -170,16 +173,23 @@ export default function Community() {
 
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
-  const adminDelete = useCallback(async (q) => {
-    if (!window.confirm(`Delete "${q.question.slice(0, 60)}…"?\n\nThe author will be notified.`)) return;
-    try {
-      await api.delete(`/questions/${q.id}`);
-      setQuestions(qs => qs.filter(x => x.id !== q.id));
-      toast.success("Question deleted");
-    } catch { toast.error("Failed to delete"); }
-  }, []);
+  const adminDelete = useCallback((q) => {
+    confirm({
+      title: `Delete this question?`,
+      message: `"${q.question.slice(0, 60)}…" — The author will be notified.`,
+      confirmLabel: "Delete",
+      onConfirm: async () => {
+        try {
+          await api.delete(`/questions/${q.id}`);
+          setQuestions(qs => qs.filter(x => x.id !== q.id));
+          toast.success("Question deleted");
+        } catch { toast.error("Failed to delete"); }
+      },
+    });
+  }, [confirm]);
 
   return (
+    <>
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">🌍 Community Feed</h1>
@@ -188,24 +198,47 @@ export default function Community() {
 
       {/* Daily poster banner */}
       {todayPoster && (
-        <div className={`rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2 ${
-          todayPoster.allowed
-            ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/40"
-            : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
-        }`}>
-          {todayPoster.allowed ? (
-            <>
-              <span>📅</span>
-              <span>
-                Today's post: <strong>{todayPoster.allowedName}</strong>
-                {user && user.email === todayPoster.allowedEmail
-                  ? " — that's you! 🎉"
-                  : ""}
-              </span>
-            </>
-          ) : (
-            <><span>🚫</span><span>Community is closed today — no posts scheduled.</span></>
-          )}
+        <div className="space-y-2">
+          <div className={`rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2 ${
+            todayPoster.allowed
+              ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/40"
+              : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
+          }`}>
+            {todayPoster.allowed ? (
+              <>
+                <span>📅</span>
+                <span>
+                  Today's post: <strong>{todayPoster.allowedName}</strong>
+                  {user && user.email === todayPoster.allowedEmail
+                    ? " — that's you! 🎉"
+                    : ""}
+                </span>
+              </>
+            ) : (
+              <><span>🚫</span><span>Community is closed today — no posts scheduled.</span></>
+            )}
+          </div>
+          {todayPoster.myDay && !isAdmin && (() => {
+            // Both backend and frontend use Monday-first ordering (0=Mon…6=Sun),
+            // but JS getDay() is 0=Sun…6=Sat, so map accordingly.
+            const DAYS      = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+            const JS_DAY_OF = [1,2,3,4,5,6,0]; // JS getDay() value for each backend index
+            const bIdx = DAYS.indexOf(todayPoster.myDay);
+            if (bIdx === -1) return null;
+            const myJsDay  = JS_DAY_OF[bIdx];
+            const todayJs  = new Date().getDay();
+            const daysUntil = (myJsDay - todayJs + 7) % 7;
+            const label = daysUntil === 0
+              ? "Today is your posting day! 🎉"
+              : daysUntil === 1
+              ? "Tomorrow is your posting day 📅"
+              : `Your posting day is ${todayPoster.myDay} (in ${daysUntil} days) 📅`;
+            return (
+              <div className="rounded-xl px-4 py-2.5 text-xs font-medium flex items-center gap-2 bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-700/40">
+                <span>🗓️</span><span>{label}</span>
+              </div>
+            );
+          })()}
         </div>
       )}
 
@@ -272,5 +305,7 @@ export default function Community() {
         </>
       )}
     </motion.div>
+    <ConfirmModal {...confirmProps} />
+    </>
   );
 }

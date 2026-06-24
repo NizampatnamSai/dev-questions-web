@@ -5,25 +5,23 @@ import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "./ConfirmModal";
 
 export default function UserMenu() {
-  const { user, logout } = useAuth();
+  const { user, logout, profile, setProfile } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(null);
+
+  const avatarUrl = profile?.avatar_url || null;
 
   useEffect(() => {
     if (!user || user.isGuest) return;
-    const load = () => {
+    // Re-sync when profile page fires avatar update event
+    const reload = () => {
       import("../api/axios").then(({ default: api }) => {
-        api.get("/profile/my/profile").then(({ data }) => {
-          setAvatarUrl(data.avatar_url || null);
-        }).catch(() => {});
+        api.get("/profile/my/profile").then(({ data }) => setProfile(data)).catch(() => {});
       });
     };
-    load();
-    // Re-sync when profile page fires avatar update event
-    window.addEventListener("avatar-updated", load);
-    return () => window.removeEventListener("avatar-updated", load);
+    window.addEventListener("avatar-updated", reload);
+    return () => window.removeEventListener("avatar-updated", reload);
   }, [user?.id]);
 
   if (!user || user.isGuest) return null;

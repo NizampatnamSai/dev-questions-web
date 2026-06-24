@@ -24,7 +24,7 @@ export default function ScrollToTopBtn() {
             hover:from-indigo-400 hover:to-purple-400
             flex items-center justify-center text-white text-lg
             hover:shadow-indigo-500/40 hover:shadow-xl transition-shadow
-            md:bottom-8 md:right-8"
+            md:bottom-24 md:right-8"
           aria-label="Scroll to top"
           title="Back to top"
         >

@@ -19,7 +19,7 @@ export default function Recommendations() {
       const { data } = await api.get("/questions/recommendations", {
         params: { type: filter, limit: 20 }
       });
-      setQuestions(data.items || []);
+      setQuestions(Array.isArray(data) ? data : data.items || []);
     } catch {
       toast.error("Failed to load recommendations");
     } finally {

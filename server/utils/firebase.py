@@ -95,13 +95,36 @@ async def send_to_tokens(tokens: list[str], title: str, body: str, data: dict | 
         ]
         batch_size = 500  # FCM limit per batch
         sent = 0
+        stale_tokens: list[str] = []
         for i in range(0, len(msgs), batch_size):
+            batch_tokens = tokens[i:i+batch_size]
             resp = messaging.send_each(msgs[i:i+batch_size])
             sent += resp.success_count
+            # Collect tokens that are invalid/unregistered so we can prune them
+            for j, r in enumerate(resp.responses):
+                if not r.success and r.exception:
+                    code = getattr(r.exception, "code", "") or ""
+                    if "UNREGISTERED" in str(code) or "INVALID_ARGUMENT" in str(code) or "NOT_FOUND" in str(code):
+                        stale_tokens.append(batch_tokens[j])
+        # Prune stale tokens asynchronously (fire-and-forget via asyncio)
+        if stale_tokens:
+            import asyncio
+            asyncio.ensure_future(_prune_stale_tokens(stale_tokens))
         return sent
     except Exception as e:
         log.error(f"FCM send error: {e}")
         return 0
+
+
+async def _prune_stale_tokens(tokens: list[str]):
+    """Remove invalid/unregistered FCM tokens from MongoDB."""
+    try:
+        from db_mongo import col_fcm_tokens
+        result = await col_fcm_tokens().delete_many({"token": {"$in": tokens}})
+        if result.deleted_count:
+            log.info(f"FCM: pruned {result.deleted_count} stale token(s)")
+    except Exception as e:
+        log.warning(f"FCM: failed to prune stale tokens — {e}")
 
 
 async def send_to_all(title: str, body: str, data: dict | None = None) -> int:

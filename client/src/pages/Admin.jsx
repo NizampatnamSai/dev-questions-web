@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "../components/ConfirmModal";
+import { fmtDate, fmtDateTime } from "../utils/time";
 
 const ROLES = ["user", "sub_admin", "admin"];
 
@@ -916,7 +917,7 @@ function NotifyLogs({ logs, loading }) {
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{h.body}</p>
               <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-                by {h.sentByName ?? "Admin"} · {new Date(h.createdAt).toLocaleString()}
+                by {h.sentByName ?? "Admin"} · {fmtDateTime(h.createdAt)}
               </p>
             </div>
           </div>
@@ -1053,6 +1054,7 @@ export default function Admin() {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [disableTarget, setDisableTarget] = useState(null);
   const [search, setSearch] = useState("");
   const [showNotify, setShowNotify] = useState(false);
   const [logs, setLogs] = useState([]);
@@ -1158,7 +1160,13 @@ export default function Admin() {
   const toggleDisable = async (u) => {
     const isDisabled = u.status === "disabled";
     const action = isDisabled ? "enable" : "disable";
-    if (!isDisabled && !window.confirm(`Disable ${u.name}? They will be immediately logged out and treated as a guest.`)) return;
+    if (!isDisabled) { setDisableTarget(u); return; }
+    await _applyToggleDisable(u);
+  };
+
+  const _applyToggleDisable = async (u) => {
+    const isDisabled = u.status === "disabled";
+    const action = isDisabled ? "enable" : "disable";
     try {
       await api.patch(`/admin/users/${u.id}/${action}`);
       setUsers(prev => prev.map(x => x.id === u.id ? { ...x, status: isDisabled ? "approved" : "disabled" } : x));
@@ -1341,7 +1349,7 @@ export default function Admin() {
                         <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">{u.questionCount ?? 0}</span>
                       </td>
                       <td className="px-4 py-3 text-xs text-slate-400">
-                        {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "—"}
+                        {u.createdAt ? fmtDate(u.createdAt) : "—"}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1.5">
@@ -1465,6 +1473,15 @@ export default function Admin() {
         confirmLabel="Delete"
         onConfirm={() => { deleteInvalidUser(invalidDeleteTarget.id); setInvalidDeleteTarget(null); }}
         onCancel={() => setInvalidDeleteTarget(null)}
+      />
+
+      <ConfirmModal
+        open={!!disableTarget}
+        title={`Disable ${disableTarget?.name}?`}
+        message="They will be immediately logged out and treated as a guest."
+        confirmLabel="Disable"
+        onConfirm={() => { const t = disableTarget; setDisableTarget(null); _applyToggleDisable(t); }}
+        onCancel={() => setDisableTarget(null)}
       />
 
       {/* Reject user modal */}

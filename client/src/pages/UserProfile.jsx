@@ -24,7 +24,7 @@ function compressImage(file, maxSize = 200) {
 
 export default function UserProfile() {
   const { userId } = useParams();
-  const { user } = useAuth();
+  const { user, setProfile: setGlobalProfile } = useAuth();
   const isOwnProfile = !userId || userId === user?.id;
 
   const [profile, setProfile] = useState(null);
@@ -62,6 +62,7 @@ export default function UserProfile() {
     try {
       await api.patch("/profile/my/profile", formData);
       setProfile(prev => ({ ...prev, ...formData }));
+      if (isOwnProfile) setGlobalProfile(prev => ({ ...prev, ...formData }));
       setEditing(false);
       toast.success("Profile updated!");
     } catch {
@@ -79,7 +80,7 @@ export default function UserProfile() {
       const base64 = await compressImage(file, 200);
       await api.patch("/profile/my/profile", { avatar_url: base64 });
       setProfile(prev => ({ ...prev, avatar_url: base64 }));
-      window.dispatchEvent(new Event("avatar-updated"));
+      if (isOwnProfile) setGlobalProfile(prev => ({ ...prev, avatar_url: base64 }));
       toast.success("Photo updated!");
     } catch {
       toast.error("Failed to upload photo");

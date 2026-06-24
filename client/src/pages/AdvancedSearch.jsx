@@ -152,7 +152,14 @@ export default function AdvancedSearch() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {results.map((q) => (
-              <QuestionCard key={q.id} q={q} />
+              <div key={q.id} className="relative">
+                {(q.author?.name || q.authorName) && (
+                  <div className="absolute top-3 right-3 z-10 text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/40 font-medium">
+                    👤 {q.author?.name || q.authorName}
+                  </div>
+                )}
+                <QuestionCard q={q} />
+              </div>
             ))}
           </div>
 

@@ -3,23 +3,35 @@ import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
+import { parseUTC } from "../utils/time";
 
 const _apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+
+function UserAvatar({ name, avatar, size = "w-7 h-7", textSize = "text-xs" }) {
+  if (avatar) {
+    return <img src={avatar} alt={name} className={`${size} rounded-full object-cover flex-shrink-0`} />;
+  }
+  return (
+    <div className={`${size} rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center ${textSize} font-bold text-indigo-600 dark:text-indigo-300 flex-shrink-0`}>
+      {name?.[0]?.toUpperCase() || "?"}
+    </div>
+  );
+}
 const WS_BASE = _apiUrl.replace(/^http:/, "ws:").replace(/^https:/, "wss:").replace(/\/api$/, "");
 
 function timeAgo(iso) {
-  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  const diff = (Date.now() - parseUTC(iso).getTime()) / 1000;
   if (diff < 60) return "just now";
   if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
   return `${Math.floor(diff / 3600)}h ago`;
 }
 
 function canStillEdit(postedAt) {
-  return (Date.now() - new Date(postedAt).getTime()) < 30 * 60 * 1000;
+  return (Date.now() - parseUTC(postedAt).getTime()) < 30 * 60 * 1000;
 }
 
 export default function WorkBoard() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [status, setStatus]       = useState(null); // "none"|"pending"|"active"
   const [posts, setPosts]         = useState([]);
   const [missing, setMissing]     = useState([]);
@@ -62,11 +74,11 @@ export default function WorkBoard() {
   const saveConfig = async () => {
     setSavingConfig(true);
     try {
-      await api.put("/admin/app-config", {
-        wb_reminder_time: configDraft.reminder_time,
-        wb_edit_window_minutes: parseInt(configDraft.edit_window_minutes) || 30,
+      const { data } = await api.patch("/workboard/config", {
+        reminder_time: configDraft.reminder_time,
+        edit_window_minutes: parseInt(configDraft.edit_window_minutes) || 30,
       });
-      setWbConfig({ ...configDraft, edit_window_minutes: parseInt(configDraft.edit_window_minutes) || 30 });
+      setWbConfig(data);
       setEditingConfig(false);
       toast.success("Settings saved!");
     } catch { toast.error("Failed to save"); }
@@ -138,7 +150,8 @@ export default function WorkBoard() {
     const token = localStorage.getItem("devquiz_token");
     const userId = encodeURIComponent(user?.id || "");
     const userName = encodeURIComponent(user?.name || "");
-    const ws = new WebSocket(`${WS_BASE}/api/workboard/ws?user_id=${userId}&user_name=${userName}`);
+    const userAvatar = encodeURIComponent(profile?.avatar_url || "");
+    const ws = new WebSocket(`${WS_BASE}/api/workboard/ws?user_id=${userId}&user_name=${userName}&user_avatar=${userAvatar}`);
     ws.onmessage = (e) => {
       try {
         const msg = JSON.parse(e.data);
@@ -389,12 +402,10 @@ export default function WorkBoard() {
         <div className="glass-card p-4 space-y-2">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Currently Viewing</p>
           <div className="flex flex-wrap gap-2">
-            {activeUsers.map(user => (
-              <div key={user.id} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
-                <div className="w-6 h-6 rounded-full bg-indigo-200 dark:bg-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-700 dark:text-indigo-300">
-                  {user.name?.[0]?.toUpperCase()}
-                </div>
-                <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">{user.name}</span>
+            {activeUsers.map(u => (
+              <div key={u.id || u.userId} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
+                <UserAvatar name={u.name || u.userName} avatar={u.userAvatar} size="w-6 h-6" />
+                <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">{u.name || u.userName}</span>
               </div>
             ))}
           </div>
@@ -488,9 +499,7 @@ export default function WorkBoard() {
                 <motion.div key={post.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="p-4 space-y-1">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-300">
-                        {post.userName?.[0]?.toUpperCase() || "?"}
-                      </div>
+                      <UserAvatar name={post.userName} avatar={post.userAvatar} />
                       <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{post.userName}</span>
                       {post.userId === user?.id && <span className="text-xs text-indigo-400">(you)</span>}
                     </div>
@@ -527,9 +536,7 @@ export default function WorkBoard() {
           {!myPost && !historyLoading ? (
             <div className="glass-card p-4">
               <div className="flex gap-2">
-                <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-300 flex-shrink-0">
-                  {user?.name?.[0]?.toUpperCase() || "?"}
-                </div>
+                <UserAvatar name={user?.name} avatar={profile?.avatar_url} size="w-8 h-8" textSize="text-sm" />
                 <div className="flex-1 flex gap-2">
                   <div className="relative flex-1">
                     <input
@@ -612,9 +619,7 @@ export default function WorkBoard() {
                 <motion.div key={post.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="p-4 space-y-1">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-300">
-                        {post.userName?.[0]?.toUpperCase() || "?"}
-                      </div>
+                      <UserAvatar name={post.userName} avatar={post.userAvatar} />
                       <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{post.userName}</span>
                       {post.userId === user?.id && <span className="text-xs text-indigo-400">(you)</span>}
                     </div>

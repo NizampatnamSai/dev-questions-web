@@ -4,21 +4,10 @@ import { Link } from "react-router-dom";
 import api from "../api/axios";
 import StatsCard from "../components/StatsCard";
 import { useAuth } from "../context/AuthContext";
+import { fmtDateTime as fmtDate } from "../utils/time";
 
 function Skeleton({ className }) {
   return <div className={`animate-pulse bg-slate-200 dark:bg-slate-700 rounded-lg ${className}`} />;
-}
-
-function fmtDate(iso) {
-  const d = new Date(iso);
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
-  const dDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const timeStr = d.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true }).toUpperCase();
-  if (dDay.getTime() === today.getTime())     return `Today • ${timeStr}`;
-  if (dDay.getTime() === yesterday.getTime()) return `Yesterday • ${timeStr}`;
-  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) + ` • ${timeStr}`;
 }
 
 export default function Dashboard() {

@@ -9,46 +9,72 @@ import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
 
 const BASE_LINKS = [
-  { to: "/dashboard",      label: "Dashboard",       icon: "📊" },
-  { to: "/workboard",      label: "Work Board",      icon: "📋" },
-  { to: "/challenge",      label: "JS Challenge",    icon: "🧩" },
-  { to: "/generate",       label: "AI Generator",    icon: "✨" },
-  { to: "/quiz",           label: "Quiz Mode",       icon: "🧠" },
-  { to: "/study",          label: "Study Hub",       icon: "📚" },
-  { to: "/study-advanced", label: "🧠 AI Study Lab", icon: "⭐", highlight: true },
-  { to: "/mock-interview", label: "Mock Interview",  icon: "🎯" },
-  { to: "/flashcards",     label: "Flashcards",      icon: "🃏" },
-  { to: "/progress",       label: "My Progress",     icon: "📈" },
-  { to: "/community",      label: "Community",       icon: "🌍" },
-  { to: "/my-questions",   label: "My Questions",    icon: "📝" },
-  { to: "/my-answers",     label: "My Answers",      icon: "✍️" },
-  { to: "/bookmarks",      label: "Bookmarks",       icon: "🔖" },
-  { to: "/leaderboard",    label: "Leaderboard",     icon: "🏆" },
-  { to: "/profile",        label: "My Profile",      icon: "👤" },
-  { to: "/search",         label: "Advanced Search", icon: "🔎" },
-  { to: "/recommendations",label: "Recommended",     icon: "💡" },
-  { to: "/roadmap",        label: "Learning Path",   icon: "🗺️" },
-  { to: "/timed-challenge",label: "Timed Challenge", icon: "⏱️" },
-  { to: "/js-compiler",   label: "JS Compiler",     icon: "⚡" },
-  { to: "/json-parser",   label: "JSON Parser",     icon: "🔍" },
-  { to: "/study?tool=ts",      label: "TS Adder",        icon: "🔷", activeMatch: "/study?tool=ts" },
-  { to: "/study?tool=errors",  label: "Error Finder",    icon: "🐛", activeMatch: "/study?tool=errors" },
-  { to: "/study?tool=breaks",  label: "Break Finder",    icon: "💥", activeMatch: "/study?tool=breaks" },
-  { to: "/ask",            label: "Ask AI",          icon: "🤖" },
-  { to: "/api-docs",       label: "API Docs",        icon: "📚" },
-  { to: "/notifications",  label: "Notifications",   icon: "🔔" },
-  { to: "/drafts",         label: "Drafts",          icon: "💾" },
-  { to: "/guide",          label: "Project Guide",   icon: "🗺️" },
+  { to: "/dashboard", label: "Dashboard", icon: "📊" },
+  { to: "/workboard", label: "Work Board", icon: "📋" },
+  { to: "/challenge", label: "JS Challenge", icon: "🧩" },
+  { to: "/generate", label: "AI Generator", icon: "✨" },
+  { to: "/quiz", label: "Quiz Mode", icon: "🧠" },
+  { to: "/study", label: "Study Hub", icon: "📚" },
+  {
+    to: "/study-advanced",
+    label: "🧠 AI Study Lab",
+    icon: "⭐",
+    highlight: true,
+  },
+  { to: "/mock-interview", label: "Mock Interview", icon: "🎯" },
+  { to: "/flashcards", label: "Flashcards", icon: "🃏" },
+  { to: "/progress", label: "My Progress", icon: "📈" },
+  { to: "/community", label: "Community", icon: "🌍" },
+  { to: "/my-questions", label: "My Questions", icon: "📝" },
+  { to: "/my-answers", label: "My Answers", icon: "✍️" },
+  { to: "/bookmarks", label: "Bookmarks", icon: "🔖" },
+  { to: "/leaderboard", label: "Leaderboard", icon: "🏆" },
+  { to: "/profile", label: "My Profile", icon: "👤" },
+  { to: "/search", label: "Advanced Search", icon: "🔎" },
+  { to: "/recommendations", label: "Recommended", icon: "💡" },
+  { to: "/roadmap", label: "Learning Path", icon: "🗺️" },
+  { to: "/timed-challenge", label: "Timed Challenge", icon: "⏱️" },
+  { to: "/js-compiler", label: "JS Compiler", icon: "⚡" },
+  { to: "/json-parser", label: "JSON Parser", icon: "🔍" },
+  { to: "/ask", label: "Ask AI", icon: "🤖" },
+  { to: "/notifications", label: "Notifications", icon: "🔔" },
+  { to: "/my-feedback", label: "My Feedback", icon: "💬", hideForAdmin: true },
+  { to: "/drafts", label: "Drafts", icon: "💾" },
+  { to: "/guide", label: "Project Guide", icon: "🗺️" },
 ];
 // exact match prevents /admin matching /admin/export etc.
-const ADMIN_LINK = { to: "/admin", label: "Admin Panel", icon: "👑", exact: true };
-const ADMIN_EXPORT_LINK = { to: "/admin/export", label: "Export Data", icon: "📥", exact: true };
-const ADMIN_FEEDBACK_LINK = { to: "/admin/feedback", label: "Feedbacks", icon: "💬", exact: true };
+const ADMIN_LINK = {
+  to: "/admin",
+  label: "Admin Panel",
+  icon: "👑",
+  exact: true,
+};
+const ADMIN_EXPORT_LINK = {
+  to: "/admin/export",
+  label: "Export Data",
+  icon: "📥",
+  exact: true,
+};
+const ADMIN_FEEDBACK_LINK = {
+  to: "/admin/feedback",
+  label: "Feedbacks",
+  icon: "💬",
+  exact: true,
+};
+const ADMIN_API_DOCS_LINK = {
+  to: "/api-docs",
+  label: "API Docs",
+  icon: "📚",
+  exact: true,
+};
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   return (
     <button
-      onClick={(e) => { e.stopPropagation(); onToggle(); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle();
+      }}
       className={`rounded-full relative transition-colors flex-shrink-0 ${on ? color : "bg-slate-200 dark:bg-slate-700"}`}
       style={{ height: 18, width: 32 }}
     >
@@ -61,27 +87,116 @@ function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   );
 }
 
+const DEV_TOOL_LINKS = [
+  { to: "/devtools?tool=ts", icon: "🔷", label: "TS Adder" },
+  { to: "/devtools?tool=errors", icon: "🐛", label: "Error Finder" },
+  { to: "/devtools?tool=breaks", icon: "💥", label: "Break Finder" },
+  { to: "/js-compiler", icon: "⚡", label: "JS Compiler" },
+];
+
+function DevToolsGroup({ textMuted }) {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  return (
+    <div className="rounded-xl border border-black/5 dark:border-white/8 overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all hover:bg-black/5 dark:hover:bg-white/8 ${textMuted}`}
+      >
+        <span className="text-base">🛠️</span>
+        <span className="flex-1 text-left">Dev Tools</span>
+        <span className="text-xs opacity-60">{open ? "▲" : "▼"}</span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="overflow-hidden border-t border-black/5 dark:border-white/8"
+          >
+            {DEV_TOOL_LINKS.map((link) => (
+              <button
+                key={link.to}
+                onClick={() => navigate(link.to)}
+                className={`w-full flex items-center gap-3 px-5 py-2 text-sm transition-all hover:bg-black/5 dark:hover:bg-white/8 ${textMuted}`}
+              >
+                <span>{link.icon}</span>
+                <span>{link.label}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const [confirmLogout, setConfirmLogout] = useState(false);
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
   const {
-    enabled, toggleEnabled,
-    manual, setManualCondition,
-    manualLoc, setManualLocation,
-    activeCondition, meta, CONDITION_META,
-    temp, locName, loading, error, locDenied,
+    enabled,
+    toggleEnabled,
+    manual,
+    setManualCondition,
+    manualLoc,
+    setManualLocation,
+    activeCondition,
+    meta,
+    CONDITION_META,
+    temp,
+    locName,
+    loading,
+    error,
+    locDenied,
   } = useWeather();
   const navigate = useNavigate();
 
   const [stateSearch, setStateSearch] = useState("");
 
-  const GUEST_HIDDEN = ["/notifications", "/generate", "/my-questions", "/drafts", "/my-answers", "/bookmarks", "/progress", "/mock-interview", "/flashcards", "/js-compiler", "/study?tool=ts", "/study?tool=errors", "/study?tool=breaks", "/quiz", "/leaderboard"];
-  const allLinks = user?.role === "admin" ? [...BASE_LINKS, ADMIN_LINK, ADMIN_EXPORT_LINK, ADMIN_FEEDBACK_LINK] : BASE_LINKS;
-  const links = user?.isGuest ? allLinks.filter(l => !GUEST_HIDDEN.includes(l.to)) : allLinks;
+  const GUEST_HIDDEN = [
+    "/notifications",
+    "/generate",
+    "/my-questions",
+    "/drafts",
+    "/my-answers",
+    "/bookmarks",
+    "/progress",
+    "/mock-interview",
+    "/flashcards",
+    "/js-compiler",
+    "/study?tool=ts",
+    "/study?tool=errors",
+    "/study?tool=breaks",
+    "/quiz",
+    "/leaderboard",
+  ];
+  const isAdmin = user?.role === "admin";
+  const baseFiltered = isAdmin
+    ? BASE_LINKS.filter((l) => !l.hideForAdmin)
+    : BASE_LINKS;
+  const allLinks = isAdmin
+    ? [
+        ...baseFiltered,
+        ADMIN_LINK,
+        ADMIN_EXPORT_LINK,
+        ADMIN_FEEDBACK_LINK,
+        ADMIN_API_DOCS_LINK,
+      ]
+    : baseFiltered;
+  const links = user?.isGuest
+    ? allLinks.filter((l) => !GUEST_HIDDEN.includes(l.to))
+    : allLinks;
 
   const initials = user?.name
-    ?.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
+    ?.split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   const isStormy = activeCondition === "stormy";
   const textMuted = isStormy
@@ -92,7 +207,6 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden md:flex md:flex-col w-64 h-screen sticky top-0 sidebar-light glass border-r border-black/5 dark:border-white/10 p-5 overflow-y-auto">
-
       {/* Logo + Bell */}
       <motion.div
         className="flex items-center gap-2.5 mb-8 px-1"
@@ -100,10 +214,18 @@ export default function Sidebar() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <img src="/logo192.png" alt="DevQuiz" className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30" />
+        <img
+          src="/logo192.png"
+          alt="DevQuiz"
+          className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30"
+        />
         <div className="flex-1 min-w-0">
-          <p className="text-base font-bold tracking-tight gradient-text">DevQuiz</p>
-          <p className="text-[10px] text-slate-400 -mt-0.5">AI Interview Platform</p>
+          <p className="text-base font-bold tracking-tight gradient-text">
+            DevQuiz
+          </p>
+          <p className="text-[10px] text-slate-400 -mt-0.5">
+            AI Interview Platform
+          </p>
         </div>
       </motion.div>
 
@@ -120,7 +242,9 @@ export default function Sidebar() {
               to={link.to}
               end={!!link.exact}
               className={({ isActive }) => {
-                const active = link.activeMatch ? fullPath === link.activeMatch : isActive;
+                const active = link.activeMatch
+                  ? fullPath === link.activeMatch
+                  : isActive;
                 return `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                   active
                     ? "nav-active-light shadow-sm"
@@ -129,44 +253,66 @@ export default function Sidebar() {
               }}
             >
               {({ isActive }) => {
-                const active = link.activeMatch ? fullPath === link.activeMatch : isActive;
+                const active = link.activeMatch
+                  ? fullPath === link.activeMatch
+                  : isActive;
                 return (
-                <>
-                  <motion.span
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    className="text-base"
-                  >
-                    {link.icon}
-                  </motion.span>
-                  <span>{link.label}</span>
-                  {active && (
-                    <motion.div
-                      layoutId="nav-pill"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400"
-                    />
-                  )}
-                </>
-              );}}
+                  <>
+                    <motion.span
+                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 10,
+                      }}
+                      className="text-base"
+                    >
+                      {link.icon}
+                    </motion.span>
+                    <span>{link.label}</span>
+                    {active && (
+                      <motion.div
+                        layoutId="nav-pill"
+                        className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400"
+                      />
+                    )}
+                  </>
+                );
+              }}
             </NavLink>
           </motion.div>
         ))}
       </nav>
 
+      {/* Dev Tools section */}
+      <div className="mt-3 mb-1">
+        <DevToolsGroup textMuted={textMuted} />
+      </div>
+
       {/* Bottom controls */}
       <div className="border-t border-black/5 dark:border-white/10 pt-4 space-y-1.5">
-
         {/* Theme */}
         <div
           onClick={toggleTheme}
           role="button"
           className={`w-full flex items-center gap-3 text-sm px-3 py-2.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 transition-all cursor-pointer ${textMuted}`}
         >
-          <motion.span key={theme} initial={{ rotate: -30, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} className="text-base">
+          <motion.span
+            key={theme}
+            initial={{ rotate: -30, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            className="text-base"
+          >
             {theme === "dark" ? "🌙" : "☀️"}
           </motion.span>
-          <span className="flex-1 text-left">{theme === "dark" ? "Dark mode" : "Light mode"}</span>
-          <Toggle on={theme === "dark"} onToggle={toggleTheme} color="bg-indigo-500" />
+          <span className="flex-1 text-left">
+            {theme === "dark" ? "Dark mode" : "Light mode"}
+          </span>
+          <Toggle
+            on={theme === "dark"}
+            onToggle={toggleTheme}
+            color="bg-indigo-500"
+          />
         </div>
 
         {/* Snow */}
@@ -177,7 +323,11 @@ export default function Sidebar() {
         >
           <motion.span
             animate={{ rotate: snow ? [0, 15, -15, 0] : 0 }}
-            transition={{ duration: 0.5, repeat: snow ? Infinity : 0, repeatDelay: 2 }}
+            transition={{
+              duration: 0.5,
+              repeat: snow ? Infinity : 0,
+              repeatDelay: 2,
+            }}
             className="text-base"
           >
             ❄️
@@ -204,17 +354,24 @@ export default function Sidebar() {
               <p>Weather BG</p>
               {enabled && activeCondition && (
                 <p className="text-[10px] text-indigo-400 dark:text-cyan-400 -mt-0.5">
-                  {meta?.icon} {meta?.label}{temp !== null ? ` · ${temp}°C` : ""}
+                  {meta?.icon} {meta?.label}
+                  {temp !== null ? ` · ${temp}°C` : ""}
                   {locName ? ` · ${locName}` : ""}
                 </p>
               )}
             </div>
             <div className="flex items-center gap-1.5">
-              <Toggle on={enabled} onToggle={toggleEnabled} color="bg-emerald-500" />
+              <Toggle
+                on={enabled}
+                onToggle={toggleEnabled}
+                color="bg-emerald-500"
+              />
               <motion.span
                 animate={{ rotate: enabled ? 180 : 0 }}
                 className={`text-xs ${textMuted}`}
-              >▾</motion.span>
+              >
+                ▾
+              </motion.span>
             </div>
           </div>
 
@@ -228,16 +385,19 @@ export default function Sidebar() {
                 className="overflow-hidden"
               >
                 <div className="mx-2 mb-1 p-3 rounded-xl bg-black/5 dark:bg-white/5 space-y-3">
-
                   {/* ── Location section ── always visible when enabled ── */}
                   <div>
-                    <p className={`text-[10px] font-medium uppercase tracking-wide mb-2 ${textMuted}`}>
+                    <p
+                      className={`text-[10px] font-medium uppercase tracking-wide mb-2 ${textMuted}`}
+                    >
                       📍 Location
                     </p>
 
                     {/* Loading */}
                     {loading && (
-                      <p className="text-xs text-slate-400 animate-pulse mb-1.5">Fetching weather…</p>
+                      <p className="text-xs text-slate-400 animate-pulse mb-1.5">
+                        Fetching weather…
+                      </p>
                     )}
 
                     {/* Current location badge */}
@@ -275,7 +435,7 @@ export default function Sidebar() {
                     {/* Search */}
                     <input
                       value={stateSearch}
-                      onChange={e => setStateSearch(e.target.value)}
+                      onChange={(e) => setStateSearch(e.target.value)}
                       placeholder="Search state or city…"
                       className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
                     />
@@ -285,7 +445,10 @@ export default function Sidebar() {
                       {/* GPS option (if not denied) */}
                       {!locDenied && (
                         <button
-                          onClick={() => { setManualLocation(null); setStateSearch(""); }}
+                          onClick={() => {
+                            setManualLocation(null);
+                            setStateSearch("");
+                          }}
                           className={`w-full text-left text-xs px-2 py-1.5 rounded-lg transition-all ${
                             !manualLoc
                               ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-medium"
@@ -297,33 +460,42 @@ export default function Sidebar() {
                       )}
 
                       {/* States list */}
-                      {STATES_CAPITALS
-                        .filter(s =>
+                      {STATES_CAPITALS.filter(
+                        (s) =>
                           !stateSearch ||
-                          s.state.toLowerCase().includes(stateSearch.toLowerCase()) ||
-                          s.capital.toLowerCase().includes(stateSearch.toLowerCase())
-                        )
-                        .map(s => (
-                          <button
-                            key={s.state}
-                            onClick={() => { setManualLocation(s); setStateSearch(""); }}
-                            className={`w-full text-left text-xs px-2 py-1.5 rounded-lg transition-all ${
-                              manualLoc?.state === s.state
-                                ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-medium"
-                                : "hover:bg-black/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300"
-                            }`}
-                          >
-                            <span className="font-medium">{s.capital}</span>
-                            <span className="text-slate-400 dark:text-slate-500 ml-1 text-[10px]">— {s.state}</span>
-                          </button>
-                        ))
-                      }
+                          s.state
+                            .toLowerCase()
+                            .includes(stateSearch.toLowerCase()) ||
+                          s.capital
+                            .toLowerCase()
+                            .includes(stateSearch.toLowerCase()),
+                      ).map((s) => (
+                        <button
+                          key={s.state}
+                          onClick={() => {
+                            setManualLocation(s);
+                            setStateSearch("");
+                          }}
+                          className={`w-full text-left text-xs px-2 py-1.5 rounded-lg transition-all ${
+                            manualLoc?.state === s.state
+                              ? "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-medium"
+                              : "hover:bg-black/5 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300"
+                          }`}
+                        >
+                          <span className="font-medium">{s.capital}</span>
+                          <span className="text-slate-400 dark:text-slate-500 ml-1 text-[10px]">
+                            — {s.state}
+                          </span>
+                        </button>
+                      ))}
                     </div>
                   </div>
 
                   {/* ── Condition override ── */}
                   <div className="border-t border-black/5 dark:border-white/5 pt-3">
-                    <p className={`text-[10px] font-medium uppercase tracking-wide mb-2 ${textMuted}`}>
+                    <p
+                      className={`text-[10px] font-medium uppercase tracking-wide mb-2 ${textMuted}`}
+                    >
                       Condition override
                     </p>
                     <div className="grid grid-cols-3 gap-1">
@@ -352,7 +524,9 @@ export default function Sidebar() {
                       ))}
                     </div>
                     {manual && (
-                      <p className={`text-[10px] mt-1.5 ${textMuted}`}>Override active — ignores location weather</p>
+                      <p className={`text-[10px] mt-1.5 ${textMuted}`}>
+                        Override active — ignores location weather
+                      </p>
                     )}
                   </div>
                 </div>
@@ -369,7 +543,9 @@ export default function Sidebar() {
         >
           <span className="text-base">📱</span>
           <span className="flex-1 text-left">Android App</span>
-          <span className="text-[10px] font-semibold text-indigo-500 dark:text-cyan-400 bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-md">↓ APK</span>
+          <span className="text-[10px] font-semibold text-indigo-500 dark:text-cyan-400 bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-md">
+            ↓ APK
+          </span>
         </a>
       </div>
     </aside>

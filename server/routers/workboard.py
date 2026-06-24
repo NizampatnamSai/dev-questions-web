@@ -51,6 +51,7 @@ class ConnectionManager:
                 users_map[uid] = {
                     "id": uid,
                     "name": user_info.get("name", "Unknown"),
+                    "userAvatar": user_info.get("avatar"),
                 }
         return list(users_map.values())
 
@@ -64,8 +65,8 @@ async def _broadcast_online_count():
 
 
 @router.websocket("/ws")
-async def workboard_ws(ws: WebSocket, user_id: str = None, user_name: str = None):
-    user_info = {"id": user_id or "anonymous", "name": user_name or "Guest"}
+async def workboard_ws(ws: WebSocket, user_id: str = None, user_name: str = None, user_avatar: str = None):
+    user_info = {"id": user_id or "anonymous", "name": user_name or "Guest", "avatar": user_avatar or None}
     await manager.connect(ws, user_info)
     # Tell everyone (including new joiner) the updated count
     await _broadcast_online_count()
@@ -165,7 +166,11 @@ async def list_members(user=Depends(current_user)):
         if not member or member.get("status") != "active":
             raise HTTPException(403, "Members only")
     docs = await col_workboard_members().find({"status": "active"}).to_list(200)
-    return [{"userId": d["userId"], "userName": d["userName"]} for d in docs]
+    from db_mongo import col_user_profiles
+    user_ids = [d["userId"] for d in docs]
+    profiles = await col_user_profiles().find({"userId": {"$in": user_ids}}).to_list(200)
+    avatar_map = {p["userId"]: p.get("avatar_url") for p in profiles}
+    return [{"userId": d["userId"], "userName": d["userName"], "userAvatar": avatar_map.get(d["userId"])} for d in docs]
 
 
 # ── Posts endpoints ───────────────────────────────────────────────────────────
@@ -198,12 +203,18 @@ async def today_posts(user=Depends(current_user), date: Optional[str] = Query(No
     target_date = date or ist_today()
     wb_cfg = await _get_wb_config()
     docs = await col_workboard_posts().find({"date": target_date}).sort("postedAt", 1).to_list(200)
+    from db_mongo import col_user_profiles
+    user_ids = list({d["userId"] for d in docs})
+    profiles = await col_user_profiles().find({"userId": {"$in": user_ids}}).to_list(200)
+    avatar_map = {p["userId"]: p.get("avatar_url") for p in profiles}
     result = []
     for d in docs:
         d["id"] = str(d.pop("_id"))
         can_edit = d["userId"] == user["id"] and _can_edit(d, wb_cfg["edit_window_minutes"])
         d["postedAt"] = d["postedAt"].strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(d.get("postedAt"), datetime) else d.get("postedAt")
         d["canEdit"] = can_edit
+        if not d.get("userAvatar"):
+            d["userAvatar"] = avatar_map.get(d["userId"])
         result.append(d)
     return result
 
@@ -211,6 +222,40 @@ async def today_posts(user=Depends(current_user), date: Optional[str] = Query(No
 @router.get("/config")
 async def get_wb_config():
     """Public: returns workboard settings for display"""
+    return await _get_wb_config()
+
+
+class WbConfigBody(BaseModel):
+    reminder_time: Optional[str] = None        # "HH:MM" IST
+    edit_window_minutes: Optional[int] = None
+
+
+@router.patch("/config")
+async def update_wb_config(body: WbConfigBody, user=Depends(current_user)):
+    """Admin: update reminder time + edit window, then reschedule cron job."""
+    if not _is_admin(user):
+        raise HTTPException(403, "Admins only")
+    from db_mongo import col_app_config
+    update: dict = {}
+    if body.reminder_time is not None:
+        update["wb_reminder_time"] = body.reminder_time
+    if body.edit_window_minutes is not None:
+        update["wb_edit_window_minutes"] = body.edit_window_minutes
+    if update:
+        await col_app_config().update_one({"_id": "config"}, {"$set": update}, upsert=True)
+    # Reschedule the APScheduler job
+    if body.reminder_time is not None:
+        try:
+            h, m = [int(x) for x in body.reminder_time.split(":")]
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            from apscheduler.schedulers.asyncio import AsyncIOScheduler
+            import main as _main
+            _main.scheduler.reschedule_job("workboard_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
+            print(f"[workboard] rescheduled to {utc_h:02d}:{utc_m:02d} UTC ({body.reminder_time} IST)", flush=True)
+        except Exception as e:
+            print(f"[workboard] reschedule failed (non-fatal): {e}", flush=True)
     return await _get_wb_config()
 
 
@@ -231,21 +276,26 @@ async def create_post(body: PostBody, user=Depends(current_user)):
     if existing:
         raise HTTPException(400, "You've already posted today")
     posted_at = now()
+    from db_mongo import col_user_profiles
+    profile = await col_user_profiles().find_one({"userId": user["id"]}) or {}
+    avatar = profile.get("avatar_url") or None
     result = await col_workboard_posts().insert_one({
-        "userId":   user["id"],
-        "userName": user.get("name", ""),
-        "message":  body.message.strip(),
-        "date":     today,
-        "postedAt": posted_at,
+        "userId":      user["id"],
+        "userName":    user.get("name", ""),
+        "userAvatar":  avatar,
+        "message":     body.message.strip(),
+        "date":        today,
+        "postedAt":    posted_at,
     })
     post_data = {
-        "id":       str(result.inserted_id),
-        "userId":   user["id"],
-        "userName": user.get("name", ""),
-        "message":  body.message.strip(),
-        "date":     today,
-        "postedAt": posted_at.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z",
-        "canEdit":  True,
+        "id":          str(result.inserted_id),
+        "userId":      user["id"],
+        "userName":    user.get("name", ""),
+        "userAvatar":  avatar,
+        "message":     body.message.strip(),
+        "date":        today,
+        "postedAt":    posted_at.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z",
+        "canEdit":     True,
     }
     # Broadcast via WebSocket
     await manager.broadcast({"type": "new_post", "post": post_data})
@@ -335,6 +385,32 @@ async def missing_today(user=Depends(current_user)):
     ]
     return missing
 
+@router.get("/workboard-status")
+async def workboard_status(user=Depends(current_user)):
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+
+    today = ist_today()
+    members = await col_workboard_members().find({"status": "active"}).to_list(200)
+    posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
+    posted_ids = {d["userId"] for d in posted_docs}
+
+    missing = [
+        {"userId": m["userId"], "userName": m["userName"]}
+        for m in members if m["userId"] not in posted_ids
+    ]
+
+    if user.get("role") in ("admin", "sub_admin"):
+        pending_members = await col_workboard_members().find({"status": "pending"}).to_list(100)
+        return {
+            "missing": missing,
+            "pending_members": [sid(d) for d in pending_members]
+        }
+    else:
+        return {"missing": missing}
+
 
 @router.get("/export")
 async def export_posts(
@@ -368,3 +444,30 @@ async def export_posts(
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+
+
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+
+    today = ist_today()
+    members = await col_workboard_members().find({"status": "active"}).to_list(200)
+    posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
+    posted_ids = {d["userId"] for d in posted_docs}
+
+    missing = [
+        {"userId": m["userId"], "userName": m["userName"]}
+        for m in members if m["userId"] not in posted_ids
+    ]
+
+    if user.get("role") in ("admin", "sub_admin"):
+        pending_members = await col_workboard_members().find({"status": "pending"}).to_list(100)
+        return {
+            "missing": missing,
+            "pending_members": [sid(d) for d in pending_members]
+        }
+    else:
+        return {"missing": missing}

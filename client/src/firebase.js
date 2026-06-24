@@ -18,6 +18,8 @@ export const messaging = getMessaging(app);
 // VAPID key from Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
 const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY ?? '';
 
+const FCM_TOKEN_KEY = 'devquiz_fcm_token';
+
 export async function requestAndRegisterToken(apiClient) {
   try {
     const permission = await Notification.requestPermission();
@@ -32,7 +34,12 @@ export async function requestAndRegisterToken(apiClient) {
     });
 
     if (token && apiClient) {
+      const cached = localStorage.getItem(FCM_TOKEN_KEY);
+      // Always register; backend does upsert so re-registering same token is safe
       await apiClient.post('/admin/fcm-token', { token, platform: 'web' });
+      if (cached !== token) {
+        localStorage.setItem(FCM_TOKEN_KEY, token);
+      }
     }
     return token;
   } catch (e) {

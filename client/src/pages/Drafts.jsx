@@ -3,21 +3,26 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import AnswerBlock from "../components/AnswerBlock";
+import { fmtDate, fmtTime } from "../utils/time";
 import ConfirmModal from "../components/ConfirmModal";
 
-function DraftCard({ q, onPublish, onDelete, publishing, communityToday }) {
+function DraftCard({ q, onPublish, onDelete, onUpdate, publishing, communityToday }) {
   const [revealed, setRevealed] = useState(false);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ question: q.question, answer: q.answer, hints: q.hints || [], tags: q.tags || [] });
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    setForm({ question: q.question, answer: q.answer, hints: q.hints || [], tags: q.tags || [] });
+  }, [q.question, q.answer, q.tags]);
+
   const saveEdit = async () => {
     setSaving(true);
     try {
-      await api.put(`/questions/${q.id}`, form);
+      const { data } = await api.put(`/questions/${q.id}`, form);
       toast.success("Draft updated");
       setEditing(false);
-      // update local state via parent reload
+      onUpdate?.({ ...q, ...form, ...(data || {}) });
     } catch {
       toast.error("Failed to save");
     } finally {
@@ -49,7 +54,7 @@ function DraftCard({ q, onPublish, onDelete, publishing, communityToday }) {
           {q.type === "Coding" ? "💻 Coding" : "🧩 Technical"}
         </span>
         <span className="ml-auto text-[10px] text-slate-400">
-          {new Date(q.createdAt).toLocaleDateString()} {new Date(q.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {fmtDate(q.createdAt)} {fmtTime(q.createdAt)}
         </span>
       </div>
 
@@ -255,6 +260,7 @@ export default function Drafts() {
                   q={q}
                   onPublish={handlePublish}
                   onDelete={q => setDeleteTarget(q)}
+                  onUpdate={updated => setDrafts(ds => ds.map(d => d.id === updated.id ? updated : d))}
                   publishing={publishing}
                   communityToday={communityToday}
                 />

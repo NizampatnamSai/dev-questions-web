@@ -36,7 +36,7 @@ async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user))
     try:
         # Get user's previous flashcard questions to avoid duplicates
         user_id = str(user["_id"])
-        previous_questions = await col_flashcards.find(
+        previous_questions = await col_flashcards().find(
             {"userId": user_id}
         ).to_list(1000)
 
@@ -67,7 +67,7 @@ async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user))
                 "reviews": 0,
                 "createdAt": now()
             }
-            result = await col_flashcards.insert_one(card_doc)
+            result = await col_flashcards().insert_one(card_doc)
             card_doc["id"] = str(result.inserted_id)
             cards.append(card_doc)
 
@@ -93,7 +93,7 @@ async def rate_flashcard(card_id: str, rating: int, user=Depends(current_user)):
     Uses SM-2 algorithm for optimal spacing
     """
     try:
-        card = await col_flashcards.find_one({"_id": oid(card_id)})
+        card = await col_flashcards().find_one({"_id": oid(card_id)})
         if not card:
             raise HTTPException(404, "Flashcard not found")
 
@@ -109,7 +109,7 @@ async def rate_flashcard(card_id: str, rating: int, user=Depends(current_user)):
             ease = min(2.5, card.get("ease", 2.5) + 0.1)
 
         # Update card
-        await col_flashcards.update_one(
+        await col_flashcards().update_one(
             {"_id": oid(card_id)},
             {"$set": {
                 "nextReview": now() + timedelta(days=interval),
@@ -135,7 +135,7 @@ async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
         user_id = str(user["_id"])
 
         # Check if user already completed this day
-        completion = await col_dsa_challenge.find_one({
+        completion = await col_dsa_challenge().find_one({
             "userId": user_id,
             "day": day
         })
@@ -148,7 +148,7 @@ async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
             }
 
         # Generate unique question for this day
-        existing_day_questions = await col_dsa_challenge.find({
+        existing_day_questions = await col_dsa_challenge().find({
             "day": day
         }).to_list(1000)
 
@@ -182,7 +182,7 @@ async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
         user_id = str(user["_id"])
 
         # Get the question
-        question = await col_dsa_challenge.find_one({
+        question = await col_dsa_challenge().find_one({
             "userId": user_id,
             "day": req.day
         })
@@ -195,7 +195,7 @@ async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
         )
 
         # Store submission
-        await col_dsa_challenge.update_one(
+        await col_dsa_challenge().update_one(
             {"_id": oid(question["_id"])} if question else {"userId": user_id, "day": req.day},
             {"$set": {
                 "submittedAnswer": req.answer,
@@ -228,7 +228,7 @@ async def get_daily_challenge(category: str = "mixed", user=Depends(current_user
         today = now().date()
 
         # Check if user already got today's challenge
-        existing = await col_ai_questions.find_one({
+        existing = await col_ai_questions().find_one({
             "userId": user_id,
             "type": "daily",
             "date": today
@@ -238,7 +238,7 @@ async def get_daily_challenge(category: str = "mixed", user=Depends(current_user
             return format_question_response(existing)
 
         # Get all questions asked to this user to avoid duplicates
-        user_questions = await col_ai_questions.find({
+        user_questions = await col_ai_questions().find({
             "userId": user_id
         }).to_list(5000)
 
@@ -266,7 +266,7 @@ async def get_daily_challenge(category: str = "mixed", user=Depends(current_user
             "questionHash": hash_question(question_data["title"]),
             "createdAt": now()
         }
-        await col_ai_questions.insert_one(doc)
+        await col_ai_questions().insert_one(doc)
 
         return format_question_response(doc)
     except Exception as e:
@@ -278,7 +278,7 @@ async def get_daily_challenge(category: str = "mixed", user=Depends(current_user
 
 async def get_user_dsa_streak(user_id: str) -> int:
     """Calculate current DSA challenge streak"""
-    completions = await col_dsa_challenge.find({
+    completions = await col_dsa_challenge().find({
         "userId": user_id,
         "correct": True
     }).sort("day", -1).to_list(100)

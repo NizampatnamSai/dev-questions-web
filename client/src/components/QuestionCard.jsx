@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AnswerBlock from "./AnswerBlock";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import { fmtDate, fmtTime } from "../utils/time";
 import ConfirmModal from "./ConfirmModal";
 
 const CATEGORY_STYLES = {
@@ -88,7 +89,7 @@ function CommentsSection({ qid, onCommentCountChange }) {
                   <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">{c.author?.name}</span>
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] text-slate-400">
-                      {new Date(c.createdAt).toLocaleDateString()} {new Date(c.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      {fmtDate(c.createdAt)} {fmtTime(c.createdAt)}
                     </span>
                     {(user?.id === c.author?.id || user?.role === "admin" || user?.role === "sub_admin") && (
                       <button onClick={() => setDeleteTarget(c.id)} className="text-[10px] text-red-400 hover:text-red-500">✕</button>
@@ -172,7 +173,7 @@ export default function QuestionCard({
           </span>
         )}
         <span className="ml-auto text-xs text-slate-400 whitespace-nowrap">
-          {new Date(q.createdAt).toLocaleDateString()} {new Date(q.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {fmtDate(q.createdAt)} {fmtTime(q.createdAt)}
         </span>
       </div>
 

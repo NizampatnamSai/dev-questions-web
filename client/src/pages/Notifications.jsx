@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
+import { parseUTC } from "../utils/time";
 
 const TYPE_ICON = {
   manual:           "📢",
@@ -12,19 +13,24 @@ const TYPE_ICON = {
   question_deleted: "🗑️",
   new_question:     "❓",
   comment:          "💬",
+  feedback:         "✨",
+  feedback_reply:   "💬",
+  workboard_reminder:"📋",
 };
 
 function fmtDate(iso) {
   if (!iso) return "";
-  const d = new Date(iso);
+  const d = parseUTC(iso);
   const now = new Date();
   const diff = (now - d) / 1000;
   if (diff < 60)   return "Just now";
   if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  // Show actual IST time for anything older than 1h
+  const timeStr = d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" });
   const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
-  if (d.toDateString() === yesterday.toDateString()) return "Yesterday";
-  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  if (d.toDateString() === now.toDateString()) return timeStr;
+  if (d.toDateString() === yesterday.toDateString()) return `Yesterday ${timeStr}`;
+  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", timeZone: "Asia/Kolkata" }) + ` ${timeStr}`;
 }
 
 export default function Notifications() {
@@ -55,13 +61,20 @@ export default function Notifications() {
 
   const handleCardClick = async (n) => {
     await markOneRead(n.id);
-    // Redirect based on notification type
-    if (n.data?.path) {
-      navigate(n.data.path);
+    // path is stored top-level in in-app notifications; data.path in push-derived ones
+    const path = n.path || n.data?.path;
+    if (path && path !== "/notifications") {
+      navigate(path);
+    } else if (n.type === "feedback_reply") {
+      navigate("/my-feedback");
+    } else if (n.type === "feedback") {
+      navigate("/admin/feedback");
     } else if (n.type === "comment") {
       navigate(`/question/${n.data?.questionId}`);
     } else if (n.type === "new_question" || n.type === "question_deleted") {
       navigate("/community");
+    } else if (n.type === "workboard_reminder") {
+      navigate("/workboard");
     }
   };
 

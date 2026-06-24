@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 
@@ -32,7 +33,7 @@ const ROADMAPS = {
   },
 };
 
-const RoadmapCard = ({ category, data }) => (
+const RoadmapCard = ({ category, data, onViewDetails }) => (
   <motion.div
     initial={{ opacity: 0, y: 8 }}
     animate={{ opacity: 1, y: 0 }}
@@ -75,14 +76,18 @@ const RoadmapCard = ({ category, data }) => (
       ))}
     </div>
 
-    <button className="w-full px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 transition-colors">
-      View Details
+    <button
+      onClick={e => { e.stopPropagation(); onViewDetails?.(); }}
+      className="w-full px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 transition-colors"
+    >
+      Study This Roadmap →
     </button>
   </motion.div>
 );
 
 export default function CategoryRoadmap() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   if (selectedCategory && ROADMAPS[selectedCategory]) {
@@ -94,7 +99,11 @@ export default function CategoryRoadmap() {
         >
           ← Back to all roadmaps
         </button>
-        <RoadmapCard category={selectedCategory} data={ROADMAPS[selectedCategory]} />
+        <RoadmapCard
+          category={selectedCategory}
+          data={ROADMAPS[selectedCategory]}
+          onViewDetails={() => navigate("/study")}
+        />
       </motion.div>
     );
   }
@@ -109,7 +118,11 @@ export default function CategoryRoadmap() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {Object.entries(ROADMAPS).map(([key, data]) => (
           <div key={key} onClick={() => setSelectedCategory(key)} className="cursor-pointer">
-            <RoadmapCard category={key} data={data} />
+            <RoadmapCard
+              category={key}
+              data={data}
+              onViewDetails={() => { setSelectedCategory(key); }}
+            />
           </div>
         ))}
       </div>
