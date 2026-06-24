@@ -57,6 +57,8 @@ import ExportData from "./pages/ExportData";
 import AdvancedStudyHub from "./pages/AdvancedStudyHub";
 import MyFeedback from "./pages/MyFeedback";
 import DevTools from "./pages/DevTools";
+import AdminTasks from "./pages/AdminTasks";
+import MyTasks from "./pages/MyTasks";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -439,6 +441,22 @@ function AppInner() {
           element={
             <ProtectedPage path="/admin/feedback">
               <AdminFeedback />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/admin/tasks"
+          element={
+            <ProtectedPage path="/admin/tasks">
+              <AdminTasks />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/my-tasks"
+          element={
+            <ProtectedPage path="/my-tasks">
+              <MyTasks />
             </ProtectedPage>
           }
         />

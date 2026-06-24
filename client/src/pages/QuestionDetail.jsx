@@ -255,6 +255,21 @@ export default function QuestionDetail() {
           )}
         </AnimatePresence>
 
+        {/* Ideal Answer panel */}
+        <AnimatePresence>
+          {showAnswer && q.answer && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+              className="rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 p-5 space-y-2"
+            >
+              <p className="text-xs font-bold text-indigo-500 uppercase tracking-wider">💡 Ideal Answer</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">{q.answer}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Saved answer history */}
         <AnimatePresence>
           {showHistory && myAnswers.length > 0 && (

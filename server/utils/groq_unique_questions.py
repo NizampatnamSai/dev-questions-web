@@ -56,13 +56,13 @@ EXAMPLES OF UNIQUE vs DUPLICATE:
 Generate questions NOW:"""
 
         try:
-            response = client.messages.create(
+            response = client.chat.completions.create(
                 model="mixtral-8x7b-32768",
                 max_tokens=2048,
                 messages=[{"role": "user", "content": prompt}]
             )
 
-            response_text = response.content[0].text
+            response_text = response.choices[0].message.content
             generated = json.loads(response_text)
 
             # Validate and deduplicate
@@ -130,13 +130,13 @@ Return JSON array:
 Generate NOW:"""
 
     try:
-        response = client.messages.create(
+        response = client.chat.completions.create(
             model="mixtral-8x7b-32768",
             max_tokens=2048,
             messages=[{"role": "user", "content": prompt}]
         )
 
-        response_text = response.content[0].text
+        response_text = response.choices[0].message.content
         cards = json.loads(response_text)
 
         # Deduplicate
@@ -178,13 +178,13 @@ Return JSON:
 Make this problem COMPLETELY UNIQUE:"""
 
     try:
-        response = client.messages.create(
+        response = client.chat.completions.create(
             model="mixtral-8x7b-32768",
             max_tokens=1024,
             messages=[{"role": "user", "content": prompt}]
         )
 
-        response_text = response.content[0].text
+        response_text = response.choices[0].message.content
         challenge = json.loads(response_text)
 
         return challenge
@@ -202,12 +202,12 @@ Make this problem COMPLETELY UNIQUE:"""
 async def call_groq_api(prompt: str, max_tokens: int = 1024) -> str:
     """Generic Groq API call"""
     try:
-        response = client.messages.create(
+        response = client.chat.completions.create(
             model="mixtral-8x7b-32768",
             max_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.content[0].text
+        return response.choices[0].message.content
     except Exception as e:
         print(f"Groq API error: {e}")
         return ""

@@ -39,6 +39,7 @@ const BASE_LINKS = [
   { to: "/ask", label: "Ask AI", icon: "🤖" },
   { to: "/notifications", label: "Notifications", icon: "🔔" },
   { to: "/my-feedback", label: "My Feedback", icon: "💬", hideForAdmin: true },
+  { to: "/my-tasks", label: "My Tasks", icon: "📋", hideForAdmin: true },
   { to: "/drafts", label: "Drafts", icon: "💾" },
   { to: "/guide", label: "Project Guide", icon: "🗺️" },
 ];
@@ -59,6 +60,12 @@ const ADMIN_FEEDBACK_LINK = {
   to: "/admin/feedback",
   label: "Feedbacks",
   icon: "💬",
+  exact: true,
+};
+const ADMIN_TASKS_LINK = {
+  to: "/admin/tasks",
+  label: "Task Manager",
+  icon: "📋",
   exact: true,
 };
 const ADMIN_API_DOCS_LINK = {
@@ -184,6 +191,7 @@ export default function Sidebar() {
         ADMIN_LINK,
         ADMIN_EXPORT_LINK,
         ADMIN_FEEDBACK_LINK,
+        ADMIN_TASKS_LINK,
         ADMIN_API_DOCS_LINK,
       ]
     : baseFiltered;

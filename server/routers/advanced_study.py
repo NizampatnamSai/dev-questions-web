@@ -35,7 +35,7 @@ async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user))
     """Generate unique flashcard questions with spaced repetition"""
     try:
         # Get user's previous flashcard questions to avoid duplicates
-        user_id = str(user["_id"])
+        user_id = user["id"]
         previous_questions = await col_flashcards().find(
             {"userId": user_id}
         ).to_list(1000)
@@ -132,7 +132,7 @@ async def rate_flashcard(card_id: str, rating: int, user=Depends(current_user)):
 async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
     """Get the daily DSA challenge question (unique, no repeats)"""
     try:
-        user_id = str(user["_id"])
+        user_id = user["id"]
 
         # Check if user already completed this day
         completion = await col_dsa_challenge().find_one({
@@ -179,7 +179,7 @@ async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
 async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
     """Submit answer to DSA challenge"""
     try:
-        user_id = str(user["_id"])
+        user_id = user["id"]
 
         # Get the question
         question = await col_dsa_challenge().find_one({
@@ -224,8 +224,8 @@ async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
 async def get_daily_challenge(category: str = "mixed", user=Depends(current_user)):
     """Get today's unique daily challenge (no duplicates)"""
     try:
-        user_id = str(user["_id"])
-        today = now().date()
+        user_id = user["id"]
+        today = now().strftime("%Y-%m-%d")
 
         # Check if user already got today's challenge
         existing = await col_ai_questions().find_one({

@@ -52,6 +52,8 @@ def col_challenges():           return mdb()["challenges"]
 def col_ai_questions():         return mdb()["ai_questions"]
 def col_dsa_challenge():        return mdb()["dsa_challenge"]
 def col_flashcards():           return mdb()["flashcards"]
+def col_tasks():                return mdb()["tasks"]
+def col_task_comments():        return mdb()["task_comments"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
