@@ -58,15 +58,24 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 
+async def _broadcast_online_count():
+    users = manager.get_active_users()
+    await manager.broadcast({"type": "online_count", "count": len(users), "users": users})
+
+
 @router.websocket("/ws")
 async def workboard_ws(ws: WebSocket, user_id: str = None, user_name: str = None):
     user_info = {"id": user_id or "anonymous", "name": user_name or "Guest"}
     await manager.connect(ws, user_info)
+    # Tell everyone (including new joiner) the updated count
+    await _broadcast_online_count()
     try:
         while True:
             await ws.receive_text()  # keep alive
     except WebSocketDisconnect:
         manager.disconnect(ws)
+        # Tell remaining users the count dropped
+        await _broadcast_online_count()
 
 
 # ── Member endpoints ──────────────────────────────────────────────────────────
@@ -161,13 +170,22 @@ async def list_members(user=Depends(current_user)):
 
 # ── Posts endpoints ───────────────────────────────────────────────────────────
 
-def _can_edit(post: dict) -> bool:
+async def _get_wb_config() -> dict:
+    from db_mongo import col_app_config
+    doc = await col_app_config().find_one({"_id": "config"}) or {}
+    return {
+        "edit_window_minutes": int(doc.get("wb_edit_window_minutes", 30)),
+        "reminder_time": doc.get("wb_reminder_time", "09:30"),
+    }
+
+
+def _can_edit(post: dict, window_minutes: int = 30) -> bool:
     posted_at = post.get("postedAt")
     if not posted_at:
         return False
     if posted_at.tzinfo is None:
         posted_at = posted_at.replace(tzinfo=timezone.utc)
-    return (datetime.now(timezone.utc) - posted_at).total_seconds() < 1800
+    return (datetime.now(timezone.utc) - posted_at).total_seconds() < (window_minutes * 60)
 
 
 @router.get("/posts")
@@ -178,15 +196,22 @@ async def today_posts(user=Depends(current_user), date: Optional[str] = Query(No
             raise HTTPException(403, "Members only")
     # If date provided, fetch that date. Otherwise fetch today's posts
     target_date = date or ist_today()
+    wb_cfg = await _get_wb_config()
     docs = await col_workboard_posts().find({"date": target_date}).sort("postedAt", 1).to_list(200)
     result = []
     for d in docs:
         d["id"] = str(d.pop("_id"))
-        can_edit = d["userId"] == user["id"] and _can_edit(d)
+        can_edit = d["userId"] == user["id"] and _can_edit(d, wb_cfg["edit_window_minutes"])
         d["postedAt"] = d["postedAt"].strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(d.get("postedAt"), datetime) else d.get("postedAt")
         d["canEdit"] = can_edit
         result.append(d)
     return result
+
+
+@router.get("/config")
+async def get_wb_config():
+    """Public: returns workboard settings for display"""
+    return await _get_wb_config()
 
 
 class PostBody(BaseModel):
@@ -247,8 +272,9 @@ async def edit_post(post_id: str, body: PostBody, user=Depends(current_user)):
         raise HTTPException(404, "Post not found")
     if post["userId"] != user["id"]:
         raise HTTPException(403, "Not your post")
-    if not _can_edit(post):
-        raise HTTPException(400, "Edit window (30 min) has expired")
+    wb_cfg = await _get_wb_config()
+    if not _can_edit(post, wb_cfg["edit_window_minutes"]):
+        raise HTTPException(400, f"Edit window ({wb_cfg['edit_window_minutes']} min) has expired")
     if not body.message.strip():
         raise HTTPException(400, "Message cannot be empty")
     await col_workboard_posts().update_one(

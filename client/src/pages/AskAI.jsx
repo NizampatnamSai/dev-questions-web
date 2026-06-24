@@ -184,10 +184,13 @@ export default function AskAI() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);       // current chat already saved
+  const [isSaved, setIsSaved] = useState(false);
+  const [autoSave, setAutoSave] = useState(() => localStorage.getItem("devquiz_ai_autosave") === "true");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  // Keep a ref so the auto-save inside async send() always sees the latest chatId
+  const activeChatIdRef = useRef(null);
 
   // Load history on mount
   useEffect(() => {
@@ -198,8 +201,21 @@ export default function AskAI() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  // Keep ref in sync
+  useEffect(() => { activeChatIdRef.current = activeChatId; }, [activeChatId]);
+
+  const toggleAutoSave = () => {
+    setAutoSave(prev => {
+      const next = !prev;
+      localStorage.setItem("devquiz_ai_autosave", String(next));
+      toast(next ? "🔄 Auto-save ON" : "Auto-save OFF", { icon: next ? "✅" : "⏸️" });
+      return next;
+    });
+  };
+
   const startNewChat = () => {
     setActiveChatId(null);
+    activeChatIdRef.current = null;
     setMessages([]);
     setInput("");
     setIsSaved(false);
@@ -241,34 +257,55 @@ export default function AskAI() {
     } catch { toast.error("Failed"); }
   };
 
-  const saveChat = async () => {
-    if (!messages.length) return;
-    setSaving(true);
+  // Export all saved chats as a single JSON file
+  const exportAll = () => {
+    if (!history.length) { toast.error("No saved chats to export"); return; }
+    const json = JSON.stringify(history, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `devquiz-ai-chats-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Exported all chats!");
+  };
+
+  const saveChat = async (msgsOverride, chatIdOverride, silent = false) => {
+    const msgsToSave = msgsOverride ?? messages;
+    const chatIdToUse = chatIdOverride ?? activeChatId;
+    if (!msgsToSave.length) return;
+    if (!silent) setSaving(true);
     try {
-      const payload = { messages, chat_id: activeChatId || "" };
+      const payload = { messages: msgsToSave, chat_id: chatIdToUse || "" };
       const { data } = await api.post("/ai/history", payload);
-      const newId = data.id || activeChatId;
+      const newId = data.id || chatIdToUse;
       setActiveChatId(newId);
+      activeChatIdRef.current = newId;
       setIsSaved(true);
-      // Refresh history list
       const { data: hist } = await api.get("/ai/history");
       setHistory(hist);
-      toast.success("Saved to history!");
-    } catch { toast.error("Failed to save"); }
-    finally { setSaving(false); }
+      if (!silent) toast.success("Saved to history!");
+    } catch { if (!silent) toast.error("Failed to save"); }
+    finally { if (!silent) setSaving(false); }
   };
 
   const send = async (text) => {
     const q = (text || input).trim();
     if (!q || loading) return;
     setInput("");
-    setIsSaved(false); // unsaved after new message
+    setIsSaved(false);
     const updatedMsgs = [...messages, { role: "user", text: q }];
     setMessages(updatedMsgs);
     setLoading(true);
     try {
       const { data } = await api.post("/ai/ask", { question: q });
-      setMessages([...updatedMsgs, { role: "ai", text: data.answer }]);
+      const finalMsgs = [...updatedMsgs, { role: "ai", text: data.answer }];
+      setMessages(finalMsgs);
+      // Auto-save if enabled — use ref so we always have the latest chatId
+      if (autoSave) {
+        await saveChat(finalMsgs, activeChatIdRef.current, true);
+      }
     } catch (err) {
       const msg = err.response?.data?.detail || "AI failed to respond. Try again.";
       setMessages([...updatedMsgs, { role: "ai", text: `⚠️ ${msg}` }]);
@@ -324,6 +361,7 @@ export default function AskAI() {
           onSelect={openChat}
           onDelete={deleteChat}
           onDeleteAll={deleteAll}
+          onExportAll={exportAll}
         />
       </div>
 
@@ -343,6 +381,7 @@ export default function AskAI() {
               onSelect={openChat}
               onDelete={deleteChat}
               onDeleteAll={deleteAll}
+              onExportAll={exportAll}
               onClose={() => setSidebarOpen(false)}
             />
           </motion.div>
@@ -367,23 +406,46 @@ export default function AskAI() {
           </div>
           {!isEmpty && (
             <div className="flex items-center gap-2 flex-shrink-0">
-              {/* Save button — only show when chat has unsaved changes */}
-              {!isSaved && (
+              {/* Auto-save toggle */}
+              <button
+                onClick={toggleAutoSave}
+                title={autoSave ? "Auto-save ON — click to disable" : "Auto-save OFF — click to enable"}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                  autoSave
+                    ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-500/30"
+                    : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/15"
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${autoSave ? "bg-indigo-500 animate-pulse" : "bg-slate-400"}`} />
+                {autoSave ? "Auto-save" : "Auto-save"}
+              </button>
+
+              {/* Manual save — only when not auto-saving and has unsaved changes */}
+              {!autoSave && !isSaved && (
                 <button
-                  onClick={saveChat}
+                  onClick={() => saveChat()}
                   disabled={saving}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-semibold hover:bg-emerald-200 dark:hover:bg-emerald-500/30 disabled:opacity-50 transition-colors"
                 >
-                  {saving
-                    ? <span className="w-3 h-3 border-2 border-emerald-400/40 border-t-emerald-400 rounded-full animate-spin" />
-                    : "💾"
-                  }
+                  {saving ? <span className="w-3 h-3 border-2 border-emerald-400/40 border-t-emerald-400 rounded-full animate-spin" /> : "💾"}
                   {saving ? "Saving…" : "Save Chat"}
                 </button>
               )}
-              {isSaved && (
+              {!autoSave && isSaved && (
                 <span className="text-[11px] text-emerald-500 dark:text-emerald-400 font-medium flex items-center gap-1">✅ Saved</span>
               )}
+
+              {/* Delete current chat — only if it's saved */}
+              {activeChatId && (
+                <button
+                  onClick={() => deleteChat(activeChatId)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-200 dark:hover:bg-red-500/30 transition-colors"
+                  title="Delete this chat"
+                >
+                  🗑
+                </button>
+              )}
+
               <button
                 onClick={startNewChat}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-medium hover:bg-slate-200 dark:hover:bg-white/15 transition-colors"
@@ -448,7 +510,7 @@ export default function AskAI() {
 }
 
 // ─── Sidebar content (shared desktop + mobile) ────────────────────────────────
-function SidebarContent({ grouped, activeChatId, historyLoading, onNew, onSelect, onDelete, onDeleteAll, onClose }) {
+function SidebarContent({ grouped, activeChatId, historyLoading, onNew, onSelect, onDelete, onDeleteAll, onExportAll, onClose }) {
   const hasAny = Object.keys(grouped).length > 0;
   return (
     <>
@@ -492,7 +554,10 @@ function SidebarContent({ grouped, activeChatId, historyLoading, onNew, onSelect
 
       {/* Footer */}
       {hasAny && (
-        <div className="p-3 border-t border-slate-200 dark:border-white/10 flex-shrink-0">
+        <div className="p-3 border-t border-slate-200 dark:border-white/10 flex-shrink-0 space-y-1">
+          <button onClick={onExportAll} className="w-full text-xs text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors py-1">
+            📥 Export all as JSON
+          </button>
           <button onClick={onDeleteAll} className="w-full text-xs text-slate-400 hover:text-red-500 transition-colors py-1">
             🗑 Clear all
           </button>

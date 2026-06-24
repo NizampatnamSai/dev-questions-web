@@ -125,24 +125,28 @@ async def fire_challenge_notifications():
 async def fire_workboard_notifications():
     """9:30 AM IST workboard reminder — Mon-Sat, skip even Saturdays."""
     now_ist = datetime.now(IST)
+    print(f"[workboard] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
     if not _is_working_day(now_ist):
         print(f"[workboard] skipping — not a working day ({now_ist.strftime('%A %d')})", flush=True)
         return
 
     members = await col_workboard_members().find({"status": "active"}).to_list(200)
-    print(f"[workboard] sending to {len(members)} active members", flush=True)
+    print(f"[workboard] {len(members)} active members found", flush=True)
 
     today = now_ist.strftime("%Y-%m-%d")
     from db_mongo import col_workboard_posts
     posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
     posted_ids = {d["userId"] for d in posted_docs}
 
+    sent = 0
     for member in members:
         uid = member["userId"]
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
         if not tokens:
+            print(f"[workboard] no FCM token for userId={uid}", flush=True)
             continue
+        sent += 1
         if uid in posted_ids:
             await send_to_tokens(tokens,
                 title="📋 Daily Work Board",
@@ -155,6 +159,7 @@ async def fire_workboard_notifications():
                 body="Share your daily update with the team! 👀",
                 data={"type": "workboard_reminder", "path": "/workboard"},
             )
+    print(f"[workboard] done — notified {sent}/{len(members)} members", flush=True)
 
 
 async def fire_community_reminder():
@@ -162,6 +167,7 @@ async def fire_community_reminder():
     from db_mongo import col_users, col_community_schedule
     now_ist = datetime.now(IST)
     wd = now_ist.weekday()
+    print(f"[community_reminder] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST, weekday={wd}", flush=True)
 
     DEFAULT_SCHEDULE = {
         0: "vikash.jangid.eps@gmail.com",
@@ -206,6 +212,7 @@ async def fire_community_reminder():
 
     user_doc = await col_users().find_one({"email": email})
     if not user_doc:
+        print(f"[community_reminder] no user found for email={email}", flush=True)
         return
     uid = str(user_doc["_id"])
     toks = await col_fcm_tokens().find({"userId": uid}).to_list(10)
@@ -216,4 +223,7 @@ async def fire_community_reminder():
             body="Today is your scheduled day to share on the Community feed.",
             data={"type": "community_reminder", "path": "/notifications"},
         )
+        print(f"[community_reminder] sent to {email} ({len(tokens)} token(s))", flush=True)
+    else:
+        print(f"[community_reminder] no FCM tokens for email={email} uid={uid}", flush=True)
     await _log_user_notification(uid, "🌟 It's your day to post!", "Today is your scheduled day to share on the Community feed.", "community_reminder")

@@ -1009,6 +1009,39 @@ function AppConfigPanel() {
           </div>
         )}
       </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* WorkBoard Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">📋 Work Board Settings</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Reminder Time (IST)</label>
+            <input
+              type="time"
+              value={config.wb_reminder_time || "09:30"}
+              onChange={e => setConfig(c => ({ ...c, wb_reminder_time: e.target.value }))}
+              onBlur={() => save({ wb_reminder_time: config.wb_reminder_time || "09:30" })}
+              className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+            />
+            <p className="text-[10px] text-slate-400">Daily standups reminder push notification time</p>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Edit Window (minutes)</label>
+            <input
+              type="number"
+              min={5}
+              max={1440}
+              value={config.wb_edit_window_minutes || 30}
+              onChange={e => setConfig(c => ({ ...c, wb_edit_window_minutes: parseInt(e.target.value) || 30 }))}
+              onBlur={() => save({ wb_edit_window_minutes: config.wb_edit_window_minutes || 30 })}
+              className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+            />
+            <p className="text-[10px] text-slate-400">How long users can edit their post after submitting</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

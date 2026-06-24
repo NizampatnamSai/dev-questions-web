@@ -34,8 +34,12 @@ export default function WorkBoard() {
   const [joining, setJoining] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null); // null = today, string = specific date
+  const [selectedDate, setSelectedDate] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [wbConfig, setWbConfig] = useState({ edit_window_minutes: 30, reminder_time: "09:30" });
+  const [editingConfig, setEditingConfig] = useState(false);
+  const [configDraft, setConfigDraft] = useState({});
+  const [savingConfig, setSavingConfig] = useState(false);
   const wsRef = useRef(null);
   const bottomRef = useRef(null);
 
@@ -45,12 +49,29 @@ export default function WorkBoard() {
     loadStatus();
     loadActiveUsers();
     loadAvailableDates();
-    const timer = setInterval(loadActiveUsers, 10000);
-    return () => {
-      clearInterval(timer);
-      wsRef.current?.close();
-    };
+    api.get("/workboard/config").then(({ data }) => setWbConfig(data)).catch(() => {});
+    // No more polling — online count comes via WebSocket
+    return () => { wsRef.current?.close(); };
   }, []);
+
+  const openConfigEdit = () => {
+    setConfigDraft({ ...wbConfig });
+    setEditingConfig(true);
+  };
+
+  const saveConfig = async () => {
+    setSavingConfig(true);
+    try {
+      await api.put("/admin/app-config", {
+        wb_reminder_time: configDraft.reminder_time,
+        wb_edit_window_minutes: parseInt(configDraft.edit_window_minutes) || 30,
+      });
+      setWbConfig({ ...configDraft, edit_window_minutes: parseInt(configDraft.edit_window_minutes) || 30 });
+      setEditingConfig(false);
+      toast.success("Settings saved!");
+    } catch { toast.error("Failed to save"); }
+    setSavingConfig(false);
+  };
 
   const loadAvailableDates = async () => {
     try {
@@ -120,7 +141,11 @@ export default function WorkBoard() {
     const ws = new WebSocket(`${WS_BASE}/api/workboard/ws?user_id=${userId}&user_name=${userName}`);
     ws.onmessage = (e) => {
       try {
-        const { type, post } = JSON.parse(e.data);
+        const msg = JSON.parse(e.data);
+        const { type, post } = msg;
+        if (type === "online_count") {
+          setActiveUsers(msg.users || []);
+        }
         if (type === "new_post") {
           setPosts(prev => {
             if (prev.find(p => p.id === post.id)) return prev;
@@ -235,7 +260,56 @@ export default function WorkBoard() {
             <div className="text-3xl">📋</div>
             <div className="min-w-0">
               <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Daily Work Board</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Mon–Sat standups · 9:30 AM reminder · 30-min edit window</p>
+              {editingConfig && isAdmin ? (
+                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                  <label className="text-xs text-slate-400">Reminder:</label>
+                  <input
+                    type="time"
+                    value={configDraft.reminder_time || "09:30"}
+                    onChange={e => setConfigDraft(d => ({ ...d, reminder_time: e.target.value }))}
+                    className="text-xs px-2 py-1 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-700 dark:text-slate-200 outline-none focus:border-indigo-400"
+                  />
+                  <label className="text-xs text-slate-400">Edit window:</label>
+                  <input
+                    type="number"
+                    min={5} max={1440}
+                    value={configDraft.edit_window_minutes || 30}
+                    onChange={e => setConfigDraft(d => ({ ...d, edit_window_minutes: e.target.value }))}
+                    className="text-xs px-2 py-1 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-700 dark:text-slate-200 outline-none focus:border-indigo-400 w-16"
+                  />
+                  <span className="text-xs text-slate-400">min</span>
+                  <button
+                    onClick={saveConfig}
+                    disabled={savingConfig}
+                    className="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-500 disabled:opacity-50 transition-colors"
+                  >
+                    {savingConfig ? "Saving…" : "Save"}
+                  </button>
+                  <button
+                    onClick={() => setEditingConfig(false)}
+                    className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 text-xs hover:bg-slate-200 dark:hover:bg-white/15 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    Mon–Sat standups · {wbConfig.reminder_time} reminder · {wbConfig.edit_window_minutes}-min edit window
+                  </p>
+                  {isAdmin && (
+                    <button
+                      onClick={openConfigEdit}
+                      className="text-slate-400 hover:text-indigo-500 transition-colors p-0.5 rounded"
+                      title="Edit settings"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           {activeUsers.length > 0 && (
