@@ -33,6 +33,9 @@ export default function WorkBoard() {
   const [exportDate, setExportDate] = useState("");
   const [joining, setJoining] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
+  const [availableDates, setAvailableDates] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null); // null = today, string = specific date
+  const [historyLoading, setHistoryLoading] = useState(false);
   const wsRef = useRef(null);
   const bottomRef = useRef(null);
 
@@ -41,12 +44,22 @@ export default function WorkBoard() {
   useEffect(() => {
     loadStatus();
     loadActiveUsers();
+    loadAvailableDates();
     const timer = setInterval(loadActiveUsers, 10000);
     return () => {
       clearInterval(timer);
       wsRef.current?.close();
     };
   }, []);
+
+  const loadAvailableDates = async () => {
+    try {
+      const { data } = await api.get("/workboard/dates");
+      setAvailableDates(data || []);
+    } catch {
+      // silently fail
+    }
+  };
 
   const loadActiveUsers = async () => {
     try {
@@ -74,13 +87,29 @@ export default function WorkBoard() {
     setLoading(false);
   };
 
-  const loadBoard = async () => {
-    const [postsRes, missingRes] = await Promise.all([
-      api.get("/workboard/posts"),
-      api.get("/workboard/missing-today"),
-    ]);
-    setPosts(postsRes.data);
-    setMissing(missingRes.data);
+  const loadBoard = async (date = null) => {
+    try {
+      const params = date ? `?date=${date}` : "";
+      const postsRes = await api.get(`/workboard/posts${params}`);
+      setPosts(postsRes.data);
+
+      // Only fetch missing if viewing today
+      if (!date) {
+        const missingRes = await api.get("/workboard/missing-today");
+        setMissing(missingRes.data);
+      } else {
+        setMissing([]);
+      }
+    } catch (err) {
+      console.error("Error loading board:", err);
+    }
+  };
+
+  const handleSelectDate = async (date) => {
+    setSelectedDate(date);
+    setHistoryLoading(true);
+    await loadBoard(date);
+    setHistoryLoading(false);
   };
 
   const connectWS = () => {
@@ -216,8 +245,72 @@ export default function WorkBoard() {
         </div>
       </div>
 
+      {/* View selector: Today vs History */}
+      {status === "active" && (
+        <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800">
+          <button
+            onClick={() => {
+              setSelectedDate(null);
+              loadBoard();
+            }}
+            className={`px-4 py-2 text-sm font-semibold transition border-b-2 ${
+              !selectedDate
+                ? "text-indigo-600 dark:text-indigo-400 border-indigo-600 dark:border-indigo-400"
+                : "text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300"
+            }`}
+          >
+            📅 Today
+          </button>
+          <button
+            onClick={() => setSelectedDate("history")}
+            className={`px-4 py-2 text-sm font-semibold transition border-b-2 ${
+              selectedDate === "history"
+                ? "text-indigo-600 dark:text-indigo-400 border-indigo-600 dark:border-indigo-400"
+                : "text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300"
+            }`}
+          >
+            📜 History
+          </button>
+        </div>
+      )}
+
+      {/* History date picker */}
+      {status === "active" && selectedDate === "history" && (
+        <div className="glass-card p-4 space-y-3">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">📜 Browse History</p>
+          {availableDates.length === 0 ? (
+            <p className="text-sm text-slate-400">No posts history available yet</p>
+          ) : (
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {availableDates.map(item => (
+                <button
+                  key={item.date}
+                  onClick={() => handleSelectDate(item.date)}
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition border border-slate-200 dark:border-slate-800"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                      {new Date(item.date).toLocaleDateString("en-IN", {
+                        weekday: "short",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <div className="flex items-center gap-2 text-xs text-slate-500">
+                      <span>📝 {item.postCount}</span>
+                      <span>👥 {item.memberCount}</span>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Active users list */}
-      {activeUsers.length > 0 && (
+      {activeUsers.length > 0 && !selectedDate && (
         <div className="glass-card p-4 space-y-2">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Currently Viewing</p>
           <div className="flex flex-wrap gap-2">
@@ -300,15 +393,21 @@ export default function WorkBoard() {
       )}
 
       {/* Active board */}
-      {status === "active" && (
+      {status === "active" && selectedDate !== "history" && (
         <>
           {/* Posts feed */}
-          <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
-            {posts.length === 0 && (
-              <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
-                No posts today yet. Be the first! 👋
-              </div>
-            )}
+          {historyLoading && (
+            <div className="glass-card p-8 text-center">
+              <div className="inline-block w-6 h-6 border-3 border-slate-300 dark:border-slate-600 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin" />
+            </div>
+          )}
+          {!historyLoading && (
+            <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+              {posts.length === 0 && (
+                <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
+                  No posts today yet. Be the first! 👋
+                </div>
+              )}
             <AnimatePresence initial={false}>
               {posts.map(post => (
                 <motion.div key={post.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="p-4 space-y-1">
@@ -345,11 +444,12 @@ export default function WorkBoard() {
                 </motion.div>
               ))}
             </AnimatePresence>
-            <div ref={bottomRef} />
-          </div>
+              <div ref={bottomRef} />
+            </div>
+          )}
 
           {/* Post input */}
-          {!myPost ? (
+          {!myPost && !historyLoading ? (
             <div className="glass-card p-4">
               <div className="flex gap-2">
                 <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-300 flex-shrink-0">
@@ -390,6 +490,57 @@ export default function WorkBoard() {
               </div>
             </div>
           )}
+        </>
+      )}
+
+      {/* History view */}
+      {status === "active" && selectedDate && selectedDate !== "history" && (
+        <>
+          {/* Date header */}
+          <div className="glass-card p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20 border border-indigo-200 dark:border-indigo-700/40">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
+                📜 {new Date(selectedDate).toLocaleDateString("en-IN", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </h2>
+              <button
+                onClick={() => setSelectedDate(null)}
+                className="px-3 py-1 rounded-lg bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+              >
+                Back to Today
+              </button>
+            </div>
+          </div>
+
+          {/* Posts for selected date */}
+          <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+            {posts.length === 0 && (
+              <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
+                No posts on this day
+              </div>
+            )}
+            <AnimatePresence initial={false}>
+              {posts.map(post => (
+                <motion.div key={post.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="p-4 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-300">
+                        {post.userName?.[0]?.toUpperCase() || "?"}
+                      </div>
+                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{post.userName}</span>
+                      {post.userId === user?.id && <span className="text-xs text-indigo-400">(you)</span>}
+                    </div>
+                    <span className="text-xs text-slate-400">{timeAgo(post.postedAt)}</span>
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 ml-9 leading-relaxed">{post.message}</p>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         </>
       )}
     </div>

@@ -171,13 +171,14 @@ def _can_edit(post: dict) -> bool:
 
 
 @router.get("/posts")
-async def today_posts(user=Depends(current_user)):
+async def today_posts(user=Depends(current_user), date: Optional[str] = Query(None)):
     if not _is_admin(user):
         member = await col_workboard_members().find_one({"userId": user["id"]})
         if not member or member.get("status") != "active":
             raise HTTPException(403, "Members only")
-    today = ist_today()
-    docs = await col_workboard_posts().find({"date": today}).sort("postedAt", 1).to_list(200)
+    # If date provided, fetch that date. Otherwise fetch today's posts
+    target_date = date or ist_today()
+    docs = await col_workboard_posts().find({"date": target_date}).sort("postedAt", 1).to_list(200)
     result = []
     for d in docs:
         d["id"] = str(d.pop("_id"))
@@ -265,6 +266,31 @@ async def edit_post(post_id: str, body: PostBody, user=Depends(current_user)):
     }
     await manager.broadcast({"type": "edit_post", "post": updated})
     return updated
+
+
+@router.get("/dates")
+async def get_available_dates(user=Depends(current_user)):
+    """Get all dates with posts (for history view)"""
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+
+    # Get distinct dates, sorted newest first
+    dates = await col_workboard_posts().distinct("date")
+    dates.sort(reverse=True)
+
+    # Get post count and member count per date
+    result = []
+    for date in dates:
+        posts = await col_workboard_posts().find({"date": date}).to_list(1000)
+        member_count = len(set(p["userId"] for p in posts))
+        result.append({
+            "date": date,
+            "postCount": len(posts),
+            "memberCount": member_count,
+        })
+    return result
 
 
 @router.get("/missing-today")
