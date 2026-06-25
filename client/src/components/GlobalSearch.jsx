@@ -158,6 +158,22 @@ const PAGES = [
     hideForAdmin: true,
   },
   {
+    to: "/my-tasks",
+    label: "My Tasks",
+    icon: "💬",
+    keywords: "my tasks list",
+    adminOnly: false,
+    hideForAdmin: true,
+  },
+  {
+    to: "/admin/tasks",
+    label: "Task Manager",
+    icon: "💬",
+    keywords: "assigned tasks list",
+    adminOnly: true,
+    hideForAdmin: false,
+  },
+  {
     to: "/drafts",
     label: "Drafts",
     icon: "💾",

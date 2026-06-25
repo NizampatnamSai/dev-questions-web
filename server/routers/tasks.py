@@ -95,8 +95,11 @@ async def create_task(body: TaskCreate, user=Depends(current_user)):
             {"type": "task", "path": "/my-tasks"},
         )
 
-    doc["_id"] = task_id
-    return doc
+    return {
+        "success": True,
+        "message": "Task created successfully",
+        "taskId": task_id,
+    }
 
 
 # ── Admin: list all tasks ─────────────────────────────────────────────────────

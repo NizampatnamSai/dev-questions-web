@@ -52,11 +52,12 @@ function DevTools() {
   const [searchParams] = useSearchParams();
   const toolParam = searchParams.get("tool");
   const [open, setOpen] = useState(!!toolParam);
-  const [tool, setTool] = useState(toolParam || "ts");
+  // const [tool, setTool] = useState(toolParam || "ts");
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const tool = toolParam || "ts";
   const isMac =
     typeof navigator !== "undefined" &&
     /Mac|iPhone|iPad/.test(navigator.platform);
@@ -64,7 +65,6 @@ function DevTools() {
 
   useEffect(() => {
     if (toolParam) {
-      setTool(toolParam);
       setOpen(true);
       setTimeout(
         () =>
@@ -80,7 +80,7 @@ function DevTools() {
   const cur = DEV_TOOLS.find((t) => t.id === tool);
 
   function switchTool(id) {
-    setTool(id);
+    navigate(`?tool=${id}`, { replace: true });
     setCode("");
     setResult(null);
   }
