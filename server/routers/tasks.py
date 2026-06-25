@@ -95,7 +95,7 @@ async def create_task(body: TaskCreate, user=Depends(current_user)):
             {"type": "task", "path": "/my-tasks"},
         )
 
-    doc["id"] = task_id
+    doc["_id"] = task_id
     return doc
 
 
