@@ -98,20 +98,44 @@ const DEV_TOOL_LINKS = [
   { to: "/devtools?tool=ts", icon: "🔷", label: "TS Adder" },
   { to: "/devtools?tool=errors", icon: "🐛", label: "Error Finder" },
   { to: "/devtools?tool=breaks", icon: "💥", label: "Break Finder" },
-  { to: "/js-compiler", icon: "⚡", label: "JS Compiler" },
+  { to: "/devtools?tool=js", icon: "⚡", label: "JS Compiler" },
 ];
 
 function DevToolsGroup({ textMuted }) {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const fullPath = location.pathname + location.search;
+  const isDevToolRoute = DEV_TOOL_LINKS.some((link) => link.to === fullPath);
+  const [open, setOpen] = useState(isDevToolRoute);
+
+  useEffect(() => {
+    const isDevToolRoute = DEV_TOOL_LINKS.some((link) => link.to === fullPath);
+
+    setOpen(isDevToolRoute);
+  }, [fullPath]);
   return (
-    <div className="rounded-xl border border-black/5 dark:border-white/8 overflow-hidden">
+    <div
+      className={`rounded-xl overflow-hidden transition-all duration-200 ${
+        isDevToolRoute || open ? "nav-active-light shadow-sm" : ""
+      }`}
+    >
       <button
         onClick={() => setOpen((v) => !v)}
-        className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all hover:bg-black/5 dark:hover:bg-white/8 ${textMuted}`}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+          isDevToolRoute
+            ? "nav-active-light"
+            : `${textMuted} hover:bg-black/5 dark:hover:bg-white/8`
+        }`}
       >
         <span className="text-base">🛠️</span>
         <span className="flex-1 text-left">Dev Tools</span>
+        {/* {isDevToolRoute && (
+          <motion.div
+            layoutId="nav-pill"
+            className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400"
+          />
+        )} */}
         <span className="text-xs opacity-60">{open ? "▲" : "▼"}</span>
       </button>
       <AnimatePresence initial={false}>
@@ -121,18 +145,27 @@ function DevToolsGroup({ textMuted }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className="overflow-hidden border-t border-black/5 dark:border-white/8"
+            className="overflow-hidden border-t border-black/5 dark:border-white/8 "
           >
-            {DEV_TOOL_LINKS.map((link) => (
-              <button
-                key={link.to}
-                onClick={() => navigate(link.to)}
-                className={`w-full flex items-center gap-3 px-5 py-2 text-sm transition-all hover:bg-black/5 dark:hover:bg-white/8 ${textMuted}`}
-              >
-                <span>{link.icon}</span>
-                <span>{link.label}</span>
-              </button>
-            ))}
+            {DEV_TOOL_LINKS.map((link) => {
+              const isActive = fullPath === link.to;
+
+              return (
+                <button
+                  key={link.to}
+                  onClick={() => navigate(link.to)}
+                  className={`w-full flex items-center gap-3 px-5 py-2 text-sm transition-all
+        ${
+          isActive
+            ? "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
+            : `${textMuted} hover:bg-black/5 dark:hover:bg-white/8`
+        }`}
+                >
+                  <span>{link.icon}</span>
+                  <span>{link.label}</span>
+                </button>
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>
