@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+import { createPortal } from "react-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -8,21 +10,32 @@ import { fmtDate, fmtTime } from "../utils/time";
 import ConfirmModal from "./ConfirmModal";
 
 const CATEGORY_STYLES = {
-  "HTML/CSS":     "bg-red-100  text-red-700  border-red-200  dark:bg-red-500/15   dark:text-red-300   dark:border-red-500/30",
-  JavaScript:     "bg-amber-100 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-300 dark:border-yellow-500/30",
-  React:          "bg-cyan-100 text-cyan-800  border-cyan-200 dark:bg-cyan-500/15   dark:text-cyan-300  dark:border-cyan-500/30",
-  "Next.js":      "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/15 dark:text-slate-300 dark:border-slate-500/30",
-  "React Native": "bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/30",
+  "HTML/CSS":
+    "bg-red-100  text-red-700  border-red-200  dark:bg-red-500/15   dark:text-red-300   dark:border-red-500/30",
+  JavaScript:
+    "bg-amber-100 text-amber-700 border-amber-200 dark:bg-yellow-500/15 dark:text-yellow-300 dark:border-yellow-500/30",
+  React:
+    "bg-cyan-100 text-cyan-800  border-cyan-200 dark:bg-cyan-500/15   dark:text-cyan-300  dark:border-cyan-500/30",
+  "Next.js":
+    "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/15 dark:text-slate-300 dark:border-slate-500/30",
+  "React Native":
+    "bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/30",
 };
 
 const LEVEL_STYLES = {
-  Low:    "bg-green-100  text-green-700  border-green-200  dark:bg-green-500/15   dark:text-green-300  dark:border-green-500/30",
-  Medium: "bg-amber-100  text-amber-700  border-amber-200  dark:bg-amber-500/15   dark:text-amber-300  dark:border-amber-500/30",
-  High:   "bg-red-100    text-red-700    border-red-200    dark:bg-red-500/15     dark:text-red-300    dark:border-red-500/30",
+  Low: "bg-green-100  text-green-700  border-green-200  dark:bg-green-500/15   dark:text-green-300  dark:border-green-500/30",
+  Medium:
+    "bg-amber-100  text-amber-700  border-amber-200  dark:bg-amber-500/15   dark:text-amber-300  dark:border-amber-500/30",
+  High: "bg-red-100    text-red-700    border-red-200    dark:bg-red-500/15     dark:text-red-300    dark:border-red-500/30",
 };
 
 function initialsOf(name = "?") {
-  return name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+  return name
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }
 
 function CommentsSection({ qid, onCommentCountChange }) {
@@ -34,8 +47,9 @@ function CommentsSection({ qid, onCommentCountChange }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    api.get(`/questions/${qid}/comments`)
-      .then(r => setComments(r.data))
+    api
+      .get(`/questions/${qid}/comments`)
+      .then((r) => setComments(r.data))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [qid]);
@@ -44,90 +58,121 @@ function CommentsSection({ qid, onCommentCountChange }) {
     e.preventDefault();
     if (!text.trim()) return;
     setPosting(true);
+    const toastId = toast.loading("Posting comment...");
     try {
       const { data } = await api.post(`/questions/${qid}/comments`, { text });
-      setComments(c => {
+      setComments((c) => {
         const updated = [...c, data];
         onCommentCountChange?.(updated.length);
         return updated;
       });
       setText("");
-    } catch {}
-    setPosting(false);
+      toast.success("Comment posted", { id: toastId });
+    } catch {
+      toast.error("Failed to post comment", { id: toastId });
+    } finally {
+      setPosting(false);
+    }
   };
 
   const del = async (cid) => {
+    const toastId = toast.loading("Deleting comment...");
+
     try {
       await api.delete(`/questions/comments/${cid}`);
-      setComments(c => {
-        const updated = c.filter(x => x.id !== cid);
+      setComments((c) => {
+        const updated = c.filter((x) => x.id !== cid);
         onCommentCountChange?.(updated.length);
         return updated;
       });
-    } catch {}
+      toast.success("Comment deleted", { id: toastId });
+    } catch {
+      toast.error("Failed to delete comment", { id: toastId });
+    }
   };
 
   return (
-    <div className="border-t border-black/5 dark:border-white/10 pt-3 space-y-2">
-      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-        💬 Comments {comments.length > 0 && `(${comments.length})`}
-      </p>
+    <>
+      <div className="border-t border-black/5 dark:border-white/10 pt-3 space-y-2">
+        <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+          💬 Comments {comments.length > 0 && `(${comments.length})`}
+        </p>
 
-      {loading ? (
-        <p className="text-xs text-slate-400">Loading…</p>
-      ) : comments.length === 0 ? (
-        <p className="text-xs text-slate-400 italic">No comments yet. Be the first!</p>
-      ) : (
-        <div className="space-y-2 max-h-48 overflow-y-auto">
-          {comments.map(c => (
-            <div key={c.id} className="flex gap-2 group">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-[9px] flex items-center justify-center text-white font-bold flex-shrink-0 mt-0.5">
-                {initialsOf(c.author?.name || "?")}
-              </div>
-              <div className="flex-1 bg-slate-50 dark:bg-white/5 rounded-xl px-3 py-2">
-                <div className="flex items-center justify-between gap-2 mb-0.5">
-                  <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">{c.author?.name}</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-slate-400">
-                      {fmtDate(c.createdAt)} {fmtTime(c.createdAt)}
-                    </span>
-                    {(user?.id === c.author?.id || user?.role === "admin" || user?.role === "sub_admin") && (
-                      <button onClick={() => setDeleteTarget(c.id)} className="text-[10px] text-red-400 hover:text-red-500">✕</button>
-                    )}
-                  </div>
+        {loading ? (
+          <p className="text-xs text-slate-400">Loading…</p>
+        ) : comments.length === 0 ? (
+          <p className="text-xs text-slate-400 italic">
+            No comments yet. Be the first!
+          </p>
+        ) : (
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {comments.map((c) => (
+              <div key={c.id} className="flex gap-2 group">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-[9px] flex items-center justify-center text-white font-bold flex-shrink-0 mt-0.5">
+                  {initialsOf(c.author?.name || "?")}
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{c.text}</p>
+                <div className="flex-1 bg-slate-50 dark:bg-white/5 rounded-xl px-3 py-2">
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
+                    <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">
+                      {c.author?.name}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] text-slate-400">
+                        {fmtDate(c.createdAt)} {fmtTime(c.createdAt)}
+                      </span>
+                      {(user?.id === c.author?.id ||
+                        user?.role === "admin" ||
+                        user?.role === "sub_admin") && (
+                        <button
+                          onClick={() => setDeleteTarget(c.id)}
+                          className="text-[10px] text-red-400 hover:text-red-500"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {c.text}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
-      <ConfirmModal
-        open={!!deleteTarget}
-        title="Delete comment?"
-        message="This comment will be permanently removed."
-        confirmLabel="Delete"
-        onConfirm={() => { del(deleteTarget); setDeleteTarget(null); }}
-        onCancel={() => setDeleteTarget(null)}
-      />
-      <form onSubmit={submit} className="flex gap-2 mt-2">
-        <input
-          value={text}
-          onChange={e => setText(e.target.value)}
-          placeholder="Write a comment…"
-          maxLength={1000}
-          className="flex-1 text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
-        />
-        <button
-          type="submit"
-          disabled={posting || !text.trim()}
-          className="text-xs px-3 py-2 rounded-xl bg-indigo-500 text-white font-semibold disabled:opacity-40 hover:bg-indigo-600 transition-colors"
-        >
-          {posting ? "…" : "Post"}
-        </button>
-      </form>
-    </div>
+        <form onSubmit={submit} className="flex gap-2 mt-2">
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Write a comment…"
+            maxLength={1000}
+            className="flex-1 text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
+          />
+          <button
+            type="submit"
+            disabled={posting || !text.trim()}
+            className="text-xs px-3 py-2 rounded-xl bg-indigo-500 text-white font-semibold disabled:opacity-40 hover:bg-indigo-600 transition-colors"
+          >
+            {posting ? "…" : "Post"}
+          </button>
+        </form>
+      </div>
+      {createPortal(
+        <ConfirmModal
+          open={!!deleteTarget}
+          title="Delete comment?"
+          message="This comment will be permanently removed."
+          confirmLabel="Delete"
+          onConfirm={() => {
+            del(deleteTarget);
+            setDeleteTarget(null);
+          }}
+          onCancel={() => setDeleteTarget(null)}
+        />,
+        document.body,
+      )}
+    </>
   );
 }
 
@@ -156,10 +201,14 @@ export default function QuestionCard({
     >
       {/* Badges row */}
       <div className="flex items-center gap-2 flex-wrap">
-        <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${CATEGORY_STYLES[q.category] || "bg-slate-500/15 text-slate-300 border-slate-500/30"}`}>
+        <span
+          className={`text-xs px-2.5 py-1 rounded-full border font-medium ${CATEGORY_STYLES[q.category] || "bg-slate-500/15 text-slate-300 border-slate-500/30"}`}
+        >
           {q.category}
         </span>
-        <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${LEVEL_STYLES[q.level] || ""}`}>
+        <span
+          className={`text-xs px-2.5 py-1 rounded-full border font-medium ${LEVEL_STYLES[q.level] || ""}`}
+        >
           {q.level}
         </span>
         {q.type && (
@@ -178,13 +227,16 @@ export default function QuestionCard({
       </div>
 
       {/* Question text */}
-      <Link to={`/question/${q.id}`} className="font-semibold leading-snug text-slate-800 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-cyan-300 transition-colors line-clamp-3 block">
+      <Link
+        to={`/question/${q.id}`}
+        className="font-semibold leading-snug text-slate-800 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-cyan-300 transition-colors line-clamp-3 block"
+      >
         {q.question}
       </Link>
 
       {/* Reveal answer */}
       <button
-        onClick={() => setRevealed(r => !r)}
+        onClick={() => setRevealed((r) => !r)}
         className="text-xs self-start font-medium text-indigo-600 dark:text-cyan-300 hover:underline"
       >
         {revealed ? "Hide answer ▲" : "Reveal answer ▼"}
@@ -202,7 +254,9 @@ export default function QuestionCard({
               <AnswerBlock text={q.answer} questionType={q.type} />
               {q.hints?.length > 0 && (
                 <ul className="mt-1 text-xs text-slate-600 dark:text-slate-400 list-disc list-inside space-y-0.5">
-                  {q.hints.map((h, i) => <li key={i}>{h}</li>)}
+                  {q.hints.map((h, i) => (
+                    <li key={i}>{h}</li>
+                  ))}
                 </ul>
               )}
             </div>
@@ -214,7 +268,10 @@ export default function QuestionCard({
       {q.tags?.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {q.tags.map((t, i) => (
-            <span key={i} className="text-[11px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-white/10">
+            <span
+              key={i}
+              className="text-[11px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-white/10"
+            >
               #{t}
             </span>
           ))}
@@ -228,7 +285,9 @@ export default function QuestionCard({
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-[10px] flex items-center justify-center text-white font-bold">
               {initialsOf(q.author.name)}
             </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400">{q.author.name}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              {q.author.name}
+            </span>
           </div>
         )}
 
@@ -264,7 +323,7 @@ export default function QuestionCard({
 
           {/* Comments toggle */}
           <button
-            onClick={() => setShowComments(v => !v)}
+            onClick={() => setShowComments((v) => !v)}
             className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-colors ${
               showComments
                 ? "bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-500/20 dark:border-indigo-500/40 dark:text-indigo-300"
@@ -291,7 +350,10 @@ export default function QuestionCard({
           {/* Edit removed intentionally */}
           {/* Delete — shown to owner (via showOwnerActions) or admin */}
           {(showOwnerActions || isAdmin) && onDelete && (
-            <button onClick={() => onDelete(q)} className="text-xs px-2.5 py-1 rounded-full border border-red-400/30 text-red-400 hover:bg-red-400/10 transition-colors">
+            <button
+              onClick={() => onDelete(q)}
+              className="text-xs px-2.5 py-1 rounded-full border border-red-400/30 text-red-400 hover:bg-red-400/10 transition-colors"
+            >
               🗑 Delete
             </button>
           )}
@@ -307,7 +369,10 @@ export default function QuestionCard({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <CommentsSection qid={q.id} onCommentCountChange={setCommentCount} />
+            <CommentsSection
+              qid={q.id}
+              onCommentCountChange={setCommentCount}
+            />
           </motion.div>
         )}
       </AnimatePresence>

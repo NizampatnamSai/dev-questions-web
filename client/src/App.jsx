@@ -325,7 +325,11 @@ function AppInner() {
         )}
       <Toaster
         position="top-right"
-        toastOptions={{ style: toastStyle, borderRadius: "12px" }}
+        containerStyle={{
+          top: 60,
+          right: 20,
+        }}
+        toastOptions={{ style: { ...toastStyle, borderRadius: "12px" } }}
       />
       <Routes>
         <Route

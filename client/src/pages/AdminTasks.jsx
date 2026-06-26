@@ -199,7 +199,7 @@ export default function AdminTasks() {
                     </div>
                     <h3 className="font-semibold text-slate-800 dark:text-slate-100">{task.title}</h3>
                     {task.description && (
-                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{task.description}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{task.description}</p>
                     )}
                     {/* Assignees */}
                     <div className="flex items-center gap-1.5 mt-3">
