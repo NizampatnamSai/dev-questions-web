@@ -103,6 +103,7 @@ def _ser(doc: dict, uid: str = None) -> dict:
         "tags":           doc.get("tags", []),
         "status":         doc.get("status", "published"),
         "createdAt":      doc["createdAt"].isoformat() if isinstance(doc.get("createdAt"), datetime) else str(doc.get("createdAt", "")),
+        "draftCreatedAt": doc["draftCreatedAt"].isoformat() if isinstance(doc.get("draftCreatedAt"), datetime) else str(doc.get("draftCreatedAt", "")),
         "upvoteCount":    len(upvotes),
         "highlightCount": len(highlights),
         "commentCount":   doc.get("commentCount", 0),
@@ -375,7 +376,8 @@ async def publish_draft(qid: str, user=Depends(current_user)):
             raise HTTPException(403, "Community is closed today — no posts scheduled.")
         if allowed_email != "ADMIN_ONLY" and allowed_email.lower() != user_email.lower():
             raise HTTPException(403, f"Today is not your posting day.")
-    await col_questions().update_one({"_id": oid(qid)}, {"$set": {"status": "published"}})
+    await col_questions().update_one({"_id": oid(qid)}, {"$set": {"status": "published", "draftCreatedAt": doc["createdAt"],
+            "createdAt": datetime.now(timezone.utc),}})
     updated = await col_questions().find_one({"_id": oid(qid)})
     return _ser(updated, user["id"])
 
@@ -552,48 +554,18 @@ async def upvote(qid: str, user=Depends(current_user)):
 
 
 # ── Bookmark toggle ───────────────────────────────────────────────────────────
+
 @router.post("/{qid}/bookmark")
 async def bookmark(qid: str, user=Depends(current_user)):
     uid = user["id"]
-
     doc = await col_questions().find_one({"_id": oid(qid)})
-    if not doc:
-        raise HTTPException(404, "Not found")
-
-    is_bookmarked = uid not in doc.get("bookmarks", [])
-
-    await col_questions().update_one(
-        {"_id": oid(qid)},
-        {
-            "$addToSet" if is_bookmarked else "$pull": {
-                "bookmarks": uid
-            }
-        }
-    )
-
-    return {
-        "success": True,
-        "message": (
-            "Saved to bookmarks"
-            if is_bookmarked
-            else "Removed from bookmarks"
-        ),
-        "isBookmarked": is_bookmarked,
-        "isHighlighted": uid in doc.get("highlights", []),
-        "isUpvoted": uid in doc.get("upvotes", []),
-    }
-
-# @router.post("/{qid}/bookmark")
-# async def bookmark(qid: str, user=Depends(current_user)):
-#     uid = user["id"]
-#     doc = await col_questions().find_one({"_id": oid(qid)})
-#     if not doc: raise HTTPException(404, "Not found")
-#     if uid in doc.get("bookmarks", []):
-#         await col_questions().update_one({"_id": oid(qid)}, {"$pull": {"bookmarks": uid}})
-#     else:
-#         await col_questions().update_one({"_id": oid(qid)}, {"$addToSet": {"bookmarks": uid}})
-#     updated = await col_questions().find_one({"_id": oid(qid)})
-#     return _ser(updated, uid)
+    if not doc: raise HTTPException(404, "Not found")
+    if uid in doc.get("bookmarks", []):
+        await col_questions().update_one({"_id": oid(qid)}, {"$pull": {"bookmarks": uid}})
+    else:
+        await col_questions().update_one({"_id": oid(qid)}, {"$addToSet": {"bookmarks": uid}})
+    updated = await col_questions().find_one({"_id": oid(qid)})
+    return _ser(updated, uid)
 
 
 # ── Highlight toggle ──────────────────────────────────────────────────────────

@@ -673,11 +673,12 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
     if body.wb_edit_window_minutes is not None:
         update["wb_edit_window_minutes"] = body.wb_edit_window_minutes
 
-    await col_app_config().update_one(
-        {"_id": "config"},
-        {"$set": update},
-        upsert=True,
-    )
+    if update:
+        await col_app_config().update_one(
+            {"_id": "config"},
+            {"$set": update},
+            upsert=True,
+        )
 
     # If WorkBoard reminder time changed, reschedule the cron job
     if body.wb_reminder_time is not None:

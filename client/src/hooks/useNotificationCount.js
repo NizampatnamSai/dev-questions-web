@@ -7,7 +7,7 @@ const listeners = new Set();
 
 function setGlobalCount(n) {
   globalCount = n;
-  listeners.forEach(fn => fn(n));
+  listeners.forEach((fn) => fn(n));
 }
 
 export function useNotificationCount() {
@@ -24,7 +24,8 @@ export function useNotificationCount() {
     if (!user || user.isGuest) return;
 
     // Initial fetch
-    api.get("/admin/notifications/my/unread-count")
+    api
+      .get("/admin/notifications/my/unread-count")
       .then(({ data }) => setGlobalCount(data.count || 0))
       .catch(() => {});
 
@@ -45,11 +46,12 @@ export function useNotificationCount() {
         try {
           const msg = JSON.parse(e.data);
           if (msg.type === "unread_count") setGlobalCount(msg.count);
-          else if (msg.type === "new_notification") setGlobalCount(c => c + 1);
+          else if (msg.type === "new_notification")
+            setGlobalCount((c) => c + 1);
         } catch {}
       };
 
-      ws.onerror = () => {};  // suppress console errors
+      ws.onerror = () => {}; // suppress console errors
       ws.onclose = () => {
         if (!intentionalClose) setTimeout(connect, 5000);
       };
@@ -58,18 +60,23 @@ export function useNotificationCount() {
     connect();
 
     // Refetch on window focus as fallback
-    const onFocus = () => api.get("/admin/notifications/my/unread-count")
-      .then(({ data }) => setGlobalCount(data.count || 0))
-      .catch(() => {});
+    const onFocus = () =>
+      api
+        .get("/admin/notifications/my/unread-count")
+        .then(({ data }) => setGlobalCount(data.count || 0))
+        .catch(() => {});
     window.addEventListener("focus", onFocus);
 
     return () => {
       intentionalClose = true;
       window.removeEventListener("focus", onFocus);
-      if (wsRef.current) { wsRef.current.onclose = null; wsRef.current.close(); }
+      if (wsRef.current) {
+        wsRef.current.onclose = null;
+        wsRef.current.close();
+      }
     };
   }, [user?.id]);
 
-  const markRead = () => setGlobalCount(0);
-  return { count, markRead };
+  const updateCount = (count) => setGlobalCount(count);
+  return { count, updateCount };
 }

@@ -1,18 +1,141 @@
 // Auto-generated — 264 topics across 7 technologies
 export const STUDY_CATEGORIES = [
-  { id: "html",        label: "HTML",         icon: "\ud83c\udf10", color: "#e34c26", sources: [{ label: "W3Schools",       url: "https://www.w3schools.com/html/" }, { label: "MDN",             url: "https://developer.mozilla.org/en-US/docs/Web/HTML" }] },
-  { id: "css",         label: "CSS",          icon: "\ud83c\udfa8", color: "#264de4", sources: [{ label: "W3Schools",       url: "https://www.w3schools.com/css/" },  { label: "MDN",             url: "https://developer.mozilla.org/en-US/docs/Web/CSS" }] },
-  { id: "javascript",  label: "JavaScript",   icon: "\u26a1",        color: "#f7df1e", sources: [{ label: "MDN",             url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" }, { label: "javascript.info", url: "https://javascript.info/" }] },
-  { id: "typescript",  label: "TypeScript",   icon: "\ud83d\udd37", color: "#3178c6", sources: [{ label: "TypeScript Docs", url: "https://www.typescriptlang.org/docs/" }, { label: "W3Schools",    url: "https://www.w3schools.com/typescript/" }] },
-  { id: "react",       label: "React",        icon: "\u269b\ufe0f", color: "#61dafb", sources: [{ label: "React Docs",      url: "https://react.dev/" }, { label: "W3Schools",               url: "https://www.w3schools.com/react/" }] },
-  { id: "reactnative", label: "React Native", icon: "\ud83d\udcf1", color: "#0fa5e9", sources: [{ label: "RN Docs",         url: "https://reactnative.dev/docs/getting-started" }, { label: "Expo Docs",    url: "https://docs.expo.dev/" }] },
-  { id: "nextjs",      label: "Next.js",      icon: "\u25b2",        color: "#000000", sources: [{ label: "Next.js Docs",    url: "https://nextjs.org/docs" }, { label: "Learn Next.js",          url: "https://nextjs.org/learn" }] },
-  { id: "git",         label: "Git & GitHub",        icon: "🐙", color: "#f05032", sources: [{ label: "W3Schools",    url: "https://www.w3schools.com/git/" },         { label: "Git Docs",       url: "https://git-scm.com/doc" }] },
-  { id: "python",      label: "Python",              icon: "🐍", color: "#3776ab", sources: [{ label: "Python Docs",  url: "https://docs.python.org/3/" },             { label: "W3Schools",      url: "https://www.w3schools.com/python/" }] },
-  { id: "pybackend",   label: "Python Backend",      icon: "⚙️", color: "#009688", sources: [{ label: "FastAPI Docs", url: "https://fastapi.tiangolo.com/" },          { label: "Django Docs",    url: "https://docs.djangoproject.com/" }] },
-  { id: "pyai",        label: "Python AI/ML",        icon: "🤖", color: "#ff6f00", sources: [{ label: "scikit-learn", url: "https://scikit-learn.org/stable/" },       { label: "TensorFlow",     url: "https://www.tensorflow.org/learn" }] },
-  { id: "pydata",      label: "Python Data Analysis",icon: "📊", color: "#1565c0", sources: [{ label: "Pandas Docs",  url: "https://pandas.pydata.org/docs/" },         { label: "Matplotlib",     url: "https://matplotlib.org/stable/tutorials/" }] },
-  { id: "nodejs",     label: "Node.js",             icon: "🟢", color: "#339933", sources: [{ label: "Node.js Docs", url: "https://nodejs.org/en/docs/" },             { label: "W3Schools",      url: "https://www.w3schools.com/nodejs/" }] },
+  {
+    id: "html",
+    label: "HTML",
+    icon: "\ud83c\udf10",
+    color: "#e34c26",
+    sources: [
+      { label: "W3Schools", url: "https://www.w3schools.com/html/" },
+      {
+        label: "MDN",
+        url: "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      },
+    ],
+  },
+  {
+    id: "css",
+    label: "CSS",
+    icon: "\ud83c\udfa8",
+    color: "#264de4",
+    sources: [
+      { label: "W3Schools", url: "https://www.w3schools.com/css/" },
+      { label: "MDN", url: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    ],
+  },
+  {
+    id: "javascript",
+    label: "JavaScript",
+    icon: "\u26a1",
+    color: "#f7df1e",
+    sources: [
+      {
+        label: "MDN",
+        url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+      },
+      { label: "javascript.info", url: "https://javascript.info/" },
+    ],
+  },
+  {
+    id: "typescript",
+    label: "TypeScript",
+    icon: "\ud83d\udd37",
+    color: "#3178c6",
+    sources: [
+      { label: "TypeScript Docs", url: "https://www.typescriptlang.org/docs/" },
+      { label: "W3Schools", url: "https://www.w3schools.com/typescript/" },
+    ],
+  },
+  {
+    id: "react",
+    label: "React",
+    icon: "\u269b\ufe0f",
+    color: "#61dafb",
+    sources: [
+      { label: "React Docs", url: "https://react.dev/" },
+      { label: "W3Schools", url: "https://www.w3schools.com/react/" },
+    ],
+  },
+  {
+    id: "reactnative",
+    label: "React Native",
+    icon: "\ud83d\udcf1",
+    color: "#0fa5e9",
+    sources: [
+      { label: "RN Docs", url: "https://reactnative.dev/docs/getting-started" },
+      { label: "Expo Docs", url: "https://docs.expo.dev/" },
+    ],
+  },
+  {
+    id: "nextjs",
+    label: "Next.js",
+    icon: "\u25b2",
+    color: "#000000",
+    sources: [
+      { label: "Next.js Docs", url: "https://nextjs.org/docs" },
+      { label: "Learn Next.js", url: "https://nextjs.org/learn" },
+    ],
+  },
+  {
+    id: "git",
+    label: "Git & GitHub",
+    icon: "🐙",
+    color: "#f05032",
+    sources: [
+      { label: "W3Schools", url: "https://www.w3schools.com/git/" },
+      { label: "Git Docs", url: "https://git-scm.com/doc" },
+    ],
+  },
+  {
+    id: "python",
+    label: "Python",
+    icon: "🐍",
+    color: "#3776ab",
+    sources: [
+      { label: "Python Docs", url: "https://docs.python.org/3/" },
+      { label: "W3Schools", url: "https://www.w3schools.com/python/" },
+    ],
+  },
+  {
+    id: "pybackend",
+    label: "Python Backend",
+    icon: "⚙️",
+    color: "#009688",
+    sources: [
+      { label: "FastAPI Docs", url: "https://fastapi.tiangolo.com/" },
+      { label: "Django Docs", url: "https://docs.djangoproject.com/" },
+    ],
+  },
+  {
+    id: "pyai",
+    label: "Python AI/ML",
+    icon: "🤖",
+    color: "#ff6f00",
+    sources: [
+      { label: "scikit-learn", url: "https://scikit-learn.org/stable/" },
+      { label: "TensorFlow", url: "https://www.tensorflow.org/learn" },
+    ],
+  },
+  {
+    id: "pydata",
+    label: "Python Data Analysis",
+    icon: "📊",
+    color: "#1565c0",
+    sources: [
+      { label: "Pandas Docs", url: "https://pandas.pydata.org/docs/" },
+      { label: "Matplotlib", url: "https://matplotlib.org/stable/tutorials/" },
+    ],
+  },
+  {
+    id: "nodejs",
+    label: "Node.js",
+    icon: "🟢",
+    color: "#339933",
+    sources: [
+      { label: "Node.js Docs", url: "https://nodejs.org/en/docs/" },
+      { label: "W3Schools", url: "https://www.w3schools.com/nodejs/" },
+    ],
+  },
 ];
 
 export const STUDY_TOPICS = [
@@ -4711,7 +4834,8 @@ ANALYZE=true npm run build`,
     topic: "Basics",
     title: "git init, add, commit",
     difficulty: "Basic",
-    summary: "Three-step workflow: track files with add, snapshot with commit, share with push",
+    summary:
+      "Three-step workflow: track files with add, snapshot with commit, share with push",
     explanation: `Git has three areas: Working Directory (your files), Staging Area (what will be committed), and Repository (.git folder).
 
 git init — creates a new .git directory and starts tracking the folder as a repository.
@@ -4741,7 +4865,8 @@ git log --oneline`,
     topic: "Branching",
     title: "Branches & Merging",
     difficulty: "Basic",
-    summary: "Branches are lightweight pointers to commits — create, switch, and merge without copying files",
+    summary:
+      "Branches are lightweight pointers to commits — create, switch, and merge without copying files",
     explanation: `A branch is just a named pointer to a commit. HEAD points to the current branch.
 
 git branch <name> — creates a new branch at the current commit.
@@ -4768,7 +4893,8 @@ git merge feature/login
 
 # Delete branch after merge
 git branch -d feature/login`,
-    interviewQuestion: "What is the difference between a fast-forward merge and a three-way merge?",
+    interviewQuestion:
+      "What is the difference between a fast-forward merge and a three-way merge?",
   },
   {
     id: "git-remote",
@@ -4776,7 +4902,8 @@ git branch -d feature/login`,
     topic: "Remote",
     title: "Remote, fetch, pull, push",
     difficulty: "Basic",
-    summary: "Remote repos live on a server — push sends your commits, pull fetches + merges them",
+    summary:
+      "Remote repos live on a server — push sends your commits, pull fetches + merges them",
     explanation: `git remote add origin <url> — links your local repo to a remote URL (called 'origin' by convention).
 git push origin <branch> — sends local commits to the remote branch.
 git fetch — downloads remote changes WITHOUT merging them. Safe to run anytime.
@@ -4809,7 +4936,8 @@ git pull --rebase origin main`,
     topic: "Stash",
     title: "git stash",
     difficulty: "Intermediate",
-    summary: "Stash saves uncommitted work temporarily so you can switch branches without losing changes",
+    summary:
+      "Stash saves uncommitted work temporarily so you can switch branches without losing changes",
     explanation: `git stash — saves all uncommitted changes (tracked files only) to a stash stack and reverts Working Directory to HEAD.
 git stash pop — applies the latest stash and removes it from the stack.
 git stash apply — applies the latest stash but keeps it in the stack.
@@ -4846,7 +4974,8 @@ git stash clear`,
     topic: "Rebase",
     title: "git rebase & interactive rebase",
     difficulty: "Advanced",
-    summary: "Rebase replays commits on top of another branch — cleaner history than merge but rewrites SHAs",
+    summary:
+      "Rebase replays commits on top of another branch — cleaner history than merge but rewrites SHAs",
     explanation: `git rebase <base> — takes all commits from your current branch that diverged from <base> and re-applies them one by one on top of <base>.
 
 Result: linear history instead of a merge commit.
@@ -4879,7 +5008,8 @@ git rebase --continue
 
 # Abort rebase
 git rebase --abort`,
-    interviewQuestion: "What is the difference between git merge and git rebase? When would you choose each?",
+    interviewQuestion:
+      "What is the difference between git merge and git rebase? When would you choose each?",
   },
   {
     id: "git-reset-revert",
@@ -4887,7 +5017,8 @@ git rebase --abort`,
     topic: "Undoing",
     title: "reset, revert, restore",
     difficulty: "Intermediate",
-    summary: "reset rewrites history, revert adds an undo commit — revert is safe for shared branches",
+    summary:
+      "reset rewrites history, revert adds an undo commit — revert is safe for shared branches",
     explanation: `Three ways to undo in Git:
 
 git restore <file> — discards unstaged changes in Working Directory (safe, can't undo).
@@ -4916,7 +5047,8 @@ git reset --hard HEAD~1
 
 # Safe undo: creates a new "undo" commit
 git revert abc1234`,
-    interviewQuestion: "What is the difference between git reset --hard and git revert?",
+    interviewQuestion:
+      "What is the difference between git reset --hard and git revert?",
   },
   {
     id: "git-cherry-pick",
@@ -4924,7 +5056,8 @@ git revert abc1234`,
     topic: "Advanced",
     title: "cherry-pick",
     difficulty: "Advanced",
-    summary: "cherry-pick copies a specific commit from another branch without merging the whole branch",
+    summary:
+      "cherry-pick copies a specific commit from another branch without merging the whole branch",
     explanation: `git cherry-pick <hash> — applies the changes from the specified commit onto your current branch as a new commit (new SHA).
 
 Use cases:
@@ -4947,7 +5080,8 @@ git cherry-pick --no-commit abc1234
 # After resolving conflict
 git add resolved.js
 git cherry-pick --continue`,
-    interviewQuestion: "When would you use git cherry-pick instead of merging or rebasing?",
+    interviewQuestion:
+      "When would you use git cherry-pick instead of merging or rebasing?",
   },
   {
     id: "git-worktree",
@@ -4955,7 +5089,8 @@ git cherry-pick --continue`,
     topic: "Advanced",
     title: "git worktree — work on 2 branches at once",
     difficulty: "Advanced",
-    summary: "git worktree creates a second working directory linked to the same repo, so you can have two branches checked out simultaneously",
+    summary:
+      "git worktree creates a second working directory linked to the same repo, so you can have two branches checked out simultaneously",
     explanation: `git worktree lets you check out multiple branches of the same repo into separate folders at the same time — without stashing or switching.
 
 This is perfect when you:
@@ -4992,7 +5127,8 @@ git merge hotfix/crash-fix
 
 # Remove when done
 git worktree remove ../hotfix`,
-    interviewQuestion: "What is git worktree and when would you use it instead of git stash?",
+    interviewQuestion:
+      "What is git worktree and when would you use it instead of git stash?",
   },
   {
     id: "git-github-pr",
@@ -5000,7 +5136,8 @@ git worktree remove ../hotfix`,
     topic: "GitHub",
     title: "Pull Requests & Code Review",
     difficulty: "Basic",
-    summary: "A Pull Request proposes merging your branch — the place for code review, discussion, and CI checks before merging",
+    summary:
+      "A Pull Request proposes merging your branch — the place for code review, discussion, and CI checks before merging",
     explanation: `A Pull Request (PR) on GitHub is a request to merge one branch into another. It's the standard collaboration workflow:
 
 1. Create a feature branch locally: git checkout -b feature/dark-mode
@@ -5036,7 +5173,8 @@ gh pr status
 gh pr merge --squash
 
 # Or via GitHub UI: click "Merge pull request"`,
-    interviewQuestion: "What makes a good Pull Request? What do you look for in code review?",
+    interviewQuestion:
+      "What makes a good Pull Request? What do you look for in code review?",
   },
   {
     id: "git-github-actions",
@@ -5044,7 +5182,8 @@ gh pr merge --squash
     topic: "GitHub",
     title: "GitHub Actions — CI/CD",
     difficulty: "Intermediate",
-    summary: "GitHub Actions runs automated workflows (test, build, deploy) on events like push or PR open",
+    summary:
+      "GitHub Actions runs automated workflows (test, build, deploy) on events like push or PR open",
     explanation: `GitHub Actions lets you automate workflows directly in your repository. A workflow is a YAML file in .github/workflows/.
 
 Key concepts:
@@ -5089,7 +5228,8 @@ jobs:
       - run: npx netlify-cli deploy --prod --dir=dist
         env:
           NETLIFY_AUTH_TOKEN: \${{ secrets.NETLIFY_AUTH_TOKEN }}`,
-    interviewQuestion: "How does GitHub Actions differ from other CI tools? What is a workflow trigger?",
+    interviewQuestion:
+      "How does GitHub Actions differ from other CI tools? What is a workflow trigger?",
   },
   {
     id: "git-conflict-resolution",
@@ -5097,14 +5237,10 @@ jobs:
     topic: "Conflicts",
     title: "Resolving Merge Conflicts",
     difficulty: "Intermediate",
-    summary: "Conflicts happen when two branches change the same line — Git marks them with <<<<<<<, =======, >>>>>>>",
+    summary:
+      "Conflicts happen when two branches change the same line — Git marks them with <<<<<<<, =======, >>>>>>>",
     explanation: `A merge conflict occurs when two branches modified the same part of a file. Git can't auto-merge, so it marks the conflict:
 
-<<<<<<< HEAD
-your version
-=======
-their version
->>>>>>> feature/login
 
 To resolve:
 1. Open the file and decide which version to keep (or combine them)
@@ -5137,7 +5273,8 @@ git rebase --continue
 
 # See all conflicted files
 git diff --name-only --diff-filter=U`,
-    interviewQuestion: "Walk me through how you would resolve a merge conflict.",
+    interviewQuestion:
+      "Walk me through how you would resolve a merge conflict.",
   },
 
   // ── Git extra topics ──────────────────────────────────────────────────────
@@ -5147,7 +5284,8 @@ git diff --name-only --diff-filter=U`,
     topic: "History",
     title: "Reading Git Log & History",
     difficulty: "Basic",
-    summary: "git log shows the commit history. Use flags to format and filter it.",
+    summary:
+      "git log shows the commit history. Use flags to format and filter it.",
     explanation: `git log is your time machine — it lists every commit on the current branch.
 
 Useful flags:
@@ -5174,7 +5312,8 @@ git log --author="Alice" --since="1 week ago"
 git log -p --follow src/auth.js   # history of one file
 
 git show a1b2c3d   # full diff of one commit`,
-    interviewQuestion: "How do you find which commit introduced a specific bug using git log?",
+    interviewQuestion:
+      "How do you find which commit introduced a specific bug using git log?",
   },
   {
     id: "git-diff",
@@ -5182,7 +5321,8 @@ git show a1b2c3d   # full diff of one commit`,
     topic: "Inspection",
     title: "git diff — Comparing Changes",
     difficulty: "Basic",
-    summary: "git diff compares working directory, staging area, and commits to show what changed.",
+    summary:
+      "git diff compares working directory, staging area, and commits to show what changed.",
     explanation: `git diff shows changes that haven't been staged yet (working directory vs. staging area).
 
 Key variants:
@@ -5210,7 +5350,8 @@ git diff main..feature/login
 
 # Only show filenames
 git diff --name-only HEAD~1`,
-    interviewQuestion: "What is the difference between git diff and git diff --staged?",
+    interviewQuestion:
+      "What is the difference between git diff and git diff --staged?",
   },
   {
     id: "git-tag",
@@ -5218,7 +5359,8 @@ git diff --name-only HEAD~1`,
     topic: "Tags",
     title: "Git Tags & Releases",
     difficulty: "Basic",
-    summary: "Tags mark specific commits as releases or milestones. Lightweight and annotated tags.",
+    summary:
+      "Tags mark specific commits as releases or milestones. Lightweight and annotated tags.",
     explanation: `Tags are pointers to specific commits — most commonly used to mark release versions (v1.0.0).
 
 Lightweight tag: just a name pointing to a commit, no extra info.
@@ -5250,7 +5392,8 @@ git tag -a v1.1.0 a1b2c3d -m "Previous release"
 # Delete and re-push
 git tag -d v1.2.0
 git push origin :refs/tags/v1.2.0`,
-    interviewQuestion: "What is the difference between a lightweight tag and an annotated tag in Git?",
+    interviewQuestion:
+      "What is the difference between a lightweight tag and an annotated tag in Git?",
   },
   {
     id: "git-bisect",
@@ -5258,7 +5401,8 @@ git push origin :refs/tags/v1.2.0`,
     topic: "Debugging",
     title: "git bisect — Binary Search for Bugs",
     difficulty: "Advanced",
-    summary: "git bisect does a binary search through commit history to find which commit introduced a bug.",
+    summary:
+      "git bisect does a binary search through commit history to find which commit introduced a bug.",
     explanation: `git bisect is a powerful debugging tool. Instead of checking commits one by one, it uses binary search — O(log n) — to find the bad commit.
 
 How it works:
@@ -5289,7 +5433,8 @@ git bisect start
 git bisect bad HEAD
 git bisect good v1.0.0
 git bisect run npm test`,
-    interviewQuestion: "How would you use git bisect to find which commit introduced a regression?",
+    interviewQuestion:
+      "How would you use git bisect to find which commit introduced a regression?",
   },
   {
     id: "git-blame",
@@ -5324,7 +5469,8 @@ git blame -w src/auth.js
 
 # See full history of a specific function
 git log -p -S "function login" src/auth.js`,
-    interviewQuestion: "When would you use git blame and what are its limitations?",
+    interviewQuestion:
+      "When would you use git blame and what are its limitations?",
   },
   {
     id: "git-stash-advanced",
@@ -5332,7 +5478,8 @@ git log -p -S "function login" src/auth.js`,
     topic: "Stash",
     title: "git stash — Advanced Usage",
     difficulty: "Intermediate",
-    summary: "Stash multiple entries, apply selectively, include untracked files, and create branches from stashes.",
+    summary:
+      "Stash multiple entries, apply selectively, include untracked files, and create branches from stashes.",
     explanation: `Beyond git stash / git stash pop, there are powerful advanced options:
 
 Multiple stashes:
@@ -5372,7 +5519,8 @@ git stash push -p
 
 # Turn stash into a branch
 git stash branch fix/auth stash@{0}`,
-    interviewQuestion: "How would you stash only specific files or hunks in Git?",
+    interviewQuestion:
+      "How would you stash only specific files or hunks in Git?",
   },
   {
     id: "git-interactive-rebase",
@@ -5380,7 +5528,8 @@ git stash branch fix/auth stash@{0}`,
     topic: "Rebase",
     title: "Interactive Rebase — Rewriting History",
     difficulty: "Advanced",
-    summary: "git rebase -i lets you squash, reorder, edit, or drop commits before merging.",
+    summary:
+      "git rebase -i lets you squash, reorder, edit, or drop commits before merging.",
     explanation: `Interactive rebase (git rebase -i) opens an editor listing recent commits. You can rewrite history before pushing.
 
 Actions per commit:
@@ -5421,7 +5570,8 @@ git rebase -i HEAD~4
 
 # Abort if things go wrong
 git rebase --abort`,
-    interviewQuestion: "What is the difference between squash and fixup in interactive rebase?",
+    interviewQuestion:
+      "What is the difference between squash and fixup in interactive rebase?",
   },
   {
     id: "git-reflog",
@@ -5429,7 +5579,8 @@ git rebase --abort`,
     topic: "Recovery",
     title: "git reflog — Recovering Lost Commits",
     difficulty: "Intermediate",
-    summary: "reflog records every HEAD movement. Use it to recover from accidental resets or dropped commits.",
+    summary:
+      "reflog records every HEAD movement. Use it to recover from accidental resets or dropped commits.",
     explanation: `The reflog (reference log) tracks every change to HEAD — commits, checkouts, resets, rebases — kept for 90 days by default.
 
 This is your safety net. Even after git reset --hard or a bad rebase, commits aren't immediately deleted — reflog can find them.
@@ -5458,7 +5609,8 @@ git checkout 5d6e7f8        # inspect
 git branch recovery/payment 5d6e7f8  # save it
 git switch main
 git merge recovery/payment`,
-    interviewQuestion: "How would you recover a commit that was lost after git reset --hard?",
+    interviewQuestion:
+      "How would you recover a commit that was lost after git reset --hard?",
   },
   {
     id: "git-fetch-pull",
@@ -5466,7 +5618,8 @@ git merge recovery/payment`,
     topic: "Remote",
     title: "git fetch vs git pull",
     difficulty: "Basic",
-    summary: "fetch downloads changes without merging; pull = fetch + merge (or rebase). Know the difference.",
+    summary:
+      "fetch downloads changes without merging; pull = fetch + merge (or rebase). Know the difference.",
     explanation: `Both commands download changes from a remote, but they behave differently:
 
 git fetch:
@@ -5499,7 +5652,8 @@ git pull --rebase origin main
 
 # Set rebase as default for all pulls
 git config --global pull.rebase true`,
-    interviewQuestion: "What is the difference between git fetch and git pull? When would you use each?",
+    interviewQuestion:
+      "What is the difference between git fetch and git pull? When would you use each?",
   },
   {
     id: "git-hooks",
@@ -5507,7 +5661,8 @@ git config --global pull.rebase true`,
     topic: "Automation",
     title: "Git Hooks — Automate Git Events",
     difficulty: "Intermediate",
-    summary: "Git hooks are scripts that run automatically at key Git events (commit, push, merge).",
+    summary:
+      "Git hooks are scripts that run automatically at key Git events (commit, push, merge).",
     explanation: `Git hooks are shell scripts stored in .git/hooks/ that fire at specific Git lifecycle events.
 
 Common hooks:
@@ -5539,7 +5694,8 @@ npx lint-staged
 npm install --save-dev husky lint-staged
 npx husky init
 echo "npx lint-staged" > .husky/pre-commit`,
-    interviewQuestion: "How would you enforce that all commits follow the Conventional Commits format using Git hooks?",
+    interviewQuestion:
+      "How would you enforce that all commits follow the Conventional Commits format using Git hooks?",
   },
   {
     id: "git-submodules",
@@ -5547,7 +5703,8 @@ echo "npx lint-staged" > .husky/pre-commit`,
     topic: "Advanced",
     title: "Git Submodules",
     difficulty: "Advanced",
-    summary: "Submodules let you embed one Git repo inside another, pinned to a specific commit.",
+    summary:
+      "Submodules let you embed one Git repo inside another, pinned to a specific commit.",
     explanation: `A submodule is a pointer from one Git repo to a specific commit in another repo. The inner repo is tracked as a dependency.
 
 When to use:
@@ -5582,7 +5739,8 @@ git submodule update --remote components/shared-ui
 
 # See submodule status
 git submodule status`,
-    interviewQuestion: "What are Git submodules and what problems can they cause?",
+    interviewQuestion:
+      "What are Git submodules and what problems can they cause?",
   },
   {
     id: "git-squash-merge",
@@ -5590,7 +5748,8 @@ git submodule status`,
     topic: "Merging",
     title: "Merge Strategies — Squash, Rebase, Merge Commit",
     difficulty: "Intermediate",
-    summary: "Three ways to integrate a branch: merge commit, squash merge, rebase merge. Each has different history implications.",
+    summary:
+      "Three ways to integrate a branch: merge commit, squash merge, rebase merge. Each has different history implications.",
     explanation: `When merging a PR/branch, you choose a strategy:
 
 1. Merge Commit (--no-ff):
@@ -5627,7 +5786,8 @@ git checkout feature/login
 git rebase main
 git checkout main
 git merge feature/login   # fast-forward`,
-    interviewQuestion: "What is the difference between squash merge, rebase merge, and a merge commit?",
+    interviewQuestion:
+      "What is the difference between squash merge, rebase merge, and a merge commit?",
   },
   {
     id: "git-gitignore",
@@ -5635,7 +5795,8 @@ git merge feature/login   # fast-forward`,
     topic: "Config",
     title: ".gitignore — Excluding Files",
     difficulty: "Basic",
-    summary: ".gitignore tells Git which files and folders to never track. Patterns use glob syntax.",
+    summary:
+      ".gitignore tells Git which files and folders to never track. Patterns use glob syntax.",
     explanation: `The .gitignore file lists patterns for files Git should ignore. Ignored files don't appear in git status and can't be accidentally committed.
 
 Pattern syntax:
@@ -5677,7 +5838,8 @@ git commit -m "chore: stop tracking .env"
 
 # Check why a file is ignored
 git check-ignore -v .env`,
-    interviewQuestion: "How do you stop tracking a file that was already committed to Git?",
+    interviewQuestion:
+      "How do you stop tracking a file that was already committed to Git?",
   },
   {
     id: "git-alias",
@@ -5685,7 +5847,8 @@ git check-ignore -v .env`,
     topic: "Config",
     title: "Git Aliases & Config",
     difficulty: "Basic",
-    summary: "Create short aliases for long Git commands. Store in ~/.gitconfig for global use.",
+    summary:
+      "Create short aliases for long Git commands. Store in ~/.gitconfig for global use.",
     explanation: `Git aliases let you create shortcuts for frequently used commands.
 
 Set globally via git config --global alias.<name> '<command>'
@@ -5725,7 +5888,8 @@ git config --global core.editor "code --wait"
 
 # Auto-set upstream on push
 git config --global push.autoSetupRemote true`,
-    interviewQuestion: "How do you create a Git alias, and what aliases do you find most useful?",
+    interviewQuestion:
+      "How do you create a Git alias, and what aliases do you find most useful?",
   },
   {
     id: "git-fork-workflow",
@@ -5733,7 +5897,8 @@ git config --global push.autoSetupRemote true`,
     topic: "GitHub",
     title: "Fork & Pull Request Workflow",
     difficulty: "Intermediate",
-    summary: "The standard open-source workflow: fork a repo, make changes on a branch, open a PR back to upstream.",
+    summary:
+      "The standard open-source workflow: fork a repo, make changes on a branch, open a PR back to upstream.",
     explanation: `The fork & PR workflow is how open source contribution works on GitHub:
 
 1. Fork: create your own copy of the upstream repo on GitHub
@@ -5776,7 +5941,8 @@ git commit -m "fix: correct broken docs link"
 git push origin fix/broken-link
 
 # Open PR on GitHub: your-fork/fix/broken-link → original/main`,
-    interviewQuestion: "Walk me through the fork and pull request workflow for contributing to an open source project.",
+    interviewQuestion:
+      "Walk me through the fork and pull request workflow for contributing to an open source project.",
   },
   {
     id: "git-protected-branches",
@@ -5784,7 +5950,8 @@ git push origin fix/broken-link
     topic: "GitHub",
     title: "Branch Protection & Code Review",
     difficulty: "Intermediate",
-    summary: "GitHub branch protection rules enforce PR reviews, CI checks, and prevent force-pushes to main.",
+    summary:
+      "GitHub branch protection rules enforce PR reviews, CI checks, and prevent force-pushes to main.",
     explanation: `Branch protection rules (GitHub Settings → Branches → Add rule) enforce quality gates on important branches.
 
 Common protections on main/master:
@@ -5818,7 +5985,8 @@ src/auth/   @alice @bob
 
 # Docs → anyone on docs team
 docs/       @org/docs-team`,
-    interviewQuestion: "What are branch protection rules and why are they important in a team environment?",
+    interviewQuestion:
+      "What are branch protection rules and why are they important in a team environment?",
   },
   {
     id: "git-ci-cd-basics",
@@ -5826,7 +5994,8 @@ docs/       @org/docs-team`,
     topic: "CI/CD",
     title: "CI/CD with Git — Pipelines on Push",
     difficulty: "Intermediate",
-    summary: "CI runs tests on every push/PR. CD deploys automatically when main is green. Git events trigger pipelines.",
+    summary:
+      "CI runs tests on every push/PR. CD deploys automatically when main is green. Git events trigger pipelines.",
     explanation: `Continuous Integration (CI): automatically run tests, linting, and builds on every push and PR.
 Continuous Deployment (CD): automatically deploy to staging or production when CI passes on main.
 
@@ -5868,7 +6037,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test`,
-    interviewQuestion: "What is the difference between Continuous Integration and Continuous Deployment?",
+    interviewQuestion:
+      "What is the difference between Continuous Integration and Continuous Deployment?",
   },
   {
     id: "git-conventional-commits",
@@ -5876,7 +6046,8 @@ jobs:
     topic: "Workflow",
     title: "Conventional Commits",
     difficulty: "Basic",
-    summary: "A commit message standard: type(scope): description. Powers changelogs, semantic versioning, and tooling.",
+    summary:
+      "A commit message standard: type(scope): description. Powers changelogs, semantic versioning, and tooling.",
     explanation: `Conventional Commits is a specification for structured commit messages that humans and tools can parse.
 
 Format: <type>(<scope>): <short description>
@@ -5912,7 +6083,8 @@ git commit -m "chore(deps): bump react to 19.0.0"
 git commit -m "feat(api)!: rename /users to /accounts
 
 BREAKING CHANGE: /users endpoint removed, use /accounts"`,
-    interviewQuestion: "What are Conventional Commits and how do they help automate versioning?",
+    interviewQuestion:
+      "What are Conventional Commits and how do they help automate versioning?",
   },
   {
     id: "git-mono-repo",
@@ -5920,7 +6092,8 @@ BREAKING CHANGE: /users endpoint removed, use /accounts"`,
     topic: "Architecture",
     title: "Monorepo vs Polyrepo",
     difficulty: "Intermediate",
-    summary: "Monorepo = all projects in one Git repo. Polyrepo = one repo per project. Each has distinct trade-offs.",
+    summary:
+      "Monorepo = all projects in one Git repo. Polyrepo = one repo per project. Each has distinct trade-offs.",
     explanation: `Monorepo: all code (frontend, backend, mobile, shared libs) lives in one Git repository.
 
 Pros of monorepo:
@@ -5963,9 +6136,9 @@ npx turbo run test
 
 # Only rebuild what changed
 npx turbo run build --filter=[HEAD^1]`,
-    interviewQuestion: "What are the trade-offs between a monorepo and a polyrepo architecture?",
+    interviewQuestion:
+      "What are the trade-offs between a monorepo and a polyrepo architecture?",
   },
-
 
   // ── Python Core ──────────────────────────────────────────────────────────
   {
@@ -5975,7 +6148,8 @@ npx turbo run build --filter=[HEAD^1]`,
     title: "Data Types & Variables",
     difficulty: "Basic",
     summary: "Python has dynamic typing — variables have no declared type",
-    explanation: "Python's built-in types: int, float, str, bool, list, tuple, set, dict, NoneType. Use type() to inspect. Everything is an object.",
+    explanation:
+      "Python's built-in types: int, float, str, bool, list, tuple, set, dict, NoneType. Use type() to inspect. Everything is an object.",
     code: `x = 42          # int
 y = 3.14        # float
 name = "Alice"  # str
@@ -5986,7 +6160,8 @@ unique = {1,2}  # set   — unordered unique
 data = {"a":1}  # dict  — key-value
 
 print(type(x))  # <class 'int'>`,
-    interviewQuestion: "What is the difference between a list and a tuple in Python?",
+    interviewQuestion:
+      "What is the difference between a list and a tuple in Python?",
   },
   {
     id: "python-comprehensions",
@@ -5995,7 +6170,8 @@ print(type(x))  # <class 'int'>`,
     title: "List & Dict Comprehensions",
     difficulty: "Intermediate",
     summary: "Concise way to build lists, dicts, and sets in one line",
-    explanation: "Comprehensions are faster than loops because they're optimized at the C level. Use them for simple transformations; avoid nesting more than 2 levels.",
+    explanation:
+      "Comprehensions are faster than loops because they're optimized at the C level. Use them for simple transformations; avoid nesting more than 2 levels.",
     code: `# List comprehension
 squares = [x**2 for x in range(10) if x % 2 == 0]
 # [0, 4, 16, 36, 64]
@@ -6006,7 +6182,8 @@ word_len = {w: len(w) for w in ["python","is","great"]}
 
 # Set comprehension
 uniq_chars = {c.lower() for c in "Hello World" if c != " "}`,
-    interviewQuestion: "When would you use a generator expression instead of a list comprehension?",
+    interviewQuestion:
+      "When would you use a generator expression instead of a list comprehension?",
   },
   {
     id: "python-decorators",
@@ -6015,7 +6192,8 @@ uniq_chars = {c.lower() for c in "Hello World" if c != " "}`,
     title: "Decorators",
     difficulty: "Advanced",
     summary: "Functions that wrap other functions to add behaviour",
-    explanation: "A decorator is syntactic sugar for higher-order functions. @functools.wraps preserves the wrapped function's metadata (__name__, __doc__).",
+    explanation:
+      "A decorator is syntactic sugar for higher-order functions. @functools.wraps preserves the wrapped function's metadata (__name__, __doc__).",
     code: `import functools, time
 
 def timer(func):
@@ -6040,8 +6218,10 @@ slow()  # slow took 0.1001s`,
     topic: "Core Python",
     title: "Generators & yield",
     difficulty: "Intermediate",
-    summary: "Lazy iterators that produce values one at a time — memory efficient",
-    explanation: "A generator function uses yield instead of return. Execution suspends at each yield and resumes on next(). Great for large data streams.",
+    summary:
+      "Lazy iterators that produce values one at a time — memory efficient",
+    explanation:
+      "A generator function uses yield instead of return. Execution suspends at each yield and resumes on next(). Great for large data streams.",
     code: `def fibonacci():
     a, b = 0, 1
     while True:
@@ -6055,7 +6235,8 @@ print([next(gen) for _ in range(8)])
 # Generator expression (lazy list comprehension)
 evens = (x for x in range(1_000_000) if x % 2 == 0)
 print(next(evens))  # 0 — only one value computed`,
-    interviewQuestion: "What is the memory advantage of a generator over a list?",
+    interviewQuestion:
+      "What is the memory advantage of a generator over a list?",
   },
   {
     id: "python-oop",
@@ -6063,8 +6244,10 @@ print(next(evens))  # 0 — only one value computed`,
     topic: "Core Python",
     title: "Classes & OOP",
     difficulty: "Intermediate",
-    summary: "Python supports full OOP: inheritance, encapsulation, polymorphism",
-    explanation: "__init__ is the constructor. Use @property for computed attributes. __repr__ for dev-friendly string, __str__ for user-friendly. Single underscore _x = convention-private; double __x = name-mangled.",
+    summary:
+      "Python supports full OOP: inheritance, encapsulation, polymorphism",
+    explanation:
+      "__init__ is the constructor. Use @property for computed attributes. __repr__ for dev-friendly string, __str__ for user-friendly. Single underscore _x = convention-private; double __x = name-mangled.",
     code: `class Animal:
     def __init__(self, name: str):
         self.name = name
@@ -6093,7 +6276,8 @@ print(repr(dog))     # Animal('Rex')`,
     title: "FastAPI Basics",
     difficulty: "Basic",
     summary: "FastAPI is a modern async Python web framework with auto docs",
-    explanation: "FastAPI uses Python type hints for request validation (via Pydantic) and auto-generates OpenAPI docs at /docs. Runs on Uvicorn (ASGI server).",
+    explanation:
+      "FastAPI uses Python type hints for request validation (via Pydantic) and auto-generates OpenAPI docs at /docs. Runs on Uvicorn (ASGI server).",
     code: `from fastapi import FastAPI
 from pydantic import BaseModel
 
@@ -6120,8 +6304,10 @@ async def create_item(item: Item):
     topic: "FastAPI",
     title: "Dependency Injection",
     difficulty: "Intermediate",
-    summary: "Depends() injects reusable logic like auth, DB sessions, rate limits",
-    explanation: "FastAPI's dependency injection system runs dependencies before the route handler. They can be chained, async, and have their own dependencies.",
+    summary:
+      "Depends() injects reusable logic like auth, DB sessions, rate limits",
+    explanation:
+      "FastAPI's dependency injection system runs dependencies before the route handler. They can be chained, async, and have their own dependencies.",
     code: `from fastapi import Depends, HTTPException, Header
 
 async def verify_token(x_token: str = Header(...)):
@@ -6141,7 +6327,8 @@ async def secure_route(token: str = Depends(verify_token)):
     title: "MongoDB with Motor (Async)",
     difficulty: "Intermediate",
     summary: "Motor is the async MongoDB driver for Python used with FastAPI",
-    explanation: "Motor wraps PyMongo for async/await usage. Use AsyncIOMotorClient. Operations like find_one, insert_one, update_one are all awaitable.",
+    explanation:
+      "Motor wraps PyMongo for async/await usage. Use AsyncIOMotorClient. Operations like find_one, insert_one, update_one are all awaitable.",
     code: `from motor.motor_asyncio import AsyncIOMotorClient
 
 client = AsyncIOMotorClient("mongodb://localhost:27017")
@@ -6168,7 +6355,8 @@ docs = await col.find({}).sort("name", 1).to_list(length=100)`,
     title: "Django ORM Basics",
     difficulty: "Intermediate",
     summary: "Django ORM maps Python classes to database tables",
-    explanation: "Each Model class maps to a DB table. Fields define columns. QuerySets are lazy — they hit DB only when evaluated. Use select_related() for JOIN, prefetch_related() for M2M.",
+    explanation:
+      "Each Model class maps to a DB table. Fields define columns. QuerySets are lazy — they hit DB only when evaluated. Use select_related() for JOIN, prefetch_related() for M2M.",
     code: `from django.db import models
 
 class User(models.Model):
@@ -6185,7 +6373,8 @@ User.objects.filter(name="Alice")     # WHERE name='Alice'
 User.objects.get(id=1)               # single row or raise
 User.objects.create(name="Bob", email="b@x.com")
 User.objects.filter(id=1).update(name="Alice2")`,
-    interviewQuestion: "What is the N+1 query problem and how does select_related() solve it?",
+    interviewQuestion:
+      "What is the N+1 query problem and how does select_related() solve it?",
   },
 
   // ── Python AI/ML ──────────────────────────────────────────────────────────
@@ -6196,7 +6385,8 @@ User.objects.filter(id=1).update(name="Alice2")`,
     title: "NumPy Arrays & Operations",
     difficulty: "Basic",
     summary: "NumPy ndarray is the foundation of all Python ML/data libraries",
-    explanation: "NumPy arrays are contiguous memory blocks of typed values. Vectorized operations (no Python loops) make them 100x faster than lists for numerical work.",
+    explanation:
+      "NumPy arrays are contiguous memory blocks of typed values. Vectorized operations (no Python loops) make them 100x faster than lists for numerical work.",
     code: `import numpy as np
 
 a = np.array([1, 2, 3, 4, 5])
@@ -6220,7 +6410,8 @@ print(a[a > 3])     # [4 5]`,
     title: "ML Pipeline with scikit-learn",
     difficulty: "Intermediate",
     summary: "Pipeline chains preprocessing + model into one reusable object",
-    explanation: "Pipeline prevents data leakage by fitting transformers only on training data. fit() trains the whole pipe; predict() transforms + predicts in one call.",
+    explanation:
+      "Pipeline prevents data leakage by fitting transformers only on training data. fit() trains the whole pipe; predict() transforms + predicts in one call.",
     code: `from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -6237,7 +6428,8 @@ pipe = Pipeline([
 
 pipe.fit(X_train, y_train)
 print(pipe.score(X_test, y_test))  # ~0.97`,
-    interviewQuestion: "Why is it important to fit the scaler only on training data?",
+    interviewQuestion:
+      "Why is it important to fit the scaler only on training data?",
   },
   {
     id: "pyai-openai-api",
@@ -6246,7 +6438,8 @@ print(pipe.score(X_test, y_test))  # ~0.97`,
     title: "OpenAI / LLM API Integration",
     difficulty: "Intermediate",
     summary: "Call LLM APIs with Python to build AI-powered features",
-    explanation: "Use the openai SDK (or httpx for other providers). Always stream for long responses. Store API keys in env vars, never in code.",
+    explanation:
+      "Use the openai SDK (or httpx for other providers). Always stream for long responses. Store API keys in env vars, never in code.",
     code: `from openai import OpenAI
 import os
 
@@ -6268,7 +6461,8 @@ stream = client.chat.completions.create(model="gpt-4o-mini",
     messages=[{"role":"user","content":"Tell me a joke"}], stream=True)
 for chunk in stream:
     print(chunk.choices[0].delta.content or "", end="")`,
-    interviewQuestion: "What is the difference between temperature and top_p in LLM APIs?",
+    interviewQuestion:
+      "What is the difference between temperature and top_p in LLM APIs?",
   },
   {
     id: "pyai-langchain-basics",
@@ -6277,7 +6471,8 @@ for chunk in stream:
     title: "LangChain Chains & Prompts",
     difficulty: "Advanced",
     summary: "LangChain simplifies building multi-step LLM applications",
-    explanation: "LangChain's LCEL (LangChain Expression Language) uses | pipe operator to chain prompts, models, and output parsers. Supports memory, tools, and agents.",
+    explanation:
+      "LangChain's LCEL (LangChain Expression Language) uses | pipe operator to chain prompts, models, and output parsers. Supports memory, tools, and agents.",
     code: `from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -6293,7 +6488,8 @@ chain = prompt | llm | StrOutputParser()
 
 result = chain.invoke({"concept": "decorators"})
 print(result)`,
-    interviewQuestion: "What is RAG (Retrieval-Augmented Generation) and when would you use it?",
+    interviewQuestion:
+      "What is RAG (Retrieval-Augmented Generation) and when would you use it?",
   },
 
   // ── Python Data Analysis ──────────────────────────────────────────────────
@@ -6304,7 +6500,8 @@ print(result)`,
     title: "DataFrame Basics",
     difficulty: "Basic",
     summary: "Pandas DataFrame is a 2D table — the Excel of Python",
-    explanation: "A DataFrame is a dict of Series (columns). Index is the row label. Operations are vectorized. Use .loc[] for label-based, .iloc[] for integer-based access.",
+    explanation:
+      "A DataFrame is a dict of Series (columns). Index is the row label. Operations are vectorized. Use .loc[] for label-based, .iloc[] for integer-based access.",
     code: `import pandas as pd
 
 df = pd.DataFrame({
@@ -6333,8 +6530,10 @@ print(df.groupby("grade")["score"].mean())`,
     topic: "Pandas",
     title: "Data Cleaning",
     difficulty: "Intermediate",
-    summary: "Handle missing values, duplicates, and type errors in real datasets",
-    explanation: "Real data is messy. isnull(), dropna(), fillna() handle NaN. astype() fixes type mismatches. drop_duplicates() removes duplicate rows.",
+    summary:
+      "Handle missing values, duplicates, and type errors in real datasets",
+    explanation:
+      "Real data is messy. isnull(), dropna(), fillna() handle NaN. astype() fixes type mismatches. drop_duplicates() removes duplicate rows.",
     code: `import pandas as pd
 import numpy as np
 
@@ -6365,8 +6564,10 @@ df.rename(columns={"user_name": "username"}, inplace=True)`,
     topic: "Visualization",
     title: "Matplotlib & Seaborn",
     difficulty: "Basic",
-    summary: "Matplotlib is the base plotting library; Seaborn adds statistical plots",
-    explanation: "plt.figure() + plt.subplot() for layout control. Seaborn wraps Matplotlib with better defaults and statistical plot types like heatmap, boxplot, pairplot.",
+    summary:
+      "Matplotlib is the base plotting library; Seaborn adds statistical plots",
+    explanation:
+      "plt.figure() + plt.subplot() for layout control. Seaborn wraps Matplotlib with better defaults and statistical plot types like heatmap, boxplot, pairplot.",
     code: `import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -6393,8 +6594,10 @@ plt.show()`,
     topic: "EDA",
     title: "Exploratory Data Analysis",
     difficulty: "Intermediate",
-    summary: "EDA is the first step in any data project — understand before modelling",
-    explanation: "EDA uncovers patterns, outliers, and relationships. Correlation heatmaps show feature relationships. Box plots reveal outliers. Always check data shape, dtypes, and null counts first.",
+    summary:
+      "EDA is the first step in any data project — understand before modelling",
+    explanation:
+      "EDA uncovers patterns, outliers, and relationships. Correlation heatmaps show feature relationships. Box plots reveal outliers. Always check data shape, dtypes, and null counts first.",
     code: `import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -6417,18 +6620,22 @@ sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm")
 
 # 5. Categorical counts
 print(df["Survived"].value_counts(normalize=True))`,
-    interviewQuestion: "What is the first thing you do when you receive a new dataset?",
+    interviewQuestion:
+      "What is the first thing you do when you receive a new dataset?",
   },
 
   // ── Node.js ────────────────────────────────────────────────────────────────
   {
     id: "nodejs-intro",
     category: "nodejs",
-    level: "Beginner",
+    difficulty: "Beginner",
+    topic: "Node.js Fundamentals",
     title: "What is Node.js?",
-    summary: "Node.js is a JavaScript runtime built on Chrome's V8 engine that lets you run JS on the server side.",
-    explanation: "Node.js uses an event-driven, non-blocking I/O model which makes it lightweight and efficient for data-intensive real-time applications.",
-    codeExample: `// hello.js
+    summary:
+      "Node.js is a JavaScript runtime built on Chrome's V8 engine that lets you run JS on the server side.",
+    explanation:
+      "Node.js uses an event-driven, non-blocking I/O model which makes it lightweight and efficient for data-intensive real-time applications.",
+    code: `// hello.js
 const http = require('http');
 
 const server = http.createServer((req, res) => {
@@ -6437,48 +6644,60 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(3000, () => console.log('Server running on port 3000'));`,
-    interviewQuestion: "What is the difference between Node.js and the browser JavaScript environment?",
+    interviewQuestion:
+      "What is the difference between Node.js and the browser JavaScript environment?",
   },
   {
     id: "nodejs-modules",
     category: "nodejs",
-    level: "Beginner",
+    difficulty: "Beginner",
+    topic: "Modules",
     title: "CommonJS vs ES Modules",
-    summary: "Node.js supports both CommonJS (`require`) and ES Modules (`import/export`).",
-    explanation: "CommonJS is the default system in Node.js. ES Modules are the standard in modern JS. Use `.mjs` extension or `\"type\": \"module\"` in package.json for ESM.",
-    codeExample: `// CommonJS
+    summary:
+      "Node.js supports both CommonJS (`require`) and ES Modules (`import/export`).",
+    explanation:
+      'CommonJS is the default system in Node.js. ES Modules are the standard in modern JS. Use `.mjs` extension or `"type": "module"` in package.json for ESM.',
+    code: `// CommonJS
 const fs = require('fs');
 module.exports = { hello: 'world' };
 
 // ES Modules (package.json: "type": "module")
 import fs from 'fs';
 export const hello = 'world';`,
-    interviewQuestion: "When would you use ES Modules over CommonJS in Node.js?",
+    interviewQuestion:
+      "When would you use ES Modules over CommonJS in Node.js?",
   },
   {
     id: "nodejs-event-loop",
     category: "nodejs",
-    level: "Intermediate",
+    difficulty: "Intermediate",
+    topic: "Asynchronous Programming",
     title: "Node.js Event Loop",
-    summary: "The event loop is what allows Node.js to perform non-blocking I/O operations despite JavaScript being single-threaded.",
-    explanation: "Phases: timers → pending callbacks → idle/prepare → poll → check (setImmediate) → close callbacks. The poll phase waits for I/O events when the queue is empty.",
-    codeExample: `setTimeout(() => console.log('timeout'), 0);
+    summary:
+      "The event loop is what allows Node.js to perform non-blocking I/O operations despite JavaScript being single-threaded.",
+    explanation:
+      "Phases: timers → pending callbacks → idle/prepare → poll → check (setImmediate) → close callbacks. The poll phase waits for I/O events when the queue is empty.",
+    code: `setTimeout(() => console.log('timeout'), 0);
 setImmediate(() => console.log('immediate'));
 Promise.resolve().then(() => console.log('promise'));
 console.log('sync');
 
 // Output: sync → promise → timeout → immediate
 // (setImmediate fires in check phase, after poll)`,
-    interviewQuestion: "What is the difference between `process.nextTick` and `setImmediate`?",
+    interviewQuestion:
+      "What is the difference between `process.nextTick` and `setImmediate`?",
   },
   {
     id: "nodejs-fs",
     category: "nodejs",
-    level: "Beginner",
+    difficulty: "Beginner",
+    topic: "File System",
     title: "File System (fs module)",
-    summary: "The `fs` module provides APIs to interact with the file system — read, write, delete, watch files.",
-    explanation: "Always prefer `fs/promises` (async/await) over the callback-based API. Use `fs.readFileSync` only in CLI scripts, never in servers.",
-    codeExample: `import { readFile, writeFile } from 'fs/promises';
+    summary:
+      "The `fs` module provides APIs to interact with the file system — read, write, delete, watch files.",
+    explanation:
+      "Always prefer `fs/promises` (async/await) over the callback-based API. Use `fs.readFileSync` only in CLI scripts, never in servers.",
+    code: `import { readFile, writeFile } from 'fs/promises';
 
 // Read
 const content = await readFile('data.txt', 'utf-8');
@@ -6490,16 +6709,20 @@ await writeFile('output.txt', 'Hello!', 'utf-8');
 // Stream large files
 import { createReadStream } from 'fs';
 createReadStream('large.csv').pipe(process.stdout);`,
-    interviewQuestion: "What is the difference between `fs.readFile` and `fs.createReadStream`?",
+    interviewQuestion:
+      "What is the difference between `fs.readFile` and `fs.createReadStream`?",
   },
   {
     id: "nodejs-express",
     category: "nodejs",
-    level: "Beginner",
+    difficulty: "Beginner",
+    topic: "Express.js",
     title: "Express.js Basics",
-    summary: "Express is the most popular Node.js web framework — minimal, fast, and unopinionated.",
-    explanation: "Express handles routing, middleware, request/response objects. Middleware functions run in order and must call `next()` to pass control.",
-    codeExample: `import express from 'express';
+    summary:
+      "Express is the most popular Node.js web framework — minimal, fast, and unopinionated.",
+    explanation:
+      "Express handles routing, middleware, request/response objects. Middleware functions run in order and must call `next()` to pass control.",
+    code: `import express from 'express';
 const app = express();
 
 app.use(express.json()); // parse JSON body
@@ -6519,16 +6742,20 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000);`,
-    interviewQuestion: "How does middleware work in Express and what is the role of `next()`?",
+    interviewQuestion:
+      "How does middleware work in Express and what is the role of `next()`?",
   },
   {
     id: "nodejs-async",
     category: "nodejs",
-    level: "Intermediate",
+    difficulty: "Intermediate",
+    topic: "Asynchronous Programming",
     title: "Async Patterns in Node.js",
-    summary: "Node.js handles async through callbacks, Promises, and async/await. Understanding each is essential.",
-    explanation: "Callback hell → Promises → async/await. `util.promisify` converts callback-based Node APIs to Promises. Always handle rejections.",
-    codeExample: `import { promisify } from 'util';
+    summary:
+      "Node.js handles async through callbacks, Promises, and async/await. Understanding each is essential.",
+    explanation:
+      "Callback hell → Promises → async/await. `util.promisify` converts callback-based Node APIs to Promises. Always handle rejections.",
+    code: `import { promisify } from 'util';
 import { exec } from 'child_process';
 
 const execAsync = promisify(exec);
@@ -6548,16 +6775,20 @@ const [users, posts] = await Promise.all([
   fetchUsers(),
   fetchPosts(),
 ]);`,
-    interviewQuestion: "How do you convert a callback-based Node.js function to use async/await?",
+    interviewQuestion:
+      "How do you convert a callback-based Node.js function to use async/await?",
   },
   {
     id: "nodejs-streams",
     category: "nodejs",
-    level: "Advanced",
+    difficulty: "Advanced",
+    topic: "Streams",
     title: "Streams & Piping",
-    summary: "Streams process data piece by piece without loading it all into memory — essential for large files or network data.",
-    explanation: "Four types: Readable, Writable, Duplex, Transform. Use `pipe()` or `pipeline()` (preferred — handles errors) to chain streams.",
-    codeExample: `import { createReadStream, createWriteStream } from 'fs';
+    summary:
+      "Streams process data piece by piece without loading it all into memory — essential for large files or network data.",
+    explanation:
+      "Four types: Readable, Writable, Duplex, Transform. Use `pipe()` or `pipeline()` (preferred — handles errors) to chain streams.",
+    code: `import { createReadStream, createWriteStream } from 'fs';
 import { createGzip } from 'zlib';
 import { pipeline } from 'stream/promises';
 
@@ -6576,16 +6807,20 @@ const upper = new Transform({
     callback(null, chunk.toString().toUpperCase());
   },
 });`,
-    interviewQuestion: "Why are streams more memory-efficient than reading an entire file at once?",
+    interviewQuestion:
+      "Why are streams more memory-efficient than reading an entire file at once?",
   },
   {
     id: "nodejs-env",
     category: "nodejs",
-    level: "Beginner",
+    difficulty: "Beginner",
+    topic: "Configuration",
     title: "Environment Variables & dotenv",
-    summary: "Store secrets and config outside your code using environment variables. Never hardcode API keys.",
-    explanation: "Use `process.env.VAR_NAME` to read env vars. In development, use the `dotenv` package to load a `.env` file. Add `.env` to `.gitignore`.",
-    codeExample: `// .env file
+    summary:
+      "Store secrets and config outside your code using environment variables. Never hardcode API keys.",
+    explanation:
+      "Use `process.env.VAR_NAME` to read env vars. In development, use the `dotenv` package to load a `.env` file. Add `.env` to `.gitignore`.",
+    code: `// .env file
 // DATABASE_URL=mongodb://localhost:27017/mydb
 // JWT_SECRET=supersecret
 // PORT=3000
@@ -6598,16 +6833,20 @@ const dbUrl = process.env.DATABASE_URL;
 if (!dbUrl) throw new Error('DATABASE_URL is required');
 
 console.log(\`Starting on port \${port}\`);`,
-    interviewQuestion: "Why should you never commit `.env` files to version control?",
+    interviewQuestion:
+      "Why should you never commit `.env` files to version control?",
   },
   {
     id: "nodejs-websocket",
     category: "nodejs",
-    level: "Advanced",
+    difficulty: "Advanced",
+    topic: "Networking",
     title: "WebSockets with ws",
-    summary: "WebSockets enable full-duplex, real-time communication between client and server over a single TCP connection.",
-    explanation: "Unlike HTTP, WebSocket connections stay open. The `ws` package is the most popular Node.js WebSocket library. Socket.IO adds rooms, reconnection, and fallbacks.",
-    codeExample: `import { WebSocketServer } from 'ws';
+    summary:
+      "WebSockets enable full-duplex, real-time communication between client and server over a single TCP connection.",
+    explanation:
+      "Unlike HTTP, WebSocket connections stay open. The `ws` package is the most popular Node.js WebSocket library. Socket.IO adds rooms, reconnection, and fallbacks.",
+    code: `import { WebSocketServer } from 'ws';
 
 const wss = new WebSocketServer({ port: 8080 });
 
@@ -6625,16 +6864,20 @@ wss.on('connection', (socket) => {
 
   socket.on('close', () => console.log('Client disconnected'));
 });`,
-    interviewQuestion: "What is the difference between WebSockets and HTTP long-polling?",
+    interviewQuestion:
+      "What is the difference between WebSockets and HTTP long-polling?",
   },
   {
     id: "nodejs-cluster",
     category: "nodejs",
-    level: "Advanced",
+    difficulty: "Advanced",
+    topic: "Performance & Scalability",
     title: "Clustering & Worker Threads",
-    summary: "Node.js is single-threaded, but you can use `cluster` to fork multiple processes or `worker_threads` for CPU-intensive tasks.",
-    explanation: "Cluster forks child processes that share a server port — each gets its own event loop. Worker threads share memory (SharedArrayBuffer) and are better for CPU work.",
-    codeExample: `import cluster from 'cluster';
+    summary:
+      "Node.js is single-threaded, but you can use `cluster` to fork multiple processes or `worker_threads` for CPU-intensive tasks.",
+    explanation:
+      "Cluster forks child processes that share a server port — each gets its own event loop. Worker threads share memory (SharedArrayBuffer) and are better for CPU work.",
+    code: `import cluster from 'cluster';
 import { cpus } from 'os';
 import express from 'express';
 
@@ -6651,6 +6894,7 @@ if (cluster.isPrimary) {
   app.get('/', (_, res) => res.send(\`Worker \${process.pid}\`));
   app.listen(3000);
 }`,
-    interviewQuestion: "When would you use `cluster` vs `worker_threads` in Node.js?",
+    interviewQuestion:
+      "When would you use `cluster` vs `worker_threads` in Node.js?",
   },
 ];

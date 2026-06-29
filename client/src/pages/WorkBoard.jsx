@@ -44,7 +44,9 @@ function canStillEdit(postedAt) {
 export default function WorkBoard() {
   const { user, profile } = useAuth();
   const [status, setStatus] = useState(null); // "none"|"pending"|"active"
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
+  const [todayPosts, setTodayPosts] = useState([]);
+  const [historyPosts, setHistoryPosts] = useState([]);
   const [missing, setMissing] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -57,7 +59,9 @@ export default function WorkBoard() {
   const [joining, setJoining] = useState(false);
   const [activeUsers, setActiveUsers] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedDate, setSelectedDate] = useState(null);
+  const [activeTab, setActiveTab] = useState("today"); // "today" | "history"
+  const [selectedHistoryDate, setSelectedHistoryDate] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [wbConfig, setWbConfig] = useState({
     edit_window_minutes: 30,
@@ -69,11 +73,12 @@ export default function WorkBoard() {
   const wsRef = useRef(null);
   const bottomRef = useRef(null);
 
-  const myPost = posts.find((p) => p.userId === user?.id);
+  // const myPost = posts.find((p) => p.userId === user?.id);
+  const myTodayPost = todayPosts.find((p) => p.userId === user?.id);
 
   useEffect(() => {
     loadStatus();
-    loadActiveUsers();
+    // loadActiveUsers();
     loadAvailableDates();
     api
       .get("/workboard/config")
@@ -84,6 +89,31 @@ export default function WorkBoard() {
       wsRef.current?.close();
     };
   }, []);
+
+  const openToday = async () => {
+    setActiveTab("today");
+    setSelectedHistoryDate(null);
+
+    if (!todayPosts.length) {
+      setHistoryLoading(true);
+      await loadBoard();
+      setHistoryLoading(false);
+    }
+  };
+
+  // const openToday = async () => {
+  //   setActiveTab("today");
+  //   setSelectedHistoryDate(null);
+  //   // setHistoryLoading(true);
+
+  //   // await loadBoard();
+
+  //   // setHistoryLoading(false);
+  // };
+
+  const openHistory = () => {
+    setActiveTab("history");
+  };
 
   const openConfigEdit = () => {
     setConfigDraft({ ...wbConfig });
@@ -146,26 +176,42 @@ export default function WorkBoard() {
     try {
       const params = date ? `?date=${date}` : "";
       const postsRes = await api.get(`/workboard/posts${params}`);
-      setPosts(postsRes.data);
 
       // Only fetch missing if viewing today
       if (!date) {
+        setTodayPosts(postsRes.data);
         const missingRes = await api.get("/workboard/missing-today");
         setMissing(missingRes.data);
       } else {
+        setHistoryPosts(postsRes.data);
         setMissing([]);
       }
+
+      // setPosts(postsRes.data);
     } catch (err) {
       console.error("Error loading board:", err);
     }
   };
 
-  const handleSelectDate = async (date) => {
-    setSelectedDate(date);
+  const handleSelectHistoryDate = async (date) => {
+    setSelectedHistoryDate(date);
+
+    setHistoryPosts([]); // remove stale data immediately
     setHistoryLoading(true);
-    await loadBoard(date);
-    setHistoryLoading(false);
+
+    try {
+      await loadBoard(date);
+    } finally {
+      setHistoryLoading(false);
+    }
   };
+
+  // const handleSelectDate = async (date) => {
+  //   setSelectedDate(date);
+  //   setHistoryLoading(true);
+  //   await loadBoard(date);
+  //   setHistoryLoading(false);
+  // };
 
   const connectWS = () => {
     const token = localStorage.getItem("devquiz_token");
@@ -180,17 +226,19 @@ export default function WorkBoard() {
         const msg = JSON.parse(e.data);
         const { type, post } = msg;
         if (type === "online_count") {
-          setActiveUsers(msg.users || []);
+          setActiveUsers(
+            (msg.users || []).filter(({ id }) => id && id !== "anonymous"),
+          );
         }
         if (type === "new_post") {
-          setPosts((prev) => {
+          setTodayPosts((prev) => {
             if (prev.find((p) => p.id === post.id)) return prev;
             return [...prev, post];
           });
           setMissing((prev) => prev.filter((m) => m.userId !== post.userId));
         }
         if (type === "edit_post") {
-          setPosts((prev) =>
+          setTodayPosts((prev) =>
             prev.map((p) =>
               p.id === post.id ? { ...p, message: post.message } : p,
             ),
@@ -204,7 +252,7 @@ export default function WorkBoard() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [posts]);
+  }, [todayPosts]);
 
   const join = async () => {
     setJoining(true);
@@ -285,9 +333,28 @@ export default function WorkBoard() {
 
   if (loading)
     return (
-      <div className="space-y-3 max-w-2xl">
+      <div className="space-y-3 max-w-2xl glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="glass-card p-5 animate-pulse h-16" />
+          <div key={i} className="p-4 animate-pulse">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* Avatar */}
+                <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700" />
+
+                <div className="space-y-2">
+                  {/* Name */}
+                  <div className="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700" />
+                  {/* Message line 1 */}
+                  <div className="h-3 w-56 rounded bg-slate-200 dark:bg-slate-700" />
+                  {/* Message line 2 */}
+                  <div className="h-3 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+                </div>
+              </div>
+
+              {/* Time */}
+              <div className="h-3 w-12 rounded bg-slate-200 dark:bg-slate-700" />
+            </div>
+          </div>
         ))}
       </div>
     );
@@ -394,12 +461,9 @@ export default function WorkBoard() {
       {status === "active" && (
         <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800">
           <button
-            onClick={() => {
-              setSelectedDate(null);
-              loadBoard();
-            }}
+            onClick={openToday}
             className={`px-4 py-2 text-sm font-semibold transition border-b-2 ${
-              !selectedDate
+              activeTab === "today"
                 ? "text-indigo-600 dark:text-indigo-400 border-indigo-600 dark:border-indigo-400"
                 : "text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300"
             }`}
@@ -407,9 +471,9 @@ export default function WorkBoard() {
             📅 Today
           </button>
           <button
-            onClick={() => setSelectedDate("history")}
+            onClick={openHistory}
             className={`px-4 py-2 text-sm font-semibold transition border-b-2 ${
-              selectedDate === "history"
+              activeTab === "history"
                 ? "text-indigo-600 dark:text-indigo-400 border-indigo-600 dark:border-indigo-400"
                 : "text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300"
             }`}
@@ -420,7 +484,9 @@ export default function WorkBoard() {
       )}
 
       {/* History date picker */}
-      {status === "active" && selectedDate === "history" && (
+
+      {/* !selectedHistoryDate  */}
+      {status === "active" && activeTab === "history" && (
         <div className="glass-card p-4 space-y-3">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             📜 Browse History
@@ -434,7 +500,8 @@ export default function WorkBoard() {
               {availableDates.map((item) => (
                 <button
                   key={item.date}
-                  onClick={() => handleSelectDate(item.date)}
+                  // onClick={() => handleSelectDate(item.date)}
+                  onClick={() => handleSelectHistoryDate(item.date)}
                   className="w-full text-left px-3 py-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition border border-slate-200 dark:border-slate-800"
                 >
                   <div className="flex items-center justify-between">
@@ -459,7 +526,7 @@ export default function WorkBoard() {
       )}
 
       {/* Active users list */}
-      {activeUsers.length > 0 && !selectedDate && (
+      {activeUsers.length > 0 && activeTab === "today" && (
         <div className="glass-card p-4 space-y-2">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             Currently Viewing
@@ -602,23 +669,22 @@ export default function WorkBoard() {
       )}
 
       {/* Active board */}
-      {status === "active" && selectedDate !== "history" && (
+      {status === "active" && activeTab === "today" && (
         <>
           {/* Posts feed */}
-          {historyLoading && (
+          {historyLoading ? (
             <div className="glass-card p-8 text-center">
               <div className="inline-block w-6 h-6 border-3 border-slate-300 dark:border-slate-600 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin" />
             </div>
-          )}
-          {!historyLoading && (
+          ) : (
             <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
-              {posts.length === 0 && (
+              {todayPosts.length === 0 && (
                 <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
                   No posts today yet. Be the first! 👋
                 </div>
               )}
               <AnimatePresence initial={false}>
-                {posts.map((post) => (
+                {todayPosts.map((post) => (
                   <motion.div
                     key={post.id}
                     initial={{ opacity: 0, y: 8 }}
@@ -642,7 +708,8 @@ export default function WorkBoard() {
                         <span className="text-xs text-slate-400">
                           {timeAgo(post.postedAt)}
                         </span>
-                        {post.userId === user?.id &&
+                        {activeTab === "today" &&
+                          post.userId === user?.id &&
                           canStillEdit(post.postedAt) && (
                             <button
                               onClick={() => startEdit(post)}
@@ -689,7 +756,7 @@ export default function WorkBoard() {
           )}
 
           {/* Post input */}
-          {!myPost && !historyLoading ? (
+          {!myTodayPost && activeTab === "today" && !historyLoading ? (
             <div className="glass-card p-4">
               <div className="flex gap-2">
                 <UserAvatar
@@ -733,7 +800,7 @@ export default function WorkBoard() {
           ) : (
             <div className="text-center text-xs text-slate-400 dark:text-slate-500 py-1">
               ✓ You've posted today
-              {myPost && canStillEdit(myPost.postedAt) && (
+              {myTodayPost && canStillEdit(myTodayPost.postedAt) && (
                 <span className="ml-1">· edit window open</span>
               )}
             </div>
@@ -761,70 +828,100 @@ export default function WorkBoard() {
       )}
 
       {/* History view */}
-      {status === "active" && selectedDate && selectedDate !== "history" && (
-        <>
-          {/* Date header */}
-          <div className="glass-card p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20 border border-indigo-200 dark:border-indigo-700/40">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
-                📜{" "}
-                {new Date(selectedDate).toLocaleDateString("en-IN", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </h2>
-              <button
-                onClick={() => setSelectedDate(null)}
-                className="px-3 py-1 rounded-lg bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition"
-              >
-                Back to Today
-              </button>
-            </div>
-          </div>
-
-          {/* Posts for selected date */}
-          <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
-            {posts.length === 0 && (
-              <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
-                No posts on this day
-              </div>
-            )}
-            <AnimatePresence initial={false}>
-              {posts.map((post) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="p-4 space-y-1"
+      {status === "active" &&
+        activeTab === "history" &&
+        selectedHistoryDate && (
+          <>
+            {/* Date header */}
+            <div className="glass-card p-4 bg-gradient-to-r from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-800/20 border border-indigo-200 dark:border-indigo-700/40">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-indigo-700 dark:text-indigo-300">
+                  📜{" "}
+                  {new Date(selectedHistoryDate).toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </h2>
+                <button
+                  onClick={() => setActiveTab("today")}
+                  className="px-3 py-1 rounded-lg bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <UserAvatar
-                        name={post.userName}
-                        avatar={post.userAvatar}
-                      />
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                        {post.userName}
-                      </span>
-                      {post.userId === user?.id && (
-                        <span className="text-xs text-indigo-400">(you)</span>
-                      )}
+                  Back to Today
+                </button>
+              </div>
+            </div>
+
+            {/* Posts for selected date */}
+            <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+              {historyLoading ? (
+                <div className="glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="p-4 animate-pulse">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          {/* Avatar */}
+                          <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700" />
+
+                          <div className="space-y-2">
+                            {/* Name */}
+                            <div className="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700" />
+                            {/* Message line 1 */}
+                            <div className="h-3 w-56 rounded bg-slate-200 dark:bg-slate-700" />
+                            {/* Message line 2 */}
+                            <div className="h-3 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+                          </div>
+                        </div>
+
+                        {/* Time */}
+                        <div className="h-3 w-12 rounded bg-slate-200 dark:bg-slate-700" />
+                      </div>
                     </div>
-                    <span className="text-xs text-slate-400">
-                      {timeAgo(post.postedAt)}
-                    </span>
-                  </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 ml-9 leading-relaxed">
-                    {post.message}
-                  </p>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        </>
-      )}
+                  ))}
+                </div>
+              ) : historyPosts.length === 0 ? (
+                <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
+                  No posts on this day
+                </div>
+              ) : (
+                <AnimatePresence initial={false}>
+                  {historyPosts.map((post) => (
+                    <motion.div
+                      key={post.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <UserAvatar
+                            name={post.userName}
+                            avatar={post.userAvatar}
+                          />
+                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {post.userName}
+                          </span>
+                          {post.userId === user?.id && (
+                            <span className="text-xs text-indigo-400">
+                              (you)
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs text-slate-400">
+                          {timeAgo(post.postedAt)}
+                        </span>
+                      </div>
+                      <p className="text-sm text-slate-600 dark:text-slate-300 ml-9 leading-relaxed">
+                        {post.message}
+                      </p>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              )}
+            </div>
+          </>
+        )}
     </div>
   );
 }
