@@ -197,23 +197,14 @@ export default function Sidebar() {
 
   const [stateSearch, setStateSearch] = useState("");
 
-  const GUEST_HIDDEN = [
-    "/notifications",
-    "/generate",
-    "/my-questions",
-    "/drafts",
-    "/my-answers",
-    "/bookmarks",
-    "/progress",
-    "/mock-interview",
-    "/flashcards",
+  const GUEST_ALLOWED = [
+    "/dashboard",
+    "/community",
     "/js-compiler",
-    "/study?tool=ts",
-    "/study?tool=errors",
-    "/study?tool=breaks",
-    "/quiz",
-    "/leaderboard",
+    "/json-parser",
+    "/study",
   ];
+
   const isAdmin = user?.role === "admin";
   const baseFiltered = isAdmin
     ? BASE_LINKS.filter((l) => !l.hideForAdmin)
@@ -228,8 +219,9 @@ export default function Sidebar() {
         ADMIN_API_DOCS_LINK,
       ]
     : baseFiltered;
+
   const links = user?.isGuest
-    ? allLinks.filter((l) => !GUEST_HIDDEN.includes(l.to))
+    ? allLinks.filter((l) => GUEST_ALLOWED.includes(l.to))
     : allLinks;
 
   const initials = user?.name
@@ -245,6 +237,24 @@ export default function Sidebar() {
     : "text-slate-500 dark:text-slate-400";
   const location = useLocation();
   const fullPath = location.pathname + location.search;
+
+  const iconVariants = {
+    initial: {
+      scale: 1,
+      rotate: 0,
+    },
+    hover: {
+      scale: 1.2,
+      rotate: 5,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 10,
+      },
+    },
+  };
+
+  const MotionNavLink = motion(NavLink);
 
   return (
     <aside className="hidden md:flex md:flex-col w-64 h-screen sticky top-0 sidebar-light glass border-r border-black/5 dark:border-white/10 p-5 overflow-y-auto">
@@ -279,9 +289,11 @@ export default function Sidebar() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 + 0.1 }}
           >
-            <NavLink
+            <MotionNavLink
               to={link.to}
               end={!!link.exact}
+              initial="initial"
+              whileHover="hover"
               className={({ isActive }) => {
                 const active = link.activeMatch
                   ? fullPath === link.activeMatch
@@ -299,15 +311,7 @@ export default function Sidebar() {
                   : isActive;
                 return (
                   <>
-                    <motion.span
-                      whileHover={{ scale: 1.2, rotate: 5 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 10,
-                      }}
-                      className="text-base"
-                    >
+                    <motion.span variants={iconVariants} className="text-base">
                       {link.icon}
                     </motion.span>
                     <span>{link.label}</span>
@@ -320,15 +324,17 @@ export default function Sidebar() {
                   </>
                 );
               }}
-            </NavLink>
+            </MotionNavLink>
           </motion.div>
         ))}
       </nav>
 
       {/* Dev Tools section */}
-      <div className="mt-3 mb-1">
-        <DevToolsGroup textMuted={textMuted} />
-      </div>
+      {!user?.isGuest && (
+        <div className="mt-3 mb-1">
+          <DevToolsGroup textMuted={textMuted} />
+        </div>
+      )}
 
       {/* Bottom controls */}
       <div className="border-t border-black/5 dark:border-white/10 pt-4 space-y-1.5">

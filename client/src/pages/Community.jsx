@@ -77,11 +77,16 @@ export default function Community() {
   }, [category, level, type, search]);
 
   useEffect(() => {
+    if (!user || user.isGuest) {
+      setTodayPoster(null);
+      return;
+    }
+
     api
       .get("/questions/community-today")
       .then((r) => setTodayPoster(r.data))
       .catch(() => {});
-  }, []);
+  }, [user]);
 
   const buildParams = (overrides = {}) => {
     const f = { ...filtersRef.current, ...overrides };
@@ -96,7 +101,7 @@ export default function Community() {
   // Initial / filter-change load — resets list
   const load = useCallback(async (params = {}) => {
     setLoading(true);
-    setQuestions([]);
+    // setQuestions([]);
     setPage(1);
     try {
       const { data } = await api.get("/questions/community", {
@@ -231,41 +236,36 @@ export default function Community() {
     [updateQ, isGuest],
   );
 
-const toggleHighlight = useCallback(
-  async (q) => {
-    if (isGuest) {
-      toast.error("Create an account to highlight questions", {
-        icon: "🔒",
-      });
-      return;
-    }
+  const toggleHighlight = useCallback(
+    async (q) => {
+      if (isGuest) {
+        toast.error("Create an account to highlight questions", {
+          icon: "🔒",
+        });
+        return;
+      }
 
-    const toastId = toast.loading("Updating highlight...");
+      const toastId = toast.loading("Updating highlight...");
 
-    try {
-      const { data } = await api.post(`/questions/${q.id}/highlight`);
+      try {
+        const { data } = await api.post(`/questions/${q.id}/highlight`);
 
-      updateQ(data);
+        updateQ(data);
 
-      toast.success(
-        data.isHighlighted
-          ? "Question highlighted"
-          : "Highlight removed",
-        {
+        toast.success(
+          data.isHighlighted ? "Question highlighted" : "Highlight removed",
+          {
+            id: toastId,
+          },
+        );
+      } catch (err) {
+        toast.error(err.response?.data?.detail || "Failed to highlight", {
           id: toastId,
-        }
-      );
-    } catch (err) {
-      toast.error(
-        err.response?.data?.detail || "Failed to highlight",
-        {
-          id: toastId,
-        }
-      );
-    }
-  },
-  [updateQ, isGuest]
-);
+        });
+      }
+    },
+    [updateQ, isGuest],
+  );
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
   const adminDelete = useCallback(
@@ -305,7 +305,7 @@ const toggleHighlight = useCallback(
         </div>
 
         {/* Daily poster banner */}
-        {todayPoster && (
+        {!isGuest && todayPoster && (
           <div className="space-y-2">
             <div
               className={`rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2 ${
@@ -424,7 +424,7 @@ const toggleHighlight = useCallback(
         )}
 
         {/* Initial skeleton */}
-        {loading ? (
+        {questions.length === 0 && loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
               <Skeleton key={i} />

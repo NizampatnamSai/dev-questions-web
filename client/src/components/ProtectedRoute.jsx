@@ -1,8 +1,14 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-// Pages guests cannot access at all
-const GUEST_BLOCKED = ["/generate", "/my-questions", "/bookmarks", "/progress", "/admin", "/mock-interview", "/flashcards", "/quiz", "/leaderboard"];
+// Routes that guests ARE allowed to access
+const GUEST_ALLOWED = [
+  "/dashboard",
+  "/community",
+  "/js-compiler",
+  "/json-parser",
+  "/study",
+];
 
 export default function ProtectedRoute({ children, path }) {
   const { user, loading } = useAuth();
@@ -15,10 +21,12 @@ export default function ProtectedRoute({ children, path }) {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-  if (user.isGuest && path && GUEST_BLOCKED.some(p => path.startsWith(p))) {
-    return <Navigate to="/community" replace />;
+  if (user.isGuest && path && !GUEST_ALLOWED.some((p) => path.startsWith(p))) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;

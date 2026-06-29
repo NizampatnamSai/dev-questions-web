@@ -5,17 +5,23 @@ import { useNotificationCount } from "../hooks/useNotificationCount";
 
 export default function NotificationBell() {
   const { user } = useAuth();
-  const { count, markRead } = useNotificationCount();
+  const { count } = useNotificationCount();
   const navigate = useNavigate();
 
   if (!user || user.isGuest) return null;
 
   return (
     <motion.button
-      onClick={() => { markRead(); navigate("/notifications"); }}
+      onClick={() => {
+        navigate("/notifications");
+      }}
       className="relative p-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 transition-colors flex-shrink-0"
       animate={count > 0 ? { rotate: [0, -12, 12, -8, 8, 0] } : {}}
-      transition={{ duration: 0.6, repeat: count > 0 ? Infinity : 0, repeatDelay: 3 }}
+      transition={{
+        duration: 0.6,
+        repeat: count > 0 ? Infinity : 0,
+        repeatDelay: 3,
+      }}
       title="Notifications"
     >
       <span className="text-xl">🔔</span>

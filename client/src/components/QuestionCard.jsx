@@ -186,6 +186,9 @@ export default function QuestionCard({
   showOwnerActions = false,
   isAdmin = false,
 }) {
+  const { user } = useAuth();
+  const Wrapper = user?.isGuest ? "div" : Link;
+
   const [revealed, setRevealed] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentCount, setCommentCount] = useState(q.commentCount ?? 0);
@@ -227,12 +230,16 @@ export default function QuestionCard({
       </div>
 
       {/* Question text */}
-      <Link
-        to={`/question/${q.id}`}
-        className="font-semibold leading-snug text-slate-800 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-cyan-300 transition-colors line-clamp-3 block"
+      <Wrapper
+        {...(!user?.isGuest && { to: `/question/${q.id}` })}
+        className={`font-semibold leading-snug text-slate-800 dark:text-slate-100 ${
+          user?.isGuest
+            ? "cursor-default"
+            : "hover:text-indigo-600 dark:hover:text-cyan-300 transition-colors"
+        } line-clamp-3 block`}
       >
         {q.question}
-      </Link>
+      </Wrapper>
 
       {/* Reveal answer */}
       <button
