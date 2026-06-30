@@ -26,8 +26,14 @@ api.interceptors.response.use(
   (err) => {
     const status = err.response?.status;
     const url = err.config?.url || "";
-    const isAuthCall = url.includes("/auth/login") || url.includes("/auth/register") || url.includes("/auth/registration-status");
-    if (status === 401 && !isAuthCall) {
+    const isAuthCall =
+      url.includes("/auth/login") ||
+      url.includes("/auth/register") ||
+      url.includes("/auth/registration-status");
+
+    const isFcmCall = url.includes("/admin/fcm-token");
+
+    if (status === 401 && !isAuthCall && !isFcmCall) {
       localStorage.removeItem("devquiz_token");
       localStorage.removeItem("devquiz_user");
       window.location.href = "/login";
@@ -38,7 +44,7 @@ api.interceptors.response.use(
       window.location.href = "/login?disabled=1";
     }
     return Promise.reject(err);
-  }
+  },
 );
 
 export default api;

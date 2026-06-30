@@ -162,7 +162,7 @@ function NotificationBanner() {
     if (!("Notification" in window)) return;
     // Already granted — silently re-register (handles login switch)
     if (Notification.permission === "granted") {
-      requestAndRegisterToken(api);
+      requestAndRegisterToken(api, user);
     }
     // permission "default" or "denied" — do nothing; we no longer show a custom banner
     // to avoid the double-prompt (our banner + browser dialog) that confused users.

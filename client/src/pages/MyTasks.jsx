@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { fmtDateTime } from "../utils/time";
+import { DescriptionPreview } from "./AdminTasks";
 
 const PRIORITY_STYLE = {
   high: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
@@ -34,6 +35,7 @@ function Avatar({ name, avatar, size = "w-7 h-7" }) {
 export default function MyTasks() {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
+  const [viewTask, setViewTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
   const [comments, setComments] = useState({});
@@ -66,6 +68,13 @@ export default function MyTasks() {
       const { data } = await api.get(`/tasks/${taskId}/comments`);
       setComments((prev) => ({ ...prev, [taskId]: data }));
     } catch {}
+  };
+
+  const openDiscussion = (taskId) => {
+    if (expanded !== taskId) {
+      setExpanded(taskId);
+      loadComments(taskId);
+    }
   };
 
   const toggleExpand = (taskId) => {
@@ -173,6 +182,17 @@ export default function MyTasks() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [confirmModal.open]);
 
+  useEffect(() => {
+    if (!viewTask) return;
+
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [viewTask]);
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
@@ -267,6 +287,112 @@ export default function MyTasks() {
           document.body,
         )}
 
+      {viewTask &&
+        createPortal(
+          <AnimatePresence>
+            <div
+              onClick={() => setViewTask(null)}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                onClick={(e) => e.stopPropagation()}
+                className="glass-card w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+              >
+                <div className="sticky top-0 bg-white dark:bg-slate-900 border-b border-black/5 dark:border-white/10 px-6 py-4 flex items-center justify-between">
+                  <h2 className="font-bold text-xl">{viewTask.title}</h2>
+
+                  <button
+                    onClick={() => setViewTask(null)}
+                    className="text-xl text-slate-400 hover:text-slate-600"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="p-6 space-y-6">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full font-semibold ${PRIORITY_STYLE[viewTask.priority]}`}
+                    >
+                      {viewTask.priority}
+                    </span>
+
+                    {viewTask.dueDate && (
+                      <span className="text-xs text-slate-500">
+                        📅 Due {viewTask.dueDate}
+                      </span>
+                    )}
+
+                    {viewTask.completedBy?.includes(myId) && (
+                      <span className="text-xs font-semibold text-emerald-500">
+                        ✅ Completed
+                      </span>
+                    )}
+                  </div>
+
+                  {viewTask.description && (
+                    <div>
+                      <h3 className="font-semibold mb-2">Description</h3>
+
+                      <div className="rounded-xl bg-slate-50 dark:bg-slate-800 p-4 whitespace-pre-wrap break-words leading-7 text-sm">
+                        {viewTask.description}
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <h3 className="font-semibold mb-2">Assigned Team</h3>
+
+                    <div className="space-y-2">
+                      {viewTask.assignees.map((a) => (
+                        <div key={a.id} className="flex items-center gap-3">
+                          <Avatar name={a.name} avatar={a.avatar} />
+
+                          <span
+                            className={
+                              a.id === myId
+                                ? "font-semibold text-indigo-500"
+                                : ""
+                            }
+                          >
+                            {a.name}
+                            {a.id === myId && " (You)"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="text-sm text-slate-500 space-y-1">
+                    <p>
+                      Created by <strong>{viewTask.createdByName}</strong>
+                    </p>
+
+                    <p>{fmtDateTime(viewTask.createdAt)}</p>
+                  </div>
+                </div>
+
+                <div className="border-t border-black/5 dark:border-white/10 p-4 flex justify-end gap-2">
+                  <button
+                    onClick={() => {
+                      openDiscussion(viewTask.id);
+                      setViewTask(null);
+                    }}
+                    className="btn-primary"
+                  >
+                    Open Discussion
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          </AnimatePresence>,
+          document.body,
+        )}
+
       {loading ? (
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
@@ -336,6 +462,13 @@ export default function MyTasks() {
 
                     {/* Status toggle */}
                     <div className="flex gap-1 flex-shrink-0">
+                      <button
+                        onClick={() => setViewTask(task)}
+                        className="text-xs px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition font-medium"
+                      >
+                        👁 View
+                      </button>
+
                       {!iDone && task.status !== "in_progress" && (
                         <button
                           onClick={() => setStatus(task.id, "in_progress")}
@@ -348,14 +481,19 @@ export default function MyTasks() {
                   </div>
                   <div className="flex-1 min-w-0 mt-1">
                     <h3
-                      className={`font-semibold text-slate-800 dark:text-slate-100 ${iDone ? "line-through opacity-60" : ""}`}
+                      onClick={() => setViewTask(task)}
+                      className={`font-semibold cursor-pointer hover:text-indigo-500 transition text-slate-800 dark:text-slate-100 ${
+                        iDone ? "line-through opacity-60" : ""
+                      }`}
                     >
                       {task.title}
                     </h3>
+
                     {task.description && (
-                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                        {task.description}
-                      </p>
+                      <DescriptionPreview
+                        text={task.description}
+                        onView={() => setViewTask(task)}
+                      />
                     )}
 
                     <div className="flex items-center justify-between gap-3 mt-2 flex-wrap">
