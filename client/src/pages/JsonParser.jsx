@@ -115,6 +115,16 @@ export default function JsonParser() {
     return JSON.parse(wrapped);
   }
 
+  // function parseJsObject(text) {
+  //   let js = text;
+
+  //   js = js.replace(/([{,]\s*)([a-zA-Z_$][\w$]*)\s*:/g, '$1"$2":');
+
+  //   js = js.replace(/'/g, '"');
+
+  //   return JSON.parse(js);
+  // }
+
   function looksLikeJsonFragment(text) {
     const t = text.trim();
 
@@ -128,14 +138,23 @@ export default function JsonParser() {
   function smartValue(value) {
     value = value.trim();
 
+    // quoted string
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      return value.slice(1, -1);
+    }
+
     if (value === "true") return true;
     if (value === "false") return false;
     if (value === "null") return null;
 
-    if (value !== "" && !Number.isNaN(Number(value))) {
+    if (/^-?\d+(\.\d+)?$/.test(value)) {
       return Number(value);
     }
 
+    // JSON / Arrays
     if (
       (value.startsWith("{") && value.endsWith("}")) ||
       (value.startsWith("[") && value.endsWith("]"))
@@ -234,6 +253,9 @@ export default function JsonParser() {
     }
 
     return parsePairs(text);
+    // try {
+    //   return parseJsObject(text);
+    // } catch {}
 
     throw new Error("Unsupported input format");
   };
@@ -312,6 +334,13 @@ export default function JsonParser() {
       : null;
   const charCount = output.length;
 
+  const clearAll = () => {
+    setInput("");
+    setOutput("");
+    setParsed(null);
+    setError("");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -348,6 +377,17 @@ export default function JsonParser() {
         ))}
         <div className="ml-auto flex gap-2">
           <button
+            onClick={clearAll}
+            className="px-3 py-1.5 rounded-lg text-xs
+    bg-red-50
+    dark:bg-red-500/10
+    text-red-500
+    hover:bg-red-100
+    dark:hover:bg-red-500/20"
+          >
+            🗑 Clear
+          </button>
+          <button
             onClick={loadSample}
             className="px-3 py-1.5 rounded-lg text-xs bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
           >
@@ -370,17 +410,6 @@ export default function JsonParser() {
             <label className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
               Input JSON
             </label>
-            <button
-              onClick={() => {
-                setInput("");
-                setOutput("");
-                setParsed(null);
-                setError("");
-              }}
-              className="text-xs text-slate-400 hover:text-red-400 transition-colors"
-            >
-              Clear
-            </button>
           </div>
           <textarea
             value={input}
