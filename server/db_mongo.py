@@ -54,6 +54,10 @@ def col_dsa_challenge():        return mdb()["dsa_challenge"]
 def col_flashcards():           return mdb()["flashcards"]
 def col_tasks():                return mdb()["tasks"]
 def col_task_comments():        return mdb()["task_comments"]
+def col_coding_questions():     return mdb()["coding_questions"]
+def col_snippets():             return mdb()["snippets"]
+def col_study_reviewed():       return mdb()["study_reviewed"]
+def col_coding_limit_bonus():   return mdb()["coding_limit_bonus"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
@@ -94,6 +98,19 @@ async def init_mongo():
     await db["comments"].create_index("questionId")
     await db["ai_usage"].create_index([("userId", 1), ("date", 1)], unique=True)
     await db["fcm_tokens"].create_index([("userId", 1), ("token", 1)], unique=True)
+    await db["coding_questions"].create_index([("userId", 1), ("date", 1)])
+    await db["snippets"].create_index([("userId", 1), ("createdAt", -1)])
+    await db["snippets"].create_index("isPublic")
+    await db["study_reviewed"].create_index([("userId", 1), ("topicId", 1)], unique=True)
+    await db["coding_limit_bonus"].create_index([("userId", 1), ("date", 1)], unique=True)
+
+    # One-time migration: old 3-stage task status -> new Jira-style 4-stage workflow.
+    # Idempotent — only touches docs still on an old value, safe to run every startup.
+    status_migration = {"open": "todo", "in_progress": "started", "done": "completed"}
+    for old, new in status_migration.items():
+        result = await db["tasks"].update_many({"status": old}, {"$set": {"status": new}})
+        if result.modified_count:
+            print(f"[migration] tasks: {result.modified_count} '{old}' -> '{new}'")
 
     # Seed only if no users yet
     if await db["users"].count_documents({}) == 0:

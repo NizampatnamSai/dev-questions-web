@@ -12,6 +12,10 @@ def _is_admin(user):
     return user.get("role") in ("admin", "sub_admin")
 
 
+# Jira-style workflow: todo -> started -> testing -> completed
+TASK_STATUSES = ("todo", "started", "testing", "completed")
+
+
 # ── Models ────────────────────────────────────────────────────────────────────
 
 class TaskCreate(BaseModel):
@@ -25,7 +29,7 @@ class TaskComment(BaseModel):
     text: str
 
 class StatusUpdate(BaseModel):
-    status: str  # open | in_progress | done
+    status: str  # todo | started | testing | completed
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -70,7 +74,7 @@ async def create_task(body: TaskCreate, user=Depends(current_user)):
         "description": body.description,
         "priority":    body.priority,
         "dueDate":     body.dueDate,
-        "status":      "open",
+        "status":      "todo",
         "assignees":   assignees,
         "assigneeIds": [a["id"] for a in assignees],
         "createdBy":   user["id"],
@@ -95,11 +99,8 @@ async def create_task(body: TaskCreate, user=Depends(current_user)):
             {"type": "task", "path": "/my-tasks"},
         )
 
-    return {
-        "success": True,
-        "message": "Task created successfully",
-        "taskId": task_id,
-    }
+    created = await col_tasks().find_one({"_id": result.inserted_id})
+    return await _enrich_task(created)
 
 
 # ── Admin: list all tasks ─────────────────────────────────────────────────────
@@ -193,23 +194,34 @@ async def update_status(task_id: str, body: StatusUpdate, user=Depends(current_u
         raise HTTPException(404, "Task not found")
     if not _is_admin(user) and user["id"] not in doc.get("assigneeIds", []):
         raise HTTPException(403, "Not assigned to you")
-    if body.status not in ("open", "in_progress", "done"):
-        raise HTTPException(400, "Invalid status")
+    if body.status not in TASK_STATUSES:
+        raise HTTPException(400, f"Invalid status — must be one of {TASK_STATUSES}")
+
+    # Regular assignees move through the workflow one stage at a time and can't
+    # mark a task completed themselves — only an admin signs off on "completed".
+    # They can still move a task backward (e.g. testing -> started) freely.
+    if not _is_admin(user):
+        if body.status == "completed":
+            raise HTTPException(403, "Only an admin can mark a task as completed — add a comment if it's ready for review.")
+        cur_idx = TASK_STATUSES.index(doc["status"]) if doc["status"] in TASK_STATUSES else 0
+        new_idx = TASK_STATUSES.index(body.status)
+        if new_idx > cur_idx + 1:
+            raise HTTPException(400, "Move one stage at a time — you can't skip ahead.")
 
     update: dict = {"status": body.status, "updatedAt": now()}
 
     # Track who completed
     completed_by = doc.get("completedBy", [])
-    if body.status == "done" and user["id"] not in completed_by:
+    if body.status == "completed" and user["id"] not in completed_by:
         completed_by.append(user["id"])
         update["completedBy"] = completed_by
-    elif body.status != "done":
+    elif body.status != "completed":
         update["completedBy"] = [u for u in completed_by if u != user["id"]]
 
     await col_tasks().update_one({"_id": oid(task_id)}, {"$set": update})
 
     # Notify admin when user marks done
-    if body.status == "done" and not _is_admin(user):
+    if body.status == "completed" and not _is_admin(user):
         tokens_docs = await col_fcm_tokens().find({"userId": doc["createdBy"]}).to_list(5)
         tokens = [t["token"] for t in tokens_docs]
         if tokens:
@@ -263,6 +275,7 @@ async def add_comment(task_id: str, body: TaskComment, user=Depends(current_user
         "isAdmin":   _is_admin(user),
     }
     result = await col_task_comments().insert_one(comment)
+    comment.pop("_id", None)  # insert_one mutates comment in place, adding a non-JSON-serializable ObjectId
     comment["id"] = str(result.inserted_id)
 
     # Notify other participants

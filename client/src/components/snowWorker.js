@@ -65,6 +65,16 @@ self.onmessage = ({ data }) => {
     }
   }
 
+  if (data.type === "pause") {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+
+  if (data.type === "resume" && !animationId) {
+    lastTime = 0; // avoid a huge deltaTime jump after being paused
+    animationId = requestAnimationFrame(draw);
+  }
+
   if (data.type === "stop") {
     cancelAnimationFrame(animationId);
   }

@@ -5,6 +5,16 @@ import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 
+// Some categories' real brand colors don't work as a solid fill with white
+// text — JS yellow and React's light cyan are too light (poor contrast),
+// and Next.js's black nearly disappears against the app's dark theme.
+// These are readable stand-ins from the same color family.
+const TAB_COLOR_OVERRIDES = {
+  javascript: "#b45309",
+  react: "#0e7490",
+  nextjs: "#3f3f46",
+};
+
 const DIFF_STYLES = {
   Basic: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
   Intermediate:
@@ -564,6 +574,7 @@ function AiExplainer() {
 
 export default function StudyGuide() {
   const location = useLocation();
+  const { user } = useAuth();
   const preCategory = location.state?.preCategory;
   const [activeCat, setActiveCat] = useState(preCategory || "html");
   const [activeDiff, setActiveDiff] = useState("All");
@@ -571,11 +582,31 @@ export default function StudyGuide() {
   const [reviewed, setReviewed] = useState(loadReviewed);
   const [openId, setOpenId] = useState(null);
 
+  // Logged-in users get DB-backed progress (syncs any local guest progress up
+  // on first login); guests keep using localStorage only.
+  useEffect(() => {
+    if (!user || user.isGuest) return;
+    api
+      .get("/study/reviewed")
+      .then(({ data }) => {
+        const dbSet = new Set(data.topicIds);
+        const localOnly = [...loadReviewed()].filter((id) => !dbSet.has(id));
+        localOnly.forEach((id) => api.post(`/study/reviewed/${id}`).catch(() => {}));
+        setReviewed(new Set([...dbSet, ...localOnly]));
+      })
+      .catch(() => {});
+  }, [user?.id, user?.isGuest]);
+
   const toggleReview = (id) =>
     setReviewed((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      saveReviewed(next);
+      const willReview = !next.has(id);
+      willReview ? next.add(id) : next.delete(id);
+      if (user && !user.isGuest) {
+        (willReview ? api.post(`/study/reviewed/${id}`) : api.delete(`/study/reviewed/${id}`)).catch(() => {});
+      } else {
+        saveReviewed(next);
+      }
       return next;
     });
 
@@ -640,7 +671,7 @@ export default function StudyGuide() {
             className={`flex-shrink-0 text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${activeCat === c.id ? "text-white border-transparent" : "bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"}`}
             style={
               activeCat === c.id
-                ? { background: c.color === "#ffffff" ? "#334155" : c.color }
+                ? { background: TAB_COLOR_OVERRIDES[c.id] || c.color }
                 : {}
             }
           >

@@ -191,6 +191,68 @@ html.dark .input-light:focus {
   box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
 }
 
+/* ── Rich text editor (Quill) ────────────────────────────────────────────── */
+.rich-text-editor .ql-toolbar.ql-snow {
+  border-color: rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem 0.75rem 0 0;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.rich-text-editor .ql-container.ql-snow {
+  border-color: rgba(148, 163, 184, 0.3);
+  border-radius: 0 0 0.75rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+.rich-text-editor .ql-editor {
+  min-height: 100px;
+  color: #0f172a;
+}
+.rich-text-editor .ql-editor.ql-blank::before {
+  color: #94a3b8;
+  font-style: normal;
+}
+html.dark .rich-text-editor .ql-toolbar.ql-snow,
+html.dark .rich-text-editor .ql-container.ql-snow {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+html.dark .rich-text-editor .ql-editor {
+  color: #f1f5f9;
+}
+html.dark .rich-text-editor .ql-editor.ql-blank::before {
+  color: #64748b;
+}
+html.dark .rich-text-editor .ql-snow .ql-stroke {
+  stroke: #94a3b8;
+}
+html.dark .rich-text-editor .ql-snow .ql-fill {
+  fill: #94a3b8;
+}
+html.dark .rich-text-editor .ql-snow .ql-picker {
+  color: #94a3b8;
+}
+html.dark .rich-text-editor .ql-snow.ql-toolbar button:hover .ql-stroke,
+html.dark .rich-text-editor .ql-snow .ql-toolbar button:hover .ql-stroke {
+  stroke: #22d3ee;
+}
+
+/* ── Rich text view — renders saved Quill HTML ───────────────────────────── */
+.rich-text-view {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.rich-text-view p { margin: 0 0 0.5em; }
+.rich-text-view p:last-child { margin-bottom: 0; }
+.rich-text-view ul, .rich-text-view ol { margin: 0.25em 0 0.5em; padding-left: 1.5em; }
+.rich-text-view li { margin-bottom: 0.15em; }
+.rich-text-view a { color: #6366f1; text-decoration: underline; }
+.rich-text-view code { background: rgba(148, 163, 184, 0.15); padding: 0.1em 0.35em; border-radius: 0.3em; font-size: 0.85em; }
+.rich-text-view pre { background: rgba(148, 163, 184, 0.12); padding: 0.6em 0.8em; border-radius: 0.5em; overflow-x: auto; }
+html.dark .rich-text-view a { color: #22d3ee; }
+html.dark .rich-text-view code { background: rgba(255, 255, 255, 0.08); }
+html.dark .rich-text-view pre { background: rgba(255, 255, 255, 0.06); }
+
 /* ── Snowflake ───────────────────────────────────────────────────────────── */
 /* Snowfall is now canvas-based (Snowfall.jsx) — no CSS needed */
 

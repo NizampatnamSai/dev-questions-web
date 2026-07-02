@@ -629,6 +629,7 @@ class AppConfigBody(BaseModel):
     force_update_message: Optional[str] = None
     wb_reminder_time: Optional[str] = None        # "HH:MM" IST, e.g. "09:30"
     wb_edit_window_minutes: Optional[int] = None
+    coding_question_daily_limit: Optional[int] = None
 
 
 @router.get("/app-config/public")
@@ -636,12 +637,13 @@ async def get_app_config_public():
     """Public endpoint — called by frontend on every load to check maintenance/update state."""
     doc = await col_app_config().find_one({"_id": "config"})
     if not doc:
-        return {"maintenance": False, "force_update": False}
+        return {"maintenance": False, "force_update": False, "coding_question_daily_limit": 15}
     return {
         "maintenance":          doc.get("maintenance", False),
         "maintenance_message":  doc.get("maintenance_message", "We're currently performing maintenance. We'll be back shortly!"),
         "force_update":         doc.get("force_update", False),
         "force_update_message": doc.get("force_update_message", "A new version is available. Please refresh to get the latest updates!"),
+        "coding_question_daily_limit": doc.get("coding_question_daily_limit", 15),
     }
 
 
@@ -649,8 +651,10 @@ async def get_app_config_public():
 async def get_app_config(admin=Depends(_require_admin)):
     doc = await col_app_config().find_one({"_id": "config"})
     if not doc:
-        return {"maintenance": False, "maintenance_message": "", "force_update": False, "force_update_message": ""}
+        return {"maintenance": False, "maintenance_message": "", "force_update": False, "force_update_message": "", "coding_question_daily_limit": 15}
     doc.pop("_id", None)
+    doc.setdefault("coding_question_daily_limit", 15)
+    doc.setdefault("wb_reminder_time", "15:00")
     return doc
 
 
@@ -672,6 +676,8 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["wb_reminder_time"] = body.wb_reminder_time
     if body.wb_edit_window_minutes is not None:
         update["wb_edit_window_minutes"] = body.wb_edit_window_minutes
+    if body.coding_question_daily_limit is not None:
+        update["coding_question_daily_limit"] = body.coding_question_daily_limit
 
     if update:
         await col_app_config().update_one(

@@ -5,6 +5,7 @@ import api from "../api/axios";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
 import { fmtDateTime } from "../utils/time";
+import RichTextView from "../components/RichTextView";
 
 const TYPE_COLORS = {
   bug: "bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-300",
@@ -49,9 +50,10 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply }) {
           <h3 className="font-semibold text-slate-800 dark:text-slate-100 mt-1 leading-snug">
             {feedback.title}
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed whitespace-pre-wrap">
-            {feedback.message}
-          </p>
+          <RichTextView
+            html={feedback.message}
+            className="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed"
+          />
           <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
             <span>Rating: {"⭐".repeat(feedback.rating)}</span>
             <span>{feedback.userEmail}</span>

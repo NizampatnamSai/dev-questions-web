@@ -215,10 +215,40 @@ const PAGES = [
     adminOnly: true,
   },
   {
-    to: "/devtools?tool=ts",
-    label: "Dev Tools",
-    icon: "🛠️",
-    keywords: "dev tools utilities formatter debugger",
+    to: "/js-coding",
+    label: "JS Coding",
+    icon: "💻",
+    keywords: "js coding questions practice ai generated test cases",
+  },
+  {
+    to: "/regex-tester",
+    label: "Regex Tester",
+    icon: "🧬",
+    keywords: "regex regular expression tester debug pattern match",
+  },
+  {
+    to: "/cron-builder",
+    label: "Cron Builder",
+    icon: "⏰",
+    keywords: "cron builder schedule expression crontab",
+  },
+  {
+    to: "/jwt-decoder",
+    label: "JWT Decoder",
+    icon: "🔑",
+    keywords: "jwt decoder token decode verify",
+  },
+  {
+    to: "/api-tester",
+    label: "API Tester",
+    icon: "📡",
+    keywords: "api tester request postman http headers body auth",
+  },
+  {
+    to: "/snippets",
+    label: "Snippet Library",
+    icon: "📚",
+    keywords: "snippet library code save share reusable",
   },
 ];
 

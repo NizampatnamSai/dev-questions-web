@@ -7,6 +7,9 @@ const GUEST_ALLOWED = [
   "/community",
   "/js-compiler",
   "/json-parser",
+  "/regex-tester",
+  "/cron-builder",
+  "/jwt-decoder",
   "/study",
 ];
 

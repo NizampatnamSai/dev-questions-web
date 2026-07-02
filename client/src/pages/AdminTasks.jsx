@@ -4,18 +4,17 @@ import { createPortal } from "react-dom";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { fmtDateTime } from "../utils/time";
+import ConfirmModal from "../components/ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
+import { TASK_STATUSES, statusMeta } from "../utils/taskStatus";
+import RichTextEditor from "../components/RichTextEditor";
+import RichTextView from "../components/RichTextView";
 
 const PRIORITY_STYLE = {
   high: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
   medium:
     "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
   low: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
-};
-const STATUS_STYLE = {
-  open: "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300",
-  in_progress:
-    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-  done: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
 };
 
 function Avatar({ name, avatar, size = "w-7 h-7" }) {
@@ -50,12 +49,11 @@ export function DescriptionPreview({ text, onView }) {
 
   return (
     <div className="">
-      <div
-        ref={ref}
-        className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words leading-6 line-clamp-3"
-      >
-        {text}
-      </div>
+      <RichTextView
+        html={text}
+        className="text-sm text-slate-600 dark:text-slate-300 break-words leading-6 line-clamp-3"
+        forwardedRef={ref}
+      />
 
       {overflow && (
         <button
@@ -79,7 +77,10 @@ export default function AdminTasks() {
   const [expanded, setExpanded] = useState(null);
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState({});
-  const [filter, setFilter] = useState("all"); // all | open | in_progress | done
+  const [filter, setFilter] = useState("all"); // all | todo | started | testing | completed
+  const [moving, setMoving] = useState({});
+  const [saving, setSaving] = useState(false);
+  const { confirm, confirmProps } = useConfirm();
 
   // Form state
   const [form, setForm] = useState({
@@ -159,6 +160,7 @@ export default function AdminTasks() {
     if (!form.title.trim()) return toast.error("Title is required");
     if (!form.assigneeIds.length)
       return toast.error("Select at least one user");
+    setSaving(true);
     try {
       if (editTask) {
         const { data } = await api.patch(`/tasks/${editTask.id}`, form);
@@ -172,14 +174,26 @@ export default function AdminTasks() {
       setShowForm(false);
     } catch (e) {
       toast.error(e.response?.data?.detail || "Failed to save task");
+    } finally {
+      setSaving(false);
     }
   };
 
-  const deleteTask = async (taskId) => {
-    if (!window.confirm("Delete this task?")) return;
-    await api.delete(`/tasks/${taskId}`);
-    setTasks((prev) => prev.filter((t) => t.id !== taskId));
-    toast.success("Deleted");
+  const deleteTask = (task) => {
+    confirm({
+      title: "Delete this task?",
+      message: `"${task.title}" will be permanently removed for all assignees.`,
+      confirmLabel: "Delete",
+      onConfirm: async () => {
+        try {
+          await api.delete(`/tasks/${task.id}`);
+          setTasks((prev) => prev.filter((t) => t.id !== task.id));
+          toast.success("Deleted");
+        } catch {
+          toast.error("Failed to delete task");
+        }
+      },
+    });
   };
 
   const toggleAssignee = (uid) => {
@@ -214,6 +228,20 @@ export default function AdminTasks() {
     }));
   };
 
+  const moveTask = async (task, status) => {
+    if (moving[task.id] || status === task.status) return;
+    setMoving((prev) => ({ ...prev, [task.id]: true }));
+    try {
+      const { data } = await api.patch(`/tasks/${task.id}/status`, { status });
+      setTasks((prev) => prev.map((t) => (t.id === task.id ? data : t)));
+      if (viewTask?.id === task.id) setViewTask(data);
+    } catch {
+      toast.error("Failed to move task");
+    } finally {
+      setMoving((prev) => ({ ...prev, [task.id]: false }));
+    }
+  };
+
   const filtered =
     filter === "all" ? tasks : tasks.filter((t) => t.status === filter);
 
@@ -229,7 +257,7 @@ export default function AdminTasks() {
   }, [viewTask]);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
@@ -245,32 +273,30 @@ export default function AdminTasks() {
 
       {/* Filter tabs */}
       <div className="flex gap-2 flex-wrap">
-        {[
-          ["all", "All"],
-          ["open", "Open"],
-          ["in_progress", "In Progress"],
-          ["done", "Done"],
-        ].map(([val, label]) => (
-          <button
-            key={val}
-            onClick={() => setFilter(val)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${filter === val ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"}`}
-          >
-            {label}
-            <span className="ml-1.5 text-xs opacity-60">
-              {val === "all"
-                ? tasks.length
-                : tasks.filter((t) => t.status === val).length}
-            </span>
-          </button>
-        ))}
+        {[{ key: "all", label: "All", icon: "" }, ...TASK_STATUSES].map(
+          (s) => (
+            <button
+              key={s.key}
+              onClick={() => setFilter(s.key)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${filter === s.key ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"}`}
+            >
+              {s.icon ? `${s.icon} ` : ""}
+              {s.label}
+              <span className="ml-1.5 text-xs opacity-60">
+                {s.key === "all"
+                  ? tasks.length
+                  : tasks.filter((t) => t.status === s.key).length}
+              </span>
+            </button>
+          ),
+        )}
       </div>
 
-      {/* Task list */}
+      {/* Task board */}
       {loading ? (
-        <div className="space-y-3">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="glass-card p-5 h-20 animate-pulse" />
+        <div className="grid md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="glass-card p-5 h-40 animate-pulse" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
@@ -278,188 +304,257 @@ export default function AdminTasks() {
           No tasks yet. Create one above.
         </div>
       ) : (
-        <div className="space-y-3">
-          {filtered.map((task) => (
-            <div key={task.id} className="glass-card overflow-hidden">
-              <div className="p-5">
-                <div className="flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span
-                        className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${PRIORITY_STYLE[task.priority]}`}
-                      >
-                        {task.priority}
+        <div
+          className={
+            filter === "all"
+              ? "grid md:grid-cols-4 gap-4 items-start"
+              : "space-y-3"
+          }
+        >
+          {(filter === "all" ? TASK_STATUSES : [statusMeta(filter)]).map(
+            (col) => {
+              const colTasks = filtered.filter((t) => t.status === col.key);
+              return (
+                <div
+                  key={col.key}
+                  className={
+                    filter === "all"
+                      ? `rounded-2xl border p-3 space-y-3 ${col.column}`
+                      : "space-y-3"
+                  }
+                >
+                  {filter === "all" && (
+                    <div className="flex items-center gap-2 px-1">
+                      <span className={`w-2 h-2 rounded-full ${col.dot}`} />
+                      <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                        {col.icon} {col.label}
+                      </h3>
+                      <span className="text-xs text-slate-400">
+                        {colTasks.length}
                       </span>
-                      <span
-                        className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${STATUS_STYLE[task.status]}`}
-                      >
-                        {task.status.replace("_", " ")}
-                      </span>
-                      {task.dueDate && (
-                        <span className="text-[11px] text-slate-400">
-                          📅 {task.dueDate}
-                        </span>
-                      )}
                     </div>
-                    <h3
-                      onClick={() => setViewTask(task)}
-                      className="mt-2 font-semibold text-slate-800 dark:text-slate-100 cursor-pointer hover:text-indigo-500 transition"
-                    >
-                      {task.title}
-                    </h3>
-                    {task.description && (
-                      <DescriptionPreview
-                        text={task.description}
-                        onView={() => setViewTask(task)}
-                      />
-                    )}
-                  </div>
-                  <div className="flex flex-col h-[stretch] justify-between gap-1 flex-shrink-0">
-                    <div className="flex items-center justify-end gap-1 flex-shrink-0">
-                      <button
-                        onClick={() => setViewTask(task)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
-                      >
-                        👁 View
-                      </button>
-                      <button
-                        onClick={() => toggleExpand(task.id)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
-                      >
-                        {expanded === task.id ? "▲ Hide" : "▼ Comments"}
-                      </button>
-                      <button
-                        onClick={() => openEdit(task)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 transition"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => deleteTask(task.id)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 transition"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                  )}
 
-                    <div className="">
-                      {task.completedBy?.length > 0 && (
-                        <p className="text-xs text-end text-emerald-500 mt-1">
-                          ✓ {task.completedBy.length}/{task.assignees.length}{" "}
-                          completed
-                        </p>
-                      )}
+                  {colTasks.length === 0 && filter === "all" && (
+                    <p className="text-xs text-slate-400 px-1">No tasks</p>
+                  )}
 
-                      <p className="text-xs text-end text-slate-400 mt-1">
-                        Created at: {fmtDateTime(task.createdAt)}
-                      </p>
-                      {/* Assignees */}
-                      <div className="flex items-center justify-end gap-1.5 mt-1">
-                        <span className="text-xs text-slate-400">
-                          Assigned to:
-                        </span>
-                        <div className="flex -space-x-1">
-                          {task.assignees.map((a) => (
-                            <div key={a.id} title={a.name}>
-                              <Avatar
-                                name={a.name}
-                                avatar={a.avatar}
-                                size="w-6 h-6"
-                              />
-                            </div>
+                  {colTasks.map((task) => (
+                    <div key={task.id} className="glass-card overflow-hidden">
+                      <div className="p-4">
+                        {/* Fixed-height content block — description/title overflow is
+                            handled by DescriptionPreview's own "View More", so every
+                            card stays the same height regardless of content length. */}
+                        <div className="h-[142px] overflow-hidden">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <span
+                              className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${PRIORITY_STYLE[task.priority]}`}
+                            >
+                              {task.priority}
+                            </span>
+                            {filter !== "all" && (
+                              <span
+                                className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${statusMeta(task.status).badge}`}
+                              >
+                                {statusMeta(task.status).icon}{" "}
+                                {statusMeta(task.status).label}
+                              </span>
+                            )}
+                            {task.dueDate && (
+                              <span className="text-[11px] text-slate-400">
+                                📅 {task.dueDate}
+                              </span>
+                            )}
+                          </div>
+                          <h3
+                            onClick={() => setViewTask(task)}
+                            className="mt-1 font-semibold text-slate-800 dark:text-slate-100 cursor-pointer hover:text-indigo-500 transition line-clamp-1"
+                          >
+                            {task.title}
+                          </h3>
+                          {task.description && (
+                            <DescriptionPreview
+                              text={task.description}
+                              onView={() => setViewTask(task)}
+                            />
+                          )}
+                        </div>
+
+                        {/* Assignees */}
+                        <div className="flex items-center gap-1.5 mt-2">
+                          <div className="flex -space-x-1 flex-shrink-0">
+                            {task.assignees.map((a) => (
+                              <div key={a.id} title={a.name}>
+                                <Avatar
+                                  name={a.name}
+                                  avatar={a.avatar}
+                                  size="w-6 h-6"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <span className="text-xs text-slate-500 truncate">
+                            {task.assignees.map((a) => a.name).join(", ")}
+                          </span>
+                        </div>
+
+                        {task.completedBy?.length > 0 && (
+                          <p className="text-xs text-emerald-500 mt-1">
+                            ✓ {task.completedBy.length}/
+                            {task.assignees.length} completed
+                          </p>
+                        )}
+
+                        {/* Move pills */}
+                        <div className="flex items-center gap-1 flex-wrap mt-3">
+                          {TASK_STATUSES.map((s) => (
+                            <button
+                              key={s.key}
+                              disabled={
+                                moving[task.id] || s.key === task.status
+                              }
+                              onClick={() => moveTask(task, s.key)}
+                              title={s.label}
+                              className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium transition whitespace-nowrap ${
+                                s.key === task.status
+                                  ? `${s.badge} cursor-default`
+                                  : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600"
+                              }`}
+                            >
+                              {s.icon} {s.label}
+                            </button>
                           ))}
                         </div>
-                        <span className="text-xs text-slate-500">
-                          {task.assignees.map((a) => a.name).join(", ")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Comments panel */}
-              <AnimatePresence>
-                {expanded === task.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden border-t border-slate-100 dark:border-white/10"
-                  >
-                    <div className="p-4 space-y-3">
-                      <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                        Comments
-                      </p>
-                      {(comments[task.id] || []).length === 0 && (
-                        <p className="text-xs text-slate-400">
-                          No comments yet.
-                        </p>
-                      )}
-                      {(comments[task.id] || []).map((c) => (
-                        <div key={c.id} className="flex gap-2.5">
-                          <Avatar
-                            name={c.userName}
-                            avatar={c.avatar}
-                            size="w-7 h-7"
-                          />
-                          <div className="flex-1 bg-slate-50 dark:bg-slate-800/60 rounded-xl px-3 py-2">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
-                                {c.userName}
-                                {c.isAdmin && (
-                                  <span className="ml-1 text-[10px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-1.5 rounded-full">
-                                    Admin
-                                  </span>
-                                )}
-                              </span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-400">
-                                  {fmtDateTime(c.createdAt)}
-                                </span>
+                        {/* Actions */}
+                        <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-slate-100 dark:border-white/5">
+                          <div className="flex items-center gap-0.5">
+                            <button
+                              onClick={() => setViewTask(task)}
+                              title="View"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+                            >
+                              👁
+                            </button>
+                            <button
+                              onClick={() => toggleExpand(task.id)}
+                              title="Comments"
+                              className={`w-7 h-7 flex items-center justify-center rounded-lg text-sm transition ${expanded === task.id ? "bg-slate-100 dark:bg-slate-700 text-indigo-500" : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
+                            >
+                              💬
+                            </button>
+                            <button
+                              onClick={() => openEdit(task)}
+                              title="Edit"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg text-sm text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              onClick={() => deleteTask(task)}
+                              title="Delete"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                            >
+                              🗑
+                            </button>
+                          </div>
+                          <span
+                            className="text-[10px] text-slate-400 flex-shrink-0"
+                            title={`Created at: ${fmtDateTime(task.createdAt)}`}
+                          >
+                            {fmtDateTime(task.createdAt)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Comments panel */}
+                      <AnimatePresence>
+                        {expanded === task.id && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden border-t border-slate-100 dark:border-white/10"
+                          >
+                            <div className="p-4 space-y-3">
+                              <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                Comments
+                              </p>
+                              {(comments[task.id] || []).length === 0 && (
+                                <p className="text-xs text-slate-400">
+                                  No comments yet.
+                                </p>
+                              )}
+                              {(comments[task.id] || []).map((c) => (
+                                <div key={c.id} className="flex gap-2.5">
+                                  <Avatar
+                                    name={c.userName}
+                                    avatar={c.avatar}
+                                    size="w-7 h-7"
+                                  />
+                                  <div className="flex-1 bg-slate-50 dark:bg-slate-800/60 rounded-xl px-3 py-2">
+                                    <div className="flex items-center justify-between gap-2">
+                                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                                        {c.userName}
+                                        {c.isAdmin && (
+                                          <span className="ml-1 text-[10px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-1.5 rounded-full">
+                                            Admin
+                                          </span>
+                                        )}
+                                      </span>
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-[10px] text-slate-400">
+                                          {fmtDateTime(c.createdAt)}
+                                        </span>
+                                        <button
+                                          onClick={() =>
+                                            deleteComment(task.id, c.id)
+                                          }
+                                          className="text-[10px] text-red-400 hover:underline"
+                                        >
+                                          del
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <p className="text-sm text-slate-600 dark:text-slate-300 mt-0.5">
+                                      {c.text}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                              <div className="flex gap-2">
+                                <input
+                                  value={newComment[task.id] || ""}
+                                  onChange={(e) =>
+                                    setNewComment((prev) => ({
+                                      ...prev,
+                                      [task.id]: e.target.value,
+                                    }))
+                                  }
+                                  onKeyDown={(e) =>
+                                    e.key === "Enter" && postComment(task.id)
+                                  }
+                                  placeholder="Add a comment…"
+                                  className="flex-1 input-light text-sm py-2"
+                                />
                                 <button
-                                  onClick={() => deleteComment(task.id, c.id)}
-                                  className="text-[10px] text-red-400 hover:underline"
+                                  onClick={() => postComment(task.id)}
+                                  className="btn-primary px-4 py-2"
                                 >
-                                  del
+                                  Send
                                 </button>
                               </div>
                             </div>
-                            <p className="text-sm text-slate-600 dark:text-slate-300 mt-0.5">
-                              {c.text}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                      <div className="flex gap-2">
-                        <input
-                          value={newComment[task.id] || ""}
-                          onChange={(e) =>
-                            setNewComment((prev) => ({
-                              ...prev,
-                              [task.id]: e.target.value,
-                            }))
-                          }
-                          onKeyDown={(e) =>
-                            e.key === "Enter" && postComment(task.id)
-                          }
-                          placeholder="Add a comment…"
-                          className="flex-1 input-light text-sm py-2"
-                        />
-                        <button
-                          onClick={() => postComment(task.id)}
-                          className="btn-primary px-4 py-2"
-                        >
-                          Send
-                        </button>
-                      </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+                  ))}
+                </div>
+              );
+            },
+          )}
         </div>
       )}
 
@@ -505,9 +600,10 @@ export default function AdminTasks() {
                     </span>
 
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_STYLE[viewTask.status]}`}
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${statusMeta(viewTask.status).badge}`}
                     >
-                      {viewTask.status.replace("_", " ")}
+                      {statusMeta(viewTask.status).icon}{" "}
+                      {statusMeta(viewTask.status).label}
                     </span>
 
                     {viewTask.dueDate && (
@@ -546,11 +642,34 @@ export default function AdminTasks() {
                     <div>
                       <p className="font-semibold mb-2">Description</p>
 
-                      <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 whitespace-pre-wrap break-words leading-7 text-sm">
-                        {viewTask.description}
-                      </div>
+                      <RichTextView
+                        html={viewTask.description}
+                        className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 break-words leading-7 text-sm"
+                      />
                     </div>
                   )}
+
+                  <div>
+                    <p className="font-semibold mb-2">Move to</p>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {TASK_STATUSES.map((s) => (
+                        <button
+                          key={s.key}
+                          disabled={
+                            moving[viewTask.id] || s.key === viewTask.status
+                          }
+                          onClick={() => moveTask(viewTask, s.key)}
+                          className={`text-xs px-3 py-1.5 rounded-full font-medium transition ${
+                            s.key === viewTask.status
+                              ? `${s.badge} cursor-default`
+                              : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600"
+                          }`}
+                        >
+                          {s.icon} {s.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="border-t border-black/5 dark:border-white/10 p-4 flex justify-end gap-2">
@@ -597,7 +716,7 @@ export default function AdminTasks() {
               exit={{ opacity: 0, scale: 0.95 }}
               className="fixed inset-0 z-50 flex items-center justify-center p-4"
             >
-              <div className="glass-card w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-5">
+              <div className="glass-card w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-5">
                 <div className="flex items-center justify-between">
                   <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100">
                     {editTask ? "Edit Task" : "New Task"}
@@ -628,14 +747,12 @@ export default function AdminTasks() {
                     <label className="text-xs font-semibold text-slate-500 mb-1 block">
                       Description
                     </label>
-                    <textarea
+                    <RichTextEditor
                       value={form.description}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, description: e.target.value }))
+                      onChange={(html) =>
+                        setForm((f) => ({ ...f, description: html }))
                       }
                       placeholder="Task description…"
-                      rows={3}
-                      className="input-light resize-none"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -708,12 +825,24 @@ export default function AdminTasks() {
                 <div className="flex gap-2 pt-1">
                   <button
                     onClick={() => setShowForm(false)}
-                    className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition"
+                    disabled={saving}
+                    className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition disabled:opacity-50"
                   >
                     Cancel
                   </button>
-                  <button onClick={submitForm} className="flex-1 btn-primary">
-                    {editTask ? "Save Changes" : "Create & Notify"}
+                  <button
+                    onClick={submitForm}
+                    disabled={saving}
+                    className="flex-1 btn-primary flex items-center justify-center gap-2 disabled:opacity-70"
+                  >
+                    {saving && (
+                      <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    )}
+                    {saving
+                      ? "Saving..."
+                      : editTask
+                        ? "Save Changes"
+                        : "Create & Notify"}
                   </button>
                 </div>
               </div>
@@ -721,6 +850,8 @@ export default function AdminTasks() {
           </>
         )}
       </AnimatePresence>
+
+      <ConfirmModal {...confirmProps} />
     </div>
   );
 }

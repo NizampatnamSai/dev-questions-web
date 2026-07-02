@@ -35,10 +35,19 @@ export default function Rain({ heavy = false }) {
 
     window.addEventListener("resize", handleResize, { passive: true });
 
+    // Pause the draw loop when the tab is hidden — no point burning CPU/battery
+    // animating a canvas nobody can see.
+    const onVisibility = () => {
+      worker.postMessage({ type: document.hidden ? "pause" : "resume" });
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    if (document.hidden) worker.postMessage({ type: "pause" });
+
     return () => {
       worker.postMessage({ type: "stop" });
       worker.terminate();
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", onVisibility);
       canvas.remove();
     };
   }, [heavy]);

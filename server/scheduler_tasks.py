@@ -123,7 +123,8 @@ async def fire_challenge_notifications():
 
 
 async def fire_workboard_notifications():
-    """9:30 AM IST workboard reminder — Mon-Sat, skip even Saturdays."""
+    """Workboard reminder (time set via admin app-config) — Mon-Sat, skip even Saturdays.
+    Only nudges members who haven't posted yet today; posters get no notification."""
     now_ist = datetime.now(IST)
     print(f"[workboard] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
     if not _is_working_day(now_ist):
@@ -141,25 +142,20 @@ async def fire_workboard_notifications():
     sent = 0
     for member in members:
         uid = member["userId"]
+        if uid in posted_ids:
+            continue
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
         if not tokens:
             print(f"[workboard] no FCM token for userId={uid}", flush=True)
             continue
         sent += 1
-        if uid in posted_ids:
-            await send_to_tokens(tokens,
-                title="📋 Daily Work Board",
-                body="✅ You've posted today! Check what your team is up to.",
-                data={"type": "workboard_reminder", "path": "/workboard"},
-            )
-        else:
-            await send_to_tokens(tokens,
-                title="📋 Write about today's work",
-                body="Share your daily update with the team! 👀",
-                data={"type": "workboard_reminder", "path": "/workboard"},
-            )
-    print(f"[workboard] done — notified {sent}/{len(members)} members", flush=True)
+        await send_to_tokens(tokens,
+            title="📋 Write about today's work",
+            body="Share your daily update with the team! 👀",
+            data={"type": "workboard_reminder", "path": "/workboard"},
+        )
+    print(f"[workboard] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted)", flush=True)
 
 
 async def fire_community_reminder():

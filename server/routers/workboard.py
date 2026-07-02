@@ -193,6 +193,10 @@ def _can_edit(post: dict, window_minutes: int = 30) -> bool:
     return (datetime.now(timezone.utc) - posted_at).total_seconds() < (window_minutes * 60)
 
 
+def _fmt_dt(dt):
+    return dt.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(dt, datetime) else dt
+
+
 @router.get("/posts")
 async def today_posts(user=Depends(current_user), date: Optional[str] = Query(None)):
     if not _is_admin(user):
@@ -210,9 +214,17 @@ async def today_posts(user=Depends(current_user), date: Optional[str] = Query(No
     result = []
     for d in docs:
         d["id"] = str(d.pop("_id"))
-        can_edit = d["userId"] == user["id"] and _can_edit(d, wb_cfg["edit_window_minutes"])
-        d["postedAt"] = d["postedAt"].strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(d.get("postedAt"), datetime) else d.get("postedAt")
+        is_mine = d["userId"] == user["id"]
+        can_edit = is_mine and _can_edit(d, wb_cfg["edit_window_minutes"])
+        # Reply becomes available once the edit window has closed, same day only.
+        can_reply = is_mine and target_date == ist_today() and not _can_edit(d, wb_cfg["edit_window_minutes"])
+        d["postedAt"] = _fmt_dt(d.get("postedAt"))
         d["canEdit"] = can_edit
+        d["canReply"] = can_reply
+        d["replies"] = [
+            {**r, "repliedAt": _fmt_dt(r.get("repliedAt"))}
+            for r in d.get("replies", [])
+        ]
         if not d.get("userAvatar"):
             d["userAvatar"] = avatar_map.get(d["userId"])
         result.append(d)
@@ -286,6 +298,7 @@ async def create_post(body: PostBody, user=Depends(current_user)):
         "message":     body.message.strip(),
         "date":        today,
         "postedAt":    posted_at,
+        "replies":     [],
     })
     post_data = {
         "id":          str(result.inserted_id),
@@ -296,6 +309,8 @@ async def create_post(body: PostBody, user=Depends(current_user)):
         "date":        today,
         "postedAt":    posted_at.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z",
         "canEdit":     True,
+        "canReply":    False,
+        "replies":     [],
     }
     # Broadcast via WebSocket
     await manager.broadcast({"type": "new_post", "post": post_data})
@@ -342,6 +357,54 @@ async def edit_post(post_id: str, body: PostBody, user=Depends(current_user)):
     }
     await manager.broadcast({"type": "edit_post", "post": updated})
     return updated
+
+
+class ReplyBody(BaseModel):
+    message: str
+
+
+@router.post("/posts/{post_id}/reply")
+async def reply_to_post(post_id: str, body: ReplyBody, user=Depends(current_user)):
+    """Lets a user append a follow-up update to their own post once the edit
+    window has closed — e.g. posted about Redux work, picked up something new
+    two hours later, and wants to log it without overwriting the original."""
+    post = await col_workboard_posts().find_one({"_id": oid(post_id)})
+    if not post:
+        raise HTTPException(404, "Post not found")
+    if post["userId"] != user["id"]:
+        raise HTTPException(403, "Not your post")
+    if post["date"] != ist_today():
+        raise HTTPException(400, "Can only reply to today's post")
+    if not body.message.strip():
+        raise HTTPException(400, "Message cannot be empty")
+    wb_cfg = await _get_wb_config()
+    if _can_edit(post, wb_cfg["edit_window_minutes"]):
+        raise HTTPException(400, "Edit window still open — use edit instead of reply")
+
+    reply = {"message": body.message.strip(), "repliedAt": now()}
+    await col_workboard_posts().update_one(
+        {"_id": oid(post_id)},
+        {"$push": {"replies": reply}},
+    )
+    reply_out = {**reply, "repliedAt": _fmt_dt(reply["repliedAt"])}
+
+    await manager.broadcast({"type": "new_reply", "postId": post_id, "reply": reply_out})
+
+    # Notify other active members, same as a fresh post
+    members = await col_workboard_members().find({"status": "active", "userId": {"$ne": user["id"]}}).to_list(200)
+    all_tokens = []
+    for m in members:
+        t_docs = await col_fcm_tokens().find({"userId": m["userId"]}).to_list(5)
+        all_tokens += [t["token"] for t in t_docs]
+    if all_tokens:
+        await send_to_tokens(
+            list(set(all_tokens)),
+            title=f"📝 {user.get('name')} added an update",
+            body=body.message.strip()[:80],
+            data={"type": "workboard_post", "path": "/workboard"},
+        )
+
+    return {"postId": post_id, "reply": reply_out}
 
 
 @router.get("/dates")
@@ -429,13 +492,19 @@ async def export_posts(
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Date", "Name", "Message", "Posted At", "Edited"])
+    writer.writerow(["Date", "Name", "Message", "Posted At", "Edited", "Replies"])
     for d in docs:
         posted_at = d.get("postedAt")
         if isinstance(posted_at, datetime):
             posted_at = posted_at.astimezone(IST).strftime("%Y-%m-%d %H:%M IST")
         edited = "Yes" if d.get("editedAt") else "No"
-        writer.writerow([d.get("date", ""), d.get("userName", ""), d.get("message", ""), posted_at, edited])
+        replies = d.get("replies", [])
+        replies_str = " | ".join(
+            f"{r['repliedAt'].astimezone(IST).strftime('%H:%M IST')}: {r['message']}"
+            if isinstance(r.get("repliedAt"), datetime) else r.get("message", "")
+            for r in replies
+        )
+        writer.writerow([d.get("date", ""), d.get("userName", ""), d.get("message", ""), posted_at, edited, replies_str])
 
     output.seek(0)
     filename = f"workboard_{date or ('all' if all else ist_today())}.csv"

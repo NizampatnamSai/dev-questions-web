@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import api from "../api/axios";
 
 const CATEGORIES = [
@@ -67,7 +68,7 @@ export default function MockInterview() {
       const category = categories.length === 1 ? categories[0] : categories.length > 1 ? categories.join(",") : "";
       const { data } = await api.post("/study/mock/start", { category, difficulty, count });
       if (!data.questions || data.questions.length === 0) {
-        alert("No questions found for the selected filters. Try a different category or difficulty.");
+        toast.error("No questions found for the selected filters. Try a different category or difficulty.");
         return;
       }
       setQuestions(data.questions);
@@ -77,7 +78,7 @@ export default function MockInterview() {
       setTimer(0);
       setPhase("interview");
     } catch {
-      alert("Failed to load questions. Please try again.");
+      toast.error("Failed to load questions. Please try again.");
     } finally {
       setLoadingStart(false);
     }

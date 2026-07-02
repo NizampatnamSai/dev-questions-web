@@ -54,6 +54,9 @@ export default function WorkBoard() {
   const [editId, setEditId] = useState(null);
   const [editMsg, setEditMsg] = useState("");
   const [editSaving, setEditSaving] = useState(false);
+  const [replyId, setReplyId] = useState(null);
+  const [replyMsg, setReplyMsg] = useState("");
+  const [replySaving, setReplySaving] = useState(false);
   const [pendingMembers, setPending] = useState([]);
   const [exportDate, setExportDate] = useState("");
   const [joining, setJoining] = useState(false);
@@ -244,6 +247,16 @@ export default function WorkBoard() {
             ),
           );
         }
+        if (type === "new_reply") {
+          const { postId, reply } = msg;
+          setTodayPosts((prev) =>
+            prev.map((p) =>
+              p.id === postId
+                ? { ...p, replies: [...(p.replies || []), reply] }
+                : p,
+            ),
+          );
+        }
       } catch {}
     };
     ws.onclose = () => setTimeout(connectWS, 3000);
@@ -295,6 +308,34 @@ export default function WorkBoard() {
       toast.error(err.response?.data?.detail || "Error");
     }
     setEditSaving(false);
+  };
+
+  const startReply = (post) => {
+    setReplyId(post.id);
+    setReplyMsg("");
+  };
+
+  const saveReply = async () => {
+    if (!replyMsg.trim()) return;
+    setReplySaving(true);
+    try {
+      const { data } = await api.post(`/workboard/posts/${replyId}/reply`, {
+        message: replyMsg,
+      });
+      setTodayPosts((prev) =>
+        prev.map((p) =>
+          p.id === replyId
+            ? { ...p, replies: [...(p.replies || []), data.reply] }
+            : p,
+        ),
+      );
+      setReplyId(null);
+      setReplyMsg("");
+      toast.success("Update added!");
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Error");
+    }
+    setReplySaving(false);
   };
 
   const exportPosts = (mode) => {
@@ -718,6 +759,16 @@ export default function WorkBoard() {
                               edit
                             </button>
                           )}
+                        {activeTab === "today" &&
+                          post.userId === user?.id &&
+                          !canStillEdit(post.postedAt) && (
+                            <button
+                              onClick={() => startReply(post)}
+                              className="text-xs text-indigo-400 hover:text-indigo-500 transition underline"
+                            >
+                              reply
+                            </button>
+                          )}
                       </div>
                     </div>
                     {editId === post.id ? (
@@ -747,6 +798,48 @@ export default function WorkBoard() {
                       <p className="text-sm text-slate-600 dark:text-slate-300 ml-9 leading-relaxed">
                         {post.message}
                       </p>
+                    )}
+
+                    {/* Follow-up replies — added after the edit window closes */}
+                    {post.replies?.length > 0 && (
+                      <div className="ml-9 mt-2 space-y-1.5 border-l-2 border-indigo-100 dark:border-indigo-900/40 pl-3">
+                        {post.replies.map((r, i) => (
+                          <div key={i} className="text-sm">
+                            <span className="text-xs text-slate-400 mr-1.5">
+                              {timeAgo(r.repliedAt)}
+                            </span>
+                            <span className="text-slate-600 dark:text-slate-300">
+                              {r.message}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {replyId === post.id && (
+                      <div className="flex gap-2 mt-2 ml-9">
+                        <input
+                          value={replyMsg}
+                          onChange={(e) => setReplyMsg(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && saveReply()}
+                          placeholder="Got new work? Add an update…"
+                          className="flex-1 input-light text-sm px-3 py-1.5 rounded-lg"
+                          autoFocus
+                        />
+                        <button
+                          onClick={saveReply}
+                          disabled={replySaving || !replyMsg.trim()}
+                          className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold disabled:opacity-50"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setReplyId(null)}
+                          className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     )}
                   </motion.div>
                 ))}
@@ -915,6 +1008,20 @@ export default function WorkBoard() {
                       <p className="text-sm text-slate-600 dark:text-slate-300 ml-9 leading-relaxed">
                         {post.message}
                       </p>
+                      {post.replies?.length > 0 && (
+                        <div className="ml-9 mt-2 space-y-1.5 border-l-2 border-indigo-100 dark:border-indigo-900/40 pl-3">
+                          {post.replies.map((r, i) => (
+                            <div key={i} className="text-sm">
+                              <span className="text-xs text-slate-400 mr-1.5">
+                                {timeAgo(r.repliedAt)}
+                              </span>
+                              <span className="text-slate-600 dark:text-slate-300">
+                                {r.message}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </motion.div>
                   ))}
                 </AnimatePresence>

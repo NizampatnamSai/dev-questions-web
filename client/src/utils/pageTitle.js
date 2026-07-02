@@ -1,0 +1,50 @@
+// Ordered most-specific-prefix-first, since several routes share a prefix
+// (e.g. "/admin/tasks" vs "/admin", "/study-advanced" vs "/study").
+const TITLES = [
+  ["/admin/export", "Export Data"],
+  ["/admin/feedback", "Feedback Inbox"],
+  ["/admin/tasks", "Task Manager"],
+  ["/admin", "Admin Panel"],
+  ["/api-docs", "API Docs"],
+  ["/api-tester", "API Tester"],
+  ["/ask", "Ask AI"],
+  ["/bookmarks", "Bookmarks"],
+  ["/challenge", "JS Challenge"],
+  ["/community", "Community"],
+  ["/cron-builder", "Cron Builder"],
+  ["/drafts", "Drafts"],
+  ["/flashcards", "Flashcards"],
+  ["/generate", "AI Generator"],
+  ["/guide", "Project Guide"],
+  ["/js-coding", "JS Coding"],
+  ["/js-compiler", "JS Compiler"],
+  ["/json-parser", "JSON Parser"],
+  ["/jwt-decoder", "JWT Decoder"],
+  ["/leaderboard", "Leaderboard"],
+  ["/login", "Login"],
+  ["/mock-interview", "Mock Interview"],
+  ["/my-answers", "My Answers"],
+  ["/my-feedback", "My Feedback"],
+  ["/my-questions", "My Questions"],
+  ["/my-tasks", "My Tasks"],
+  ["/notifications", "Notifications"],
+  ["/profile", "My Profile"],
+  ["/progress", "My Progress"],
+  ["/question", "Question"],
+  ["/quiz", "Quiz Mode"],
+  ["/recommendations", "Recommended"],
+  ["/regex-tester", "Regex Tester"],
+  ["/register", "Register"],
+  ["/roadmap", "Learning Path"],
+  ["/search", "Advanced Search"],
+  ["/snippets", "Snippet Library"],
+  ["/study-advanced", "AI Study Lab"],
+  ["/study", "Study Hub"],
+  ["/timed-challenge", "Timed Challenge"],
+  ["/workboard", "Work Board"],
+];
+
+export function getPageTitle(pathname) {
+  const match = TITLES.find(([prefix]) => pathname.startsWith(prefix));
+  return match ? `DevQuiz — ${match[1]}` : "DevQuiz — AI Interview Prep";
+}

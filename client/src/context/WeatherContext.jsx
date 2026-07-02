@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 
 function codeToCondition(code) {
   if (code === 0)   return "sunny";
@@ -209,21 +209,26 @@ export function WeatherProvider({ children }) {
     localStorage.setItem("devquiz_weather_manual", manual);
   }, [manual]);
 
-  const toggleEnabled      = () => setEnabled(v => !v);
-  const setManualCondition = (c) => { setManual(c); setError(null); };
+  const toggleEnabled      = useCallback(() => setEnabled(v => !v), []);
+  const setManualCondition = useCallback((c) => { setManual(c); setError(null); }, []);
 
   const activeCondition = enabled ? (manual || condition) : null;
   const meta = activeCondition ? CONDITION_META[activeCondition] : null;
 
+  // Memoized so consumers (Sidebar, weather effects, etc.) only re-render when a
+  // value they actually use changes — an inline object literal here would give
+  // every consumer in the app a new context value on every single render.
+  const value = useMemo(() => ({
+    enabled, toggleEnabled,
+    manual, setManualCondition,
+    manualLoc, setManualLocation,
+    condition, activeCondition,
+    temp, locName, loading, error, locDenied,
+    meta, CONDITION_META,
+  }), [enabled, toggleEnabled, manual, setManualCondition, manualLoc, setManualLocation, condition, activeCondition, temp, locName, loading, error, locDenied, meta]);
+
   return (
-    <WeatherContext.Provider value={{
-      enabled, toggleEnabled,
-      manual, setManualCondition,
-      manualLoc, setManualLocation,
-      condition, activeCondition,
-      temp, locName, loading, error, locDenied,
-      meta, CONDITION_META,
-    }}>
+    <WeatherContext.Provider value={value}>
       {children}
     </WeatherContext.Provider>
   );

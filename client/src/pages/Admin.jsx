@@ -1377,8 +1377,9 @@ function AppConfigPanel() {
     maintenance_message: "",
     force_update: false,
     force_update_message: "",
-    wb_reminder_time: "09:30",
+    wb_reminder_time: "15:00",
     wb_edit_window_minutes: 30,
+    coding_question_daily_limit: 15,
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1428,6 +1429,27 @@ function AppConfigPanel() {
       toast.error("Failed");
     }
 
+    setSaving(false);
+  };
+
+  const hasCodingLimitChange =
+    !!initialConfig &&
+    config.coding_question_daily_limit !==
+      initialConfig.coding_question_daily_limit;
+
+  const saveCodingLimit = async () => {
+    if (!hasCodingLimitChange) return;
+    setSaving(true);
+    try {
+      const patch = {
+        coding_question_daily_limit: config.coding_question_daily_limit,
+      };
+      await api.put("/admin/app-config", patch);
+      setInitialConfig((prev) => ({ ...prev, ...patch }));
+      toast.success("Coding question limit updated");
+    } catch {
+      toast.error("Failed");
+    }
     setSaving(false);
   };
 
@@ -1557,7 +1579,7 @@ function AppConfigPanel() {
             </label>
             <input
               type="time"
-              value={config.wb_reminder_time || "09:30"}
+              value={config.wb_reminder_time || "15:00"}
               onChange={(e) =>
                 setConfig((c) => ({ ...c, wb_reminder_time: e.target.value }))
               }
@@ -1596,6 +1618,51 @@ function AppConfigPanel() {
               onClick={saveWorkBoard}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                 hasWorkBoardChanges
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* JS Coding Questions Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          💻 JS Coding Questions
+        </p>
+        <div className="space-y-1 max-w-xs">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Daily limit per user
+          </label>
+          <input
+            type="number"
+            min={1}
+            max={999}
+            value={config.coding_question_daily_limit ?? 15}
+            onChange={(e) =>
+              setConfig((c) => ({
+                ...c,
+                coding_question_daily_limit: parseInt(e.target.value) || 1,
+              }))
+            }
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            Unique AI-generated coding questions each user can request per day
+          </p>
+        </div>
+        {hasCodingLimitChange && (
+          <div className="flex justify-end">
+            <button
+              disabled={!hasCodingLimitChange || saving}
+              onClick={saveCodingLimit}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                hasCodingLimitChange
                   ? "bg-indigo-600 text-white hover:bg-indigo-700"
                   : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
               }`}

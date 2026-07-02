@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
@@ -6,6 +7,11 @@ from deps import current_user
 from utils.firebase import send_to_tokens
 
 router = APIRouter()
+
+
+def _strip_html(html: str) -> str:
+    """Plain-text preview of rich-text (Quill HTML) content, for push notification bodies."""
+    return re.sub(r"<[^>]*>", " ", html or "").strip()
 
 
 class FeedbackBody(BaseModel):
@@ -54,7 +60,7 @@ async def submit_feedback(body: FeedbackBody, user=Depends(current_user)):
             await send_to_tokens(
                 tokens,
                 title=f"{type_emoji} New Feedback from {user.get('name')}",
-                body=f"{body.title}: {body.message[:80]}",
+                body=f"{body.title}: {_strip_html(body.message)[:80]}",
                 data={"type": "feedback", "path": "/admin/feedback"},
             )
 

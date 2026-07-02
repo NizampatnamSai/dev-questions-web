@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from deps import current_user
 from utils.ai import _groq_call, _ollama_text_action, GROQ_MODEL
-from db_mongo import col_streaks, col_progress, now
+from db_mongo import col_streaks, col_progress, col_study_reviewed, now
 
 router = APIRouter()
 
@@ -355,6 +355,32 @@ async def flash_progress(req: FlashProgressReq, user=Depends(current_user)):
 async def get_flash_progress(user=Depends(current_user)):
     docs = await col_progress().find({"userId": user["id"]}).to_list(length=2000)
     return {d["topicId"]: d["result"] for d in docs}
+
+
+# ── Study Guide "reviewed" tracking (DB-backed for logged-in users) ────────────
+# Guests keep using localStorage client-side — these endpoints require auth,
+# so they're only ever called once a user is actually logged in.
+
+@router.get("/reviewed")
+async def get_reviewed(user=Depends(current_user)):
+    docs = await col_study_reviewed().find({"userId": user["id"]}).to_list(length=5000)
+    return {"topicIds": [d["topicId"] for d in docs]}
+
+
+@router.post("/reviewed/{topic_id}")
+async def mark_reviewed(topic_id: str, user=Depends(current_user)):
+    await col_study_reviewed().update_one(
+        {"userId": user["id"], "topicId": topic_id},
+        {"$set": {"reviewedAt": now()}},
+        upsert=True,
+    )
+    return {"ok": True}
+
+
+@router.delete("/reviewed/{topic_id}")
+async def unmark_reviewed(topic_id: str, user=Depends(current_user)):
+    await col_study_reviewed().delete_one({"userId": user["id"], "topicId": topic_id})
+    return {"ok": True}
 
 
 # ── Weak areas ─────────────────────────────────────────────────────────────────

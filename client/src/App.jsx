@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,6 +20,7 @@ import { useTheme } from "./context/ThemeContext";
 import { WeatherProvider, useWeather } from "./context/WeatherContext";
 import { requestAndRegisterToken, onForegroundMessage } from "./firebase";
 import api from "./api/axios";
+import { getPageTitle } from "./utils/pageTitle";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -41,11 +42,17 @@ import Progress from "./pages/Progress";
 import JsCompiler from "./pages/JsCompiler";
 import ProjectGuide from "./pages/ProjectGuide";
 import JSChallenge from "./pages/JSChallenge";
+import JsCodingQuestions from "./pages/JsCodingQuestions";
 import WorkBoard from "./pages/WorkBoard";
 import MyAnswers from "./pages/MyAnswers";
 import Notifications from "./pages/Notifications";
 import Maintenance from "./pages/Maintenance";
 import JsonParser from "./pages/JsonParser";
+import RegexTester from "./pages/RegexTester";
+import CronBuilder from "./pages/CronBuilder";
+import JwtDecoder from "./pages/JwtDecoder";
+import ApiTester from "./pages/ApiTester";
+import SnippetLibrary from "./pages/SnippetLibrary";
 import AdminFeedback from "./pages/AdminFeedback";
 import UserProfile from "./pages/UserProfile";
 import AdvancedSearch from "./pages/AdvancedSearch";
@@ -83,18 +90,49 @@ function PageWrapper({ children }) {
   );
 }
 
-function AppLayout({ children }) {
+function AppLayout({ children, fullWidth = false }) {
+  const [sidebarHidden, setSidebarHidden] = useState(() => {
+    try {
+      return localStorage.getItem("devquiz_sidebar_hidden") === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleSidebar = () => {
+    setSidebarHidden((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem("devquiz_sidebar_hidden", String(next));
+      } catch { /* ignore */ }
+      return next;
+    });
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <GuestBanner />
       <div className="flex flex-1">
-        <Sidebar />
+        {!sidebarHidden && (
+          <div className="hidden md:block flex-shrink-0 w-64">
+            <Sidebar />
+          </div>
+        )}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top bar — desktop */}
-          <div className="hidden md:flex items-center justify-end gap-2 px-8 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
-            <GlobalSearch />
-            <NotificationBell />
-            <UserMenu />
+          <div className="hidden md:flex items-center justify-between gap-2 px-4 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
+            <button
+              onClick={toggleSidebar}
+              title={sidebarHidden ? "Show sidebar" : "Hide sidebar"}
+              className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            >
+              {sidebarHidden ? "☰" : "◀"}
+            </button>
+            <div className="flex items-center gap-2">
+              <GlobalSearch />
+              <NotificationBell />
+              <UserMenu />
+            </div>
           </div>
           {/* Top bar — mobile */}
           <div className="md:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-30 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-black/5 dark:border-white/8">
@@ -108,7 +146,7 @@ function AppLayout({ children }) {
             </div>
             <GlobalSearch />
           </div>
-          <main className="flex-1 p-4 md:p-6 pb-28 md:pb-8 max-w-4xl mx-auto w-full">
+          <main className={`flex-1 p-4 md:p-6 pb-28 md:pb-8 mx-auto w-full ${fullWidth ? "max-w-full" : "max-w-4xl"}`}>
             {children}
           </main>
         </div>
@@ -119,10 +157,10 @@ function AppLayout({ children }) {
   );
 }
 
-function ProtectedPage({ children, path }) {
+function ProtectedPage({ children, path, fullWidth = false }) {
   return (
     <ProtectedRoute path={path}>
-      <AppLayout>
+      <AppLayout fullWidth={fullWidth}>
         <PageWrapper>{children}</PageWrapper>
       </AppLayout>
     </ProtectedRoute>
@@ -194,6 +232,8 @@ function AppInner() {
     }
   });
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Performance optimization: disable weather effects during maintenance or force update
   const isMaintenanceOrUpdate = appConfig.maintenance || appConfig.force_update;
@@ -204,6 +244,10 @@ function AppInner() {
       .then(({ data }) => setAppConfig(data))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    document.title = getPageTitle(location.pathname);
+  }, [location.pathname]);
 
   const handleDismissUpdate = () => {
     localStorage.setItem("devquiz_update_dismissed", "true");
@@ -387,7 +431,7 @@ function AppInner() {
         <Route
           path="/ask"
           element={
-            <ProtectedPage path="/ask">
+            <ProtectedPage path="/ask" fullWidth>
               <AskAI />
             </ProtectedPage>
           }
@@ -451,7 +495,7 @@ function AppInner() {
         <Route
           path="/admin/tasks"
           element={
-            <ProtectedPage path="/admin/tasks">
+            <ProtectedPage path="/admin/tasks" fullWidth>
               <AdminTasks />
             </ProtectedPage>
           }
@@ -459,7 +503,7 @@ function AppInner() {
         <Route
           path="/my-tasks"
           element={
-            <ProtectedPage path="/my-tasks">
+            <ProtectedPage path="/my-tasks" fullWidth>
               <MyTasks />
             </ProtectedPage>
           }
@@ -537,10 +581,58 @@ function AppInner() {
           }
         />
         <Route
+          path="/regex-tester"
+          element={
+            <ProtectedPage path="/regex-tester">
+              <RegexTester />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/cron-builder"
+          element={
+            <ProtectedPage path="/cron-builder">
+              <CronBuilder />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/jwt-decoder"
+          element={
+            <ProtectedPage path="/jwt-decoder">
+              <JwtDecoder />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/api-tester"
+          element={
+            <ProtectedPage path="/api-tester" fullWidth>
+              <ApiTester />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/snippets"
+          element={
+            <ProtectedPage path="/snippets">
+              <SnippetLibrary />
+            </ProtectedPage>
+          }
+        />
+        <Route
           path="/challenge"
           element={
             <ProtectedPage path="/challenge">
               <JSChallenge />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/js-coding"
+          element={
+            <ProtectedPage path="/js-coding">
+              <JsCodingQuestions />
             </ProtectedPage>
           }
         />
@@ -657,6 +749,22 @@ function AppInner() {
             title="Send feedback"
           >
             💭
+          </motion.button>
+        )}
+
+      {/* Floating Ask AI button — admin-only quick access, mirrors the user feedback button */}
+      {user &&
+        !user.isGuest &&
+        (user.role === "admin" || user.role === "sub_admin") &&
+        location.pathname !== "/ask" && (
+          <motion.button
+            onClick={() => navigate("/ask")}
+            className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            title="Ask AI"
+          >
+            🤖
           </motion.button>
         )}
     </>

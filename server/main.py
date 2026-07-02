@@ -9,7 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
 from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_community_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks
+from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools
 
 app = FastAPI(title="DevQuiz API")
 
@@ -51,16 +51,16 @@ async def startup():
     cr_minute = time_doc["minute"] if time_doc else 45
     print(f"[startup] community_reminder scheduled at {cr_hour:02d}:{cr_minute:02d} UTC ({cr_hour+5}:{(cr_minute+30)%60:02d} IST approx)", flush=True)
 
-    # WorkBoard reminder: read saved time from DB (default 9:30 IST = 4:00 UTC)
+    # WorkBoard reminder: read saved time from DB (default 15:00 IST = 9:30 UTC)
     wb_doc  = await col_app_config().find_one({"_id": "config"}) if True else {}
-    wb_time = (wb_doc or {}).get("wb_reminder_time", "09:30")
+    wb_time = (wb_doc or {}).get("wb_reminder_time", "15:00")
     try:
         wb_h_ist, wb_m_ist = [int(x) for x in wb_time.split(":")]
         total_utc = wb_h_ist * 60 + wb_m_ist - 330
         wb_h_utc = (total_utc // 60) % 24
         wb_m_utc = total_utc % 60
     except Exception:
-        wb_h_utc, wb_m_utc = 4, 0
+        wb_h_utc, wb_m_utc = 9, 30
     print(f"[startup] workboard_reminder scheduled at {wb_h_utc:02d}:{wb_m_utc:02d} UTC ({wb_time} IST)", flush=True)
 
     scheduler.add_job(fire_scheduled_notifications,    "cron", second=0)
@@ -97,6 +97,8 @@ app.include_router(difficulty.router,        prefix="/api/difficulty")
 app.include_router(gamification.router,      prefix="/api/gamification")
 app.include_router(timed_challenge.router,   prefix="/api/challenge")
 app.include_router(tasks.router,             prefix="/api/tasks")
+app.include_router(coding_questions.router,  prefix="/api/study")
+app.include_router(dev_tools.router,         prefix="/api/dev-tools")
 
 
 @app.get("/")

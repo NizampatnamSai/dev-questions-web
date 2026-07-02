@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 import { fmtDateTime } from "../utils/time";
+import RichTextView from "../components/RichTextView";
 
 const TYPE_COLORS = {
   bug:         "bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-300",
@@ -60,7 +61,10 @@ export default function MyFeedback() {
 
                 <div>
                   <p className="font-semibold text-slate-800 dark:text-slate-100">{item.title}</p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{item.message}</p>
+                  <RichTextView
+                    html={item.message}
+                    className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed"
+                  />
                 </div>
 
                 {item.reply && (

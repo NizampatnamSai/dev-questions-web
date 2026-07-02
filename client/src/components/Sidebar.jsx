@@ -9,39 +9,48 @@ import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
 
 const BASE_LINKS = [
+  // Requested order (top 12)
   { to: "/dashboard", label: "Dashboard", icon: "📊" },
   { to: "/workboard", label: "Work Board", icon: "📋" },
-  { to: "/challenge", label: "JS Challenge", icon: "🧩" },
+  { to: "/community", label: "Community", icon: "🌍" },
+  { to: "/ask", label: "Ask AI", icon: "🤖" },
+  { to: "/js-coding", label: "JS Coding", icon: "💻" },
   { to: "/generate", label: "AI Generator", icon: "✨" },
-  { to: "/quiz", label: "Quiz Mode", icon: "🧠" },
-  { to: "/study", label: "Study Hub", icon: "📚" },
   {
     to: "/study-advanced",
     label: "🧠 AI Study Lab",
     icon: "⭐",
     highlight: true,
   },
+  { to: "/drafts", label: "Drafts", icon: "💾" },
+  { to: "/my-tasks", label: "My Tasks", icon: "📋", hideForAdmin: true },
+  { to: "/json-parser", label: "JSON Parser", icon: "🔍" },
+  { to: "/js-compiler", label: "JS Compiler", icon: "⚡" },
+  { to: "/regex-tester", label: "Regex Tester", icon: "🧬" },
+  { to: "/cron-builder", label: "Cron Builder", icon: "⏰" },
+  { to: "/jwt-decoder", label: "JWT Decoder", icon: "🔑" },
+  { to: "/api-tester", label: "API Tester", icon: "📡" },
+  { to: "/snippets", label: "Snippet Library", icon: "📚" },
+  { to: "/challenge", label: "JS Challenge", icon: "🧩" },
+  { to: "/progress", label: "My Progress", icon: "📈" },
+  // Remaining, in previous relative order
+  { to: "/quiz", label: "Quiz Mode", icon: "🧠" },
+  { to: "/study", label: "Study Hub", icon: "📚" },
   { to: "/mock-interview", label: "Mock Interview", icon: "🎯" },
   { to: "/flashcards", label: "Flashcards", icon: "🃏" },
-  { to: "/progress", label: "My Progress", icon: "📈" },
-  { to: "/community", label: "Community", icon: "🌍" },
   { to: "/my-questions", label: "My Questions", icon: "📝" },
   { to: "/my-answers", label: "My Answers", icon: "✍️" },
   { to: "/bookmarks", label: "Bookmarks", icon: "🔖" },
   { to: "/leaderboard", label: "Leaderboard", icon: "🏆" },
-  { to: "/profile", label: "My Profile", icon: "👤" },
   { to: "/search", label: "Advanced Search", icon: "🔎" },
   { to: "/recommendations", label: "Recommended", icon: "💡" },
   { to: "/roadmap", label: "Learning Path", icon: "🗺️" },
   { to: "/timed-challenge", label: "Timed Challenge", icon: "⏱️" },
-  { to: "/js-compiler", label: "JS Compiler", icon: "⚡" },
-  { to: "/json-parser", label: "JSON Parser", icon: "🔍" },
-  { to: "/ask", label: "Ask AI", icon: "🤖" },
   { to: "/notifications", label: "Notifications", icon: "🔔" },
   { to: "/my-feedback", label: "My Feedback", icon: "💬", hideForAdmin: true },
-  { to: "/my-tasks", label: "My Tasks", icon: "📋", hideForAdmin: true },
-  { to: "/drafts", label: "Drafts", icon: "💾" },
   { to: "/guide", label: "Project Guide", icon: "🗺️" },
+  // My Profile moved to the bottom, per request
+  { to: "/profile", label: "My Profile", icon: "👤" },
 ];
 // exact match prevents /admin matching /admin/export etc.
 const ADMIN_LINK = {
@@ -202,6 +211,9 @@ export default function Sidebar() {
     "/community",
     "/js-compiler",
     "/json-parser",
+    "/regex-tester",
+    "/cron-builder",
+    "/jwt-decoder",
     "/study",
   ];
 

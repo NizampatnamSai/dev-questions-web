@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 import ConfirmModal from "../components/ConfirmModal";
@@ -42,46 +44,72 @@ function CodeBlock({ code, lang }) {
   );
 }
 
-function AnswerBlock({ text }) {
-  const parts = [];
-  const codeRegex = /```(\w*)\n?([\s\S]*?)```/g;
-  let last = 0, match;
-  while ((match = codeRegex.exec(text)) !== null) {
-    if (match.index > last) parts.push({ type: "text", content: text.slice(last, match.index) });
-    parts.push({ type: "code", lang: match[1], content: match[2].trim() });
-    last = match.index + match[0].length;
-  }
-  if (last < text.length) parts.push({ type: "text", content: text.slice(last) });
+const markdownComponents = {
+  code({ className, children, ...props }) {
+    const langMatch = /language-(\w+)/.exec(className || "");
+    // Fenced code blocks get a language- className from remark; plain inline `code` doesn't.
+    if (langMatch) {
+      return <CodeBlock code={String(children).replace(/\n$/, "")} lang={langMatch[1]} />;
+    }
+    return (
+      <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-indigo-600 dark:text-cyan-300 text-[0.85em] font-mono" {...props}>
+        {children}
+      </code>
+    );
+  },
+  // Fenced blocks render CodeBlock (a div) themselves — avoid nesting inside <pre>.
+  pre({ children }) {
+    return <>{children}</>;
+  },
+  p({ children }) {
+    return <p className="mb-2 last:mb-0">{children}</p>;
+  },
+  strong({ children }) {
+    return <strong className="font-semibold text-slate-800 dark:text-white">{children}</strong>;
+  },
+  ul({ children }) {
+    return <ul className="list-disc pl-5 space-y-1 mb-2">{children}</ul>;
+  },
+  ol({ children }) {
+    return <ol className="list-decimal pl-5 space-y-1 mb-2">{children}</ol>;
+  },
+  li({ children }) {
+    return <li className="pl-1">{children}</li>;
+  },
+  a({ children, href }) {
+    return <a href={href} target="_blank" rel="noopener noreferrer" className="text-indigo-500 dark:text-cyan-400 underline hover:no-underline">{children}</a>;
+  },
+  blockquote({ children }) {
+    return <blockquote className="border-l-2 border-indigo-300 dark:border-cyan-500/50 pl-3 italic text-slate-500 dark:text-slate-400 my-2">{children}</blockquote>;
+  },
+  table({ children }) {
+    return (
+      <div className="overflow-x-auto my-2 rounded-lg border border-slate-200 dark:border-white/10">
+        <table className="w-full text-xs border-collapse">{children}</table>
+      </div>
+    );
+  },
+  thead({ children }) {
+    return <thead className="bg-slate-100 dark:bg-white/10">{children}</thead>;
+  },
+  th({ children }) {
+    return <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-white/10">{children}</th>;
+  },
+  td({ children }) {
+    return <td className="px-3 py-2 border-b border-slate-100 dark:border-white/5 align-top">{children}</td>;
+  },
+  h1({ children }) { return <h3 className="text-base font-bold mt-3 mb-1.5 text-slate-800 dark:text-white">{children}</h3>; },
+  h2({ children }) { return <h3 className="text-base font-bold mt-3 mb-1.5 text-slate-800 dark:text-white">{children}</h3>; },
+  h3({ children }) { return <h4 className="text-sm font-bold mt-2 mb-1 text-slate-800 dark:text-white">{children}</h4>; },
+  hr() { return <hr className="my-3 border-slate-200 dark:border-white/10" />; },
+};
 
+function AnswerBlock({ text }) {
   return (
-    <div className="space-y-1 text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
-      {parts.map((part, pi) =>
-        part.type === "code" ? (
-          <CodeBlock key={pi} code={part.content} lang={part.lang} />
-        ) : (
-          <div key={pi} className="space-y-1">
-            {part.content.split("\n").map((line, i) => {
-              if (!line.trim()) return <div key={i} className="h-1" />;
-              if (/^\d+\.\s/.test(line)) return (
-                <div key={i} className="flex gap-2">
-                  <span className="text-indigo-500 dark:text-cyan-400 font-semibold flex-shrink-0 w-5">{line.match(/^\d+/)[0]}.</span>
-                  <span>{line.replace(/^\d+\.\s/, "")}</span>
-                </div>
-              );
-              if (/^[-•*]\s/.test(line)) return (
-                <div key={i} className="flex gap-2">
-                  <span className="text-indigo-400 dark:text-cyan-500 flex-shrink-0 mt-0.5">•</span>
-                  <span>{line.replace(/^[-•*]\s/, "")}</span>
-                </div>
-              );
-              if (/^\*\*.*\*\*/.test(line)) return (
-                <p key={i} className="font-semibold text-slate-800 dark:text-white">{line.replace(/\*\*/g, "")}</p>
-              );
-              return <p key={i}>{line}</p>;
-            })}
-          </div>
-        )
-      )}
+    <div className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+        {text}
+      </ReactMarkdown>
     </div>
   );
 }
@@ -200,8 +228,14 @@ export default function AskAI() {
     api.get("/ai/history").then(({ data }) => setHistory(data)).catch(() => {}).finally(() => setHistoryLoading(false));
   }, []);
 
+  // Auto-scroll when the user sends a message (so they see it + the typing indicator),
+  // but NOT when the AI's answer lands — for a long answer that yanks the view straight
+  // past it to the bottom, which is disorienting. Reading starts at the top of the reply.
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const last = messages[messages.length - 1];
+    if (last?.role !== "ai") {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages, loading]);
 
   // Keep ref in sync
@@ -467,54 +501,108 @@ export default function AskAI() {
           )}
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-4 pb-4 pr-1">
-          {isEmpty && !loading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 pt-4">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">Try asking…</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {isEmpty ? (
+          /* ── Hero / welcome state — centered, big pill composer ── */
+          <div className="flex-1 flex flex-col items-center justify-center px-4">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl space-y-6 text-center">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold gradient-text">🤖 Ask me anything</h2>
+                <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">
+                  Python internals, how Claude works, JS concepts — whatever you're curious about.
+                </p>
+              </div>
+
+              <div className="flex gap-2 items-end">
+                <div className="relative flex-1">
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={handleKey}
+                    rows={1}
+                    placeholder="Ask anything… (Enter to send, Shift+Enter for new line)"
+                    className="w-full resize-none text-sm pl-5 pr-10 py-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 text-left max-h-32 overflow-y-auto shadow-sm"
+                    style={{ fieldSizing: "content" }}
+                    autoFocus
+                  />
+                  {input && (
+                    <button
+                      onClick={() => { setInput(""); inputRef.current?.focus(); }}
+                      title="Clear"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => send()}
+                  disabled={!input.trim() || loading}
+                  className="p-4 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-2">
                 {SUGGESTIONS.map((s, i) => (
                   <button key={i} onClick={() => send(s)}
-                    className="text-left text-sm px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:text-indigo-600 dark:hover:text-cyan-300 transition-all">
+                    className="text-xs px-3.5 py-2 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:text-indigo-600 dark:hover:text-cyan-300 transition-all">
                     {s}
                   </button>
                 ))}
               </div>
             </motion.div>
-          )}
-
-          <AnimatePresence initial={false}>
-            {messages.map((msg, i) => <Message key={i} msg={msg} />)}
-          </AnimatePresence>
-          {loading && <TypingIndicator />}
-          <div ref={bottomRef} />
-        </div>
-
-        {/* Input bar */}
-        <div className="flex-shrink-0 pt-3 border-t border-black/5 dark:border-white/10">
-          <div className="flex gap-2 items-end">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={handleKey}
-              rows={1}
-              placeholder="Ask anything… (Enter to send, Shift+Enter for new line)"
-              className="flex-1 resize-none text-sm px-4 py-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 max-h-32 overflow-y-auto"
-              style={{ fieldSizing: "content" }}
-            />
-            <button
-              onClick={() => send()}
-              disabled={!input.trim() || loading}
-              className="p-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
-            >
-              {loading
-                ? <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
-                : <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
-              }
-            </button>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto space-y-4 pb-4 pr-1">
+              <AnimatePresence initial={false}>
+                {messages.map((msg, i) => <Message key={i} msg={msg} />)}
+              </AnimatePresence>
+              {loading && <TypingIndicator />}
+              <div ref={bottomRef} />
+            </div>
+
+            {/* Input bar */}
+            <div className="flex-shrink-0 pt-3 border-t border-black/5 dark:border-white/10">
+              <div className="flex gap-2 items-end">
+                <div className="relative flex-1">
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={handleKey}
+                    rows={1}
+                    placeholder="Ask anything… (Enter to send, Shift+Enter for new line)"
+                    className="w-full resize-none text-sm pl-4 pr-9 py-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 max-h-32 overflow-y-auto"
+                    style={{ fieldSizing: "content" }}
+                  />
+                  {input && (
+                    <button
+                      onClick={() => { setInput(""); inputRef.current?.focus(); }}
+                      title="Clear"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => send()}
+                  disabled={!input.trim() || loading}
+                  className="p-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+                >
+                  {loading
+                    ? <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
+                    : <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  }
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
     <ConfirmModal {...confirmProps} />

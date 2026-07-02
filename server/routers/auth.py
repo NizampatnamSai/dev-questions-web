@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from db_mongo import col_users, col_fcm_tokens, sid, now
+from db_mongo import col_users, col_fcm_tokens, col_notifications, sid, now
 from auth_utils import hash_password, verify_password, create_token
 from deps import current_user
 from utils.firebase import send_to_tokens

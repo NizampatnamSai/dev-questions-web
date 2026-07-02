@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
+import RichTextEditor, { isRichTextEmpty } from "./RichTextEditor";
 
 export default function FeedbackModal({ open, onClose }) {
   const [type, setType] = useState("feature");
@@ -12,7 +13,7 @@ export default function FeedbackModal({ open, onClose }) {
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async () => {
-    if (!title.trim() || !message.trim()) {
+    if (!title.trim() || isRichTextEmpty(message)) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -21,7 +22,7 @@ export default function FeedbackModal({ open, onClose }) {
       await api.post("/feedback", {
         type,
         title: title.trim(),
-        message: message.trim(),
+        message,
         rating,
       });
       toast.success("Thank you for your feedback! 💙");
@@ -124,13 +125,13 @@ export default function FeedbackModal({ open, onClose }) {
               {/* Message */}
               <div>
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-200">Details</label>
-                <textarea
-                  value={message}
-                  onChange={e => setMessage(e.target.value)}
-                  placeholder="Tell us more..."
-                  rows={4}
-                  className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-                />
+                <div className="mt-1">
+                  <RichTextEditor
+                    value={message}
+                    onChange={setMessage}
+                    placeholder="Tell us more..."
+                  />
+                </div>
               </div>
 
               {/* Actions */}
