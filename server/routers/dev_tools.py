@@ -60,7 +60,9 @@ def _assert_safe_url(url: str):
 
 
 @router.post("/http-request")
-async def proxy_http_request(body: HttpRequestBody, user=Depends(current_user)):
+async def proxy_http_request(body: HttpRequestBody):
+    """No login required — this tool has no AI involved and the SSRF guard
+    below doesn't depend on user identity, so it's safe to expose to guests too."""
     method = body.method.upper()
     if method not in ("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"):
         raise HTTPException(400, f"Unsupported method: {method}")
@@ -108,6 +110,116 @@ async def proxy_http_request(body: HttpRequestBody, user=Depends(current_user)):
         "sizeBytes": len(resp.content),
         "truncated": truncated,
     }
+
+
+# ── Mock API Generator ──────────────────────────────────────────────────────
+# Deterministic (seeded), zero-AI, zero-dependency fake data for frontend devs
+# who need a real HTTP endpoint to point at before the real backend is ready —
+# feed this straight into API Tester. Capped count so it can't be abused into
+# a large-response generator.
+
+import random as _random
+
+_FIRST_NAMES = ["Aarav", "Vivaan", "Aditya", "Sneha", "Ananya", "Diya", "Ishaan", "Kabir", "Meera", "Riya",
+                "James", "Olivia", "Liam", "Emma", "Noah", "Ava", "Mia", "Lucas", "Sofia", "Ethan"]
+_LAST_NAMES = ["Sharma", "Verma", "Patel", "Gupta", "Kumar", "Singh", "Reddy", "Nair", "Smith", "Johnson",
+               "Brown", "Davis", "Wilson", "Clark", "Lewis"]
+_DOMAINS = ["example.com", "mail.com", "testmail.dev", "inbox.io"]
+_WORDS = ["velocity", "cluster", "pixel", "vector", "cascade", "orbit", "signal", "matrix", "nimbus", "quartz",
+          "delta", "phoenix", "harbor", "beacon", "lattice", "summit", "vertex", "falcon", "atlas", "prism"]
+_COMPANIES = ["Nimbus Labs", "Quartz Systems", "Orbit Technologies", "Cascade Software", "Vertex Solutions"]
+
+
+def _seeded(seed: int) -> _random.Random:
+    return _random.Random(seed)
+
+
+def _mock_user(i: int) -> dict:
+    rng = _seeded(i * 7919)
+    first, last = rng.choice(_FIRST_NAMES), rng.choice(_LAST_NAMES)
+    return {
+        "id": i,
+        "name": f"{first} {last}",
+        "email": f"{first.lower()}.{last.lower()}{i}@{rng.choice(_DOMAINS)}",
+        "username": f"{first.lower()}{last.lower()}{rng.randint(10, 99)}",
+        "phone": f"+1-{rng.randint(200,999)}-{rng.randint(200,999)}-{rng.randint(1000,9999)}",
+        "company": rng.choice(_COMPANIES),
+        "isActive": rng.choice([True, True, True, False]),
+        "createdAt": f"202{rng.randint(2,5)}-{rng.randint(1,12):02d}-{rng.randint(1,28):02d}",
+    }
+
+
+def _mock_post(i: int) -> dict:
+    rng = _seeded(i * 104729)
+    title_words = rng.sample(_WORDS, 4)
+    return {
+        "id": i,
+        "userId": rng.randint(1, 10),
+        "title": " ".join(title_words).capitalize(),
+        "body": " ".join(rng.choices(_WORDS, k=20)),
+        "likes": rng.randint(0, 500),
+        "published": rng.choice([True, False]),
+    }
+
+
+def _mock_product(i: int) -> dict:
+    rng = _seeded(i * 15485863)
+    return {
+        "id": i,
+        "name": f"{rng.choice(_WORDS).capitalize()} {rng.choice(['Pro', 'Lite', 'Max', 'Mini', 'Plus'])}",
+        "price": round(rng.uniform(9.99, 299.99), 2),
+        "currency": "USD",
+        "inStock": rng.choice([True, True, False]),
+        "rating": round(rng.uniform(3.0, 5.0), 1),
+        "category": rng.choice(["Electronics", "Home", "Books", "Sports", "Toys"]),
+    }
+
+
+def _mock_todo(i: int) -> dict:
+    rng = _seeded(i * 32452843)
+    return {
+        "id": i,
+        "userId": rng.randint(1, 10),
+        "title": f"{rng.choice(['Fix', 'Review', 'Update', 'Test', 'Deploy'])} {rng.choice(_WORDS)}",
+        "completed": rng.choice([True, False]),
+        "priority": rng.choice(["low", "medium", "high"]),
+    }
+
+
+def _mock_comment(i: int) -> dict:
+    rng = _seeded(i * 49979687)
+    first, last = rng.choice(_FIRST_NAMES), rng.choice(_LAST_NAMES)
+    return {
+        "id": i,
+        "postId": rng.randint(1, 20),
+        "name": f"{first} {last}",
+        "email": f"{first.lower()}.{last.lower()}@{rng.choice(_DOMAINS)}",
+        "body": " ".join(rng.choices(_WORDS, k=12)),
+    }
+
+
+_MOCK_GENERATORS = {
+    "users": _mock_user,
+    "posts": _mock_post,
+    "products": _mock_product,
+    "todos": _mock_todo,
+    "comments": _mock_comment,
+}
+
+MAX_MOCK_COUNT = 100
+
+
+@router.get("/mock/{resource}")
+async def mock_api(resource: str, count: int = 10):
+    """Live, real HTTP endpoint returning deterministic fake data — no login,
+    no AI, safe to hammer since it's pure in-memory generation. Same `resource`
+    + `count` always returns the same data (seeded), so it behaves like a
+    stable API to build a frontend against."""
+    generator = _MOCK_GENERATORS.get(resource)
+    if not generator:
+        raise HTTPException(404, f"Unknown mock resource '{resource}'. Available: {', '.join(_MOCK_GENERATORS)}")
+    count = max(1, min(count, MAX_MOCK_COUNT))
+    return {"data": [generator(i) for i in range(1, count + 1)], "count": count, "resource": resource}
 
 
 # ── Snippet Library ─────────────────────────────────────────────────────────

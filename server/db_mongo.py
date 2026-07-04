@@ -45,6 +45,14 @@ def col_community_schedule():   return mdb()["community_schedule"]
 def col_user_answers():         return mdb()["user_answers"]
 def col_user_notifications():   return mdb()["user_notifications"]
 def col_app_config():           return mdb()["app_config"]
+
+
+async def notifications_enabled() -> bool:
+    """Single choke point for the admin 'stop/on all notifications' switch —
+    checked by both push (FCM) and in-app notification creation, so testing
+    new features never spams real users' devices or bells."""
+    doc = await col_app_config().find_one({"_id": "config"})
+    return (doc or {}).get("notifications_enabled", True)
 def col_feedback():             return mdb()["feedback"]
 def col_user_profiles():        return mdb()["user_profiles"]
 def col_question_ratings():     return mdb()["question_ratings"]
@@ -58,6 +66,11 @@ def col_coding_questions():     return mdb()["coding_questions"]
 def col_snippets():             return mdb()["snippets"]
 def col_study_reviewed():       return mdb()["study_reviewed"]
 def col_coding_limit_bonus():   return mdb()["coding_limit_bonus"]
+def col_weak_area_insights():   return mdb()["weak_area_insights"]
+def col_voice_transcripts():    return mdb()["voice_transcripts"]
+def col_resume_analyses():      return mdb()["resume_analyses"]
+def col_notes():                return mdb()["notes"]
+def col_note_keys():            return mdb()["note_keys"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
@@ -103,6 +116,14 @@ async def init_mongo():
     await db["snippets"].create_index("isPublic")
     await db["study_reviewed"].create_index([("userId", 1), ("topicId", 1)], unique=True)
     await db["coding_limit_bonus"].create_index([("userId", 1), ("date", 1)], unique=True)
+    await db["flashcards"].create_index([("userId", 1), ("nextReview", 1)])
+    await db["flashcards"].create_index([("userId", 1), ("createdAt", -1)])
+    await db["weak_area_insights"].create_index([("userId", 1), ("date", 1)], unique=True)
+    await db["voice_transcripts"].create_index([("userId", 1), ("date", 1)])
+    await db["resume_analyses"].create_index([("userId", 1), ("date", 1)])
+    await db["push_notifications"].create_index([("createdAt", -1)])
+    await db["notes"].create_index([("userId", 1), ("createdAt", -1)])
+    await db["note_keys"].create_index("userId", unique=True)
 
     # One-time migration: old 3-stage task status -> new Jira-style 4-stage workflow.
     # Idempotent — only touches docs still on an old value, safe to run every startup.

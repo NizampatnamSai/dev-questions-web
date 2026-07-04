@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
@@ -47,7 +48,148 @@ const DEV_TOOLS = [
     btnLabel: "Run Code ▶",
     resultLabel: "Output",
   },
+  {
+    id: "git",
+    icon: "🐙",
+    label: "AI Dev Assistant · Git",
+    desc: "Describe what you need in plain English, get the exact git command",
+    endpoint: "/study/git-help",
+    inputPlaceholder: "e.g. undo my last commit but keep the changes",
+    btnLabel: "Get Command →",
+    resultLabel: "Git Help",
+  },
+  {
+    id: "tests",
+    icon: "🧪",
+    label: "AI Dev Assistant · Tests",
+    desc: "Generate Jest test cases for a function",
+    endpoint: "/study/generate-tests",
+    inputPlaceholder: "Paste a function to generate tests for…",
+    btnLabel: "Generate Tests →",
+    resultLabel: "Generated Tests",
+  },
+  {
+    id: "concept",
+    icon: "📖",
+    label: "AI Dev Assistant · Docs",
+    desc: "Explain any API, error message, or concept in plain English",
+    endpoint: "/study/explain-concept",
+    inputPlaceholder: "e.g. What does ERR_HTTP_HEADERS_SENT mean?",
+    btnLabel: "Explain →",
+    resultLabel: "Explanation",
+  },
+  {
+    id: "reactperf",
+    icon: "🚀",
+    label: "React Performance Analyzer",
+    desc: "Find re-render and memoization issues in a component",
+    endpoint: "/study/react-performance",
+    inputPlaceholder: "Paste a React component to analyze…",
+    btnLabel: "Analyze Performance →",
+    resultLabel: "Performance Report",
+  },
+  {
+    id: "mock-api",
+    icon: "🎲",
+    label: "Mock API Generator",
+    desc: "Get a real, live endpoint returning dummy data — no login, no AI",
+    endpoint: null,
+    inputPlaceholder: "",
+    btnLabel: "",
+    resultLabel: "",
+  },
 ];
+
+const MOCK_RESOURCES = [
+  { id: "users", label: "Users" },
+  { id: "posts", label: "Posts" },
+  { id: "products", label: "Products" },
+  { id: "todos", label: "Todos" },
+  { id: "comments", label: "Comments" },
+];
+
+function MockApiPanel() {
+  const [resource, setResource] = useState("users");
+  const [count, setCount] = useState(10);
+  const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const apiUrl = import.meta.env.VITE_API_URL ?? "/api";
+  const fullUrl = `${apiUrl}/dev-tools/mock/${resource}?count=${count}`;
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get(`/dev-tools/mock/${resource}`, { params: { count } });
+      setPreview(data);
+    } catch {
+      toast.error("Failed to load preview");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copy = () => {
+    const absolute = fullUrl.startsWith("http") ? fullUrl : `${window.location.origin}${fullUrl}`;
+    navigator.clipboard.writeText(absolute);
+    toast.success("URL copied");
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap gap-2">
+        {MOCK_RESOURCES.map((r) => (
+          <button
+            key={r.id}
+            onClick={() => { setResource(r.id); setPreview(null); }}
+            className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${resource === r.id ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
+          >
+            {r.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-slate-500 dark:text-slate-400">Count:</label>
+        <input
+          type="number"
+          min={1}
+          max={100}
+          value={count}
+          onChange={(e) => { setCount(Math.max(1, Math.min(100, Number(e.target.value) || 1))); setPreview(null); }}
+          className="w-20 px-2 py-1 text-sm rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+        <span className="text-xs text-slate-400">(max 100)</span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <code className="flex-1 text-xs px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 font-mono truncate">
+          GET {fullUrl}
+        </code>
+        <button onClick={copy} className="text-xs px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+          📋 Copy URL
+        </button>
+      </div>
+
+      <button
+        onClick={load}
+        disabled={loading}
+        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-colors"
+      >
+        {loading ? "Loading…" : "▶ Preview Response"}
+      </button>
+
+      {preview && (
+        <pre className="text-xs p-4 overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono bg-[#0d1117] text-emerald-400 rounded-xl max-h-72 overflow-y-auto">
+          {JSON.stringify(preview, null, 2)}
+        </pre>
+      )}
+      <p className="text-[11px] text-slate-400">
+        No login required — paste the URL above into API Tester, Postman, or your own frontend code. Same resource + count always returns the same data.
+      </p>
+    </div>
+  );
+}
+
 function DevTools() {
   const [searchParams] = useSearchParams();
   const toolParam = searchParams.get("tool");
@@ -153,7 +295,7 @@ function DevTools() {
             Dev Tools
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            TS Adder · Error Finder · Break Finder · JS Compiler
+            TS Adder · Error Finder · Break Finder · JS Compiler · AI Assistant · Mock API
           </p>
         </div>
         <span className="text-slate-400 text-xs">{open ? "▲" : "▼"}</span>
@@ -185,6 +327,10 @@ function DevTools() {
                 {cur.desc}
               </p>
 
+              {cur.id === "mock-api" ? (
+                <MockApiPanel />
+              ) : (
+              <>
               {/* Code input */}
               <textarea
                 value={code}
@@ -263,6 +409,8 @@ function DevTools() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              </>
+              )}
             </div>
           </motion.div>
         )}

@@ -180,7 +180,7 @@ async def _get_wb_config() -> dict:
     doc = await col_app_config().find_one({"_id": "config"}) or {}
     return {
         "edit_window_minutes": int(doc.get("wb_edit_window_minutes", 30)),
-        "reminder_time": doc.get("wb_reminder_time", "09:30"),
+        "reminder_time": doc.get("wb_reminder_time", "15:00"),
     }
 
 

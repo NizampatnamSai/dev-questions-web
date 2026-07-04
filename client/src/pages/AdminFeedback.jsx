@@ -15,7 +15,7 @@ const TYPE_COLORS = {
   other: "bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300",
 };
 
-function FeedbackCard({ feedback, onRead, onDelete, onReply }) {
+function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
   const [replying, setReplying] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [sending, setSending] = useState(false);
@@ -46,6 +46,16 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply }) {
             <span className="text-xs text-slate-400">
               {feedback.userName} • {fmtDateTime(feedback.createdAt)}
             </span>
+            {feedback.isGuest && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-300">
+                GUEST
+              </span>
+            )}
+            {feedback.status === "completed" && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-300">
+                ✅ COMPLETED
+              </span>
+            )}
           </div>
           <h3 className="font-semibold text-slate-800 dark:text-slate-100 mt-1 leading-snug">
             {feedback.title}
@@ -74,6 +84,15 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply }) {
           >
             {replying ? "Cancel" : "↩ Reply"}
           </button>
+          {feedback.status !== "completed" && (
+            <button
+              onClick={() => onComplete(feedback.id)}
+              title={feedback.isGuest ? "Marks as completed (guest submissions can't be notified)" : "Marks as completed and notifies the user"}
+              className="px-2 py-1 rounded-lg text-xs font-medium bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-500/30 transition-colors"
+            >
+              ✅ Complete
+            </button>
+          )}
           <button
             onClick={() => onDelete(feedback.id)}
             className="px-2 py-1 rounded-lg text-xs font-medium bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 transition-colors"
@@ -207,6 +226,18 @@ export default function AdminFeedback() {
     }
   };
 
+  const handleComplete = async (id) => {
+    try {
+      await api.patch(`/feedback/admin/${id}/complete`);
+      setFeedback((f) =>
+        f.map((item) => (item.id === id ? { ...item, status: "completed" } : item)),
+      );
+      toast.success("Marked as completed");
+    } catch {
+      toast.error("Failed to mark as completed");
+    }
+  };
+
   const filtered = feedback.filter((f) =>
     filter === "all" ? true : filter === "unread" ? !f.read : f.type === filter,
   );
@@ -280,6 +311,7 @@ export default function AdminFeedback() {
                   onRead={handleRead}
                   onDelete={handleDelete}
                   onReply={handleReply}
+                  onComplete={handleComplete}
                 />
               ))}
             </div>

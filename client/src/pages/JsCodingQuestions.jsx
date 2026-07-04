@@ -114,6 +114,8 @@ export default function JsCodingQuestions() {
   const [score, setScore] = useState(null);
   const [modelAnswer, setModelAnswer] = useState(null);
   const [revealing, setRevealing] = useState(false);
+  const [explanation, setExplanation] = useState(null);
+  const [explaining, setExplaining] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [history, setHistory] = useState(null);
   const [loadingHistory, setLoadingHistory] = useState(false);
@@ -158,6 +160,7 @@ export default function JsCodingQuestions() {
     setResults(null);
     setScore(null);
     setModelAnswer(null);
+    setExplanation(null);
     try {
       const { data } = await api.post("/study/coding/generate", { difficulty });
       setQuestion(data);
@@ -176,6 +179,7 @@ export default function JsCodingQuestions() {
   const runTests = async () => {
     if (!question || !code.trim()) return;
     setSubmitting(true);
+    setExplanation(null);
     try {
       const { data } = await api.post(`/study/coding/${question.id}/submit`, { code });
       setResults(data.results);
@@ -185,6 +189,19 @@ export default function JsCodingQuestions() {
       toast.error(e.response?.data?.detail || "Failed to run tests");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const explainResult = async () => {
+    if (!question) return;
+    setExplaining(true);
+    try {
+      const { data } = await api.post(`/study/coding/${question.id}/explain`);
+      setExplanation(data.explanation);
+    } catch (e) {
+      toast.error(e.response?.data?.detail || "Couldn't get an explanation right now");
+    } finally {
+      setExplaining(false);
     }
   };
 
@@ -204,6 +221,10 @@ export default function JsCodingQuestions() {
   const toggleHistory = async () => {
     const opening = !historyOpen;
     setHistoryOpen(opening);
+    // Closing History with no active question would otherwise leave every
+    // panel hidden (setupOpen stays false once a question's been generated
+    // or opened) — fall back to the setup panel so the page is never blank.
+    if (!opening && !question) setSetupOpen(true);
     if (opening && !history) {
       setLoadingHistory(true);
       try {
@@ -226,6 +247,7 @@ export default function JsCodingQuestions() {
       setResults(data.submission?.results || null);
       setScore(data.submission ? { passed: data.submission.results.filter((r) => r.passed).length, total: data.submission.results.length, score: data.submission.score } : null);
       setModelAnswer(data.modelAnswer || null);
+      setExplanation(data.submission?.explanation || null);
       setHistoryOpen(false);
       setSetupOpen(false);
       setTab("description");
@@ -244,6 +266,7 @@ export default function JsCodingQuestions() {
     setResults(null);
     setScore(null);
     setModelAnswer(null);
+    setExplanation(null);
     setViewingFromHistory(false);
     setHistoryOpen(true);
   };
@@ -458,6 +481,24 @@ export default function JsCodingQuestions() {
                         </div>
                         <div className="bg-[#0d1117] rounded-xl p-4 font-mono text-sm space-y-2">
                           {results.map((r, i) => <ResultRow key={i} r={r} i={i} />)}
+                        </div>
+                        <div>
+                          {!explanation ? (
+                            <button
+                              onClick={explainResult}
+                              disabled={explaining}
+                              className="text-sm font-semibold text-amber-500 hover:text-amber-600 disabled:opacity-50"
+                            >
+                              {explaining ? "Thinking…" : score.score === 100 ? "🤖 Get Code Review" : "🤖 Explain What Went Wrong"}
+                            </button>
+                          ) : (
+                            <div className="space-y-2 bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+                              <p className="text-xs font-semibold text-amber-500 uppercase tracking-wide">
+                                {score.score === 100 ? "AI Code Review" : "Why It Failed"}
+                              </p>
+                              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{explanation}</p>
+                            </div>
+                          )}
                         </div>
                         <div>
                           {!modelAnswer ? (

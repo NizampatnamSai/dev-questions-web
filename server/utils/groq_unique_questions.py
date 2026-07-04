@@ -1,9 +1,45 @@
+import os
 import json
-import asyncio
-from groq import Groq
-from utils.deduplication import check_question_duplicate, deduplicate_questions
+import httpx
+from utils.deduplication import check_question_duplicate
 
-client = Groq()
+GROQ_API_KEY        = os.getenv("GROQ_API_KEY", "")
+GROQ_URL            = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL          = os.getenv("GROQ_MODEL",          "llama-3.3-70b-versatile")
+GROQ_MODEL_FALLBACK = os.getenv("GROQ_MODEL_FALLBACK", "llama-3.1-8b-instant")
+
+
+def _extract_json(text: str):
+    """Pulls the first JSON array or object out of a model response, tolerating
+    markdown fences or stray prose the model sometimes wraps it in."""
+    for open_ch, close_ch in (("[", "]"), ("{", "}")):
+        s, e = text.find(open_ch), text.rfind(close_ch)
+        if s != -1 and e != -1 and e > s:
+            try:
+                return json.loads(text[s:e + 1])
+            except json.JSONDecodeError:
+                continue
+    raise ValueError("No JSON found in AI response")
+
+
+async def _groq_call(prompt: str, max_tokens: int = 2048) -> str:
+    """Non-blocking Groq call — never runs on the event loop thread, so one slow
+    generation can't stall unrelated requests. Falls back to a smaller/faster
+    model on rate limits instead of failing outright."""
+    if not GROQ_API_KEY:
+        raise ValueError("GROQ_API_KEY not set")
+    headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+    payload = {
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": max_tokens,
+    }
+    async with httpx.AsyncClient(timeout=30) as c:
+        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        if r.status_code == 429:
+            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+        r.raise_for_status()
+        return r.json()["choices"][0]["message"]["content"]
+
 
 async def generate_unique_questions(
     category: str,
@@ -12,10 +48,8 @@ async def generate_unique_questions(
     exclude_texts: set = None,
     retry_limit: int = 3
 ) -> list:
-    """
-    Generate unique questions with deduplication
-    Will retry if similar questions are generated
-    """
+    """Generate unique questions with deduplication. Retries if similar
+    questions come back, bounded so one flaky generation can't loop forever."""
     if exclude_texts is None:
         exclude_texts = set()
 
@@ -23,7 +57,7 @@ async def generate_unique_questions(
     retry_count = 0
 
     while len(questions) < count and retry_count < retry_limit:
-        batch_size = count - len(questions) + 2  # Generate extra to account for duplicates
+        batch_size = count - len(questions) + 2  # generate extra to absorb duplicates
 
         prompt = f"""Generate {batch_size} UNIQUE and ORIGINAL {category} interview questions at {difficulty} level.
 
@@ -34,7 +68,7 @@ CRITICAL REQUIREMENTS:
 4. Each question should have a distinct solution approach
 5. Include variety in problem types and patterns
 
-Return a JSON array with this exact structure for each question:
+Return ONLY a raw JSON array, no markdown, no commentary, with this exact structure for each question:
 [
     {{
         "question": "Unique question here",
@@ -46,49 +80,21 @@ Return a JSON array with this exact structure for each question:
     }}
 ]
 
-EXAMPLES OF UNIQUE vs DUPLICATE:
-✓ UNIQUE: "Design a system to detect circular dependencies in a module graph"
-✗ DUPLICATE: "How do you detect cycles in a linked list?" (same concept, different wording)
-
-✓ UNIQUE: "Implement a rate limiter with sliding window and burst handling"
-✗ DUPLICATE: "How do you implement rate limiting?" (too generic, similar)
-
 Generate questions NOW:"""
 
         try:
-            response = client.chat.completions.create(
-                model="mixtral-8x7b-32768",
-                max_tokens=2048,
-                messages=[{"role": "user", "content": prompt}]
-            )
+            response_text = await _groq_call(prompt)
+            generated = _extract_json(response_text)
 
-            response_text = response.choices[0].message.content
-            generated = json.loads(response_text)
-
-            # Validate and deduplicate
             for q in generated:
                 q_text = q.get("question", "")
-
-                # Check against previously generated questions
-                is_duplicate = check_question_duplicate(q_text, exclude_texts, similarity_threshold=0.80)
-
-                if not is_duplicate:
+                if not check_question_duplicate(q_text, exclude_texts, similarity_threshold=0.80):
                     questions.append(q)
                     exclude_texts.add(q_text)
-
                     if len(questions) >= count:
                         break
-
-        except json.JSONDecodeError:
-            # If JSON parsing fails, try to extract questions manually
-            try:
-                lines = response_text.split("\n")
-                for line in lines:
-                    if "question" in line.lower():
-                        # Try to parse partial JSON
-                        pass
-            except:
-                pass
+        except Exception:
+            pass
 
         retry_count += 1
 
@@ -99,13 +105,22 @@ async def generate_flashcard_questions(
     category: str,
     count: int = 20,
     difficulty: str = "all",
-    exclude_texts: set = None
+    exclude_texts: set = None,
+    retry_limit: int = 3
 ) -> list:
-    """Generate unique flashcard Q&A pairs with no duplicates"""
+    """Generate unique flashcard Q&A pairs with no duplicates. Retries (bounded)
+    to backfill toward `count` when duplicates get filtered out, instead of
+    silently returning whatever survived a single batch."""
     if exclude_texts is None:
         exclude_texts = set()
 
-    prompt = f"""Generate {count} UNIQUE flashcard Q&A pairs for learning {category}.
+    unique_cards = []
+    retry_count = 0
+
+    while len(unique_cards) < count and retry_count < retry_limit:
+        batch_size = count - len(unique_cards) + 3  # a little extra to absorb duplicates
+
+        prompt = f"""Generate {batch_size} UNIQUE flashcard Q&A pairs for learning {category}.
 
 REQUIREMENTS:
 1. Each Q&A pair MUST be UNIQUE - different from standard resources
@@ -116,7 +131,7 @@ REQUIREMENTS:
 
 Difficulty: {difficulty}
 
-Return JSON array:
+Return ONLY a raw JSON array, no markdown, no commentary:
 [
     {{
         "question": "Specific question",
@@ -129,41 +144,32 @@ Return JSON array:
 
 Generate NOW:"""
 
-    try:
-        response = client.chat.completions.create(
-            model="mixtral-8x7b-32768",
-            max_tokens=2048,
-            messages=[{"role": "user", "content": prompt}]
-        )
+        try:
+            response_text = await _groq_call(prompt)
+            cards = _extract_json(response_text)
 
-        response_text = response.choices[0].message.content
-        cards = json.loads(response_text)
+            for card in cards:
+                q_text = card.get("question", "")
+                if not check_question_duplicate(q_text, exclude_texts, similarity_threshold=0.80):
+                    unique_cards.append(card)
+                    exclude_texts.add(q_text)
+                    if len(unique_cards) >= count:
+                        break
+        except Exception:
+            pass
 
-        # Deduplicate
-        unique_cards = []
-        for card in cards:
-            q_text = card.get("question", "")
-            is_duplicate = check_question_duplicate(q_text, exclude_texts, similarity_threshold=0.80)
+        retry_count += 1
 
-            if not is_duplicate:
-                unique_cards.append(card)
-                exclude_texts.add(q_text)
-
-        return unique_cards[:count]
-    except:
-        return []
+    return unique_cards[:count]
 
 
 async def generate_daily_challenge(category: str, exclude_hashes: set = None) -> dict:
-    """Generate unique daily challenge with no repeats"""
-    if exclude_hashes is None:
-        exclude_hashes = set()
-
+    """Generate unique daily coding challenge with no repeats."""
     prompt = f"""Generate ONE unique daily coding challenge for {category}.
 
 MUST BE UNIQUE - completely original problem, not from LeetCode/standard sources.
 
-Return JSON:
+Return ONLY raw JSON, no markdown, no commentary:
 {{
     "title": "Unique problem title",
     "description": "Problem description with examples",
@@ -178,17 +184,9 @@ Return JSON:
 Make this problem COMPLETELY UNIQUE:"""
 
     try:
-        response = client.chat.completions.create(
-            model="mixtral-8x7b-32768",
-            max_tokens=1024,
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        response_text = response.choices[0].message.content
-        challenge = json.loads(response_text)
-
-        return challenge
-    except:
+        response_text = await _groq_call(prompt, max_tokens=1024)
+        return _extract_json(response_text)
+    except Exception:
         return {
             "title": "Daily Challenge",
             "description": "Generate a solution",
@@ -200,14 +198,9 @@ Make this problem COMPLETELY UNIQUE:"""
 
 
 async def call_groq_api(prompt: str, max_tokens: int = 1024) -> str:
-    """Generic Groq API call"""
+    """Generic Groq call returning raw text — used where callers do their own parsing."""
     try:
-        response = client.chat.completions.create(
-            model="mixtral-8x7b-32768",
-            max_tokens=max_tokens,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message.content
+        return await _groq_call(prompt, max_tokens=max_tokens)
     except Exception as e:
         print(f"Groq API error: {e}")
         return ""

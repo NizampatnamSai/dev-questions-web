@@ -53,6 +53,10 @@ async def send_to_tokens(tokens: list[str], title: str, body: str, data: dict | 
     """Send FCM notification to a list of device tokens. Returns sent count."""
     if not tokens:
         return 0
+    from db_mongo import notifications_enabled
+    if not await notifications_enabled():
+        log.info(f"FCM: notifications globally disabled via admin toggle, skipping {len(tokens)} token(s)")
+        return 0
     if not _init():
         log.info(f"FCM (disabled) → {len(tokens)} tokens: {title}")
         return 0

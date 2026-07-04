@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { STUDY_TOPICS, STUDY_CATEGORIES } from "../data/studyGuide";
 
 const FEATURES = [
   {
@@ -54,24 +55,91 @@ const FEATURES = [
     title: "Study Hub",
     path: "/study",
     color: "from-green-500 to-teal-500",
-    summary: "Structured study guides, external resources, and built-in dev tools.",
+    summary: `${STUDY_TOPICS.length}+ topics across ${STUDY_CATEGORIES.length} technologies — HTML, CSS, JS, TypeScript, React, React Native, Next.js, Web Security, System Design, DevOps, and more — with progress tracking.`,
     steps: [
-      "Go to **Study Hub** — you'll see topic cards: HTML, CSS, JavaScript, React, etc.",
-      "Click a topic to expand it — it shows your progress bar and a list of concepts.",
-      "Click any concept to get an AI explanation right inside the app.",
-      "Use the **source links** (W3Schools, MDN) below the progress bar for official docs.",
-      "Scroll down to find the **Dev Tools** panel with 4 built-in tools.",
+      "Go to **Study Hub** — pick a category tab (HTML, CSS, JavaScript, TypeScript, React, React Native, Next.js, Git, Python, and more).",
+      "Filter by difficulty — Basic, Intermediate, Advanced, or Tricky.",
+      "Click a topic card to expand it and read the explanation, code example, and interview question.",
+      "Click **Mark Reviewed** once you've gone through a topic — it's saved to your account when logged in, or to your device if you're a guest.",
+      "Use the **source links** (W3Schools, MDN) for official docs, or open the AI panel for a deeper explanation.",
     ],
-    tip: null,
-    subSteps: {
-      title: "Dev Tools inside Study Hub",
-      items: [
-        "**TypeScript Adder** — paste any JS code and AI adds full TypeScript types.",
-        "**Error Finder** — paste code and AI finds bugs and syntax errors.",
-        "**Break Finder** — AI spots runtime risks and edge cases in your code.",
-        "**JS Compiler** — run JavaScript code right in the browser. Also available at `/js-compiler` as a full page.",
-      ],
-    },
+    tip: "If you're logged in, your reviewed progress syncs to your account automatically — including anything you reviewed as a guest before signing up.",
+  },
+  {
+    icon: "💻",
+    title: "JS Coding Questions",
+    path: "/js-coding",
+    color: "from-indigo-500 to-blue-500",
+    summary: "AI-generated coding problems, graded against real test cases — not just an AI opinion.",
+    steps: [
+      "Go to **JS Coding** from the sidebar.",
+      "Difficulty starts **Easy** and automatically ramps up as you solve more questions each day — drag the slider yourself to lock in a specific level instead.",
+      "Click **✨ Generate Question** — read the problem, and check the **Test Cases** tab to see example inputs/outputs with a plain-English explanation of how each one works.",
+      "Write your `solve(...)` function in the code editor and click **Run Tests** — each test case is actually executed in a sandbox, not guessed by AI.",
+      "Once you've submitted, click **🤖 Reveal AI Answer** to compare your solution.",
+      "Use **📜 History** to revisit past questions and **← Back to History** to return to the list.",
+    ],
+    tip: "Admins can grant themselves quick +5/+10/+15 daily question bonuses right from the page, without needing the Admin Panel.",
+  },
+  {
+    icon: "📋",
+    title: "My Tasks",
+    path: "/my-tasks",
+    color: "from-slate-500 to-slate-700",
+    summary: "Track tasks assigned to you through a Jira-style workflow.",
+    steps: [
+      "Go to **My Tasks** — tasks are organized into four columns: **To Do**, **Started**, **Testing**, and **Completed**.",
+      "Click a status pill on a task card to move it forward one stage at a time — you can always move a task backward if it needs more work.",
+      "Only an admin can mark a task **Completed** — once you believe it's ready, move it to **Testing** and leave a comment so they know to review it.",
+      "Click **▼ Discussion** on a task to open a comment thread with your admin.",
+      "Click a task's title to see the full description and due date.",
+    ],
+    tip: "If you think a task is done but can't mark it completed yourself, that's expected — add a comment and your admin will confirm it.",
+  },
+  {
+    icon: "📋",
+    title: "Task Manager",
+    path: "/admin/tasks",
+    color: "from-purple-500 to-indigo-600",
+    summary: "Admin-only — assign, track, and manage tasks across the team.",
+    steps: [
+      "Open **Task Manager** from the sidebar (visible to admins only).",
+      "Click **+ New Task** — set a title, description (rich text supported), priority, due date, and assignees.",
+      "Tasks appear on a 4-column kanban board (**To Do / Started / Testing / Completed**) — click any status pill to move a task, including straight to Completed.",
+      "Click **👁 View**, **💬**, **✏️**, or **🗑** on a card to view details, open comments, edit, or delete.",
+      "Switch to the **Work Board** tab to approve join requests and change the daily reminder time or edit window.",
+    ],
+    tip: "Unlike regular users, admins can move a task to any stage — including marking it Completed directly.",
+  },
+  {
+    icon: "📋",
+    title: "Work Board",
+    path: "/workboard",
+    color: "from-teal-500 to-cyan-600",
+    summary: "A daily standup feed — post what you're working on and see what the team is doing.",
+    steps: [
+      "Request to join from the **Work Board** page — an admin approves new members.",
+      "Once approved, post your daily update — you get a short editing window (default 30 minutes) to fix typos.",
+      "After the edit window closes, click **Reply** on your own post to add a follow-up update instead of overwriting the original — handy if you picked up new work later in the day.",
+      "Anyone who hasn't posted by the reminder time (default 3 PM IST) gets a push notification.",
+      "Browse **📅 History** to see past days' posts.",
+    ],
+    tip: "Once your edit window closes, you can't rewrite your original post — but you can always reply to add updates as the day goes on.",
+  },
+  {
+    icon: "🛠️",
+    title: "Dev Tools",
+    path: "/regex-tester",
+    color: "from-fuchsia-500 to-purple-600",
+    summary: "Five everyday developer utilities, built right into DevQuiz.",
+    steps: [
+      "**Regex Tester** (`/regex-tester`) — live match highlighting, capture groups, and a replace mode, with common presets for email/URL/IPv4 and more.",
+      "**Cron Builder** (`/cron-builder`) — build a schedule field by field, get a plain-English description, and preview the next 5 run times.",
+      "**JWT Decoder** (`/jwt-decoder`) — decode a token's header and payload entirely in your browser, with optional HMAC signature verification.",
+      "**API Request Tester** (`/api-tester`) — send real requests (raw JSON, form data, or x-www-form-urlencoded) with a Bearer Token auth tab, proxied server-side to avoid CORS.",
+      "**Snippet Library** (`/snippets`) — save reusable code snippets with tags and a description, and optionally share them publicly with the whole team.",
+    ],
+    tip: "Regex Tester, Cron Builder, and JWT Decoder don't require login — they're available to guests too, since nothing is saved.",
   },
   {
     icon: "🎯",
@@ -318,7 +386,7 @@ export default function ProjectGuide() {
               Everything you need to know to get the most out of DevQuiz — step by step.
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
-              {["12 Features", "Step-by-step", "Tips included"].map(badge => (
+              {["17 Features", "Step-by-step", "Tips included"].map(badge => (
                 <span key={badge} className="text-xs px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 font-medium">
                   {badge}
                 </span>

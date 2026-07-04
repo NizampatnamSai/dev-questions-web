@@ -642,13 +642,13 @@ export default function StudyGuide() {
   const progress = allInCat.length ? reviewedCount / allInCat.length : 0;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-4">
+    <div className="max-w-full mx-auto space-y-4">
       <div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
           📚 Study Hub
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-          275 topics · 8 technologies · AI-powered explanations & Q&A
+          {STUDY_TOPICS.length} topics · {STUDY_CATEGORIES.length} technologies · AI-powered explanations & Q&A
         </p>
       </div>
 

@@ -115,7 +115,7 @@ export default function Notifications() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-2xl mx-auto space-y-4"
+      className="max-w-4xl mx-auto space-y-4"
     >
       <div className="flex items-center justify-between">
         <div>

@@ -6,8 +6,14 @@ from db_mongo import col_users, col_ai_questions, col_flashcards, col_dsa_challe
 from deps import current_user
 from utils.groq_service import generate_unique_questions, generate_flashcard_questions
 from utils.deduplication import check_question_duplicate, hash_question
+from utils.groq_unique_questions import _extract_json
 
 router = APIRouter()
+
+# Keeps each generation call fast and each user's daily Groq usage bounded —
+# a handful of small batches a day, never one huge or unbounded request.
+FLASHCARD_MAX_PER_CALL = 15
+FLASHCARD_DAILY_LIMIT = 60
 
 # ============================================================================
 # MODELS
@@ -15,7 +21,7 @@ router = APIRouter()
 
 class FlashcardRequest(BaseModel):
     category: str
-    count: int = 20
+    count: int = 15
     difficulty: str = "all"
 
 class DSAAnswerSubmit(BaseModel):
@@ -30,12 +36,52 @@ class DailyChallengeQuery(BaseModel):
 # FLASHCARD ENDPOINTS - Spaced Repetition Learning
 # ============================================================================
 
+@router.get("/flashcards/due")
+async def get_due_flashcards(user=Depends(current_user)):
+    """Cards due for review right now, for the current user — a plain DB read,
+    no AI call, so opening the review screen never costs an API request."""
+    user_id = user["id"]
+    due = await col_flashcards().find({
+        "userId": user_id,
+        "nextReview": {"$lte": now()},
+    }).sort("nextReview", 1).to_list(200)
+
+    total = await col_flashcards().count_documents({"userId": user_id})
+
+    return {
+        "due": [
+            {
+                "id": str(c["_id"]),
+                "category": c.get("category", ""),
+                "difficulty": c.get("difficulty", ""),
+                "question": c.get("questionText", ""),
+                "answer": c.get("answerText", ""),
+                "explanation": c.get("explanation", ""),
+            }
+            for c in due
+        ],
+        "dueCount": len(due),
+        "totalCount": total,
+    }
+
+
 @router.post("/generate-flashcards")
 async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user)):
     """Generate unique flashcard questions with spaced repetition"""
     try:
-        # Get user's previous flashcard questions to avoid duplicates
         user_id = user["id"]
+        count = max(1, min(req.count, FLASHCARD_MAX_PER_CALL))
+
+        today = now().strftime("%Y-%m-%d")
+        generated_today = await col_flashcards().count_documents({
+            "userId": user_id,
+            "createdAt": {"$gte": datetime.strptime(today, "%Y-%m-%d")},
+        })
+        if generated_today >= FLASHCARD_DAILY_LIMIT:
+            raise HTTPException(429, f"Daily flashcard generation limit reached ({FLASHCARD_DAILY_LIMIT}/day). Try again tomorrow.")
+        count = min(count, FLASHCARD_DAILY_LIMIT - generated_today)
+
+        # Get user's previous flashcard questions to avoid duplicates
         previous_questions = await col_flashcards().find(
             {"userId": user_id}
         ).to_list(1000)
@@ -45,7 +91,7 @@ async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user))
         # Generate new unique questions
         cards_data = await generate_flashcard_questions(
             category=req.category,
-            count=req.count,
+            count=count,
             difficulty=req.difficulty,
             exclude_texts=previous_texts
         )
@@ -81,6 +127,8 @@ async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user))
                 } for c in cards
             ]
         }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(500, f"Failed to generate flashcards: {str(e)}")
 
@@ -318,7 +366,7 @@ async def generate_dsa_question(day: int, exclude_hashes: set) -> dict:
 
     IMPORTANT: Make this problem UNIQUE - different from any standard LeetCode problems.
 
-    Return JSON:
+    Return ONLY raw JSON, no markdown code fences, no commentary:
     {{
         "title": "Problem title",
         "description": "Detailed problem description",
@@ -331,11 +379,11 @@ async def generate_dsa_question(day: int, exclude_hashes: set) -> dict:
     response = await call_groq_api(prompt)
 
     try:
-        question_data = json.loads(response)
+        question_data = _extract_json(response)
         question_data["difficulty"] = difficulty
         question_data["day"] = day
         return question_data
-    except:
+    except Exception:
         # Fallback if JSON parsing fails
         return {
             "title": f"Day {day}: DSA Challenge",
@@ -355,7 +403,7 @@ async def generate_daily_challenge(category: str, exclude_hashes: set) -> dict:
     IMPORTANT: Generate a UNIQUE and ORIGINAL question - not from standard resources.
 
     Include multiple choice options.
-    Return JSON:
+    Return ONLY raw JSON, no markdown code fences, no commentary:
     {{
         "title": "Question title",
         "description": "Question description",
@@ -370,8 +418,8 @@ async def generate_daily_challenge(category: str, exclude_hashes: set) -> dict:
     response = await call_groq_api(prompt)
 
     try:
-        return json.loads(response)
-    except:
+        return _extract_json(response)
+    except Exception:
         return {
             "title": "Daily Challenge",
             "description": response,

@@ -17,3 +17,18 @@ async def current_user(authorization: str = Header(default="")) -> dict:
     if doc.get("status") == "disabled":
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Account disabled")
     return sid(doc)
+
+
+async def optional_user(authorization: str = Header(default="")) -> dict | None:
+    """Like current_user, but returns None instead of raising when there's no
+    (or an invalid) token — for endpoints that allow guests, e.g. feedback."""
+    if not authorization.startswith("Bearer "):
+        return None
+    try:
+        user_id = decode_token(authorization[7:])
+    except (JWTError, KeyError, ValueError):
+        return None
+    doc = await col_users().find_one({"_id": oid(user_id)})
+    if not doc or doc.get("status") == "disabled":
+        return None
+    return sid(doc)

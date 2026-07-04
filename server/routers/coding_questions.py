@@ -5,6 +5,7 @@ from db_mongo import col_coding_questions, col_app_config, col_coding_limit_bonu
 from deps import current_user
 from utils.js_sandbox import run_test_cases
 from utils.coding_question_service import generate_coding_question, DIFFICULTY_LEVELS
+from utils.ai import _groq_call
 
 router = APIRouter()
 
@@ -143,6 +144,75 @@ async def coding_submit(qid: str, body: SubmitBody, user=Depends(current_user)):
     return {"results": results, "score": score, "passed": passed, "total": total}
 
 
+async def _groq_plain(system: str, user: str, max_tokens: int = 350) -> str:
+    r = await _groq_call({
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+        "temperature": 0.5,
+        "max_tokens": max_tokens,
+    })
+    return r.json()["choices"][0]["message"]["content"].strip()
+
+
+@router.post("/coding/{qid}/explain")
+async def coding_explain(qid: str, user=Depends(current_user)):
+    """Plain-English walkthrough of why the current submission passed/failed,
+    generated once per submission and cached on it — resubmitting different
+    code invalidates the cache naturally since submission gets overwritten."""
+    doc = await col_coding_questions().find_one({"_id": oid(qid)})
+    if not doc:
+        raise HTTPException(404, "Question not found")
+    if doc["userId"] != user["id"]:
+        raise HTTPException(403, "Not your question")
+    submission = doc.get("submission")
+    if not submission:
+        raise HTTPException(400, "Submit an attempt before requesting an explanation")
+
+    if submission.get("explanation"):
+        return {"explanation": submission["explanation"], "cached": True}
+
+    results = submission["results"]
+    failed = [r for r in results if not r["passed"]]
+
+    if not failed:
+        system = (
+            "You are a friendly senior engineer reviewing a candidate's PASSING solution. "
+            "Write a short note (2-4 sentences, plain English, no markdown) on the overall "
+            "approach's time/space complexity and one concrete way it could be made cleaner "
+            "or more efficient. If it's already solid, say so briefly."
+        )
+        user_msg = f"Problem: {doc['title']}\n{doc['description']}\n\nSolution:\n{submission['code']}"
+    else:
+        cases_desc = "\n".join(
+            f"- Input {r['input']}: expected {r['expected']!r}, got "
+            f"{('an error: ' + r['error']) if r['error'] else repr(r['actual'])}"
+            for r in failed[:4]
+        )
+        system = (
+            "You are a friendly senior engineer helping a candidate debug FAILING test cases. "
+            "Write a short explanation (3-5 sentences, plain English, no markdown, no code) of "
+            "WHY the code produces the wrong output on these specific cases, and one concrete "
+            "hint toward the fix. Do NOT provide the corrected code or the full solution."
+        )
+        user_msg = (
+            f"Problem: {doc['title']}\n{doc['description']}\n\n"
+            f"Candidate's code:\n{submission['code']}\n\n"
+            f"Failing cases:\n{cases_desc}"
+        )
+
+    try:
+        explanation = await _groq_plain(system, user_msg)
+    except Exception:
+        raise HTTPException(503, "AI explanation is unavailable right now — try again shortly.")
+
+    await col_coding_questions().update_one(
+        {"_id": oid(qid)}, {"$set": {"submission.explanation": explanation}},
+    )
+    return {"explanation": explanation, "cached": False}
+
+
 @router.post("/coding/{qid}/reveal")
 async def coding_reveal(qid: str, user=Depends(current_user)):
     doc = await col_coding_questions().find_one({"_id": oid(qid)})
@@ -196,6 +266,6 @@ async def coding_detail(qid: str, user=Depends(current_user)):
         "difficulty": doc["difficulty"],
         "date": doc["date"],
         "testCases": [{"input": tc["input"], "expected": tc["expected"], "explanation": tc.get("explanation", "")} for tc in doc["testCases"]],
-        "submission": {"code": sub["code"], "results": sub["results"], "score": sub["score"]} if sub else None,
+        "submission": {"code": sub["code"], "results": sub["results"], "score": sub["score"], "explanation": sub.get("explanation")} if sub else None,
         "modelAnswer": doc["modelAnswer"] if sub else None,
     }

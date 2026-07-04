@@ -505,6 +505,9 @@ class TestNotifyPayload(BaseModel):
 @router.post("/notify/send-to-users")
 async def send_to_selected_users(payload: TestNotifyPayload, admin=Depends(_require_admin)):
     from utils.firebase import send_to_tokens as _send
+    from db_mongo import notifications_enabled
+    if not await notifications_enabled():
+        raise HTTPException(409, "Notifications are globally disabled — turn them back on in App Config to send.")
     if payload.user_ids == ["all"]:
         users = await col_users().find({"status": {"$ne": "rejected"}}).to_list(500)
         user_ids = [str(u["_id"]) for u in users]
@@ -630,6 +633,8 @@ class AppConfigBody(BaseModel):
     wb_reminder_time: Optional[str] = None        # "HH:MM" IST, e.g. "09:30"
     wb_edit_window_minutes: Optional[int] = None
     coding_question_daily_limit: Optional[int] = None
+    notifications_enabled: Optional[bool] = None
+    guest_feedback_enabled: Optional[bool] = None
 
 
 @router.get("/app-config/public")
@@ -637,13 +642,15 @@ async def get_app_config_public():
     """Public endpoint — called by frontend on every load to check maintenance/update state."""
     doc = await col_app_config().find_one({"_id": "config"})
     if not doc:
-        return {"maintenance": False, "force_update": False, "coding_question_daily_limit": 15}
+        return {"maintenance": False, "force_update": False, "coding_question_daily_limit": 15, "notifications_enabled": True, "guest_feedback_enabled": False}
     return {
         "maintenance":          doc.get("maintenance", False),
         "maintenance_message":  doc.get("maintenance_message", "We're currently performing maintenance. We'll be back shortly!"),
         "force_update":         doc.get("force_update", False),
         "force_update_message": doc.get("force_update_message", "A new version is available. Please refresh to get the latest updates!"),
         "coding_question_daily_limit": doc.get("coding_question_daily_limit", 15),
+        "notifications_enabled": doc.get("notifications_enabled", True),
+        "guest_feedback_enabled": doc.get("guest_feedback_enabled", False),
     }
 
 
@@ -651,10 +658,12 @@ async def get_app_config_public():
 async def get_app_config(admin=Depends(_require_admin)):
     doc = await col_app_config().find_one({"_id": "config"})
     if not doc:
-        return {"maintenance": False, "maintenance_message": "", "force_update": False, "force_update_message": "", "coding_question_daily_limit": 15}
+        return {"maintenance": False, "maintenance_message": "", "force_update": False, "force_update_message": "", "coding_question_daily_limit": 15, "notifications_enabled": True}
     doc.pop("_id", None)
     doc.setdefault("coding_question_daily_limit", 15)
     doc.setdefault("wb_reminder_time", "15:00")
+    doc.setdefault("notifications_enabled", True)
+    doc.setdefault("guest_feedback_enabled", False)
     return doc
 
 
@@ -678,6 +687,10 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["wb_edit_window_minutes"] = body.wb_edit_window_minutes
     if body.coding_question_daily_limit is not None:
         update["coding_question_daily_limit"] = body.coding_question_daily_limit
+    if body.notifications_enabled is not None:
+        update["notifications_enabled"] = body.notifications_enabled
+    if body.guest_feedback_enabled is not None:
+        update["guest_feedback_enabled"] = body.guest_feedback_enabled
 
     if update:
         await col_app_config().update_one(

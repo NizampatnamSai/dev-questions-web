@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios";
+import { STUDY_CATEGORIES } from "../data/studyGuide";
 
-const CAT_ICONS = {
-  html: "🌐", css: "🎨", javascript: "⚡", typescript: "🔷",
-  react: "⚛️", reactnative: "📱", nextjs: "▲", git: "🐙", dsa: "🧮",
-};
-const CAT_LABELS = {
-  html: "HTML", css: "CSS", javascript: "JavaScript", typescript: "TypeScript",
-  react: "React", reactnative: "React Native", nextjs: "Next.js", git: "Git & GitHub", dsa: "DSA",
-};
+// dsa isn't in STUDY_CATEGORIES (it's a backend-only legacy category), so it
+// keeps its own fallback entry here.
+const CAT_ICONS = { dsa: "🧮", ...Object.fromEntries(STUDY_CATEGORIES.map((c) => [c.id, c.icon])) };
+const CAT_LABELS = { dsa: "DSA", ...Object.fromEntries(STUDY_CATEGORIES.map((c) => [c.id, c.label])) };
 
 function ScoreBar({ score }) {
   const color = score >= 70 ? "bg-green-500" : score >= 40 ? "bg-yellow-500" : "bg-red-500";
@@ -81,15 +79,35 @@ export default function Progress() {
   const [loadingStreak, setLoadingStreak] = useState(true);
   const [completing, setCompleting] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [insight, setInsight] = useState(null);
+  const [insightLoading, setInsightLoading] = useState(false);
+  const [learningPath, setLearningPath] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     api.get("/study/weak-areas").then(({ data }) => setAreas(data.areas)).catch(() => {}).finally(() => setLoadingAreas(false));
+    // Pure DB computation, no AI call — safe to auto-load like the areas above.
+    api.get("/study/mentor/learning-path").then(({ data }) => setLearningPath(data)).catch(() => {});
     api.get("/study/streak").then(({ data }) => {
       setStreak(data);
       setChallenge(data.challenge);
     }).catch(() => {}).finally(() => setLoadingStreak(false));
   }, []);
+
+  async function loadInsight(force = false) {
+    setInsightLoading(true);
+    try {
+      const { data } = await api.get("/study/weak-areas/insight", { params: force ? { force: true } : {} });
+      if (data.regenLimitReached) {
+        toast("You've hit today's refresh limit for this insight — try again tomorrow.", { icon: "🚫" });
+      }
+      setInsight(data.insight || "Not enough progress data yet — review a few more topics first.");
+    } catch {
+      setInsight("Couldn't load an insight right now — try again shortly.");
+    } finally {
+      setInsightLoading(false);
+    }
+  }
 
   async function completeChallenge() {
     setCompleting(true);
@@ -99,14 +117,21 @@ export default function Progress() {
     } catch {} finally { setCompleting(false); }
   }
 
-  const overallScore = areas.length
-    ? Math.round(areas.reduce((a, b) => a + b.score, 0) / areas.length)
-    : 0;
+  // Weighted by topic count (not an average-of-percentages) so a 124-topic
+  // category like JavaScript counts more than a 30-topic one like SEO.
+  const totalKnown = areas.reduce((a, b) => a + b.know, 0);
+  const totalTopics = areas.reduce((a, b) => a + b.total, 0);
+  const overallScoreRaw = totalTopics ? (totalKnown / totalTopics) * 100 : 0;
+  // Study Hub now spans 1300+ topics — round to 1 decimal below 10% so real
+  // (if early) progress doesn't get silently flattened to a misleading "0%".
+  const overallScore = overallScoreRaw > 0 && overallScoreRaw < 10
+    ? Math.round(overallScoreRaw * 10) / 10
+    : Math.round(overallScoreRaw);
 
   const weakest = [...areas].sort((a, b) => a.score - b.score).slice(0, 3);
 
   return (
-    <div className="min-h-screen px-4 py-8 max-w-4xl mx-auto space-y-8 text-slate-800 dark:text-white">
+    <div className="min-h-screen px-4 py-8 max-w-full mx-auto space-y-8 text-slate-800 dark:text-white">
 
       {/* ── Streak + Daily Challenge ── */}
       <div className="grid md:grid-cols-2 gap-4">
@@ -199,6 +224,7 @@ export default function Progress() {
             <div className={`text-6xl font-black ${overallScore >= 70 ? "text-green-400" : overallScore >= 40 ? "text-yellow-400" : "text-red-400"}`}>
               {overallScore}%
             </div>
+            <p className="text-xs text-slate-500 mt-1">{totalKnown} / {totalTopics} topics known across {areas.length} categories</p>
             <p className="text-slate-400 text-sm mt-2">
               {overallScore >= 70 ? "Interview-ready! 🎉 Keep polishing edge cases." :
                overallScore >= 40 ? "Good progress. Focus on weak areas below." :
@@ -232,6 +258,64 @@ export default function Progress() {
               </div>
             ))}
           </div>
+
+          <div className="mt-4 pt-4 border-t border-red-500/20">
+            {insight === null && !insightLoading && (
+              <button onClick={() => loadInsight()}
+                className="text-xs px-3 py-2 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-400 rounded-lg border border-indigo-500/30 transition-all">
+                🤖 Get AI Coaching Insight
+              </button>
+            )}
+            {insightLoading && (
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <span className="w-3.5 h-3.5 border-2 border-slate-400/40 border-t-slate-400 rounded-full animate-spin" />
+                Analyzing your progress…
+              </div>
+            )}
+            {insight && !insightLoading && (
+              <div>
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  🤖 {insight}
+                </p>
+                <div className="flex gap-2 mt-3">
+                  <button onClick={() => loadInsight(true)}
+                    className="text-xs px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-lg transition-all">
+                    🔄 Ask Again
+                  </button>
+                  <button onClick={() => setInsight(null)}
+                    className="text-xs px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-lg transition-all">
+                    ✕ Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      )}
+
+      {/* ── AI Mentor: learning path ── */}
+      {learningPath?.path?.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}
+          className="glass-card p-6">
+          <h2 className="font-bold text-lg mb-1">🧠 Your Learning Path</h2>
+          <p className="text-xs text-slate-400 mb-4">Study these next, in order — picked from your weakest areas.</p>
+          <div className="space-y-2">
+            {learningPath.path.map((t, i) => (
+              <button key={t.id}
+                onClick={() => navigate("/study", { state: { preCategory: t.category } })}
+                className="w-full flex items-center gap-3 text-left p-3 rounded-xl bg-slate-100/60 dark:bg-slate-800/60 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                <span className="text-xs font-bold text-slate-400 w-5 flex-shrink-0">{i + 1}</span>
+                <span className="text-lg flex-shrink-0">{CAT_ICONS[t.category]}</span>
+                <span className="flex-1 min-w-0">
+                  <span className="block text-sm font-medium truncate">{t.title}</span>
+                  <span className="block text-xs text-slate-500">{CAT_LABELS[t.category]} · {t.topic}</span>
+                </span>
+                <span className="text-xs px-2 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 flex-shrink-0">
+                  {t.difficulty}
+                </span>
+              </button>
+            ))}
+          </div>
         </motion.div>
       )}
 
@@ -245,7 +329,9 @@ export default function Progress() {
             ))
           ) : (
             areas.map((a) => (
-              <div key={a.category} className="glass-card p-4">
+              <button key={a.category}
+                onClick={() => navigate("/study", { state: { preCategory: a.category } })}
+                className="glass-card p-4 text-left w-full hover:ring-2 hover:ring-indigo-500/40 transition-all cursor-pointer">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xl">{CAT_ICONS[a.category]}</span>
                   <span className="font-semibold">{CAT_LABELS[a.category]}</span>
@@ -259,7 +345,7 @@ export default function Progress() {
                   <span>🔄 {a.review} review</span>
                   <span>👁️ {a.unseen} unseen</span>
                 </div>
-              </div>
+              </button>
             ))
           )}
         </div>

@@ -14,7 +14,7 @@ const links = [
 export default function BottomNav() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { user } = useAuth();
-  const { count: unreadCount, markRead } = useNotificationCount();
+  const { count: unreadCount, updateCount } = useNotificationCount();
   const navigate = useNavigate();
 
   return (
@@ -40,7 +40,7 @@ export default function BottomNav() {
         {/* Bell */}
         {!user?.isGuest && (
           <button
-            onClick={() => { markRead(); navigate("/notifications"); }}
+            onClick={() => { updateCount(0); navigate("/notifications"); }}
             className="relative flex flex-col items-center text-[11px] px-2 py-1 rounded-lg text-slate-500 dark:text-slate-400 transition-colors"
           >
             <span className="text-lg relative">

@@ -5,16 +5,21 @@ import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
 import RichTextEditor, { isRichTextEmpty } from "./RichTextEditor";
 
-export default function FeedbackModal({ open, onClose }) {
+export default function FeedbackModal({ open, onClose, isGuest }) {
   const [type, setType] = useState("feature");
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [rating, setRating] = useState(5);
+  const [guestName, setGuestName] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async () => {
     if (!title.trim() || isRichTextEmpty(message)) {
       toast.error("Please fill in all fields");
+      return;
+    }
+    if (isGuest && !guestName.trim()) {
+      toast.error("Please enter a name so we know who this is from");
       return;
     }
     setSubmitting(true);
@@ -24,6 +29,7 @@ export default function FeedbackModal({ open, onClose }) {
         title: title.trim(),
         message,
         rating,
+        guestName: isGuest ? guestName.trim() : undefined,
       });
       toast.success("Thank you for your feedback! 💙");
       resetForm();
@@ -40,6 +46,7 @@ export default function FeedbackModal({ open, onClose }) {
     setTitle("");
     setMessage("");
     setRating(5);
+    setGuestName("");
   };
 
   return (
@@ -64,6 +71,25 @@ export default function FeedbackModal({ open, onClose }) {
                 <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">💭 Send Feedback</h2>
                 <p className="text-xs text-slate-400 mt-1">Help us improve DevQuiz with your thoughts</p>
               </div>
+
+              {/* Guest name */}
+              {isGuest && (
+                <div>
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-200"
+                    title="You're not logged in, so this is how we'll know who sent it — please use your real name so we can follow up if needed."
+                  >
+                    Your Name <span className="text-slate-400 font-normal">(shown to admins — please use your real name)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
+                    placeholder="e.g. Sneha Kumar"
+                    className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+              )}
 
               {/* Type selector */}
               <div>

@@ -250,6 +250,72 @@ const PAGES = [
     icon: "📚",
     keywords: "snippet library code save share reusable",
   },
+  {
+    to: "/devtools?tool=ts",
+    label: "TS Adder",
+    icon: "🔷",
+    keywords: "typescript adder convert types dev tools",
+  },
+  {
+    to: "/devtools?tool=errors",
+    label: "Error Finder",
+    icon: "🐛",
+    keywords: "error finder bugs code review dev tools",
+  },
+  {
+    to: "/devtools?tool=breaks",
+    label: "Break Finder",
+    icon: "💥",
+    keywords: "break finder runtime risk dev tools",
+  },
+  {
+    to: "/devtools?tool=js",
+    label: "JS Compiler",
+    icon: "⚡",
+    keywords: "javascript compiler run code dev tools",
+  },
+  {
+    to: "/devtools?tool=git",
+    label: "AI Dev Assistant · Git",
+    icon: "🐙",
+    keywords: "git help command assistant dev tools ai",
+  },
+  {
+    to: "/devtools?tool=tests",
+    label: "AI Dev Assistant · Tests",
+    icon: "🧪",
+    keywords: "generate tests jest unit test assistant dev tools ai",
+  },
+  {
+    to: "/devtools?tool=concept",
+    label: "AI Dev Assistant · Docs",
+    icon: "📖",
+    keywords: "explain concept docs api error message assistant dev tools ai",
+  },
+  {
+    to: "/resume-analyzer",
+    label: "Resume & ATS Analyzer",
+    icon: "📄",
+    keywords: "resume ats analyzer cv job application scan score",
+  },
+  {
+    to: "/devtools?tool=reactperf",
+    label: "React Performance Analyzer",
+    icon: "🚀",
+    keywords: "react performance analyzer rerender memoization useMemo useCallback dev tools ai",
+  },
+  {
+    to: "/background-remover",
+    label: "Background Remover",
+    icon: "🖼️",
+    keywords: "background remover image remove bg photo transparent",
+  },
+  {
+    to: "/notes",
+    label: "Notes",
+    icon: "📝",
+    keywords: "notes personal encrypted private quill google keep",
+  },
 ];
 
 export default function GlobalSearch() {

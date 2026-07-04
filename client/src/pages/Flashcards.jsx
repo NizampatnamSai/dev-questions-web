@@ -12,6 +12,71 @@ const DIFF_COLORS = {
   Tricky: "bg-purple-500/20 text-purple-400 border-purple-500/30",
 };
 
+function SmartFlipCard({ card, onRate, rating }) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <div className="relative w-full" style={{ perspective: 1200 }}>
+      <motion.div
+        className="relative w-full"
+        style={{ transformStyle: "preserve-3d", minHeight: 300 }}
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.5, type: "spring", stiffness: 120 }}
+        onClick={() => setFlipped((f) => !f)}
+      >
+        {/* Front */}
+        <div className="absolute inset-0 glass-card rounded-2xl p-6 flex flex-col justify-between cursor-pointer select-none"
+          style={{ backfaceVisibility: "hidden" }}>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-slate-500">{card.category}</span>
+            {card.difficulty && (
+              <span className={`text-xs px-2 py-1 rounded-full border ${DIFF_COLORS[card.difficulty] || "bg-slate-500/20 text-slate-400 border-slate-500/30"}`}>{card.difficulty}</span>
+            )}
+          </div>
+          <div className="text-center flex-1 flex flex-col items-center justify-center gap-4 py-6">
+            <div className="text-4xl">🧠</div>
+            <p className="text-slate-700 dark:text-slate-200 text-base leading-relaxed">{card.question}</p>
+          </div>
+          <p className="text-center text-xs text-slate-400">Tap to flip</p>
+        </div>
+
+        {/* Back */}
+        <div className="absolute inset-0 bg-indigo-50 dark:bg-slate-800 border border-indigo-300/60 dark:border-indigo-500/40 rounded-2xl p-6 flex flex-col justify-between cursor-pointer select-none"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
+          <span className="text-xs text-indigo-500 dark:text-indigo-400 font-semibold">Answer</span>
+          <div className="flex-1 overflow-y-auto py-4 space-y-3">
+            <p className="text-slate-700 dark:text-slate-200 text-sm leading-relaxed font-semibold">{card.answer}</p>
+            {card.explanation && (
+              <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{card.explanation}</p>
+            )}
+          </div>
+          <p className="text-center text-xs text-slate-400">Tap to flip back</p>
+        </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {flipped && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            className="flex gap-2 mt-4" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => { setFlipped(false); onRate(1); }}
+              className="flex-1 py-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-red-400 rounded-xl font-semibold text-sm transition-all">
+              😖 Hard
+            </button>
+            <button onClick={() => { setFlipped(false); onRate(2); }}
+              className="flex-1 py-3 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/40 text-yellow-400 rounded-xl font-semibold text-sm transition-all">
+              🙂 Medium
+            </button>
+            <button onClick={() => { setFlipped(false); onRate(3); }}
+              className="flex-1 py-3 bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 text-green-400 rounded-xl font-semibold text-sm transition-all">
+              😎 Easy
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function FlipCard({ topic, onKnow, onReview }) {
   const [flipped, setFlipped] = useState(false);
 
@@ -87,9 +152,75 @@ export default function Flashcards() {
   const [phase, setPhase] = useState("browse"); // browse | session | done
   const [reviewOnly, setReviewOnly] = useState(false);
 
+  const [deckMode, setDeckMode] = useState("topic"); // topic | smart
+  const [smartStats, setSmartStats] = useState(null); // { dueCount, totalCount } | null while loading
+  const [smartPhase, setSmartPhase] = useState("home"); // home | session | done
+  const [smartDeck, setSmartDeck] = useState([]);
+  const [smartIdx, setSmartIdx] = useState(0);
+  const [smartCategory, setSmartCategory] = useState(STUDY_CATEGORIES[0]?.id || "javascript");
+  const [smartDifficulty, setSmartDifficulty] = useState("all");
+  const [generating, setGenerating] = useState(false);
+
   useEffect(() => {
     api.get("/study/flash/progress").then(({ data }) => setProgress(data)).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (deckMode === "smart" && smartPhase === "home") loadSmartStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deckMode, smartPhase]);
+
+  async function loadSmartStats() {
+    try {
+      const { data } = await api.get("/study/flashcards/due");
+      setSmartStats(data);
+    } catch {
+      setSmartStats({ due: [], dueCount: 0, totalCount: 0 });
+    }
+  }
+
+  function startSmartReview() {
+    if (!smartStats?.due?.length) return;
+    setSmartDeck(smartStats.due);
+    setSmartIdx(0);
+    setSmartPhase("session");
+  }
+
+  async function generateSmartCards() {
+    setGenerating(true);
+    try {
+      const { data } = await api.post("/study/generate-flashcards", {
+        category: smartCategory,
+        count: 15,
+        difficulty: smartDifficulty,
+      });
+      if (!data.cards?.length) {
+        toast("Couldn't generate new cards right now — try again shortly.", { icon: "⚠️" });
+        return;
+      }
+      setSmartDeck(data.cards);
+      setSmartIdx(0);
+      setSmartPhase("session");
+    } catch (err) {
+      if (err?.response?.status === 429) {
+        toast(err.response.data?.detail || "Daily flashcard generation limit reached — try again tomorrow.", { icon: "🚫", duration: 5000 });
+      } else {
+        toast("Couldn't generate new cards right now — try again shortly.", { icon: "⚠️" });
+      }
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  async function rateSmartCard(rating) {
+    const card = smartDeck[smartIdx];
+    try { await api.post(`/study/flashcards/${card.id}/rate?rating=${rating}`); } catch {}
+    if (smartIdx + 1 >= smartDeck.length) {
+      setSmartPhase("done"); // stats refetch automatically once user returns to home
+    } else {
+      setSmartIdx((i) => i + 1);
+    }
+  }
 
   function buildDeck(reviewOnlyMode = reviewOnly) {
     let pool = categories.length === 0 ? STUDY_TOPICS : STUDY_TOPICS.filter((t) => categories.includes(t.category));
@@ -131,16 +262,119 @@ export default function Flashcards() {
   const reviewCount = Object.values(progress).filter((v) => v === "review").length;
 
   return (
-    <div className="min-h-screen px-4 py-8 max-w-2xl mx-auto text-slate-800 dark:text-white">
+    <div className="min-h-screen px-4 py-8 max-w-4xl mx-auto text-slate-800 dark:text-white">
+      <div className="text-center mb-6">
+        <div className="text-6xl mb-3">🃏</div>
+        <h1 className="text-3xl font-bold mb-2">Flashcards</h1>
+        <p className="text-slate-400 text-sm">
+          {deckMode === "topic"
+            ? "Flip through topics. Mark what you know — review what you don't."
+            : "AI-generated cards with spaced repetition — reviewed cards resurface right when you're about to forget them."}
+        </p>
+      </div>
+
+      {(phase === "browse" && smartPhase === "home") && (
+        <div className="flex gap-2 mb-6 glass-card p-1.5">
+          <button onClick={() => setDeckMode("topic")}
+            className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${deckMode === "topic" ? "bg-indigo-600 text-white" : "text-slate-500 dark:text-slate-400"}`}>
+            📖 Topic Deck
+          </button>
+          <button onClick={() => setDeckMode("smart")}
+            className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${deckMode === "smart" ? "bg-indigo-600 text-white" : "text-slate-500 dark:text-slate-400"}`}>
+            🧠 Smart Deck (AI)
+          </button>
+        </div>
+      )}
+
+      {deckMode === "smart" && (
+        <AnimatePresence mode="wait">
+          {smartPhase === "home" && (
+            <motion.div key="smart-home" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="glass-card p-4 text-center">
+                  <div className="text-2xl font-black">{smartStats === null ? "…" : smartStats.dueCount}</div>
+                  <div className="text-xs text-slate-500">Due for review</div>
+                </div>
+                <div className="glass-card p-4 text-center">
+                  <div className="text-2xl font-black">{smartStats === null ? "…" : smartStats.totalCount}</div>
+                  <div className="text-xs text-slate-500">Total smart cards</div>
+                </div>
+              </div>
+
+              {smartStats?.dueCount > 0 && (
+                <button onClick={startSmartReview}
+                  className="w-full py-4 mb-4 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-lg text-white transition-all">
+                  🔁 Review {smartStats.dueCount} Due Card{smartStats.dueCount === 1 ? "" : "s"} →
+                </button>
+              )}
+
+              <div className="glass-card p-4 space-y-4">
+                <div className="font-semibold text-sm">Generate new AI cards</div>
+                <div className="flex flex-wrap gap-2">
+                  {STUDY_CATEGORIES.slice(0, 13).map((c) => (
+                    <button key={c.id} onClick={() => setSmartCategory(c.id)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${smartCategory === c.id ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
+                      {c.icon} {c.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  {["all", "Basic", "Intermediate", "Advanced"].map((d) => (
+                    <button key={d} onClick={() => setSmartDifficulty(d)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${smartDifficulty === d ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
+                      {d === "all" ? "Any difficulty" : d}
+                    </button>
+                  ))}
+                </div>
+                <button onClick={generateSmartCards} disabled={generating}
+                  className="w-full py-3.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-60 disabled:cursor-not-allowed rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2">
+                  {generating ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      Generating 15 cards…
+                    </>
+                  ) : (
+                    "✨ Generate 15 New Cards"
+                  )}
+                </button>
+                <p className="text-xs text-slate-400">Capped at 60 cards/day per account to keep things fast for everyone.</p>
+              </div>
+            </motion.div>
+          )}
+
+          {smartPhase === "session" && smartDeck[smartIdx] && (
+            <motion.div key={`smart-card-${smartIdx}`} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}>
+              <div className="flex items-center justify-between mb-4">
+                <button onClick={() => setSmartPhase("home")} className="text-sm text-slate-400 hover:text-slate-700 dark:hover:text-white">← Back</button>
+                <span className="text-sm text-slate-400">{smartIdx + 1} / {smartDeck.length}</span>
+                <span className="w-10" />
+              </div>
+              <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-6">
+                <motion.div className="h-full bg-indigo-500 rounded-full" animate={{ width: `${((smartIdx + 1) / smartDeck.length) * 100}%` }} />
+              </div>
+              <SmartFlipCard card={smartDeck[smartIdx]} onRate={rateSmartCard} />
+            </motion.div>
+          )}
+
+          {smartPhase === "done" && (
+            <motion.div key="smart-done" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12 space-y-4">
+              <div className="text-7xl mb-2">🎉</div>
+              <h2 className="text-3xl font-bold">Deck Complete!</h2>
+              <p className="text-slate-400">You've gone through all {smartDeck.length} cards. They'll resurface when due.</p>
+              <button onClick={() => setSmartPhase("home")}
+                className="py-3 px-6 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-white transition-all mx-auto">
+                Back to Smart Deck
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+
+      {deckMode === "topic" && (
       <AnimatePresence mode="wait">
 
         {phase === "browse" && (
           <motion.div key="browse" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="text-center mb-8">
-              <div className="text-6xl mb-3">🃏</div>
-              <h1 className="text-3xl font-bold mb-2">Flashcards</h1>
-              <p className="text-slate-400 text-sm">Flip through topics. Mark what you know — review what you don't.</p>
-            </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 mb-6">
@@ -228,6 +462,7 @@ export default function Flashcards() {
         )}
 
       </AnimatePresence>
+      )}
     </div>
   );
 }

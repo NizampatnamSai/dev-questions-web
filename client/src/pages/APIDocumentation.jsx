@@ -19,11 +19,52 @@ export default function APIDocumentation() {
     { method: "POST", path: "/api/challenge/challenges/{id}/finish", desc: "Finish timed challenge" },
     { method: "GET", path: "/api/feedback", desc: "Submit feedback" },
     { method: "GET", path: "/api/feedback/admin/all", desc: "Get all feedback (admin)" },
+
+    // Tasks (Jira-style workflow: todo → started → testing → completed)
+    { method: "GET", path: "/api/tasks", desc: "List tasks — all tasks for admins, assigned-to-you for regular users" },
+    { method: "POST", path: "/api/tasks", desc: "Create a task (admin only)" },
+    { method: "PATCH", path: "/api/tasks/{id}", desc: "Edit a task (admin only)" },
+    { method: "DELETE", path: "/api/tasks/{id}", desc: "Delete a task (admin only)" },
+    { method: "PATCH", path: "/api/tasks/{id}/status", desc: "Move a task's status — regular users move one stage at a time and can't set 'completed'; admins can set any status" },
+    { method: "GET", path: "/api/tasks/{id}/comments", desc: "Get a task's comment thread" },
+    { method: "POST", path: "/api/tasks/{id}/comments", desc: "Post a comment on a task" },
+    { method: "DELETE", path: "/api/tasks/{id}/comments/{commentId}", desc: "Delete your own comment (or any, if admin)" },
+
+    // Work Board
+    { method: "GET", path: "/api/workboard/posts", desc: "Get today's (or a given date's) work board posts" },
+    { method: "POST", path: "/api/workboard/posts", desc: "Post today's update (one per day)" },
+    { method: "PUT", path: "/api/workboard/posts/{id}", desc: "Edit your post — only within the configured edit window" },
+    { method: "POST", path: "/api/workboard/posts/{id}/reply", desc: "Add a follow-up reply to your own post once the edit window has closed" },
+    { method: "GET", path: "/api/workboard/export", desc: "Export a day's (or all) posts as CSV (admin only)" },
+    { method: "PATCH", path: "/api/workboard/config", desc: "Update the reminder time and edit window (admin only)" },
+
+    // Study Hub progress
+    { method: "GET", path: "/api/study/reviewed", desc: "Get your reviewed Study Hub topic ids (logged-in users only — guests use local storage)" },
+    { method: "POST", path: "/api/study/reviewed/{topicId}", desc: "Mark a Study Hub topic as reviewed" },
+    { method: "DELETE", path: "/api/study/reviewed/{topicId}", desc: "Unmark a Study Hub topic as reviewed" },
+
+    // JS Coding Questions
+    { method: "GET", path: "/api/study/coding/usage", desc: "Get today's usage — questions generated vs. daily limit" },
+    { method: "POST", path: "/api/study/coding/usage/bonus", desc: "Admin-only — grant yourself a one-off bump to today's daily limit" },
+    { method: "POST", path: "/api/study/coding/generate", desc: "Generate a unique AI coding question with test cases at a given difficulty" },
+    { method: "POST", path: "/api/study/coding/{id}/submit", desc: "Submit code — graded against real test cases in a sandbox, not by AI opinion" },
+    { method: "POST", path: "/api/study/coding/{id}/reveal", desc: "Reveal the AI model answer, once you've submitted an attempt" },
+    { method: "GET", path: "/api/study/coding/history", desc: "List your past coding questions and scores" },
+    { method: "GET", path: "/api/study/coding/{id}", desc: "Full detail for a past question (used by History)" },
+
+    // Dev Tools — API Tester proxy & Snippet Library
+    { method: "POST", path: "/api/dev-tools/http-request", desc: "Proxy an outbound HTTP request server-side (supports raw/form-data/x-www-form-urlencoded bodies); private/internal addresses are blocked" },
+    { method: "GET", path: "/api/dev-tools/snippets", desc: "List snippets — your own plus everyone's public ones" },
+    { method: "POST", path: "/api/dev-tools/snippets", desc: "Save a new snippet; making it public notifies the whole team" },
+    { method: "PATCH", path: "/api/dev-tools/snippets/{id}", desc: "Edit a snippet you own" },
+    { method: "DELETE", path: "/api/dev-tools/snippets/{id}", desc: "Delete a snippet you own" },
+    { method: "GET", path: "/api/dev-tools/snippets/languages", desc: "Distinct list of languages used, for the filter dropdown" },
   ];
 
   const methodColors = {
     GET: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300",
     POST: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300",
+    PUT: "bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300",
     PATCH: "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300",
     DELETE: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300",
   };
@@ -85,6 +126,12 @@ export default function APIDocumentation() {
           <li>✅ Timed challenges</li>
           <li>✅ User feedback system</li>
           <li>✅ Real-time notifications</li>
+          <li>✅ Jira-style task management with role-gated status transitions</li>
+          <li>✅ Daily Work Board standups with threaded replies</li>
+          <li>✅ AI-generated coding questions, sandbox-graded against real test cases</li>
+          <li>✅ Server-proxied API request tester with SSRF protection</li>
+          <li>✅ Snippet library with team-wide public sharing</li>
+          <li>✅ Study Hub progress synced per account, guest-safe fallback to local storage</li>
         </ul>
       </div>
 

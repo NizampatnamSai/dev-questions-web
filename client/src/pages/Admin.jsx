@@ -1005,6 +1005,12 @@ function CommunityScheduleEditor({ users }) {
 
   const regularUsers = users.filter((u) => u.role !== "admin");
 
+  // Schedule days are Monday=0..Sunday=6 and the whole schedule is IST-based
+  // (see "Daily reminder time (IST)" above) — compute today's row in the same
+  // convention so Auto-post can be gated to only the actual current day.
+  const istNow = new Date(Date.now() + 330 * 60 * 1000); // UTC+5:30
+  const todayIndex = (istNow.getUTCDay() + 6) % 7; // JS Sun=0..Sat=6 -> Mon=0..Sun=6
+
   return (
     <>
       <div className="glass-card overflow-hidden">
@@ -1085,13 +1091,22 @@ function CommunityScheduleEditor({ users }) {
                     const isMuted = entry?.muted;
                     return u ? (
                       <>
-                        <button
-                          onClick={() => setAutoPostTarget(u)}
-                          className="text-xs px-2.5 py-1 rounded-lg border border-purple-300/50 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-500/10 flex-shrink-0 transition-colors"
-                          title="Auto-post a question on behalf of this user"
-                        >
-                          🤖 Auto
-                        </button>
+                        {i === todayIndex ? (
+                          <button
+                            onClick={() => setAutoPostTarget(u)}
+                            className="text-xs px-2.5 py-1 rounded-lg border border-purple-300/50 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-500/10 flex-shrink-0 transition-colors"
+                            title="Auto-post a question on behalf of this user"
+                          >
+                            🤖 Auto
+                          </button>
+                        ) : (
+                          <span
+                            className="text-xs px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-slate-700/50 text-slate-300 dark:text-slate-600 flex-shrink-0 cursor-not-allowed"
+                            title="Auto-post is only available on this user's actual scheduled day"
+                          >
+                            🤖 Auto
+                          </span>
+                        )}
                         <button
                           onClick={() => toggleMute(i, isMuted)}
                           className={`text-xs px-2.5 py-1 rounded-lg border flex-shrink-0 transition-colors ${
@@ -1194,13 +1209,13 @@ function TestNotifyPanel({ users }) {
         <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5">
           <button
             onClick={() => setSchedMode(false)}
-            className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${!schedMode ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500"}`}
+            className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${!schedMode ? "bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm" : "text-slate-500"}`}
           >
             ▶ Now
           </button>
           <button
             onClick={() => setSchedMode(true)}
-            className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${schedMode ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500"}`}
+            className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${schedMode ? "bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm" : "text-slate-500"}`}
           >
             ⏰ Schedule
           </button>
@@ -1313,23 +1328,16 @@ function TestNotifyPanel({ users }) {
 }
 
 function NotifyLogs({ logs, loading }) {
-  if (loading) return <p className="text-sm text-slate-400">Loading logs…</p>;
+  if (loading) return <p className="text-sm text-slate-400 px-4 pb-4">Loading logs…</p>;
   if (!logs.length)
     return (
-      <div className="glass-card p-8 text-center text-slate-400 text-sm">
-        No notifications sent yet.
-      </div>
+      <p className="text-sm text-slate-400 text-center py-6">No notifications sent yet.</p>
     );
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
-        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-          🔔 Notification Logs
-        </p>
-        <p className="text-xs text-slate-400">
-          Last {logs.length} · max 100 stored
-        </p>
-      </div>
+    <div className="border-t border-black/5 dark:border-white/10">
+      <p className="text-xs text-slate-400 px-4 pt-3">
+        Last {logs.length} · max 100 stored
+      </p>
       <div className="divide-y divide-black/5 dark:divide-white/5 max-h-96 overflow-y-auto">
         {logs.map((h, i) => (
           <div
@@ -1380,6 +1388,8 @@ function AppConfigPanel() {
     wb_reminder_time: "15:00",
     wb_edit_window_minutes: 30,
     coding_question_daily_limit: 15,
+    notifications_enabled: true,
+    guest_feedback_enabled: false,
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1453,17 +1463,18 @@ function AppConfigPanel() {
     setSaving(false);
   };
 
-  // const save = async (patch) => {
-  //   setSaving(true);
-  //   try {
-  //     await api.put("/admin/app-config", patch);
-  //     setConfig((c) => ({ ...c, ...patch }));
-  //     toast.success("Saved");
-  //   } catch {
-  //     toast.error("Failed");
-  //   }
-  //   setSaving(false);
-  // };
+  const save = async (patch) => {
+    setSaving(true);
+    try {
+      await api.put("/admin/app-config", patch);
+      setConfig((c) => ({ ...c, ...patch }));
+      setInitialConfig((c) => ({ ...c, ...patch }));
+      toast.success("Saved");
+    } catch {
+      toast.error("Failed");
+    }
+    setSaving(false);
+  };
 
   return (
     <div className="glass-card p-6 space-y-6">
@@ -1563,6 +1574,68 @@ function AppConfigPanel() {
             🚀 Update banner is showing to all users
           </div>
         )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Global Notifications Kill Switch */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">
+              🔔 Notifications
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Master switch for all push and in-app notifications (manual sends,
+              scheduled reminders, feedback replies, everything). Useful while
+              testing new features so you don't spam real users.
+            </p>
+          </div>
+          <button
+            onClick={() =>
+              save({ notifications_enabled: !config.notifications_enabled })
+            }
+            disabled={saving}
+            className={`relative w-12 h-6 rounded-full transition-colors ${config.notifications_enabled !== false ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.notifications_enabled !== false ? "translate-x-6" : ""}`}
+            />
+          </button>
+        </div>
+        {config.notifications_enabled === false && (
+          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            🔕 All notifications are OFF app-wide — no pushes or in-app alerts will be sent to anyone.
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Guest Feedback */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">
+              💬 Guest Feedback
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Let guests (not logged in) submit feedback too. Guest submissions
+              can't be notified back since there's no real account.
+            </p>
+          </div>
+          <button
+            onClick={() =>
+              save({ guest_feedback_enabled: !config.guest_feedback_enabled })
+            }
+            disabled={saving}
+            className={`relative w-12 h-6 rounded-full transition-colors ${config.guest_feedback_enabled ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.guest_feedback_enabled ? "translate-x-6" : ""}`}
+            />
+          </button>
+        </div>
       </div>
 
       <div className="border-t border-black/5 dark:border-white/10" />
@@ -1687,7 +1760,9 @@ export default function Admin() {
   const [search, setSearch] = useState("");
   const [showNotify, setShowNotify] = useState(false);
   const [logs, setLogs] = useState([]);
-  const [logsLoading, setLogsLoading] = useState(true);
+  const [logsLoading, setLogsLoading] = useState(false);
+  const [logsOpen, setLogsOpen] = useState(false);
+  const [logsLoaded, setLogsLoaded] = useState(false);
 
   const loadLogs = async () => {
     setLogsLoading(true);
@@ -1695,7 +1770,10 @@ export default function Admin() {
       .get("/admin/notify/history")
       .then((r) => setLogs(r.data))
       .catch(() => {})
-      .finally(() => setLogsLoading(false));
+      .finally(() => {
+        setLogsLoading(false);
+        setLogsLoaded(true);
+      });
   };
 
   const load = async () => {
@@ -1742,7 +1820,8 @@ export default function Admin() {
 
   useEffect(() => {
     load();
-    loadLogs();
+    // Notification Logs is now lazy — loaded on-demand when the admin
+    // expands that section (see logsOpen below), not on every panel visit.
     api
       .get("/admin/pending-users")
       .then((r) => setPendingUsers(r.data))
@@ -2067,7 +2146,7 @@ export default function Admin() {
                       </td>
                       <td className="px-4 py-3">
                         <span
-                          className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
+                          className={`inline-flex items-center gap-1 text-xs px-2.5 py-1.5 leading-none rounded-full font-semibold whitespace-nowrap ${
                             u.role === "admin"
                               ? "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300"
                               : u.role === "sub_admin"
@@ -2213,8 +2292,22 @@ export default function Admin() {
       {/* Test / Send Notifications */}
       <TestNotifyPanel users={users} />
 
-      {/* Notification Logs */}
-      <NotifyLogs logs={logs} loading={logsLoading} />
+      {/* Notification Logs — lazy: only queried when expanded, since this list
+          can grow large and was previously slowing down every admin panel visit */}
+      <div className="glass-card overflow-hidden">
+        <button
+          onClick={() => {
+            const opening = !logsOpen;
+            setLogsOpen(opening);
+            if (opening && !logsLoaded) loadLogs();
+          }}
+          className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-black/2 dark:hover:bg-white/3 transition-colors"
+        >
+          <span>🔔 Notification Logs</span>
+          <span className="text-xs opacity-60">{logsOpen ? "▲ Hide" : "▼ Show"}</span>
+        </button>
+        {logsOpen && <NotifyLogs logs={logs} loading={logsLoading} />}
+      </div>
 
       {/* App Config */}
       <AppConfigPanel />

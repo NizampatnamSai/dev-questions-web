@@ -1,10 +1,11 @@
 import random
-from datetime import datetime, timezone, timedelta
-from fastapi import APIRouter, Depends
+import httpx
+from datetime import datetime, timezone, timedelta, date
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from deps import current_user
-from utils.ai import _groq_call, _ollama_text_action, GROQ_MODEL
-from db_mongo import col_streaks, col_progress, col_study_reviewed, now
+from utils.ai import _groq_call, _ollama_text_action, GROQ_MODEL, GROQ_API_KEY
+from db_mongo import col_streaks, col_progress, col_study_reviewed, col_weak_area_insights, col_voice_transcripts, now
 
 router = APIRouter()
 
@@ -242,6 +243,155 @@ async def find_breaks(req: CodeReq, _=Depends(current_user)):
     return {"result": result}
 
 
+# ── AI Dev Assistant: Git Helper ────────────────────────────────────────────────
+# Reuses CodeReq{code} (not a separate {text} field) so the client's shared
+# tool-runner (always POSTs {code}) works unchanged for these too.
+
+@router.post("/git-help")
+async def git_help(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a Git expert helping a developer. They'll describe a goal or problem in "
+        "plain English (e.g. 'undo my last commit but keep the changes', 'squash my last 3 commits'). "
+        "Respond with:\n\n"
+        "COMMAND(S):\n[the exact git command(s) to run, one per line]\n\n"
+        "WHAT THIS DOES: [1-2 sentence plain-English explanation]\n\n"
+        "CAUTION: [only include this section if the command is destructive/irreversible, e.g. "
+        "force push, hard reset, filter-branch — otherwise omit it entirely]\n\n"
+        "Do NOT use markdown symbols like ** or ##. Be direct and concise."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 500)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
+# ── AI Dev Assistant: Test Generator ────────────────────────────────────────────
+
+@router.post("/generate-tests")
+async def generate_tests(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a senior engineer writing unit tests. The user gives you a function. "
+        "Write Jest test cases covering: the normal/happy path, edge cases (empty input, "
+        "null/undefined, zero, negative numbers as applicable), and at least one case that "
+        "would catch a plausible off-by-one or type-coercion bug. "
+        "Output ONLY the test code (describe/it/test blocks with expect assertions), "
+        "no explanation, no markdown fences."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 1000)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
+# ── AI Dev Assistant: Concept / Docs Explainer ──────────────────────────────────
+
+@router.post("/explain-concept")
+async def explain_concept(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a senior developer explaining a technical concept, API, error message, or "
+        "library to another developer. The user will give you a term, API name, error message, "
+        "or short doc excerpt. Explain clearly in plain English: what it is, when/why you'd use "
+        "it, and a short realistic code example if applicable. Keep it under 150 words. "
+        "Do NOT use markdown symbols like ** or ##."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 500)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
+# ── AI Dev Assistant: React Performance Analyzer ────────────────────────────────
+# Static code review for React re-render/memoization anti-patterns — not a
+# Lighthouse/runtime profiler. Real performance profiling needs a live page and
+# headless Chrome, which is exactly the kind of heavy, slow, resource-hungry
+# infra this app deliberately avoids; static analysis catches the vast majority
+# of real-world React perf issues (unmemoized callbacks/objects passed as props,
+# missing keys, unnecessary re-renders) with zero extra infrastructure.
+
+@router.post("/react-performance")
+async def react_performance(req: CodeReq, _=Depends(current_user)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a senior React performance engineer doing a static code review. "
+        "The user gives you a React component. Look specifically for:\n"
+        "- Unmemoized callbacks/objects/arrays passed as props (causes child re-renders)\n"
+        "- Missing React.memo on components that would benefit from it\n"
+        "- Missing or wrong useMemo/useCallback dependencies\n"
+        "- index-as-key or unstable keys in lists\n"
+        "- Expensive computations running on every render instead of memoized\n"
+        "- Unnecessary state that could be derived instead\n"
+        "- Long lists rendered without virtualization\n"
+        "- useEffect with missing/incorrect dependency arrays causing extra renders\n\n"
+        "Structure: For each issue write:\n"
+        "ISSUE: [what's wrong]\n"
+        "IMPACT: [why it hurts performance, be specific]\n"
+        "FIX: [the corrected code]\n\n"
+        "If the component is already well-optimized, say 'NO PERFORMANCE ISSUES FOUND — "
+        "code is well-optimized.' Do NOT use markdown symbols like ** or ##."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 900)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
+# ── Voice Mock Interview: speech-to-text ────────────────────────────────────────
+# Transcription only — grading reuses the existing text-based /mock/evaluate
+# endpoint unchanged, since a transcript is just plain text once we have it.
+# Text-to-speech for reading the question aloud needs no backend at all: the
+# client uses the browser's built-in SpeechSynthesis API, which is free and
+# has zero latency (no upload, no API call).
+
+VOICE_TRANSCRIBE_DAILY_LIMIT = 40
+MAX_AUDIO_BYTES = 10 * 1024 * 1024  # 10MB — a few minutes of compressed speech
+
+
+@router.post("/mock/transcribe")
+async def mock_transcribe(audio: UploadFile = File(...), user=Depends(current_user)):
+    if not GROQ_API_KEY:
+        raise HTTPException(503, "Voice transcription is not configured on this server.")
+
+    today = date.today().isoformat()
+    used_today = await col_voice_transcripts().count_documents({"userId": user["id"], "date": today})
+    if used_today >= VOICE_TRANSCRIBE_DAILY_LIMIT:
+        raise HTTPException(429, f"Daily voice transcription limit reached ({VOICE_TRANSCRIBE_DAILY_LIMIT}/day). Try again tomorrow, or type your answer instead.")
+
+    audio_bytes = await audio.read()
+    if len(audio_bytes) > MAX_AUDIO_BYTES:
+        raise HTTPException(413, "Audio recording is too large (max 10MB — try a shorter answer).")
+    if not audio_bytes:
+        raise HTTPException(400, "No audio received.")
+
+    headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+    files = {"file": (audio.filename or "answer.webm", audio_bytes, audio.content_type or "audio/webm")}
+    data = {"model": "whisper-large-v3-turbo", "response_format": "json"}
+
+    try:
+        async with httpx.AsyncClient(timeout=30) as c:
+            r = await c.post(
+                "https://api.groq.com/openai/v1/audio/transcriptions",
+                headers=headers, files=files, data=data,
+            )
+            r.raise_for_status()
+            text = r.json().get("text", "").strip()
+    except Exception:
+        raise HTTPException(503, "Transcription is unavailable right now — try again shortly, or type your answer instead.")
+
+    await col_voice_transcripts().insert_one({"userId": user["id"], "date": today, "createdAt": now()})
+    return {"text": text}
+
+
 # ── Mock Interview ────────────────────────────────────────────────────────────
 
 class MockStartReq(BaseModel):
@@ -387,7 +537,12 @@ async def unmark_reviewed(topic_id: str, user=Depends(current_user)):
 
 @router.get("/weak-areas")
 async def weak_areas(user=Depends(current_user)):
-    docs = await col_progress().find({"userId": user["id"]}).to_list(length=2000)
+    # Two independent signals feed into this: Flashcards' explicit Know/Review
+    # tap, and Study Hub's "Mark Reviewed" checkbox. A topic counts as "known"
+    # if EITHER source says so; an explicit "review" tap from Flashcards always
+    # wins since it's the strongest "I don't actually know this" signal.
+    progress_docs = await col_progress().find({"userId": user["id"]}).to_list(length=2000)
+    reviewed_docs = await col_study_reviewed().find({"userId": user["id"]}).to_list(length=5000)
     from data.study_topics import STUDY_TOPICS
 
     by_cat: dict[str, dict] = {}
@@ -397,10 +552,17 @@ async def weak_areas(user=Depends(current_user)):
             by_cat[cat] = {"total": 0, "know": 0, "review": 0, "unseen": 0}
         by_cat[cat]["total"] += 1
 
-    progress_map = {d["topicId"]: d["result"] for d in docs}
+    progress_map = {d["topicId"]: d["result"] for d in progress_docs}
+    reviewed_set = {d["topicId"] for d in reviewed_docs}
     for t in STUDY_TOPICS:
         cat = t["category"]
-        result = progress_map.get(t["id"], "unseen")
+        flashcard_result = progress_map.get(t["id"])
+        if flashcard_result == "review":
+            result = "review"
+        elif flashcard_result == "know" or t["id"] in reviewed_set:
+            result = "know"
+        else:
+            result = "unseen"
         by_cat[cat][result] = by_cat[cat].get(result, 0) + 1
 
     result = []
@@ -423,13 +585,135 @@ async def weak_areas(user=Depends(current_user)):
     return {"areas": result}
 
 
+WEAK_AREA_INSIGHT_DAILY_REGENS = 3  # "Ask Again" refreshes allowed per user per day
+
+
+async def _generate_weak_area_insight(user) -> str | None:
+    areas_resp = await weak_areas(user=user)
+    areas = [a for a in areas_resp["areas"] if a["total"] > 0]
+    if not areas:
+        return None
+
+    weakest = sorted(areas, key=lambda a: a["score"])[:3]
+    strongest = sorted(areas, key=lambda a: -a["score"])[:2]
+
+    summary_lines = "\n".join(
+        f"- {a['category']}: {a['score']}% mastered ({a['know']}/{a['total']} known, {a['unseen']} unseen)"
+        for a in weakest
+    )
+
+    system = (
+        "You are a supportive, direct developer interview coach. "
+        "Given a user's per-category study progress, write ONE short coaching note. "
+        "Plain English, max 3 sentences, no markdown, no bullet points, no headers. "
+        "Name the specific weak categories and give one concrete next action. "
+        "Vary your phrasing and the specific action you suggest each time — don't repeat the same wording."
+    )
+    prompt = (
+        f"Weakest categories:\n{summary_lines}\n\n"
+        f"Strongest categories: {', '.join(a['category'] for a in strongest) or 'none yet'}\n\n"
+        "Write the coaching note now."
+    )
+
+    try:
+        return await _groq_plain(system, prompt, max_tokens=150)
+    except Exception:
+        return None
+
+
+@router.get("/weak-areas/insight")
+async def weak_areas_insight(force: bool = False, user=Depends(current_user)):
+    """A short, personalized coaching note built from the same weak-areas data.
+    Cached once per day by default so revisiting the page never re-triggers the
+    AI call; pass force=true to regenerate on demand, capped at a few times a
+    day per user so 'Ask Again' can't be spammed into heavy API usage."""
+    today = now().strftime("%Y-%m-%d")
+    user_id = user["id"]
+
+    cached = await col_weak_area_insights().find_one({"userId": user_id, "date": today})
+
+    if cached and not force:
+        return {"insight": cached["insight"], "cached": True}
+
+    if force:
+        regen_count = cached.get("regenCount", 0) if cached else 0
+        if regen_count >= WEAK_AREA_INSIGHT_DAILY_REGENS:
+            return {
+                "insight": cached["insight"] if cached else None,
+                "cached": True,
+                "regenLimitReached": True,
+            }
+
+    insight = await _generate_weak_area_insight(user)
+    if insight is None:
+        return {"insight": cached["insight"] if cached else None, "cached": bool(cached)}
+
+    update = {"$set": {"insight": insight, "createdAt": now()}}
+    if force:
+        update["$inc"] = {"regenCount": 1}
+    await col_weak_area_insights().update_one(
+        {"userId": user_id, "date": today}, update, upsert=True,
+    )
+    return {"insight": insight, "cached": False}
+
+
+DIFFICULTY_ORDER = {"Basic": 0, "Intermediate": 1, "Advanced": 2, "Tricky": 3}
+
+
+@router.get("/mentor/learning-path")
+async def mentor_learning_path(user=Depends(current_user)):
+    """A concrete, ordered 'study this next' list — the structured counterpart
+    to the free-text weak-areas insight. Pure DB computation, zero AI calls,
+    so it's instant and safe to load automatically (unlike the insight, which
+    is opt-in specifically because it costs a Groq call)."""
+    from data.study_topics import STUDY_TOPICS
+
+    user_id = user["id"]
+    progress_docs = await col_progress().find({"userId": user_id}).to_list(length=2000)
+    reviewed_docs = await col_study_reviewed().find({"userId": user_id}).to_list(length=5000)
+    progress_map = {d["topicId"]: d["result"] for d in progress_docs}
+    reviewed_set = {d["topicId"] for d in reviewed_docs}
+
+    def _is_known(t):
+        return progress_map.get(t["id"]) == "know" or t["id"] in reviewed_set
+
+    by_cat: dict[str, dict] = {}
+    for t in STUDY_TOPICS:
+        c = by_cat.setdefault(t["category"], {"total": 0, "know": 0})
+        c["total"] += 1
+        if _is_known(t):
+            c["know"] += 1
+
+    ranked_cats = sorted(by_cat.items(), key=lambda kv: kv[1]["know"] / kv[1]["total"])
+    weakest_categories = [cat for cat, data in ranked_cats if data["total"] > 0][:3]
+
+    candidates = [t for t in STUDY_TOPICS if t["category"] in weakest_categories and not _is_known(t)]
+    candidates.sort(key=lambda t: (
+        weakest_categories.index(t["category"]),
+        DIFFICULTY_ORDER.get(t["difficulty"], 1),
+    ))
+
+    path = [
+        {
+            "id": t["id"],
+            "category": t["category"],
+            "title": t["title"],
+            "difficulty": t["difficulty"],
+            "topic": t["topic"],
+        }
+        for t in candidates[:8]
+    ]
+
+    return {"path": path, "focusCategories": weakest_categories}
+
+
 # ── Daily Streak + Challenge ──────────────────────────────────────────────────
 
 @router.get("/streak")
 async def get_streak(user=Depends(current_user)):
     doc = await col_streaks().find_one({"userId": user["id"]})
     if not doc:
-        return {"streak": 0, "lastActive": None, "todayDone": False, "challenge": _daily_challenge()}
+        return {"streak": 0, "lastActive": None, "todayDone": False, "challenge": await _daily_challenge(user["id"])}
     today = datetime.now(timezone.utc).date()
     last = doc.get("lastActive")
     if last:
@@ -445,7 +729,7 @@ async def get_streak(user=Depends(current_user)):
         "streak": streak,
         "lastActive": doc.get("lastActive"),
         "todayDone": today_done,
-        "challenge": _daily_challenge(),
+        "challenge": await _daily_challenge(user["id"]),
     }
 
 
@@ -470,13 +754,7 @@ async def complete_streak(user=Depends(current_user)):
     return {"streak": streak, "message": f"Day {streak} complete! 🔥"}
 
 
-def _daily_challenge():
-    from data.study_topics import STUDY_TOPICS
-    today = datetime.now(timezone.utc).date()
-    seed = today.year * 10000 + today.month * 100 + today.day
-    random.seed(seed)
-    topic = random.choice(STUDY_TOPICS)
-    random.seed()
+def _format_challenge(topic: dict) -> dict:
     return {
         "id": topic["id"],
         "category": topic["category"],
@@ -486,3 +764,47 @@ def _daily_challenge():
         "question": topic["interviewQuestion"],
         "summary": topic["summary"],
     }
+
+
+async def _daily_challenge(user_id: str = None) -> dict:
+    """Today's challenge topic — biased toward the user's weakest categories
+    and topics they haven't seen yet, so it's a genuinely useful nudge instead
+    of pure trivia. Deterministic per user+day (stable if you refresh, but
+    different from everyone else's), computed with zero AI calls — this is
+    plain weighted selection over data already in the DB."""
+    from data.study_topics import STUDY_TOPICS
+    today = datetime.now(timezone.utc).date()
+
+    # random.Random(seed) is a LOCAL instance, unlike the global random.seed()/
+    # random.choice() this replaced — that mutated process-wide random state,
+    # which is a real race condition risk now that this function awaits DB
+    # calls (other concurrent requests could interleave and get corrupted picks).
+    if not user_id:
+        seed = today.year * 10000 + today.month * 100 + today.day
+        return _format_challenge(random.Random(seed).choice(STUDY_TOPICS))
+
+    progress_docs = await col_progress().find({"userId": user_id}).to_list(length=2000)
+    reviewed_docs = await col_study_reviewed().find({"userId": user_id}).to_list(length=5000)
+    progress_map = {d["topicId"]: d["result"] for d in progress_docs}
+    reviewed_set = {d["topicId"] for d in reviewed_docs}
+
+    def _is_known(t):
+        return progress_map.get(t["id"]) == "know" or t["id"] in reviewed_set
+
+    by_cat: dict[str, dict] = {}
+    for t in STUDY_TOPICS:
+        c = by_cat.setdefault(t["category"], {"total": 0, "know": 0})
+        c["total"] += 1
+        if _is_known(t):
+            c["know"] += 1
+
+    weakest_categories = {
+        cat for cat, _ in sorted(by_cat.items(), key=lambda kv: kv[1]["know"] / kv[1]["total"])[:5]
+    }
+
+    pool = [t for t in STUDY_TOPICS if t["category"] in weakest_categories and not _is_known(t)]
+    if not pool:
+        pool = [t for t in STUDY_TOPICS if not _is_known(t)] or STUDY_TOPICS
+
+    rng = random.Random(f"{user_id}-{today.isoformat()}")
+    return _format_challenge(rng.choice(pool))

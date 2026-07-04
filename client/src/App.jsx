@@ -15,6 +15,7 @@ import Snowfall from "./components/Snowfall";
 import Rain from "./components/Rain";
 import GuestBanner from "./components/GuestBanner";
 import ScrollToTopBtn from "./components/ScrollToTopBtn";
+import ZoomControl from "./components/ZoomControl";
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
 import { WeatherProvider, useWeather } from "./context/WeatherContext";
@@ -43,6 +44,9 @@ import JsCompiler from "./pages/JsCompiler";
 import ProjectGuide from "./pages/ProjectGuide";
 import JSChallenge from "./pages/JSChallenge";
 import JsCodingQuestions from "./pages/JsCodingQuestions";
+import ResumeAnalyzer from "./pages/ResumeAnalyzer";
+import BackgroundRemover from "./pages/BackgroundRemover";
+import Notes from "./pages/Notes";
 import WorkBoard from "./pages/WorkBoard";
 import MyAnswers from "./pages/MyAnswers";
 import Notifications from "./pages/Notifications";
@@ -129,6 +133,7 @@ function AppLayout({ children, fullWidth = false }) {
               {sidebarHidden ? "☰" : "◀"}
             </button>
             <div className="flex items-center gap-2">
+              <ZoomControl />
               <GlobalSearch />
               <NotificationBell />
               <UserMenu />
@@ -146,7 +151,10 @@ function AppLayout({ children, fullWidth = false }) {
             </div>
             <GlobalSearch />
           </div>
-          <main className={`flex-1 p-4 md:p-6 pb-28 md:pb-8 mx-auto w-full ${fullWidth ? "max-w-full" : "max-w-4xl"}`}>
+          {/* Every page is full-width now — the old max-w-4xl default made most
+              pages look cramped on real screens; `fullWidth` prop is kept as a
+              no-op on call sites so nothing needs to change there. */}
+          <main className="flex-1 p-4 md:p-6 pb-28 md:pb-8 mx-auto w-full max-w-full">
             {children}
           </main>
         </div>
@@ -247,6 +255,10 @@ function AppInner() {
 
   useEffect(() => {
     document.title = getPageTitle(location.pathname);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   const handleDismissUpdate = () => {
@@ -637,6 +649,30 @@ function AppInner() {
           }
         />
         <Route
+          path="/resume-analyzer"
+          element={
+            <ProtectedPage path="/resume-analyzer">
+              <ResumeAnalyzer />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/background-remover"
+          element={
+            <ProtectedPage path="/background-remover">
+              <BackgroundRemover />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/notes"
+          element={
+            <ProtectedPage path="/notes">
+              <Notes />
+            </ProtectedPage>
+          }
+        />
+        <Route
           path="/workboard"
           element={
             <ProtectedPage path="/workboard">
@@ -734,11 +770,13 @@ function AppInner() {
       <FeedbackModal
         open={feedbackOpen}
         onClose={() => setFeedbackOpen(false)}
+        isGuest={user?.isGuest}
       />
 
-      {/* Floating feedback button — hidden for admins (they manage feedback, not submit it) */}
+      {/* Floating feedback button — hidden for admins (they manage feedback, not submit it).
+          Guests only see it when the admin has guest feedback enabled. */}
       {user &&
-        !user.isGuest &&
+        (!user.isGuest || appConfig.guest_feedback_enabled) &&
         user.role !== "admin" &&
         user.role !== "sub_admin" && (
           <motion.button

@@ -7,9 +7,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
-from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_community_reminder
+from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools
+from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes
 
 app = FastAPI(title="DevQuiz API")
 
@@ -66,6 +66,8 @@ async def startup():
     scheduler.add_job(fire_scheduled_notifications,    "cron", second=0)
     scheduler.add_job(fire_challenge_notifications,    "cron", hour=4, minute=30, second=0)
     scheduler.add_job(fire_workboard_notifications,    "cron", hour=wb_h_utc, minute=wb_m_utc, second=0, id="workboard_reminder")
+    # Fixed 3pm IST catch-up nudge, independent of the admin-configurable morning time above.
+    scheduler.add_job(fire_workboard_afternoon_reminder, "cron", hour=9, minute=30, second=0, id="workboard_afternoon_reminder")
     scheduler.add_job(fire_community_reminder, "cron", hour=cr_hour, minute=cr_minute, second=0, id="community_reminder")
     scheduler.start()
     print("[startup] ✅ Scheduler started with all jobs", flush=True)
@@ -99,6 +101,8 @@ app.include_router(timed_challenge.router,   prefix="/api/challenge")
 app.include_router(tasks.router,             prefix="/api/tasks")
 app.include_router(coding_questions.router,  prefix="/api/study")
 app.include_router(dev_tools.router,         prefix="/api/dev-tools")
+app.include_router(resume.router,            prefix="/api/resume")
+app.include_router(notes.router,             prefix="/api/notes")
 
 
 @app.get("/")

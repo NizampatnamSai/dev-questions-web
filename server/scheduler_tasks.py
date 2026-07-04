@@ -1,9 +1,11 @@
 from datetime import datetime, timezone, timedelta
-from db_mongo import col_notify_schedules, col_fcm_tokens, col_challenge_progress, col_workboard_members, col_user_notifications
+from db_mongo import col_notify_schedules, col_fcm_tokens, col_challenge_progress, col_workboard_members, col_user_notifications, notifications_enabled
 from utils.firebase import send_to_tokens
 
 
 async def _log_user_notification(user_id: str, title: str, body: str, notif_type: str):
+    if not await notifications_enabled():
+        return
     try:
         await col_user_notifications().insert_one({
             "userId": user_id, "title": title, "body": body,
@@ -156,6 +158,41 @@ async def fire_workboard_notifications():
             data={"type": "workboard_reminder", "path": "/workboard"},
         )
     print(f"[workboard] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted)", flush=True)
+
+
+async def fire_workboard_afternoon_reminder():
+    """Second, fixed 3pm IST catch-up nudge — distinct from the admin-configurable
+    morning reminder above. Same 'only non-posters' logic, later in the day for
+    anyone who still hasn't posted by then."""
+    now_ist = datetime.now(IST)
+    print(f"[workboard-3pm] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
+    if not _is_working_day(now_ist):
+        print(f"[workboard-3pm] skipping — not a working day ({now_ist.strftime('%A %d')})", flush=True)
+        return
+
+    members = await col_workboard_members().find({"status": "active"}).to_list(200)
+    today = now_ist.strftime("%Y-%m-%d")
+    from db_mongo import col_workboard_posts
+    posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
+    posted_ids = {d["userId"] for d in posted_docs}
+
+    sent = 0
+    for member in members:
+        uid = member["userId"]
+        if uid in posted_ids:
+            continue
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if not tokens:
+            continue
+        sent += 1
+        await send_to_tokens(tokens,
+            title="⏰ Still haven't posted today?",
+            body="It's 3pm — don't forget to share your work update! 👀",
+            data={"type": "workboard_reminder", "path": "/workboard"},
+        )
+        await _log_user_notification(uid, "⏰ Still haven't posted today?", "It's 3pm — don't forget to share your work update!", "workboard_reminder")
+    print(f"[workboard-3pm] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted)", flush=True)
 
 
 async def fire_community_reminder():

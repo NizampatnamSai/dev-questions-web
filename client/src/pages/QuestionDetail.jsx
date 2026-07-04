@@ -106,7 +106,7 @@ export default function QuestionDetail() {
   };
 
   if (loading) return (
-    <div className="space-y-4 animate-pulse max-w-3xl mx-auto">
+    <div className="space-y-4 animate-pulse max-w-5xl mx-auto">
       <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-1/3" />
       <div className="glass-card p-6 space-y-3">
         {[...Array(3)].map((_, i) => <div key={i} className="h-4 bg-slate-200 dark:bg-slate-700 rounded" style={{ width: `${90 - i*15}%` }} />)}
@@ -122,7 +122,7 @@ export default function QuestionDetail() {
   );
 
   return (
-    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto space-y-5">
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto space-y-5">
 
       {/* Header */}
       <div className="flex items-center gap-3">

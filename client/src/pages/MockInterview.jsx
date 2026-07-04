@@ -2,18 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import { STUDY_CATEGORIES } from "../data/studyGuide";
 
 const CATEGORIES = [
   { id: "", label: "All Topics" },
   { id: "dsa", label: "DSA 🧮", badge: "Advanced" },
-  { id: "html", label: "HTML" },
-  { id: "css", label: "CSS" },
-  { id: "javascript", label: "JavaScript" },
-  { id: "typescript", label: "TypeScript" },
-  { id: "react", label: "React" },
-  { id: "reactnative", label: "React Native" },
-  { id: "nextjs", label: "Next.js" },
-  { id: "git", label: "Git & GitHub" },
+  ...STUDY_CATEGORIES.map((c) => ({ id: c.id, label: `${c.label} ${c.icon}` })),
 ];
 
 const DIFFICULTIES = [
@@ -48,8 +42,13 @@ export default function MockInterview() {
   const [loadingStart, setLoadingStart] = useState(false);
   const [loadingEval, setLoadingEval] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [recording, setRecording] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
   const timerRef = useRef(null);
   const textRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
   useEffect(() => {
     if (phase === "interview") {
@@ -59,6 +58,13 @@ export default function MockInterview() {
     }
     return () => clearInterval(timerRef.current);
   }, [phase]);
+
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis?.cancel();
+      if (mediaRecorderRef.current?.state === "recording") mediaRecorderRef.current.stop();
+    };
+  }, []);
 
   const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
@@ -117,7 +123,73 @@ export default function MockInterview() {
     }
   }
 
+  // Text-to-speech: free, instant, no backend call — the browser's own
+  // SpeechSynthesis API reads the question aloud.
+  function readAloud() {
+    if (!("speechSynthesis" in window)) {
+      toast.error("Your browser doesn't support reading text aloud.");
+      return;
+    }
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+      return;
+    }
+    const utter = new SpeechSynthesisUtterance(questions[current]?.question || "");
+    utter.rate = 0.95;
+    utter.onend = () => setSpeaking(false);
+    utter.onerror = () => setSpeaking(false);
+    setSpeaking(true);
+    window.speechSynthesis.speak(utter);
+  }
+
+  // Speech-to-text: records via MediaRecorder, uploads the clip to Groq
+  // Whisper through our backend, and drops the transcript into the answer
+  // box — still fully editable before submitting.
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+      recorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop());
+        const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        setTranscribing(true);
+        try {
+          const formData = new FormData();
+          formData.append("audio", blob, "answer.webm");
+          const { data } = await api.post("/study/mock/transcribe", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          if (data.text) {
+            setAnswers((prev) => ({ ...prev, [current]: `${prev[current] ? prev[current] + " " : ""}${data.text}` }));
+          } else {
+            toast("Didn't catch that — try again or type your answer.", { icon: "🎤" });
+          }
+        } catch (err) {
+          toast.error(err.response?.data?.detail || "Transcription failed — try again or type your answer.");
+        } finally {
+          setTranscribing(false);
+        }
+      };
+      mediaRecorderRef.current = recorder;
+      recorder.start();
+      setRecording(true);
+    } catch {
+      toast.error("Microphone access denied or unavailable.");
+    }
+  }
+
+  function stopRecording() {
+    mediaRecorderRef.current?.stop();
+    setRecording(false);
+  }
+
   async function nextQuestion() {
+    window.speechSynthesis?.cancel();
+    setSpeaking(false);
+    if (recording) stopRecording();
     if (!scores[current]) await submitAnswer();
     if (current + 1 < questions.length) {
       setCurrent((c) => c + 1);
@@ -135,7 +207,7 @@ export default function MockInterview() {
   const q = questions[current];
 
   return (
-    <div className="min-h-screen px-4 py-8 max-w-4xl mx-auto text-slate-800 dark:text-white">
+    <div className="min-h-screen px-4 py-8 max-w-6xl mx-auto text-slate-800 dark:text-white">
       <AnimatePresence mode="wait">
 
         {/* ── Setup ── */}
@@ -241,17 +313,37 @@ export default function MockInterview() {
                   {q.difficulty}
                 </span>
                 <span className="text-xs text-slate-400">{q.topic} → {q.title}</span>
+                <button onClick={readAloud}
+                  className={`ml-auto text-xs px-2.5 py-1 rounded-full border transition-all flex-shrink-0 ${speaking ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-400" : "bg-slate-100 dark:bg-slate-800 border-transparent text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"}`}>
+                  {speaking ? "⏹ Stop" : "🔊 Read Aloud"}
+                </button>
               </div>
               <p className="text-lg font-semibold text-slate-800 dark:text-white leading-relaxed">{q.question}</p>
             </div>
 
             {/* Answer */}
-            <textarea ref={textRef}
-              className="w-full h-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:border-indigo-500 font-mono text-sm"
-              placeholder="Type your answer here... (or leave blank to see the model answer)"
-              value={answers[current] || ""}
-              onChange={(e) => setAnswers((prev) => ({ ...prev, [current]: e.target.value }))}
-            />
+            <div className="relative">
+              <textarea ref={textRef}
+                className="w-full h-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 pr-14 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:border-indigo-500 font-mono text-sm"
+                placeholder="Type your answer, or tap the mic to speak it… (or leave blank to see the model answer)"
+                value={answers[current] || ""}
+                onChange={(e) => setAnswers((prev) => ({ ...prev, [current]: e.target.value }))}
+              />
+              <button
+                onClick={recording ? stopRecording : startRecording}
+                disabled={transcribing}
+                title={recording ? "Stop recording" : "Record your answer"}
+                className={`absolute bottom-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all disabled:opacity-50 ${
+                  recording ? "bg-red-500 text-white animate-pulse" : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+                }`}
+              >
+                {transcribing ? (
+                  <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : recording ? "⏹" : "🎤"}
+              </button>
+            </div>
+            {recording && <p className="text-xs text-red-400 mt-1.5">🔴 Recording… tap ⏹ when done</p>}
+            {transcribing && <p className="text-xs text-slate-400 mt-1.5">Transcribing…</p>}
 
             {/* Score result */}
             {scores[current] && (

@@ -11,6 +11,8 @@ const GUEST_ALLOWED = [
   "/cron-builder",
   "/jwt-decoder",
   "/study",
+  "/api-tester",
+  "/background-remover",
 ];
 
 export default function ProtectedRoute({ children, path }) {

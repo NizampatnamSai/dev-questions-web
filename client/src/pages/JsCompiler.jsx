@@ -172,7 +172,7 @@ export default function JsCompiler() {
   const LOG_PREFIX = { log: "▸", error: "✖", warn: "⚠", info: "ℹ", return: "→" };
 
   return (
-    <div className="min-h-screen px-4 py-8 max-w-5xl mx-auto space-y-6 text-slate-800 dark:text-white">
+    <div className="min-h-screen px-4 py-8 max-w-full mx-auto space-y-6 text-slate-800 dark:text-white">
 
       {/* Header */}
       <div className="flex items-start justify-between flex-wrap gap-3">

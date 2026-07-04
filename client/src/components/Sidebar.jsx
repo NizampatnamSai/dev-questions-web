@@ -31,6 +31,9 @@ const BASE_LINKS = [
   { to: "/jwt-decoder", label: "JWT Decoder", icon: "🔑" },
   { to: "/api-tester", label: "API Tester", icon: "📡" },
   { to: "/snippets", label: "Snippet Library", icon: "📚" },
+  { to: "/resume-analyzer", label: "Resume & ATS Analyzer", icon: "📄" },
+  { to: "/background-remover", label: "Background Remover", icon: "🖼️" },
+  { to: "/notes", label: "Notes", icon: "📝" },
   { to: "/challenge", label: "JS Challenge", icon: "🧩" },
   { to: "/progress", label: "My Progress", icon: "📈" },
   // Remaining, in previous relative order
@@ -108,6 +111,10 @@ const DEV_TOOL_LINKS = [
   { to: "/devtools?tool=errors", icon: "🐛", label: "Error Finder" },
   { to: "/devtools?tool=breaks", icon: "💥", label: "Break Finder" },
   { to: "/devtools?tool=js", icon: "⚡", label: "JS Compiler" },
+  { to: "/devtools?tool=git", icon: "🐙", label: "AI Assistant · Git" },
+  { to: "/devtools?tool=tests", icon: "🧪", label: "AI Assistant · Tests" },
+  { to: "/devtools?tool=concept", icon: "📖", label: "AI Assistant · Docs" },
+  { to: "/devtools?tool=reactperf", icon: "🚀", label: "React Performance" },
 ];
 
 function DevToolsGroup({ textMuted }) {

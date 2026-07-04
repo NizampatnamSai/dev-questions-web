@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import JsonTreeView from "../components/JsonTreeView";
 
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
 const HISTORY_KEY = "devquiz_api_tester_history";
+const COLLECTION_KEY = "devquiz_api_tester_collection";
 const BODY_TYPES = [
   { key: "raw", label: "Raw (JSON/Text)" },
   { key: "form-data", label: "Form Data" },
@@ -22,6 +24,20 @@ function loadHistory() {
 function saveHistory(list) {
   try {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 15)));
+  } catch {}
+}
+
+function loadCollection() {
+  try {
+    return JSON.parse(localStorage.getItem(COLLECTION_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveCollection(list) {
+  try {
+    localStorage.setItem(COLLECTION_KEY, JSON.stringify(list));
   } catch {}
 }
 
@@ -79,11 +95,14 @@ export default function ApiTester() {
   const [authToken, setAuthToken] = useState("");
   const [sending, setSending] = useState(false);
   const [response, setResponse] = useState(null);
-  const [respTab, setRespTab] = useState("body"); // body | headers
+  const [respTab, setRespTab] = useState("body"); // body | headers | tree
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
+  const [collection, setCollection] = useState([]);
+  const importInputRef = useRef(null);
 
   useEffect(() => {
+    setCollection(loadCollection());
     setHistory(loadHistory());
   }, []);
 
@@ -152,15 +171,104 @@ export default function ApiTester() {
     }
   };
 
+  // Converts the raw JSON body's top-level keys into Form Data rows — for
+  // APIs that expect multipart/urlencoded but you drafted the payload as JSON.
+  const jsonToFormData = () => {
+    try {
+      const parsed = JSON.parse(body);
+      if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+        toast.error("JSON must be a flat object to convert to Form Data");
+        return;
+      }
+      const rows = Object.entries(parsed).map(([key, value]) => ({
+        key,
+        value: typeof value === "object" ? JSON.stringify(value) : String(value),
+      }));
+      setFormFields(rows.length ? rows : [{ key: "", value: "" }]);
+      setBodyType("form-data");
+      toast.success(`Converted ${rows.length} field(s) to Form Data`);
+    } catch {
+      toast.error("Not valid JSON");
+    }
+  };
+
+  const saveToCollection = () => {
+    if (!url.trim()) {
+      toast.error("Enter a URL first");
+      return;
+    }
+    const name = window.prompt("Name this request:", `${method} ${url}`);
+    if (!name) return;
+    const entry = { id: Date.now(), name, method, url, headers, bodyType, body, formFields, authType, ts: Date.now() };
+    const next = [entry, ...collection];
+    setCollection(next);
+    saveCollection(next);
+    toast.success("Saved to collection");
+  };
+
+  const loadFromCollection = (c) => {
+    setMethod(c.method);
+    setUrl(c.url);
+    setHeaders(c.headers?.length ? c.headers : [{ key: "", value: "" }]);
+    setBodyType(c.bodyType || "raw");
+    setBody(c.body || "");
+    setFormFields(c.formFields?.length ? c.formFields : [{ key: "", value: "" }]);
+    setAuthType(c.authType || "none");
+    toast.success(`Loaded "${c.name}"`);
+  };
+
+  const deleteFromCollection = (id) => {
+    const next = collection.filter((c) => c.id !== id);
+    setCollection(next);
+    saveCollection(next);
+  };
+
+  const exportCollection = () => {
+    if (!collection.length) {
+      toast.error("Collection is empty");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(collection, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "devquiz-api-collection.json";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const importCollection = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const imported = JSON.parse(reader.result);
+        if (!Array.isArray(imported)) throw new Error("not an array");
+        // Re-stamp ids so imported entries can't collide with existing ones.
+        const withIds = imported.map((c) => ({ ...c, id: Date.now() + Math.random() }));
+        const next = [...withIds, ...collection];
+        setCollection(next);
+        saveCollection(next);
+        toast.success(`Imported ${withIds.length} request(s)`);
+      } catch {
+        toast.error("Invalid collection file");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = ""; // allow re-importing the same file name later
+  };
+
   const copy = (text) => {
     navigator.clipboard.writeText(text);
     toast.success("Copied");
   };
 
   let prettyBody = response?.body || "";
+  let parsedResponseJson = null;
   if (response?.body) {
     try {
-      prettyBody = JSON.stringify(JSON.parse(response.body), null, 2);
+      parsedResponseJson = JSON.parse(response.body);
+      prettyBody = JSON.stringify(parsedResponseJson, null, 2);
     } catch {}
   }
 
@@ -206,6 +314,13 @@ export default function ApiTester() {
           >
             {sending && <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
             {sending ? "Sending…" : "Send"}
+          </button>
+          <button
+            onClick={saveToCollection}
+            title="Save this request to your collection"
+            className="px-3 py-2 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/20 text-sm font-semibold transition-colors"
+          >
+            💾 Save
           </button>
           <button
             onClick={resetAll}
@@ -302,7 +417,10 @@ export default function ApiTester() {
 
             {bodyType === "raw" ? (
               <div className="space-y-1.5">
-                <div className="flex items-center justify-end">
+                <div className="flex items-center justify-end gap-3">
+                  <button onClick={jsonToFormData} className="text-[10px] text-slate-400 hover:text-indigo-500">
+                    JSON → Form Data
+                  </button>
                   <button onClick={formatBody} className="text-[10px] text-slate-400 hover:text-indigo-500">
                     Format JSON
                   </button>
@@ -344,7 +462,7 @@ export default function ApiTester() {
           </div>
 
           <div className="flex gap-2 border-b border-slate-200 dark:border-white/10">
-            {["body", "headers"].map((t) => (
+            {["body", ...(parsedResponseJson !== null ? ["tree"] : []), "headers"].map((t) => (
               <button
                 key={t}
                 onClick={() => setRespTab(t)}
@@ -354,11 +472,11 @@ export default function ApiTester() {
                     : "text-slate-500 dark:text-slate-400 border-transparent"
                 }`}
               >
-                {t === "body" ? "Body" : `Headers (${Object.keys(response.headers).length})`}
+                {t === "body" ? "Body" : t === "tree" ? "Tree" : `Headers (${Object.keys(response.headers).length})`}
               </button>
             ))}
             <button
-              onClick={() => copy(respTab === "body" ? prettyBody : JSON.stringify(response.headers, null, 2))}
+              onClick={() => copy(respTab === "headers" ? JSON.stringify(response.headers, null, 2) : prettyBody)}
               className="ml-auto text-xs px-2 py-1 rounded bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/20"
             >
               📋 Copy
@@ -369,6 +487,10 @@ export default function ApiTester() {
             <pre className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/40 text-slate-700 dark:text-slate-200 font-mono text-xs overflow-auto max-h-96 whitespace-pre-wrap break-words">
               {prettyBody || <span className="text-slate-400 italic">(empty body)</span>}
             </pre>
+          ) : respTab === "tree" ? (
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/40 font-mono text-xs overflow-auto max-h-96">
+              <JsonTreeView data={parsedResponseJson} />
+            </div>
           ) : (
             <div className="rounded-xl bg-slate-50 dark:bg-slate-900/40 divide-y divide-slate-200 dark:divide-white/5 max-h-96 overflow-auto">
               {Object.entries(response.headers).map(([k, v]) => (
@@ -381,6 +503,45 @@ export default function ApiTester() {
           )}
         </div>
       )}
+
+      {/* Collections */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
+            Collection {collection.length > 0 && `(${collection.length})`}
+          </label>
+          <div className="flex gap-2">
+            <input ref={importInputRef} type="file" accept="application/json" onChange={importCollection} className="hidden" />
+            <button onClick={() => importInputRef.current?.click()} className="text-[10px] text-slate-400 hover:text-indigo-500">
+              ⬆ Import
+            </button>
+            <button onClick={exportCollection} className="text-[10px] text-slate-400 hover:text-indigo-500">
+              ⬇ Export
+            </button>
+          </div>
+        </div>
+        {collection.length > 0 ? (
+          <div className="glass-card divide-y divide-slate-100 dark:divide-white/5 overflow-hidden">
+            {collection.map((c) => (
+              <div key={c.id} className="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 dark:hover:bg-white/5 transition group">
+                <button onClick={() => loadFromCollection(c)} className="flex-1 flex items-center gap-3 text-left min-w-0">
+                  <span className="text-[10px] font-bold text-indigo-500 w-16 flex-shrink-0">{c.method}</span>
+                  <span className="text-xs text-slate-600 dark:text-slate-300 truncate">{c.name}</span>
+                </button>
+                <button
+                  onClick={() => deleteFromCollection(c.id)}
+                  className="text-slate-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity text-xs flex-shrink-0"
+                  title="Remove from collection"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-slate-400">No saved requests yet — hit 💾 Save above to build a reusable collection.</p>
+        )}
+      </div>
 
       {/* History */}
       {history.length > 0 && (
