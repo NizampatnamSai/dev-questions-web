@@ -1,5 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
+import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const EXAMPLES = [
   {
@@ -101,15 +105,26 @@ function formatOutput(val) {
 }
 
 export default function JsCompiler() {
-  const [code, setCode]       = useState(EXAMPLES[0].code);
+  const { user } = useAuth();
+  const isGuest = !user || user.isGuest;
+  const location = useLocation();
+  const [code, setCode]       = useState(location.state?.code || EXAMPLES[0].code);
   const [output, setOutput]   = useState([]);
   const [hasRun, setHasRun]   = useState(false);
   const [running, setRunning] = useState(false);
+  const [aiAnswer, setAiAnswer]   = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
   const outputRef             = useRef(null);
+
+  useEffect(() => {
+    if (location.state?.code) toast.success("Code loaded from Study Hub");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function run() {
     if (!code.trim() || running) return;
     setRunning(true);
+    setAiAnswer("");
     const logs = [];
 
     const origLog  = console.log;
@@ -158,7 +173,27 @@ export default function JsCompiler() {
     setTimeout(() => outputRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
   }
 
-  function clearAll() { setCode(""); setOutput([]); setHasRun(false); }
+  function clearAll() { setCode(""); setOutput([]); setHasRun(false); setAiAnswer(""); }
+
+  async function askAI() {
+    if (isGuest) return toast.error("Log in to use Ask AI — it's free but needs an account.");
+    if (!hasRun) return;
+    setAiLoading(true);
+    setAiAnswer("");
+    const outputText = output.map((l) => `[${l.type}] ${l.text}`).join("\n");
+    const hasError = output.some((l) => l.type === "error");
+    const question =
+      `${hasError ? "This JavaScript code threw an error. Explain what's wrong and how to fix it." : "Explain what this JavaScript code does and why it produces this output."}\n\n` +
+      `Code:\n${code}\n\nOutput:\n${outputText || "(no output)"}`;
+    try {
+      const { data } = await api.post("/ai/ask", { question });
+      setAiAnswer(data.answer);
+    } catch {
+      toast.error("AI explanation failed — try again shortly.");
+    } finally {
+      setAiLoading(false);
+    }
+  }
 
   const lineCount = code.split("\n").length;
 
@@ -293,6 +328,27 @@ export default function JsCompiler() {
               )}
             </AnimatePresence>
           </div>
+
+          {hasRun && (
+            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 space-y-2">
+              <button
+                onClick={askAI}
+                disabled={aiLoading || isGuest}
+                title={isGuest ? "Log in to use Ask AI" : "Ask AI to explain this code and output"}
+                className="text-xs px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-semibold transition-colors flex items-center gap-1.5"
+              >
+                {aiLoading ? <><span className="animate-spin">⟳</span> Thinking…</> : "🤖 Ask AI to Explain"}
+              </button>
+              {isGuest && (
+                <p className="text-[10px] text-slate-400">Log in to use Ask AI — free, but requires an account.</p>
+              )}
+              {aiAnswer && (
+                <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                  {aiAnswer}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

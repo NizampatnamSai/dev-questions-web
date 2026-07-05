@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import JsonTreeView from "../components/JsonTreeView";
+import MockApiPanel from "../components/MockApiPanel";
 
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
 const HISTORY_KEY = "devquiz_api_tester_history";
@@ -99,6 +100,7 @@ export default function ApiTester() {
   const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
   const [collection, setCollection] = useState([]);
+  const [topTab, setTopTab] = useState("test"); // "test" | "mock"
   const importInputRef = useRef(null);
 
   useEffect(() => {
@@ -278,39 +280,70 @@ export default function ApiTester() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       <div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
-          📡 API Request Tester
+          📡 API Tester
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          A lightweight Postman — send requests to any public API and inspect the response. Requests are proxied through our server to avoid CORS, and private/internal addresses are blocked.
+          {topTab === "test"
+            ? "A lightweight Postman — send requests to any public API and inspect the response. Requests are proxied through our server to avoid CORS, and private/internal addresses are blocked."
+            : "Get a real, live URL that returns dummy JSON data — no login, no AI involved. Paste the URL into the API Testing tab to try it out."}
         </p>
       </div>
 
+      {/* Top-level sections */}
+      <div className="flex gap-2 border-b border-slate-200 dark:border-white/10">
+        {[
+          { key: "test", label: "🔌 API Testing" },
+          { key: "mock", label: "🎲 Mock APIs" },
+        ].map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTopTab(t.key)}
+            className={`px-4 py-2 text-sm font-semibold border-b-2 transition ${
+              topTab === t.key
+                ? "text-indigo-600 dark:text-indigo-400 border-indigo-600 dark:border-indigo-400"
+                : "text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-700 dark:hover:text-slate-300"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {topTab === "mock" ? (
+        <div className="glass-card p-4">
+          <MockApiPanel />
+        </div>
+      ) : (
+      <>
       {/* Request bar */}
       <div className="glass-card p-4 space-y-3">
-        <div className="flex gap-2">
-          <div className="w-36 flex-shrink-0">
-            <select
-              value={method}
-              onChange={(e) => setMethod(e.target.value)}
-              className="input-light font-mono font-semibold"
-            >
-              {METHODS.map((m) => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </select>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex gap-2 flex-1 min-w-0">
+            <div className="w-24 sm:w-36 flex-shrink-0">
+              <select
+                value={method}
+                onChange={(e) => setMethod(e.target.value)}
+                className="input-light font-mono font-semibold"
+              >
+                {METHODS.map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            </div>
+            <input
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && send()}
+              placeholder="https://api.example.com/endpoint"
+              spellCheck={false}
+              className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-mono text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
-          <input
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && send()}
-            placeholder="https://api.example.com/endpoint"
-            spellCheck={false}
-            className="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-mono text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <div className="flex gap-2 flex-wrap sm:flex-nowrap">
           <button
             onClick={send}
             disabled={sending}
-            className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="flex-1 sm:flex-initial justify-center px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             {sending && <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
             {sending ? "Sending…" : "Send"}
@@ -329,6 +362,7 @@ export default function ApiTester() {
           >
             ↺ Clear
           </button>
+          </div>
         </div>
 
         {/* Panel tabs */}
@@ -562,6 +596,8 @@ export default function ApiTester() {
             ))}
           </div>
         </div>
+      )}
+      </>
       )}
     </motion.div>
   );

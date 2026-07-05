@@ -1,4 +1,5 @@
 import ipaddress
+import re
 import socket
 import time
 from typing import Optional, List
@@ -198,12 +199,33 @@ def _mock_comment(i: int) -> dict:
     }
 
 
+def _mock_image(i: int) -> dict:
+    rng = _seeded(i * 67867967)
+    width, height = rng.choice([(400, 300), (600, 400), (800, 600), (1024, 768)])
+    caption_words = rng.sample(_WORDS, 5)
+    first, last = rng.choice(_FIRST_NAMES), rng.choice(_LAST_NAMES)
+    # picsum.photos: free, no API key, deterministic per seed — same seed always returns the same image
+    seed = f"devquiz-{i}"
+    return {
+        "id": i,
+        "url": f"https://picsum.photos/seed/{seed}/{width}/{height}",
+        "thumbnailUrl": f"https://picsum.photos/seed/{seed}/150/100",
+        "width": width,
+        "height": height,
+        "title": " ".join(caption_words).capitalize(),
+        "caption": " ".join(rng.choices(_WORDS, k=12)),
+        "author": f"{first} {last}",
+        "likes": rng.randint(0, 2000),
+    }
+
+
 _MOCK_GENERATORS = {
     "users": _mock_user,
     "posts": _mock_post,
     "products": _mock_product,
     "todos": _mock_todo,
     "comments": _mock_comment,
+    "images": _mock_image,
 }
 
 MAX_MOCK_COUNT = 100
@@ -244,9 +266,13 @@ async def list_snippets(
     if language:
         query["language"] = language
     if search:
+        # re.escape() so user input is matched literally, never interpreted as
+        # a live regex pattern — closes a ReDoS vector (e.g. "(a+)+b") and
+        # avoids surprising matches from stray regex metacharacters.
+        safe_search = re.escape(search)
         query["$and"] = query.get("$and", []) + [{"$or": [
-            {"title": {"$regex": search, "$options": "i"}},
-            {"tags": {"$regex": search, "$options": "i"}},
+            {"title": {"$regex": safe_search, "$options": "i"}},
+            {"tags": {"$regex": safe_search, "$options": "i"}},
         ]}]
     docs = await col_snippets().find(query).sort("createdAt", -1).to_list(300)
     return [sid(d) for d in docs]

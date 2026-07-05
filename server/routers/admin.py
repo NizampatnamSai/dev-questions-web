@@ -17,6 +17,7 @@ def _require_admin(user=Depends(current_user)):
 
 
 def _safe_user(doc: dict) -> dict:
+    disabled_until = doc.get("disabledUntil")
     return {
         "id":           doc.get("id", str(doc.get("_id", ""))),
         "name":         doc.get("name"),
@@ -25,6 +26,9 @@ def _safe_user(doc: dict) -> dict:
         "dailyLimit":   doc.get("dailyLimit", 25),
         "createdAt":    doc["createdAt"].isoformat() if isinstance(doc.get("createdAt"), datetime) else str(doc.get("createdAt", "")),
         "questionCount": doc.get("questionCount", 0),
+        "status":         doc.get("status", "approved"),
+        "disabledUntil":  disabled_until.isoformat() if isinstance(disabled_until, datetime) else None,
+        "avatarUrl":      doc.get("avatarUrl"),
     }
 
 
@@ -32,15 +36,28 @@ def _safe_user(doc: dict) -> dict:
 
 @router.get("/users")
 async def list_users(admin=Depends(_require_admin)):
-    from db_mongo import col_questions
+    from db_mongo import col_questions, col_user_profiles
     cursor = col_users().find({"status": {"$ne": "rejected"}}).sort("createdAt", -1)
     docs   = await cursor.to_list(length=500)
+    user_ids = [str(d["_id"]) for d in docs]
+    # Batched (not per-user) profile lookup — avatars live in a separate
+    # collection from the core user record, so this is a single $in query
+    # rather than one lookup per row.
+    profiles = await col_user_profiles().find({"userId": {"$in": user_ids}}).to_list(length=len(user_ids) or 1)
+    avatar_by_id = {p["userId"]: p.get("avatar_url") for p in profiles}
+    # Batched question counts via one aggregation instead of one
+    # count_documents() call per user.
+    count_rows = await col_questions().aggregate([
+        {"$match": {"userId": {"$in": user_ids}}},
+        {"$group": {"_id": "$userId", "count": {"$sum": 1}}},
+    ]).to_list(length=len(user_ids) or 1)
+    qcount_by_id = {r["_id"]: r["count"] for r in count_rows}
     result = []
     for doc in docs:
         u = sid(doc)
         uid = u["id"]
-        qcount = await col_questions().count_documents({"userId": uid})
-        u["questionCount"] = qcount
+        u["questionCount"] = qcount_by_id.get(uid, 0)
+        u["avatarUrl"] = avatar_by_id.get(uid)
         result.append(_safe_user(u))
     return result
 
@@ -53,6 +70,7 @@ class CreateUserBody(BaseModel):
     password:    str
     role:        str = "user"
     dailyLimit:  int = 25
+    disabledUntil: Optional[str] = None  # ISO timestamp — client computes this from hours/days/custom picker
 
 
 @router.post("/users")
@@ -65,14 +83,20 @@ async def create_user(body: CreateUserBody, admin=Depends(_require_admin)):
     if await col_users().find_one({"email": email}):
         raise HTTPException(409, "Email already exists")
     hashed = bcrypt.hashpw(body.password[:72].encode(), bcrypt.gensalt()).decode()
-    result = await col_users().insert_one({
+    doc_to_insert = {
         "name":       body.name.strip(),
         "email":      email,
         "password":   hashed,
         "role":       body.role,
         "dailyLimit": body.dailyLimit,
         "createdAt":  now(),
-    })
+    }
+    if body.disabledUntil:
+        try:
+            doc_to_insert["disabledUntil"] = datetime.fromisoformat(body.disabledUntil.replace("Z", "+00:00"))
+        except ValueError:
+            raise HTTPException(400, "disabledUntil must be a valid ISO timestamp")
+    result = await col_users().insert_one(doc_to_insert)
     doc = sid(await col_users().find_one({"_id": result.inserted_id}))
     return _safe_user(doc)
 
@@ -149,18 +173,18 @@ class NotifyBody(BaseModel):
 @router.post("/notify")
 async def send_notification(nb: NotifyBody, admin=Depends(_require_admin)):
     if nb.user_ids:
-        rows = []
-        for uid in nb.user_ids:
-            rows += await col_fcm_tokens().find({"userId": uid}).to_list(length=50)
+        rows = await col_fcm_tokens().find({"userId": {"$in": nb.user_ids}}).to_list(length=(len(nb.user_ids) * 50) or 1)
         target = "users"
-        # resolve names
-        names = []
+        # resolve names — one batched query instead of one per user id
+        oids = []
         for uid in nb.user_ids:
             try:
-                u = await col_users().find_one({"_id": oid(uid)})
-                names.append(u.get("name", uid) if u else uid)
+                oids.append(oid(uid))
             except Exception:
-                names.append(uid)
+                pass
+        users_docs = await col_users().find({"_id": {"$in": oids}}).to_list(length=len(oids) or 1)
+        name_map = {str(u["_id"]): u.get("name") for u in users_docs}
+        names = [name_map.get(uid, uid) for uid in nb.user_ids]
         target_name = ", ".join(names)
     else:
         rows = await col_fcm_tokens().find({}).to_list(length=1000)
@@ -371,13 +395,32 @@ async def block_user(uid: str, admin=Depends(_require_admin)):
 
 @router.patch("/users/{uid}/disable")
 async def disable_user(uid: str, admin=Depends(_require_admin)):
-    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "disabled"}})
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "disabled"}, "$unset": {"disabledUntil": ""}})
     return {"message": "User disabled"}
 
 @router.patch("/users/{uid}/enable")
 async def enable_user(uid: str, admin=Depends(_require_admin)):
-    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved"}})
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"status": "approved"}, "$unset": {"disabledUntil": ""}})
     return {"message": "User enabled"}
+
+
+class DisableTempBody(BaseModel):
+    disabled_until: str  # ISO timestamp — client computes this from hours/days/custom picker
+
+
+@router.patch("/users/{uid}/disable-temp")
+async def disable_user_temp(uid: str, body: DisableTempBody, admin=Depends(_require_admin)):
+    """Schedule a temporary lockout — same full-lockout enforcement as a
+    permanent disable (blocks login + every API call, see deps.py), but
+    automatically lifts once disabledUntil passes, no admin action needed."""
+    try:
+        until = datetime.fromisoformat(body.disabled_until.replace("Z", "+00:00"))
+    except ValueError:
+        raise HTTPException(400, "disabled_until must be a valid ISO timestamp")
+    if not await col_users().find_one({"_id": oid(uid)}):
+        raise HTTPException(404, "User not found")
+    await col_users().update_one({"_id": oid(uid)}, {"$set": {"disabledUntil": until}})
+    return {"message": "User temporarily disabled", "disabledUntil": until.isoformat()}
 
 
 # ── Debug / manual trigger ────────────────────────────────────────────────────
@@ -406,11 +449,18 @@ async def trigger_notifications_now(admin=Depends(_require_admin)):
     schedules = await col_notify_schedules().find({"enabled": {"$ne": False}}).to_list(500)
     print(f"[trigger-now] firing {len(schedules)} schedule(s)", flush=True)
 
+    # Batch-fetch every schedule's FCM tokens in one query instead of one per
+    # schedule — each user can still get their own personalized message below.
+    sched_user_ids = [s["userId"] for s in schedules]
+    all_token_docs = await col_fcm_tokens().find({"userId": {"$in": sched_user_ids}}).to_list(length=(len(sched_user_ids) * 50) or 1)
+    tokens_by_user: dict = {}
+    for t in all_token_docs:
+        tokens_by_user.setdefault(t["userId"], []).append(t["token"])
+
     sent_total = 0
     for sched in schedules:
-        uid         = sched["userId"]
-        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(50)
-        tokens      = [t["token"] for t in tokens_docs]
+        uid    = sched["userId"]
+        tokens = tokens_by_user.get(uid, [])
         if not tokens:
             print(f"[trigger-now] no FCM tokens for userId={uid}", flush=True)
             continue
@@ -514,17 +564,24 @@ async def send_to_selected_users(payload: TestNotifyPayload, admin=Depends(_requ
     else:
         user_ids = payload.user_ids
 
+    # Batch-fetch every selected user's FCM tokens in one query instead of
+    # one per user.
+    all_token_docs = await col_fcm_tokens().find({"userId": {"$in": user_ids}}).to_list(length=(len(user_ids) * 10) or 1)
+    tokens_by_user: dict = {}
+    for t in all_token_docs:
+        tokens_by_user.setdefault(t["userId"], []).append(t["token"])
+
     sent = 0
     ts = now()
+    notif_docs = []
     for uid in user_ids:
-        toks = await col_fcm_tokens().find({"userId": uid}).to_list(10)
-        tokens = [t["token"] for t in toks]
+        tokens = tokens_by_user.get(uid, [])
         if tokens:
             await _send(tokens, title=payload.title, body=payload.body,
                         data={"type": "manual", "path": "/notifications"})
             sent += len(tokens)
         # Log per-user notification regardless of FCM token (so inbox shows it)
-        await col_user_notifications().insert_one({
+        notif_docs.append({
             "userId":    uid,
             "title":     payload.title,
             "body":      payload.body,
@@ -534,6 +591,8 @@ async def send_to_selected_users(payload: TestNotifyPayload, admin=Depends(_requ
             "read":      False,
             "createdAt": ts,
         })
+    if notif_docs:
+        await col_user_notifications().insert_many(notif_docs)
     return {"sent": sent, "users": len(user_ids)}
 
 
@@ -605,7 +664,16 @@ notif_manager = NotificationManager()
 
 
 @router.websocket("/notifications/ws")
-async def notifications_ws(ws: WebSocket, user_id: str = None):
+async def notifications_ws(ws: WebSocket, token: str = None):
+    # Identity is derived from the JWT server-side — a raw user_id query param
+    # would let anyone read another user's unread notification count.
+    from auth_utils import decode_token
+    user_id = None
+    if token:
+        try:
+            user_id = decode_token(token)
+        except Exception:
+            user_id = None
     if not user_id:
         await ws.close(code=4001)
         return
@@ -635,6 +703,9 @@ class AppConfigBody(BaseModel):
     coding_question_daily_limit: Optional[int] = None
     notifications_enabled: Optional[bool] = None
     guest_feedback_enabled: Optional[bool] = None
+    guest_mode_enabled: Optional[bool] = None
+    guest_mode_message: Optional[str] = None
+    wb_afternoon_reminder_time: Optional[str] = None  # "HH:MM" IST, e.g. "15:00"
 
 
 @router.get("/app-config/public")
@@ -651,6 +722,8 @@ async def get_app_config_public():
         "coding_question_daily_limit": doc.get("coding_question_daily_limit", 15),
         "notifications_enabled": doc.get("notifications_enabled", True),
         "guest_feedback_enabled": doc.get("guest_feedback_enabled", False),
+        "guest_mode_enabled": doc.get("guest_mode_enabled", True),
+        "guest_mode_message": doc.get("guest_mode_message", "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."),
     }
 
 
@@ -664,6 +737,9 @@ async def get_app_config(admin=Depends(_require_admin)):
     doc.setdefault("wb_reminder_time", "15:00")
     doc.setdefault("notifications_enabled", True)
     doc.setdefault("guest_feedback_enabled", False)
+    doc.setdefault("guest_mode_enabled", True)
+    doc.setdefault("guest_mode_message", "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue.")
+    doc.setdefault("wb_afternoon_reminder_time", "15:00")
     return doc
 
 
@@ -691,6 +767,12 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["notifications_enabled"] = body.notifications_enabled
     if body.guest_feedback_enabled is not None:
         update["guest_feedback_enabled"] = body.guest_feedback_enabled
+    if body.guest_mode_enabled is not None:
+        update["guest_mode_enabled"] = body.guest_mode_enabled
+    if body.guest_mode_message is not None:
+        update["guest_mode_message"] = body.guest_mode_message
+    if body.wb_afternoon_reminder_time is not None:
+        update["wb_afternoon_reminder_time"] = body.wb_afternoon_reminder_time
 
     if update:
         await col_app_config().update_one(
@@ -711,6 +793,18 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
             scheduler.reschedule_job("workboard_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
         except Exception as e:
             import logging; logging.getLogger(__name__).warning(f"Failed to reschedule workboard job: {e}")
+
+    # If the afternoon catch-up reminder time changed, reschedule that job too
+    if body.wb_afternoon_reminder_time is not None:
+        try:
+            from main import scheduler
+            h, m = [int(x) for x in body.wb_afternoon_reminder_time.split(":")]
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            scheduler.reschedule_job("workboard_afternoon_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
+        except Exception as e:
+            import logging; logging.getLogger(__name__).warning(f"Failed to reschedule workboard afternoon job: {e}")
 
     # If maintenance just turned OFF → notify all users
     if was_maintenance and body.maintenance is False:

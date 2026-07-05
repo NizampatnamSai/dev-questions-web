@@ -369,6 +369,22 @@ export const STUDY_CATEGORIES = [
     ]
   },
   {
+    "id": "backend",
+    "label": "Backend Development",
+    "icon": "🔧",
+    "color": "#334155",
+    "sources": [
+      {
+        "label": "MDN HTTP Docs",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP"
+      },
+      {
+        "label": "OWASP API Security",
+        "url": "https://owasp.org/www-project-api-security/"
+      }
+    ]
+  },
+  {
     "id": "devops",
     "label": "DevOps",
     "icon": "☁",

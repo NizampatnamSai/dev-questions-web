@@ -59,6 +59,33 @@ export default function APIDocumentation() {
     { method: "PATCH", path: "/api/dev-tools/snippets/{id}", desc: "Edit a snippet you own" },
     { method: "DELETE", path: "/api/dev-tools/snippets/{id}", desc: "Delete a snippet you own" },
     { method: "GET", path: "/api/dev-tools/snippets/languages", desc: "Distinct list of languages used, for the filter dropdown" },
+    { method: "GET", path: "/api/dev-tools/mock/{resource}", desc: "Public, no-auth mock data generator — users/posts/products/todos/comments/images, deterministic per resource+count" },
+
+    // Notes — zero-knowledge encrypted, server never sees plaintext or the key
+    { method: "GET", path: "/api/notes/salt", desc: "Get your encryption salt + verification blob (creates them on first use)" },
+    { method: "POST", path: "/api/notes/verify-setup", desc: "Store the one-time passphrase verification blob (first-time setup only)" },
+    { method: "GET", path: "/api/notes", desc: "List your notes (still encrypted — client decrypts)" },
+    { method: "POST", path: "/api/notes", desc: "Create a note (client sends only ciphertext + IV)" },
+    { method: "PATCH", path: "/api/notes/{id}", desc: "Update a note" },
+    { method: "DELETE", path: "/api/notes/{id}", desc: "Delete a note" },
+
+    // Meetings — free Jitsi-based video calls
+    { method: "POST", path: "/api/meetings", desc: "Create/schedule a meeting and choose invitees (admin only)" },
+    { method: "GET", path: "/api/meetings", desc: "List meetings — all of them for admins, only your invites otherwise" },
+    { method: "GET", path: "/api/meetings/join/{code}", desc: "Look up a meeting by its join code — works for guests with no account at all" },
+    { method: "GET", path: "/api/meetings/{id}", desc: "Get one meeting's details (must be admin or invited)" },
+    { method: "PATCH", path: "/api/meetings/{id}/end", desc: "End a meeting for everyone (admin only)" },
+    { method: "DELETE", path: "/api/meetings/{id}", desc: "Delete/cancel a meeting (admin only)" },
+
+    // Recent Jobs — free public job board feed
+    { method: "GET", path: "/api/jobs/recent", desc: "Recent tech job listings from the last 7 days (public, cached ~20 min)" },
+
+    // Project Chatbot — scoped to explaining this app only
+    { method: "POST", path: "/api/project-chat/ask", desc: "Ask the in-app assistant about a DevQuiz feature or how to get somewhere (open to guests)" },
+    { method: "GET", path: "/api/project-chat/knowledge", desc: "The same feature/route knowledge the chatbot and Admin Features Doc both read from" },
+
+    // Uploads — Cloudinary-backed, only the URL is ever stored
+    { method: "POST", path: "/api/uploads/image", desc: "Upload an image (max 5MB); returns a URL — used by Profile pictures" },
   ];
 
   const methodColors = {
@@ -132,6 +159,13 @@ export default function APIDocumentation() {
           <li>✅ Server-proxied API request tester with SSRF protection</li>
           <li>✅ Snippet library with team-wide public sharing</li>
           <li>✅ Study Hub progress synced per account, guest-safe fallback to local storage</li>
+          <li>✅ Zero-knowledge encrypted personal Notes — server never sees plaintext or the key</li>
+          <li>✅ Free video meetings (Jitsi) with admin-controlled invites plus a guest-friendly join code</li>
+          <li>✅ Recent tech job listings from a free public source</li>
+          <li>✅ In-app Project Chatbot scoped to explaining this app, with navigation help</li>
+          <li>✅ Cloudinary-backed image uploads — only the URL is ever stored, never the image bytes</li>
+          <li>✅ Scheduled/temporary user lockouts (hours/days/custom) that lift automatically</li>
+          <li>✅ Admin-toggleable guest mode with a custom message when disabled</li>
         </ul>
       </div>
 

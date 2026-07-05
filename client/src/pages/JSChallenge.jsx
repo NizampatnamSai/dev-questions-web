@@ -101,13 +101,13 @@ export default function JSChallenge() {
   };
 
   if (loading) return (
-    <div className="space-y-4 max-w-2xl">
+    <div className="space-y-4 max-w-2xl mx-auto">
       {[1,2,3].map(i => <div key={i} className="glass-card p-6 animate-pulse h-24" />)}
     </div>
   );
 
   if (!status?.joined) return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl space-y-6">
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl mx-auto space-y-6">
       <div className="glass-card p-8 text-center space-y-4">
         <div className="text-6xl">🧩</div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">30-Day JS Challenge</h1>
@@ -130,7 +130,7 @@ export default function JSChallenge() {
   const missCount = history.filter(h => h.status === "missed").length;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl space-y-5">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto space-y-5">
       {/* Header */}
       <div className="glass-card p-5">
         <div className="flex items-center justify-between flex-wrap gap-3">

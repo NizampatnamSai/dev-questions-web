@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "./ConfirmModal";
+import { useClickOutside } from "../hooks/useClickOutside";
 
 export default function UserMenu() {
   const { user, logout, profile, setProfile } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const menuRef = useRef(null);
+
+  useClickOutside(menuRef, () => setOpen(false), open);
 
   const avatarUrl = profile?.avatar_url || null;
 
@@ -39,7 +43,7 @@ export default function UserMenu() {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative" ref={menuRef}>
         <div className="flex items-center gap-1">
           <button
             onClick={() => navigate("/profile")}

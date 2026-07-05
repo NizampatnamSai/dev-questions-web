@@ -64,6 +64,7 @@ export default function WorkBoard() {
   const [availableDates, setAvailableDates] = useState([]);
   // const [selectedDate, setSelectedDate] = useState(null);
   const [activeTab, setActiveTab] = useState("today"); // "today" | "history"
+  const [datesLoaded, setDatesLoaded] = useState(false);
   const [selectedHistoryDate, setSelectedHistoryDate] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [wbConfig, setWbConfig] = useState({
@@ -81,12 +82,8 @@ export default function WorkBoard() {
 
   useEffect(() => {
     loadStatus();
-    // loadActiveUsers();
-    loadAvailableDates();
-    api
-      .get("/workboard/config")
-      .then(({ data }) => setWbConfig(data))
-      .catch(() => {});
+    // Dates for the History tab are fetched lazily on first open instead of
+    // eagerly here — most visits only ever look at Today.
     // No more polling — online count comes via WebSocket
     return () => {
       wsRef.current?.close();
@@ -116,6 +113,10 @@ export default function WorkBoard() {
 
   const openHistory = () => {
     setActiveTab("history");
+    if (!datesLoaded) {
+      loadAvailableDates();
+      setDatesLoaded(true);
+    }
   };
 
   const openConfigEdit = () => {
@@ -161,15 +162,18 @@ export default function WorkBoard() {
   const loadStatus = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get("/workboard/status");
+      // One combined call replaces what used to be status + config + posts +
+      // missing-today + pending-members (5 round trips) on initial load.
+      const { data } = await api.get("/workboard/board");
       setStatus(data.status);
+      setWbConfig(data.config);
       if (data.status === "active") {
-        await loadBoard();
+        setTodayPosts(data.posts);
+        setMissing(data.missing);
         connectWS();
       }
       if (user?.role === "admin" || user?.role === "sub_admin") {
-        const { data: pending } = await api.get("/workboard/pending-members");
-        setPending(pending);
+        setPending(data.pendingMembers || []);
       }
     } catch {}
     setLoading(false);
@@ -217,13 +221,11 @@ export default function WorkBoard() {
   // };
 
   const connectWS = () => {
-    const token = localStorage.getItem("devquiz_token");
-    const userId = encodeURIComponent(user?.id || "");
-    const userName = encodeURIComponent(user?.name || "");
-    // const userAvatar = encodeURIComponent(profile?.avatar_url || "");
-    const ws = new WebSocket(
-      `${WS_BASE}/api/workboard/ws?user_id=${userId}&user_name=${userName}`,
-    );
+    // Identity (name, avatar) is looked up server-side from this token — the
+    // backend no longer trusts a client-supplied user_id/user_name, which
+    // anyone could otherwise set to impersonate another real user's presence.
+    const token = encodeURIComponent(localStorage.getItem("devquiz_token") || "");
+    const ws = new WebSocket(`${WS_BASE}/api/workboard/ws?token=${token}`);
     ws.onmessage = (e) => {
       try {
         const msg = JSON.parse(e.data);
@@ -374,7 +376,7 @@ export default function WorkBoard() {
 
   if (loading)
     return (
-      <div className="space-y-3 max-w-2xl glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+      <div className="space-y-3 max-w-3xl mx-auto glass-card divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
         {[1, 2, 3].map((i) => (
           <div key={i} className="p-4 animate-pulse">
             <div className="flex items-center justify-between">
@@ -403,7 +405,7 @@ export default function WorkBoard() {
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
   return (
-    <div className="max-w-2xl space-y-5">
+    <div className="max-w-3xl mx-auto space-y-5">
       {/* Header */}
       <div className="glass-card p-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

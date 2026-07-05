@@ -103,19 +103,24 @@ async def add_points(action: str, user=Depends(current_user)):
     return {"points": new_points, "level": new_level, "leveledUp": new_level != old_level}
 
 
-@router.post("/profile/add-badge/{badge_id}")
-async def add_badge(badge_id: str, user=Depends(current_user)):
-    """Award a badge to user (admin/internal use)"""
+@router.post("/profile/add-badge/{target_user_id}/{badge_id}")
+async def add_badge(target_user_id: str, badge_id: str, admin=Depends(current_user)):
+    """Admin-only: award a badge to a specific user. Was previously reachable
+    by any logged-in user to self-award any badge (no role check + always
+    targeted the caller's own profile) — now requires admin and takes an
+    explicit target so it actually matches its own docstring intent."""
+    if admin.get("role") not in ("admin", "sub_admin"):
+        raise HTTPException(403, "Admin only")
     if badge_id not in BADGES:
         raise HTTPException(400, "Invalid badge")
 
-    profile = await col_user_profiles().find_one({"userId": user["id"]}) or {}
+    profile = await col_user_profiles().find_one({"userId": target_user_id}) or {}
     badges = profile.get("badges", [])
 
     if badge_id not in badges:
         badges.append(badge_id)
         await col_user_profiles().update_one(
-            {"userId": user["id"]},
+            {"userId": target_user_id},
             {"$set": {"badges": badges, "updatedAt": now()}},
             upsert=True
         )

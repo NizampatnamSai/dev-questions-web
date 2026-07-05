@@ -9,7 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
 from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes
+from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads
 
 app = FastAPI(title="DevQuiz API")
 
@@ -63,11 +63,21 @@ async def startup():
         wb_h_utc, wb_m_utc = 9, 30
     print(f"[startup] workboard_reminder scheduled at {wb_h_utc:02d}:{wb_m_utc:02d} UTC ({wb_time} IST)", flush=True)
 
+    # Afternoon catch-up reminder — also admin-configurable (App Config), same conversion as above.
+    wb_pm_time = (wb_doc or {}).get("wb_afternoon_reminder_time", "15:00")
+    try:
+        wb_pm_h_ist, wb_pm_m_ist = [int(x) for x in wb_pm_time.split(":")]
+        total_pm_utc = wb_pm_h_ist * 60 + wb_pm_m_ist - 330
+        wb_pm_h_utc = (total_pm_utc // 60) % 24
+        wb_pm_m_utc = total_pm_utc % 60
+    except Exception:
+        wb_pm_h_utc, wb_pm_m_utc = 9, 30
+    print(f"[startup] workboard_afternoon_reminder scheduled at {wb_pm_h_utc:02d}:{wb_pm_m_utc:02d} UTC ({wb_pm_time} IST)", flush=True)
+
     scheduler.add_job(fire_scheduled_notifications,    "cron", second=0)
     scheduler.add_job(fire_challenge_notifications,    "cron", hour=4, minute=30, second=0)
     scheduler.add_job(fire_workboard_notifications,    "cron", hour=wb_h_utc, minute=wb_m_utc, second=0, id="workboard_reminder")
-    # Fixed 3pm IST catch-up nudge, independent of the admin-configurable morning time above.
-    scheduler.add_job(fire_workboard_afternoon_reminder, "cron", hour=9, minute=30, second=0, id="workboard_afternoon_reminder")
+    scheduler.add_job(fire_workboard_afternoon_reminder, "cron", hour=wb_pm_h_utc, minute=wb_pm_m_utc, second=0, id="workboard_afternoon_reminder")
     scheduler.add_job(fire_community_reminder, "cron", hour=cr_hour, minute=cr_minute, second=0, id="community_reminder")
     scheduler.start()
     print("[startup] ✅ Scheduler started with all jobs", flush=True)
@@ -103,6 +113,10 @@ app.include_router(coding_questions.router,  prefix="/api/study")
 app.include_router(dev_tools.router,         prefix="/api/dev-tools")
 app.include_router(resume.router,            prefix="/api/resume")
 app.include_router(notes.router,             prefix="/api/notes")
+app.include_router(project_chat.router,      prefix="/api/project-chat")
+app.include_router(jobs.router,              prefix="/api/jobs")
+app.include_router(meetings.router,          prefix="/api/meetings")
+app.include_router(uploads.router,           prefix="/api/uploads")
 
 
 @app.get("/")

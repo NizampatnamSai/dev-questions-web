@@ -27,6 +27,7 @@ import designpatterns from "./studyTopics/designpatterns";
 import frontendsystemdesign from "./studyTopics/frontendsystemdesign";
 import testing from "./studyTopics/testing";
 import database from "./studyTopics/database";
+import backend from "./studyTopics/backend";
 import devops from "./studyTopics/devops";
 import aifordevs from "./studyTopics/aifordevs";
 import accessibility from "./studyTopics/accessibility";
@@ -60,6 +61,7 @@ export const STUDY_TOPICS = [
   ...frontendsystemdesign,
   ...testing,
   ...database,
+  ...backend,
   ...devops,
   ...aifordevs,
   ...accessibility,

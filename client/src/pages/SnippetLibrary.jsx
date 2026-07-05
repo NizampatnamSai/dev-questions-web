@@ -7,6 +7,7 @@ import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
 import RichTextEditor from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
+import CodeCard from "../components/CodeCard";
 
 const COMMON_LANGUAGES = [
   "javascript", "typescript", "python", "java", "go", "rust", "c", "cpp",
@@ -140,11 +141,6 @@ export default function SnippetLibrary() {
     });
   };
 
-  const copy = (text) => {
-    navigator.clipboard.writeText(text);
-    toast.success("Copied");
-  };
-
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -252,13 +248,12 @@ export default function SnippetLibrary() {
                 </div>
 
                 {/* Code preview */}
-                <div className="rounded-lg overflow-hidden border border-slate-800">
-                  <pre
-                    className={`bg-[#0d1117] text-emerald-300 font-mono text-xs p-3 overflow-x-auto ${expanded === s.id ? "" : "max-h-24 overflow-y-hidden"}`}
-                  >
-                    {s.code}
-                  </pre>
-                </div>
+                <CodeCard
+                  code={s.code}
+                  language={s.language}
+                  title={s.title}
+                  maxHeight={expanded === s.id ? undefined : "6rem"}
+                />
 
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <button
@@ -266,12 +261,6 @@ export default function SnippetLibrary() {
                     className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
                   >
                     {expanded === s.id ? "▲ Show Less" : "▼ View More"}
-                  </button>
-                  <button
-                    onClick={() => copy(s.code)}
-                    className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
-                  >
-                    📋 Copy
                   </button>
                   {s.userId === user?.id && (
                     <>

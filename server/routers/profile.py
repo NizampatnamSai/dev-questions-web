@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from db_mongo import col_users, col_user_profiles, sid, oid, now
 from deps import current_user
@@ -144,7 +144,6 @@ async def get_user_profile(user_id: str):
     return {
         "id": str(user["_id"]),
         "name": user.get("name", ""),
-        "email": user.get("email", ""),
         "role": user.get("role", "user"),
         "bio": profile.get("bio", ""),
         "avatar_url": profile.get("avatar_url"),

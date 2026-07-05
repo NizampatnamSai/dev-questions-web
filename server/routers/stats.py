@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from db_mongo import col_questions, col_comments, col_users, sid
+from db_mongo import col_questions, col_comments, col_users, col_user_profiles, sid
 from deps import current_user
 
 router = APIRouter()
@@ -116,4 +116,12 @@ async def leaderboard():
             "upvotesReceived": r["upvotesReceived"],
             "questionsPosted": r["questionsPosted"],
         })
+
+    user_ids = [r["id"] for r in result]
+    if user_ids:
+        profiles = await col_user_profiles().find({"userId": {"$in": user_ids}}).to_list(length=len(user_ids))
+        avatar_by_id = {p["userId"]: p.get("avatar_url") for p in profiles}
+        for r in result:
+            r["avatarUrl"] = avatar_by_id.get(r["id"])
+
     return result

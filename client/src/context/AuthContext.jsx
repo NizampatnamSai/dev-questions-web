@@ -6,6 +6,7 @@ import {
   requestAndRegisterToken,
   onForegroundMessage,
 } from "../firebase";
+import { forgetSessionKey } from "../utils/noteCrypto";
 
 const AuthContext = createContext(null);
 
@@ -56,8 +57,11 @@ export function AuthProvider({ children }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email, password) => {
-    const { data } = await api.post("/auth/login", { email, password });
+  const login = async (email, password, adminKey) => {
+    const { data } = await api.post("/auth/login", { email, password, admin_key: adminKey });
+    if (data.requireAdminKey) {
+      return { requireAdminKey: true };
+    }
     localStorage.setItem("devquiz_token", data.token);
     localStorage.setItem("devquiz_user", JSON.stringify(data.user));
     localStorage.removeItem("devquiz_guest");
@@ -86,6 +90,7 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     setProfile(null);
+    forgetSessionKey(); // don't let a remembered Notes key survive into the next login on this tab
     if (user?.isGuest) {
       localStorage.removeItem("devquiz_guest");
       setUser(null);

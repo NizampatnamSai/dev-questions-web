@@ -41,7 +41,10 @@ function connectFor(userId) {
   const wsBase = apiUrl.startsWith("http")
     ? apiUrl.replace(/^http/, "ws").replace(/\/api$/, "")
     : `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
-  const wsUrl = `${wsBase}/api/admin/notifications/ws?user_id=${userId}`;
+  // Identity is derived from this token server-side — a raw user_id query
+  // param would let anyone read another user's unread notification count.
+  const token = encodeURIComponent(localStorage.getItem("devquiz_token") || "");
+  const wsUrl = `${wsBase}/api/admin/notifications/ws?token=${token}`;
 
   let retryDelay = 3000;
   const connect = () => {

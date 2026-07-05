@@ -49,6 +49,14 @@ export default function ZoomControl() {
       >
         +
       </button>
+      <button
+        onClick={reset}
+        disabled={zoom === 100}
+        className="w-6 h-6 flex items-center justify-center rounded text-slate-500 dark:text-slate-400 hover:bg-black/10 dark:hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-xs"
+        title="Reset zoom to 100%"
+      >
+        ↺
+      </button>
     </div>
   );
 }

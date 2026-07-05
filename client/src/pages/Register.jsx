@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { requestAndRegisterToken } from "../firebase";
 import api from "../api/axios";
+import Footer from "../components/Footer";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -58,7 +59,7 @@ export default function Register() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card w-full max-w-md p-8 text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto text-3xl">⏳</div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Awaiting Approval</h2>
@@ -92,12 +93,15 @@ export default function Register() {
           )}
           <Link to="/login" className="inline-block mt-2 text-sm text-cyan-400 hover:underline">← Back to login</Link>
         </motion.div>
+        <div className="absolute bottom-0 inset-x-0">
+          <Footer />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -184,6 +188,9 @@ export default function Register() {
           )}
         </p>
       </motion.div>
+      <div className="absolute bottom-0 inset-x-0">
+        <Footer />
+      </div>
     </div>
   );
 }

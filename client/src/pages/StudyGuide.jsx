@@ -215,12 +215,17 @@ function AiPanel({ topic, onClose }) {
   );
 }
 
+const JS_COMPILER_CATEGORIES = new Set(["javascript"]);
+
 function TopicCard({ topic, reviewed, onToggle, openId, setOpenId }) {
   const open = openId === topic.id;
   const setOpen = (val) => setOpenId(val ? topic.id : null);
   const [tab, setTab] = useState("explanation");
   const [showAi, setShowAi] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const canOpenInCompiler = topic.code && JS_COMPILER_CATEGORIES.has(topic.category);
+  const openInCompiler = () => navigate("/js-compiler", { state: { code: topic.code } });
 
   const tabs = [
     { id: "explanation", label: "📖 Explanation" },
@@ -315,9 +320,19 @@ function TopicCard({ topic, reviewed, onToggle, openId, setOpenId }) {
                   {/* If code exists, always show a preview */}
                   {topic.code && (
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                        Code Example
-                      </p>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Code Example
+                        </p>
+                        {canOpenInCompiler && (
+                          <button
+                            onClick={openInCompiler}
+                            className="text-[10px] px-2 py-1 rounded-lg bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 font-semibold transition-colors"
+                          >
+                            ▶ Open in JS Compiler
+                          </button>
+                        )}
+                      </div>
                       <pre className="bg-slate-900 dark:bg-black rounded-xl p-3 overflow-x-auto text-xs text-emerald-300 leading-relaxed whitespace-pre">
                         <code>{topic.code}</code>
                       </pre>
@@ -353,9 +368,21 @@ function TopicCard({ topic, reviewed, onToggle, openId, setOpenId }) {
               )}
 
               {tab === "code" && topic.code && (
-                <pre className="bg-slate-900 dark:bg-black rounded-xl p-4 overflow-x-auto text-xs text-emerald-300 leading-relaxed whitespace-pre">
-                  <code>{topic.code}</code>
-                </pre>
+                <div className="space-y-2">
+                  {canOpenInCompiler && (
+                    <div className="flex justify-end">
+                      <button
+                        onClick={openInCompiler}
+                        className="text-xs px-3 py-1.5 rounded-lg bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 font-semibold transition-colors"
+                      >
+                        ▶ Open in JS Compiler
+                      </button>
+                    </div>
+                  )}
+                  <pre className="bg-slate-900 dark:bg-black rounded-xl p-4 overflow-x-auto text-xs text-emerald-300 leading-relaxed whitespace-pre">
+                    <code>{topic.code}</code>
+                  </pre>
+                </div>
               )}
 
               <AnimatePresence>

@@ -76,9 +76,17 @@ export default function Leaderboard() {
                   {MEDALS[i] || <span className="text-sm text-slate-400">#{i + 1}</span>}
                 </div>
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-xs flex items-center justify-center text-white font-bold flex-shrink-0">
-                    {initialsOf(r.name)}
-                  </div>
+                  {r.avatarUrl ? (
+                    <img
+                      src={r.avatarUrl}
+                      alt={r.name}
+                      className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-xs flex items-center justify-center text-white font-bold flex-shrink-0">
+                      {initialsOf(r.name)}
+                    </div>
+                  )}
                   <div className="min-w-0">
                     <p className="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">{r.name}</p>
                     <p className="text-xs text-slate-400 truncate">{r.email}</p>

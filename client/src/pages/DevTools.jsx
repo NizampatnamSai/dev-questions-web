@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import MockApiPanel from "../components/MockApiPanel";
+import CssCalculatorPanel from "../components/CssCalculatorPanel";
 // ── Dev Tools Panel ──────────────────────────────────────────────────────────
 const DEV_TOOLS = [
   {
@@ -98,102 +100,22 @@ const DEV_TOOLS = [
     btnLabel: "",
     resultLabel: "",
   },
+  {
+    id: "css-calculator",
+    icon: "📐",
+    label: "CSS Calculator",
+    desc: "",
+    endpoint: null,
+    inputPlaceholder: "",
+    btnLabel: "",
+    resultLabel: "",
+  },
 ];
-
-const MOCK_RESOURCES = [
-  { id: "users", label: "Users" },
-  { id: "posts", label: "Posts" },
-  { id: "products", label: "Products" },
-  { id: "todos", label: "Todos" },
-  { id: "comments", label: "Comments" },
-];
-
-function MockApiPanel() {
-  const [resource, setResource] = useState("users");
-  const [count, setCount] = useState(10);
-  const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const apiUrl = import.meta.env.VITE_API_URL ?? "/api";
-  const fullUrl = `${apiUrl}/dev-tools/mock/${resource}?count=${count}`;
-
-  const load = async () => {
-    setLoading(true);
-    try {
-      const { data } = await api.get(`/dev-tools/mock/${resource}`, { params: { count } });
-      setPreview(data);
-    } catch {
-      toast.error("Failed to load preview");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const copy = () => {
-    const absolute = fullUrl.startsWith("http") ? fullUrl : `${window.location.origin}${fullUrl}`;
-    navigator.clipboard.writeText(absolute);
-    toast.success("URL copied");
-  };
-
-  return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
-        {MOCK_RESOURCES.map((r) => (
-          <button
-            key={r.id}
-            onClick={() => { setResource(r.id); setPreview(null); }}
-            className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${resource === r.id ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
-          >
-            {r.label}
-          </button>
-        ))}
-      </div>
-      <div className="flex items-center gap-2">
-        <label className="text-xs text-slate-500 dark:text-slate-400">Count:</label>
-        <input
-          type="number"
-          min={1}
-          max={100}
-          value={count}
-          onChange={(e) => { setCount(Math.max(1, Math.min(100, Number(e.target.value) || 1))); setPreview(null); }}
-          className="w-20 px-2 py-1 text-sm rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-indigo-400"
-        />
-        <span className="text-xs text-slate-400">(max 100)</span>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <code className="flex-1 text-xs px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 font-mono truncate">
-          GET {fullUrl}
-        </code>
-        <button onClick={copy} className="text-xs px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
-          📋 Copy URL
-        </button>
-      </div>
-
-      <button
-        onClick={load}
-        disabled={loading}
-        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-colors"
-      >
-        {loading ? "Loading…" : "▶ Preview Response"}
-      </button>
-
-      {preview && (
-        <pre className="text-xs p-4 overflow-x-auto whitespace-pre-wrap leading-relaxed font-mono bg-[#0d1117] text-emerald-400 rounded-xl max-h-72 overflow-y-auto">
-          {JSON.stringify(preview, null, 2)}
-        </pre>
-      )}
-      <p className="text-[11px] text-slate-400">
-        No login required — paste the URL above into API Tester, Postman, or your own frontend code. Same resource + count always returns the same data.
-      </p>
-    </div>
-  );
-}
 
 function DevTools() {
   const [searchParams] = useSearchParams();
   const toolParam = searchParams.get("tool");
-  const [open, setOpen] = useState(!!toolParam);
+  const [open, setOpen] = useState(true);
   // const [tool, setTool] = useState(toolParam || "ts");
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
@@ -323,12 +245,24 @@ function DevTools() {
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                {cur.desc}
-              </p>
+              {cur.desc && (
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {cur.desc}
+                </p>
+              )}
 
               {cur.id === "mock-api" ? (
-                <MockApiPanel />
+                <div className="space-y-3">
+                  <button
+                    onClick={() => navigate("/api-tester")}
+                    className="text-xs px-3 py-1.5 rounded-full border border-indigo-300/50 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-colors"
+                  >
+                    📡 Open in API Tester →
+                  </button>
+                  <MockApiPanel />
+                </div>
+              ) : cur.id === "css-calculator" ? (
+                <CssCalculatorPanel />
               ) : (
               <>
               {/* Code input */}

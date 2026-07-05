@@ -11,7 +11,15 @@ from bson import ObjectId
 MONGO_URL = os.getenv("MONGO_URL", "")
 DB_NAME   = os.getenv("MONGO_DB", "devquiz")
 
+# Notes can live on a separate MongoDB deployment (e.g. its own free-tier
+# cluster) so the encrypted-notes collections don't eat into the main
+# database's storage quota. Same API, same server, just a different
+# connection string — falls back to the main database when unset.
+NOTES_MONGO_URL = os.getenv("NOTES_MONGO_URL", "")
+NOTES_DB_NAME   = os.getenv("NOTES_MONGO_DB", "devquiz_notes")
+
 _client: AsyncIOMotorClient = None
+_notes_client: AsyncIOMotorClient = None
 
 
 def _get_client() -> AsyncIOMotorClient:
@@ -25,6 +33,21 @@ def _get_client() -> AsyncIOMotorClient:
 
 def mdb():
     return _get_client()[DB_NAME]
+
+
+def _get_notes_client() -> AsyncIOMotorClient:
+    global _notes_client
+    if _notes_client is None:
+        _notes_client = AsyncIOMotorClient(NOTES_MONGO_URL)
+    return _notes_client
+
+
+def notes_db():
+    """Notes' own database if NOTES_MONGO_URL is set, else falls back to the
+    main database — same collections, same code, just a different cluster."""
+    if NOTES_MONGO_URL:
+        return _get_notes_client()[NOTES_DB_NAME]
+    return mdb()
 
 
 # ── Collection shortcuts ──────────────────────────────────────────────────────
@@ -69,8 +92,9 @@ def col_coding_limit_bonus():   return mdb()["coding_limit_bonus"]
 def col_weak_area_insights():   return mdb()["weak_area_insights"]
 def col_voice_transcripts():    return mdb()["voice_transcripts"]
 def col_resume_analyses():      return mdb()["resume_analyses"]
-def col_notes():                return mdb()["notes"]
-def col_note_keys():            return mdb()["note_keys"]
+def col_notes():                return notes_db()["notes"]
+def col_note_keys():            return notes_db()["note_keys"]
+def col_meetings():             return mdb()["meetings"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
@@ -122,8 +146,29 @@ async def init_mongo():
     await db["voice_transcripts"].create_index([("userId", 1), ("date", 1)])
     await db["resume_analyses"].create_index([("userId", 1), ("date", 1)])
     await db["push_notifications"].create_index([("createdAt", -1)])
-    await db["notes"].create_index([("userId", 1), ("createdAt", -1)])
-    await db["note_keys"].create_index("userId", unique=True)
+    await db["question_ratings"].create_index("questionId")
+    await db["tasks"].create_index("assigneeIds")
+    await db["tasks"].create_index([("createdAt", -1)])
+    await db["task_comments"].create_index("taskId")
+    await db["user_profiles"].create_index("userId", unique=True)
+    await db["user_answers"].create_index("questionId")
+    await db["user_answers"].create_index([("userId", 1), ("questionId", 1)])
+    await db["workboard_members"].create_index("userId", unique=True)
+    await db["workboard_members"].create_index("status")
+    await db["workboard_posts"].create_index([("date", 1)])
+    await db["workboard_posts"].create_index([("userId", 1), ("date", 1)])
+    await db["user_notifications"].create_index([("userId", 1), ("read", 1)])
+    await db["ai_questions"].create_index("userId")
+    await db["dsa_challenge"].create_index("userId")
+
+    ndb = notes_db()
+    await ndb["notes"].create_index([("userId", 1), ("createdAt", -1)])
+    await ndb["note_keys"].create_index("userId", unique=True)
+    if NOTES_MONGO_URL:
+        print(f"✅ Notes using separate MongoDB ({NOTES_DB_NAME}).")
+
+    await db["meetings"].create_index([("invitedUserIds", 1)])
+    await db["meetings"].create_index([("createdBy", 1), ("createdAt", -1)])
 
     # One-time migration: old 3-stage task status -> new Jira-style 4-stage workflow.
     # Idempotent — only touches docs still on an old value, safe to run every startup.

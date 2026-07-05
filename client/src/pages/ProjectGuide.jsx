@@ -262,6 +262,64 @@ const FEATURES = [
     ],
     tip: "On mobile, install the app as a PWA for the best notification experience.",
   },
+  {
+    icon: "📝",
+    title: "Notes",
+    path: "/notes",
+    color: "from-slate-500 to-slate-700",
+    summary: "Personal notes, encrypted end-to-end — not even an admin can read them.",
+    steps: [
+      "Open **Notes** from the sidebar and set a passphrase the first time — this is separate from your account password and can't be reset if forgotten.",
+      "Everything is encrypted and decrypted only in your browser; the server only ever stores unreadable ciphertext.",
+      "Check **Don't ask again this session** to skip re-entering your passphrase on this browser tab until you log out — a confirmation warns you what that trades off first.",
+      "Use the **Blur** dropdown at the top to blur note previews (all, title only, or description only) for privacy — hover a card to reveal it.",
+      "Use **⬇ Export CSV** to download your notes for a date range.",
+    ],
+    tip: "There is no admin override or master key by design — if you forget your passphrase, your notes are unrecoverable, so store it somewhere safe.",
+  },
+  {
+    icon: "🤖",
+    title: "Ask AI",
+    path: "/ask",
+    color: "from-cyan-500 to-blue-500",
+    summary: "A general-purpose AI chat, plus a Prompt Improver mode for writing better prompts for other AI tools.",
+    steps: [
+      "Open **Ask AI** and type any question — Python internals, how a concept works, debugging help.",
+      "Switch to **✨ Prompt Improver** mode (top right) when you want a clean, detailed prompt to paste into ChatGPT, Claude, or any other AI instead of an answer here.",
+      "In Prompt Improver mode, describe your goal in plain words (e.g. 'give me a prompt for ChatGPT to create a React website') and it writes the full prompt for you.",
+      "Use **📋 Copy response** on any AI message to copy it.",
+      "Turn on **Auto-save** to keep every conversation, or save manually — past chats live in the sidebar.",
+    ],
+    tip: "For DevQuiz-specific questions (how a feature here works, where to find something), use the 🤖 chatbot icon in the top bar instead — Ask AI is for general questions.",
+  },
+  {
+    icon: "📹",
+    title: "Meetings",
+    path: "/meetings",
+    color: "from-red-500 to-pink-500",
+    summary: "Free video calls — admins schedule them, anyone with a join code can join even without an account.",
+    steps: [
+      "Admins: open **Meetings**, click **+ New Meeting**, give it a title, optionally schedule it for later, and pick who to invite.",
+      "Admins: the first person to join a meeting must sign in once via Google/GitHub on Jitsi's own screen to become the host — that's Jitsi's free-tier policy, not something we control. Everyone joining after that needs no login at all.",
+      "Everyone: use the **🔑 join code** shown on the meeting (admins can copy it) to join directly, even as a guest with no account.",
+      "During a call, use **—** to minimize it to a small window so you can keep using the rest of the site, and **Leave** to exit.",
+      "Admins: use **End Meeting** to end the call for everyone at once.",
+    ],
+    tip: "The join code works for anyone, invited or not — only share it with people you actually want in the call.",
+  },
+  {
+    icon: "💼",
+    title: "Recent Jobs",
+    path: "/jobs",
+    color: "from-emerald-500 to-teal-500",
+    summary: "Real, live tech job listings from the last 7 days.",
+    steps: [
+      "Open **Recent Jobs** from the sidebar — no setup needed.",
+      "Search by title, company, or tag, or toggle **🌍 Remote only**.",
+      "Click any listing to open the real posting on the source site.",
+    ],
+    tip: "Listings currently skew Germany/Europe-focused since that's what the free data source covers — broader regional coverage is on the list for later.",
+  },
 ];
 
 function FeatureCard({ feature, index }) {
@@ -375,7 +433,7 @@ export default function ProjectGuide() {
   );
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 max-w-3xl">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 max-w-3xl mx-auto">
       {/* Hero */}
       <div className="glass-card p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/40 border border-indigo-100 dark:border-indigo-800/30">
         <div className="flex items-start gap-4">

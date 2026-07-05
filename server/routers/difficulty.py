@@ -6,6 +6,35 @@ from deps import current_user
 router = APIRouter()
 
 
+async def _difficulty_agg(question_id: str) -> dict:
+    """Server-side aggregation for a question's ratings — avoids pulling every
+    rating document into Python just to sum/count them, which got slower
+    forever as a popular question accumulated more ratings (unbounded
+    .to_list(None) previously)."""
+    pipeline = [
+        {"$match": {"questionId": question_id}},
+        {"$group": {
+            "_id": None,
+            "avg": {"$avg": "$difficulty"},
+            "count": {"$sum": 1},
+            "d1": {"$sum": {"$cond": [{"$eq": ["$difficulty", 1]}, 1, 0]}},
+            "d2": {"$sum": {"$cond": [{"$eq": ["$difficulty", 2]}, 1, 0]}},
+            "d3": {"$sum": {"$cond": [{"$eq": ["$difficulty", 3]}, 1, 0]}},
+            "d4": {"$sum": {"$cond": [{"$eq": ["$difficulty", 4]}, 1, 0]}},
+            "d5": {"$sum": {"$cond": [{"$eq": ["$difficulty", 5]}, 1, 0]}},
+        }},
+    ]
+    rows = await col_question_ratings().aggregate(pipeline).to_list(1)
+    if not rows:
+        return {"avg": 3, "count": 0, "distribution": {}}
+    r = rows[0]
+    return {
+        "avg": r["avg"],
+        "count": r["count"],
+        "distribution": {"1": r["d1"], "2": r["d2"], "3": r["d3"], "4": r["d4"], "5": r["d5"]},
+    }
+
+
 class DifficultyRating(BaseModel):
     question_id: str
     difficulty: int  # 1-5 scale
@@ -45,16 +74,18 @@ async def rate_difficulty(question_id: str, body: DifficultyRating, user=Depends
     else:
         await col_question_ratings().insert_one(rating_doc)
 
-    # Update question average difficulty
-    ratings = await col_question_ratings().find({"questionId": question_id}).to_list(None)
-    avg_difficulty = sum(r.get("difficulty", 3) for r in ratings) / len(ratings) if ratings else 3
+    # Update question average difficulty — aggregated server-side instead of
+    # pulling every rating doc into Python.
+    agg = await _difficulty_agg(question_id)
+    avg_difficulty = agg["avg"] if agg["count"] else 3
+    rating_count = agg["count"]
 
     await col_questions().update_one(
         {"_id": oid(question_id)},
-        {"$set": {"avgDifficulty": round(avg_difficulty, 2), "ratingCount": len(ratings)}}
+        {"$set": {"avgDifficulty": round(avg_difficulty, 2), "ratingCount": rating_count}}
     )
 
-    return {"message": "Rating saved", "avgDifficulty": round(avg_difficulty, 2), "ratingCount": len(ratings)}
+    return {"message": "Rating saved", "avgDifficulty": round(avg_difficulty, 2), "ratingCount": rating_count}
 
 
 @router.get("/questions/{question_id}/difficulty")
@@ -74,18 +105,12 @@ async def get_difficulty(question_id: str, user=Depends(current_user)):
 @router.get("/questions/difficulty/stats/{question_id}")
 async def get_difficulty_stats(question_id: str):
     """Get difficulty statistics for a question"""
-    ratings = await col_question_ratings().find({"questionId": question_id}).to_list(None)
-
-    if not ratings:
+    agg = await _difficulty_agg(question_id)
+    if not agg["count"]:
         return {"avgDifficulty": 3, "totalRatings": 0, "distribution": {}}
 
-    avg = sum(r.get("difficulty", 3) for r in ratings) / len(ratings)
-    distribution = {}
-    for i in range(1, 6):
-        distribution[str(i)] = sum(1 for r in ratings if r.get("difficulty") == i)
-
     return {
-        "avgDifficulty": round(avg, 2),
-        "totalRatings": len(ratings),
-        "distribution": distribution
+        "avgDifficulty": round(agg["avg"], 2),
+        "totalRatings": agg["count"],
+        "distribution": agg["distribution"],
     }

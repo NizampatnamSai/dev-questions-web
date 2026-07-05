@@ -1,7 +1,23 @@
+from datetime import datetime, timezone
 from fastapi import Header, HTTPException, status
 from jose import JWTError
 from auth_utils import decode_token
 from db_mongo import col_users, oid, sid
+
+
+def is_locked_out(doc: dict) -> bool:
+    """True for a permanent admin-disable OR an active scheduled disable
+    (disabledUntil in the future). Once disabledUntil passes, access is
+    restored automatically — no admin action needed."""
+    if doc.get("status") == "disabled":
+        return True
+    until = doc.get("disabledUntil")
+    if until:
+        if until.tzinfo is None:
+            until = until.replace(tzinfo=timezone.utc)
+        if until > datetime.now(timezone.utc):
+            return True
+    return False
 
 
 async def current_user(authorization: str = Header(default="")) -> dict:
@@ -14,7 +30,7 @@ async def current_user(authorization: str = Header(default="")) -> dict:
     doc = await col_users().find_one({"_id": oid(user_id)})
     if not doc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not found")
-    if doc.get("status") == "disabled":
+    if is_locked_out(doc):
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Account disabled")
     return sid(doc)
 
@@ -29,6 +45,6 @@ async def optional_user(authorization: str = Header(default="")) -> dict | None:
     except (JWTError, KeyError, ValueError):
         return None
     doc = await col_users().find_one({"_id": oid(user_id)})
-    if not doc or doc.get("status") == "disabled":
+    if not doc or is_locked_out(doc):
         return None
     return sid(doc)

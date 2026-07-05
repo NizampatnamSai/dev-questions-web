@@ -47,6 +47,24 @@ async def _enrich_task(doc: dict) -> dict:
     return doc
 
 
+async def _enrich_tasks(docs: list) -> list:
+    """Batched version of _enrich_task for list endpoints — one profile query
+    covering every assignee across the whole list, instead of calling
+    _enrich_task() (and its own $in query) once per task."""
+    all_ids = list({a["id"] for d in docs for a in d.get("assignees", [])})
+    profiles = await col_user_profiles().find({"userId": {"$in": all_ids}}).to_list(length=len(all_ids) or 1)
+    avatar_map = {p["userId"]: p.get("avatar_url") for p in profiles}
+    result = []
+    for doc in docs:
+        doc = sid(doc)
+        assignees = doc.get("assignees", [])
+        for a in assignees:
+            a["avatar"] = avatar_map.get(a["id"])
+        doc["assignees"] = assignees
+        result.append(doc)
+    return result
+
+
 # ── Admin: create task ────────────────────────────────────────────────────────
 
 @router.post("")
@@ -86,10 +104,9 @@ async def create_task(body: TaskCreate, user=Depends(current_user)):
     result = await col_tasks().insert_one(doc)
     task_id = str(result.inserted_id)
 
-    # Notify all assignees
-    tokens_docs = []
-    for uid in [a["id"] for a in assignees]:
-        tokens_docs += await col_fcm_tokens().find({"userId": uid}).to_list(5)
+    # Notify all assignees — one batched query instead of one per assignee.
+    assignee_ids = [a["id"] for a in assignees]
+    tokens_docs = await col_fcm_tokens().find({"userId": {"$in": assignee_ids}}).to_list(length=(len(assignee_ids) * 5) or 1)
     tokens = list({t["token"] for t in tokens_docs})
     if tokens:
         await send_to_tokens(
@@ -111,7 +128,7 @@ async def list_tasks(user=Depends(current_user)):
         docs = await col_tasks().find({}).sort("createdAt", -1).to_list(500)
     else:
         docs = await col_tasks().find({"assigneeIds": user["id"]}).sort("createdAt", -1).to_list(200)
-    return [await _enrich_task(d) for d in docs]
+    return await _enrich_tasks(docs)
 
 
 # ── Get single task ───────────────────────────────────────────────────────────
@@ -160,9 +177,8 @@ async def update_task(task_id: str, body: TaskCreate, user=Depends(current_user)
     old_ids = set(doc.get("assigneeIds", []))
     new_ids = {a["id"] for a in assignees} - old_ids
     if new_ids:
-        tokens_docs = []
-        for uid in new_ids:
-            tokens_docs += await col_fcm_tokens().find({"userId": uid}).to_list(5)
+        new_ids_list = list(new_ids)
+        tokens_docs = await col_fcm_tokens().find({"userId": {"$in": new_ids_list}}).to_list(length=(len(new_ids_list) * 5) or 1)
         tokens = list({t["token"] for t in tokens_docs})
         if tokens:
             await send_to_tokens(
@@ -283,9 +299,8 @@ async def add_comment(task_id: str, body: TaskComment, user=Depends(current_user
     participants.add(doc["createdBy"])
     participants.discard(user["id"])
 
-    tokens_docs = []
-    for uid in participants:
-        tokens_docs += await col_fcm_tokens().find({"userId": uid}).to_list(5)
+    participant_ids = list(participants)
+    tokens_docs = await col_fcm_tokens().find({"userId": {"$in": participant_ids}}).to_list(length=(len(participant_ids) * 5) or 1)
     tokens = list({t["token"] for t in tokens_docs})
     if tokens:
         await send_to_tokens(

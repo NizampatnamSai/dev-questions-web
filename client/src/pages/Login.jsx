@@ -4,15 +4,19 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [needsAdminKey, setNeedsAdminKey] = useState(false);
+  const [adminKey, setAdminKey] = useState("");
   const { login, enterGuest } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const [guestConfig, setGuestConfig] = useState({ guest_mode_enabled: true, guest_mode_message: "" });
 
   useEffect(() => {
     if (params.get("disabled") === "1") {
@@ -22,6 +26,10 @@ export default function Login() {
     }
   }, []);
 
+  useEffect(() => {
+    api.get("/admin/app-config/public").then(({ data }) => setGuestConfig(data)).catch(() => {});
+  }, []);
+
   const submit = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -29,48 +37,64 @@ export default function Login() {
       toast.error("Please enter both email and password");
       return;
     }
+    if (needsAdminKey && !adminKey) {
+      toast.error("Enter the admin secret key to continue");
+      return;
+    }
     setLoading(true);
     try {
-      // Check registration status first
-      const { data: statusData } = await api.get(
-        `/auth/registration-status/${email}`,
-      );
-
-      if (statusData.status === "not_found") {
-        toast.error("Account not found. Please register first.", {
-          duration: 5000,
-        });
-        setLoading(false);
-        return;
-      }
-
-      if (statusData.status === "pending") {
-        toast.error(
-          "Your account is still pending admin approval. Please wait.",
-          { duration: 5000 },
+      // Registration-status pre-check only matters on the first attempt —
+      // once we're re-submitting just to add the admin key, skip straight to login.
+      if (!needsAdminKey) {
+        const { data: statusData } = await api.get(
+          `/auth/registration-status/${email}`,
         );
-        setLoading(false);
-        return;
-      }
 
-      if (statusData.status === "rejected") {
-        const reason = statusData.rejectionReason || "No reason provided";
-        toast.error(`Account rejected: ${reason}`, { duration: 6000 });
-        setLoading(false);
-        return;
-      }
+        if (statusData.status === "not_found") {
+          toast.error("Account not found. Please register first.", {
+            duration: 5000,
+          });
+          setLoading(false);
+          return;
+        }
 
-      if (statusData.status === "disabled" || statusData.status === "blocked") {
-        toast.error("Your account has been disabled. Contact support.", {
-          duration: 6000,
-        });
-        setLoading(false);
-        return;
+        if (statusData.status === "pending") {
+          toast.error(
+            "Your account is still pending admin approval. Please wait.",
+            { duration: 5000 },
+          );
+          setLoading(false);
+          return;
+        }
+
+        if (statusData.status === "rejected") {
+          const reason = statusData.rejectionReason || "No reason provided";
+          toast.error(`Account rejected: ${reason}`, { duration: 6000 });
+          setLoading(false);
+          return;
+        }
+
+        if (statusData.status === "disabled" || statusData.status === "blocked") {
+          toast.error("Your account has been disabled. Contact support.", {
+            duration: 6000,
+          });
+          setLoading(false);
+          return;
+        }
       }
 
       // If approved, proceed with login
-      await login(email, password);
-      toast.success("Welcome back!", { id: "welcome" });
+      const result = await login(email, password, needsAdminKey ? adminKey : undefined);
+      if (result?.requireAdminKey) {
+        setNeedsAdminKey(true);
+        toast("🔐 Admin account detected — enter the secret key to continue", { duration: 5000 });
+        setLoading(false);
+        return;
+      }
+      const loggedInUser = result;
+      const fullName = loggedInUser?.name;
+      const displayName = fullName && (fullName.length > 20 ? `${fullName.slice(0, 20)}…` : fullName);
+      toast.success(displayName ? `Welcome back, ${displayName}!` : "Welcome back!", { id: "welcome" });
       navigate("/dashboard");
     } catch (err) {
       const detail = err.response?.data?.detail || err.response?.data?.message;
@@ -87,7 +111,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -110,7 +134,7 @@ export default function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
+            disabled={loading || needsAdminKey}
             className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
           />
           <div className="relative">
@@ -120,7 +144,7 @@ export default function Login() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
+              disabled={loading || needsAdminKey}
               className="w-full px-4 py-2.5 pr-11 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm disabled:opacity-60"
             />
             <button
@@ -132,6 +156,23 @@ export default function Login() {
               {showPw ? "🙈" : "👁️"}
             </button>
           </div>
+          {needsAdminKey && (
+            <div>
+              <input
+                type="password"
+                required
+                autoFocus
+                placeholder="Admin secret key"
+                value={adminKey}
+                onChange={(e) => setAdminKey(e.target.value)}
+                disabled={loading}
+                className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-amber-500/40 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm disabled:opacity-60"
+              />
+              <p className="text-xs text-amber-400 mt-1.5">
+                🔐 This admin account needs the secret key on top of your password.
+              </p>
+            </div>
+          )}
           <button
             type="submit"
             disabled={loading}
@@ -160,10 +201,25 @@ export default function Login() {
                 </svg>
                 Signing in…
               </>
+            ) : needsAdminKey ? (
+              "Verify & Sign In"
             ) : (
               "Sign In"
             )}
           </button>
+          {needsAdminKey && (
+            <button
+              type="button"
+              onClick={() => {
+                setNeedsAdminKey(false);
+                setAdminKey("");
+              }}
+              disabled={loading}
+              className="w-full text-xs text-slate-400 hover:text-slate-200 transition"
+            >
+              ← Back
+            </button>
+          )}
         </form>
 
         <p className="text-center text-sm text-slate-400 mt-4">
@@ -186,20 +242,29 @@ export default function Login() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            enterGuest();
-            navigate("/dashboard");
-          }}
-          className="w-full py-2.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-slate-300 text-sm font-medium transition flex items-center justify-center gap-2"
-        >
-          👁 View as Guest
-          <span className="text-xs text-slate-500 font-normal">
-            — browse without signing in
-          </span>
-        </button>
+        {guestConfig.guest_mode_enabled === false ? (
+          <div className="text-xs text-center text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-2.5">
+            🕶️ {guestConfig.guest_mode_message || "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              enterGuest();
+              navigate("/dashboard");
+            }}
+            className="w-full py-2.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-slate-300 text-sm font-medium transition flex items-center justify-center gap-2"
+          >
+            👁 View as Guest
+            <span className="text-xs text-slate-500 font-normal">
+              — browse without signing in
+            </span>
+          </button>
+        )}
       </motion.div>
+      <div className="absolute bottom-0 inset-x-0">
+        <Footer />
+      </div>
     </div>
   );
 }

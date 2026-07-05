@@ -1,10 +1,11 @@
 import os
+import re
 from datetime import date, timezone, datetime, timedelta
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from db_mongo import col_questions, col_comments, col_ai_usage, col_users, col_fcm_tokens, col_community_schedule, col_user_answers, sid, oid, now
-from deps import current_user
+from deps import current_user, optional_user
 from utils.ai import generate_questions, generate_answer, ai_text_action, check_answer
 from utils.firebase import send_to_all, send_to_tokens
 
@@ -110,8 +111,25 @@ def _ser(doc: dict, uid: str = None) -> dict:
         "isUpvoted":      uid in upvotes    if uid else False,
         "isBookmarked":   uid in bookmarks  if uid else False,
         "isHighlighted":  uid in highlights if uid else False,
-        "author": {"id": doc.get("userId"), "name": doc.get("authorName", "Unknown")},
+        "author": {"id": doc.get("userId"), "name": doc.get("authorName", "Unknown"), "avatarUrl": None},
     }
+
+
+async def _attach_avatars(items: list[dict]) -> list[dict]:
+    """Batched (single query) avatar lookup for a list of already-serialized
+    questions, mutating each item's author.avatarUrl in place. Avoids doing
+    one profile lookup per question, which would be N+1 on any list endpoint."""
+    from db_mongo import col_user_profiles
+    author_ids = list({i["author"]["id"] for i in items if i.get("author", {}).get("id")})
+    if not author_ids:
+        return items
+    profiles = await col_user_profiles().find({"userId": {"$in": author_ids}}).to_list(length=len(author_ids))
+    avatar_by_id = {p["userId"]: p.get("avatar_url") for p in profiles}
+    for item in items:
+        aid = item.get("author", {}).get("id")
+        if aid in avatar_by_id:
+            item["author"]["avatarUrl"] = avatar_by_id[aid]
+    return items
 
 
 # ── AI usage helpers ──────────────────────────────────────────────────────────
@@ -236,8 +254,12 @@ async def gen_answer(body: GenAnswerBody, user=Depends(current_user)):
 async def get_recommendations(
     type: Optional[str] = "trending",
     limit: int = 20,
-    x_user_id: Optional[str] = Header(default=None),
+    user: Optional[dict] = Depends(optional_user),
 ):
+    # Personalization identity comes from the JWT (if any), never a raw
+    # client header — otherwise anyone could pass another user's id here and
+    # list their bookmarked questions (type=bookmarked) without authenticating.
+    x_user_id = user["id"] if user else None
     limit = max(1, min(limit, 50))
     filt = {"status": "published"}
 
@@ -279,8 +301,11 @@ async def community(
     search:    Optional[str] = None,
     page:      int = 1,
     page_size: int = 15,
-    x_user_id: Optional[str] = Header(default=None),
+    user: Optional[dict] = Depends(optional_user),
 ):
+    # See get_recommendations() above — identity for the upvoted/bookmarked
+    # flags comes from the JWT, not a spoofable client header.
+    x_user_id = user["id"] if user else None
     page      = max(1, page)
     page_size = max(1, min(page_size, 50))
     skip      = (page - 1) * page_size
@@ -291,15 +316,18 @@ async def community(
     if type:     filt["type"]     = type
     if tag:      filt["tags"]     = tag
     if search:
+        # re.escape() so search terms are matched literally, not as a live
+        # regex — closes a ReDoS vector via catastrophic-backtracking patterns.
+        safe_search = re.escape(search)
         filt["$or"] = [
-            {"question": {"$regex": search, "$options": "i"}},
-            {"answer":   {"$regex": search, "$options": "i"}},
+            {"question": {"$regex": safe_search, "$options": "i"}},
+            {"answer":   {"$regex": safe_search, "$options": "i"}},
         ]
     total  = await col_questions().count_documents(filt)
     cursor = col_questions().find(filt).sort("createdAt", -1).skip(skip).limit(page_size)
     docs   = await cursor.to_list(length=page_size)
     return {
-        "items":    [_ser(d, x_user_id) for d in docs],
+        "items":    await _attach_avatars([_ser(d, x_user_id) for d in docs]),
         "total":    total,
         "page":     page,
         "pages":    (total + page_size - 1) // page_size,
@@ -352,14 +380,14 @@ async def get_all_my_answers(user=Depends(current_user)):
 async def mine(user=Depends(current_user)):
     cursor = col_questions().find({"userId": user["id"]}).sort("createdAt", -1)
     docs   = await cursor.to_list(length=500)
-    return [_ser(d, user["id"]) for d in docs]
+    return await _attach_avatars([_ser(d, user["id"]) for d in docs])
 
 
 @router.get("/mine/drafts")
 async def mine_drafts(user=Depends(current_user)):
     cursor = col_questions().find({"userId": user["id"], "status": "draft"}).sort("createdAt", -1)
     docs   = await cursor.to_list(length=200)
-    return [_ser(d, user["id"]) for d in docs]
+    return await _attach_avatars([_ser(d, user["id"]) for d in docs])
 
 
 @router.patch("/{qid}/publish")
@@ -389,7 +417,7 @@ async def bookmarks(user=Depends(current_user)):
     uid    = user["id"]
     cursor = col_questions().find({"bookmarks": uid}).sort("createdAt", -1)
     docs   = await cursor.to_list(length=500)
-    return [_ser(d, uid) for d in docs]
+    return await _attach_avatars([_ser(d, uid) for d in docs])
 
 
 # ── Create question ───────────────────────────────────────────────────────────
@@ -615,7 +643,7 @@ async def quiz_random(
         {"$sample": {"size": count}},
     ]
     docs = [d async for d in col_questions().aggregate(pipeline)]
-    return [_ser(d, user["id"]) for d in docs]
+    return await _attach_avatars([_ser(d, user["id"]) for d in docs])
 
 
 # ── AI Answer Checker ─────────────────────────────────────────────────────────
@@ -677,7 +705,7 @@ async def random_suggestions(category: str = "", type: str = "", level: str = ""
     if level:    filt["level"]    = level
     pipeline = [{"$match": filt}, {"$sample": {"size": 5}}]
     docs = [d async for d in col_questions().aggregate(pipeline)]
-    return [_ser(d) for d in docs]
+    return await _attach_avatars([_ser(d) for d in docs])
 
 class AutoPostBody(BaseModel):
     question_id: str
@@ -744,9 +772,12 @@ async def advanced_search(
     filters = {"status": "published"}
 
     if query:
+        # re.escape() so search terms are matched literally, not as a live
+        # regex — closes a ReDoS vector via catastrophic-backtracking patterns.
+        safe_query = re.escape(query)
         filters["$or"] = [
-            {"question": {"$regex": query, "$options": "i"}},
-            {"answer": {"$regex": query, "$options": "i"}},
+            {"question": {"$regex": safe_query, "$options": "i"}},
+            {"answer": {"$regex": safe_query, "$options": "i"}},
             {"tags": {"$in": [query.lower()]}},
         ]
 
@@ -757,7 +788,7 @@ async def advanced_search(
         filters["level"] = level
 
     if author:
-        author_user = await col_users().find_one({"name": {"$regex": author, "$options": "i"}})
+        author_user = await col_users().find_one({"name": {"$regex": re.escape(author), "$options": "i"}})
         if author_user:
             filters["authorId"] = str(author_user["_id"])
 

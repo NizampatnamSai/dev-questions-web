@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import useFullWidth from "../hooks/useFullWidth";
+import FullWidthToggle from "../components/FullWidthToggle";
 
 const GRADE_COLOR = {
   Excellent: "text-emerald-500",
@@ -42,6 +44,7 @@ export default function QuestionDetail() {
   const navigate  = useNavigate();
   const [q, setQ] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fullWidth, setFullWidth] = useFullWidth();
 
   // Show Answer panel
   const [showAnswer, setShowAnswer] = useState(false);
@@ -122,7 +125,7 @@ export default function QuestionDetail() {
   );
 
   return (
-    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto space-y-5">
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className={`mx-auto space-y-5 transition-all ${fullWidth ? "max-w-full" : "max-w-5xl"}`}>
 
       {/* Header */}
       <div className="flex items-center gap-3">
@@ -135,9 +138,12 @@ export default function QuestionDetail() {
           <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${LEVEL_COLOR[q.level] ?? LEVEL_COLOR.Low}`}>{q.level}</span>
           <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">{q.type}</span>
         </div>
-        <button onClick={copyLink} className="ml-auto text-xs text-slate-400 hover:text-indigo-500 transition flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-          🔗 Share
-        </button>
+        <div className="ml-auto flex items-center gap-2">
+          <FullWidthToggle fullWidth={fullWidth} onToggle={setFullWidth} />
+          <button onClick={copyLink} className="text-xs text-slate-400 hover:text-indigo-500 transition flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+            🔗 Share
+          </button>
+        </div>
       </div>
 
       {/* Question card */}

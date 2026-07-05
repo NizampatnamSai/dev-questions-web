@@ -5,6 +5,7 @@
 // access) can decrypt a note without the owner's passphrase.
 
 const VERIFY_PLAINTEXT = "devquiz-notes-verify";
+const SESSION_KEY_STORAGE = "devquiz_notes_session_key";
 
 function b64encode(bytes) {
   let binary = "";
@@ -16,7 +17,7 @@ function b64decode(str) {
   return Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
 }
 
-async function deriveKey(passphrase, saltB64) {
+async function deriveKey(passphrase, saltB64, extractable = false) {
   const enc = new TextEncoder();
   const salt = b64decode(saltB64);
   const baseKey = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]);
@@ -24,7 +25,7 @@ async function deriveKey(passphrase, saltB64) {
     { name: "PBKDF2", salt, iterations: 150_000, hash: "SHA-256" },
     baseKey,
     { name: "AES-GCM", length: 256 },
-    false,
+    extractable,
     ["encrypt", "decrypt"],
   );
 }
@@ -46,8 +47,8 @@ async function decryptText(key, cipherB64, ivB64) {
 /** Derives a key and confirms it's correct against the stored canary
  * ciphertext. Throws if the passphrase is wrong (AES-GCM auth tag mismatch or
  * mismatched plaintext) or if this looks like first-time setup. */
-async function unlockWithPassphrase(passphrase, salt, verifyCipher, verifyIv) {
-  const key = await deriveKey(passphrase, salt);
+async function unlockWithPassphrase(passphrase, salt, verifyCipher, verifyIv, extractable = false) {
+  const key = await deriveKey(passphrase, salt, extractable);
   if (verifyCipher && verifyIv) {
     const decrypted = await decryptText(key, verifyCipher, verifyIv);
     if (decrypted !== VERIFY_PLAINTEXT) throw new Error("Wrong passphrase");
@@ -59,4 +60,44 @@ async function createVerificationBlob(key) {
   return encryptText(key, VERIFY_PLAINTEXT);
 }
 
-export { deriveKey, encryptText, decryptText, unlockWithPassphrase, createVerificationBlob };
+/** Caches the derived key in sessionStorage (cleared when the tab/browser
+ * closes, or explicitly on logout) so the user isn't re-prompted for the
+ * passphrase on every page load within the same browsing session. The key
+ * itself is stored, never the passphrase. Only ever call this after the user
+ * has explicitly opted in via the confirmation modal — anyone with access to
+ * this browser tab during the session can then read notes without a prompt. */
+async function rememberKeyForSession(key, saltB64) {
+  const raw = await crypto.subtle.exportKey("raw", key);
+  sessionStorage.setItem(SESSION_KEY_STORAGE, JSON.stringify({ key: b64encode(new Uint8Array(raw)), salt: saltB64 }));
+}
+
+/** Restores a previously-remembered key for this browsing session, if any,
+ * scoped to the current user's salt. Returns null if nothing is stored, the
+ * salt doesn't match (e.g. a different account logged in on this tab), or
+ * the stored key otherwise fails the verification check. */
+async function restoreKeyForSession(saltB64, verifyCipher, verifyIv) {
+  const raw = sessionStorage.getItem(SESSION_KEY_STORAGE);
+  if (!raw) return null;
+  try {
+    const { key: rawB64, salt: storedSalt } = JSON.parse(raw);
+    if (storedSalt !== saltB64) throw new Error("salt mismatch");
+    const key = await crypto.subtle.importKey("raw", b64decode(rawB64), "AES-GCM", false, ["encrypt", "decrypt"]);
+    if (verifyCipher && verifyIv) {
+      const decrypted = await decryptText(key, verifyCipher, verifyIv);
+      if (decrypted !== VERIFY_PLAINTEXT) throw new Error("Wrong key");
+    }
+    return key;
+  } catch {
+    sessionStorage.removeItem(SESSION_KEY_STORAGE);
+    return null;
+  }
+}
+
+function forgetSessionKey() {
+  sessionStorage.removeItem(SESSION_KEY_STORAGE);
+}
+
+export {
+  deriveKey, encryptText, decryptText, unlockWithPassphrase, createVerificationBlob,
+  rememberKeyForSession, restoreKeyForSession, forgetSessionKey,
+};

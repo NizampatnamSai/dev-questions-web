@@ -104,6 +104,29 @@ const FEATURE_LINKS = [
     label: "Work Board",
     sub: "Daily standup board",
   },
+  { to: "/profile", icon: "👤", label: "My Profile", sub: "Account, settings & badges" },
+  { to: "/my-tasks", icon: "✅", label: "My Tasks", sub: "Tasks assigned to you" },
+  { to: "/my-answers", icon: "🗒️", label: "My Answers", sub: "Your saved answers, AI-graded" },
+  { to: "/my-feedback", icon: "💬", label: "My Feedback", sub: "Feedback you've submitted" },
+  { to: "/notes", icon: "🔒", label: "Notes", sub: "Zero-knowledge encrypted notes" },
+  { to: "/snippets", icon: "📚", label: "Snippet Library", sub: "Save reusable code snippets" },
+  { to: "/study", icon: "📖", label: "Study Hub", sub: "Structured learning guide" },
+  { to: "/study-advanced", icon: "🚀", label: "Advanced Study Hub", sub: "Deeper topic breakdowns" },
+  { to: "/roadmap", icon: "🗺️", label: "Learning Path", sub: "Suggested topic order" },
+  { to: "/recommendations", icon: "🎯", label: "Recommended", sub: "Personalized picks for you" },
+  { to: "/search", icon: "🔎", label: "Advanced Search", sub: "Full-text search with filters" },
+  { to: "/timed-challenge", icon: "⏱️", label: "Timed Challenge", sub: "Race the clock" },
+  { to: "/jobs", icon: "💼", label: "Recent Jobs", sub: "Live tech job listings" },
+  { to: "/js-coding", icon: "💻", label: "JS Coding", sub: "AI-graded coding problems" },
+  { to: "/meetings", icon: "🎥", label: "Meetings", sub: "Free video calls" },
+  { to: "/resume-analyzer", icon: "📄", label: "Resume Analyzer", sub: "AI resume/ATS scoring" },
+  { to: "/background-remover", icon: "🖼️", label: "Background Remover", sub: "Remove image backgrounds" },
+  { to: "/api-tester", icon: "📡", label: "API Tester", sub: "Postman-style request tester" },
+  { to: "/api-docs", icon: "📘", label: "API Docs", sub: "Full backend API reference" },
+  { to: "/devtools", icon: "🛠️", label: "Dev Tools", sub: "All dev tools in one place" },
+  { to: "/cron-builder", icon: "⏰", label: "Cron Builder", sub: "Build & explain cron expressions" },
+  { to: "/regex-tester", icon: "🧪", label: "Regex Tester", sub: "Test regex against sample text" },
+  { to: "/jwt-decoder", icon: "🔑", label: "JWT Decoder", sub: "Decode & inspect JWTs" },
 ];
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
@@ -125,8 +148,17 @@ function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   );
 }
 
+const ADMIN_LINKS = [
+  { to: "/admin", icon: "⚙️", label: "Admin Panel", sub: "Users, config & notifications" },
+  { to: "/admin/tasks", icon: "📋", label: "Manage Tasks", sub: "Assign & track team tasks" },
+  { to: "/admin/feedback", icon: "💬", label: "Feedbacks", sub: "User-submitted feedback" },
+  { to: "/admin/export", icon: "📥", label: "Export Data", sub: "Download platform data" },
+  { to: "/admin/features-doc", icon: "📖", label: "Features & Docs", sub: "Full app + backend reference" },
+];
+
 export default function MobileSettingsSheet({ open, onClose }) {
   const { user, logout } = useAuth();
+  const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
   const navigate = useNavigate();
   const {
@@ -211,6 +243,39 @@ export default function MobileSettingsSheet({ open, onClose }) {
                   </button>
                 ))}
               </div>
+
+              {/* Admin section — only visible to admin/sub_admin, this is the
+                  only way to reach the admin panel at all on mobile web since
+                  the desktop sidebar (which has these links) is hidden below md. */}
+              {isAdmin && (
+                <>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest px-1 mb-2">
+                    Admin
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {ADMIN_LINKS.map((f) => (
+                      <button
+                        key={f.to}
+                        onClick={() => {
+                          onClose();
+                          navigate(f.to);
+                        }}
+                        className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/15 text-left transition-all cursor-pointer"
+                      >
+                        <span className="text-xl flex-shrink-0">{f.icon}</span>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
+                            {f.label}
+                          </p>
+                          <p className="text-[10px] text-slate-400 truncate">
+                            {f.sub}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
 
               {/* Divider */}
               <div className="border-t border-black/5 dark:border-white/10 mb-3" />

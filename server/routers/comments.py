@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from db_mongo import col_comments, col_questions, col_fcm_tokens, sid, oid, now
+from db_mongo import col_comments, col_questions, col_fcm_tokens, col_user_profiles, sid, oid, now
 from deps import current_user
 from utils.firebase import send_to_tokens
 
@@ -16,15 +16,29 @@ def _ser(doc: dict) -> dict:
         "authorName": doc.get("authorName", "Unknown"),
         "text":       doc.get("text"),
         "createdAt":  doc["createdAt"].isoformat() if isinstance(doc.get("createdAt"), datetime) else str(doc.get("createdAt", "")),
-        "author": {"id": doc.get("userId"), "name": doc.get("authorName", "Unknown")},
+        "author": {"id": doc.get("userId"), "name": doc.get("authorName", "Unknown"), "avatarUrl": None},
     }
+
+
+async def _attach_avatars(items: list[dict]) -> list[dict]:
+    """Batched (single query) avatar lookup — mirrors questions.py's helper."""
+    author_ids = list({i["author"]["id"] for i in items if i.get("author", {}).get("id")})
+    if not author_ids:
+        return items
+    profiles = await col_user_profiles().find({"userId": {"$in": author_ids}}).to_list(length=len(author_ids))
+    avatar_by_id = {p["userId"]: p.get("avatar_url") for p in profiles}
+    for item in items:
+        aid = item.get("author", {}).get("id")
+        if aid in avatar_by_id:
+            item["author"]["avatarUrl"] = avatar_by_id[aid]
+    return items
 
 
 @router.get("/{qid}/comments")
 async def list_comments(qid: str, user=Depends(current_user)):
     cursor = col_comments().find({"questionId": qid}).sort("createdAt", 1)
     docs   = await cursor.to_list(length=500)
-    return [_ser(d) for d in docs]
+    return await _attach_avatars([_ser(d) for d in docs])
 
 
 class CommentBody(BaseModel):

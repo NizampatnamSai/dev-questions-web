@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
@@ -16,6 +16,16 @@ import Rain from "./components/Rain";
 import GuestBanner from "./components/GuestBanner";
 import ScrollToTopBtn from "./components/ScrollToTopBtn";
 import ZoomControl from "./components/ZoomControl";
+import BrightnessControl from "./components/BrightnessControl";
+import Footer from "./components/Footer";
+import ProjectChatbot from "./components/ProjectChatbot";
+// Not lazy: these are synchronous full-screen gates rendered as an early
+// return from AppInner, outside the <Suspense> that wraps <Routes>. If they
+// were lazy and their chunk hadn't loaded yet, the first suspend would have
+// no boundary above it to catch it (blank/crashed screen) — exactly the
+// wrong failure mode for a maintenance/lockout page.
+import Maintenance from "./pages/Maintenance";
+import GuestModeDisabled from "./pages/GuestModeDisabled";
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
 import { WeatherProvider, useWeather } from "./context/WeatherContext";
@@ -23,62 +33,75 @@ import { requestAndRegisterToken, onForegroundMessage } from "./firebase";
 import api from "./api/axios";
 import { getPageTitle } from "./utils/pageTitle";
 
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Generator from "./pages/Generator";
-import Community from "./pages/Community";
-import MyQuestions from "./pages/MyQuestions";
-import Drafts from "./pages/Drafts";
-import AskAI from "./pages/AskAI";
-import Bookmarks from "./pages/Bookmarks";
-import Leaderboard from "./pages/Leaderboard";
-import Admin from "./pages/Admin";
-import Quiz from "./pages/Quiz";
-import QuestionDetail from "./pages/QuestionDetail";
-import StudyGuide from "./pages/StudyGuide";
-import MockInterview from "./pages/MockInterview";
-import Flashcards from "./pages/Flashcards";
-import Progress from "./pages/Progress";
-import JsCompiler from "./pages/JsCompiler";
-import ProjectGuide from "./pages/ProjectGuide";
-import JSChallenge from "./pages/JSChallenge";
-import JsCodingQuestions from "./pages/JsCodingQuestions";
-import ResumeAnalyzer from "./pages/ResumeAnalyzer";
-import BackgroundRemover from "./pages/BackgroundRemover";
-import Notes from "./pages/Notes";
-import WorkBoard from "./pages/WorkBoard";
-import MyAnswers from "./pages/MyAnswers";
-import Notifications from "./pages/Notifications";
-import Maintenance from "./pages/Maintenance";
-import JsonParser from "./pages/JsonParser";
-import RegexTester from "./pages/RegexTester";
-import CronBuilder from "./pages/CronBuilder";
-import JwtDecoder from "./pages/JwtDecoder";
-import ApiTester from "./pages/ApiTester";
-import SnippetLibrary from "./pages/SnippetLibrary";
-import AdminFeedback from "./pages/AdminFeedback";
-import UserProfile from "./pages/UserProfile";
-import AdvancedSearch from "./pages/AdvancedSearch";
-import TimedChallenge from "./pages/TimedChallenge";
-import APIDocumentation from "./pages/APIDocumentation";
-import Recommendations from "./pages/Recommendations";
-import CategoryRoadmap from "./pages/CategoryRoadmap";
-import ExportData from "./pages/ExportData";
-import AdvancedStudyHub from "./pages/AdvancedStudyHub";
-import MyFeedback from "./pages/MyFeedback";
-import DevTools from "./pages/DevTools";
-import AdminTasks from "./pages/AdminTasks";
-import MyTasks from "./pages/MyTasks";
+// Every page is code-split via React.lazy() — previously all 47 pages were
+// bundled into one ~3.4MB JS file downloaded and parsed on every single page
+// load, which is the real cause of "site feels laggy," especially on first
+// load and on slower connections. Now each page is its own chunk, fetched
+// only when a user actually navigates to it.
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Generator = lazy(() => import("./pages/Generator"));
+const Community = lazy(() => import("./pages/Community"));
+const MyQuestions = lazy(() => import("./pages/MyQuestions"));
+const Drafts = lazy(() => import("./pages/Drafts"));
+const AskAI = lazy(() => import("./pages/AskAI"));
+const Bookmarks = lazy(() => import("./pages/Bookmarks"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const Admin = lazy(() => import("./pages/Admin"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const QuestionDetail = lazy(() => import("./pages/QuestionDetail"));
+const StudyGuide = lazy(() => import("./pages/StudyGuide"));
+const MockInterview = lazy(() => import("./pages/MockInterview"));
+const Flashcards = lazy(() => import("./pages/Flashcards"));
+const Progress = lazy(() => import("./pages/Progress"));
+const JsCompiler = lazy(() => import("./pages/JsCompiler"));
+const ProjectGuide = lazy(() => import("./pages/ProjectGuide"));
+const JSChallenge = lazy(() => import("./pages/JSChallenge"));
+const JsCodingQuestions = lazy(() => import("./pages/JsCodingQuestions"));
+const ResumeAnalyzer = lazy(() => import("./pages/ResumeAnalyzer"));
+const BackgroundRemover = lazy(() => import("./pages/BackgroundRemover"));
+const Notes = lazy(() => import("./pages/Notes"));
+const WorkBoard = lazy(() => import("./pages/WorkBoard"));
+const MyAnswers = lazy(() => import("./pages/MyAnswers"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const JsonParser = lazy(() => import("./pages/JsonParser"));
+const RegexTester = lazy(() => import("./pages/RegexTester"));
+const CronBuilder = lazy(() => import("./pages/CronBuilder"));
+const JwtDecoder = lazy(() => import("./pages/JwtDecoder"));
+const ApiTester = lazy(() => import("./pages/ApiTester"));
+const SnippetLibrary = lazy(() => import("./pages/SnippetLibrary"));
+const AdminFeedback = lazy(() => import("./pages/AdminFeedback"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+const AdvancedSearch = lazy(() => import("./pages/AdvancedSearch"));
+const TimedChallenge = lazy(() => import("./pages/TimedChallenge"));
+const APIDocumentation = lazy(() => import("./pages/APIDocumentation"));
+const Recommendations = lazy(() => import("./pages/Recommendations"));
+const CategoryRoadmap = lazy(() => import("./pages/CategoryRoadmap"));
+const ExportData = lazy(() => import("./pages/ExportData"));
+const AdvancedStudyHub = lazy(() => import("./pages/AdvancedStudyHub"));
+const MyFeedback = lazy(() => import("./pages/MyFeedback"));
+const DevTools = lazy(() => import("./pages/DevTools"));
+const AdminTasks = lazy(() => import("./pages/AdminTasks"));
+const AdminFeaturesDoc = lazy(() => import("./pages/AdminFeaturesDoc"));
+const Jobs = lazy(() => import("./pages/Jobs"));
+const Meetings = lazy(() => import("./pages/Meetings"));
+const MyTasks = lazy(() => import("./pages/MyTasks"));
 
+// Kept short and subtle on purpose: this wraps every single page, and the
+// old 250ms fade+12px slide was long enough that scrolling immediately after
+// clicking a nav link (very natural for a fast user) caught whatever just
+// scrolled into view still mid-fade-in — reading as a blank flash before the
+// content "popped in". A much shorter, smaller-offset transition keeps the
+// visual continuity without being catchable by an immediate scroll.
 const pageVariants = {
-  initial: { opacity: 0, y: 12 },
+  initial: { opacity: 0, y: 4 },
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.25, ease: "easeOut" },
+    transition: { duration: 0.1, ease: "easeOut" },
   },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
+  exit: { opacity: 0, transition: { duration: 0.08 } },
 };
 
 function PageWrapper({ children }) {
@@ -134,7 +157,9 @@ function AppLayout({ children, fullWidth = false }) {
             </button>
             <div className="flex items-center gap-2">
               <ZoomControl />
+              <BrightnessControl />
               <GlobalSearch />
+              <ProjectChatbot />
               <NotificationBell />
               <UserMenu />
             </div>
@@ -149,7 +174,10 @@ function AppLayout({ children, fullWidth = false }) {
               />
               <span className="font-bold text-sm gradient-text">DevQuiz</span>
             </div>
-            <GlobalSearch />
+            <div className="flex items-center gap-2">
+              <ProjectChatbot />
+              <GlobalSearch />
+            </div>
           </div>
           {/* Every page is full-width now — the old max-w-4xl default made most
               pages look cramped on real screens; `fullWidth` prop is kept as a
@@ -157,6 +185,7 @@ function AppLayout({ children, fullWidth = false }) {
           <main className="flex-1 p-4 md:p-6 pb-28 md:pb-8 mx-auto w-full max-w-full">
             {children}
           </main>
+          <Footer />
         </div>
         <BottomNav />
         <ScrollToTopBtn />
@@ -231,6 +260,7 @@ function AppInner() {
   const [appConfig, setAppConfig] = useState({
     maintenance: false,
     force_update: false,
+    guest_mode_enabled: true,
   });
   const [updateDismissed, setUpdateDismissed] = useState(() => {
     try {
@@ -271,6 +301,11 @@ function AppInner() {
   // Maintenance mode — block everyone except admins
   if (appConfig.maintenance && !isAdmin) {
     return <Maintenance message={appConfig.maintenance_message} />;
+  }
+
+  // Guest mode disabled — guests see nothing except this screen until they log in/register
+  if (user?.isGuest && appConfig.guest_mode_enabled === false) {
+    return <GuestModeDisabled message={appConfig.guest_mode_message} />;
   }
 
   // Show foreground FCM notifications as a toast (browser doesn't show them automatically when app is open)
@@ -387,6 +422,13 @@ function AppInner() {
         }}
         toastOptions={{ style: { ...toastStyle, borderRadius: "12px" } }}
       />
+      <Suspense
+        fallback={
+          <div className="flex min-h-screen items-center justify-center">
+            <span className="w-8 h-8 border-2 border-indigo-400/40 border-t-indigo-500 rounded-full animate-spin" />
+          </div>
+        }
+      >
       <Routes>
         <Route
           path="/login"
@@ -509,6 +551,30 @@ function AppInner() {
           element={
             <ProtectedPage path="/admin/tasks" fullWidth>
               <AdminTasks />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/admin/features-doc"
+          element={
+            <ProtectedPage path="/admin/features-doc">
+              <AdminFeaturesDoc />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/jobs"
+          element={
+            <ProtectedPage path="/jobs">
+              <Jobs />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/meetings"
+          element={
+            <ProtectedPage path="/meetings">
+              <Meetings />
             </ProtectedPage>
           }
         />
@@ -765,6 +831,7 @@ function AppInner() {
           element={<Navigate to={user ? "/dashboard" : "/login"} />}
         />
       </Routes>
+      </Suspense>
 
       {/* Feedback modal */}
       <FeedbackModal

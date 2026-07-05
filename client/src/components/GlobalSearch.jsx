@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
+import { useClickOutside } from "../hooks/useClickOutside";
 
 // Keep in sync with Sidebar.jsx BASE_LINKS + admin links
 const PAGES = [
@@ -324,6 +325,7 @@ export default function GlobalSearch() {
   const [selectedIdx, setSelectedIdx] = useState(0);
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  const panelRef = useRef(null);
   const navigate = useNavigate();
   const { user } = useAuth();
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
@@ -359,6 +361,8 @@ export default function GlobalSearch() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
+
+  useClickOutside(panelRef, () => setOpen(false), open);
 
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 50);
@@ -412,6 +416,7 @@ export default function GlobalSearch() {
               onClick={() => setOpen(false)}
             />
             <motion.div
+              ref={panelRef}
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}

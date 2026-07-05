@@ -34,13 +34,72 @@ function Modal({ title, onClose, children }) {
   );
 }
 
+const DISABLE_QUICK_DURATIONS = [
+  { label: "1 hour", hours: 1 },
+  { label: "6 hours", hours: 6 },
+  { label: "1 day", hours: 24 },
+  { label: "3 days", hours: 72 },
+  { label: "7 days", hours: 168 },
+];
+
+function DisableDurationPicker({ value, onChange }) {
+  const [customOpen, setCustomOpen] = useState(false);
+  const pick = (hours) => onChange(new Date(Date.now() + hours * 3600 * 1000).toISOString());
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-1.5">
+        {DISABLE_QUICK_DURATIONS.map((q) => (
+          <button
+            key={q.label}
+            type="button"
+            onClick={() => pick(q.hours)}
+            className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+          >
+            {q.label}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => setCustomOpen((v) => !v)}
+          className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+        >
+          Custom…
+        </button>
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="text-xs px-2.5 py-1 rounded-full border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+          >
+            ✕ Clear
+          </button>
+        )}
+      </div>
+      {customOpen && (
+        <input
+          type="datetime-local"
+          onChange={(e) => e.target.value && onChange(new Date(e.target.value).toISOString())}
+          className="input-light"
+        />
+      )}
+      {value && (
+        <p className="text-xs text-amber-500">
+          🔒 Locked out until {new Date(value).toLocaleString()} — no login, no API, no AI access until then.
+        </p>
+      )}
+    </div>
+  );
+}
+
 function UserForm({ initial = {}, onSave, onClose, isCreate }) {
   const [form, setForm] = useState({
     name: initial.name || "",
     email: initial.email || "",
     password: "",
     role: initial.role || "user",
-    daily_limit: initial.dailyLimit ?? 10,
+    dailyLimit: initial.dailyLimit ?? 10,
+    disabledUntil: "",
   });
   const [showPw, setShowPw] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -135,8 +194,8 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
             Daily Post Limit
           </label>
           <input
-            value={form.daily_limit}
-            onChange={(e) => set("daily_limit", Number(e.target.value))}
+            value={form.dailyLimit}
+            onChange={(e) => set("dailyLimit", Number(e.target.value))}
             type="number"
             min={1}
             max={999}
@@ -144,6 +203,14 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
           />
         </div>
       </div>
+      {isCreate && (
+        <div>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">
+            Disable on creation (optional)
+          </label>
+          <DisableDurationPicker value={form.disabledUntil} onChange={(v) => set("disabledUntil", v)} />
+        </div>
+      )}
       <div className="flex gap-2 pt-2">
         <button
           type="button"
@@ -202,7 +269,7 @@ function NotifyModal({ onClose, users, onSent }) {
       if (target === "pick") payload.user_ids = [...selected];
       const { data } = await api.post("/admin/notify", payload);
       toast.success(`Sent to ${data.sent_count} device(s)`);
-      onSent();
+      onSent?.();
       onClose();
     } catch {
       toast.error("Failed to send notification");
@@ -1102,7 +1169,7 @@ function CommunityScheduleEditor({ users }) {
                         ) : (
                           <span
                             className="text-xs px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-slate-700/50 text-slate-300 dark:text-slate-600 flex-shrink-0 cursor-not-allowed"
-                            title="Auto-post is only available on this user's actual scheduled day"
+                            title={`Auto-post is only available on ${u.name}'s scheduled day — ${day} (today is ${DAYS_LABELS[todayIndex]})`}
                           >
                             🤖 Auto
                           </span>
@@ -1327,57 +1394,10 @@ function TestNotifyPanel({ users }) {
   );
 }
 
-function NotifyLogs({ logs, loading }) {
-  if (loading) return <p className="text-sm text-slate-400 px-4 pb-4">Loading logs…</p>;
-  if (!logs.length)
-    return (
-      <p className="text-sm text-slate-400 text-center py-6">No notifications sent yet.</p>
-    );
-  return (
-    <div className="border-t border-black/5 dark:border-white/10">
-      <p className="text-xs text-slate-400 px-4 pt-3">
-        Last {logs.length} · max 100 stored
-      </p>
-      <div className="divide-y divide-black/5 dark:divide-white/5 max-h-96 overflow-y-auto">
-        {logs.map((h, i) => (
-          <div
-            key={h.id ?? i}
-            className="flex items-start gap-3 px-4 py-3 hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
-          >
-            <span className="text-base mt-0.5">🔔</span>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
-                  {h.title}
-                </p>
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    h.target === "user"
-                      ? "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300"
-                      : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
-                  }`}
-                >
-                  {h.target === "users"
-                    ? `👤 ${h.targetName?.trim() || "All Users"}`
-                    : "🌍 All"}
-                </span>
-                <span className="text-[10px] bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300 px-2 py-0.5 rounded-full font-bold">
-                  {h.sentCount ?? 0} delivered
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                {h.body}
-              </p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-                by {h.sentByName ?? "Admin"} · {fmtDateTime(h.createdAt)}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// NotifyLogs (🔔 Notification Logs admin section) was removed 2026-07 per
+// explicit request — "we don't need this as of now". See PENDING_FROM_USER.md.
+// The backend endpoints it read from (admin.py's /notify/history) were left
+// intact in case this comes back later.
 
 function AppConfigPanel() {
   const [config, setConfig] = useState({
@@ -1386,10 +1406,13 @@ function AppConfigPanel() {
     force_update: false,
     force_update_message: "",
     wb_reminder_time: "15:00",
+    wb_afternoon_reminder_time: "15:00",
     wb_edit_window_minutes: 30,
     coding_question_daily_limit: 15,
     notifications_enabled: true,
     guest_feedback_enabled: false,
+    guest_mode_enabled: true,
+    guest_mode_message: "",
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1408,6 +1431,10 @@ function AppConfigPanel() {
 
     if (config.wb_reminder_time !== initialConfig.wb_reminder_time) {
       patch.wb_reminder_time = config.wb_reminder_time;
+    }
+
+    if (config.wb_afternoon_reminder_time !== initialConfig.wb_afternoon_reminder_time) {
+      patch.wb_afternoon_reminder_time = config.wb_afternoon_reminder_time;
     }
 
     if (
@@ -1640,6 +1667,55 @@ function AppConfigPanel() {
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
+      {/* Guest Mode */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">
+              🕶️ Guest Mode
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Let visitors browse without an account. Turning this off
+              immediately signs out anyone currently in guest mode and blocks
+              new guest sessions — they'll see the message below instead.
+            </p>
+          </div>
+          <button
+            onClick={() =>
+              save({
+                guest_mode_enabled: !config.guest_mode_enabled,
+                guest_mode_message: config.guest_mode_message,
+              })
+            }
+            disabled={saving}
+            className={`relative w-12 h-6 rounded-full transition-colors ${config.guest_mode_enabled ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.guest_mode_enabled ? "translate-x-6" : ""}`}
+            />
+          </button>
+        </div>
+        <textarea
+          value={config.guest_mode_message}
+          onChange={(e) =>
+            setConfig((c) => ({ ...c, guest_mode_message: e.target.value }))
+          }
+          onBlur={() =>
+            save({ guest_mode_message: config.guest_mode_message })
+          }
+          placeholder="Message shown to guests when guest mode is off…"
+          rows={1}
+          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
+        />
+        {!config.guest_mode_enabled && (
+          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            🚫 Guest mode is OFF — guests are signed out and blocked app-wide
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
       {/* WorkBoard Settings */}
       <div className="space-y-4">
         <p className="font-semibold text-slate-700 dark:text-slate-200">
@@ -1660,6 +1736,22 @@ function AppConfigPanel() {
             />
             <p className="text-[10px] text-slate-400">
               Daily standups reminder push notification time
+            </p>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+              Afternoon Catch-up Time (IST)
+            </label>
+            <input
+              type="time"
+              value={config.wb_afternoon_reminder_time || "15:00"}
+              onChange={(e) =>
+                setConfig((c) => ({ ...c, wb_afternoon_reminder_time: e.target.value }))
+              }
+              className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+            />
+            <p className="text-[10px] text-slate-400">
+              Second reminder for anyone who hasn't posted yet
             </p>
           </div>
           <div className="space-y-1">
@@ -1752,29 +1844,25 @@ function AppConfigPanel() {
 export default function Admin() {
   const { user: me } = useAuth();
   const [users, setUsers] = useState([]);
+  // Was recomputed (5 full array passes) on every render, including every
+  // keystroke elsewhere on the page — now only recalculates when the users
+  // list itself actually changes.
+  const userStats = useMemo(() => [
+    { label: "Total Users", value: users.length, icon: "👥" },
+    { label: "Admins", value: users.filter((u) => u.role === "admin").length, icon: "👑" },
+    { label: "Sub-Admins", value: users.filter((u) => u.role === "sub_admin").length, icon: "🔑" },
+    { label: "Users", value: users.filter((u) => u.role === "user").length, icon: "👤" },
+    { label: "Total Posts", value: users.reduce((s, u) => s + (u.questionCount || 0), 0), icon: "📝" },
+  ], [users]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [disableTarget, setDisableTarget] = useState(null);
+  const [scheduleTarget, setScheduleTarget] = useState(null);
+  const [scheduleValue, setScheduleValue] = useState("");
   const [search, setSearch] = useState("");
   const [showNotify, setShowNotify] = useState(false);
-  const [logs, setLogs] = useState([]);
-  const [logsLoading, setLogsLoading] = useState(false);
-  const [logsOpen, setLogsOpen] = useState(false);
-  const [logsLoaded, setLogsLoaded] = useState(false);
-
-  const loadLogs = async () => {
-    setLogsLoading(true);
-    api
-      .get("/admin/notify/history")
-      .then((r) => setLogs(r.data))
-      .catch(() => {})
-      .finally(() => {
-        setLogsLoading(false);
-        setLogsLoaded(true);
-      });
-  };
 
   const load = async () => {
     setLoading(true);
@@ -1820,8 +1908,6 @@ export default function Admin() {
 
   useEffect(() => {
     load();
-    // Notification Logs is now lazy — loaded on-demand when the admin
-    // expands that section (see logsOpen below), not on every panel visit.
     api
       .get("/admin/pending-users")
       .then((r) => setPendingUsers(r.data))
@@ -1919,6 +2005,33 @@ export default function Admin() {
     }
   };
 
+  const applySchedule = async () => {
+    if (!scheduleTarget || !scheduleValue) return;
+    try {
+      await api.patch(`/admin/users/${scheduleTarget.id}/disable-temp`, { disabled_until: scheduleValue });
+      setUsers((prev) =>
+        prev.map((x) => (x.id === scheduleTarget.id ? { ...x, disabledUntil: scheduleValue } : x)),
+      );
+      toast.success(`Locked out until ${new Date(scheduleValue).toLocaleString()}`);
+      setScheduleTarget(null);
+      setScheduleValue("");
+    } catch {
+      toast.error("Failed to schedule disable");
+    }
+  };
+
+  const clearSchedule = async (u) => {
+    try {
+      await api.patch(`/admin/users/${u.id}/enable`);
+      setUsers((prev) =>
+        prev.map((x) => (x.id === u.id ? { ...x, disabledUntil: null, status: "approved" } : x)),
+      );
+      toast.success("Schedule cleared");
+    } catch {
+      toast.error("Failed");
+    }
+  };
+
   const setLimit = async (user, limit) => {
     try {
       await api.patch(`/admin/users/${user.id}/limit`, { daily_limit: limit });
@@ -1971,29 +2084,7 @@ export default function Admin() {
 
       {/* Stats strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "Total Users", value: users.length, icon: "👥" },
-          {
-            label: "Admins",
-            value: users.filter((u) => u.role === "admin").length,
-            icon: "👑",
-          },
-          {
-            label: "Sub-Admins",
-            value: users.filter((u) => u.role === "sub_admin").length,
-            icon: "🔑",
-          },
-          {
-            label: "Users",
-            value: users.filter((u) => u.role === "user").length,
-            icon: "👤",
-          },
-          {
-            label: "Total Posts",
-            value: users.reduce((s, u) => s + (u.questionCount || 0), 0),
-            icon: "📝",
-          },
-        ].map((s) => (
+        {userStats.map((s) => (
           <div key={s.label} className="glass-card p-4 flex items-center gap-3">
             <span className="text-2xl">{s.icon}</span>
             <div>
@@ -2133,14 +2224,23 @@ export default function Admin() {
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
-                            {u.name.slice(0, 2).toUpperCase()}
-                          </div>
+                          {u.avatarUrl ? (
+                            <img src={u.avatarUrl} alt={u.name} className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+                              {u.name.slice(0, 2).toUpperCase()}
+                            </div>
+                          )}
                           <div>
                             <p className="font-medium text-slate-700 dark:text-slate-200">
                               {u.name}
                             </p>
                             <p className="text-xs text-slate-400">{u.email}</p>
+                            {u.disabledUntil && new Date(u.disabledUntil) > new Date() && (
+                              <p className="text-[10px] text-amber-500 font-medium mt-0.5">
+                                🔒 Locked until {new Date(u.disabledUntil).toLocaleString()}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </td>
@@ -2213,6 +2313,23 @@ export default function Admin() {
                                   ? "✅ Enable"
                                   : "🚫 Disable"}
                               </button>
+                              {u.disabledUntil && new Date(u.disabledUntil) > new Date() ? (
+                                <button
+                                  onClick={() => clearSchedule(u)}
+                                  className="text-xs px-2.5 py-1 rounded-lg border border-green-300/50 text-green-500 hover:bg-green-50 dark:hover:bg-green-500/10 transition-colors"
+                                  title="Clear scheduled disable"
+                                >
+                                  ⏰ Clear
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => { setScheduleTarget(u); setScheduleValue(""); }}
+                                  className="text-xs px-2.5 py-1 rounded-lg border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors"
+                                  title="Schedule a temporary disable"
+                                >
+                                  ⏰ Schedule
+                                </button>
+                              )}
                               <button
                                 onClick={() => setDeleteTarget(u)}
                                 className="text-xs px-2.5 py-1 rounded-lg border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
@@ -2292,23 +2409,6 @@ export default function Admin() {
       {/* Test / Send Notifications */}
       <TestNotifyPanel users={users} />
 
-      {/* Notification Logs — lazy: only queried when expanded, since this list
-          can grow large and was previously slowing down every admin panel visit */}
-      <div className="glass-card overflow-hidden">
-        <button
-          onClick={() => {
-            const opening = !logsOpen;
-            setLogsOpen(opening);
-            if (opening && !logsLoaded) loadLogs();
-          }}
-          className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-black/2 dark:hover:bg-white/3 transition-colors"
-        >
-          <span>🔔 Notification Logs</span>
-          <span className="text-xs opacity-60">{logsOpen ? "▲ Hide" : "▼ Show"}</span>
-        </button>
-        {logsOpen && <NotifyLogs logs={logs} loading={logsLoading} />}
-      </div>
-
       {/* App Config */}
       <AppConfigPanel />
 
@@ -2339,7 +2439,6 @@ export default function Admin() {
           <NotifyModal
             onClose={() => setShowNotify(false)}
             users={users}
-            onSent={loadLogs}
           />
         )}
       </AnimatePresence>
@@ -2377,6 +2476,37 @@ export default function Admin() {
         }}
         onCancel={() => setDisableTarget(null)}
       />
+
+      <AnimatePresence>
+        {scheduleTarget && (
+          <Modal title={`Schedule disable — ${scheduleTarget.name}`} onClose={() => setScheduleTarget(null)}>
+            <div className="space-y-4">
+              <p className="text-xs text-slate-400">
+                They'll be fully locked out (no login, no API, no AI) starting now until the time you pick below —
+                then access is restored automatically, no admin action needed.
+              </p>
+              <DisableDurationPicker value={scheduleValue} onChange={setScheduleValue} />
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setScheduleTarget(null)}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={!scheduleValue}
+                  onClick={applySchedule}
+                  className="flex-1 btn-primary py-2.5 disabled:opacity-50"
+                >
+                  Schedule
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
 
       {/* Reject user modal */}
       <AnimatePresence>

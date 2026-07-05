@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, memo } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
@@ -7,6 +7,7 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
+import { GUEST_ALLOWED } from "./ProtectedRoute";
 
 const BASE_LINKS = [
   // Requested order (top 12)
@@ -52,6 +53,8 @@ const BASE_LINKS = [
   { to: "/notifications", label: "Notifications", icon: "🔔" },
   { to: "/my-feedback", label: "My Feedback", icon: "💬", hideForAdmin: true },
   { to: "/guide", label: "Project Guide", icon: "🗺️" },
+  { to: "/jobs", label: "Recent Jobs", icon: "💼" },
+  { to: "/meetings", label: "Meetings", icon: "📹" },
   // My Profile moved to the bottom, per request
   { to: "/profile", label: "My Profile", icon: "👤" },
 ];
@@ -86,6 +89,12 @@ const ADMIN_API_DOCS_LINK = {
   icon: "📚",
   exact: true,
 };
+const ADMIN_FEATURES_DOC_LINK = {
+  to: "/admin/features-doc",
+  label: "Features & Docs",
+  icon: "📖",
+  exact: true,
+};
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
   return (
@@ -115,6 +124,8 @@ const DEV_TOOL_LINKS = [
   { to: "/devtools?tool=tests", icon: "🧪", label: "AI Assistant · Tests" },
   { to: "/devtools?tool=concept", icon: "📖", label: "AI Assistant · Docs" },
   { to: "/devtools?tool=reactperf", icon: "🚀", label: "React Performance" },
+  { to: "/devtools?tool=mock-api", icon: "🎲", label: "Mock API Generator" },
+  { to: "/devtools?tool=css-calculator", icon: "📐", label: "CSS Calculator" },
 ];
 
 function DevToolsGroup({ textMuted }) {
@@ -189,7 +200,22 @@ function DevToolsGroup({ textMuted }) {
   );
 }
 
-export default function Sidebar() {
+// Hoisted to module scope — motion(NavLink) creates a brand-new component
+// TYPE every time it's called. Declaring it inside Sidebar's function body
+// meant a fresh type on every single render, which made React treat every
+// one of the ~48 nav links as an entirely new component on every route change
+// (since Sidebar re-renders on navigation via useLocation) — forcing a full
+// unmount+remount of all 48 DOM nodes instead of a normal update. This was
+// the actual source of "desktop feels laggy" complaints; only display:none
+// on mobile (not full unmount) meant mobile never paid this cost.
+const MotionNavLink = motion(NavLink);
+
+const iconVariants = {
+  initial: { scale: 1, rotate: 0 },
+  hover: { scale: 1.2, rotate: 5, transition: { type: "spring", stiffness: 400, damping: 10 } },
+};
+
+function Sidebar() {
   const { user, logout } = useAuth();
   const [confirmLogout, setConfirmLogout] = useState(false);
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
@@ -213,17 +239,6 @@ export default function Sidebar() {
 
   const [stateSearch, setStateSearch] = useState("");
 
-  const GUEST_ALLOWED = [
-    "/dashboard",
-    "/community",
-    "/js-compiler",
-    "/json-parser",
-    "/regex-tester",
-    "/cron-builder",
-    "/jwt-decoder",
-    "/study",
-  ];
-
   const isAdmin = user?.role === "admin";
   const baseFiltered = isAdmin
     ? BASE_LINKS.filter((l) => !l.hideForAdmin)
@@ -236,11 +251,12 @@ export default function Sidebar() {
         ADMIN_FEEDBACK_LINK,
         ADMIN_TASKS_LINK,
         ADMIN_API_DOCS_LINK,
+        ADMIN_FEATURES_DOC_LINK,
       ]
     : baseFiltered;
 
   const links = user?.isGuest
-    ? allLinks.filter((l) => GUEST_ALLOWED.includes(l.to))
+    ? allLinks.filter((l) => GUEST_ALLOWED.some((p) => l.to.startsWith(p)))
     : allLinks;
 
   const initials = user?.name
@@ -256,24 +272,6 @@ export default function Sidebar() {
     : "text-slate-500 dark:text-slate-400";
   const location = useLocation();
   const fullPath = location.pathname + location.search;
-
-  const iconVariants = {
-    initial: {
-      scale: 1,
-      rotate: 0,
-    },
-    hover: {
-      scale: 1.2,
-      rotate: 5,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10,
-      },
-    },
-  };
-
-  const MotionNavLink = motion(NavLink);
 
   return (
     <aside className="hidden md:flex md:flex-col w-64 h-screen sticky top-0 sidebar-light glass border-r border-black/5 dark:border-white/10 p-5 overflow-y-auto">
@@ -335,10 +333,13 @@ export default function Sidebar() {
                     </motion.span>
                     <span>{link.label}</span>
                     {active && (
-                      <motion.div
-                        layoutId="nav-pill"
-                        className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400"
-                      />
+                      // Plain conditional render, not a layoutId shared-layout
+                      // animation — that variant measured element position via
+                      // getBoundingClientRect() across the whole 48-link list
+                      // on every single route change, which is real, repeated
+                      // desktop-only cost (this list is only display:none, not
+                      // unmounted, on mobile, so mobile never paid for it).
+                      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400" />
                     )}
                   </>
                 );
@@ -617,3 +618,13 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+// Sidebar takes no props, so this makes it immune to re-rendering just
+// because its parent layout re-rendered (e.g. every keystroke in Admin.jsx's
+// search box) — it now only re-renders from its own hooks (route change,
+// theme, auth, weather). It's CSS-hidden (not unmounted) below the md
+// breakpoint, so this mainly matters for real desktop-width sessions, where
+// its ~48 individually framer-motion-animated links (including a shared
+// layoutId "active pill") were previously redoing layout work on every
+// unrelated re-render of whatever page was open next to it.
+export default memo(Sidebar);

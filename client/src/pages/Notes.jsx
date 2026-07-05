@@ -3,10 +3,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import RichTextEditor, { isRichTextEmpty } from "../components/RichTextEditor";
-import { unlockWithPassphrase, createVerificationBlob, encryptText, decryptText } from "../utils/noteCrypto";
+import {
+  unlockWithPassphrase, createVerificationBlob, encryptText, decryptText,
+  rememberKeyForSession, restoreKeyForSession, forgetSessionKey,
+} from "../utils/noteCrypto";
 
 function stripHtml(html) {
-  return (html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  if (!html) return "";
+  // Let the browser's own HTML parser do this — a regex can strip tags but
+  // can't reliably decode every entity Quill can produce (&nbsp;, &amp;,
+  // &lt;, numeric entities, etc.). Using a real (detached, never-rendered)
+  // element guarantees this matches whatever the browser considers valid HTML.
+  const el = document.createElement("div");
+  el.innerHTML = html;
+  return (el.textContent || "").replace(/\s+/g, " ").trim();
+}
+
+function textToHtml(text) {
+  return text
+    .split(/\n\n+/)
+    .map((para) => `<p>${para.trim().replace(/\n/g, "<br>")}</p>`)
+    .join("");
 }
 
 function csvEscape(value) {
@@ -49,7 +66,18 @@ export default function Notes() {
   const [confirmPassphrase, setConfirmPassphrase] = useState("");
   const [unlockError, setUnlockError] = useState("");
   const [unlocking, setUnlocking] = useState(false);
-  const keyRef = useRef(null); // CryptoKey — in memory only, never persisted
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showRememberConfirm, setShowRememberConfirm] = useState(false);
+  const [sessionRemembered, setSessionRemembered] = useState(false); // true once this tab is relying on a cached key
+  // Blur note cards for over-the-shoulder privacy — "off" | "all" | "title" | "description".
+  // Hovering a card reveals it; the preference persists per-browser.
+  const [blurMode, setBlurMode] = useState(() => {
+    try { return localStorage.getItem("devquiz_notes_blur") || "off"; } catch { return "off"; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem("devquiz_notes_blur", blurMode); } catch {}
+  }, [blurMode]);
+  const keyRef = useRef(null); // CryptoKey — in memory only unless "remember" is opted into
 
   const [notes, setNotes] = useState([]); // decrypted: [{id, title, body, createdAt, updatedAt}]
   const [loadingNotes, setLoadingNotes] = useState(false);
@@ -57,6 +85,9 @@ export default function Notes() {
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const [saving, setSaving] = useState(false);
+  const [showAiWrite, setShowAiWrite] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiWriting, setAiWriting] = useState(false);
 
   const [exportOpen, setExportOpen] = useState(false);
   const [exportPreset, setExportPreset] = useState("month");
@@ -64,10 +95,20 @@ export default function Notes() {
   const [customEnd, setCustomEnd] = useState("");
 
   useEffect(() => {
-    api.get("/notes/salt").then(({ data }) => {
+    api.get("/notes/salt").then(async ({ data }) => {
       setSalt(data.salt);
       setVerifyCipher(data.verifyCipher);
       setVerifyIv(data.verifyIv);
+      // If the user opted in to "remember this session" earlier, this tab may
+      // already have a usable key cached — skip the passphrase prompt entirely.
+      const remembered = await restoreKeyForSession(data.salt, data.verifyCipher, data.verifyIv);
+      if (remembered) {
+        keyRef.current = remembered;
+        setSessionRemembered(true);
+        setPhase("ready");
+        await loadNotes(remembered);
+        return;
+      }
       setPhase(data.verifyCipher ? "unlock" : "setup");
     }).catch(() => toast.error("Failed to load notes setup"));
   }, []);
@@ -104,10 +145,14 @@ export default function Notes() {
     }
     setUnlocking(true);
     try {
-      const key = await unlockWithPassphrase(passphrase, salt, null, null);
+      const key = await unlockWithPassphrase(passphrase, salt, null, null, rememberMe);
       const { cipher, iv } = await createVerificationBlob(key);
       await api.post("/notes/verify-setup", { cipher, iv });
       keyRef.current = key;
+      if (rememberMe) {
+        await rememberKeyForSession(key, salt);
+        setSessionRemembered(true);
+      }
       setPhase("ready");
       await loadNotes(key);
       toast.success("Notes unlocked — keep your passphrase safe, it can't be reset!");
@@ -122,8 +167,12 @@ export default function Notes() {
     setUnlockError("");
     setUnlocking(true);
     try {
-      const key = await unlockWithPassphrase(passphrase, salt, verifyCipher, verifyIv);
+      const key = await unlockWithPassphrase(passphrase, salt, verifyCipher, verifyIv, rememberMe);
       keyRef.current = key;
+      if (rememberMe) {
+        await rememberKeyForSession(key, salt);
+        setSessionRemembered(true);
+      }
       setPhase("ready");
       await loadNotes(key);
     } catch {
@@ -133,16 +182,54 @@ export default function Notes() {
     }
   }
 
+  function onToggleRemember(checked) {
+    if (checked) setShowRememberConfirm(true);
+    else setRememberMe(false);
+  }
+
+  function handleForgetSession() {
+    forgetSessionKey();
+    setSessionRemembered(false);
+    setRememberMe(false);
+    keyRef.current = null;
+    setNotes([]);
+    setPassphrase("");
+    setPhase(verifyCipher ? "unlock" : "setup");
+    toast.success("Locked — you'll be asked for your passphrase again.");
+  }
+
   function openNew() {
     setEditing("new");
     setEditTitle("");
     setEditBody("");
+    setShowAiWrite(false);
+    setAiPrompt("");
   }
 
   function openEdit(note) {
     setEditing(note);
     setEditTitle(note.title);
     setEditBody(note.body);
+    setShowAiWrite(false);
+    setAiPrompt("");
+  }
+
+  async function generateWithAi() {
+    if (!aiPrompt.trim()) return;
+    setAiWriting(true);
+    try {
+      const { data } = await api.post("/ai/ask", {
+        question: `Write note content for this request, as plain prose (no markdown headers, no code fences unless code is actually requested): "${aiPrompt.trim()}"`,
+      });
+      setEditBody((prev) => (isRichTextEmpty(prev) ? "" : prev) + textToHtml(data.answer));
+      setAiPrompt("");
+      setShowAiWrite(false);
+      toast.success("Added to note — feel free to edit it");
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "AI couldn't write that — try again");
+    } finally {
+      setAiWriting(false);
+    }
   }
 
   async function saveNote() {
@@ -252,6 +339,15 @@ export default function Notes() {
             />
           )}
           {unlockError && <p className="text-sm text-red-500">{unlockError}</p>}
+          <label className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 cursor-pointer select-none justify-center">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => onToggleRemember(e.target.checked)}
+              className="rounded border-slate-300 dark:border-white/20"
+            />
+            Don't ask again this session
+          </label>
           <button
             onClick={phase === "setup" ? handleSetup : handleUnlock}
             disabled={unlocking || !passphrase}
@@ -260,6 +356,44 @@ export default function Notes() {
             {unlocking ? "Working…" : phase === "setup" ? "Create & Unlock" : "🔓 Unlock"}
           </button>
         </motion.div>
+
+        <AnimatePresence>
+          {showRememberConfirm && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 flex items-center justify-center px-4 z-50"
+              onClick={() => setShowRememberConfirm(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                onClick={(e) => e.stopPropagation()}
+                className="glass-card p-6 max-w-sm w-full space-y-4 text-center"
+              >
+                <div className="text-4xl">⚠️</div>
+                <h2 className="text-lg font-bold text-slate-800 dark:text-white">Skip the passphrase this session?</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Your notes will stay unlocked on this browser tab until you log out or close the browser —
+                  anyone who uses this device or browser during that time could open them without your passphrase.
+                  You'll be asked again after logout, or on any other browser or device.
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowRememberConfirm(false)}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => { setRememberMe(true); setShowRememberConfirm(false); }}
+                    className="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold transition-colors"
+                  >
+                    Yes, remember
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -271,11 +405,31 @@ export default function Notes() {
           <h1 className="text-2xl font-bold">📝 Notes</h1>
           <p className="text-xs text-slate-400 mt-0.5">🔒 End-to-end encrypted — only you can read these</p>
         </div>
-        <div className="flex gap-2">
-          <button onClick={() => setExportOpen(true)} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold transition-colors">
+        <div className="flex flex-wrap gap-2 items-center">
+          <select
+            value={blurMode}
+            onChange={(e) => setBlurMode(e.target.value)}
+            title="Blur note previews for privacy — hover a card to reveal"
+            className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold transition-colors text-slate-700 dark:text-slate-200 outline-none cursor-pointer whitespace-nowrap"
+          >
+            <option value="off">👁 Blur: Off</option>
+            <option value="all">🙈 Blur: All</option>
+            <option value="title">🙈 Blur: Title</option>
+            <option value="description">🙈 Blur: Description</option>
+          </select>
+          {sessionRemembered && (
+            <button
+              onClick={handleForgetSession}
+              title="Stop skipping the passphrase prompt on this tab"
+              className="px-4 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-500 text-sm font-semibold transition-colors whitespace-nowrap"
+            >
+              🔒 Ask for passphrase again
+            </button>
+          )}
+          <button onClick={() => setExportOpen(true)} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold transition-colors whitespace-nowrap">
             ⬇ Export CSV
           </button>
-          <button onClick={openNew} className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors">
+          <button onClick={openNew} className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors whitespace-nowrap">
             + New Note
           </button>
         </div>
@@ -298,10 +452,22 @@ export default function Notes() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => openEdit(n)}
-              className="glass-card p-4 h-40 flex flex-col cursor-pointer hover:ring-2 hover:ring-indigo-500/40 transition-all"
+              className="group glass-card p-4 h-40 flex flex-col cursor-pointer hover:ring-2 hover:ring-indigo-500/40 transition-all"
             >
-              <h3 className="font-semibold truncate mb-1">{n.title}</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 flex-1 overflow-hidden">{stripHtml(n.body).slice(0, 160)}</p>
+              <h3
+                className={`font-semibold truncate mb-1 transition-[filter] duration-150 ${
+                  (blurMode === "all" || blurMode === "title") ? "blur-sm group-hover:blur-none" : ""
+                }`}
+              >
+                {n.title}
+              </h3>
+              <p
+                className={`text-xs text-slate-500 dark:text-slate-400 flex-1 overflow-hidden transition-[filter] duration-150 ${
+                  (blurMode === "all" || blurMode === "description") ? "blur-sm group-hover:blur-none" : ""
+                }`}
+              >
+                {stripHtml(n.body).slice(0, 160)}
+              </p>
               <div className="flex items-center justify-between mt-2 pt-2 border-t border-black/5 dark:border-white/10">
                 <span className="text-[10px] text-slate-400">{new Date(n.updatedAt).toLocaleDateString()}</span>
                 <button onClick={(e) => { e.stopPropagation(); deleteNote(n.id); }} className="text-xs text-red-400 hover:text-red-500">
@@ -326,6 +492,38 @@ export default function Notes() {
                   placeholder="Title"
                   className="w-full text-lg font-bold px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:ring-2 focus:ring-indigo-500"
                 />
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowAiWrite((v) => !v)}
+                    className="text-xs px-3 py-1.5 rounded-full bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 font-semibold transition-colors"
+                  >
+                    ✨ AI Write
+                  </button>
+                </div>
+                {showAiWrite && (
+                  <div className="rounded-xl border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-500/5 p-3 space-y-2">
+                    <textarea
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), generateWithAi())}
+                      placeholder="What should I write? e.g. 'a packing checklist for a weekend trip'"
+                      rows={2}
+                      className="w-full text-sm px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                    />
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[10px] text-slate-400">
+                        Unlike the rest of Notes, this prompt is sent to the AI to generate a response — it isn't end-to-end encrypted like your saved notes.
+                      </p>
+                      <button
+                        onClick={generateWithAi}
+                        disabled={!aiPrompt.trim() || aiWriting}
+                        className="flex-shrink-0 text-xs px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold transition-colors"
+                      >
+                        {aiWriting ? "Writing…" : "Generate"}
+                      </button>
+                    </div>
+                  </div>
+                )}
                 <RichTextEditor value={editBody} onChange={setEditBody} placeholder="Write your note…" />
                 <div className="flex gap-2 pt-2">
                   <button onClick={() => setEditing(null)} className="flex-1 px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">

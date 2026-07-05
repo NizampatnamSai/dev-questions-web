@@ -4,27 +4,12 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
-function compressImage(file, maxSize = 200) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL("image/jpeg", 0.8));
-    };
-    img.src = url;
-  });
-}
+import { useTheme } from "../context/ThemeContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
   const { user, setProfile: setGlobalProfile } = useAuth();
+  const { theme, toggleTheme, snow, toggleSnow } = useTheme();
   const isOwnProfile = !userId || userId === user?.id;
 
   const [profile, setProfile] = useState(null);
@@ -38,6 +23,9 @@ export default function UserProfile() {
     website: "",
     location: "",
   });
+  const [showSettings, setShowSettings] = useState(false);
+  const [pwForm, setPwForm] = useState({ old_password: "", new_password: "", confirm_password: "" });
+  const [changingPw, setChangingPw] = useState(false);
 
   useEffect(() => {
     loadProfile();
@@ -77,16 +65,64 @@ export default function UserProfile() {
     if (file.size > 5 * 1024 * 1024) { toast.error("Image must be under 5MB"); return; }
     setUploadingAvatar(true);
     try {
-      const base64 = await compressImage(file, 200);
-      await api.patch("/profile/my/profile", { avatar_url: base64 });
-      setProfile(prev => ({ ...prev, avatar_url: base64 }));
-      if (isOwnProfile) setGlobalProfile(prev => ({ ...prev, avatar_url: base64 }));
+      // Uploaded to Cloudinary — only the returned URL is stored in our database,
+      // never the image bytes, so profile documents stay small regardless of photo size.
+      const uploadForm = new FormData();
+      uploadForm.append("file", file);
+      const { data: uploadData } = await api.post("/uploads/image", uploadForm, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      await api.patch("/profile/my/profile", { avatar_url: uploadData.url });
+      setProfile(prev => ({ ...prev, avatar_url: uploadData.url }));
+      if (isOwnProfile) setGlobalProfile(prev => ({ ...prev, avatar_url: uploadData.url }));
       toast.success("Photo updated!");
-    } catch {
-      toast.error("Failed to upload photo");
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to upload photo");
     } finally {
       setUploadingAvatar(false);
       e.target.value = "";
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    setUploadingAvatar(true);
+    try {
+      await api.patch("/profile/my/profile", { avatar_url: "" });
+      setProfile(prev => ({ ...prev, avatar_url: "" }));
+      if (isOwnProfile) setGlobalProfile(prev => ({ ...prev, avatar_url: "" }));
+      toast.success("Photo removed");
+    } catch {
+      toast.error("Failed to remove photo");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!pwForm.old_password || !pwForm.new_password) {
+      toast.error("Fill in both password fields");
+      return;
+    }
+    if (pwForm.new_password.length < 6) {
+      toast.error("New password must be at least 6 characters");
+      return;
+    }
+    if (pwForm.new_password !== pwForm.confirm_password) {
+      toast.error("New passwords don't match");
+      return;
+    }
+    setChangingPw(true);
+    try {
+      await api.post("/profile/my/change-password", {
+        old_password: pwForm.old_password,
+        new_password: pwForm.new_password,
+      });
+      toast.success("Password changed successfully");
+      setPwForm({ old_password: "", new_password: "", confirm_password: "" });
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to change password");
+    } finally {
+      setChangingPw(false);
     }
   };
 
@@ -153,6 +189,16 @@ export default function UserProfile() {
                     onChange={handleAvatarChange}
                     className="hidden"
                   />
+                  {profile.avatar_url && (
+                    <button
+                      onClick={handleRemoveAvatar}
+                      disabled={uploadingAvatar}
+                      title="Remove photo"
+                      className="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-red-500 hover:bg-red-400 border-2 border-slate-900 flex items-center justify-center text-[11px] text-white transition-colors disabled:opacity-50"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </>
               )}
             </div>
@@ -164,12 +210,20 @@ export default function UserProfile() {
           </div>
 
           {isOwnProfile && (
-            <button
-              onClick={() => setEditing(!editing)}
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 transition-colors"
-            >
-              {editing ? "Cancel" : "Edit Profile"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+              >
+                {showSettings ? "Cancel" : "⚙️ Settings"}
+              </button>
+              <button
+                onClick={() => setEditing(!editing)}
+                className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 transition-colors"
+              >
+                {editing ? "Cancel" : "Edit Profile"}
+              </button>
+            </div>
           )}
         </div>
 
@@ -243,6 +297,92 @@ export default function UserProfile() {
           </div>
         )}
       </div>
+
+      {/* Settings */}
+      {showSettings && isOwnProfile && (
+        <div className="glass-card p-6 space-y-6">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">⚙️ Settings</h2>
+
+          {/* Account info */}
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">Account</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 rounded-lg">
+                <div className="text-xs text-slate-400">Email</div>
+                <div className="text-slate-700 dark:text-slate-200 truncate">{profile.email}</div>
+              </div>
+              <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 rounded-lg">
+                <div className="text-xs text-slate-400">Member since</div>
+                <div className="text-slate-700 dark:text-slate-200">
+                  {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString() : "—"}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Appearance */}
+          <div className="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">Appearance</h3>
+            <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 px-4 py-3 rounded-lg">
+              <span className="text-sm text-slate-700 dark:text-slate-200">
+                {theme === "dark" ? "🌙 Dark mode" : "☀️ Light mode"}
+              </span>
+              <button
+                onClick={toggleTheme}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition-colors"
+              >
+                Switch to {theme === "dark" ? "Light" : "Dark"}
+              </button>
+            </div>
+            <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 px-4 py-3 rounded-lg">
+              <span className="text-sm text-slate-700 dark:text-slate-200">❄️ Snow effect</span>
+              <button
+                onClick={toggleSnow}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                  snow ? "bg-cyan-600 text-white hover:bg-cyan-500" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600"
+                }`}
+              >
+                {snow ? "On" : "Off"}
+              </button>
+            </div>
+          </div>
+
+          {/* Change password */}
+          <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">Change Password</h3>
+            <input
+              type="password"
+              value={pwForm.old_password}
+              onChange={(e) => setPwForm((f) => ({ ...f, old_password: e.target.value }))}
+              placeholder="Current password"
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input
+                type="password"
+                value={pwForm.new_password}
+                onChange={(e) => setPwForm((f) => ({ ...f, new_password: e.target.value }))}
+                placeholder="New password (min 6 chars)"
+                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <input
+                type="password"
+                value={pwForm.confirm_password}
+                onChange={(e) => setPwForm((f) => ({ ...f, confirm_password: e.target.value }))}
+                placeholder="Confirm new password"
+                className="px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <button
+              onClick={handleChangePassword}
+              disabled={changingPw}
+              className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-60 transition-colors"
+            >
+              {changingPw ? "Changing…" : "Change Password"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Badges */}
       {profile.badges && profile.badges.length > 0 && (

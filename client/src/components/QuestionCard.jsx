@@ -108,9 +108,17 @@ function CommentsSection({ qid, onCommentCountChange }) {
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {comments.map((c) => (
               <div key={c.id} className="flex gap-2 group">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-[9px] flex items-center justify-center text-white font-bold flex-shrink-0 mt-0.5">
-                  {initialsOf(c.author?.name || "?")}
-                </div>
+                {c.author?.avatarUrl ? (
+                  <img
+                    src={c.author.avatarUrl}
+                    alt={c.author?.name}
+                    className="w-6 h-6 rounded-full object-cover flex-shrink-0 mt-0.5"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 text-[9px] flex items-center justify-center text-white font-bold flex-shrink-0 mt-0.5">
+                    {initialsOf(c.author?.name || "?")}
+                  </div>
+                )}
                 <div className="flex-1 bg-slate-50 dark:bg-white/5 rounded-xl px-3 py-2">
                   <div className="flex items-center justify-between gap-2 mb-0.5">
                     <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">
@@ -287,11 +295,19 @@ export default function QuestionCard({
 
       {/* Action bar */}
       <div className="flex items-center gap-2 pt-2 border-t border-black/5 dark:border-white/10 mt-1 flex-wrap">
-        {q.author && (
+        {q.author && !user?.isGuest && (
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-[10px] flex items-center justify-center text-white font-bold">
-              {initialsOf(q.author.name)}
-            </div>
+            {q.author.avatarUrl ? (
+              <img
+                src={q.author.avatarUrl}
+                alt={q.author.name}
+                className="w-6 h-6 rounded-full object-cover flex-shrink-0"
+              />
+            ) : (
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-[10px] flex items-center justify-center text-white font-bold flex-shrink-0">
+                {initialsOf(q.author.name)}
+              </div>
+            )}
             <span className="text-xs text-slate-500 dark:text-slate-400">
               {q.author.name}
             </span>
@@ -302,8 +318,9 @@ export default function QuestionCard({
           {/* Upvote */}
           {onUpvote && (
             <button
-              onClick={() => onUpvote(q)}
+              onClick={() => (user?.isGuest ? toast("Log in to upvote") : onUpvote(q))}
               className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                user?.isGuest ? "opacity-50 cursor-not-allowed border-slate-200 dark:border-white/10 text-slate-400" :
                 q.isUpvoted
                   ? "bg-cyan-100 border-cyan-300 text-cyan-700 dark:bg-cyan-500/20 dark:border-cyan-500/40 dark:text-cyan-300"
                   : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
@@ -316,8 +333,9 @@ export default function QuestionCard({
           {/* Highlight */}
           {onHighlight && (
             <button
-              onClick={() => onHighlight(q)}
+              onClick={() => (user?.isGuest ? toast("Log in to highlight") : onHighlight(q))}
               className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                user?.isGuest ? "opacity-50 cursor-not-allowed border-slate-200 dark:border-white/10 text-slate-400" :
                 q.isHighlighted
                   ? "bg-yellow-100 border-yellow-300 text-yellow-700 dark:bg-yellow-500/20 dark:border-yellow-500/40 dark:text-yellow-300"
                   : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
@@ -330,8 +348,9 @@ export default function QuestionCard({
 
           {/* Comments toggle */}
           <button
-            onClick={() => setShowComments((v) => !v)}
+            onClick={() => (user?.isGuest ? toast("Log in to comment") : setShowComments((v) => !v))}
             className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-colors ${
+              user?.isGuest ? "opacity-50 cursor-not-allowed border-slate-200 dark:border-white/10 text-slate-400" :
               showComments
                 ? "bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-500/20 dark:border-indigo-500/40 dark:text-indigo-300"
                 : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
@@ -343,8 +362,9 @@ export default function QuestionCard({
           {/* Bookmark */}
           {onBookmark && (
             <button
-              onClick={() => onBookmark(q)}
+              onClick={() => (user?.isGuest ? toast("Log in to save") : onBookmark(q))}
               className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                user?.isGuest ? "opacity-50 cursor-not-allowed border-slate-200 dark:border-white/10 text-slate-400" :
                 q.isBookmarked
                   ? "bg-amber-100 border-amber-300 text-amber-700 dark:bg-amber-500/20 dark:border-amber-500/40 dark:text-amber-400"
                   : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"

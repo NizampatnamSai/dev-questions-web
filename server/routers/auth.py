@@ -1,11 +1,19 @@
+import os
+from datetime import timezone
+from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from db_mongo import col_users, col_fcm_tokens, col_notifications, sid, now
 from auth_utils import hash_password, verify_password, create_token
-from deps import current_user
+from deps import current_user, is_locked_out
 from utils.firebase import send_to_tokens
 
 router = APIRouter()
+
+# Extra shared-secret gate for admin/sub_admin logins, on top of email+password.
+# Only enforced if set — an empty/unset env var means this layer is skipped
+# entirely (so local dev without the var configured isn't locked out).
+ADMIN_LOGIN_SECRET_KEY = os.getenv("ADMIN_LOGIN_SECRET_KEY", "")
 
 
 def _pub(u: dict) -> dict:
@@ -15,6 +23,7 @@ def _pub(u: dict) -> dict:
 class LoginBody(BaseModel):
     email: str
     password: str
+    admin_key: Optional[str] = None
 
 
 class RegisterBody(BaseModel):
@@ -33,6 +42,23 @@ async def login(body: LoginBody):
         raise HTTPException(403, "Your account is pending admin approval. You'll be notified once approved.")
     if status == "blocked":
         raise HTTPException(403, "Your account has been blocked. Please contact the admin.")
+    if is_locked_out(doc):
+        until = doc.get("disabledUntil")
+        if until:
+            if until.tzinfo is None:
+                until = until.replace(tzinfo=timezone.utc)
+            raise HTTPException(403, f"Your account is temporarily disabled until {until.strftime('%d %b %Y, %H:%M UTC')}.")
+        raise HTTPException(403, "Your account has been disabled by admin.")
+
+    if ADMIN_LOGIN_SECRET_KEY and doc.get("role") in ("admin", "sub_admin"):
+        if not body.admin_key:
+            # Signal the frontend to prompt for the key — email+password were
+            # already verified above, so this doesn't leak anything to someone
+            # who doesn't already have valid credentials for this account.
+            return {"requireAdminKey": True}
+        if body.admin_key != ADMIN_LOGIN_SECRET_KEY:
+            raise HTTPException(401, "Invalid admin secret key")
+
     user = sid(doc)
     return {"token": create_token(user["id"]), "user": _pub(user)}
 

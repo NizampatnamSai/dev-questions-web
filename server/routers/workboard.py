@@ -6,8 +6,9 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from db_mongo import col_workboard_members, col_workboard_posts, col_users, col_fcm_tokens, sid, oid, now
+from db_mongo import col_workboard_members, col_workboard_posts, col_users, col_fcm_tokens, col_user_profiles, sid, oid, now
 from deps import current_user
+from auth_utils import decode_token
 from utils.firebase import send_to_tokens
 
 router = APIRouter()
@@ -65,8 +66,20 @@ async def _broadcast_online_count():
 
 
 @router.websocket("/ws")
-async def workboard_ws(ws: WebSocket, user_id: str = None, user_name: str = None, user_avatar: str = None):
-    user_info = {"id": user_id or "anonymous", "name": user_name or "Guest", "avatar": user_avatar or None}
+async def workboard_ws(ws: WebSocket, token: str = None):
+    # Identity is derived from the JWT server-side — never trust a raw
+    # user_id/user_name query param, which anyone could set to any value to
+    # spoof presence as another real user in the "Currently Viewing" list.
+    user_info = {"id": "anonymous", "name": "Guest", "avatar": None}
+    if token:
+        try:
+            uid = decode_token(token)
+            udoc = await col_users().find_one({"_id": oid(uid)})
+            if udoc:
+                profile = await col_user_profiles().find_one({"userId": uid}) or {}
+                user_info = {"id": uid, "name": udoc.get("name", "Unknown"), "avatar": profile.get("avatar_url")}
+        except Exception:
+            pass
     await manager.connect(ws, user_info)
     # Tell everyone (including new joiner) the updated count
     await _broadcast_online_count()
@@ -197,19 +210,10 @@ def _fmt_dt(dt):
     return dt.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z" if isinstance(dt, datetime) else dt
 
 
-@router.get("/posts")
-async def today_posts(user=Depends(current_user), date: Optional[str] = Query(None)):
-    if not _is_admin(user):
-        member = await col_workboard_members().find_one({"userId": user["id"]})
-        if not member or member.get("status") != "active":
-            raise HTTPException(403, "Members only")
-    # If date provided, fetch that date. Otherwise fetch today's posts
-    target_date = date or ist_today()
-    wb_cfg = await _get_wb_config()
-    docs = await col_workboard_posts().find({"date": target_date}).sort("postedAt", 1).to_list(200)
+async def _serialize_posts(docs: list, user: dict, target_date: str, wb_cfg: dict) -> list:
     from db_mongo import col_user_profiles
     user_ids = list({d["userId"] for d in docs})
-    profiles = await col_user_profiles().find({"userId": {"$in": user_ids}}).to_list(200)
+    profiles = await col_user_profiles().find({"userId": {"$in": user_ids}}).to_list(length=len(user_ids) or 1)
     avatar_map = {p["userId"]: p.get("avatar_url") for p in profiles}
     result = []
     for d in docs:
@@ -229,6 +233,62 @@ async def today_posts(user=Depends(current_user), date: Optional[str] = Query(No
             d["userAvatar"] = avatar_map.get(d["userId"])
         result.append(d)
     return result
+
+
+@router.get("/posts")
+async def today_posts(user=Depends(current_user), date: Optional[str] = Query(None)):
+    if not _is_admin(user):
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        if not member or member.get("status") != "active":
+            raise HTTPException(403, "Members only")
+    # If date provided, fetch that date. Otherwise fetch today's posts
+    target_date = date or ist_today()
+    wb_cfg = await _get_wb_config()
+    docs = await col_workboard_posts().find({"date": target_date}).sort("postedAt", 1).to_list(200)
+    return await _serialize_posts(docs, user, target_date, wb_cfg)
+
+
+@router.get("/board")
+async def get_board(user=Depends(current_user)):
+    """Single combined payload for the WorkBoard's initial page load — replaces
+    what used to be 5 separate round trips (status, config, today's posts,
+    missing-today, pending-members) with one. Live updates after that (online
+    count, new posts/replies) still arrive over the existing /ws websocket, so
+    this isn't polled — it's just the one-time initial fetch."""
+    is_admin = _is_admin(user)
+    wb_cfg = await _get_wb_config()
+
+    if not is_admin:
+        member = await col_workboard_members().find_one({"userId": user["id"]})
+        status = member.get("status", "pending") if member else "none"
+        if status != "active":
+            return {"status": status, "config": wb_cfg, "posts": [], "missing": [], "pendingMembers": []}
+    else:
+        status = "active"
+
+    today = ist_today()
+    posts_docs = await col_workboard_posts().find({"date": today}).sort("postedAt", 1).to_list(200)
+    posts = await _serialize_posts(posts_docs, user, today, wb_cfg)
+
+    members = await col_workboard_members().find({"status": "active"}).to_list(200)
+    posted_ids = {d["userId"] for d in posts_docs}
+    missing = [
+        {"userId": m["userId"], "userName": m["userName"]}
+        for m in members if m["userId"] not in posted_ids
+    ]
+
+    pending_members = []
+    if is_admin:
+        pending_docs = await col_workboard_members().find({"status": "pending"}).to_list(100)
+        pending_members = [sid(d) for d in pending_docs]
+
+    return {
+        "status": status,
+        "config": wb_cfg,
+        "posts": posts,
+        "missing": missing,
+        "pendingMembers": pending_members,
+    }
 
 
 @router.get("/config")
@@ -314,12 +374,11 @@ async def create_post(body: PostBody, user=Depends(current_user)):
     }
     # Broadcast via WebSocket
     await manager.broadcast({"type": "new_post", "post": post_data})
-    # Push to all active members (except poster)
+    # Push to all active members (except poster) — one batched $in query
+    # instead of one FCM lookup per member.
     members = await col_workboard_members().find({"status": "active", "userId": {"$ne": user["id"]}}).to_list(200)
-    all_tokens = []
-    for m in members:
-        t_docs = await col_fcm_tokens().find({"userId": m["userId"]}).to_list(5)
-        all_tokens += [t["token"] for t in t_docs]
+    member_ids = [m["userId"] for m in members]
+    all_tokens = [t["token"] for t in await col_fcm_tokens().find({"userId": {"$in": member_ids}}).to_list(length=(len(member_ids) * 5) or 1)]
     if all_tokens:
         await send_to_tokens(
             list(set(all_tokens)),
@@ -390,12 +449,10 @@ async def reply_to_post(post_id: str, body: ReplyBody, user=Depends(current_user
 
     await manager.broadcast({"type": "new_reply", "postId": post_id, "reply": reply_out})
 
-    # Notify other active members, same as a fresh post
+    # Notify other active members, same as a fresh post — one batched query.
     members = await col_workboard_members().find({"status": "active", "userId": {"$ne": user["id"]}}).to_list(200)
-    all_tokens = []
-    for m in members:
-        t_docs = await col_fcm_tokens().find({"userId": m["userId"]}).to_list(5)
-        all_tokens += [t["token"] for t in t_docs]
+    member_ids = [m["userId"] for m in members]
+    all_tokens = [t["token"] for t in await col_fcm_tokens().find({"userId": {"$in": member_ids}}).to_list(length=(len(member_ids) * 5) or 1)]
     if all_tokens:
         await send_to_tokens(
             list(set(all_tokens)),
@@ -513,30 +570,3 @@ async def export_posts(
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
-
-
-
-
-    if not _is_admin(user):
-        member = await col_workboard_members().find_one({"userId": user["id"]})
-        if not member or member.get("status") != "active":
-            raise HTTPException(403, "Members only")
-
-    today = ist_today()
-    members = await col_workboard_members().find({"status": "active"}).to_list(200)
-    posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
-    posted_ids = {d["userId"] for d in posted_docs}
-
-    missing = [
-        {"userId": m["userId"], "userName": m["userName"]}
-        for m in members if m["userId"] not in posted_ids
-    ]
-
-    if user.get("role") in ("admin", "sub_admin"):
-        pending_members = await col_workboard_members().find({"status": "pending"}).to_list(100)
-        return {
-            "missing": missing,
-            "pending_members": [sid(d) for d in pending_members]
-        }
-    else:
-        return {"missing": missing}
