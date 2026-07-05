@@ -3,7 +3,7 @@ import httpx
 from datetime import datetime, timezone, timedelta, date
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from pydantic import BaseModel
-from deps import current_user
+from deps import current_user, require_ai_enabled
 from utils.ai import _groq_call, _ollama_text_action, GROQ_MODEL, GROQ_API_KEY
 from db_mongo import col_streaks, col_progress, col_study_reviewed, col_weak_area_insights, col_voice_transcripts, now
 
@@ -35,7 +35,7 @@ class SummariseReq(BaseModel):
 
 
 @router.post("/summarise")
-async def ai_summarise(req: SummariseReq, _=Depends(current_user)):
+async def ai_summarise(req: SummariseReq, _=Depends(require_ai_enabled)):
     system = (
         "You are a senior developer mentor. "
         "Give a concise, clear summary of the given topic for a developer preparing for interviews. "
@@ -69,7 +69,7 @@ class AskReq(BaseModel):
 
 
 @router.post("/ask")
-async def ai_ask(req: AskReq, _=Depends(current_user)):
+async def ai_ask(req: AskReq, _=Depends(require_ai_enabled)):
     system = (
         "You are a senior developer mentor answering developer interview questions. "
         "Be concise, accurate, and practical. Max 200 words. No markdown headers. "
@@ -98,7 +98,7 @@ class ExplainReq(BaseModel):
 
 
 @router.post("/explain")
-async def ai_explain(req: ExplainReq, _=Depends(current_user)):
+async def ai_explain(req: ExplainReq, _=Depends(require_ai_enabled)):
     if not req.text.strip():
         return {"explanation": ""}
     system = (
@@ -132,7 +132,7 @@ class ChallengeExpandReq(BaseModel):
     summary:  str
 
 @router.post("/challenge/expand")
-async def challenge_expand(req: ChallengeExpandReq, _=Depends(current_user)):
+async def challenge_expand(req: ChallengeExpandReq, _=Depends(require_ai_enabled)):
     system = (
         "You are a senior developer mentor explaining a technical concept to a developer preparing for interviews. "
         "Given a concept title and a one-line summary, produce a rich explanation in this EXACT JSON format:\n"
@@ -169,7 +169,7 @@ class CodeReq(BaseModel):
     code: str
 
 @router.post("/ts-add")
-async def ts_add(req: CodeReq, _=Depends(current_user)):
+async def ts_add(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -193,7 +193,7 @@ async def ts_add(req: CodeReq, _=Depends(current_user)):
 # ── Error Finder ───────────────────────────────────────────────────────────────
 
 @router.post("/find-errors")
-async def find_errors(req: CodeReq, _=Depends(current_user)):
+async def find_errors(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -217,7 +217,7 @@ async def find_errors(req: CodeReq, _=Depends(current_user)):
 # ── Potential Break Finder ─────────────────────────────────────────────────────
 
 @router.post("/find-breaks")
-async def find_breaks(req: CodeReq, _=Depends(current_user)):
+async def find_breaks(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -248,7 +248,7 @@ async def find_breaks(req: CodeReq, _=Depends(current_user)):
 # tool-runner (always POSTs {code}) works unchanged for these too.
 
 @router.post("/git-help")
-async def git_help(req: CodeReq, _=Depends(current_user)):
+async def git_help(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -271,7 +271,7 @@ async def git_help(req: CodeReq, _=Depends(current_user)):
 # ── AI Dev Assistant: Test Generator ────────────────────────────────────────────
 
 @router.post("/generate-tests")
-async def generate_tests(req: CodeReq, _=Depends(current_user)):
+async def generate_tests(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -292,7 +292,7 @@ async def generate_tests(req: CodeReq, _=Depends(current_user)):
 # ── AI Dev Assistant: Concept / Docs Explainer ──────────────────────────────────
 
 @router.post("/explain-concept")
-async def explain_concept(req: CodeReq, _=Depends(current_user)):
+async def explain_concept(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -318,7 +318,7 @@ async def explain_concept(req: CodeReq, _=Depends(current_user)):
 # missing keys, unnecessary re-renders) with zero extra infrastructure.
 
 @router.post("/react-performance")
-async def react_performance(req: CodeReq, _=Depends(current_user)):
+async def react_performance(req: CodeReq, _=Depends(require_ai_enabled)):
     if not req.code.strip():
         return {"result": ""}
     system = (
@@ -358,7 +358,7 @@ MAX_AUDIO_BYTES = 10 * 1024 * 1024  # 10MB — a few minutes of compressed speec
 
 
 @router.post("/mock/transcribe")
-async def mock_transcribe(audio: UploadFile = File(...), user=Depends(current_user)):
+async def mock_transcribe(audio: UploadFile = File(...), user=Depends(require_ai_enabled)):
     if not GROQ_API_KEY:
         raise HTTPException(503, "Voice transcription is not configured on this server.")
 
@@ -441,7 +441,7 @@ async def mock_start(req: MockStartReq, user=Depends(current_user)):
 
 
 @router.post("/mock/evaluate")
-async def mock_evaluate(req: MockEvalReq, _=Depends(current_user)):
+async def mock_evaluate(req: MockEvalReq, _=Depends(require_ai_enabled)):
     """AI scores the user's answer 1-10 with feedback."""
     system = (
         "You are a senior developer interviewer evaluating a candidate's answer. "
@@ -622,7 +622,7 @@ async def _generate_weak_area_insight(user) -> str | None:
 
 
 @router.get("/weak-areas/insight")
-async def weak_areas_insight(force: bool = False, user=Depends(current_user)):
+async def weak_areas_insight(force: bool = False, user=Depends(require_ai_enabled)):
     """A short, personalized coaching note built from the same weak-areas data.
     Cached once per day by default so revisiting the page never re-triggers the
     AI call; pass force=true to regenerate on demand, capped at a few times a
@@ -661,7 +661,7 @@ DIFFICULTY_ORDER = {"Basic": 0, "Intermediate": 1, "Advanced": 2, "Tricky": 3}
 
 
 @router.get("/mentor/learning-path")
-async def mentor_learning_path(user=Depends(current_user)):
+async def mentor_learning_path(user=Depends(require_ai_enabled)):
     """A concrete, ordered 'study this next' list — the structured counterpart
     to the free-text weak-areas insight. Pure DB computation, zero AI calls,
     so it's instant and safe to load automatically (unlike the insight, which

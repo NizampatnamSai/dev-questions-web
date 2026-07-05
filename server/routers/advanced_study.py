@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from db_mongo import col_users, col_ai_questions, col_flashcards, col_dsa_challenge, oid, sid, now
-from deps import current_user
+from deps import current_user, require_ai_enabled
 from utils.groq_service import generate_unique_questions, generate_flashcard_questions
 from utils.deduplication import check_question_duplicate, hash_question
 from utils.groq_unique_questions import _extract_json
@@ -66,7 +66,7 @@ async def get_due_flashcards(user=Depends(current_user)):
 
 
 @router.post("/generate-flashcards")
-async def generate_flashcards(req: FlashcardRequest, user=Depends(current_user)):
+async def generate_flashcards(req: FlashcardRequest, user=Depends(require_ai_enabled)):
     """Generate unique flashcard questions with spaced repetition"""
     try:
         user_id = user["id"]
@@ -177,7 +177,7 @@ async def rate_flashcard(card_id: str, rating: int, user=Depends(current_user)):
 # ============================================================================
 
 @router.get("/dsa-challenge/daily")
-async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
+async def get_daily_dsa_challenge(day: int, user=Depends(require_ai_enabled)):
     """Get the daily DSA challenge question (unique, no repeats)"""
     try:
         user_id = user["id"]
@@ -224,7 +224,7 @@ async def get_daily_dsa_challenge(day: int, user=Depends(current_user)):
 
 
 @router.post("/dsa-challenge/submit")
-async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
+async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(require_ai_enabled)):
     """Submit answer to DSA challenge"""
     try:
         user_id = user["id"]
@@ -269,7 +269,7 @@ async def submit_dsa_answer(req: DSAAnswerSubmit, user=Depends(current_user)):
 # ============================================================================
 
 @router.get("/daily-challenge")
-async def get_daily_challenge(category: str = "mixed", user=Depends(current_user)):
+async def get_daily_challenge(category: str = "mixed", user=Depends(require_ai_enabled)):
     """Get today's unique daily challenge (no duplicates)"""
     try:
         user_id = user["id"]

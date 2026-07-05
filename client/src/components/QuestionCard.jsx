@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnswerBlock from "./AnswerBlock";
@@ -184,7 +184,7 @@ function CommentsSection({ qid, onCommentCountChange }) {
   );
 }
 
-export default function QuestionCard({
+function QuestionCard({
   q,
   onUpvote,
   onHighlight,
@@ -406,3 +406,9 @@ export default function QuestionCard({
     </motion.div>
   );
 }
+
+// Memoized at the source so every consumer (Community, MyQuestions, Drafts,
+// Bookmarks, etc.) benefits automatically — previously only Community had its
+// own local memo wrapper, so lists like MyQuestions/Drafts re-rendered every
+// visible card on any unrelated state change in their parent page.
+export default memo(QuestionCard);

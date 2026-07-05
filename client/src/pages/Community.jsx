@@ -6,6 +6,7 @@ import QuestionCard from "../components/QuestionCard";
 import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
+import Select from "../components/Select";
 
 const CATEGORIES = [
   "HTML/CSS",
@@ -375,42 +376,24 @@ export default function Community() {
             placeholder="Search questions…"
             className="input-light flex-1 min-w-[200px] !py-2"
           />
-          <select
+          <Select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="input-light !w-auto !py-2"
-          >
-            <option value="">All Categories</option>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <select
+            onChange={setCategory}
+            className="w-auto"
+            options={[{ value: "", label: "All Categories" }, ...CATEGORIES.map((c) => ({ value: c, label: c }))]}
+          />
+          <Select
             value={level}
-            onChange={(e) => setLevel(e.target.value)}
-            className="input-light !w-auto !py-2"
-          >
-            <option value="">All Levels</option>
-            {LEVELS.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
-          <select
+            onChange={setLevel}
+            className="w-auto"
+            options={[{ value: "", label: "All Levels" }, ...LEVELS.map((l) => ({ value: l, label: l }))]}
+          />
+          <Select
             value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="input-light !w-auto !py-2"
-          >
-            <option value="">All Types</option>
-            {TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
+            onChange={setType}
+            className="w-auto"
+            options={[{ value: "", label: "All Types" }, ...TYPES.map((t) => ({ value: t, label: t }))]}
+          />
         </div>
 
         {!loading && (

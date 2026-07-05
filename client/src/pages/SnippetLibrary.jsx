@@ -8,6 +8,8 @@ import useConfirm from "../hooks/useConfirm";
 import RichTextEditor from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
 import CodeCard from "../components/CodeCard";
+import Select from "../components/Select";
+import Checkbox from "../components/Checkbox";
 
 const COMMON_LANGUAGES = [
   "javascript", "typescript", "python", "java", "go", "rust", "c", "cpp",
@@ -171,16 +173,12 @@ export default function SnippetLibrary() {
         >
           👤 Mine only
         </button>
-        <select
+        <Select
           value={langFilter}
-          onChange={(e) => setLangFilter(e.target.value)}
-          className="input-light w-auto text-xs py-1.5"
-        >
-          <option value="">All languages</option>
-          {languages.map((l) => (
-            <option key={l} value={l}>{l}</option>
-          ))}
-        </select>
+          onChange={setLangFilter}
+          className="w-auto"
+          options={[{ value: "", label: "All languages" }, ...languages.map((l) => ({ value: l, label: l }))]}
+        />
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -324,15 +322,11 @@ export default function SnippetLibrary() {
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-slate-500 mb-1 block">Language</label>
-                    <select
+                    <Select
                       value={form.language}
-                      onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
-                      className="input-light"
-                    >
-                      {COMMON_LANGUAGES.map((l) => (
-                        <option key={l} value={l}>{l}</option>
-                      ))}
-                    </select>
+                      onChange={(v) => setForm((f) => ({ ...f, language: v }))}
+                      options={COMMON_LANGUAGES.map((l) => ({ value: l, label: l }))}
+                    />
                   </div>
                 </div>
 
@@ -378,15 +372,12 @@ export default function SnippetLibrary() {
                   </div>
                 </div>
 
-                <label className="flex items-center gap-2.5 text-base font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={form.isPublic}
-                    onChange={(e) => setForm((f) => ({ ...f, isPublic: e.target.checked }))}
-                    className="w-5 h-5 rounded accent-indigo-600"
-                  />
-                  🌍 Share publicly with the team
-                </label>
+                <Checkbox
+                  checked={form.isPublic}
+                  onChange={(v) => setForm((f) => ({ ...f, isPublic: v }))}
+                  label="🌍 Share publicly with the team"
+                  className="text-base font-medium text-slate-700 dark:text-slate-200"
+                />
 
                 <div className="flex gap-2 pt-2">
                   <button

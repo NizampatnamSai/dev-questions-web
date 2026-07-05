@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import AnswerBlock from "../components/AnswerBlock";
+import Select from "../components/Select";
 
 const CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"];
 const LEVELS = ["Low", "Medium", "High"];
@@ -122,27 +123,30 @@ export default function TimedChallenge() {
         <div className="glass-card p-8 max-w-md mx-auto space-y-6">
           <div>
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Category</label>
-            <select value={formData.category}
-              onChange={e => setFormData(p => ({ ...p, category: e.target.value }))}
-              className="w-full mt-2 input-light">
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
+            <Select
+              className="w-full mt-2"
+              value={formData.category}
+              onChange={(v) => setFormData(p => ({ ...p, category: v }))}
+              options={CATEGORIES.map(c => ({ value: c, label: c }))}
+            />
           </div>
           <div>
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Difficulty</label>
-            <select value={formData.difficulty}
-              onChange={e => setFormData(p => ({ ...p, difficulty: e.target.value }))}
-              className="w-full mt-2 input-light">
-              {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-            </select>
+            <Select
+              className="w-full mt-2"
+              value={formData.difficulty}
+              onChange={(v) => setFormData(p => ({ ...p, difficulty: v }))}
+              options={LEVELS.map(l => ({ value: l, label: l }))}
+            />
           </div>
           <div>
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Questions</label>
-            <select value={formData.questions_count}
-              onChange={e => setFormData(p => ({ ...p, questions_count: parseInt(e.target.value) }))}
-              className="w-full mt-2 input-light">
-              {[3, 5, 10].map(n => <option key={n} value={n}>{n} questions (~{n} min)</option>)}
-            </select>
+            <Select
+              className="w-full mt-2"
+              value={formData.questions_count}
+              onChange={(v) => setFormData(p => ({ ...p, questions_count: parseInt(v) }))}
+              options={[3, 5, 10].map(n => ({ value: n, label: `${n} questions (~${n} min)` }))}
+            />
           </div>
           <button onClick={startChallenge}
             className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-semibold hover:shadow-lg transition-all">

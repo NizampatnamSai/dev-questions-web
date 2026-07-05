@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from fastapi import Header, HTTPException, status
+from fastapi import Depends, Header, HTTPException, status
 from jose import JWTError
 from auth_utils import decode_token
 from db_mongo import col_users, oid, sid
@@ -48,3 +48,16 @@ async def optional_user(authorization: str = Header(default="")) -> dict | None:
     if not doc or is_locked_out(doc):
         return None
     return sid(doc)
+
+
+async def require_ai_enabled(user: dict = Depends(current_user)) -> dict:
+    """Drop-in replacement for Depends(current_user) on any AI-backed
+    endpoint — blocks regular users when the admin's global AI on/off switch
+    is off, while admin/sub_admin can still pass through to test/manage."""
+    if user.get("role") not in ("admin", "sub_admin"):
+        from db_mongo import col_app_config
+        doc = await col_app_config().find_one({"_id": "config"}) or {}
+        if not doc.get("ai_features_enabled", True):
+            msg = doc.get("ai_features_message") or "AI features are temporarily disabled by the admin."
+            raise HTTPException(status.HTTP_403_FORBIDDEN, msg)
+    return user

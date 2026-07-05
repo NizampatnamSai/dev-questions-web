@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from routers.auth import current_user
+from deps import require_ai_enabled
 from utils.ai import GROQ_API_KEY, GROQ_URL, GROQ_MODEL, GROQ_MODEL_FALLBACK
 from db_mongo import sid, oid, now
 import httpx
@@ -43,7 +44,7 @@ async def _groq_ask(question: str) -> str:
 
 
 @router.post("/ask")
-async def ask(body: AskBody, _user=Depends(current_user)):
+async def ask(body: AskBody, _user=Depends(require_ai_enabled)):
     q = body.question.strip()
     if not q:
         raise HTTPException(400, "Question is required")

@@ -5,7 +5,7 @@ extracted plain text goes to Groq."""
 import io
 from datetime import date
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
-from deps import current_user
+from deps import current_user, require_ai_enabled
 from db_mongo import col_resume_analyses, now
 from utils.ai import _groq_call
 from utils.groq_unique_questions import _extract_json
@@ -33,7 +33,7 @@ def _extract_docx_text(raw: bytes) -> str:
 async def analyze_resume(
     file: UploadFile = File(...),
     job_description: str = Form(""),
-    user=Depends(current_user),
+    user=Depends(require_ai_enabled),
 ):
     filename = (file.filename or "").lower()
     if not (filename.endswith(".pdf") or filename.endswith(".docx")):

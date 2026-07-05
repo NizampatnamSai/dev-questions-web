@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import RichTextEditor, { isRichTextEmpty } from "../components/RichTextEditor";
+import Select from "../components/Select";
+import Checkbox from "../components/Checkbox";
 import {
   unlockWithPassphrase, createVerificationBlob, encryptText, decryptText,
   rememberKeyForSession, restoreKeyForSession, forgetSessionKey,
@@ -339,15 +341,14 @@ export default function Notes() {
             />
           )}
           {unlockError && <p className="text-sm text-red-500">{unlockError}</p>}
-          <label className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 cursor-pointer select-none justify-center">
-            <input
-              type="checkbox"
+          <div className="flex justify-center">
+            <Checkbox
               checked={rememberMe}
-              onChange={(e) => onToggleRemember(e.target.checked)}
-              className="rounded border-slate-300 dark:border-white/20"
+              onChange={onToggleRemember}
+              label="Don't ask again this session"
+              className="text-slate-500 dark:text-slate-400"
             />
-            Don't ask again this session
-          </label>
+          </div>
           <button
             onClick={phase === "setup" ? handleSetup : handleUnlock}
             disabled={unlocking || !passphrase}
@@ -406,17 +407,17 @@ export default function Notes() {
           <p className="text-xs text-slate-400 mt-0.5">🔒 End-to-end encrypted — only you can read these</p>
         </div>
         <div className="flex flex-wrap gap-2 items-center">
-          <select
+          <Select
             value={blurMode}
-            onChange={(e) => setBlurMode(e.target.value)}
-            title="Blur note previews for privacy — hover a card to reveal"
-            className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold transition-colors text-slate-700 dark:text-slate-200 outline-none cursor-pointer whitespace-nowrap"
-          >
-            <option value="off">👁 Blur: Off</option>
-            <option value="all">🙈 Blur: All</option>
-            <option value="title">🙈 Blur: Title</option>
-            <option value="description">🙈 Blur: Description</option>
-          </select>
+            onChange={setBlurMode}
+            className="w-auto min-w-[9rem]"
+            options={[
+              { value: "off", label: "👁 Blur: Off" },
+              { value: "all", label: "🙈 Blur: All" },
+              { value: "title", label: "🙈 Blur: Title" },
+              { value: "description", label: "🙈 Blur: Description" },
+            ]}
+          />
           {sessionRemembered && (
             <button
               onClick={handleForgetSession}

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import { CheckboxBox } from "../components/Checkbox";
 import { STUDY_TOPICS, STUDY_CATEGORIES } from "../data/studyGuide";
 
 const DIFF_COLORS = {
@@ -409,7 +410,7 @@ export default function Flashcards() {
 
             {/* Mode toggle */}
             <label className="flex items-center gap-3 glass-card p-4 cursor-pointer mb-6">
-              <input type="checkbox" checked={reviewOnly} onChange={(e) => setReviewOnly(e.target.checked)} className="accent-indigo-500 w-4 h-4" />
+              <CheckboxBox checked={reviewOnly} onChange={setReviewOnly} />
               <div>
                 <div className="font-semibold text-sm">Review mode</div>
                 <div className="text-xs text-slate-400">Only show topics you marked "Need Review" (no unseen cards)</div>

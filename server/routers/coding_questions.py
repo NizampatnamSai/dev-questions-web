@@ -2,7 +2,7 @@ from datetime import date
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from db_mongo import col_coding_questions, col_app_config, col_coding_limit_bonus, oid, now
-from deps import current_user
+from deps import current_user, require_ai_enabled
 from utils.js_sandbox import run_test_cases
 from utils.coding_question_service import generate_coding_question, DIFFICULTY_LEVELS
 from utils.ai import _groq_call
@@ -67,7 +67,7 @@ class GenerateBody(BaseModel):
 
 
 @router.post("/coding/generate")
-async def coding_generate(body: GenerateBody, user=Depends(current_user)):
+async def coding_generate(body: GenerateBody, user=Depends(require_ai_enabled)):
     difficulty = body.difficulty.lower()
     if difficulty not in VALID_DIFFICULTIES:
         raise HTTPException(400, "difficulty must be 'medium' or 'hard'")
@@ -157,7 +157,7 @@ async def _groq_plain(system: str, user: str, max_tokens: int = 350) -> str:
 
 
 @router.post("/coding/{qid}/explain")
-async def coding_explain(qid: str, user=Depends(current_user)):
+async def coding_explain(qid: str, user=Depends(require_ai_enabled)):
     """Plain-English walkthrough of why the current submission passed/failed,
     generated once per submission and cached on it — resubmitting different
     code invalidates the cache naturally since submission gets overwritten."""

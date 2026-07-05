@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import { CheckboxBox } from "../components/Checkbox";
 
 function statusBadge(m) {
   if (m.status === "ended") return { text: "Ended", cls: "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400" };
@@ -73,7 +74,7 @@ function ScheduleModal({ users, onClose, onCreated }) {
           <div className="max-h-40 overflow-y-auto space-y-1 border border-slate-200 dark:border-white/10 rounded-xl p-2">
             {users.map((u) => (
               <label key={u.id} className="flex items-center gap-2 text-sm px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer">
-                <input type="checkbox" checked={invited.includes(u.id)} onChange={() => toggleInvite(u.id)} />
+                <CheckboxBox checked={invited.includes(u.id)} onChange={() => toggleInvite(u.id)} />
                 <span className="text-slate-700 dark:text-slate-200">{u.name}</span>
                 <span className="text-xs text-slate-400 ml-auto">{u.email}</span>
               </label>

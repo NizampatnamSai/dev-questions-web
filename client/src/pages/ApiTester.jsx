@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import JsonTreeView from "../components/JsonTreeView";
 import MockApiPanel from "../components/MockApiPanel";
+import Select from "../components/Select";
 
 const METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
 const HISTORY_KEY = "devquiz_api_tester_history";
@@ -320,15 +321,11 @@ export default function ApiTester() {
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="flex gap-2 flex-1 min-w-0">
             <div className="w-24 sm:w-36 flex-shrink-0">
-              <select
+              <Select
                 value={method}
-                onChange={(e) => setMethod(e.target.value)}
-                className="input-light font-mono font-semibold"
-              >
-                {METHODS.map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
+                onChange={setMethod}
+                options={METHODS.map((m) => ({ value: m, label: m }))}
+              />
             </div>
             <input
               value={url}

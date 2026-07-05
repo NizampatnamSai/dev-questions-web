@@ -5,6 +5,8 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import ConfirmModal from "../components/ConfirmModal";
 import { fmtDate, fmtDateTime } from "../utils/time";
+import Select from "../components/Select";
+import Checkbox, { CheckboxBox } from "../components/Checkbox";
 
 const ROLES = ["user", "sub_admin", "admin"];
 
@@ -177,17 +179,11 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
           <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">
             Role
           </label>
-          <select
+          <Select
             value={form.role}
-            onChange={(e) => set("role", e.target.value)}
-            className="input-light"
-          >
-            {ROLES.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
+            onChange={(v) => set("role", v)}
+            options={ROLES.map((r) => ({ value: r, label: r }))}
+          />
         </div>
         <div>
           <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">
@@ -359,11 +355,9 @@ function NotifyModal({ onClose, users, onSent }) {
                     key={u.id}
                     className="flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-white/5 cursor-pointer transition-colors"
                   >
-                    <input
-                      type="checkbox"
+                    <CheckboxBox
                       checked={selected.has(u.id)}
                       onChange={() => toggle(u.id)}
-                      className="rounded accent-indigo-500 w-4 h-4 flex-shrink-0"
                     />
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                       {u.name
@@ -528,47 +522,28 @@ function ScheduleRow({ u, saved, onSave, onRemove }) {
         </p>
         <p className="text-[10px] text-slate-400 truncate">{u.email}</p>
       </div>
-      <select
+      <Select
         value={draft.day}
-        onChange={(e) => setDraft((d) => ({ ...d, day: e.target.value }))}
-        className="input-light !py-1.5 !text-xs !w-auto"
-      >
-        {DAYS.map((d) => (
-          <option key={d} value={d}>
-            {DAY_LABEL[d]}
-          </option>
-        ))}
-      </select>
+        onChange={(v) => setDraft((d) => ({ ...d, day: v }))}
+        className="w-auto"
+        options={DAYS.map((d) => ({ value: d, label: DAY_LABEL[d] }))}
+      />
       <div className="flex items-center gap-1.5">
-        <select
+        <Select
           value={draft.hour}
-          onChange={(e) =>
-            setDraft((d) => ({ ...d, hour: parseInt(e.target.value) }))
-          }
-          className="input-light !py-1 !text-xs !w-[68px]"
-        >
-          {Array.from({ length: 24 }, (_, h) => (
-            <option key={h} value={h}>
-              {String(h).padStart(2, "0")}
-            </option>
-          ))}
-        </select>
+          onChange={(v) => setDraft((d) => ({ ...d, hour: parseInt(v) }))}
+          className="w-[74px]"
+          options={Array.from({ length: 24 }, (_, h) => ({ value: h, label: String(h).padStart(2, "0") }))}
+        />
         <span className="text-slate-400 font-bold text-sm leading-none select-none">
           :
         </span>
-        <select
+        <Select
           value={draft.minute}
-          onChange={(e) =>
-            setDraft((d) => ({ ...d, minute: parseInt(e.target.value) }))
-          }
-          className="input-light !py-1 !text-xs !w-[68px]"
-        >
-          {Array.from({ length: 60 }, (_, m) => (
-            <option key={m} value={m}>
-              {String(m).padStart(2, "0")}
-            </option>
-          ))}
-        </select>
+          onChange={(v) => setDraft((d) => ({ ...d, minute: parseInt(v) }))}
+          className="w-[74px]"
+          options={Array.from({ length: 60 }, (_, m) => ({ value: m, label: String(m).padStart(2, "0") }))}
+        />
         <span className="text-[10px] text-slate-400 font-medium leading-none">
           UTC
         </span>
@@ -901,42 +876,21 @@ function AutoPostModal({ user: targetUser, onClose }) {
           </button>
         </div>
         <div className="grid grid-cols-3 gap-2">
-          <select
+          <Select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="input-light text-xs !py-1.5"
-          >
-            <option value="">Any Category</option>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <select
+            onChange={setCategory}
+            options={[{ value: "", label: "Any Category" }, ...CATEGORIES.map((c) => ({ value: c, label: c }))]}
+          />
+          <Select
             value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="input-light text-xs !py-1.5"
-          >
-            <option value="">Any Type</option>
-            {TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-          <select
+            onChange={setType}
+            options={[{ value: "", label: "Any Type" }, ...TYPES.map((t) => ({ value: t, label: t }))]}
+          />
+          <Select
             value={level}
-            onChange={(e) => setLevel(e.target.value)}
-            className="input-light text-xs !py-1.5"
-          >
-            <option value="">Any Level</option>
-            {LEVELS.map((l) => (
-              <option key={l} value={l}>
-                {l}
-              </option>
-            ))}
-          </select>
+            onChange={setLevel}
+            options={[{ value: "", label: "Any Level" }, ...LEVELS.map((l) => ({ value: l, label: l }))]}
+          />
         </div>
         <button
           onClick={fetchSuggestions}
@@ -1127,20 +1081,17 @@ function CommunityScheduleEditor({ users }) {
                     {day}
                   </p>
                 </div>
-                <select
+                <Select
                   value={currentEmail}
-                  onChange={(e) => save(i, e.target.value)}
+                  onChange={(v) => save(i, v)}
                   disabled={saving === i}
-                  className="input-light flex-1 !py-1.5 text-sm"
-                >
-                  <option value="">— Closed —</option>
-                  {i === 5 && <option value="ADMIN_ONLY">Admin only</option>}
-                  {regularUsers.map((u) => (
-                    <option key={u.id} value={u.email}>
-                      {u.name} ({u.email})
-                    </option>
-                  ))}
-                </select>
+                  className="flex-1"
+                  options={[
+                    { value: "", label: "— Closed —" },
+                    ...(i === 5 ? [{ value: "ADMIN_ONLY", label: "Admin only" }] : []),
+                    ...regularUsers.map((u) => ({ value: u.email, label: `${u.name} (${u.email})` })),
+                  ]}
+                />
                 {saving === i && (
                   <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
                 )}
@@ -1413,6 +1364,8 @@ function AppConfigPanel() {
     guest_feedback_enabled: false,
     guest_mode_enabled: true,
     guest_mode_message: "",
+    ai_features_enabled: true,
+    ai_features_message: "",
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1710,6 +1663,56 @@ function AppConfigPanel() {
         {!config.guest_mode_enabled && (
           <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
             🚫 Guest mode is OFF — guests are signed out and blocked app-wide
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* AI Features */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">
+              🤖 AI Features
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Master switch for every AI-backed feature (Ask AI, question
+              generation, JS Coding, Study Hub assistants, Resume Analyzer,
+              Mock Interview, etc). Admins/sub-admins are always exempt.
+              Toggling this notifies all users.
+            </p>
+          </div>
+          <button
+            onClick={() =>
+              save({
+                ai_features_enabled: !config.ai_features_enabled,
+                ai_features_message: config.ai_features_message,
+              })
+            }
+            disabled={saving}
+            className={`relative w-12 h-6 rounded-full transition-colors ${config.ai_features_enabled ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.ai_features_enabled ? "translate-x-6" : ""}`}
+            />
+          </button>
+        </div>
+        <textarea
+          value={config.ai_features_message}
+          onChange={(e) =>
+            setConfig((c) => ({ ...c, ai_features_message: e.target.value }))
+          }
+          onBlur={() =>
+            save({ ai_features_message: config.ai_features_message })
+          }
+          placeholder="Reason shown to users when AI features are off (e.g. 'AI turned off for scheduled maintenance')…"
+          rows={1}
+          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
+        />
+        {!config.ai_features_enabled && (
+          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+            🚫 AI features are OFF for all non-admin users
           </div>
         )}
       </div>

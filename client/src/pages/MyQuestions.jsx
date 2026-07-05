@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import QuestionCard from "../components/QuestionCard";
 import ConfirmModal from "../components/ConfirmModal";
+import Select from "../components/Select";
 
 const PAGE = 10;
 
@@ -178,16 +179,14 @@ export default function MyQuestions() {
                 className="input-light text-sm resize-none"
                 rows={3}
               />
-              <select
+              <Select
                 value={editing.status}
-                onChange={(e) =>
-                  setEditing({ ...editing, status: e.target.value })
-                }
-                className="input-light !py-2"
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
+                onChange={(v) => setEditing({ ...editing, status: v })}
+                options={[
+                  { value: "draft", label: "Draft" },
+                  { value: "published", label: "Published" },
+                ]}
+              />
               <div className="flex gap-2 justify-end pt-2">
                 <button
                   onClick={() => setEditing(null)}

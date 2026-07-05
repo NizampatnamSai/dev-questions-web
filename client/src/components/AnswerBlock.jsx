@@ -2,6 +2,8 @@
 // 1. Markdown fenced code blocks (```lang ... ```)
 // 2. Plain-text code with \n line breaks (detected by code-like patterns)
 
+import { memo, useMemo } from "react";
+
 function looksLikeCode(text) {
   return /^\s*(function |const |let |var |class |import |export |if\s*\(|for\s*\(|\{[\s\S]*\}|\/\/|=>)/.test(text.trim());
 }
@@ -20,10 +22,13 @@ function splitByFences(text) {
   return parts.length ? parts : [{ type: "text", content: text }];
 }
 
-export default function AnswerBlock({ text, questionType }) {
-  if (!text) return null;
-
-  const parts = splitByFences(text);
+function AnswerBlock({ text, questionType }) {
+  // splitByFences() runs a regex exec loop — memoized since this component
+  // renders once per visible answer in lists (Quiz, Community, Timed
+  // Challenge), so an unrelated parent re-render shouldn't re-parse every
+  // visible answer's fenced code blocks again.
+  const parts = useMemo(() => (text ? splitByFences(text) : null), [text]);
+  if (!text || !parts) return null;
 
   // If no fences found but the whole thing looks like code (Coding question), treat as code block
   if (parts.length === 1 && parts[0].type === "text" && questionType === "Coding") {
@@ -74,3 +79,5 @@ export default function AnswerBlock({ text, questionType }) {
     </div>
   );
 }
+
+export default memo(AnswerBlock);

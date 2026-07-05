@@ -5,7 +5,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from db_mongo import col_questions, col_comments, col_ai_usage, col_users, col_fcm_tokens, col_community_schedule, col_user_answers, sid, oid, now
-from deps import current_user, optional_user
+from deps import current_user, optional_user, require_ai_enabled
 from utils.ai import generate_questions, generate_answer, ai_text_action, check_answer
 from utils.firebase import send_to_all, send_to_tokens
 
@@ -181,7 +181,7 @@ class HelperBody(BaseModel):
 
 
 @router.post("/ai-helper")
-async def question_helper(body: HelperBody, user=Depends(current_user)):
+async def question_helper(body: HelperBody, user=Depends(require_ai_enabled)):
     raw = (body.input or body.text).strip()
     if not raw:
         raise HTTPException(400, "Input cannot be empty")
@@ -214,7 +214,7 @@ def resolve_category(raw: str) -> str:
 
 
 @router.post("/generate")
-async def gen_questions(body: GenBody, user=Depends(current_user)):
+async def gen_questions(body: GenBody, user=Depends(require_ai_enabled)):
     category = resolve_category(body.category)
     if body.level not in LEVELS: raise HTTPException(400, "Invalid level")
     if body.type  not in TYPES:  raise HTTPException(400, "Invalid type")
@@ -239,7 +239,7 @@ class GenAnswerBody(BaseModel):
 
 
 @router.post("/generate/answer")
-async def gen_answer(body: GenAnswerBody, user=Depends(current_user)):
+async def gen_answer(body: GenAnswerBody, user=Depends(require_ai_enabled)):
     if len(body.question.strip()) < 10: raise HTTPException(400, "Question too short")
     category = resolve_category(body.category)
     if body.level not in LEVELS: raise HTTPException(400, "Invalid level")
@@ -653,7 +653,7 @@ class CheckAnswerBody(BaseModel):
 
 
 @router.post("/{qid}/check-answer")
-async def check_answer_endpoint(qid: str, body: CheckAnswerBody, user=Depends(current_user)):
+async def check_answer_endpoint(qid: str, body: CheckAnswerBody, user=Depends(require_ai_enabled)):
     if not body.user_answer.strip():
         raise HTTPException(400, "Answer cannot be empty")
     doc = await col_questions().find_one({"_id": oid(qid)})

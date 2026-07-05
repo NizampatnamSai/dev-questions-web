@@ -6,6 +6,8 @@ import api from "../api/axios";
 import { fmtDateTime } from "../utils/time";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
+import Select from "../components/Select";
+import { CheckboxBox } from "../components/Checkbox";
 import { TASK_STATUSES, statusMeta } from "../utils/taskStatus";
 import RichTextEditor from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
@@ -760,17 +762,15 @@ export default function AdminTasks() {
                       <label className="text-xs font-semibold text-slate-500 mb-1 block">
                         Priority
                       </label>
-                      <select
+                      <Select
                         value={form.priority}
-                        onChange={(e) =>
-                          setForm((f) => ({ ...f, priority: e.target.value }))
-                        }
-                        className="input-light"
-                      >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                      </select>
+                        onChange={(v) => setForm((f) => ({ ...f, priority: v }))}
+                        options={[
+                          { value: "low", label: "Low" },
+                          { value: "medium", label: "Medium" },
+                          { value: "high", label: "High" },
+                        ]}
+                      />
                     </div>
                     <div>
                       <label className="text-xs font-semibold text-slate-500 mb-1 block">
@@ -799,11 +799,9 @@ export default function AdminTasks() {
                           key={u.id}
                           className="flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer"
                         >
-                          <input
-                            type="checkbox"
+                          <CheckboxBox
                             checked={form.assigneeIds.includes(u.id)}
                             onChange={() => toggleAssignee(u.id)}
-                            className="rounded accent-indigo-600"
                           />
                           <span className="text-sm text-slate-700 dark:text-slate-200">
                             {u.name}

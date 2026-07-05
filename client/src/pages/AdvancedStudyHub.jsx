@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import Select from "../components/Select";
 
 // ============================================================================
 // FLASHCARD SYSTEM - Spaced Repetition Learning
@@ -62,26 +63,28 @@ function FlashcardMode() {
     <div className="space-y-6">
       {/* Category & Difficulty Selector */}
       <div className="flex gap-4 flex-wrap">
-        <select
+        <Select
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
-        >
-          <option value="javascript">JavaScript</option>
-          <option value="react">React</option>
-          <option value="nodejs">Node.js</option>
-          <option value="dsa">DSA</option>
-        </select>
-        <select
+          onChange={setCategory}
+          className="w-auto"
+          options={[
+            { value: "javascript", label: "JavaScript" },
+            { value: "react", label: "React" },
+            { value: "nodejs", label: "Node.js" },
+            { value: "dsa", label: "DSA" },
+          ]}
+        />
+        <Select
           value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
-        >
-          <option value="all">All Levels</option>
-          <option value="basic">Basic</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </select>
+          onChange={setDifficulty}
+          className="w-auto"
+          options={[
+            { value: "all", label: "All Levels" },
+            { value: "basic", label: "Basic" },
+            { value: "intermediate", label: "Intermediate" },
+            { value: "advanced", label: "Advanced" },
+          ]}
+        />
       </div>
 
       {/* Progress Bar */}
@@ -347,16 +350,17 @@ function DailyAIChallenge() {
   return (
     <div className="space-y-6">
       <div className="flex gap-3">
-        <select
+        <Select
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
-        >
-          <option value="mixed">All Categories</option>
-          <option value="javascript">JavaScript</option>
-          <option value="react">React</option>
-          <option value="dsa">DSA</option>
-        </select>
+          onChange={setCategory}
+          className="w-auto"
+          options={[
+            { value: "mixed", label: "All Categories" },
+            { value: "javascript", label: "JavaScript" },
+            { value: "react", label: "React" },
+            { value: "dsa", label: "DSA" },
+          ]}
+        />
         <button
           onClick={loadChallenge}
           className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500"

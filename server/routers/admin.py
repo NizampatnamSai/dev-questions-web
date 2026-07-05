@@ -706,6 +706,8 @@ class AppConfigBody(BaseModel):
     guest_mode_enabled: Optional[bool] = None
     guest_mode_message: Optional[str] = None
     wb_afternoon_reminder_time: Optional[str] = None  # "HH:MM" IST, e.g. "15:00"
+    ai_features_enabled: Optional[bool] = None
+    ai_features_message: Optional[str] = None
 
 
 @router.get("/app-config/public")
@@ -724,6 +726,8 @@ async def get_app_config_public():
         "guest_feedback_enabled": doc.get("guest_feedback_enabled", False),
         "guest_mode_enabled": doc.get("guest_mode_enabled", True),
         "guest_mode_message": doc.get("guest_mode_message", "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."),
+        "ai_features_enabled": doc.get("ai_features_enabled", True),
+        "ai_features_message": doc.get("ai_features_message", "AI features are temporarily disabled by the admin."),
     }
 
 
@@ -740,6 +744,8 @@ async def get_app_config(admin=Depends(_require_admin)):
     doc.setdefault("guest_mode_enabled", True)
     doc.setdefault("guest_mode_message", "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue.")
     doc.setdefault("wb_afternoon_reminder_time", "15:00")
+    doc.setdefault("ai_features_enabled", True)
+    doc.setdefault("ai_features_message", "AI features are temporarily disabled by the admin.")
     return doc
 
 
@@ -747,6 +753,7 @@ async def get_app_config(admin=Depends(_require_admin)):
 async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
     doc = await col_app_config().find_one({"_id": "config"}) or {}
     was_maintenance = doc.get("maintenance", False)
+    was_ai_enabled = doc.get("ai_features_enabled", True)
 
     update = {}
     if body.maintenance is not None:
@@ -773,6 +780,10 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["guest_mode_message"] = body.guest_mode_message
     if body.wb_afternoon_reminder_time is not None:
         update["wb_afternoon_reminder_time"] = body.wb_afternoon_reminder_time
+    if body.ai_features_enabled is not None:
+        update["ai_features_enabled"] = body.ai_features_enabled
+    if body.ai_features_message is not None:
+        update["ai_features_message"] = body.ai_features_message
 
     if update:
         await col_app_config().update_one(
@@ -826,6 +837,29 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
             await send_to_tokens(tokens,
                 title="🚀 Update Available!",
                 body=msg,
+                data={"type": "broadcast", "path": "/dashboard"},
+            )
+
+    # AI features toggled off → notify all users with the admin's reason
+    if body.ai_features_enabled is False and was_ai_enabled:
+        msg = body.ai_features_message or update.get("ai_features_message") or "AI features are temporarily disabled by the admin."
+        all_tokens = await col_fcm_tokens().find({}).to_list(1000)
+        tokens = list({t["token"] for t in all_tokens})
+        if tokens:
+            await send_to_tokens(tokens,
+                title="🔒 AI Features Disabled",
+                body=msg,
+                data={"type": "broadcast", "path": "/dashboard"},
+            )
+
+    # AI features toggled back on → notify all users
+    if body.ai_features_enabled is True and not was_ai_enabled:
+        all_tokens = await col_fcm_tokens().find({}).to_list(1000)
+        tokens = list({t["token"] for t in all_tokens})
+        if tokens:
+            await send_to_tokens(tokens,
+                title="✨ AI Features Are Back!",
+                body="AI-powered features are available again.",
                 data={"type": "broadcast", "path": "/dashboard"},
             )
 
