@@ -7,7 +7,7 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
-import { GUEST_ALLOWED } from "./ProtectedRoute";
+import { isGuestAllowedPath } from "./ProtectedRoute";
 
 const BASE_LINKS = [
   // Requested order (top 12)
@@ -256,7 +256,7 @@ function Sidebar() {
     : baseFiltered;
 
   const links = user?.isGuest
-    ? allLinks.filter((l) => GUEST_ALLOWED.some((p) => l.to.startsWith(p)))
+    ? allLinks.filter((l) => isGuestAllowedPath(l.to))
     : allLinks;
 
   const initials = user?.name

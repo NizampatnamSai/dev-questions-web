@@ -20,6 +20,18 @@ export const GUEST_ALLOWED = [
   "/meetings", // the invite-list view needs login, but the join-by-code box is intentionally open to guests
 ];
 
+// Exact match on the prefix, or the prefix followed by "/" or "?" — a plain
+// `path.startsWith(p)` would let "/study" in the list above also match
+// "/study-advanced" (wrong page, no guest support) since it's a literal
+// string-prefix match with no path-segment boundary. This bit us for real:
+// guests could see + open "AI Study Lab" only to have its API calls bounce
+// them to /login once the page tried to fetch data as a real user.
+export function isGuestAllowedPath(path) {
+  return GUEST_ALLOWED.some(
+    (p) => path === p || path.startsWith(p + "/") || path.startsWith(p + "?"),
+  );
+}
+
 export default function ProtectedRoute({ children, path }) {
   const { user, loading } = useAuth();
 
@@ -35,7 +47,7 @@ export default function ProtectedRoute({ children, path }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.isGuest && path && !GUEST_ALLOWED.some((p) => path.startsWith(p))) {
+  if (user.isGuest && path && !isGuestAllowedPath(path)) {
     return <Navigate to="/dashboard" replace />;
   }
 

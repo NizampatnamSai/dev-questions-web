@@ -214,6 +214,225 @@ function HistoryItem({ chat, active, onSelect, onDelete }) {
   );
 }
 
+// ─── Image mode ─────────────────────────────────────────────────────────────
+// Self-contained: separate upload + preview + answer flow, not part of the
+// saved-chat history/message-list architecture the other two modes share.
+function ImageAskPanel() {
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const pickFile = (f) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    if (f.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5MB");
+      return;
+    }
+    setFile(f);
+    setAnswer("");
+    setPreviewUrl(URL.createObjectURL(f));
+  };
+
+  const clearImage = () => {
+    setFile(null);
+    setAnswer("");
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const ask = async () => {
+    if (!file) {
+      toast.error("Choose an image first");
+      return;
+    }
+    setLoading(true);
+    setAnswer("");
+    try {
+      const form = new FormData();
+      form.append("image", file);
+      form.append("question", question.trim());
+      const { data } = await api.post("/ai/ask-image", form, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setAnswer(data.answer);
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to analyze image");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto px-1">
+      <div className="max-w-2xl mx-auto space-y-4 py-4">
+        {!previewUrl ? (
+          <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-slate-300 dark:border-white/15 rounded-2xl py-16 cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-400 transition-colors">
+            <span className="text-4xl">🖼️</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+              Click to upload an image
+            </span>
+            <span className="text-xs text-slate-400">PNG, JPG, WEBP — up to 5MB</span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => pickFile(e.target.files?.[0])}
+            />
+          </label>
+        ) : (
+          <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
+            <img src={previewUrl} alt="Selected" className="w-full max-h-96 object-contain bg-slate-50 dark:bg-slate-900" />
+            <button
+              onClick={clearImage}
+              className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors"
+              title="Remove image"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        <div className="flex gap-2 items-end">
+          <textarea
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), ask())}
+            rows={1}
+            placeholder="Ask about this image (optional)…"
+            className="flex-1 min-w-0 resize-none text-sm px-4 py-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 placeholder:truncate max-h-32 overflow-y-auto"
+            style={{ fieldSizing: "content" }}
+          />
+          <button
+            onClick={ask}
+            disabled={!file || loading}
+            className={`w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed ${
+              file && !loading
+                ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm"
+                : "bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500"
+            }`}
+          >
+            {loading
+              ? <span className="w-4 h-4 border-2 border-current/40 border-t-current rounded-full animate-spin" />
+              : <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>}
+          </button>
+        </div>
+
+        {answer && (
+          <div className="glass-card p-4 text-sm text-slate-700 dark:text-slate-200 whitespace-pre-wrap leading-relaxed">
+            {answer}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Create (text-to-image) mode ───────────────────────────────────────────────
+// Free via Pollinations.ai (no key, no cost) — Groq has no image-generation
+// model. Self-contained, like the Image (understanding) mode above.
+function CreateImagePanel() {
+  const [prompt, setPrompt] = useState("");
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [usage, setUsage] = useState(null);
+
+  const loadUsage = () => {
+    api.get("/ai/generate-image/usage").then(({ data }) => setUsage(data)).catch(() => {});
+  };
+  useEffect(() => { loadUsage(); }, []);
+
+  const generate = async () => {
+    const p = prompt.trim();
+    if (!p) {
+      toast.error("Describe what you want to generate");
+      return;
+    }
+    setLoading(true);
+    setImage(null);
+    try {
+      const { data } = await api.post("/ai/generate-image", { prompt: p });
+      setImage(data.image);
+      loadUsage();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to generate image");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const download = () => {
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = "devquiz-generated.jpg";
+    a.click();
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto px-1">
+      <div className="max-w-2xl mx-auto space-y-4 py-4">
+        {usage && (
+          <p className="text-xs text-slate-400 text-center">
+            {usage.remaining} of {usage.limit} image generations left today
+          </p>
+        )}
+
+        <div className="flex gap-2 items-center">
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), generate())}
+            rows={1}
+            placeholder="Describe an image to generate…"
+            className="flex-1 min-w-0 resize-none text-sm px-4 py-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 max-h-32 overflow-y-auto"
+            style={{ fieldSizing: "content" }}
+          />
+          <button
+            onClick={generate}
+            disabled={!prompt.trim() || loading || usage?.remaining === 0}
+            className={`w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed ${
+              prompt.trim() && !loading && usage?.remaining !== 0
+                ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm"
+                : "bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500"
+            }`}
+          >
+            {loading
+              ? <span className="w-4 h-4 border-2 border-current/40 border-t-current rounded-full animate-spin" />
+              : <span className="text-lg">🎨</span>}
+          </button>
+        </div>
+
+        {loading && (
+          <div className="glass-card p-12 flex flex-col items-center justify-center gap-3 text-slate-400">
+            <span className="w-6 h-6 border-2 border-slate-300 dark:border-slate-600 border-t-indigo-500 rounded-full animate-spin" />
+            <span className="text-sm">Generating…</span>
+          </div>
+        )}
+
+        {image && !loading && (
+          <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10">
+            <img src={image} alt={prompt} className="w-full" />
+            <button
+              onClick={download}
+              className="absolute top-2 right-2 px-3 py-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white text-xs font-semibold transition-colors"
+            >
+              ⬇ Download
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function AskAI() {
   const { confirm, confirmProps } = useConfirm();
@@ -453,23 +672,30 @@ export default function AskAI() {
       {/* ── Chat panel ── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="mb-4 flex-shrink-0 flex items-center gap-3">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 dark:text-slate-400 transition-colors flex-shrink-0"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12h18M3 6h18M3 18h18"/>
-            </svg>
-          </button>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">🤖 Ask AI</h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block">
-              {mode === "promptImprover"
-                ? "Describe what you want, get back a well-written prompt to paste into ChatGPT, Claude, or any other AI."
-                : "Ask anything — Python internals, how Claude works, JS concepts…"}
-            </p>
+        <div className="mb-4 flex-shrink-0 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-500 dark:text-slate-400 transition-colors flex-shrink-0"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 12h18M3 6h18M3 18h18"/>
+              </svg>
+            </button>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 truncate">🤖 Ask AI</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block">
+                {mode === "promptImprover"
+                  ? "Describe what you want, get back a well-written prompt to paste into ChatGPT, Claude, or any other AI."
+                  : mode === "image"
+                  ? "Upload an image — get an explanation, a description, or the text extracted from it."
+                  : mode === "create"
+                  ? "Describe an image and generate it — free, with a daily limit."
+                  : "Ask anything — Python internals, how Claude works, JS concepts…"}
+              </p>
+            </div>
           </div>
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap sm:ml-auto">
           <div className="flex-shrink-0 flex items-center gap-0.5 rounded-lg bg-slate-100 dark:bg-white/10 p-1">
             <button
               onClick={() => setMode("chat")}
@@ -484,8 +710,22 @@ export default function AskAI() {
             >
               ✨ Prompt Improver
             </button>
+            <button
+              onClick={() => setMode("image")}
+              title="Upload an image — explain it, describe it, or extract text from it"
+              className={`text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "image" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+            >
+              🖼️ Image
+            </button>
+            <button
+              onClick={() => setMode("create")}
+              title="Generate an image from a text description"
+              className={`text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "create" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+            >
+              🎨 Create
+            </button>
           </div>
-          {!isEmpty && (
+          {!isEmpty && mode !== "image" && mode !== "create" && (
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Auto-save toggle */}
               <button
@@ -535,9 +775,14 @@ export default function AskAI() {
               </button>
             </div>
           )}
+          </div>
         </div>
 
-        {isEmpty ? (
+        {mode === "image" ? (
+          <ImageAskPanel />
+        ) : mode === "create" ? (
+          <CreateImagePanel />
+        ) : isEmpty ? (
           /* ── Hero / welcome state — centered, big pill composer ── */
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl space-y-6 text-center">
@@ -552,7 +797,7 @@ export default function AskAI() {
                 </p>
               </div>
 
-              <div className="flex gap-2 items-end">
+              <div className="flex gap-2 items-center">
                 <div className="relative flex-1">
                   <textarea
                     ref={inputRef}
@@ -578,7 +823,7 @@ export default function AskAI() {
                 <button
                   onClick={() => send()}
                   disabled={!input.trim() || loading}
-                  className={`w-11 h-11 self-end mb-0.5 flex-shrink-0 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed ${
+                  className={`w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed ${
                     input.trim() && !loading
                       ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm"
                       : "bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500"
