@@ -6,9 +6,11 @@ from db_mongo import col_users, oid, sid
 
 
 def is_locked_out(doc: dict) -> bool:
-    """True for a permanent admin-disable OR an active scheduled disable
-    (disabledUntil in the future). Once disabledUntil passes, access is
-    restored automatically — no admin action needed."""
+    """True for a permanent admin-disable, an active scheduled disable
+    (disabledUntil in the future — locked NOW, auto-restores once it
+    passes), or a reached auto-disable point (autoDisableAt in the past —
+    opposite direction: works fine until then, then locks and STAYS locked,
+    no auto-restore, since the intent is 'shut this off going forward')."""
     if doc.get("status") == "disabled":
         return True
     until = doc.get("disabledUntil")
@@ -16,6 +18,12 @@ def is_locked_out(doc: dict) -> bool:
         if until.tzinfo is None:
             until = until.replace(tzinfo=timezone.utc)
         if until > datetime.now(timezone.utc):
+            return True
+    auto_disable_at = doc.get("autoDisableAt")
+    if auto_disable_at:
+        if auto_disable_at.tzinfo is None:
+            auto_disable_at = auto_disable_at.replace(tzinfo=timezone.utc)
+        if datetime.now(timezone.utc) >= auto_disable_at:
             return True
     return False
 

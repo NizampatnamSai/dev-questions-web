@@ -18,6 +18,7 @@ def _require_admin(user=Depends(current_user)):
 
 def _safe_user(doc: dict) -> dict:
     disabled_until = doc.get("disabledUntil")
+    auto_disable_at = doc.get("autoDisableAt")
     return {
         "id":           doc.get("id", str(doc.get("_id", ""))),
         "name":         doc.get("name"),
@@ -28,6 +29,7 @@ def _safe_user(doc: dict) -> dict:
         "questionCount": doc.get("questionCount", 0),
         "status":         doc.get("status", "approved"),
         "disabledUntil":  disabled_until.isoformat() if isinstance(disabled_until, datetime) else None,
+        "autoDisableAt":  auto_disable_at.isoformat() if isinstance(auto_disable_at, datetime) else None,
         "avatarUrl":      doc.get("avatarUrl"),
     }
 
@@ -70,7 +72,12 @@ class CreateUserBody(BaseModel):
     password:    str
     role:        str = "user"
     dailyLimit:  int = 25
-    disabledUntil: Optional[str] = None  # ISO timestamp — client computes this from hours/days/custom picker
+    # Opposite semantics from disabledUntil (used by the *existing-user*
+    # schedule-disable feature): the account works normally from creation,
+    # then automatically locks once this timestamp passes — it does NOT
+    # start locked and auto-unlock. Client computes this from hours/days/
+    # custom picker.
+    autoDisableAt: Optional[str] = None  # ISO timestamp
 
 
 @router.post("/users")
@@ -91,11 +98,11 @@ async def create_user(body: CreateUserBody, admin=Depends(_require_admin)):
         "dailyLimit": body.dailyLimit,
         "createdAt":  now(),
     }
-    if body.disabledUntil:
+    if body.autoDisableAt:
         try:
-            doc_to_insert["disabledUntil"] = datetime.fromisoformat(body.disabledUntil.replace("Z", "+00:00"))
+            doc_to_insert["autoDisableAt"] = datetime.fromisoformat(body.autoDisableAt.replace("Z", "+00:00"))
         except ValueError:
-            raise HTTPException(400, "disabledUntil must be a valid ISO timestamp")
+            raise HTTPException(400, "autoDisableAt must be a valid ISO timestamp")
     result = await col_users().insert_one(doc_to_insert)
     doc = sid(await col_users().find_one({"_id": result.inserted_id}))
     return _safe_user(doc)
@@ -466,7 +473,7 @@ async def trigger_notifications_now(admin=Depends(_require_admin)):
             continue
         body = sched.get("message") or random.choice(MOTIVATION_MESSAGES)
         from utils.firebase import send_to_tokens
-        sent = await send_to_tokens(tokens, title="📚 DevQuiz — Study Time!", body=body, data={"type": "weekly_motivation"})
+        sent = await send_to_tokens(tokens, title="📚 DevQuiz — Study Time!", body=body, data={"type": "weekly_motivation", "path": "/study"})
         print(f"[trigger-now] sent to userId={uid}, tokens={len(tokens)}, delivered={sent}", flush=True)
         sent_total += sent
 

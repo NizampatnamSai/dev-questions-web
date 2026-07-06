@@ -96,6 +96,8 @@ def col_resume_analyses():      return mdb()["resume_analyses"]
 def col_notes():                return notes_db()["notes"]
 def col_note_keys():            return notes_db()["note_keys"]
 def col_meetings():             return mdb()["meetings"]
+def col_admin_chats():          return mdb()["admin_chats"]
+def col_admin_chat_messages():  return mdb()["admin_chat_messages"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
@@ -171,6 +173,10 @@ async def init_mongo():
 
     await db["meetings"].create_index([("invitedUserIds", 1)])
     await db["meetings"].create_index([("createdBy", 1), ("createdAt", -1)])
+
+    await db["admin_chats"].create_index([("adminId", 1), ("userId", 1)], unique=True)
+    await db["admin_chats"].create_index([("userId", 1), ("lastMessageAt", -1)])
+    await db["admin_chat_messages"].create_index([("chatId", 1), ("createdAt", 1)])
 
     # One-time migration: old 3-stage task status -> new Jira-style 4-stage workflow.
     # Idempotent — only touches docs still on an old value, safe to run every startup.

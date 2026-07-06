@@ -277,10 +277,16 @@ ROUTES = {
         "desc": "A human-readable walkthrough of how the whole app works.",
         "python": "Static content page — no dedicated backend endpoint.",
     },
-    "/jobs": {
-        "label": "Recent Jobs", "audience": "user",
-        "desc": "Real, live tech job listings from the last 7 days, sourced from a free public job board API (no Google Jobs feed exists for free, so this is the closest equivalent). Currently Germany/Europe-focused with no India coverage — a proper India feed would need a different provider (e.g. Adzuna) with its own free API key; noted as a known gap for now.",
-        "python": "routers/jobs.py fetches from Arbeitnow's public API via httpx, filters to the last 7 days and tech-relevant tags, and caches the result in a plain in-memory Python dict for 20 minutes (no Redis needed at this scale) so repeated page views don't hammer the upstream API on every request.",
+    # "/jobs" disabled for now — kept for when it's re-enabled.
+    # "/jobs": {
+    #     "label": "Recent Jobs", "audience": "user",
+    #     "desc": "Real, live tech job listings from the last 7 days, sourced from a free public job board API (no Google Jobs feed exists for free, so this is the closest equivalent). Currently Germany/Europe-focused with no India coverage — a proper India feed would need a different provider (e.g. Adzuna) with its own free API key; noted as a known gap for now.",
+    #     "python": "routers/jobs.py fetches from Arbeitnow's public API via httpx, filters to the last 7 days and tech-relevant tags, and caches the result in a plain in-memory Python dict for 20 minutes (no Redis needed at this scale) so repeated page views don't hammer the upstream API on every request.",
+    # },
+    "/messages": {
+        "label": "Messages", "audience": "user",
+        "desc": "Private 1-to-1 chat between an admin and a user. Only an admin can start a new conversation — there is no user-to-user chat — but once a conversation exists, the user can reply freely with rich text or an image. A per-conversation blur toggle hides message content on screen until hovered, for privacy in shared spaces (same idea as Notes). Every message triggers both a push and in-app notification.",
+        "python": "routers/admin_chat.py stores conversations and messages in MongoDB and delivers new messages in real time over a per-user WebSocket (/api/admin-chat/ws), authenticated via a JWT passed as a ?token= query param rather than trusting a raw user id — the same pattern used by the WorkBoard and admin notification sockets. REST endpoints handle starting a chat, listing conversations with unread counts, fetching/marking messages read, and sending a message (which also fires the WebSocket push plus a notification).",
     },
     "/meetings": {
         "label": "Meetings", "audience": "all",

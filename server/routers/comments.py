@@ -77,7 +77,7 @@ async def add_comment(qid: str, body: CommentBody, user=Depends(current_user)):
             tokens,
             f"💬 {user['name']} commented",
             f'On "{short_q}": {short_c}',
-            {"questionId": qid},
+            {"questionId": qid, "type": "comment", "path": f"/question/{qid}"},
         )
     except Exception:
         pass
