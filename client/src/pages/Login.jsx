@@ -111,7 +111,7 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -262,7 +262,7 @@ export default function Login() {
           </button>
         )}
       </motion.div>
-      <div className="absolute bottom-0 inset-x-0">
+      <div className="w-full mt-4">
         <Footer />
       </div>
     </div>

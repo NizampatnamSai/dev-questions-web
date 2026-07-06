@@ -51,6 +51,13 @@ export default function APIDocumentation() {
     { method: "POST", path: "/api/study/coding/{id}/reveal", desc: "Reveal the AI model answer, once you've submitted an attempt" },
     { method: "GET", path: "/api/study/coding/history", desc: "List your past coding questions and scores" },
     { method: "GET", path: "/api/study/coding/{id}", desc: "Full detail for a past question (used by History)" },
+    { method: "POST", path: "/api/study/sql-query", desc: "AI Dev Assistant · SQL — plain English to a SQL query + explanation" },
+
+    // Leave / Holiday — Work Board + Community rotation both respect this automatically
+    { method: "POST", path: "/api/leaves", desc: "Submit a leave for a date range; notifies all admins" },
+    { method: "GET", path: "/api/leaves/my", desc: "List your own leave requests" },
+    { method: "DELETE", path: "/api/leaves/{id}", desc: "Cancel your own leave request" },
+    { method: "GET", path: "/api/leaves/admin/upcoming", desc: "Admin only — leaves active today or upcoming" },
 
     // Dev Tools — API Tester proxy & Snippet Library
     { method: "POST", path: "/api/dev-tools/http-request", desc: "Proxy an outbound HTTP request server-side (supports raw/form-data/x-www-form-urlencoded bodies); private/internal addresses are blocked" },

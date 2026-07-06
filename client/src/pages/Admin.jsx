@@ -7,6 +7,7 @@ import ConfirmModal from "../components/ConfirmModal";
 import { fmtDate, fmtDateTime } from "../utils/time";
 import Select from "../components/Select";
 import Checkbox, { CheckboxBox } from "../components/Checkbox";
+import Toggle from "../components/Toggle";
 
 const ROLES = ["user", "sub_admin", "admin"];
 
@@ -1378,6 +1379,80 @@ function TestNotifyPanel({ users }) {
 // The backend endpoints it read from (admin.py's /notify/history) were left
 // intact in case this comes back later.
 
+// Every toggle here is a two-step change: clicking it only updates local
+// draft state (setConfig), never calls the API directly — a "Save Changes"
+// button appears once something in the section actually differs from
+// initialConfig, and that's the only thing that PUTs to the backend. This
+// applies uniformly to toggles AND message fields per explicit request —
+// clicking a toggle used to save instantly, which surprised the admin (e.g.
+// flipping Guest Mode off immediately kicked live guest sessions with no
+// chance to reconsider or fix the message text first).
+//
+// Defined at module scope (not inside AppConfigPanel) on purpose — a
+// component defined inside another component's render body gets a brand new
+// identity every render, which forces React to fully unmount/remount it
+// instead of just re-rendering in place. For a plain <div> that's invisible;
+// for a <textarea> the user is actively typing into, it means losing focus
+// and cursor position after every single keystroke.
+function ConfigToggleSection({
+  config, setConfig, initialConfig, save, saving,
+  icon, title, desc, toggleField, messageField, placeholder,
+  color = "bg-green-500", onLabel, offLabel, warningWhen, warningText,
+}) {
+  const dirty =
+    !!initialConfig &&
+    (config[toggleField] !== initialConfig[toggleField] ||
+      (messageField && config[messageField] !== initialConfig[messageField]));
+  const doSave = () => {
+    const patch = { [toggleField]: config[toggleField] };
+    if (messageField) patch[messageField] = config[messageField];
+    save(patch, config[toggleField] ? onLabel : offLabel);
+  };
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-slate-700 dark:text-slate-200">
+            {icon} {title}
+          </p>
+          <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
+        </div>
+        <Toggle
+          on={config[toggleField]}
+          onToggle={() => setConfig((c) => ({ ...c, [toggleField]: !c[toggleField] }))}
+          color={color}
+          disabled={saving}
+        />
+      </div>
+      {messageField && (
+        <textarea
+          value={config[messageField] || ""}
+          onChange={(e) => setConfig((c) => ({ ...c, [messageField]: e.target.value }))}
+          placeholder={placeholder}
+          rows={2}
+          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
+        />
+      )}
+      {dirty && (
+        <div className="flex justify-end">
+          <button
+            onClick={doSave}
+            disabled={saving}
+            className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+          >
+            {saving ? "Saving…" : "💾 Save Changes"}
+          </button>
+        </div>
+      )}
+      {warningWhen && (
+        <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+          {warningText}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AppConfigPanel() {
   const [config, setConfig] = useState({
     maintenance: false,
@@ -1398,12 +1473,46 @@ function AppConfigPanel() {
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  // Community post reminder time — lives in a separate collection
+  // (col_community_schedule, weekday=-1) from the rest of this panel's
+  // /admin/app-config fields, since it's shared with the per-weekday
+  // assignee schedule editor elsewhere in Admin. Surfaced here too since
+  // that's where admins actually expect to find every reminder time.
+  const [communityReminderTime, setCommunityReminderTime] = useState("15:00");
+  const [communityReminderInitial, setCommunityReminderInitial] = useState("15:00");
+  const [communityReminderSaving, setCommunityReminderSaving] = useState(false);
+
   useEffect(() => {
     api.get("/admin/app-config").then(({ data }) => {
       setConfig(data);
       setInitialConfig(data);
     });
+    api.get("/admin/community-schedule").then(({ data }) => {
+      const h = data.reminderHourUTC ?? 9;
+      const m = data.reminderMinuteUTC ?? 30;
+      const istMin = (h * 60 + m + 330) % (24 * 60);
+      const ih = Math.floor(istMin / 60), im = istMin % 60;
+      const t = `${String(ih).padStart(2, "0")}:${String(im).padStart(2, "0")}`;
+      setCommunityReminderTime(t);
+      setCommunityReminderInitial(t);
+    }).catch(() => {});
   }, []);
+
+  const saveCommunityReminderTime = async () => {
+    const [ih, im] = communityReminderTime.split(":").map(Number);
+    if (isNaN(ih) || isNaN(im)) return toast.error("Invalid time");
+    const { hour, minute } = istToUtc(ih, im);
+    setCommunityReminderSaving(true);
+    try {
+      await api.put("/admin/community-schedule", { weekday: -1, hour, minute });
+      setCommunityReminderInitial(communityReminderTime);
+      toast.success(`Community post reminder set to ${utcToIst(hour, minute)}`);
+    } catch {
+      toast.error("Failed to save time");
+    } finally {
+      setCommunityReminderSaving(false);
+    }
+  };
 
   const workBoardPatch = useMemo(() => {
     if (!initialConfig) return {};
@@ -1471,15 +1580,15 @@ function AppConfigPanel() {
     setSaving(false);
   };
 
-  const save = async (patch) => {
+  const save = async (patch, message = "Saved") => {
     setSaving(true);
     try {
       await api.put("/admin/app-config", patch);
       setConfig((c) => ({ ...c, ...patch }));
       setInitialConfig((c) => ({ ...c, ...patch }));
-      toast.success("Saved");
+      toast.success(message);
     } catch {
-      toast.error("Failed");
+      toast.error("Failed to save");
     }
     setSaving(false);
   };
@@ -1490,260 +1599,118 @@ function AppConfigPanel() {
         ⚙️ App Control
       </h2>
 
-      {/* Maintenance Mode */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">
-              🔧 Maintenance Mode
-            </p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              All users (except admins) will see a maintenance page. A push
-              notification is sent when you turn it back on.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              save({
-                maintenance: !config.maintenance,
-                maintenance_message: config.maintenance_message,
-              })
-            }
-            disabled={saving}
-            className={`relative w-12 h-6 rounded-full transition-colors ${config.maintenance ? "bg-red-500" : "bg-slate-300 dark:bg-slate-600"}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.maintenance ? "translate-x-6" : ""}`}
-            />
-          </button>
-        </div>
-        <textarea
-          value={config.maintenance_message}
-          onChange={(e) =>
-            setConfig((c) => ({ ...c, maintenance_message: e.target.value }))
-          }
-          onBlur={() =>
-            save({ maintenance_message: config.maintenance_message })
-          }
-          placeholder="Maintenance message shown to users…"
-          rows={1}
-          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
-        />
-        {config.maintenance && (
-          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-            ⚠️ Maintenance mode is ON — users cannot access the app
-          </div>
-        )}
-      </div>
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="🔧"
+        title="Maintenance Mode"
+        desc="All users (except admins) will see a maintenance page. A push notification is sent when you turn it back on. Click Save Changes to apply."
+        toggleField="maintenance"
+        messageField="maintenance_message"
+        placeholder="Maintenance message shown to users…"
+        color="bg-red-500"
+        onLabel="Maintenance mode is ON — only admins can access the app now."
+        offLabel="Maintenance mode is OFF — the app is live for everyone again."
+        warningWhen={config.maintenance}
+        warningText="⚠️ Maintenance mode is ON — users cannot access the app"
+      />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
-      {/* Force Update */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">
-              🚀 Force Update Banner
-            </p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Shows a banner on web and sends a push notification prompting
-              users to refresh / update the app.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              save({
-                force_update: !config.force_update,
-                force_update_message: config.force_update_message,
-              })
-            }
-            disabled={saving}
-            className={`relative w-12 h-6 rounded-full transition-colors ${config.force_update ? "bg-indigo-500" : "bg-slate-300 dark:bg-slate-600"}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.force_update ? "translate-x-6" : ""}`}
-            />
-          </button>
-        </div>
-        <textarea
-          value={config.force_update_message}
-          onChange={(e) =>
-            setConfig((c) => ({ ...c, force_update_message: e.target.value }))
-          }
-          onBlur={() =>
-            save({ force_update_message: config.force_update_message })
-          }
-          placeholder="e.g. New content added! Please refresh to get the latest updates."
-          rows={1}
-          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
-        />
-        {config.force_update && (
-          <div className="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded-lg px-3 py-2">
-            🚀 Update banner is showing to all users
-          </div>
-        )}
-      </div>
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="🚀"
+        title="Force Update Banner"
+        desc="Shows a banner on web and sends a push notification prompting users to refresh / update the app. Click Save Changes to apply."
+        toggleField="force_update"
+        messageField="force_update_message"
+        placeholder="e.g. New content added! Please refresh to get the latest updates."
+        onLabel="Force update banner is ON — all users will see a refresh prompt."
+        offLabel="Force update banner is OFF."
+        warningWhen={config.force_update}
+        warningText="🚀 Update banner is showing to all users"
+      />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
-      {/* Global Notifications Kill Switch */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">
-              🔔 Notifications
-            </p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Master switch for all push and in-app notifications (manual sends,
-              scheduled reminders, feedback replies, everything). Useful while
-              testing new features so you don't spam real users.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              save({ notifications_enabled: !config.notifications_enabled })
-            }
-            disabled={saving}
-            className={`relative w-12 h-6 rounded-full transition-colors ${config.notifications_enabled !== false ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.notifications_enabled !== false ? "translate-x-6" : ""}`}
-            />
-          </button>
-        </div>
-        {config.notifications_enabled === false && (
-          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-            🔕 All notifications are OFF app-wide — no pushes or in-app alerts will be sent to anyone.
-          </div>
-        )}
-      </div>
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="🔔"
+        title="Notifications"
+        desc="Master switch for all push and in-app notifications (manual sends, scheduled reminders, feedback replies, everything). Useful while testing new features so you don't spam real users."
+        toggleField="notifications_enabled"
+        onLabel="Notifications are ON — pushes and in-app alerts will be sent normally."
+        offLabel="Notifications are OFF — no pushes or in-app alerts will be sent to anyone."
+        warningWhen={config.notifications_enabled === false}
+        warningText="🔕 All notifications are OFF app-wide — no pushes or in-app alerts will be sent to anyone."
+      />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
-      {/* Guest Feedback */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">
-              💬 Guest Feedback
-            </p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Let guests (not logged in) submit feedback too. Guest submissions
-              can't be notified back since there's no real account.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              save({ guest_feedback_enabled: !config.guest_feedback_enabled })
-            }
-            disabled={saving}
-            className={`relative w-12 h-6 rounded-full transition-colors ${config.guest_feedback_enabled ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.guest_feedback_enabled ? "translate-x-6" : ""}`}
-            />
-          </button>
-        </div>
-      </div>
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="💬"
+        title="Guest Feedback"
+        desc="Let guests (not logged in) submit feedback too. Guest submissions can't be notified back since there's no real account."
+        toggleField="guest_feedback_enabled"
+        onLabel="Guests can now submit feedback without an account."
+        offLabel="Guest feedback is OFF — only logged-in users can submit feedback."
+      />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
-      {/* Guest Mode */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">
-              🕶️ Guest Mode
-            </p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Let visitors browse without an account. Turning this off
-              immediately signs out anyone currently in guest mode and blocks
-              new guest sessions — they'll see the message below instead.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              save({
-                guest_mode_enabled: !config.guest_mode_enabled,
-                guest_mode_message: config.guest_mode_message,
-              })
-            }
-            disabled={saving}
-            className={`relative w-12 h-6 rounded-full transition-colors ${config.guest_mode_enabled ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.guest_mode_enabled ? "translate-x-6" : ""}`}
-            />
-          </button>
-        </div>
-        <textarea
-          value={config.guest_mode_message}
-          onChange={(e) =>
-            setConfig((c) => ({ ...c, guest_mode_message: e.target.value }))
-          }
-          onBlur={() =>
-            save({ guest_mode_message: config.guest_mode_message })
-          }
-          placeholder="Message shown to guests when guest mode is off…"
-          rows={1}
-          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
-        />
-        {!config.guest_mode_enabled && (
-          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-            🚫 Guest mode is OFF — guests are signed out and blocked app-wide
-          </div>
-        )}
-      </div>
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="🕶️"
+        title="Guest Mode"
+        desc="Let visitors browse without an account. Saving this off immediately signs out anyone currently in guest mode and blocks new guest sessions — they'll see the message below instead."
+        toggleField="guest_mode_enabled"
+        messageField="guest_mode_message"
+        placeholder="Message shown to guests when guest mode is off…"
+        onLabel="Guest mode is ON — visitors can browse without an account again."
+        offLabel="Guest mode is OFF — visitors must log in or create an account now. Anyone currently in guest mode was signed out."
+        warningWhen={!config.guest_mode_enabled}
+        warningText="🚫 Guest mode is OFF — guests are signed out and blocked app-wide"
+      />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
-      {/* AI Features */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold text-slate-700 dark:text-slate-200">
-              🤖 AI Features
-            </p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Master switch for every AI-backed feature (Ask AI, question
-              generation, JS Coding, Study Hub assistants, Resume Analyzer,
-              Mock Interview, etc). Admins/sub-admins are always exempt.
-              Toggling this notifies all users.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              save({
-                ai_features_enabled: !config.ai_features_enabled,
-                ai_features_message: config.ai_features_message,
-              })
-            }
-            disabled={saving}
-            className={`relative w-12 h-6 rounded-full transition-colors ${config.ai_features_enabled ? "bg-green-500" : "bg-slate-300 dark:bg-slate-600"}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${config.ai_features_enabled ? "translate-x-6" : ""}`}
-            />
-          </button>
-        </div>
-        <textarea
-          value={config.ai_features_message}
-          onChange={(e) =>
-            setConfig((c) => ({ ...c, ai_features_message: e.target.value }))
-          }
-          onBlur={() =>
-            save({ ai_features_message: config.ai_features_message })
-          }
-          placeholder="Reason shown to users when AI features are off (e.g. 'AI turned off for scheduled maintenance')…"
-          rows={1}
-          className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none"
-        />
-        {!config.ai_features_enabled && (
-          <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-            🚫 AI features are OFF for all non-admin users
-          </div>
-        )}
-      </div>
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="🤖"
+        title="AI Features"
+        desc="Master switch for every AI-backed feature (Ask AI, question generation, JS Coding, Study Hub assistants, Resume Analyzer, Mock Interview, etc). Admins/sub-admins are always exempt. Saving this notifies all users."
+        toggleField="ai_features_enabled"
+        messageField="ai_features_message"
+        placeholder="Reason shown to users when AI features are off (e.g. 'AI turned off for scheduled maintenance')…"
+        onLabel="AI features are back ON for everyone."
+        offLabel="AI features are OFF for regular users — admins are still exempt. All users were notified."
+        warningWhen={!config.ai_features_enabled}
+        warningText="🚫 AI features are OFF for all non-admin users"
+      />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
@@ -1808,7 +1775,21 @@ function AppConfigPanel() {
           </div>
         </div>
         {hasWorkBoardChanges && (
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() =>
+                setConfig((c) => ({
+                  ...c,
+                  wb_reminder_time: initialConfig.wb_reminder_time,
+                  wb_afternoon_reminder_time: initialConfig.wb_afternoon_reminder_time,
+                  wb_edit_window_minutes: initialConfig.wb_edit_window_minutes,
+                }))
+              }
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              ↺ Reset
+            </button>
             <button
               disabled={!hasWorkBoardChanges || saving}
               onClick={saveWorkBoard}
@@ -1819,6 +1800,47 @@ function AppConfigPanel() {
               }`}
             >
               {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Community Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          🌍 Community Settings
+        </p>
+        <div className="max-w-xs space-y-1">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Post Reminder Time (IST)
+          </label>
+          <input
+            type="time"
+            value={communityReminderTime}
+            onChange={(e) => setCommunityReminderTime(e.target.value)}
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            Reminds today's scheduled Community poster (and CCs admins) if they haven't posted yet
+          </p>
+        </div>
+        {communityReminderTime !== communityReminderInitial && (
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => setCommunityReminderTime(communityReminderInitial)}
+              disabled={communityReminderSaving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              ↺ Reset
+            </button>
+            <button
+              onClick={saveCommunityReminderTime}
+              disabled={communityReminderSaving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+            >
+              {communityReminderSaving ? "Saving..." : "💾 Save Changes"}
             </button>
           </div>
         )}

@@ -114,13 +114,13 @@ ROUTES = {
     },
     "/workboard": {
         "label": "Work Board", "audience": "user",
-        "desc": "Daily standup-style posts; admin sets reminder times.",
-        "python": "routers/workboard.py. Reminder times are stored in MongoDB (col_app_config), converted from IST to UTC at server startup and scheduled with APScheduler; admin changes call scheduler.reschedule_job(...) live, no restart needed. The 30-minute edit window is enforced server-side by comparing the post's stored createdAt (UTC) against datetime.now(timezone.utc).",
+        "desc": "Daily standup-style posts; admin sets reminder times. Members marked on leave (Profile → Settings) are silently skipped by both reminders — no nag for a day they're not expected to post.",
+        "python": "routers/workboard.py for the posts themselves. Reminder times are stored in MongoDB (col_app_config), converted from IST to UTC at server startup and scheduled with APScheduler; admin changes call scheduler.reschedule_job(...) live, no restart needed. The actual reminder jobs (scheduler_tasks.py: fire_workboard_notifications, fire_workboard_afternoon_reminder) skip any member for whom utils/leaves.is_user_on_leave(userId, today) is true. The 30-minute edit window is enforced server-side by comparing the post's stored createdAt (UTC) against datetime.now(timezone.utc).",
     },
     "/community": {
         "label": "Community", "audience": "all",
-        "desc": "Public discussion feed.",
-        "python": "routers/discussion.py — standard Motor find()/insert_one() CRUD, paginated, with a scheduled community reminder job (same APScheduler pattern as WorkBoard).",
+        "desc": "Public interview-question feed with a weekday posting rotation — only the day's assigned person (or admin, any day) can post. The reminder for that person now checks whether they've actually posted yet (no nag if they already have) and, if they're on leave that day, redirects the reminder to admins to cover the post instead of pinging someone who's out.",
+        "python": "routers/questions.py handles posting + the rotation gate (get_community_allowed_email(), checked in create()); col_community_schedule stores the per-weekday assignee plus the admin-configurable reminder time (default 3:00 PM IST). The reminder job itself (scheduler_tasks.py: fire_community_reminder) checks col_questions for a post from today's assignee before sending anything, checks utils/leaves.is_user_on_leave() to redirect to admins instead of the assignee when they're out, and CCs admins with a 'reminder sent' notification when it does ping the assignee.",
     },
     "/ask": {
         "label": "Ask AI", "audience": "user",
@@ -295,8 +295,8 @@ ROUTES = {
     },
     "/profile": {
         "label": "My Profile", "audience": "user",
-        "desc": "Account details and preferences, plus a Settings panel: account info (email, member-since date), appearance (dark/light theme, snow effect), and a change-password form. Profile photos upload to Cloudinary with a one-click reset back to initials.",
-        "python": "routers/profile.py for profile fields (bio, links, change-password) and routers/uploads.py for the picture itself — the file is streamed to Cloudinary via their Python SDK, and only the returned HTTPS URL string is saved to MongoDB, never the image bytes. Theme/snow preferences are pure client-side localStorage state, no backend involved.",
+        "desc": "Account details and preferences, plus a Settings panel: account info (email, member-since date), appearance (dark/light theme, snow effect), a change-password form, and a Leave/Holiday section — mark yourself out for a single day or a date range, and Work Board reminders + the Community posting rotation both respect it automatically.",
+        "python": "routers/profile.py for profile fields (bio, links, change-password), routers/uploads.py for the picture (streamed to Cloudinary, only the HTTPS URL is ever saved to MongoDB, never the image bytes), and routers/leaves.py for leave requests (col_user_leaves, a simple startDate/endDate string range — string comparison works fine since YYYY-MM-DD sorts lexicographically same as chronologically). Submitting a leave notifies all admins immediately. Theme/snow preferences are pure client-side localStorage state, no backend involved.",
     },
     "/devtools?tool=mock-api": {
         "label": "Mock API Generator", "audience": "user",
@@ -317,6 +317,11 @@ ROUTES = {
         "label": "JS Compiler (Dev Tools)", "audience": "user",
         "desc": "Same sandboxed JS runner, embedded in Dev Tools.",
         "python": "No backend execution — identical client-side new Function(code) sandbox as the standalone /js-compiler page.",
+    },
+    "/devtools?tool=sql-query": {
+        "label": "AI Dev Assistant · SQL", "audience": "user",
+        "desc": "Describe what you want in plain English (e.g. 'get user id where email is x') and get back a real SQL query plus a short explanation.",
+        "python": "routers/study.py's POST /study/sql-query — same single-shot Groq-prompt pattern as the other AI Dev Assistant tools (git/tests/concept), gated by require_ai_enabled so guests are bounced (no real JWT) rather than shown fake results.",
     },
     "/admin": {
         "label": "Admin Panel", "audience": "admin",

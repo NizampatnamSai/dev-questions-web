@@ -26,10 +26,58 @@ export default function UserProfile() {
   const [showSettings, setShowSettings] = useState(false);
   const [pwForm, setPwForm] = useState({ old_password: "", new_password: "", confirm_password: "" });
   const [changingPw, setChangingPw] = useState(false);
+  const [leaves, setLeaves] = useState([]);
+  const [leaveForm, setLeaveForm] = useState({ startDate: "", endDate: "", reason: "" });
+  const [submittingLeave, setSubmittingLeave] = useState(false);
 
   useEffect(() => {
     loadProfile();
   }, [userId]);
+
+  useEffect(() => {
+    if (showSettings && isOwnProfile) loadLeaves();
+  }, [showSettings, isOwnProfile]);
+
+  const loadLeaves = async () => {
+    try {
+      const { data } = await api.get("/leaves/my");
+      setLeaves(data);
+    } catch {
+      toast.error("Failed to load leave history");
+    }
+  };
+
+  const handleSubmitLeave = async () => {
+    if (!leaveForm.startDate || !leaveForm.endDate) {
+      toast.error("Pick both a start and end date");
+      return;
+    }
+    if (leaveForm.endDate < leaveForm.startDate) {
+      toast.error("End date must be on or after the start date");
+      return;
+    }
+    setSubmittingLeave(true);
+    try {
+      await api.post("/leaves", leaveForm);
+      toast.success("Leave submitted — admin has been notified");
+      setLeaveForm({ startDate: "", endDate: "", reason: "" });
+      loadLeaves();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to submit leave");
+    } finally {
+      setSubmittingLeave(false);
+    }
+  };
+
+  const handleCancelLeave = async (id) => {
+    try {
+      await api.delete(`/leaves/${id}`);
+      setLeaves((prev) => prev.filter((l) => l.id !== id));
+      toast.success("Leave cancelled");
+    } catch {
+      toast.error("Failed to cancel leave");
+    }
+  };
 
   const loadProfile = async () => {
     try {
@@ -163,6 +211,15 @@ export default function UserProfile() {
                   {initials}
                 </div>
               )}
+              {/* Upload-in-progress overlay — always visible while uploading, not
+                  just on hover. The hover-only overlay below goes invisible the
+                  moment the mouse leaves the avatar (e.g. while the file picker
+                  dialog is open), so without this the 3-5s upload looked frozen. */}
+              {uploadingAvatar && (
+                <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center">
+                  <span className="w-6 h-6 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                </div>
+              )}
               {isOwnProfile && (
                 <>
                   {/* Dark overlay on hover */}
@@ -171,7 +228,7 @@ export default function UserProfile() {
                     disabled={uploadingAvatar}
                     className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xl"
                   >
-                    {uploadingAvatar ? "⏳" : "📷"}
+                    📷
                   </button>
                   {/* Always-visible camera badge at bottom-right */}
                   <button
@@ -380,6 +437,74 @@ export default function UserProfile() {
             >
               {changingPw ? "Changing…" : "Change Password"}
             </button>
+          </div>
+
+          {/* Leave / Holiday */}
+          <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">🏖️ Leave / Holiday</h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Mark yourself out for a day or a range. Work Board reminders skip you on those days, and if it's
+                your turn to post to Community, admin gets notified to cover for you instead.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-slate-400">From</label>
+                <input
+                  type="date"
+                  value={leaveForm.startDate}
+                  onChange={(e) => setLeaveForm((f) => ({ ...f, startDate: e.target.value }))}
+                  className="w-full mt-1 px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400">To</label>
+                <input
+                  type="date"
+                  value={leaveForm.endDate}
+                  onChange={(e) => setLeaveForm((f) => ({ ...f, endDate: e.target.value }))}
+                  className="w-full mt-1 px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+            <input
+              value={leaveForm.reason}
+              onChange={(e) => setLeaveForm((f) => ({ ...f, reason: e.target.value }))}
+              placeholder="Reason (optional)"
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button
+              onClick={handleSubmitLeave}
+              disabled={submittingLeave}
+              className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 disabled:opacity-60 transition-colors"
+            >
+              {submittingLeave ? "Submitting…" : "Submit Leave"}
+            </button>
+
+            {leaves.length > 0 && (
+              <div className="space-y-2 pt-2">
+                {leaves.map((l) => (
+                  <div
+                    key={l.id}
+                    className="flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 px-4 py-2.5 rounded-lg text-sm"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-slate-700 dark:text-slate-200 font-medium">
+                        {l.startDate === l.endDate ? l.startDate : `${l.startDate} → ${l.endDate}`}
+                      </p>
+                      {l.reason && <p className="text-xs text-slate-400 truncate">{l.reason}</p>}
+                    </div>
+                    <button
+                      onClick={() => handleCancelLeave(l.id)}
+                      className="text-xs px-2.5 py-1 rounded-lg bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 transition-colors flex-shrink-0"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

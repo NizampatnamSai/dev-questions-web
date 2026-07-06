@@ -169,12 +169,18 @@ function ColorConverter() {
         ))}
       </div>
 
-      <div className="space-y-1.5">
+      <div className="flex items-center gap-x-4 gap-y-1.5 flex-wrap px-2.5 py-2 rounded-lg bg-slate-100 dark:bg-slate-900">
         {[["HEX", valid ? hex : "invalid"], ["RGB", rgbStr], ["HSL", hslStr]].map(([label, value]) => (
-          <div key={label} className="flex items-center gap-2">
-            <span className="text-[10px] w-8 font-bold text-slate-400">{label}</span>
-            <code className="flex-1 text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 font-mono truncate">{value}</code>
-            <button onClick={() => copy(value)} className="text-[10px] px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">📋</button>
+          <div key={label} className="flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-slate-400">{label}</span>
+            <code className="text-xs text-slate-700 dark:text-slate-200 font-mono">{value}</code>
+            <button
+              onClick={() => copy(value)}
+              title={`Copy ${label}`}
+              className="text-[10px] px-1.5 py-1 rounded-md bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+            >
+              📋
+            </button>
           </div>
         ))}
       </div>

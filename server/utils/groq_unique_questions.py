@@ -10,15 +10,44 @@ GROQ_MODEL_FALLBACK = os.getenv("GROQ_MODEL_FALLBACK", "llama-3.1-8b-instant")
 
 
 def _extract_json(text: str):
-    """Pulls the first JSON array or object out of a model response, tolerating
-    markdown fences or stray prose the model sometimes wraps it in."""
-    for open_ch, close_ch in (("[", "]"), ("{", "}")):
-        s, e = text.find(open_ch), text.rfind(close_ch)
-        if s != -1 and e != -1 and e > s:
-            try:
-                return json.loads(text[s:e + 1])
-            except json.JSONDecodeError:
-                continue
+    """Pulls the first complete JSON array or object out of a model response,
+    tolerating markdown fences or stray prose the model sometimes wraps it in.
+
+    Picks whichever bracket type ([ or {) starts first in the text, then walks
+    forward tracking bracket depth (ignoring brackets inside string literals)
+    to find that bracket's true matching close. A naive find()+rfind() pair
+    picks the wrong span whenever the JSON is an object containing an array
+    field — e.g. {"title": ..., "options": [...]} — since rfind("]") grabs the
+    options array's own closing bracket, which comes before the object's, and
+    silently returns just that inner array instead of the whole object.
+    """
+    starts = [(i, ch) for i, ch in ((text.find("["), "["), (text.find("{"), "{")) if i != -1]
+    if not starts:
+        raise ValueError("No JSON found in AI response")
+    start, open_ch = min(starts, key=lambda pair: pair[0])
+    close_ch = "]" if open_ch == "[" else "}"
+
+    depth = 0
+    in_string = False
+    escape = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == open_ch:
+            depth += 1
+        elif ch == close_ch:
+            depth -= 1
+            if depth == 0:
+                return json.loads(text[start:i + 1])
     raise ValueError("No JSON found in AI response")
 
 

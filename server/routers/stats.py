@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from db_mongo import col_questions, col_comments, col_users, col_user_profiles, sid
-from deps import current_user
+from deps import current_user, guest_gate
 
 router = APIRouter()
 
 
 @router.get("/dashboard")
-async def dashboard():
+async def dashboard(_user=Depends(guest_gate)):
     total = await col_questions().count_documents({"status": "published"})
 
     cat_pipe = [

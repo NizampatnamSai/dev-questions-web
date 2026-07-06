@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
@@ -26,6 +27,7 @@ function Avatar({ name, avatar, size = "w-9 h-9" }) {
 export default function AdminChat() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -124,6 +126,18 @@ export default function AdminChat() {
       toast.error(err.response?.data?.detail || "Failed to start chat");
     }
   };
+
+  // Deep-link support — e.g. a "Continue in Messages" button elsewhere (Admin
+  // Feedback) links to /messages?userId=... ; /start is idempotent (returns
+  // the existing chat if one's already there), so this is safe to call blind.
+  useEffect(() => {
+    const targetUserId = searchParams.get("userId");
+    if (targetUserId && isAdmin) {
+      startChat(targetUserId);
+      setSearchParams({}, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, isAdmin]);
 
   const pickImage = async (file) => {
     if (!file) return;

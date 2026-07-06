@@ -9,7 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
 from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat
+from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel
 
 app = FastAPI(title="DevQuiz API")
 
@@ -47,9 +47,10 @@ async def startup():
 
     # ── Community reminder time ───────────────────────────────────────────────
     time_doc  = await col_community_schedule().find_one({"weekday": -1})
-    cr_hour   = time_doc["hour"]   if time_doc else 4
-    cr_minute = time_doc["minute"] if time_doc else 45
-    print(f"[startup] community_reminder scheduled at {cr_hour:02d}:{cr_minute:02d} UTC ({cr_hour+5}:{(cr_minute+30)%60:02d} IST approx)", flush=True)
+    cr_hour   = time_doc["hour"]   if time_doc else 9   # default 3:00 PM IST
+    cr_minute = time_doc["minute"] if time_doc else 30
+    cr_total_ist = (cr_hour * 60 + cr_minute + 330) % (24 * 60)  # was dropping the minute-carry into the hour (e.g. 9:30 UTC printed as "14:00 IST" instead of 15:00)
+    print(f"[startup] community_reminder scheduled at {cr_hour:02d}:{cr_minute:02d} UTC ({cr_total_ist // 60:02d}:{cr_total_ist % 60:02d} IST)", flush=True)
 
     # WorkBoard reminder: read saved time from DB (default 15:00 IST = 9:30 UTC)
     wb_doc  = await col_app_config().find_one({"_id": "config"}) if True else {}
@@ -118,6 +119,8 @@ app.include_router(jobs.router,              prefix="/api/jobs")
 app.include_router(meetings.router,          prefix="/api/meetings")
 app.include_router(uploads.router,           prefix="/api/uploads")
 app.include_router(admin_chat.router,        prefix="/api/admin-chat")
+app.include_router(leaves.router,            prefix="/api/leaves")
+app.include_router(travel.router,            prefix="/api/travel")
 
 
 @app.get("/")

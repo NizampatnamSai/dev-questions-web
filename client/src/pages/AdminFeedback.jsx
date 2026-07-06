@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
@@ -16,6 +17,7 @@ const TYPE_COLORS = {
 };
 
 function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
+  const navigate = useNavigate();
   const [replying, setReplying] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [sending, setSending] = useState(false);
@@ -35,8 +37,8 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
       animate={{ opacity: 1, y: 0 }}
       className={`glass-card p-5 space-y-3 ${feedback.read && !replying ? "opacity-70" : ""}`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span
               className={`text-xs px-2 py-0.5 rounded-full font-semibold ${TYPE_COLORS[feedback.type] || TYPE_COLORS.other}`}
@@ -64,12 +66,12 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
             html={feedback.message}
             className="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed"
           />
-          <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
+          <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 flex-wrap">
             <span>Rating: {"⭐".repeat(feedback.rating)}</span>
-            <span>{feedback.userEmail}</span>
+            <span className="truncate max-w-full">{feedback.userEmail}</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap sm:flex-shrink-0">
           {!feedback.read && (
             <button
               onClick={() => onRead(feedback.id)}
@@ -84,6 +86,15 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
           >
             {replying ? "Cancel" : "↩ Reply"}
           </button>
+          {feedback.userId && (
+            <button
+              onClick={() => navigate(`/messages?userId=${feedback.userId}`)}
+              title="Open a private chat with this user for back-and-forth — feedback only supports one reply"
+              className="px-2 py-1 rounded-lg text-xs font-medium bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 transition-colors"
+            >
+              💬 Continue in Messages
+            </button>
+          )}
           {feedback.status !== "completed" && (
             <button
               onClick={() => onComplete(feedback.id)}
@@ -137,7 +148,7 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
                 placeholder="Type your reply..."
                 rows={3}
                 maxLength={500}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-slate-800 dark:text-slate-100 outline-none transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none"
               />
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">

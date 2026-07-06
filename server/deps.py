@@ -58,6 +58,23 @@ async def optional_user(authorization: str = Header(default="")) -> dict | None:
     return sid(doc)
 
 
+async def guest_gate(user: dict | None = Depends(optional_user)) -> dict | None:
+    """Drop-in replacement for Depends(optional_user) on endpoints guests are
+    allowed to hit (Dashboard, Community, ...) — once the admin turns Guest
+    Mode off, unauthenticated requests to these endpoints get rejected too,
+    not just blocked by the frontend's own routing. Frontend-only enforcement
+    left a real gap: a guest tab that was already open before the toggle
+    flipped kept getting real data back from these APIs with no server-side
+    check at all, until the tab happened to refresh its cached config."""
+    if user is None:
+        from db_mongo import col_app_config
+        doc = await col_app_config().find_one({"_id": "config"}) or {}
+        if not doc.get("guest_mode_enabled", True):
+            msg = doc.get("guest_mode_message") or "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."
+            raise HTTPException(status.HTTP_403_FORBIDDEN, msg)
+    return user
+
+
 async def require_ai_enabled(user: dict = Depends(current_user)) -> dict:
     """Drop-in replacement for Depends(current_user) on any AI-backed
     endpoint — blocks regular users when the admin's global AI on/off switch

@@ -8,6 +8,7 @@ import { STATES_CAPITALS } from "../data/statesCapitals";
 import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
 import { isGuestAllowedPath } from "./ProtectedRoute";
+import SharedToggle from "./Toggle";
 
 const BASE_LINKS = [
   // Requested order (top 12)
@@ -98,22 +99,7 @@ const ADMIN_FEATURES_DOC_LINK = {
 };
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        onToggle();
-      }}
-      className={`rounded-full relative transition-colors flex-shrink-0 ${on ? color : "bg-slate-200 dark:bg-slate-700"}`}
-      style={{ height: 18, width: 32 }}
-    >
-      <motion.div
-        className="absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow"
-        animate={{ left: on ? "14px" : "2px" }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      />
-    </button>
-  );
+  return <SharedToggle on={on} onToggle={onToggle} color={color} size="sm" />;
 }
 
 const DEV_TOOL_LINKS = [
@@ -124,6 +110,7 @@ const DEV_TOOL_LINKS = [
   { to: "/devtools?tool=git", icon: "🐙", label: "AI Assistant · Git" },
   { to: "/devtools?tool=tests", icon: "🧪", label: "AI Assistant · Tests" },
   { to: "/devtools?tool=concept", icon: "📖", label: "AI Assistant · Docs" },
+  { to: "/devtools?tool=sql-query", icon: "🗄️", label: "AI Assistant · SQL" },
   { to: "/devtools?tool=reactperf", icon: "🚀", label: "React Performance" },
   { to: "/devtools?tool=mock-api", icon: "🎲", label: "Mock API Generator" },
   { to: "/devtools?tool=css-calculator", icon: "📐", label: "CSS Calculator" },

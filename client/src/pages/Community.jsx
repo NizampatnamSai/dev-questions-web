@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef, memo, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
@@ -57,7 +58,8 @@ const MemoCard = memo(
 
 export default function Community() {
   const { confirm, confirmProps } = useConfirm();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [todayPoster, setTodayPoster] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(1);
@@ -76,18 +78,6 @@ export default function Community() {
   useEffect(() => {
     filtersRef.current = { category, level, type, search };
   }, [category, level, type, search]);
-
-  useEffect(() => {
-    if (!user || user.isGuest) {
-      setTodayPoster(null);
-      return;
-    }
-
-    api
-      .get("/questions/community-today")
-      .then((r) => setTodayPoster(r.data))
-      .catch(() => {});
-  }, [user]);
 
   const buildParams = (overrides = {}) => {
     const f = { ...filtersRef.current, ...overrides };
@@ -111,8 +101,19 @@ export default function Community() {
       setQuestions(data.items ?? []);
       setTotal(data.total ?? 0);
       setHasMore(data.has_more ?? false);
-    } catch {
-      toast.error("Failed to load community feed");
+      // Folded into this same response server-side — used to be a separate
+      // /questions/community-today round trip on every page load.
+      setTodayPoster(data.todayPoster ?? null);
+    } catch (err) {
+      // Guest Mode was turned off server-side while this guest session was
+      // already active — don't just fail silently, actually kick them out.
+      if (err.response?.status === 403 && user?.isGuest) {
+        toast.error(err.response?.data?.detail || "Guest mode is disabled. Please log in or create an account.");
+        logout();
+        navigate("/login");
+      } else {
+        toast.error("Failed to load community feed");
+      }
     } finally {
       setLoading(false);
     }
@@ -130,8 +131,14 @@ export default function Community() {
       setQuestions((prev) => [...prev, ...(data.items ?? [])]);
       setPage(nextPage);
       setHasMore(data.has_more ?? false);
-    } catch {
-      toast.error("Failed to load more");
+    } catch (err) {
+      if (err.response?.status === 403 && user?.isGuest) {
+        toast.error(err.response?.data?.detail || "Guest mode is disabled. Please log in or create an account.");
+        logout();
+        navigate("/login");
+      } else {
+        toast.error("Failed to load more");
+      }
     } finally {
       setLoadingMore(false);
     }

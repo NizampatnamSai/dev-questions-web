@@ -2,7 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
-import { STUDY_CATEGORIES } from "../data/studyGuide";
+// Direct from studyCategories, not the "../data/studyGuide" barrel — see the
+// comment in Progress.jsx for why (that barrel also pulls in ~2.3MB of
+// STUDY_TOPICS content this page never uses).
+import { STUDY_CATEGORIES } from "../data/studyCategories";
 
 const CATEGORIES = [
   { id: "", label: "All Topics" },

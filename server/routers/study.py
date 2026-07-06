@@ -309,6 +309,28 @@ async def explain_concept(req: CodeReq, _=Depends(require_ai_enabled)):
     return {"result": result}
 
 
+# ── AI Dev Assistant: SQL Query Generator ───────────────────────────────────────
+
+@router.post("/sql-query")
+async def sql_query(req: CodeReq, _=Depends(require_ai_enabled)):
+    if not req.code.strip():
+        return {"result": ""}
+    system = (
+        "You are a SQL expert. The user describes what they want in plain English "
+        "(e.g. 'get user id where email is x', 'count orders per customer last 30 days'). "
+        "Respond with:\n\n"
+        "QUERY:\n[the SQL query, standard ANSI SQL unless the user names a specific database]\n\n"
+        "EXPLANATION: [1-2 sentence plain-English explanation of what it does]\n\n"
+        "Do NOT use markdown code fences or ** or ##. Assume reasonable generic table/column "
+        "names when none are given, and say so briefly in the explanation."
+    )
+    try:
+        result = await _groq_plain(system, req.code.strip(), 500)
+    except Exception:
+        result = "AI unavailable. Please try again."
+    return {"result": result}
+
+
 # ── AI Dev Assistant: React Performance Analyzer ────────────────────────────────
 # Static code review for React re-render/memoization anti-patterns — not a
 # Lighthouse/runtime profiler. Real performance profiling needs a live page and

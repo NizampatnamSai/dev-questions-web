@@ -2,7 +2,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { STUDY_TOPICS, STUDY_CATEGORIES } from "../data/studyGuide";
+// Only STUDY_CATEGORIES (small) is needed here, imported directly from
+// studyCategories rather than the "../data/studyGuide" barrel — see
+// Progress.jsx for why: that barrel also pulls in ~2.3MB of STUDY_TOPICS
+// content just to read .length below, which this page used to do.
+import { STUDY_CATEGORIES } from "../data/studyCategories";
 
 const FEATURES = [
   {
@@ -55,7 +59,10 @@ const FEATURES = [
     title: "Study Hub",
     path: "/study",
     color: "from-green-500 to-teal-500",
-    summary: `${STUDY_TOPICS.length}+ topics across ${STUDY_CATEGORIES.length} technologies — HTML, CSS, JS, TypeScript, React, React Native, Next.js, Web Security, System Design, DevOps, and more — with progress tracking.`,
+    // 800+ verified via the per-file topic counts in data/studyTopics/*.js
+    // (summed to 862+ from just 24 of the 30 files that had a count comment,
+    // so this is a safe floor, not an exact live count).
+    summary: `800+ topics across ${STUDY_CATEGORIES.length} technologies — HTML, CSS, JS, TypeScript, React, React Native, Next.js, Web Security, System Design, DevOps, and more — with progress tracking.`,
     steps: [
       "Go to **Study Hub** — pick a category tab (HTML, CSS, JavaScript, TypeScript, React, React Native, Next.js, Git, Python, and more).",
       "Filter by difficulty — Basic, Intermediate, Advanced, or Tricky.",
@@ -123,6 +130,7 @@ const FEATURES = [
       "After the edit window closes, click **Reply** on your own post to add a follow-up update instead of overwriting the original — handy if you picked up new work later in the day.",
       "Anyone who hasn't posted by the reminder time (default 3 PM IST) gets a push notification.",
       "Browse **📅 History** to see past days' posts.",
+      "On leave? Mark it in **Profile → Settings** and both reminders skip you automatically for those days.",
     ],
     tip: "Once your edit window closes, you can't rewrite your original post — but you can always reply to add updates as the day goes on.",
   },
@@ -138,6 +146,7 @@ const FEATURES = [
       "**JWT Decoder** (`/jwt-decoder`) — decode a token's header and payload entirely in your browser, with optional HMAC signature verification.",
       "**API Request Tester** (`/api-tester`) — send real requests (raw JSON, form data, or x-www-form-urlencoded) with a Bearer Token auth tab, proxied server-side to avoid CORS.",
       "**Snippet Library** (`/snippets`) — save reusable code snippets with tags and a description, and optionally share them publicly with the whole team.",
+      "**AI Dev Assistant · SQL** (`/devtools?tool=sql-query`) — describe what you want in plain English and get back a real SQL query with a short explanation.",
     ],
     tip: "Regex Tester, Cron Builder, and JWT Decoder don't require login — they're available to guests too, since nothing is saved.",
   },
@@ -200,6 +209,7 @@ const FEATURES = [
       "Click **🔖 Bookmark** to save a question to your Bookmarks.",
       "Click any question title to open its full detail page with answers and comments.",
       "Use the filter bar to search by category, level, or keyword.",
+      "There's a weekday posting rotation — only that day's assigned person (or admin, any day) can post. If it's your day and you haven't posted by the reminder time, you get pinged; if you're on leave that day, admin gets asked to cover for you instead.",
     ],
     tip: "Questions with more upvotes appear in Quiz Mode more often — upvote quality questions.",
   },

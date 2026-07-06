@@ -148,7 +148,7 @@ function AppLayout({ children, fullWidth = false }) {
         )}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top bar — desktop */}
-          <div className="hidden md:flex items-center justify-between gap-2 px-4 py-3 sticky top-0 z-30 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-black/5 dark:border-white/8">
+          <div className="hidden md:flex items-center justify-between gap-2 px-4 py-3 sticky top-0 z-30 bg-white/95 dark:bg-slate-950/95 border-b border-black/5 dark:border-white/8">
             <button
               onClick={toggleSidebar}
               title={sidebarHidden ? "Show sidebar" : "Hide sidebar"}
@@ -277,11 +277,27 @@ function AppInner() {
   // Performance optimization: disable weather effects during maintenance or force update
   const isMaintenanceOrUpdate = appConfig.maintenance || appConfig.force_update;
 
+  // Re-checked on every navigation (not just once on first load) and on a
+  // 30s poll — a tab that was already open when an admin flips maintenance/
+  // guest-mode/force-update has no other way to find out. Fetching once on
+  // mount meant an active guest session could keep browsing indefinitely
+  // after guest mode was turned off, since nothing ever told that tab to
+  // re-check until the user manually refreshed.
   useEffect(() => {
     api
       .get("/admin/app-config/public")
       .then(({ data }) => setAppConfig(data))
       .catch(() => {});
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      api
+        .get("/admin/app-config/public")
+        .then(({ data }) => setAppConfig(data))
+        .catch(() => {});
+    }, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -299,17 +315,13 @@ function AppInner() {
 
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
-  // Maintenance mode — block everyone except admins
-  if (appConfig.maintenance && !isAdmin) {
-    return <Maintenance message={appConfig.maintenance_message} />;
-  }
-
-  // Guest mode disabled — guests see nothing except this screen until they log in/register
-  if (user?.isGuest && appConfig.guest_mode_enabled === false) {
-    return <GuestModeDisabled message={appConfig.guest_mode_message} />;
-  }
-
-  // Show foreground FCM notifications as a toast (browser doesn't show them automatically when app is open)
+  // Show foreground FCM notifications as a toast (browser doesn't show them automatically when app is open).
+  // Must stay ABOVE the early returns below — a hook called only on some
+  // renders (e.g. skipped whenever the maintenance/guest-mode block kicks in)
+  // violates the Rules of Hooks and crashes React with "Rendered fewer hooks
+  // than expected." This is also why turning guest mode off didn't actually
+  // block an active guest session: the crash prevented the block screen
+  // from ever committing, so the app silently fell through to normal use.
   useEffect(() => {
     if (!user) return;
 
@@ -344,6 +356,16 @@ function AppInner() {
       navigator.serviceWorker?.removeEventListener("message", swHandler);
     };
   }, [user]);
+
+  // Maintenance mode — block everyone except admins
+  if (appConfig.maintenance && !isAdmin) {
+    return <Maintenance message={appConfig.maintenance_message} />;
+  }
+
+  // Guest mode disabled — guests see nothing except this screen until they log in/register
+  if (user?.isGuest && appConfig.guest_mode_enabled === false) {
+    return <GuestModeDisabled message={appConfig.guest_mode_message} />;
+  }
 
   const toastStyle =
     theme === "dark"

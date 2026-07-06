@@ -98,6 +98,8 @@ def col_note_keys():            return notes_db()["note_keys"]
 def col_meetings():             return mdb()["meetings"]
 def col_admin_chats():          return mdb()["admin_chats"]
 def col_admin_chat_messages():  return mdb()["admin_chat_messages"]
+def col_user_leaves():          return mdb()["user_leaves"]
+def col_geocode_cache():        return mdb()["geocode_cache"]
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────
@@ -177,6 +179,10 @@ async def init_mongo():
     await db["admin_chats"].create_index([("adminId", 1), ("userId", 1)], unique=True)
     await db["admin_chats"].create_index([("userId", 1), ("lastMessageAt", -1)])
     await db["admin_chat_messages"].create_index([("chatId", 1), ("createdAt", 1)])
+
+    await db["user_leaves"].create_index([("userId", 1), ("startDate", 1)])
+    await db["user_leaves"].create_index([("startDate", 1), ("endDate", 1)])
+    await db["geocode_cache"].create_index("query", unique=True)
 
     # One-time migration: old 3-stage task status -> new Jira-style 4-stage workflow.
     # Idempotent — only touches docs still on an old value, safe to run every startup.

@@ -11,6 +11,7 @@ import { CheckboxBox } from "../components/Checkbox";
 import { TASK_STATUSES, statusMeta } from "../utils/taskStatus";
 import RichTextEditor from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
+import { useAuth } from "../context/AuthContext";
 
 const PRIORITY_STYLE = {
   high: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
@@ -70,6 +71,7 @@ export function DescriptionPreview({ text, onView }) {
 }
 
 export default function AdminTasks() {
+  const { user: me } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [viewTask, setViewTask] = useState(null);
@@ -112,8 +114,11 @@ export default function AdminTasks() {
   const loadUsers = async () => {
     try {
       const { data } = await api.get("/admin/users");
+      // Other admins/sub_admins are excluded (tasks are for the team, not
+      // admin-to-admin) — but the logged-in admin's OWN account stays in the
+      // list so they can self-assign a task as a personal reminder.
       setUsers(
-        data.filter((u) => u.role !== "admin" && u.role !== "sub_admin"),
+        data.filter((u) => (u.role !== "admin" && u.role !== "sub_admin") || u.id === me?.id),
       );
     } catch {}
   };
@@ -794,23 +799,30 @@ export default function AdminTasks() {
                       </span>
                     </label>
                     <div className="max-h-48 overflow-y-auto space-y-1.5 border border-slate-200 dark:border-slate-700 rounded-xl p-2">
-                      {users.map((u) => (
-                        <label
-                          key={u.id}
-                          className="flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer"
-                        >
-                          <CheckboxBox
-                            checked={form.assigneeIds.includes(u.id)}
-                            onChange={() => toggleAssignee(u.id)}
-                          />
-                          <span className="text-sm text-slate-700 dark:text-slate-200">
-                            {u.name}
-                          </span>
-                          <span className="text-xs text-slate-400 ml-auto">
-                            {u.email}
-                          </span>
-                        </label>
-                      ))}
+                      {users.map((u) => {
+                        const isSelf = u.id === me?.id;
+                        return (
+                          <label
+                            key={u.id}
+                            className={`flex items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer border ${
+                              isSelf
+                                ? "bg-amber-100 dark:bg-amber-500/20 border-amber-300 dark:border-amber-500/40 hover:bg-amber-200 dark:hover:bg-amber-500/30"
+                                : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                            }`}
+                          >
+                            <CheckboxBox
+                              checked={form.assigneeIds.includes(u.id)}
+                              onChange={() => toggleAssignee(u.id)}
+                            />
+                            <span className="text-sm text-slate-700 dark:text-slate-200">
+                              {isSelf ? "Self (Me)" : u.name}
+                            </span>
+                            <span className="text-xs text-slate-400 ml-auto">
+                              {u.email}
+                            </span>
+                          </label>
+                        );
+                      })}
                       {users.length === 0 && (
                         <p className="text-xs text-slate-400 p-2">
                           No users found

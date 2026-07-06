@@ -1,21 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-// Navigate first, then log out only once the route transition has actually
-// painted. A single setTimeout(fn, 0) wasn't always enough — React Router's
-// location context can still be one render behind on the very next macrotask,
-// so /dashboard's own auth guard occasionally saw user=null while it was
-// still (transiently) the matched route, and its own redirect to /login won
-// the race against navigate("/register"). Waiting two animation frames
-// guarantees at least one full paint has happened with the new route before
-// auth state changes, so there's no window left for a stale route to react to.
-function navigateThenLogout(navigate, logout, path) {
-  navigate(path);
-  requestAnimationFrame(() => requestAnimationFrame(logout));
-}
-
 export default function GuestBanner() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   if (!user?.isGuest) return null;
@@ -28,14 +15,27 @@ export default function GuestBanner() {
         <span className="text-amber-500/70 dark:text-amber-500 hidden sm:inline">— You can browse but not save or create anything.</span>
       </div>
       <div className="flex items-center gap-2">
+        {/* Plain navigate() — no logout() beforehand. Both /register and
+            /login already render fine for a guest user (their own route
+            guards in App.jsx only redirect away a REAL logged-in user —
+            `user && !user.isGuest` — which is false for a guest), and
+            neither Register.jsx nor Login.jsx reads user state at all. The
+            guest flag doesn't need to be cleared here either: login() already
+            removes "devquiz_guest" from localStorage on success, and
+            registration itself doesn't log anyone in immediately (new
+            accounts need admin approval first). Three earlier attempts all
+            tried to end the guest session before switching pages and each
+            hit a different flavor of the same race against ProtectedRoute's
+            own "not logged in" redirect — the logout() call was never
+            actually necessary in the first place. */}
         <button
-          onClick={() => navigateThenLogout(navigate, logout, "/register")}
+          onClick={() => navigate("/register")}
           className="text-xs px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-white font-semibold transition"
         >
           Sign Up Free
         </button>
         <button
-          onClick={() => navigateThenLogout(navigate, logout, "/login")}
+          onClick={() => navigate("/login")}
           className="text-xs px-3 py-1.5 rounded-lg border border-amber-500/30 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium transition"
         >
           Log In

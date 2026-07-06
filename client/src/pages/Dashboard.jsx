@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios";
 import StatsCard from "../components/StatsCard";
 import { useAuth } from "../context/AuthContext";
@@ -15,13 +16,24 @@ function Skeleton({ className }) {
 }
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
 
   const Wrapper = user?.isGuest ? "div" : Link;
 
   useEffect(() => {
-    api.get("/stats/dashboard").then(({ data }) => setStats(data));
+    api.get("/stats/dashboard")
+      .then(({ data }) => setStats(data))
+      .catch((err) => {
+        // Guest Mode was turned off server-side while this guest session was
+        // already active — don't just fail silently, actually kick them out.
+        if (err.response?.status === 403 && user?.isGuest) {
+          toast.error(err.response?.data?.detail || "Guest mode is disabled. Please log in or create an account.");
+          logout();
+          navigate("/login");
+        }
+      });
   }, []);
 
   const loading = !stats;

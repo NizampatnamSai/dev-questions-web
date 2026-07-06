@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
-import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import MockApiPanel from "../components/MockApiPanel";
@@ -79,6 +78,16 @@ const DEV_TOOLS = [
     inputPlaceholder: "e.g. What does ERR_HTTP_HEADERS_SENT mean?",
     btnLabel: "Explain →",
     resultLabel: "Explanation",
+  },
+  {
+    id: "sql-query",
+    icon: "🗄️",
+    label: "AI Dev Assistant · SQL",
+    desc: "Describe what you need in plain English, get the SQL query",
+    endpoint: "/study/sql-query",
+    inputPlaceholder: "e.g. get user id where email is x@example.com",
+    btnLabel: "Generate Query →",
+    resultLabel: "SQL Query",
   },
   {
     id: "reactperf",

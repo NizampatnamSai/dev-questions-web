@@ -5,7 +5,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from db_mongo import col_questions, col_comments, col_ai_usage, col_users, col_fcm_tokens, col_community_schedule, col_user_answers, sid, oid, now
-from deps import current_user, optional_user, require_ai_enabled
+from deps import current_user, optional_user, require_ai_enabled, guest_gate
 from utils.ai import generate_questions, generate_answer, ai_text_action, check_answer
 from utils.firebase import send_to_all, send_to_tokens
 
@@ -51,9 +51,9 @@ async def get_community_allowed_email() -> Optional[str]:
 
 DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-@router.get("/community-today")
-async def community_today(user=Depends(current_user)):
-    """Returns who is allowed to post today + which day the current user is scheduled."""
+async def _compute_today_poster(user: dict) -> dict:
+    """Shared by GET /community-today and the todayPoster field folded into
+    GET /community (page 1) — same computation, one place to keep them consistent."""
     allowed_email = await get_community_allowed_email()
     schedule = await _load_community_schedule()
 
@@ -77,6 +77,15 @@ async def community_today(user=Depends(current_user)):
         "adminOnly": False,
         "myDay": my_day,
     }
+
+
+@router.get("/community-today")
+async def community_today(user=Depends(current_user)):
+    """Returns who is allowed to post today + which day the current user is scheduled.
+    Still used standalone by Generator/Drafts (they need it outside the feed page);
+    the Community feed page instead reads the same data off GET /community's
+    todayPoster field so it doesn't need this as a second round-trip."""
+    return await _compute_today_poster(user)
 
 CATEGORIES = ["HTML/CSS", "JavaScript", "React", "Next.js", "React Native"]
 LEVELS     = ["Low", "Medium", "High"]
@@ -301,7 +310,7 @@ async def community(
     search:    Optional[str] = None,
     page:      int = 1,
     page_size: int = 15,
-    user: Optional[dict] = Depends(optional_user),
+    user: Optional[dict] = Depends(guest_gate),
 ):
     # See get_recommendations() above — identity for the upvoted/bookmarked
     # flags comes from the JWT, not a spoofable client header.
@@ -326,12 +335,20 @@ async def community(
     total  = await col_questions().count_documents(filt)
     cursor = col_questions().find(filt).sort("createdAt", -1).skip(skip).limit(page_size)
     docs   = await cursor.to_list(length=page_size)
+
+    # Folded in from the old separate GET /community-today call — only computed
+    # on page 1 (the only page the UI actually shows it on) and only for real
+    # logged-in users (guests get None, same as before: optional_user returns
+    # None for them since guest sessions carry no real JWT at all).
+    today_poster = await _compute_today_poster(user) if (user and page == 1) else None
+
     return {
-        "items":    await _attach_avatars([_ser(d, x_user_id) for d in docs]),
-        "total":    total,
-        "page":     page,
-        "pages":    (total + page_size - 1) // page_size,
-        "has_more": page * page_size < total,
+        "items":       await _attach_avatars([_ser(d, x_user_id) for d in docs]),
+        "total":       total,
+        "page":        page,
+        "pages":       (total + page_size - 1) // page_size,
+        "has_more":    page * page_size < total,
+        "todayPoster": today_poster,
     }
 
 

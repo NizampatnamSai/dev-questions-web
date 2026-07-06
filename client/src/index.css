@@ -51,26 +51,32 @@ html.dark.weather-stormy body { background: linear-gradient(160deg, #07050f 0%, 
 
 /* ── Glass (sidebar, floating panels) ───────────────────────────────────── */
 .glass {
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  background: rgba(255, 255, 255, 0.84);
+  /* No backdrop-filter here on purpose — it's a real scroll-perf cost (constant
+     recomposite as content moves behind it) on elements that are sticky/fixed
+     and visible during every scroll (Sidebar, BottomNav). Background opacity
+     alone gives nearly the same look without paying that cost every frame. */
+  background: rgba(255, 255, 255, 0.97);
   border: 1px solid rgba(148, 163, 184, 0.2);
   box-shadow: 0 4px 24px rgba(99, 102, 241, 0.06), 0 1px 4px rgba(0,0,0,0.04);
 }
 html.dark .glass {
-  background: rgba(2, 6, 23, 0.78);
+  background: rgba(2, 6, 23, 0.97);
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 html.weather-stormy .glass {
-  background: rgba(30, 27, 75, 0.75);
+  background: rgba(30, 27, 75, 0.97);
   border-color: rgba(196, 181, 253, 0.15);
 }
 
 /* ── Glass card (content cards) ─────────────────────────────────────────── */
 .glass-card {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* No backdrop-filter here on purpose — with dozens of these in a scrolling
+     list (Feedback, Community, ...), each one moving under/over the sticky
+     header on every scroll frame forced a re-blur of everything behind it.
+     That's what caused the scroll jank and the flash-to-black compositor
+     glitch during fast scroll. High background opacity already does most of
+     the visual job without the per-frame cost. */
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(148, 163, 184, 0.18);
   box-shadow: 0 2px 12px rgba(99, 102, 241, 0.06), 0 1px 3px rgba(0,0,0,0.04);
@@ -78,7 +84,7 @@ html.weather-stormy .glass {
   color: #0f172a;
 }
 html.dark .glass-card {
-  background: rgba(15, 23, 42, 0.78);
+  background: rgba(15, 23, 42, 0.96);
   border-color: rgba(255, 255, 255, 0.07);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   color: #f1f5f9;

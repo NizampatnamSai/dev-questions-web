@@ -1,4 +1,4 @@
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, date, timezone, timedelta
 from db_mongo import col_notify_schedules, col_fcm_tokens, col_challenge_progress, col_workboard_members, col_user_notifications, notifications_enabled
 from utils.firebase import send_to_tokens
 
@@ -138,13 +138,18 @@ async def fire_workboard_notifications():
 
     today = now_ist.strftime("%Y-%m-%d")
     from db_mongo import col_workboard_posts
+    from utils.leaves import is_user_on_leave
     posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
     posted_ids = {d["userId"] for d in posted_docs}
 
     sent = 0
+    skipped_leave = 0
     for member in members:
         uid = member["userId"]
         if uid in posted_ids:
+            continue
+        if await is_user_on_leave(uid, today):
+            skipped_leave += 1
             continue
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
@@ -157,7 +162,7 @@ async def fire_workboard_notifications():
             body="Share your daily update with the team! 👀",
             data={"type": "workboard_reminder", "path": "/workboard"},
         )
-    print(f"[workboard] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted)", flush=True)
+    print(f"[workboard] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted, {skipped_leave} on leave)", flush=True)
 
 
 async def fire_workboard_afternoon_reminder():
@@ -173,13 +178,18 @@ async def fire_workboard_afternoon_reminder():
     members = await col_workboard_members().find({"status": "active"}).to_list(200)
     today = now_ist.strftime("%Y-%m-%d")
     from db_mongo import col_workboard_posts
+    from utils.leaves import is_user_on_leave
     posted_docs = await col_workboard_posts().find({"date": today}).to_list(200)
     posted_ids = {d["userId"] for d in posted_docs}
 
     sent = 0
+    skipped_leave = 0
     for member in members:
         uid = member["userId"]
         if uid in posted_ids:
+            continue
+        if await is_user_on_leave(uid, today):
+            skipped_leave += 1
             continue
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
@@ -192,7 +202,7 @@ async def fire_workboard_afternoon_reminder():
             data={"type": "workboard_reminder", "path": "/workboard"},
         )
         await _log_user_notification(uid, "⏰ Still haven't posted today?", "It's 3pm — don't forget to share your work update!", "workboard_reminder")
-    print(f"[workboard-3pm] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted)", flush=True)
+    print(f"[workboard-3pm] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted, {skipped_leave} on leave)", flush=True)
 
 
 async def fire_community_reminder():
@@ -248,6 +258,43 @@ async def fire_community_reminder():
         print(f"[community_reminder] no user found for email={email}", flush=True)
         return
     uid = str(user_doc["_id"])
+    user_name = user_doc.get("name", email)
+    today_str = now_ist.strftime("%Y-%m-%d")
+
+    async def _notify_admins(title: str, body: str, notif_type: str):
+        admins = await col_users().find({"role": {"$in": ["admin", "sub_admin"]}}).to_list(20)
+        admin_ids = [str(a["_id"]) for a in admins]
+        if not admin_ids:
+            return
+        token_docs = await col_fcm_tokens().find({"userId": {"$in": admin_ids}}).to_list(200)
+        tokens = [t["token"] for t in token_docs]
+        if tokens:
+            await send_to_tokens(tokens, title=title, body=body, data={"type": notif_type, "path": "/community"})
+        for admin_id in admin_ids:
+            await _log_user_notification(admin_id, title, body, notif_type)
+
+    # On leave — skip pinging them entirely; admins already have posting
+    # rights on any day (questions.py's create() bypass), so just ask one of
+    # them to cover instead of leaving the day's post silently missed.
+    from utils.leaves import is_user_on_leave
+    if await is_user_on_leave(uid, today_str):
+        await _notify_admins(
+            "🏖️ Cover for a teammate today",
+            f"{user_name} is on leave today — it's their turn to post to Community. Please post on their behalf.",
+            "community_reminder_leave",
+        )
+        print(f"[community_reminder] {user_name} on leave — notified admins to cover", flush=True)
+        return
+
+    # Already posted today — nothing to remind about. Same UTC-midnight day
+    # boundary questions.py's own daily-post-limit check uses, for consistency.
+    from db_mongo import col_questions
+    today_start = datetime.combine(date.today(), datetime.min.time()).replace(tzinfo=timezone.utc)
+    already_posted = await col_questions().count_documents({"userId": uid, "createdAt": {"$gte": today_start}}) > 0
+    if already_posted:
+        print(f"[community_reminder] {user_name} already posted today — skipping", flush=True)
+        return
+
     toks = await col_fcm_tokens().find({"userId": uid}).to_list(10)
     tokens = [t["token"] for t in toks]
     if tokens:
@@ -260,3 +307,10 @@ async def fire_community_reminder():
     else:
         print(f"[community_reminder] no FCM tokens for email={email} uid={uid}", flush=True)
     await _log_user_notification(uid, "🌟 It's your day to post!", "Today is your scheduled day to share on the Community feed.", "community_reminder")
+
+    # CC admins so they know a reminder went out and can follow up if needed.
+    await _notify_admins(
+        "👀 Community reminder sent",
+        f"{user_name} hasn't posted to Community today — a reminder was sent.",
+        "community_reminder_admin",
+    )

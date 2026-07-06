@@ -300,6 +300,12 @@ const PAGES = [
     keywords: "explain concept docs api error message assistant dev tools ai",
   },
   {
+    to: "/devtools?tool=sql-query",
+    label: "AI Dev Assistant · SQL",
+    icon: "🗄️",
+    keywords: "sql query database select assistant dev tools ai",
+  },
+  {
     to: "/resume-analyzer",
     label: "Resume & ATS Analyzer",
     icon: "📄",

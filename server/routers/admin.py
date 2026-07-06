@@ -498,8 +498,8 @@ async def get_community_schedule(admin=Depends(_require_admin)):
     docs = {d["weekday"]: d for d in await col_community_schedule().find({}).to_list(10)}
     # reminder time stored at weekday=-1
     time_doc = await col_community_schedule().find_one({"weekday": -1})
-    reminder_hour   = time_doc["hour"]   if time_doc else 4
-    reminder_minute = time_doc["minute"] if time_doc else 45
+    reminder_hour   = time_doc["hour"]   if time_doc else 9   # default 3:00 PM IST
+    reminder_minute = time_doc["minute"] if time_doc else 30
     result = []
     for i, day in enumerate(DAYS):
         doc = docs.get(i)
@@ -719,22 +719,23 @@ class AppConfigBody(BaseModel):
 
 @router.get("/app-config/public")
 async def get_app_config_public():
-    """Public endpoint — called by frontend on every load to check maintenance/update state."""
+    """Public endpoint — called by frontend (incl. anonymous visitors, before
+    login) on every load to check maintenance/update/guest-mode state. Only
+    fields actually read by App.jsx/Login.jsx belong here — everything else
+    (ai_features_*, coding_question_daily_limit, notifications_enabled) is
+    admin-settings-only and lives behind the authenticated GET /app-config
+    instead, so it isn't needlessly exposed to unauthenticated visitors."""
     doc = await col_app_config().find_one({"_id": "config"})
     if not doc:
-        return {"maintenance": False, "force_update": False, "coding_question_daily_limit": 15, "notifications_enabled": True, "guest_feedback_enabled": False}
+        return {"maintenance": False, "force_update": False, "guest_feedback_enabled": False}
     return {
         "maintenance":          doc.get("maintenance", False),
         "maintenance_message":  doc.get("maintenance_message", "We're currently performing maintenance. We'll be back shortly!"),
         "force_update":         doc.get("force_update", False),
         "force_update_message": doc.get("force_update_message", "A new version is available. Please refresh to get the latest updates!"),
-        "coding_question_daily_limit": doc.get("coding_question_daily_limit", 15),
-        "notifications_enabled": doc.get("notifications_enabled", True),
         "guest_feedback_enabled": doc.get("guest_feedback_enabled", False),
         "guest_mode_enabled": doc.get("guest_mode_enabled", True),
         "guest_mode_message": doc.get("guest_mode_message", "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."),
-        "ai_features_enabled": doc.get("ai_features_enabled", True),
-        "ai_features_message": doc.get("ai_features_message", "AI features are temporarily disabled by the admin."),
     }
 
 

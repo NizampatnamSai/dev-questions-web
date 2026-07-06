@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +15,13 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [notifGranted, setNotifGranted] = useState(false);
-  const { register } = useAuth();
+  const [guestConfig, setGuestConfig] = useState({ guest_mode_enabled: true, guest_mode_message: "" });
+  const { register, enterGuest } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    api.get("/admin/app-config/public").then(({ data }) => setGuestConfig(data)).catch(() => {});
+  }, []);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -59,7 +65,7 @@ export default function Register() {
 
   if (submitted) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card w-full max-w-md p-8 text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto text-3xl">⏳</div>
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Awaiting Approval</h2>
@@ -93,7 +99,7 @@ export default function Register() {
           )}
           <Link to="/login" className="inline-block mt-2 text-sm text-cyan-400 hover:underline">← Back to login</Link>
         </motion.div>
-        <div className="absolute bottom-0 inset-x-0">
+        <div className="w-full mt-4">
           <Footer />
         </div>
       </div>
@@ -101,7 +107,7 @@ export default function Register() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -187,8 +193,37 @@ export default function Register() {
             <Link to="/login" className="text-cyan-400 hover:underline">Sign in</Link>
           )}
         </p>
+
+        <div className="relative my-5">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="px-3 text-xs text-slate-500 bg-slate-900">or</span>
+          </div>
+        </div>
+
+        {guestConfig.guest_mode_enabled === false ? (
+          <div className="text-xs text-center text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-2.5">
+            🕶️ {guestConfig.guest_mode_message || "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              enterGuest();
+              navigate("/dashboard");
+            }}
+            className="w-full py-2.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-slate-300 text-sm font-medium transition flex items-center justify-center gap-2"
+          >
+            👁 View as Guest
+            <span className="text-xs text-slate-500 font-normal">
+              — browse without signing in
+            </span>
+          </button>
+        )}
       </motion.div>
-      <div className="absolute bottom-0 inset-x-0">
+      <div className="w-full mt-4">
         <Footer />
       </div>
     </div>

@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
+import SharedToggle from "./Toggle";
 
 const FEATURE_LINKS = [
   {
@@ -130,22 +131,7 @@ const FEATURE_LINKS = [
 ];
 
 function Toggle({ on, onToggle, color = "bg-indigo-500" }) {
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        onToggle();
-      }}
-      className={`rounded-full relative transition-colors flex-shrink-0 ${on ? color : "bg-slate-200 dark:bg-slate-700"}`}
-      style={{ height: 22, width: 38 }}
-    >
-      <motion.div
-        className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow"
-        animate={{ left: on ? "18px" : "3px" }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      />
-    </button>
-  );
+  return <SharedToggle on={on} onToggle={onToggle} color={color} size="compact" />;
 }
 
 const ADMIN_LINKS = [

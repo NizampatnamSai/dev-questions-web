@@ -3,7 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/axios";
-import { STUDY_CATEGORIES } from "../data/studyGuide";
+// Imported directly from studyCategories (not the "../data/studyGuide" barrel)
+// on purpose — that barrel also statically imports every studyTopics/*.js
+// file and concatenates them into STUDY_TOPICS (~2.3MB combined). This page
+// never touches STUDY_TOPICS, only the small category list, but going
+// through the barrel still pulled in the full 2.2MB shared chunk — the
+// likely cause of a multi-second mobile-CPU freeze whenever this page (or
+// MockInterview/DevTools, which had the same issue) was opened for the
+// first time in a session.
+import { STUDY_CATEGORIES } from "../data/studyCategories";
 
 // dsa isn't in STUDY_CATEGORIES (it's a backend-only legacy category), so it
 // keeps its own fallback entry here.
