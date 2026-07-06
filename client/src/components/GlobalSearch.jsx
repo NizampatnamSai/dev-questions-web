@@ -13,6 +13,12 @@ const PAGES = [
     keywords: "home overview",
   },
   {
+    to: "/messages",
+    label: "Messages",
+    icon: "💬",
+    keywords: "chat admin private message",
+  },
+  {
     to: "/workboard",
     label: "Work Board",
     icon: "📋",

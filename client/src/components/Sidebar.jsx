@@ -12,6 +12,7 @@ import { isGuestAllowedPath } from "./ProtectedRoute";
 const BASE_LINKS = [
   // Requested order (top 12)
   { to: "/dashboard", label: "Dashboard", icon: "📊" },
+  { to: "/messages", label: "Messages", icon: "💬" },
   { to: "/workboard", label: "Work Board", icon: "📋" },
   { to: "/community", label: "Community", icon: "🌍" },
   { to: "/ask", label: "Ask AI", icon: "🤖" },
@@ -53,7 +54,7 @@ const BASE_LINKS = [
   { to: "/notifications", label: "Notifications", icon: "🔔" },
   { to: "/my-feedback", label: "My Feedback", icon: "💬", hideForAdmin: true },
   { to: "/guide", label: "Project Guide", icon: "🗺️" },
-  { to: "/jobs", label: "Recent Jobs", icon: "💼" },
+  // { to: "/jobs", label: "Recent Jobs", icon: "💼" }, // disabled for now
   { to: "/meetings", label: "Meetings", icon: "📹" },
   // My Profile moved to the bottom, per request
   { to: "/profile", label: "My Profile", icon: "👤" },

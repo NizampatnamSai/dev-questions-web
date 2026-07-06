@@ -321,16 +321,13 @@ export default function WorkBoard() {
     if (!replyMsg.trim()) return;
     setReplySaving(true);
     try {
-      const { data } = await api.post(`/workboard/posts/${replyId}/reply`, {
+      // Don't append the reply to state here — the websocket "new_reply"
+      // broadcast (sent to everyone, including the poster) already does
+      // that, same as submitPost() above relies on "new_post". Doing both
+      // was appending the same reply twice.
+      await api.post(`/workboard/posts/${replyId}/reply`, {
         message: replyMsg,
       });
-      setTodayPosts((prev) =>
-        prev.map((p) =>
-          p.id === replyId
-            ? { ...p, replies: [...(p.replies || []), data.reply] }
-            : p,
-        ),
-      );
       setReplyId(null);
       setReplyMsg("");
       toast.success("Update added!");
@@ -831,9 +828,10 @@ export default function WorkBoard() {
                         <button
                           onClick={saveReply}
                           disabled={replySaving || !replyMsg.trim()}
-                          className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold disabled:opacity-50"
+                          className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold disabled:opacity-50 flex items-center gap-1.5"
                         >
-                          Save
+                          {replySaving && <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
+                          {replySaving ? "Saving…" : "Save"}
                         </button>
                         <button
                           onClick={() => setReplyId(null)}

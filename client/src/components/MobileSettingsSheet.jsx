@@ -104,6 +104,7 @@ const FEATURE_LINKS = [
     label: "Work Board",
     sub: "Daily standup board",
   },
+  { to: "/messages", icon: "💬", label: "Messages", sub: "Private chat with admin" },
   { to: "/profile", icon: "👤", label: "My Profile", sub: "Account, settings & badges" },
   { to: "/my-tasks", icon: "✅", label: "My Tasks", sub: "Tasks assigned to you" },
   { to: "/my-answers", icon: "🗒️", label: "My Answers", sub: "Your saved answers, AI-graded" },
@@ -116,7 +117,7 @@ const FEATURE_LINKS = [
   { to: "/recommendations", icon: "🎯", label: "Recommended", sub: "Personalized picks for you" },
   { to: "/search", icon: "🔎", label: "Advanced Search", sub: "Full-text search with filters" },
   { to: "/timed-challenge", icon: "⏱️", label: "Timed Challenge", sub: "Race the clock" },
-  { to: "/jobs", icon: "💼", label: "Recent Jobs", sub: "Live tech job listings" },
+  // { to: "/jobs", icon: "💼", label: "Recent Jobs", sub: "Live tech job listings" }, // disabled for now
   { to: "/js-coding", icon: "💻", label: "JS Coding", sub: "AI-graded coding problems" },
   { to: "/meetings", icon: "🎥", label: "Meetings", sub: "Free video calls" },
   { to: "/resume-analyzer", icon: "📄", label: "Resume Analyzer", sub: "AI resume/ATS scoring" },

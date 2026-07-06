@@ -44,9 +44,22 @@ const DISABLE_QUICK_DURATIONS = [
   { label: "7 days", hours: 168 },
 ];
 
-function DisableDurationPicker({ value, onChange }) {
+function DisableDurationPicker({ value, onChange, message, mode = "lock-now" }) {
   const [customOpen, setCustomOpen] = useState(false);
-  const pick = (hours) => onChange(new Date(Date.now() + hours * 3600 * 1000).toISOString());
+  const [selectedHours, setSelectedHours] = useState(null);
+  const pick = (hours) => {
+    setSelectedHours(hours);
+    onChange(new Date(Date.now() + hours * 3600 * 1000).toISOString());
+  };
+  const clear = () => {
+    setSelectedHours(null);
+    onChange("");
+  };
+
+  const defaultMessage =
+    mode === "lock-now"
+      ? `🔒 Locked out until ${value ? new Date(value).toLocaleString() : ""} — no login, no API, no AI access until then.`
+      : `⏳ Works normally until ${value ? new Date(value).toLocaleString() : ""}, then automatically locks — no login, no API, no AI access from that point on.`;
 
   return (
     <div className="space-y-2">
@@ -56,22 +69,30 @@ function DisableDurationPicker({ value, onChange }) {
             key={q.label}
             type="button"
             onClick={() => pick(q.hours)}
-            className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+            className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+              selectedHours === q.hours && !customOpen
+                ? "border-indigo-400 bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-semibold"
+                : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
+            }`}
           >
             {q.label}
           </button>
         ))}
         <button
           type="button"
-          onClick={() => setCustomOpen((v) => !v)}
-          className="text-xs px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+          onClick={() => { setCustomOpen((v) => !v); setSelectedHours(null); }}
+          className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+            customOpen
+              ? "border-indigo-400 bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-semibold"
+              : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
+          }`}
         >
           Custom…
         </button>
         {value && (
           <button
             type="button"
-            onClick={() => onChange("")}
+            onClick={clear}
             className="text-xs px-2.5 py-1 rounded-full border border-red-300/50 text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
           >
             ✕ Clear
@@ -87,7 +108,7 @@ function DisableDurationPicker({ value, onChange }) {
       )}
       {value && (
         <p className="text-xs text-amber-500">
-          🔒 Locked out until {new Date(value).toLocaleString()} — no login, no API, no AI access until then.
+          {message || defaultMessage}
         </p>
       )}
     </div>
@@ -101,7 +122,7 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
     password: "",
     role: initial.role || "user",
     dailyLimit: initial.dailyLimit ?? 10,
-    disabledUntil: "",
+    autoDisableAt: "",
   });
   const [showPw, setShowPw] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -202,9 +223,16 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
       {isCreate && (
         <div>
           <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1 block">
-            Disable on creation (optional)
+            Auto-disable after (optional)
           </label>
-          <DisableDurationPicker value={form.disabledUntil} onChange={(v) => set("disabledUntil", v)} />
+          <p className="text-[11px] text-slate-400 mb-1.5">
+            Account works normally right away — it only locks automatically once this time is reached.
+          </p>
+          <DisableDurationPicker
+            mode="auto-disable-later"
+            value={form.autoDisableAt}
+            onChange={(v) => set("autoDisableAt", v)}
+          />
         </div>
       )}
       <div className="flex gap-2 pt-2">
@@ -2242,6 +2270,11 @@ export default function Admin() {
                             {u.disabledUntil && new Date(u.disabledUntil) > new Date() && (
                               <p className="text-[10px] text-amber-500 font-medium mt-0.5">
                                 🔒 Locked until {new Date(u.disabledUntil).toLocaleString()}
+                              </p>
+                            )}
+                            {u.autoDisableAt && new Date(u.autoDisableAt) > new Date() && (
+                              <p className="text-[10px] text-amber-500 font-medium mt-0.5">
+                                ⏳ Auto-locks at {new Date(u.autoDisableAt).toLocaleString()}
                               </p>
                             )}
                           </div>

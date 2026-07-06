@@ -63,16 +63,25 @@ self.addEventListener('notificationclick', event => {
   const path = event.notification.data?.path || '/';
   const url  = self.location.origin + path;
 
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      for (const client of list) {
-        if (client.url.startsWith(self.location.origin) && 'focus' in client) {
-          client.focus();
-          client.navigate(url);
-          return;
+  // Was calling focus()/navigate() without awaiting or returning their
+  // promises, so event.waitUntil() didn't actually cover them — the browser
+  // could terminate the service worker mid-navigation, and a navigate()
+  // failure (unsupported/blocked) silently did nothing with no fallback.
+  event.waitUntil((async () => {
+    const list = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of list) {
+      if (client.url.startsWith(self.location.origin) && 'focus' in client) {
+        await client.focus();
+        if ('navigate' in client) {
+          try {
+            await client.navigate(url);
+            return;
+          } catch (e) {
+            // fall through to opening a fresh window below
+          }
         }
       }
-      return clients.openWindow(url);
-    })
-  );
+    }
+    await clients.openWindow(url);
+  })());
 });

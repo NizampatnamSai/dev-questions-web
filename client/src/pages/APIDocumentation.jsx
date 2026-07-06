@@ -77,8 +77,16 @@ export default function APIDocumentation() {
     { method: "PATCH", path: "/api/meetings/{id}/end", desc: "End a meeting for everyone (admin only)" },
     { method: "DELETE", path: "/api/meetings/{id}", desc: "Delete/cancel a meeting (admin only)" },
 
-    // Recent Jobs — free public job board feed
-    { method: "GET", path: "/api/jobs/recent", desc: "Recent tech job listings from the last 7 days (public, cached ~20 min)" },
+    // Recent Jobs — free public job board feed (disabled for now)
+    // { method: "GET", path: "/api/jobs/recent", desc: "Recent tech job listings from the last 7 days (public, cached ~20 min)" },
+
+    // Messages — private admin <-> user chat, only an admin can start a conversation
+    { method: "POST", path: "/api/admin-chat/start", desc: "Start a private conversation with a user (admin only)" },
+    { method: "GET", path: "/api/admin-chat/conversations", desc: "List your conversations — all of them for admins, only yours otherwise" },
+    { method: "GET", path: "/api/admin-chat/users", desc: "List users you can start a new conversation with (admin only)" },
+    { method: "GET", path: "/api/admin-chat/{chatId}/messages", desc: "Get a conversation's messages and mark unread ones as read" },
+    { method: "POST", path: "/api/admin-chat/{chatId}/messages", desc: "Send a rich-text message and/or image in a conversation" },
+    { method: "WS", path: "/api/admin-chat/ws", desc: "Real-time delivery of new messages (JWT via ?token= query param)" },
 
     // Project Chatbot — scoped to explaining this app only
     { method: "POST", path: "/api/project-chat/ask", desc: "Ask the in-app assistant about a DevQuiz feature or how to get somewhere (open to guests)" },
@@ -94,6 +102,7 @@ export default function APIDocumentation() {
     PUT: "bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300",
     PATCH: "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300",
     DELETE: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300",
+    WS: "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300",
   };
 
   return (

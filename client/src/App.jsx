@@ -86,6 +86,7 @@ const AdminTasks = lazy(() => import("./pages/AdminTasks"));
 const AdminFeaturesDoc = lazy(() => import("./pages/AdminFeaturesDoc"));
 const Jobs = lazy(() => import("./pages/Jobs"));
 const Meetings = lazy(() => import("./pages/Meetings"));
+const AdminChat = lazy(() => import("./pages/AdminChat"));
 const MyTasks = lazy(() => import("./pages/MyTasks"));
 
 // Kept short and subtle on purpose: this wraps every single page, and the
@@ -562,6 +563,7 @@ function AppInner() {
             </ProtectedPage>
           }
         />
+        {/* /jobs route disabled for now
         <Route
           path="/jobs"
           element={
@@ -570,11 +572,20 @@ function AppInner() {
             </ProtectedPage>
           }
         />
+        */}
         <Route
           path="/meetings"
           element={
             <ProtectedPage path="/meetings">
               <Meetings />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/messages"
+          element={
+            <ProtectedPage path="/messages">
+              <AdminChat />
             </ProtectedPage>
           }
         />

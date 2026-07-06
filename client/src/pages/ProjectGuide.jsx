@@ -308,6 +308,21 @@ const FEATURES = [
     tip: "The join code works for anyone, invited or not — only share it with people you actually want in the call.",
   },
   {
+    icon: "💬",
+    title: "Messages",
+    path: "/messages",
+    color: "from-indigo-500 to-purple-500",
+    summary: "Private 1-to-1 chat with an admin — only an admin can start a conversation, but once one exists you can reply freely.",
+    steps: [
+      "Admins: open **Messages**, click **+**, and pick any user to start a private conversation.",
+      "Everyone: reply with rich text (bold, lists, links) or attach an image, right from the conversation.",
+      "Toggle **🙈 Blur** to hide message content on screen until you hover — handy in shared spaces, same idea as Notes.",
+      "You'll get a push + in-app notification for every new message, even while you're on another page.",
+    ],
+    tip: "Regular users can't start new conversations or message each other — only an admin can open the first message.",
+  },
+  /* Recent Jobs disabled for now
+  {
     icon: "💼",
     title: "Recent Jobs",
     path: "/jobs",
@@ -320,6 +335,7 @@ const FEATURES = [
     ],
     tip: "Listings currently skew Germany/Europe-focused since that's what the free data source covers — broader regional coverage is on the list for later.",
   },
+  */
 ];
 
 function FeatureCard({ feature, index }) {
