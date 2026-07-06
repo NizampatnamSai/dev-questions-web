@@ -195,9 +195,9 @@ function AppLayout({ children, fullWidth = false }) {
   );
 }
 
-function ProtectedPage({ children, path, fullWidth = false }) {
+function ProtectedPage({ children, path, fullWidth = false, adminOnly = false }) {
   return (
-    <ProtectedRoute path={path}>
+    <ProtectedRoute path={path} adminOnly={adminOnly}>
       <AppLayout fullWidth={fullWidth}>
         <PageWrapper>{children}</PageWrapper>
       </AppLayout>
@@ -534,7 +534,7 @@ function AppInner() {
         <Route
           path="/admin"
           element={
-            <ProtectedPage path="/admin">
+            <ProtectedPage path="/admin" adminOnly>
               <Admin />
             </ProtectedPage>
           }
@@ -542,7 +542,7 @@ function AppInner() {
         <Route
           path="/admin/feedback"
           element={
-            <ProtectedPage path="/admin/feedback">
+            <ProtectedPage path="/admin/feedback" adminOnly>
               <AdminFeedback />
             </ProtectedPage>
           }
@@ -550,7 +550,7 @@ function AppInner() {
         <Route
           path="/admin/tasks"
           element={
-            <ProtectedPage path="/admin/tasks" fullWidth>
+            <ProtectedPage path="/admin/tasks" fullWidth adminOnly>
               <AdminTasks />
             </ProtectedPage>
           }
@@ -558,7 +558,7 @@ function AppInner() {
         <Route
           path="/admin/features-doc"
           element={
-            <ProtectedPage path="/admin/features-doc">
+            <ProtectedPage path="/admin/features-doc" adminOnly>
               <AdminFeaturesDoc />
             </ProtectedPage>
           }
@@ -792,7 +792,7 @@ function AppInner() {
         <Route
           path="/api-docs"
           element={
-            <ProtectedPage path="/api-docs">
+            <ProtectedPage path="/api-docs" adminOnly>
               <APIDocumentation />
             </ProtectedPage>
           }
@@ -816,7 +816,7 @@ function AppInner() {
         <Route
           path="/admin/export"
           element={
-            <ProtectedPage path="/admin/export">
+            <ProtectedPage path="/admin/export" adminOnly>
               <ExportData />
             </ProtectedPage>
           }

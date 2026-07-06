@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="py-4 px-4 text-center text-xs text-slate-400 dark:text-slate-500 border-t border-black/5 dark:border-white/5">
+    <footer className="pt-4 pb-24 md:py-4 px-4 text-center text-xs text-slate-400 dark:text-slate-500 border-t border-black/5 dark:border-white/5">
       Powered by{" "}
       <a
         href="mailto:nizampatnamsai202@gmail.com"

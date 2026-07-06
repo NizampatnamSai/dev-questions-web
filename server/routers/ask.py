@@ -68,6 +68,53 @@ async def ask(body: AskBody, _user=Depends(require_ai_enabled)):
     return {"answer": answer}
 
 
+HUMANIZE_SYSTEM_PROMPT = (
+    "You rewrite AI-generated text so it reads like it was written by a person, not a model. "
+    "Keep the same meaning, facts, and roughly the same length — don't summarize or add new content. "
+    "Vary sentence length and structure, cut generic AI filler and transition words "
+    "(e.g. 'Moreover', 'In conclusion', 'It is important to note', 'Furthermore'), remove overly uniform "
+    "paragraph structure, and drop unnecessary hedging or repetition. Keep it natural and clear, not overly casual. "
+    "Return ONLY the rewritten text — no preamble, no explanation, no quotes around it."
+)
+
+# Input length cap for /humanize — matches the word limit shown in the UI.
+# Enforced here (not just client-side) since this is a real cost-bearing AI call.
+MAX_HUMANIZE_WORDS = 1000
+
+
+class HumanizeBody(BaseModel):
+    text: str
+
+
+@router.post("/humanize")
+async def humanize(body: HumanizeBody, _user=Depends(require_ai_enabled)):
+    text = body.text.strip()
+    if not text:
+        raise HTTPException(400, "Text is required")
+    word_count = len(text.split())
+    if word_count > MAX_HUMANIZE_WORDS:
+        raise HTTPException(400, f"Text too long (max {MAX_HUMANIZE_WORDS} words)")
+    if not GROQ_API_KEY:
+        raise HTTPException(503, "AI service not configured")
+
+    headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+    payload = {
+        "messages": [
+            {"role": "system", "content": HUMANIZE_SYSTEM_PROMPT},
+            {"role": "user", "content": text},
+        ],
+        "temperature": 0.8,
+        "max_tokens": 2048,
+    }
+    async with httpx.AsyncClient(timeout=30) as c:
+        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        if r.status_code == 429:
+            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+        r.raise_for_status()
+    result = r.json()["choices"][0]["message"]["content"].strip()
+    return {"result": result}
+
+
 @router.post("/ask-image")
 async def ask_image(
     image: UploadFile = File(...),

@@ -369,7 +369,7 @@ export default function Community() {
         )}
 
         {/* Filters */}
-        <div className="glass-card p-4 flex flex-col sm:flex-row gap-3 flex-wrap">
+        <div className="glass-card p-4 flex flex-col sm:flex-row gap-3 flex-wrap relative z-20">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}

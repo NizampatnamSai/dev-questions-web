@@ -282,11 +282,12 @@ const FEATURES = [
     title: "Ask AI",
     path: "/ask",
     color: "from-cyan-500 to-blue-500",
-    summary: "A general-purpose AI chat, plus a Prompt Improver mode for writing better prompts for other AI tools.",
+    summary: "A general-purpose AI chat, plus Prompt Improver, Image, Create, and Humanize modes.",
     steps: [
       "Open **Ask AI** and type any question — Python internals, how a concept works, debugging help.",
       "Switch to **✨ Prompt Improver** mode (top right) when you want a clean, detailed prompt to paste into ChatGPT, Claude, or any other AI instead of an answer here.",
       "In Prompt Improver mode, describe your goal in plain words (e.g. 'give me a prompt for ChatGPT to create a React website') and it writes the full prompt for you.",
+      "Switch to **🧑 Humanize** mode and paste any AI-generated text (up to 1000 words) — it rewrites it to sound more natural, keeping the same meaning and length.",
       "Use **📋 Copy response** on any AI message to copy it.",
       "Turn on **Auto-save** to keep every conversation, or save manually — past chats live in the sidebar.",
     ],

@@ -433,6 +433,93 @@ function CreateImagePanel() {
   );
 }
 
+const MAX_HUMANIZE_WORDS = 1000;
+
+function HumanizeAIPanel() {
+  const [text, setText] = useState("");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const overLimit = wordCount > MAX_HUMANIZE_WORDS;
+
+  const humanize = async () => {
+    const t = text.trim();
+    if (!t) {
+      toast.error("Paste some AI-generated text first");
+      return;
+    }
+    if (overLimit) {
+      toast.error(`Too long — max ${MAX_HUMANIZE_WORDS} words`);
+      return;
+    }
+    setLoading(true);
+    setResult("");
+    try {
+      const { data } = await api.post("/ai/humanize", { text: t });
+      setResult(data.result);
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to humanize text");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copy = () => {
+    navigator.clipboard.writeText(result);
+    toast.success("Copied!");
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto px-1">
+      <div className="max-w-2xl mx-auto space-y-4 py-4">
+        <div className="space-y-1.5">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            rows={8}
+            placeholder="Paste an AI-generated response here — I'll rewrite it to sound more natural and human, same meaning, less robotic."
+            className="w-full resize-y text-sm px-4 py-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
+          />
+          <p className={`text-xs text-right ${overLimit ? "text-red-500 font-semibold" : "text-slate-400"}`}>
+            {wordCount} / {MAX_HUMANIZE_WORDS} words
+          </p>
+        </div>
+
+        <button
+          onClick={humanize}
+          disabled={!text.trim() || loading || overLimit}
+          className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+        >
+          {loading ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              Humanizing…
+            </>
+          ) : (
+            "🧑 Humanize"
+          )}
+        </button>
+
+        {result && (
+          <div className="glass-card p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Result</p>
+              <button
+                onClick={copy}
+                className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+              >
+                📋 Copy
+              </button>
+            </div>
+            <p className="text-sm text-slate-700 dark:text-slate-200 whitespace-pre-wrap leading-relaxed">{result}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function AskAI() {
   const { confirm, confirmProps } = useConfirm();
@@ -446,7 +533,7 @@ export default function AskAI() {
   const [isSaved, setIsSaved] = useState(false);
   const [autoSave, setAutoSave] = useState(() => localStorage.getItem("devquiz_ai_autosave") === "true");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [mode, setMode] = useState("chat"); // "chat" | "promptImprover"
+  const [mode, setMode] = useState("chat"); // "chat" | "promptImprover" | "image" | "create" | "humanize"
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   // Keep a ref so the auto-save inside async send() always sees the latest chatId
@@ -691,41 +778,50 @@ export default function AskAI() {
                   ? "Upload an image — get an explanation, a description, or the text extracted from it."
                   : mode === "create"
                   ? "Describe an image and generate it — free, with a daily limit."
+                  : mode === "humanize"
+                  ? "Paste AI-generated text and get back a more natural, human-sounding rewrite."
                   : "Ask anything — Python internals, how Claude works, JS concepts…"}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap sm:ml-auto">
-          <div className="flex-shrink-0 flex items-center gap-0.5 rounded-lg bg-slate-100 dark:bg-white/10 p-1">
+          <div className="flex-shrink-0 flex items-center gap-0.5 rounded-lg bg-slate-100 dark:bg-white/10 p-1 overflow-x-auto max-w-full">
             <button
               onClick={() => setMode("chat")}
-              className={`text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "chat" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+              className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "chat" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
             >
-              💬 Chat
+              💬 <span className="hidden sm:inline">Chat</span>
             </button>
             <button
               onClick={() => setMode("promptImprover")}
               title="Turn a rough idea into a clean, detailed prompt for ChatGPT/Claude/etc"
-              className={`text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "promptImprover" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+              className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "promptImprover" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
             >
-              ✨ Prompt Improver
+              ✨ <span className="hidden sm:inline">Prompt Improver</span>
             </button>
             <button
               onClick={() => setMode("image")}
               title="Upload an image — explain it, describe it, or extract text from it"
-              className={`text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "image" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+              className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "image" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
             >
-              🖼️ Image
+              🖼️ <span className="hidden sm:inline">Image</span>
             </button>
             <button
               onClick={() => setMode("create")}
               title="Generate an image from a text description"
-              className={`text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "create" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+              className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "create" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
             >
-              🎨 Create
+              🎨 <span className="hidden sm:inline">Create</span>
+            </button>
+            <button
+              onClick={() => setMode("humanize")}
+              title="Rewrite AI-generated text to sound more natural and human"
+              className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "humanize" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+            >
+              🧑 <span className="hidden sm:inline">Humanize</span>
             </button>
           </div>
-          {!isEmpty && mode !== "image" && mode !== "create" && (
+          {!isEmpty && mode !== "image" && mode !== "create" && mode !== "humanize" && (
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Auto-save toggle */}
               <button
@@ -782,6 +878,8 @@ export default function AskAI() {
           <ImageAskPanel />
         ) : mode === "create" ? (
           <CreateImagePanel />
+        ) : mode === "humanize" ? (
+          <HumanizeAIPanel />
         ) : isEmpty ? (
           /* ── Hero / welcome state — centered, big pill composer ── */
           <div className="flex-1 flex flex-col items-center justify-center px-4">

@@ -124,8 +124,8 @@ ROUTES = {
     },
     "/ask": {
         "label": "Ask AI", "audience": "user",
-        "desc": "General-purpose AI chat for any dev question, with saved history.",
-        "python": "routers/ask.py. POST /ai/ask sends {system prompt + question} to Groq's chat completions endpoint via httpx, falls back to a smaller model on 429. Chat history is just Mongo documents (col_ai_history) with a messages array — no vector DB or embedding search involved, purely a saved transcript.",
+        "desc": "General-purpose AI chat for any dev question (with saved history), plus a Prompt Improver mode, an image-understanding mode, a text-to-image Create mode, and a Humanize mode that rewrites pasted AI-generated text to sound more natural — all as tabs on the same page.",
+        "python": "routers/ask.py. POST /ai/ask sends {system prompt + question} to Groq's chat completions endpoint via httpx, falls back to a smaller model on 429. Chat history is just Mongo documents (col_ai_history) with a messages array — no vector DB or embedding search involved, purely a saved transcript. POST /ai/humanize uses the same Groq call with a different system prompt tuned to cut generic AI phrasing/filler while preserving meaning and length; capped at 1000 words server-side, matching the UI's word counter.",
     },
     "/js-coding": {
         "label": "JS Coding Questions", "audience": "user",
@@ -320,7 +320,7 @@ ROUTES = {
     },
     "/admin": {
         "label": "Admin Panel", "audience": "admin",
-        "desc": "User management, app-wide config (maintenance mode, guest mode, force update, WorkBoard reminder times, AI daily limits), notifications, and feature docs.",
+        "desc": "User management, app-wide config (maintenance mode, guest mode, force update, WorkBoard reminder times, AI daily limits), notifications, feature docs, and the full backend API reference (/api-docs) — all admin-only, enforced both by hidden nav and by a route-level guard so they can't be reached by a direct URL either.",
         "python": "routers/admin.py — the single largest router in the codebase. App-wide settings live in one MongoDB document ({_id: 'config'} in col_app_config()), read via a public GET (no secrets in it) and an admin-only GET (same doc, defaults filled in with setdefault()), written via a single PUT with a Pydantic model where every field is Optional so partial updates only touch what was actually sent.",
     },
 }

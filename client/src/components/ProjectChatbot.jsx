@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -24,6 +25,7 @@ export default function ProjectChatbot() {
   const [listeningForCommand, setListeningForCommand] = useState(false);
   const navigate = useNavigate();
   const containerRef = useRef(null);
+  const panelRef = useRef(null);
   const bottomRef = useRef(null);
   const wakeRecognitionRef = useRef(null);
   const commandRecognitionRef = useRef(null);
@@ -161,7 +163,7 @@ export default function ProjectChatbot() {
     };
   }, [voiceEnabled]);
 
-  useClickOutside(containerRef, () => setOpen(false), open);
+  useClickOutside([containerRef, panelRef], () => setOpen(false), open);
 
   return (
     // display:contents so this wrapper doesn't affect the header's flex
@@ -179,9 +181,11 @@ export default function ProjectChatbot() {
         🤖
       </button>
 
-      <AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
@@ -281,7 +285,9 @@ export default function ProjectChatbot() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 }

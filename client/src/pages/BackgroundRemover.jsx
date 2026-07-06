@@ -40,8 +40,19 @@ export default function BackgroundRemover() {
       });
       setResultUrl(URL.createObjectURL(blob));
       toast.success("Background removed!");
-    } catch {
-      toast.error("Background removal failed — try a different image.");
+    } catch (err) {
+      // This runs entirely client-side (WASM/ONNX model, no backend involved),
+      // so the only way to diagnose a real failure is the browser console —
+      // a bare `catch {}` here was swallowing the actual error entirely.
+      console.error("Background removal failed:", err);
+      const msg = String(err?.message || err || "");
+      if (/fetch|network|NetworkError|Failed to fetch/i.test(msg)) {
+        toast.error("Couldn't download the AI model (network issue) — check your connection and try again.");
+      } else if (/memory|out of memory|Aborted/i.test(msg)) {
+        toast.error("Image too complex for this device's memory — try a smaller image.");
+      } else {
+        toast.error("Background removal failed — try a different image.");
+      }
     } finally {
       setProcessing(false);
       setProgress(null);

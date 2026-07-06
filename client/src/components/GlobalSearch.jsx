@@ -148,7 +148,7 @@ const PAGES = [
     to: "/ask",
     label: "Ask AI",
     icon: "🤖",
-    keywords: "ask ai chat gpt claude python general query",
+    keywords: "ask ai chat gpt claude python general query humanize humanise prompt improver image create",
   },
   {
     to: "/notifications",

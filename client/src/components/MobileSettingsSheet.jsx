@@ -123,7 +123,6 @@ const FEATURE_LINKS = [
   { to: "/resume-analyzer", icon: "📄", label: "Resume Analyzer", sub: "AI resume/ATS scoring" },
   { to: "/background-remover", icon: "🖼️", label: "Background Remover", sub: "Remove image backgrounds" },
   { to: "/api-tester", icon: "📡", label: "API Tester", sub: "Postman-style request tester" },
-  { to: "/api-docs", icon: "📘", label: "API Docs", sub: "Full backend API reference" },
   { to: "/devtools", icon: "🛠️", label: "Dev Tools", sub: "All dev tools in one place" },
   { to: "/cron-builder", icon: "⏰", label: "Cron Builder", sub: "Build & explain cron expressions" },
   { to: "/regex-tester", icon: "🧪", label: "Regex Tester", sub: "Test regex against sample text" },
@@ -155,6 +154,7 @@ const ADMIN_LINKS = [
   { to: "/admin/feedback", icon: "💬", label: "Feedbacks", sub: "User-submitted feedback" },
   { to: "/admin/export", icon: "📥", label: "Export Data", sub: "Download platform data" },
   { to: "/admin/features-doc", icon: "📖", label: "Features & Docs", sub: "Full app + backend reference" },
+  { to: "/api-docs", icon: "📘", label: "API Docs", sub: "Full backend API reference" },
 ];
 
 export default function MobileSettingsSheet({ open, onClose }) {

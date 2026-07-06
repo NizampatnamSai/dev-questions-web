@@ -61,6 +61,16 @@ export default function APIDocumentation() {
     { method: "GET", path: "/api/dev-tools/snippets/languages", desc: "Distinct list of languages used, for the filter dropdown" },
     { method: "GET", path: "/api/dev-tools/mock/{resource}", desc: "Public, no-auth mock data generator — users/posts/products/todos/comments/images, deterministic per resource+count" },
 
+    // Ask AI — general chat, prompt improver, image understanding, image generation, humanize
+    { method: "POST", path: "/api/ai/ask", desc: "General-purpose AI chat / prompt-improver mode" },
+    { method: "POST", path: "/api/ai/humanize", desc: "Rewrite pasted AI-generated text to sound more natural (max 1000 words)" },
+    { method: "POST", path: "/api/ai/ask-image", desc: "Upload an image and ask about it — explain, describe, or extract text" },
+    { method: "GET", path: "/api/ai/generate-image/usage", desc: "Today's text-to-image usage vs. daily limit" },
+    { method: "POST", path: "/api/ai/generate-image", desc: "Generate an image from a text prompt (free, daily-limited)" },
+    { method: "GET", path: "/api/ai/history", desc: "List your saved Ask AI chats" },
+    { method: "POST", path: "/api/ai/history", desc: "Save or update a chat transcript" },
+    { method: "DELETE", path: "/api/ai/history/{id}", desc: "Delete one saved chat" },
+
     // Notes — zero-knowledge encrypted, server never sees plaintext or the key
     { method: "GET", path: "/api/notes/salt", desc: "Get your encryption salt + verification blob (creates them on first use)" },
     { method: "POST", path: "/api/notes/verify-setup", desc: "Store the one-time passphrase verification blob (first-time setup only)" },
@@ -133,7 +143,7 @@ export default function APIDocumentation() {
               <span className={`px-2 py-1 rounded text-xs font-bold ${methodColors[endpoint.method]}`}>
                 {endpoint.method}
               </span>
-              <code className="text-sm text-slate-700 dark:text-slate-300 font-mono flex-1">{endpoint.path}</code>
+              <code className="text-sm text-slate-700 dark:text-slate-300 font-mono flex-1 min-w-0 break-all">{endpoint.path}</code>
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-400">{endpoint.desc}</p>
           </motion.div>

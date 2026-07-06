@@ -64,16 +64,16 @@ function KeyValueEditor({ rows, onChange, keyPlaceholder = "key", valuePlacehold
             onChange={(e) => update(i, "key", e.target.value)}
             placeholder={keyPlaceholder}
             spellCheck={false}
-            className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-mono text-xs outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-mono text-xs outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <input
             value={r.value}
             onChange={(e) => update(i, "value", e.target.value)}
             placeholder={valuePlaceholder}
             spellCheck={false}
-            className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-mono text-xs outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-mono text-xs outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          <button onClick={() => remove(i)} className="px-2 rounded-lg text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 text-xs">
+          <button onClick={() => remove(i)} className="px-2 flex-shrink-0 rounded-lg text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 text-xs">
             ✕
           </button>
         </div>

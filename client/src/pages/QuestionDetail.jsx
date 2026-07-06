@@ -139,7 +139,11 @@ export default function QuestionDetail() {
           <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">{q.type}</span>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <FullWidthToggle fullWidth={fullWidth} onToggle={setFullWidth} />
+          {/* max-w-5xl (1024px) is already at/beyond the viewport on phones and small tablets, so
+              toggling "full width" is visually a no-op there — only show it once it can matter. */}
+          <div className="hidden lg:block">
+            <FullWidthToggle fullWidth={fullWidth} onToggle={setFullWidth} />
+          </div>
           <button onClick={copyLink} className="text-xs text-slate-400 hover:text-indigo-500 transition flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
             🔗 Share
           </button>

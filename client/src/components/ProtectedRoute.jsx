@@ -32,7 +32,7 @@ export function isGuestAllowedPath(path) {
   );
 }
 
-export default function ProtectedRoute({ children, path }) {
+export default function ProtectedRoute({ children, path, adminOnly = false }) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -48,6 +48,10 @@ export default function ProtectedRoute({ children, path }) {
   }
 
   if (user.isGuest && path && !isGuestAllowedPath(path)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  if (adminOnly && user.role !== "admin" && user.role !== "sub_admin") {
     return <Navigate to="/dashboard" replace />;
   }
 
