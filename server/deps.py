@@ -1,8 +1,29 @@
+import time
 from datetime import datetime, timezone
 from fastapi import Depends, Header, HTTPException, status
 from jose import JWTError
 from auth_utils import decode_token
 from db_mongo import col_users, oid, sid
+
+# In-process throttle for the "last active" presence timestamp (used by
+# Messages' online/away/offline dots) — current_user() runs on nearly every
+# authenticated request, so writing lastActiveAt unconditionally would mean
+# a Mongo write per API call. Capping it to once a minute per user keeps the
+# signal fresh enough for a presence dot while adding ~zero overhead to the
+# other 59 requests in that window. Resets on backend restart — acceptable,
+# it's a presence indicator, not durable data.
+_last_active_write: dict[str, float] = {}
+
+
+async def _touch_last_active(user_id: str) -> None:
+    last = _last_active_write.get(user_id, 0)
+    t = time.monotonic()
+    if t - last < 60:
+        return
+    _last_active_write[user_id] = t
+    await col_users().update_one(
+        {"_id": oid(user_id)}, {"$set": {"lastActiveAt": datetime.now(timezone.utc)}}
+    )
 
 
 def is_locked_out(doc: dict) -> bool:
@@ -40,6 +61,7 @@ async def current_user(authorization: str = Header(default="")) -> dict:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not found")
     if is_locked_out(doc):
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Account disabled")
+    await _touch_last_active(user_id)
     return sid(doc)
 
 

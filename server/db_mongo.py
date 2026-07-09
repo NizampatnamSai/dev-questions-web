@@ -27,7 +27,17 @@ def _get_client() -> AsyncIOMotorClient:
     if _client is None:
         if not MONGO_URL:
             raise RuntimeError("MONGO_URL env var not set")
-        _client = AsyncIOMotorClient(MONGO_URL)
+        # tz_aware=True — BSON stores datetimes as plain UTC with no timezone
+        # metadata, and Motor/PyMongo return NAIVE datetimes (tzinfo=None) by
+        # default even though the value IS UTC. FastAPI's jsonable_encoder
+        # then serializes a naive datetime with no "Z"/"+00:00" suffix at
+        # all, so the browser's `new Date(...)` silently parses it as LOCAL
+        # time instead of UTC — e.g. a message sent at 15:18 IST (09:48 UTC)
+        # displayed as "09:48" instead of converting to "15:18" IST. This
+        # makes every datetime Motor returns timezone-aware (tzinfo=utc)
+        # everywhere in the app, so serialization always includes the
+        # correct offset and every client parses it unambiguously.
+        _client = AsyncIOMotorClient(MONGO_URL, tz_aware=True)
     return _client
 
 
@@ -38,7 +48,7 @@ def mdb():
 def _get_notes_client() -> AsyncIOMotorClient:
     global _notes_client
     if _notes_client is None:
-        _notes_client = AsyncIOMotorClient(NOTES_MONGO_URL)
+        _notes_client = AsyncIOMotorClient(NOTES_MONGO_URL, tz_aware=True)
     return _notes_client
 
 

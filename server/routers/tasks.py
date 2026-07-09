@@ -104,8 +104,10 @@ async def create_task(body: TaskCreate, user=Depends(current_user)):
     result = await col_tasks().insert_one(doc)
     task_id = str(result.inserted_id)
 
-    # Notify all assignees — one batched query instead of one per assignee.
-    assignee_ids = [a["id"] for a in assignees]
+    # Notify all assignees except the creator — one batched query instead of
+    # one per assignee. No point push-notifying an admin about a task they
+    # just assigned to themselves.
+    assignee_ids = [a["id"] for a in assignees if a["id"] != user["id"]]
     tokens_docs = await col_fcm_tokens().find({"userId": {"$in": assignee_ids}}).to_list(length=(len(assignee_ids) * 5) or 1)
     tokens = list({t["token"] for t in tokens_docs})
     if tokens:
@@ -173,9 +175,10 @@ async def update_task(task_id: str, body: TaskCreate, user=Depends(current_user)
         except Exception:
             pass
 
-    # Notify newly added assignees
+    # Notify newly added assignees, excluding the admin making the change —
+    # same reasoning as create_task, no self-notification.
     old_ids = set(doc.get("assigneeIds", []))
-    new_ids = {a["id"] for a in assignees} - old_ids
+    new_ids = ({a["id"] for a in assignees} - old_ids) - {user["id"]}
     if new_ids:
         new_ids_list = list(new_ids)
         tokens_docs = await col_fcm_tokens().find({"userId": {"$in": new_ids_list}}).to_list(length=(len(new_ids_list) * 5) or 1)

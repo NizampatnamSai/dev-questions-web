@@ -715,6 +715,7 @@ class AppConfigBody(BaseModel):
     wb_afternoon_reminder_time: Optional[str] = None  # "HH:MM" IST, e.g. "15:00"
     ai_features_enabled: Optional[bool] = None
     ai_features_message: Optional[str] = None
+    chat_edit_window_minutes: Optional[int] = None
 
 
 @router.get("/app-config/public")
@@ -754,6 +755,7 @@ async def get_app_config(admin=Depends(_require_admin)):
     doc.setdefault("wb_afternoon_reminder_time", "15:00")
     doc.setdefault("ai_features_enabled", True)
     doc.setdefault("ai_features_message", "AI features are temporarily disabled by the admin.")
+    doc.setdefault("chat_edit_window_minutes", 30)
     return doc
 
 
@@ -792,6 +794,8 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["ai_features_enabled"] = body.ai_features_enabled
     if body.ai_features_message is not None:
         update["ai_features_message"] = body.ai_features_message
+    if body.chat_edit_window_minutes is not None:
+        update["chat_edit_window_minutes"] = body.chat_edit_window_minutes
 
     if update:
         await col_app_config().update_one(

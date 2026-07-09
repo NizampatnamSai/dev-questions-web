@@ -5,6 +5,8 @@ import api from "../api/axios";
 import RichTextEditor, { isRichTextEmpty } from "../components/RichTextEditor";
 import Select from "../components/Select";
 import Checkbox from "../components/Checkbox";
+import ConfirmModal from "../components/ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
 import {
   unlockWithPassphrase, createVerificationBlob, encryptText, decryptText,
   rememberKeyForSession, restoreKeyForSession, forgetSessionKey,
@@ -60,6 +62,7 @@ function rangeToDates(preset, customStart, customEnd) {
 }
 
 export default function Notes() {
+  const { confirm, confirmProps } = useConfirm();
   const [phase, setPhase] = useState("loading"); // loading | setup | unlock | ready
   const [salt, setSalt] = useState(null);
   const [verifyCipher, setVerifyCipher] = useState(null);
@@ -87,6 +90,22 @@ export default function Notes() {
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const [saving, setSaving] = useState(false);
+  // "idle" (nothing typed yet) | "dirty" (unsaved changes, debounce pending)
+  // | "saving" | "saved". Drives the yellow "Draft" border/label so an
+  // interrupted session (lost network, closed the laptop, switched screens)
+  // doesn't lose typed content — auto-save fires ~1.5s after typing stops,
+  // and immediately (bypassing the debounce) when the tab is hidden.
+  const [autoSaveStatus, setAutoSaveStatus] = useState("idle");
+  const autoSaveTimerRef = useRef(null);
+  const editingRef = useRef(editing);
+  const editTitleRef = useRef(editTitle);
+  const editBodyRef = useRef(editBody);
+  // openNew()/openEdit() set editing+editTitle+editBody together in one
+  // handler, so they land in the same React batch — this flag lets the
+  // debounce effect below tell "editor just opened with initial content"
+  // apart from "user actually typed something," so opening an existing note
+  // doesn't immediately mark it dirty and schedule a pointless autosave.
+  const justOpenedRef = useRef(false);
   const [showAiWrite, setShowAiWrite] = useState(false);
   const [aiPrompt, setAiPrompt] = useState("");
   const [aiWriting, setAiWriting] = useState(false);
@@ -200,6 +219,55 @@ export default function Notes() {
     toast.success("Locked — you'll be asked for your passphrase again.");
   }
 
+  // Keep refs in sync so the debounce timer / visibilitychange handler below
+  // (both created once, outside React's render cycle) always read fresh
+  // values instead of whatever was current when they were set up.
+  useEffect(() => { editingRef.current = editing; }, [editing]);
+  useEffect(() => { editTitleRef.current = editTitle; }, [editTitle]);
+  useEffect(() => { editBodyRef.current = editBody; }, [editBody]);
+
+  // Marks the next title/body change-effect run as "just opened" so
+  // populating the modal with an existing note's content doesn't itself
+  // count as an edit.
+  useEffect(() => {
+    if (editing) {
+      justOpenedRef.current = true;
+      setAutoSaveStatus("idle");
+    }
+  }, [editing]);
+
+  // Debounced auto-save — fires ~1.5s after the user stops typing.
+  useEffect(() => {
+    if (!editing) return;
+    if (justOpenedRef.current) {
+      justOpenedRef.current = false;
+      return;
+    }
+    if (!editTitle.trim() && isRichTextEmpty(editBody)) {
+      setAutoSaveStatus("idle");
+      return;
+    }
+    setAutoSaveStatus("dirty");
+    clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(autoSaveNote, 1500);
+    return () => clearTimeout(autoSaveTimerRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editTitle, editBody]);
+
+  // Covers "switched to another tab/app" and most OS sleep/lid-close paths
+  // (they fire visibilitychange before actually suspending) — saves
+  // immediately instead of waiting out the debounce.
+  useEffect(() => {
+    const handler = () => {
+      if (document.visibilityState === "hidden" && editingRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+        autoSaveNote();
+      }
+    };
+    document.addEventListener("visibilitychange", handler);
+    return () => document.removeEventListener("visibilitychange", handler);
+  }, []);
+
   function openNew() {
     setEditing("new");
     setEditTitle("");
@@ -234,28 +302,43 @@ export default function Notes() {
     }
   }
 
+  // Shared by the manual Save button and auto-save — encrypts + POSTs/PATCHes
+  // and returns the resulting note. Reads from refs (not the title/body
+  // state directly) so it stays correct when called from the debounce timer
+  // or the visibilitychange handler, where the closure would otherwise be
+  // holding stale values from whenever the timer/listener was created.
+  async function persistNote(title, body) {
+    const key = keyRef.current;
+    const titleEnc = await encryptText(key, title.trim() || "Untitled");
+    const bodyEnc = await encryptText(key, body);
+    const payload = {
+      titleCipher: titleEnc.cipher, titleIv: titleEnc.iv,
+      bodyCipher: bodyEnc.cipher, bodyIv: bodyEnc.iv,
+    };
+    if (editingRef.current === "new") {
+      const { data } = await api.post("/notes", payload);
+      const created = { id: data.id, title: title.trim() || "Untitled", body, createdAt: data.createdAt, updatedAt: data.updatedAt };
+      setNotes((prev) => [created, ...prev]);
+      return created;
+    }
+    const noteId = editingRef.current.id;
+    const { data } = await api.patch(`/notes/${noteId}`, payload);
+    const updated = { ...editingRef.current, title: title.trim() || "Untitled", body, updatedAt: data.updatedAt };
+    setNotes((prev) => prev.map((n) => (n.id === noteId ? updated : n)));
+    return updated;
+  }
+
   async function saveNote() {
     if (!editTitle.trim() && isRichTextEmpty(editBody)) {
       toast.error("Note is empty");
       return;
     }
     setSaving(true);
+    clearTimeout(autoSaveTimerRef.current);
     try {
-      const key = keyRef.current;
-      const titleEnc = await encryptText(key, editTitle.trim() || "Untitled");
-      const bodyEnc = await encryptText(key, editBody);
-      const payload = {
-        titleCipher: titleEnc.cipher, titleIv: titleEnc.iv,
-        bodyCipher: bodyEnc.cipher, bodyIv: bodyEnc.iv,
-      };
-      if (editing === "new") {
-        const { data } = await api.post("/notes", payload);
-        setNotes((prev) => [{ id: data.id, title: editTitle.trim() || "Untitled", body: editBody, createdAt: data.createdAt, updatedAt: data.updatedAt }, ...prev]);
-      } else {
-        const { data } = await api.patch(`/notes/${editing.id}`, payload);
-        setNotes((prev) => prev.map((n) => (n.id === editing.id ? { ...n, title: editTitle.trim() || "Untitled", body: editBody, updatedAt: data.updatedAt } : n)));
-      }
+      await persistNote(editTitle, editBody);
       setEditing(null);
+      setAutoSaveStatus("idle");
       toast.success("Saved");
     } catch {
       toast.error("Failed to save note");
@@ -264,16 +347,39 @@ export default function Notes() {
     }
   }
 
-  async function deleteNote(id) {
-    if (!window.confirm("Delete this note? This can't be undone.")) return;
+  // Silent counterpart — no toast, doesn't close the editor. A "new" note's
+  // first auto-save switches editingRef to the real created note so the
+  // NEXT auto-save PATCHes it instead of creating a duplicate.
+  async function autoSaveNote() {
+    const title = editTitleRef.current;
+    const body = editBodyRef.current;
+    if (!title.trim() && isRichTextEmpty(body)) return;
+    setAutoSaveStatus("saving");
     try {
-      await api.delete(`/notes/${id}`);
-      setNotes((prev) => prev.filter((n) => n.id !== id));
-      if (editing?.id === id) setEditing(null);
-      toast.success("Deleted");
+      const result = await persistNote(title, body);
+      if (editingRef.current === "new") setEditing(result);
+      setAutoSaveStatus("saved");
     } catch {
-      toast.error("Failed to delete");
+      setAutoSaveStatus("dirty"); // will retry on the next keystroke or tab-hide
     }
+  }
+
+  function deleteNote(id) {
+    confirm({
+      title: "Delete this note?",
+      message: "This can't be undone.",
+      confirmLabel: "Delete",
+      onConfirm: async () => {
+        try {
+          await api.delete(`/notes/${id}`);
+          setNotes((prev) => prev.filter((n) => n.id !== id));
+          if (editing?.id === id) setEditing(null);
+          toast.success("Deleted");
+        } catch {
+          toast.error("Failed to delete");
+        }
+      },
+    });
   }
 
   function exportCsv() {
@@ -486,14 +592,35 @@ export default function Notes() {
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setEditing(null)} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="glass-card w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 space-y-4">
+              <div
+                className={`glass-card w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 space-y-4 border-2 transition-colors ${
+                  autoSaveStatus === "dirty" || autoSaveStatus === "saving"
+                    ? "border-amber-400 dark:border-amber-500/60"
+                    : "border-transparent"
+                }`}
+              >
                 <input
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   placeholder="Title"
                   className="w-full text-lg font-bold px-3 py-2 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:ring-2 focus:ring-indigo-500"
                 />
-                <div className="flex justify-end">
+                <div className="flex items-center justify-between">
+                  {autoSaveStatus === "dirty" && (
+                    <span className="text-xs font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                      ● Draft — unsaved changes
+                    </span>
+                  )}
+                  {autoSaveStatus === "saving" && (
+                    <span className="text-xs font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                      <span className="w-3 h-3 border-2 border-amber-300 border-t-amber-600 rounded-full animate-spin" />
+                      Saving draft…
+                    </span>
+                  )}
+                  {autoSaveStatus === "saved" && (
+                    <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">✓ Draft saved</span>
+                  )}
+                  {autoSaveStatus === "idle" && <span />}
                   <button
                     onClick={() => setShowAiWrite((v) => !v)}
                     className="text-xs px-3 py-1.5 rounded-full bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 font-semibold transition-colors"
@@ -574,6 +701,8 @@ export default function Notes() {
           </>
         )}
       </AnimatePresence>
+
+      <ConfirmModal {...confirmProps} />
     </div>
   );
 }

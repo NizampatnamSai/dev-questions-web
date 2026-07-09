@@ -874,14 +874,18 @@ function AppInner() {
       />
 
       {/* Floating feedback button — hidden for admins (they manage feedback, not submit it).
-          Guests only see it when the admin has guest feedback enabled. */}
+          Guests only see it when the admin has guest feedback enabled. Pushed further up on
+          /messages so it clears the composer's own send/attach buttons in that same corner
+          instead of sitting on top of them. */}
       {user &&
         (!user.isGuest || appConfig.guest_feedback_enabled) &&
         user.role !== "admin" &&
         user.role !== "sub_admin" && (
           <motion.button
             onClick={() => setFeedbackOpen(true)}
-            className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors"
+            className={`fixed right-4 md:right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors ${
+              location.pathname === "/messages" ? "bottom-40 md:bottom-24" : "bottom-24 md:bottom-6"
+            }`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             title="Send feedback"
@@ -897,7 +901,9 @@ function AppInner() {
         location.pathname !== "/ask" && (
           <motion.button
             onClick={() => navigate("/ask")}
-            className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors"
+            className={`fixed right-4 md:right-6 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors ${
+              location.pathname === "/messages" ? "bottom-40 md:bottom-24" : "bottom-24 md:bottom-6"
+            }`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             title="Ask AI"

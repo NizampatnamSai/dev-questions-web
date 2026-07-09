@@ -1469,6 +1469,7 @@ function AppConfigPanel() {
     guest_mode_message: "",
     ai_features_enabled: true,
     ai_features_message: "",
+    chat_edit_window_minutes: 30,
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1574,6 +1575,24 @@ function AppConfigPanel() {
       await api.put("/admin/app-config", patch);
       setInitialConfig((prev) => ({ ...prev, ...patch }));
       toast.success("Coding question limit updated");
+    } catch {
+      toast.error("Failed");
+    }
+    setSaving(false);
+  };
+
+  const hasChatEditWindowChange =
+    !!initialConfig &&
+    config.chat_edit_window_minutes !== initialConfig.chat_edit_window_minutes;
+
+  const saveChatEditWindow = async () => {
+    if (!hasChatEditWindowChange) return;
+    setSaving(true);
+    try {
+      const patch = { chat_edit_window_minutes: config.chat_edit_window_minutes };
+      await api.put("/admin/app-config", patch);
+      setInitialConfig((prev) => ({ ...prev, ...patch }));
+      toast.success("Message edit window updated");
     } catch {
       toast.error("Failed");
     }
@@ -1881,6 +1900,51 @@ function AppConfigPanel() {
               onClick={saveCodingLimit}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                 hasCodingLimitChange
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Messages Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          💬 Messages
+        </p>
+        <div className="space-y-1 max-w-xs">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Edit window (minutes)
+          </label>
+          <input
+            type="number"
+            min={1}
+            max={1440}
+            value={config.chat_edit_window_minutes ?? 30}
+            onChange={(e) =>
+              setConfig((c) => ({
+                ...c,
+                chat_edit_window_minutes: parseInt(e.target.value) || 1,
+              }))
+            }
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            How long after sending a message either side can still edit it
+          </p>
+        </div>
+        {hasChatEditWindowChange && (
+          <div className="flex justify-end">
+            <button
+              disabled={!hasChatEditWindowChange || saving}
+              onClick={saveChatEditWindow}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                hasChatEditWindowChange
                   ? "bg-indigo-600 text-white hover:bg-indigo-700"
                   : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
               }`}

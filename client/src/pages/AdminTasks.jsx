@@ -852,7 +852,9 @@ export default function AdminTasks() {
                       ? "Saving..."
                       : editTask
                         ? "Save Changes"
-                        : "Create & Notify"}
+                        : form.assigneeIds.length === 1 && form.assigneeIds[0] === me?.id
+                          ? "Create Task"
+                          : "Create & Notify"}
                   </button>
                 </div>
               </div>
