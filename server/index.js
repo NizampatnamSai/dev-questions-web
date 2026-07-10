@@ -28,5 +28,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`DevQuiz API running on http://localhost:${PORT}`);
+  console.log(`Dev Life API running on http://localhost:${PORT}`);
 });

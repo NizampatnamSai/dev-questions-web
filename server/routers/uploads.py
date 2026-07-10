@@ -24,5 +24,5 @@ async def upload_image(file: UploadFile = File(...), user=Depends(current_user))
     if len(data) > MAX_UPLOAD_BYTES:
         raise HTTPException(413, "Image too large — max 5MB.")
 
-    url = upload_image_bytes(data, folder=f"devquiz/{user['id']}")
+    url = upload_image_bytes(data, folder=f"devquiz/{user['id']}", is_gif=(file.content_type == "image/gif"))
     return {"url": url}

@@ -347,6 +347,24 @@ async def get_user_dsa_streak(user_id: str) -> int:
     return streak
 
 
+def _stringify_examples(examples) -> str:
+    """The AI is asked for a plain string but sometimes returns a structured
+    {input, output} shape (or a list of them) instead — flattened here so
+    it's always safe to render directly."""
+    if isinstance(examples, str):
+        return examples
+    if isinstance(examples, dict):
+        parts = []
+        if "input" in examples:
+            parts.append(f"Input: {examples['input']}")
+        if "output" in examples:
+            parts.append(f"Output: {examples['output']}")
+        return "\n".join(parts) if parts else json.dumps(examples)
+    if isinstance(examples, list):
+        return "\n\n".join(_stringify_examples(e) for e in examples)
+    return str(examples) if examples else ""
+
+
 async def generate_dsa_question(day: int, exclude_hashes: set) -> dict:
     """Generate unique DSA question for specific day using Groq AI"""
     difficulty_map = {
@@ -382,6 +400,12 @@ async def generate_dsa_question(day: int, exclude_hashes: set) -> dict:
         question_data = _extract_json(response)
         question_data["difficulty"] = difficulty
         question_data["day"] = day
+        # The prompt asks for "examples" as a string, but the model doesn't
+        # always comply — it sometimes returns a richer {input, output}
+        # shape instead, which crashed the frontend (React refuses to render
+        # a raw object as a child). Normalized here so every consumer always
+        # gets a plain string regardless of what shape the model chose.
+        question_data["examples"] = _stringify_examples(question_data.get("examples", ""))
         return question_data
     except Exception:
         # Fallback if JSON parsing fails
@@ -394,13 +418,55 @@ async def generate_dsa_question(day: int, exclude_hashes: set) -> dict:
         }
 
 
+async def _verify_daily_challenge_answer(question_data: dict) -> int:
+    """Independently re-solves the question and cross-checks it against the
+    model's own claimed correctIndex. Generating the puzzle, its 4 options,
+    AND which one is correct all in a single pass frequently produces
+    self-inconsistent questions — the model's own explanation contradicts
+    itself and none of the 4 options actually match the logic it just
+    described (confirmed live: real generated questions where the model's
+    own worked-through answer matched none of its own options). Returns the
+    independently re-derived correct index, or -1 if none of the 4 options
+    are actually correct."""
+    from utils.groq_service import call_groq_api
+
+    options = question_data.get("options", [])
+    if len(options) != 4:
+        return -1
+    options_text = "\n".join(f"{i}. {opt}" for i, opt in enumerate(options))
+    prompt = f"""Solve this question yourself from scratch, step by step — do not assume any of the options below are correct until you've derived the answer independently.
+
+Question: {question_data.get('description', '')}
+
+Options:
+{options_text}
+
+After deriving your own answer, state which option index (0-3) matches it exactly.
+Return ONLY raw JSON, no markdown code fences, no commentary:
+{{"correctIndex": <0, 1, 2, or 3 — or -1 if none of the options match your independently-derived answer>}}"""
+
+    response = await call_groq_api(prompt)
+    try:
+        result = _extract_json(response)
+        idx = int(result.get("correctIndex", -1))
+        return idx if idx in (0, 1, 2, 3) else -1
+    except Exception:
+        return -1
+
+
 async def generate_daily_challenge(category: str, exclude_hashes: set) -> dict:
-    """Generate unique daily challenge question"""
+    """Generate unique daily challenge question — self-verified (see
+    _verify_daily_challenge_answer) with bounded retries, same
+    generate-then-verify shape as generate_unique_questions's own
+    retry_limit pattern elsewhere in this codebase, rather than trusting the
+    model's single-pass output blindly."""
     from utils.groq_service import call_groq_api
 
     prompt = f"""Generate a quick {category} coding challenge question (5-10 min solve time).
 
     IMPORTANT: Generate a UNIQUE and ORIGINAL question - not from standard resources.
+    IMPORTANT: Work out the correct answer to your own question FIRST, step by step,
+    THEN write the 4 options so that exactly one of them exactly matches that answer.
 
     Include multiple choice options.
     Return ONLY raw JSON, no markdown code fences, no commentary:
@@ -415,20 +481,33 @@ async def generate_daily_challenge(category: str, exclude_hashes: set) -> dict:
         "explanation": "Why this is correct"
     }}"""
 
-    response = await call_groq_api(prompt)
+    response = ""
+    for attempt in range(3):
+        response = await call_groq_api(prompt)
+        try:
+            question_data = _extract_json(response)
+        except Exception:
+            continue
 
-    try:
-        return _extract_json(response)
-    except Exception:
-        return {
-            "title": "Daily Challenge",
-            "description": response,
-            "category": category,
-            "difficulty": "Medium",
-            "options": ["Option A", "Option B", "Option C", "Option D"],
-            "correctIndex": 0,
-            "explanation": "Check the explanation"
-        }
+        verified_index = await _verify_daily_challenge_answer(question_data)
+        if verified_index == -1:
+            continue  # none of the options check out — regenerate rather than ship it
+        # Trust the independently re-solved index even if it differs from
+        # the model's own original claim — the question/options themselves
+        # are still fine, only the originally-claimed index was wrong.
+        question_data["correctIndex"] = verified_index
+        return question_data
+
+    # All attempts failed to produce a self-consistent question.
+    return {
+        "title": "Daily Challenge",
+        "description": response,
+        "category": category,
+        "difficulty": "Medium",
+        "options": ["Option A", "Option B", "Option C", "Option D"],
+        "correctIndex": 0,
+        "explanation": "Check the explanation"
+    }
 
 
 async def verify_dsa_answer(submitted: str, expected: str, criteria: list) -> bool:

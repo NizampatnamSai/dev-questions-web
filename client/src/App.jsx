@@ -170,10 +170,10 @@ function AppLayout({ children, fullWidth = false }) {
             <div className="flex items-center gap-2">
               <img
                 src="/logo192.png"
-                alt="DevQuiz"
+                alt="Dev Life"
                 className="w-7 h-7 rounded-lg"
               />
-              <span className="font-bold text-sm gradient-text">DevQuiz</span>
+              <span className="font-bold text-sm gradient-text">Dev Life</span>
             </div>
             <div className="flex items-center gap-2">
               <ProjectChatbot />
@@ -333,7 +333,7 @@ function AppInner() {
     navigator.serviceWorker?.addEventListener("message", swHandler);
 
     const unsub = onForegroundMessage(({ notification, data }) => {
-      const title = notification?.title ?? "DevQuiz";
+      const title = notification?.title ?? "Dev Life";
       const body = notification?.body ?? "";
       playNotificationSound();
       toast(

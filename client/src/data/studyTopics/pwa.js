@@ -21,7 +21,7 @@ export default [
     summary: "A JSON file that describes how the app should appear and behave when installed.",
     explanation:
       "The manifest.json controls the app name, icons, theme colors, start URL, and display mode used when the browser installs the PWA. It is linked from HTML via a link tag and is read by the browser's install prompt logic. Fields like display, orientation, and background_color shape the standalone launch experience so the app looks less like a browser tab and more like a native app.",
-    code: "{\n  \"name\": \"DevQuiz Study Hub\",\n  \"short_name\": \"DevQuiz\",\n  \"start_url\": \"/?source=pwa\",\n  \"display\": \"standalone\",\n  \"background_color\": \"#0f172a\",\n  \"theme_color\": \"#6366f1\",\n  \"icons\": [\n    { \"src\": \"/icons/icon-192.png\", \"sizes\": \"192x192\", \"type\": \"image/png\" },\n    { \"src\": \"/icons/icon-512.png\", \"sizes\": \"512x512\", \"type\": \"image/png\" }\n  ]\n}",
+    code: "{\n  \"name\": \"Dev Life Study Hub\",\n  \"short_name\": \"Dev Life\",\n  \"start_url\": \"/?source=pwa\",\n  \"display\": \"standalone\",\n  \"background_color\": \"#0f172a\",\n  \"theme_color\": \"#6366f1\",\n  \"icons\": [\n    { \"src\": \"/icons/icon-192.png\", \"sizes\": \"192x192\", \"type\": \"image/png\" },\n    { \"src\": \"/icons/icon-512.png\", \"sizes\": \"512x512\", \"type\": \"image/png\" }\n  ]\n}",
     interviewQuestion: "Which manifest field controls whether the browser UI (address bar) is hidden after install?",
   },
   {
@@ -189,7 +189,7 @@ export default [
     summary: "Lets a web app trigger the OS-native share sheet to share text, links, or files.",
     explanation:
       "navigator.share() opens the platform's native share UI, letting users send content to installed apps like Messages, Mail, or social apps, matching native app UX instead of custom share buttons. It requires a user gesture (like a click) and HTTPS. navigator.canShare() lets you feature-detect support, including whether file sharing is supported, before calling share so you can fall back to custom share buttons on unsupported browsers.",
-    code: "shareButton.addEventListener('click', async () => {\n  if (navigator.canShare && navigator.canShare({ url: location.href })) {\n    await navigator.share({\n      title: 'DevQuiz Study Hub',\n      text: 'Check out this PWA topic',\n      url: location.href,\n    });\n  } else {\n    showFallbackShareMenu();\n  }\n});",
+    code: "shareButton.addEventListener('click', async () => {\n  if (navigator.canShare && navigator.canShare({ url: location.href })) {\n    await navigator.share({\n      title: 'Dev Life Study Hub',\n      text: 'Check out this PWA topic',\n      url: location.href,\n    });\n  } else {\n    showFallbackShareMenu();\n  }\n});",
     interviewQuestion: "Why must navigator.share be called from within a user gesture handler?",
   },
   {

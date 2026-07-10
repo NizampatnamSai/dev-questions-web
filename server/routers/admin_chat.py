@@ -6,6 +6,7 @@ JWT-token-auth pattern as workboard.py/admin.py's notification socket — never
 trust a raw user_id query param), plus a push + in-app notification on every
 message so the other side finds out even while offline."""
 import re
+import json
 import html as html_lib
 from datetime import timezone
 from typing import List, Optional
@@ -15,9 +16,10 @@ from db_mongo import (
     col_admin_chats, col_admin_chat_messages, col_users, col_user_profiles,
     col_fcm_tokens, col_user_notifications, col_app_config, sid, oid, now,
 )
-from deps import current_user
+from deps import current_user, require_ai_enabled
 from auth_utils import decode_token
 from utils.firebase import send_to_tokens
+from routers.ask import _groq_ask
 
 router = APIRouter()
 
@@ -38,25 +40,6 @@ def _can_edit_message(msg: dict, window_minutes: int) -> bool:
     if created_at.tzinfo is None:
         created_at = created_at.replace(tzinfo=timezone.utc)
     return (now() - created_at).total_seconds() < (window_minutes * 60)
-
-
-def _presence_status(online: bool, last_active_at) -> str:
-    """green (online) < 5 min since last activity, yellow (away) < 1 hour,
-    red (offline) beyond that or never seen. `online` comes from a live WS
-    connection and always wins — someone can be mid-conversation with a
-    lastActiveAt that's a few seconds stale purely from request timing."""
-    if online:
-        return "online"
-    if not last_active_at:
-        return "offline"
-    if last_active_at.tzinfo is None:
-        last_active_at = last_active_at.replace(tzinfo=timezone.utc)
-    elapsed = (now() - last_active_at).total_seconds()
-    if elapsed < 300:
-        return "online"
-    if elapsed < 3600:
-        return "away"
-    return "offline"
 
 
 def _is_participant(chat: dict, user_id: str) -> bool:
@@ -171,7 +154,25 @@ async def admin_chat_ws(ws: WebSocket, token: str = None):
     await manager.broadcast({"type": "presence", "userId": user_id, "online": True}, exclude_user_id=user_id)
     try:
         while True:
-            await ws.receive_text()  # keep-alive
+            raw = await ws.receive_text()
+            # Client -> server traffic on this socket, beyond the plain
+            # keep-alive pings: currently just "I have this chat open and
+            # just saw a live message" so read receipts don't need a
+            # separate REST call for every incoming message.
+            try:
+                data = json.loads(raw)
+            except (ValueError, TypeError):
+                continue
+            if data.get("type") == "mark_read":
+                chat_id = data.get("chatId")
+                if not chat_id:
+                    continue
+                try:
+                    chat = await col_admin_chats().find_one({"_id": oid(chat_id)})
+                except ValueError:
+                    continue
+                if chat and _is_participant(chat, user_id):
+                    await _mark_delivered_and_read(chat, chat_id, {"id": user_id})
     except WebSocketDisconnect:
         manager.disconnect(user_id, ws)
         await col_users().update_one({"_id": oid(user_id)}, {"$set": {"lastActiveAt": now()}})
@@ -335,11 +336,17 @@ async def list_conversations(user=Depends(current_user)):
             "otherUserId": other_id,
             "otherUserName": other_name,
             "otherUserAvatar": avatar_by_id.get(other_id),
-            "otherUserPresence": _presence_status(manager.is_online(other_id), last_active_by_id.get(other_id)),
+            # Raw online flag + timestamp instead of a precomputed status —
+            # the frontend derives online/away/offline itself from elapsed
+            # time on a local clock tick, so it never needs to re-poll this
+            # endpoint just to notice a dot should turn from green to yellow.
+            "otherUserOnline": manager.is_online(other_id),
+            "otherUserLastActiveAt": last_active_by_id.get(other_id).isoformat() if last_active_by_id.get(other_id) else None,
             "lastMessageAt": d.get("lastMessageAt").isoformat() if d.get("lastMessageAt") else None,
             "lastMessagePreview": d.get("lastMessagePreview", ""),
             "unreadCount": unread_by_chat.get(chat_id, 0),
             "pinnedMessageIds": d.get("pinnedMessageIds", []),
+            "mutedByMe": user["id"] in d.get("mutedBy", []),
         })
     for d in group_docs:
         chat_id = str(d["_id"])
@@ -355,6 +362,9 @@ async def list_conversations(user=Depends(current_user)):
             "lastMessagePreview": d.get("lastMessagePreview", ""),
             "unreadCount": unread_by_chat.get(chat_id, 0),
             "pinnedMessageIds": d.get("pinnedMessageIds", []),
+            "mutedByMe": user["id"] in d.get("mutedBy", []),
+            # Needed client-side to detect/highlight @mentions in message text.
+            "participantNames": d.get("participantNames", {}),
         })
 
     result.sort(key=lambda c: c["lastMessageAt"] or "", reverse=True)
@@ -398,7 +408,8 @@ async def list_users_for_new_chat(admin=Depends(current_user), forGroup: bool = 
             "id": str(d["_id"]), "name": d.get("name", ""), "email": d.get("email", ""),
             "avatar": avatar_by_id.get(str(d["_id"])),
             "isSelf": str(d["_id"]) == admin["id"],
-            "presence": _presence_status(manager.is_online(str(d["_id"])), d.get("lastActiveAt")),
+            "online": manager.is_online(str(d["_id"])),
+            "lastActiveAt": d.get("lastActiveAt").isoformat() if d.get("lastActiveAt") else None,
         }
         for d in docs
     ]
@@ -481,9 +492,17 @@ async def _mark_delivered_and_read(chat: dict, chat_id: str, user: dict) -> list
         {"$addToSet": {"readBy": user["id"], "deliveredTo": user["id"]}},
     )
     message_ids = [str(d["_id"]) for d in stale_docs]
+    # Carries the fresh per-message counts in the broadcast itself so the
+    # sender's client can patch its local state directly instead of firing a
+    # REST refetch just to learn what changed.
+    updated_docs = await col_admin_chat_messages().find({"_id": {"$in": [oid(i) for i in message_ids]}}).to_list(500)
+    statuses = {
+        str(d["_id"]): _recipient_status(d, _other_participant_ids(chat, d["senderId"]))
+        for d in updated_docs
+    }
     await manager.broadcast_to_many(
         _other_participant_ids(chat, user["id"]),
-        {"type": "read_receipt", "chatId": chat_id, "readerId": user["id"], "messageIds": message_ids},
+        {"type": "read_receipt", "chatId": chat_id, "readerId": user["id"], "messageIds": message_ids, "statuses": statuses},
     )
     return message_ids
 
@@ -579,17 +598,26 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
     # by construction for groups, but kept explicit — themselves in a group.
     await manager.broadcast_to_many(other_ids, {"type": "new_message", "chatId": chat_id, "message": created})
 
-    notify_ids = [i for i in other_ids if i != user["id"]]
+    # Muting only silences push/in-app notifications for whoever muted it —
+    # the live WS delivery above already went out to everyone regardless, so
+    # a muted chat still updates instantly if you have it open, it just
+    # doesn't ping you when you don't.
+    muted_by = set(chat.get("mutedBy", []))
+    notify_ids = [i for i in other_ids if i != user["id"] and i not in muted_by]
     if notify_ids:
         is_group = chat.get("type") == "group"
         title = (
             f"💬 {user.get('name', 'Someone')} sent a message in {chat.get('groupName', 'a group')}"
             if is_group else f"💬 {user.get('name', 'Someone')} sent you a message"
         )
+        # Deep-links straight to the conversation and the exact message,
+        # instead of just the bare /messages list — mirrors the ?userId=
+        # deep link Admin Feedback already uses to jump into a specific chat.
+        deep_link = f"/messages?chatId={chat_id}&messageId={created['id']}"
         await col_user_notifications().insert_many([
             {
                 "userId": nid, "title": title, "body": preview, "type": "admin_chat",
-                "path": "/messages", "read": False, "createdAt": now(),
+                "path": deep_link, "read": False, "createdAt": now(),
             }
             for nid in notify_ids
         ])
@@ -598,7 +626,7 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
         token_docs = await col_fcm_tokens().find({"userId": {"$in": notify_ids}}).to_list(length=len(notify_ids) * 5 or 1)
         tokens = list({t["token"] for t in token_docs})
         if tokens:
-            await send_to_tokens(tokens, title=title, body=preview, data={"type": "admin_chat", "path": "/messages"})
+            await send_to_tokens(tokens, title=title, body=preview, data={"type": "admin_chat", "path": deep_link})
 
     return created
 
@@ -691,3 +719,40 @@ async def unpin_message(chat_id: str, message_id: str, user=Depends(current_user
         _other_participant_ids(chat, user["id"]), {"type": "unpin_message", "chatId": chat_id, "messageId": message_id},
     )
     return {"pinnedMessageIds": updated_ids}
+
+
+@router.post("/{chat_id}/mute")
+async def mute_chat(chat_id: str, user=Depends(current_user)):
+    """Purely per-user, unlike pin — muting only affects what push/in-app
+    notifications the caller themselves gets (see send_message's notify_ids
+    filtering), so no broadcast to other participants is needed here."""
+    await _get_chat_or_403(chat_id, user)
+    await col_admin_chats().update_one({"_id": oid(chat_id)}, {"$addToSet": {"mutedBy": user["id"]}})
+    return {"muted": True}
+
+
+@router.delete("/{chat_id}/mute")
+async def unmute_chat(chat_id: str, user=Depends(current_user)):
+    await _get_chat_or_403(chat_id, user)
+    await col_admin_chats().update_one({"_id": oid(chat_id)}, {"$pull": {"mutedBy": user["id"]}})
+    return {"muted": False}
+
+
+SUMMARIZE_SYSTEM_PROMPT = (
+    "Summarize the following chat message in 1-2 short, plain sentences that capture "
+    "its key point(s). Return ONLY the summary — no preamble, no quotes around it."
+)
+MIN_SUMMARIZE_WORDS = 25  # short messages don't need summarizing — not worth an AI call
+
+
+@router.post("/{chat_id}/messages/{message_id}/summarize")
+async def summarize_message(chat_id: str, message_id: str, user=Depends(require_ai_enabled)):
+    chat = await _get_chat_or_403(chat_id, user)
+    msg = await col_admin_chat_messages().find_one({"_id": oid(message_id), "chatId": chat_id})
+    if not msg:
+        raise HTTPException(404, "Message not found")
+    text = _strip_html(msg.get("html", ""))
+    if len(text.split()) < MIN_SUMMARIZE_WORDS:
+        raise HTTPException(400, "Message is too short to summarize")
+    summary = await _groq_ask(text, system_prompt=SUMMARIZE_SYSTEM_PROMPT, max_tokens=150)
+    return {"summary": summary}

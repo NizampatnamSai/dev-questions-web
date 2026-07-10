@@ -116,7 +116,7 @@ export default function Register() {
         <div className="text-center mb-6">
           <span className="text-3xl">🧠</span>
           <h1 className="text-2xl font-bold mt-2">Create account</h1>
-          <p className="text-sm text-slate-400">Join the DevQuiz community</p>
+          <p className="text-sm text-slate-400">Join the Dev Life community</p>
         </div>
 
         <form onSubmit={submit} className="space-y-4">

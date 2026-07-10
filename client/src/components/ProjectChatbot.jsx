@@ -8,11 +8,11 @@ import { useClickOutside } from "../hooks/useClickOutside";
 
 const GREETING = {
   role: "bot",
-  text: "Hi! I'm the DevQuiz assistant — ask me about any feature or page, or tell me where you're trying to go and I'll take you there.",
+  text: "Hi! I'm the Dev Life assistant — ask me about any feature or page, or tell me where you're trying to go and I'll take you there.",
   navigateTo: null,
 };
 
-const WAKE_WORD = "hey devquiz";
+const WAKE_WORD = "hey dev life";
 const SpeechRecognitionApi =
   typeof window !== "undefined" ? window.SpeechRecognition || window.webkitSpeechRecognition : null;
 
@@ -175,7 +175,7 @@ export default function ProjectChatbot() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        title="Ask about DevQuiz"
+        title="Ask about Dev Life"
         className="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 transition-colors text-base"
       >
         🤖
@@ -195,7 +195,7 @@ export default function ProjectChatbot() {
           >
             <div className="px-4 py-3 border-b border-black/5 dark:border-white/10 flex items-center justify-between flex-shrink-0">
               <div>
-                <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">🤖 DevQuiz Assistant</p>
+                <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">🤖 Dev Life Assistant</p>
                 <p className="text-[10px] text-slate-400">
                   {listeningForCommand ? "🎙️ Listening…" : "Only answers about this app — nothing else"}
                 </p>
@@ -205,7 +205,7 @@ export default function ProjectChatbot() {
                   <button
                     type="button"
                     onClick={() => setVoiceEnabled((v) => !v)}
-                    title={voiceEnabled ? 'Voice wake word is on — say "Hey DevQuiz"' : "Enable voice wake word"}
+                    title={voiceEnabled ? 'Voice wake word is on — say "Hey Dev Life"' : "Enable voice wake word"}
                     className={`text-xs px-2 py-1 rounded-lg font-semibold transition-colors ${
                       voiceEnabled
                         ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
@@ -222,7 +222,7 @@ export default function ProjectChatbot() {
             </div>
             {voiceEnabled && (
               <p className="px-4 pt-2 text-[10px] text-slate-400 flex-shrink-0">
-                Say <span className="font-semibold">"Hey DevQuiz"</span> followed by what you need — I'll open this panel and go there for you.
+                Say <span className="font-semibold">"Hey Dev Life"</span> followed by what you need — I'll open this panel and go there for you.
               </p>
             )}
 

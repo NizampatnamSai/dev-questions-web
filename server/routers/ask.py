@@ -27,7 +27,7 @@ def col_ai_history():
 router = APIRouter()
 
 SYSTEM_PROMPT = (
-    "You are a knowledgeable, friendly AI assistant embedded in DevQuiz — a developer learning platform. "
+    "You are a knowledgeable, friendly AI assistant embedded in Dev Life — a developer learning platform. "
     "Answer any question clearly and concisely. For technical topics, use examples. "
     "For conceptual questions, give a structured explanation. "
     "Format your answer in plain text with clear paragraphs. "
@@ -37,17 +37,17 @@ SYSTEM_PROMPT = (
 class AskBody(BaseModel):
     question: str
 
-async def _groq_ask(question: str) -> str:
+async def _groq_ask(question: str, system_prompt: str = SYSTEM_PROMPT, max_tokens: int = 1024) -> str:
     if not GROQ_API_KEY:
         raise HTTPException(503, "AI service not configured")
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
     payload = {
         "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user",   "content": question},
         ],
         "temperature": 0.7,
-        "max_tokens": 1024,
+        "max_tokens": max_tokens,
     }
     async with httpx.AsyncClient(timeout=30) as c:
         r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})

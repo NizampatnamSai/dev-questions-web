@@ -22,7 +22,7 @@ MOTIVATION_MESSAGES = [
     "⚡ Top engineers never stop learning. Your daily review is ready.",
     "🔥 You're building something great — don't break the chain!",
     "🧠 10 minutes of focused study > 1 hour of distraction. Ready?",
-    "🌟 Another day, another concept mastered. Open DevQuiz now!",
+    "🌟 Another day, another concept mastered. Open Dev Life now!",
 ]
 
 _msg_index = 0
@@ -83,11 +83,11 @@ async def fire_scheduled_notifications():
         _msg_index += 1
         await send_to_tokens(
             tokens,
-            title="📚 DevQuiz — Study Time!",
+            title="📚 Dev Life — Study Time!",
             body=body,
             data={"type": "weekly_motivation", "path": "/notifications"},
         )
-        await _log_user_notification(uid, "📚 DevQuiz — Study Time!", body, "study_reminder")
+        await _log_user_notification(uid, "📚 Dev Life — Study Time!", body, "study_reminder")
 
 
 async def fire_challenge_notifications():

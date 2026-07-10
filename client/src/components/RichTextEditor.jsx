@@ -40,7 +40,22 @@ export default function RichTextEditor({
   onPasteImage, // (file: File) => void — clipboard image paste (e.g. a screenshot)
   onEnterSubmit, // chat-style composers: Enter sends, Shift+Enter still inserts a newline
   compact = false, // trims the toolbar to fit one row — for tight/mobile composers like chat
+  spellCheck = true, // Quill's editing area has no prop for this — set directly on its DOM node below
+  onReady, // (quillInstance) => void — escape hatch for callers needing direct Quill API access (e.g. cursor-position-aware @mentions), fired once after mount
 }) {
+  // ReactQuill renders its own contenteditable internally with no spellCheck
+  // prop of its own, so the only way in is finding that node after mount and
+  // setting the attribute directly. Relevant because macOS's own system-wide
+  // spell-check (not a browser extension, not Chrome autofill) shows its
+  // "Save to dictionary" popover on any contenteditable with an unrecognized
+  // word — for a chat composer where people type shorthand/typos constantly,
+  // that popover firing mid-message is disruptive enough to just turn off.
+  const containerRef = useRef(null);
+  useEffect(() => {
+    const editor = containerRef.current?.querySelector(".ql-editor");
+    if (editor) editor.setAttribute("spellcheck", String(spellCheck));
+  }, [spellCheck]);
+
   // Read the latest callback via a ref so the Quill keyboard binding below
   // (built once and never recreated — `modules` is one of ReactQuill's
   // "dirtyProps" that fully re-instantiates the editor on change) never
@@ -48,6 +63,12 @@ export default function RichTextEditor({
   // first created in.
   const onEnterSubmitRef = useRef(onEnterSubmit);
   useEffect(() => { onEnterSubmitRef.current = onEnterSubmit; }, [onEnterSubmit]);
+
+  const quillComponentRef = useRef(null);
+  useEffect(() => {
+    onReady?.(quillComponentRef.current?.getEditor());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Whether this instance wants Enter-to-submit at all is a per-usage,
   // load-bearing decision that doesn't change during the component's
@@ -89,8 +110,9 @@ export default function RichTextEditor({
   };
 
   return (
-    <div className={`rich-text-editor ${className}`} onPaste={handlePaste}>
+    <div ref={containerRef} className={`rich-text-editor ${className}`} onPaste={handlePaste}>
       <ReactQuill
+        ref={quillComponentRef}
         theme="snow"
         value={value}
         onChange={onChange}

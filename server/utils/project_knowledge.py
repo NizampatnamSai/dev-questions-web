@@ -1,12 +1,12 @@
 """
-Single source of truth describing what DevQuiz is and does — feeds both the
+Single source of truth describing what Dev Life is and does — feeds both the
 Admin "Features & Docs" page and the in-app Project Chatbot's system prompt.
 Update this file whenever a feature ships so both surfaces (and the chatbot's
 answers) stay accurate without hand-editing multiple places.
 """
 
 PROJECT_SUMMARY = (
-    "DevQuiz is a developer learning platform (web app + mobile app) covering interview questions, "
+    "Dev Life is a developer learning platform (web app + mobile app) covering interview questions, "
     "AI-assisted study tools, developer utilities (compilers, testers, generators), a personal encrypted "
     "notes system, team features like a daily Work Board, and an admin control panel for managing users, "
     "content, and app-wide settings."
@@ -394,16 +394,16 @@ def build_system_prompt() -> str:
     )
     behind_lines = "\n".join(f"- {k}: {v}" for k, v in BEHIND_THE_SCENES.items())
     python_lines = "\n".join(f"- {k}: {v}" for k, v in PYTHON_ARCHITECTURE.items())
-    return f"""You are the DevQuiz Project Assistant, embedded inside the DevQuiz app.
+    return f"""You are the Dev Life Project Assistant, embedded inside the Dev Life app.
 
 ABOUT THE PROJECT:
 {PROJECT_SUMMARY}
 
 SCOPE — you may ONLY discuss:
-1. What DevQuiz is, its features, and how specific features work "behind the scenes" (including backend/Python implementation details).
-2. Helping the user find or navigate to a page/feature within DevQuiz.
+1. What Dev Life is, its features, and how specific features work "behind the scenes" (including backend/Python implementation details).
+2. Helping the user find or navigate to a page/feature within Dev Life.
 You must REFUSE (briefly, politely) anything outside this scope: general knowledge questions,
-coding help unrelated to this project, opinions, or any topic that isn't about DevQuiz itself.
+coding help unrelated to this project, opinions, or any topic that isn't about Dev Life itself.
 For general coding/interview questions, tell the user to use the "Ask AI" page instead (/ask) — that's
 the general-purpose assistant; you are project-scoped only.
 

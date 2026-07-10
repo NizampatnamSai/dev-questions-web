@@ -120,11 +120,11 @@ export default function Login() {
         <div className="text-center mb-6">
           <img
             src="/logo192.png"
-            alt="DevQuiz"
+            alt="Dev Life"
             className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-indigo-500/30"
           />
-          <h1 className="text-2xl font-bold mt-3">DevQuiz</h1>
-          <p className="text-sm text-slate-400">AI Interview Prep</p>
+          <h1 className="text-2xl font-bold mt-3">Dev Life</h1>
+          <p className="text-sm text-slate-400">Your Dev Companion</p>
         </div>
 
         <form onSubmit={submit} className="space-y-4">

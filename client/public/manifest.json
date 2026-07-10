@@ -1,6 +1,6 @@
 {
-  "name": "DevQuiz — AI Interview Prep",
-  "short_name": "DevQuiz",
+  "name": "Dev Life — Your Dev Companion",
+  "short_name": "Dev Life",
   "description": "Practice frontend & fullstack interview questions with AI-powered feedback.",
   "start_url": "/",
   "display": "standalone",

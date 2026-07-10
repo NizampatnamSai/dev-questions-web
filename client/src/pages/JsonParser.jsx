@@ -205,7 +205,7 @@ export default function JsonParser() {
     const sample = JSON.stringify(
       {
         id: 1,
-        name: "DevQuiz",
+        name: "Dev Life",
         active: true,
         score: 9.5,
         tags: ["react", "javascript"],

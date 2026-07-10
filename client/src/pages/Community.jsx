@@ -308,7 +308,7 @@ export default function Community() {
             🌍 Community Feed
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Browse questions posted by the DevQuiz community.
+            Browse questions posted by the Dev Life community.
           </p>
         </div>
 

@@ -338,7 +338,7 @@ async def approve_user(uid: str, admin=Depends(_require_admin)):
         "userId": uid,
         "type": "account_approved",
         "title": "✅ Account Approved!",
-        "body": "Your DevQuiz account has been approved. You can now log in!",
+        "body": "Your Dev Life account has been approved. You can now log in!",
         "data": {"path": "/login"},
         "read": False,
         "createdAt": now(),
@@ -351,7 +351,7 @@ async def approve_user(uid: str, admin=Depends(_require_admin)):
         await send_to_tokens(
             tokens,
             title="✅ Account Approved!",
-            body="Your DevQuiz account has been approved. Tap to log in.",
+            body="Your Dev Life account has been approved. Tap to log in.",
             data={"type": "account_approved", "path": "/login"},
         )
     return {"message": "User approved"}
@@ -473,7 +473,7 @@ async def trigger_notifications_now(admin=Depends(_require_admin)):
             continue
         body = sched.get("message") or random.choice(MOTIVATION_MESSAGES)
         from utils.firebase import send_to_tokens
-        sent = await send_to_tokens(tokens, title="📚 DevQuiz — Study Time!", body=body, data={"type": "weekly_motivation", "path": "/study"})
+        sent = await send_to_tokens(tokens, title="📚 Dev Life — Study Time!", body=body, data={"type": "weekly_motivation", "path": "/study"})
         print(f"[trigger-now] sent to userId={uid}, tokens={len(tokens)}, delivered={sent}", flush=True)
         sent_total += sent
 
@@ -836,7 +836,7 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         if tokens:
             await send_to_tokens(tokens,
                 title="✅ We're back online!",
-                body="Maintenance is complete. DevQuiz is ready to use!",
+                body="Maintenance is complete. Dev Life is ready to use!",
                 data={"type": "broadcast", "path": "/dashboard"},
             )
 

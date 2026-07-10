@@ -69,7 +69,7 @@ export default function FeedbackModal({ open, onClose, isGuest }) {
             <div className="glass-card w-full max-w-md rounded-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
               <div>
                 <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">💭 Send Feedback</h2>
-                <p className="text-xs text-slate-400 mt-1">Help us improve DevQuiz with your thoughts</p>
+                <p className="text-xs text-slate-400 mt-1">Help us improve Dev Life with your thoughts</p>
               </div>
 
               {/* Guest name */}

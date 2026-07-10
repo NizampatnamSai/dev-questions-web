@@ -11,7 +11,7 @@ from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notific
 from routers import auth, questions, stats, admin, comments, study
 from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel
 
-app = FastAPI(title="DevQuiz API")
+app = FastAPI(title="Dev Life API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -125,4 +125,4 @@ app.include_router(travel.router,            prefix="/api/travel")
 
 @app.get("/")
 def root():
-    return {"status": "DevQuiz API running"}
+    return {"status": "Dev Life API running"}

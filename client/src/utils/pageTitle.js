@@ -46,5 +46,5 @@ const TITLES = [
 
 export function getPageTitle(pathname) {
   const match = TITLES.find(([prefix]) => pathname.startsWith(prefix));
-  return match ? `DevQuiz — ${match[1]}` : "DevQuiz — AI Interview Prep";
+  return match ? `Dev Life — ${match[1]}` : "Dev Life — Your Dev Companion";
 }

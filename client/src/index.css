@@ -162,6 +162,17 @@ html.dark .card-hover:hover {
 button { text-align: center; }
 
 /* ── Input ───────────────────────────────────────────────────────────────── */
+/* Belt-and-suspenders against Chrome's autofill styling (the white/blue glow
+   that ignored autocomplete="off" on the Messages group-rename field) —
+   Chrome applies its highlight via background-color, so an absurdly long
+   transition on it means that "animation" never visibly completes. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s;
+}
+
 .input-light {
   @apply w-full px-4 py-3 rounded-xl text-sm outline-none transition-all border;
 }
@@ -255,6 +266,14 @@ html.dark .rich-text-editor .ql-snow .ql-toolbar button:hover .ql-stroke {
 .rich-text-view ul, .rich-text-view ol { margin: 0.25em 0 0.5em; padding-left: 1.5em; }
 .rich-text-view li { margin-bottom: 0.15em; }
 .rich-text-view a { color: #6366f1; text-decoration: underline; }
+/* On a solid indigo bubble (Messages "mine" bubbles), the default indigo
+   link color is nearly invisible against its own background — same class
+   of contrast bug as the read-receipt ticks. */
+.rich-text-view.on-tint a { color: #ffffff; text-decoration: underline; }
+.rich-text-view .mention { font-weight: 600; color: #4f46e5; background: rgba(99, 102, 241, 0.12); padding: 0 3px; border-radius: 4px; }
+html.dark .rich-text-view .mention { color: #a5b4fc; background: rgba(165, 180, 252, 0.18); }
+/* Same on-tint reasoning as links — indigo-on-indigo is unreadable on a "mine" bubble. */
+.rich-text-view.on-tint .mention { color: #ffffff; background: rgba(255, 255, 255, 0.25); }
 .rich-text-view code { background: rgba(148, 163, 184, 0.15); padding: 0.1em 0.35em; border-radius: 0.3em; font-size: 0.85em; }
 .rich-text-view pre { background: rgba(148, 163, 184, 0.12); padding: 0.6em 0.8em; border-radius: 0.5em; overflow-x: auto; }
 html.dark .rich-text-view a { color: #22d3ee; }

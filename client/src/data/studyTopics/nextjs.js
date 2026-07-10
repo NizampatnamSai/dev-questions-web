@@ -166,7 +166,7 @@ export default [
     summary: "Export metadata object or generateMetadata function",
     explanation:
       "Export async generateMetadata function from page.tsx. It receives params — use it to fetch data for title, description, og tags.",
-    code: "// Static metadata\nexport const metadata = {\n  title: 'DevQuiz',\n  description: 'Practice coding interview questions',\n  openGraph: { images: ['/og.png'] },\n};\n// Dynamic metadata\nexport async function generateMetadata({ params }) {\n  const post = await getPost(params.slug);\n  return { title: post.title, description: post.excerpt };\n}",
+    code: "// Static metadata\nexport const metadata = {\n  title: 'Dev Life',\n  description: 'Practice coding interview questions',\n  openGraph: { images: ['/og.png'] },\n};\n// Dynamic metadata\nexport async function generateMetadata({ params }) {\n  const post = await getPost(params.slug);\n  return { title: post.title, description: post.excerpt };\n}",
     interviewQuestion: "How do you generate dynamic metadata?",
   },
   {
@@ -1100,7 +1100,7 @@ export default [
     summary: "A manifest.ts (or static manifest.json) file in the app directory describes the app for PWA installability — name, icons, theme colors, and display mode.",
     explanation:
       "Next.js supports a special app/manifest.ts file that exports a function returning a MetadataRoute.Manifest object; Next.js automatically serves it at /manifest.webmanifest and links it in the document head, so no manual <link rel='manifest'> tag is needed. Fields like display: 'standalone' control whether the installed app hides browser chrome, and icons should include multiple sizes (including a maskable purpose icon for Android adaptive icons). This is what enables the browser's 'Add to Home Screen' / install prompt on supported devices.",
-    code: "// app/manifest.ts\nimport type { MetadataRoute } from 'next';\n\nexport default function manifest(): MetadataRoute.Manifest {\n  return {\n    name: 'DevQuiz Study Hub',\n    short_name: 'DevQuiz',\n    description: 'Interview prep and study tracker',\n    start_url: '/',\n    display: 'standalone',\n    background_color: '#0f172a',\n    theme_color: '#0f172a',\n    icons: [\n      { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },\n      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },\n    ],\n  };\n}",
+    code: "// app/manifest.ts\nimport type { MetadataRoute } from 'next';\n\nexport default function manifest(): MetadataRoute.Manifest {\n  return {\n    name: 'Dev Life Study Hub',\n    short_name: 'Dev Life',\n    description: 'Interview prep and study tracker',\n    start_url: '/',\n    display: 'standalone',\n    background_color: '#0f172a',\n    theme_color: '#0f172a',\n    icons: [\n      { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },\n      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },\n    ],\n  };\n}",
     interviewQuestion: "How does app/manifest.ts get exposed to the browser, and what's the purpose of a 'maskable' icon?",
   },
   {

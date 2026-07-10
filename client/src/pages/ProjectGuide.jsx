@@ -139,7 +139,7 @@ const FEATURES = [
     title: "Dev Tools",
     path: "/regex-tester",
     color: "from-fuchsia-500 to-purple-600",
-    summary: "Five everyday developer utilities, built right into DevQuiz.",
+    summary: "Five everyday developer utilities, built right into Dev Life.",
     steps: [
       "**Regex Tester** (`/regex-tester`) — live match highlighting, capture groups, and a replace mode, with common presets for email/URL/IPv4 and more.",
       "**Cron Builder** (`/cron-builder`) — build a schedule field by field, get a plain-English description, and preview the next 5 run times.",
@@ -301,7 +301,7 @@ const FEATURES = [
       "Use **📋 Copy response** on any AI message to copy it.",
       "Turn on **Auto-save** to keep every conversation, or save manually — past chats live in the sidebar.",
     ],
-    tip: "For DevQuiz-specific questions (how a feature here works, where to find something), use the 🤖 chatbot icon in the top bar instead — Ask AI is for general questions.",
+    tip: "For Dev Life-specific questions (how a feature here works, where to find something), use the 🤖 chatbot icon in the top bar instead — Ask AI is for general questions.",
   },
   {
     icon: "📹",
@@ -468,7 +468,7 @@ export default function ProjectGuide() {
           <div>
             <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Project Guide</h1>
             <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-              Everything you need to know to get the most out of DevQuiz — step by step.
+              Everything you need to know to get the most out of Dev Life — step by step.
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
               {["17 Features", "Step-by-step", "Tips included"].map(badge => (

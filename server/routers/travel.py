@@ -12,7 +12,7 @@ no free API for actual Indian train/bus travel times exists anywhere.
 Nominatim's usage policy caps free use at ~1 req/sec and requires a real
 User-Agent identifying the app, and asks callers to cache results — geocode_cache
 below does that, and _throttle() below serializes our outbound calls to both
-free services so a burst of users can't get DevQuiz's IP rate-limited/banned.
+free services so a burst of users can't get Dev Life's IP rate-limited/banned.
 """
 import asyncio
 import time
@@ -24,7 +24,7 @@ from deps import current_user
 
 router = APIRouter()
 
-USER_AGENT = "DevQuizTravelPlanner/1.0 (https://ai-devquiz.netlify.app)"
+USER_AGENT = "DevLifeTravelPlanner/1.0 (https://ai-devquiz.netlify.app)"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 OSRM_URL = "http://router.project-osrm.org/route/v1/driving"
 

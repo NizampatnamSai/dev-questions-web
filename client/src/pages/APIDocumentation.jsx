@@ -106,7 +106,7 @@ export default function APIDocumentation() {
     { method: "WS", path: "/api/admin-chat/ws", desc: "Real-time delivery of new messages (JWT via ?token= query param)" },
 
     // Project Chatbot — scoped to explaining this app only
-    { method: "POST", path: "/api/project-chat/ask", desc: "Ask the in-app assistant about a DevQuiz feature or how to get somewhere (open to guests)" },
+    { method: "POST", path: "/api/project-chat/ask", desc: "Ask the in-app assistant about a Dev Life feature or how to get somewhere (open to guests)" },
     { method: "GET", path: "/api/project-chat/knowledge", desc: "The same feature/route knowledge the chatbot and Admin Features Doc both read from" },
 
     // Uploads — Cloudinary-backed, only the URL is ever stored
@@ -126,7 +126,7 @@ export default function APIDocumentation() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">📚 API Documentation</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">DevQuiz API Reference</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Dev Life API Reference</p>
       </div>
 
       <div className="glass-card p-6 space-y-4">

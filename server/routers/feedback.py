@@ -204,7 +204,7 @@ async def complete_feedback(feedback_id: str, user=Depends(current_user)):
         await col_user_notifications().insert_one({
             "userId": target_user_id,
             "title": f"✅ Feedback completed: {fb.get('title', '')}",
-            "body": "An admin marked your feedback as completed. Thanks for helping improve DevQuiz!",
+            "body": "An admin marked your feedback as completed. Thanks for helping improve Dev Life!",
             "type": "feedback_completed",
             "path": "/my-feedback",
             "read": False,

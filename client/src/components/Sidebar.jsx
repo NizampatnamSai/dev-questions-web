@@ -272,15 +272,15 @@ function Sidebar() {
       >
         <img
           src="/logo192.png"
-          alt="DevQuiz"
+          alt="Dev Life"
           className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30"
         />
         <div className="flex-1 min-w-0">
           <p className="text-base font-bold tracking-tight gradient-text">
-            DevQuiz
+            Dev Life
           </p>
           <p className="text-[10px] text-slate-400 -mt-0.5">
-            AI Interview Platform
+            Your Dev Companion
           </p>
         </div>
       </motion.div>

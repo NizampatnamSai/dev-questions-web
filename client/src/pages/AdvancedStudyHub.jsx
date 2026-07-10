@@ -266,7 +266,10 @@ function DSAChallenge30Days() {
             <div className="space-y-2">
               <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">Examples:</p>
               <pre className="bg-slate-100 dark:bg-slate-800 p-3 rounded text-xs overflow-x-auto">
-                {dailyQuestion.examples}
+                {/* Backend normalizes this to a string now, but a raw object
+                    ever slipping through (e.g. a stale cached doc) crashed
+                    the whole page before — safe to render either way. */}
+                {typeof dailyQuestion.examples === "string" ? dailyQuestion.examples : JSON.stringify(dailyQuestion.examples, null, 2)}
               </pre>
             </div>
           )}

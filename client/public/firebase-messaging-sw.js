@@ -43,7 +43,7 @@ messaging.onBackgroundMessage(async payload => {
   const type = payload.data?.type || '';
   const extra = getNotifOptions(type);
 
-  await self.registration.showNotification(title ?? 'DevQuiz', {
+  await self.registration.showNotification(title ?? 'Dev Life', {
     body:    body ?? '',
     icon:    '/logo192.png',
     badge:   '/logo192.png',

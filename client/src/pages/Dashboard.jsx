@@ -50,7 +50,7 @@ export default function Dashboard() {
             Welcome, {user?.name} 👋
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Here's what's happening in the DevQuiz community.
+            Here's what's happening in the Dev Life community.
           </p>
         </div>
         {!user?.isGuest && (

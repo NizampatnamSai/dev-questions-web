@@ -2,7 +2,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import toast from "react-hot-toast";
 
-// Maps our own language ids (used across DevQuiz for filters/badges) to the
+// Maps our own language ids (used across Dev Life for filters/badges) to the
 // closest id Prism actually ships a grammar for.
 const LANG_ALIAS = {
   text: "plaintext",

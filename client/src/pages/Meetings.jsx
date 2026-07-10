@@ -147,7 +147,7 @@ function JitsiRoom({ meeting, displayName, isAdmin, onLeave, onEndMeeting }) {
           src={src}
           allow="camera; microphone; fullscreen; display-capture; autoplay"
           className="w-full h-full border-0"
-          title="DevQuiz Meeting"
+          title="Dev Life Meeting"
           onLoad={() => setLoaded(true)}
         />
       </div>

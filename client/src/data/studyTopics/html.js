@@ -360,7 +360,7 @@ export default [
     summary: "Contact information for nearest article/body ancestor",
     explanation:
       "Not necessarily — it's for contact info of the author/owner of the nearest article or body. Physical address is one use case but also: email, phone, social.",
-    code: "<footer>\n  <address>\n    Written by <a href='mailto:author@dev.com'>Author</a>.\n    Visit at <a href='https://devquiz.app'>DevQuiz</a>.\n  </address>\n</footer>",
+    code: "<footer>\n  <address>\n    Written by <a href='mailto:author@dev.com'>Author</a>.\n    Visit at <a href='https://devlife.app'>Dev Life</a>.\n  </address>\n</footer>",
     interviewQuestion: "Is <address> for postal addresses?",
   },
   {
