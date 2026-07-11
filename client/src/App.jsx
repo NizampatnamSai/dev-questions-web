@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
@@ -53,6 +53,7 @@ const Quiz = lazy(() => import("./pages/Quiz"));
 const QuestionDetail = lazy(() => import("./pages/QuestionDetail"));
 const StudyGuide = lazy(() => import("./pages/StudyGuide"));
 const MockInterview = lazy(() => import("./pages/MockInterview"));
+const TypingRace = lazy(() => import("./pages/TypingRace"));
 const Flashcards = lazy(() => import("./pages/Flashcards"));
 const Progress = lazy(() => import("./pages/Progress"));
 const JsCompiler = lazy(() => import("./pages/JsCompiler"));
@@ -289,6 +290,26 @@ function AppInner() {
       .then(({ data }) => setAppConfig(data))
       .catch(() => {});
   }, [location.pathname]);
+
+  // Report this build's version once per session so Admin's Force Update
+  // panel can tell who's still running an old bundle after a deploy.
+  const versionReported = useRef(false);
+  useEffect(() => {
+    if (!user || user.isGuest || versionReported.current) return;
+    versionReported.current = true;
+    api
+      .post("/profile/my/app-version", { version: __APP_VERSION__ })
+      .catch(() => {});
+  }, [user]);
+
+  // Sidebar's "locked page" prompt (guest mode) opens this same feedback
+  // modal via a custom event instead of prop-drilling feedbackOpen down
+  // through Sidebar — Sidebar has no other reason to know about it.
+  useEffect(() => {
+    const handler = () => setFeedbackOpen(true);
+    window.addEventListener("open-feedback-modal", handler);
+    return () => window.removeEventListener("open-feedback-modal", handler);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -648,6 +669,14 @@ function AppInner() {
           element={
             <ProtectedPage path="/mock-interview">
               <MockInterview />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/typing-race"
+          element={
+            <ProtectedPage path="/typing-race">
+              <TypingRace />
             </ProtectedPage>
           }
         />

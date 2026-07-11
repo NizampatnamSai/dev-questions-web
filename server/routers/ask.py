@@ -115,6 +115,46 @@ async def humanize(body: HumanizeBody, _user=Depends(require_ai_enabled)):
     return {"result": result}
 
 
+DIAGRAM_SYSTEM_PROMPT = (
+    "You turn a plain-English description of a project/system structure into a Mermaid.js "
+    "flowchart diagram. Pick 'graph TD' (top-down) unless a left-right layout reads better, then "
+    "use 'graph LR'. Group related pieces with Mermaid subgraphs (e.g. 'Frontend', 'Backend', "
+    "'Database', 'CI/CD') when the description implies layers or folders. Use short, clear node "
+    "labels (e.g. React App, Express API, MongoDB, Redux Store) and label edges with the "
+    "relationship where it adds clarity (e.g. -->|REST API| ). "
+    "Return ONLY the raw Mermaid code — no markdown code fences, no explanation, no preamble."
+)
+
+MAX_DIAGRAM_DESC_LEN = 800
+
+
+class DiagramBody(BaseModel):
+    description: str
+
+
+def _strip_mermaid_fences(code: str) -> str:
+    # Models routinely wrap output in ```mermaid ... ``` despite being told
+    # not to — stripped here so the frontend always gets raw diagram syntax.
+    code = code.strip()
+    if code.startswith("```"):
+        code = code.split("\n", 1)[1] if "\n" in code else ""
+        if code.endswith("```"):
+            code = code.rsplit("```", 1)[0]
+    return code.strip()
+
+
+@router.post("/diagram")
+async def generate_diagram(body: DiagramBody, _user=Depends(require_ai_enabled)):
+    description = body.description.strip()
+    if not description:
+        raise HTTPException(400, "Description is required")
+    if len(description) > MAX_DIAGRAM_DESC_LEN:
+        raise HTTPException(400, f"Description too long (max {MAX_DIAGRAM_DESC_LEN} chars)")
+    raw = await _groq_ask(description, system_prompt=DIAGRAM_SYSTEM_PROMPT, max_tokens=1200)
+    mermaid_code = _strip_mermaid_fences(raw)
+    return {"mermaid": mermaid_code}
+
+
 @router.post("/ask-image")
 async def ask_image(
     image: UploadFile = File(...),

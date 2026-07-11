@@ -45,7 +45,7 @@ async def get_community_allowed_email() -> Optional[str]:
     if wd == 6:
         return None
     if wd == 5:
-        return "ADMIN_ONLY" if not _is_even_saturday(now_ist) else None
+        return "ADMIN_ONLY" if _is_even_saturday(now_ist) else None
     schedule = await _load_community_schedule()
     return schedule.get(wd)
 

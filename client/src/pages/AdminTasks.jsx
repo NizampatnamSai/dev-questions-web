@@ -61,7 +61,7 @@ export function DescriptionPreview({ text, onView }) {
       {overflow && (
         <button
           onClick={onView}
-          className="mt-1 text-xs font-medium text-indigo-500 hover:text-indigo-600"
+          className="mt-1 text-xs font-semibold text-indigo-500 dark:text-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:underline"
         >
           View More →
         </button>
@@ -352,7 +352,7 @@ export default function AdminTasks() {
                         {/* Fixed-height content block — description/title overflow is
                             handled by DescriptionPreview's own "View More", so every
                             card stays the same height regardless of content length. */}
-                        <div className="h-[142px] overflow-hidden">
+                        <div className="h-[154px] overflow-hidden">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
                             <span
                               className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${PRIORITY_STYLE[task.priority]}`}

@@ -1453,6 +1453,122 @@ function ConfigToggleSection({
   );
 }
 
+function AppVersionsPanel() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get("/admin/app-versions");
+      setData(data);
+    } catch {
+      toast.error("Failed to load app versions");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (open && !data) load();
+  }, [open]);
+
+  return (
+    <div className="space-y-3">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="text-sm font-semibold text-indigo-500 hover:text-indigo-600 transition-colors"
+      >
+        {open ? "▾" : "▸"} Who's updated? (per-user build version)
+      </button>
+      {open && (
+        <div className="rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden">
+          {loading ? (
+            <p className="text-sm text-slate-400 text-center py-4">Loading…</p>
+          ) : (
+            <div className="max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-white/5">
+              {(data?.users || []).map((u) => (
+                <div key={u.userId} className="flex items-center justify-between gap-2 px-4 py-2 text-sm">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-slate-700 dark:text-slate-200 truncate">
+                      {u.name} <span className="text-xs text-slate-400">({u.role})</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400 truncate">
+                      {u.appVersionAt ? new Date(u.appVersionAt).toLocaleString() : "never reported"}
+                    </div>
+                  </div>
+                  <span
+                    className={`flex-shrink-0 text-[10px] px-2 py-0.5 rounded-full font-semibold whitespace-nowrap ${
+                      u.isLatest
+                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                        : u.appVersion
+                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                          : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                    }`}
+                  >
+                    {u.isLatest ? "🟢 Up to date" : u.appVersion ? "🟡 Outdated" : "— never loaded"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="px-4 py-2 border-t border-slate-100 dark:border-white/10">
+            <button onClick={load} className="text-xs text-indigo-500 hover:text-indigo-600 transition-colors">
+              ↻ Refresh
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CommunityUnansweredPanel() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showRoster, setShowRoster] = useState(false);
+
+  useEffect(() => {
+    api
+      .get("/admin/community/unanswered")
+      .then(({ data }) => setData(data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return null;
+
+  return (
+    <div className="max-w-xl space-y-2 pt-2">
+      <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 px-4 py-3 rounded-lg">
+        <span className="text-sm text-slate-700 dark:text-slate-200">
+          {data?.unansweredCount > 0 ? "🔴" : "🟢"} {data?.unansweredCount ?? 0} unanswered question
+          {data?.unansweredCount === 1 ? "" : "s"} posted today
+        </span>
+        <button
+          onClick={() => setShowRoster((v) => !v)}
+          title="Who can post/answer in Community"
+          className="w-7 h-7 flex items-center justify-center rounded-lg text-sm text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+        >
+          👁
+        </button>
+      </div>
+      {showRoster && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-lg p-3 text-sm space-y-1">
+          <p className="text-xs text-slate-400 mb-1">Users scheduled to post in Community:</p>
+          {(data?.roster || []).map((r) => (
+            <div key={r.day} className="flex justify-between text-slate-600 dark:text-slate-300">
+              <span>{r.day}</span>
+              <span className="font-medium">{r.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AppConfigPanel() {
   const [config, setConfig] = useState({
     maintenance: false,
@@ -1470,6 +1586,8 @@ function AppConfigPanel() {
     ai_features_enabled: true,
     ai_features_message: "",
     chat_edit_window_minutes: 30,
+    task_due_reminder_time: "17:00",
+    typing_race_reminder_time: "11:00",
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1557,6 +1675,50 @@ function AppConfigPanel() {
       toast.error("Failed");
     }
 
+    setSaving(false);
+  };
+
+  const hasTaskDueChange =
+    !!initialConfig &&
+    config.task_due_reminder_time !== initialConfig.task_due_reminder_time;
+
+  const saveTaskDueReminder = async () => {
+    if (!hasTaskDueChange) return;
+    setSaving(true);
+    try {
+      await api.put("/admin/app-config", {
+        task_due_reminder_time: config.task_due_reminder_time,
+      });
+      setInitialConfig((prev) => ({
+        ...prev,
+        task_due_reminder_time: config.task_due_reminder_time,
+      }));
+      toast.success("Task due-date reminder time updated");
+    } catch {
+      toast.error("Failed");
+    }
+    setSaving(false);
+  };
+
+  const hasTypingRaceChange =
+    !!initialConfig &&
+    config.typing_race_reminder_time !== initialConfig.typing_race_reminder_time;
+
+  const saveTypingRaceReminder = async () => {
+    if (!hasTypingRaceChange) return;
+    setSaving(true);
+    try {
+      await api.put("/admin/app-config", {
+        typing_race_reminder_time: config.typing_race_reminder_time,
+      });
+      setInitialConfig((prev) => ({
+        ...prev,
+        typing_race_reminder_time: config.typing_race_reminder_time,
+      }));
+      toast.success("Typing Race reminder time updated");
+    } catch {
+      toast.error("Failed");
+    }
     setSaving(false);
   };
 
@@ -1656,6 +1818,8 @@ function AppConfigPanel() {
         warningWhen={config.force_update}
         warningText="🚀 Update banner is showing to all users"
       />
+
+      <AppVersionsPanel />
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
@@ -1826,6 +1990,110 @@ function AppConfigPanel() {
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
+      {/* Task Manager Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          🗂️ Task Manager Settings
+        </p>
+        <div className="max-w-xs space-y-1">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Due-Date Reminder Time (IST)
+          </label>
+          <input
+            type="time"
+            value={config.task_due_reminder_time || "17:00"}
+            onChange={(e) =>
+              setConfig((c) => ({ ...c, task_due_reminder_time: e.target.value }))
+            }
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            Daily nudge to every assignee whose task is due today and not yet completed
+          </p>
+        </div>
+        {hasTaskDueChange && (
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() =>
+                setConfig((c) => ({
+                  ...c,
+                  task_due_reminder_time: initialConfig.task_due_reminder_time,
+                }))
+              }
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              ↺ Reset
+            </button>
+            <button
+              disabled={!hasTaskDueChange || saving}
+              onClick={saveTaskDueReminder}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                hasTaskDueChange
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Typing Race Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          ⌨️ Typing Race Settings
+        </p>
+        <div className="max-w-xs space-y-1">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Daily Play Reminder Time (IST)
+          </label>
+          <input
+            type="time"
+            value={config.typing_race_reminder_time || "11:00"}
+            onChange={(e) =>
+              setConfig((c) => ({ ...c, typing_race_reminder_time: e.target.value }))
+            }
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            Daily nudge to anyone who hasn't played today's Typing Race yet
+          </p>
+        </div>
+        {hasTypingRaceChange && (
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() =>
+                setConfig((c) => ({
+                  ...c,
+                  typing_race_reminder_time: initialConfig.typing_race_reminder_time,
+                }))
+              }
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              ↺ Reset
+            </button>
+            <button
+              disabled={!hasTypingRaceChange || saving}
+              onClick={saveTypingRaceReminder}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                hasTypingRaceChange
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
       {/* Community Settings */}
       <div className="space-y-4">
         <p className="font-semibold text-slate-700 dark:text-slate-200">
@@ -1863,6 +2131,7 @@ function AppConfigPanel() {
             </button>
           </div>
         )}
+        <CommunityUnansweredPanel />
       </div>
 
       <div className="border-t border-black/5 dark:border-white/10" />

@@ -1,3 +1,4 @@
+from datetime import date, datetime, timezone
 from fastapi import APIRouter, Depends
 from db_mongo import col_questions, col_comments, col_users, col_user_profiles, sid
 from deps import current_user, guest_gate
@@ -8,6 +9,15 @@ router = APIRouter()
 @router.get("/dashboard")
 async def dashboard(_user=Depends(guest_gate)):
     total = await col_questions().count_documents({"status": "published"})
+
+    # Every published question IS a community post (there's no separate,
+    # disjoint "community" pool) — a second card just repeating `total`
+    # under a different label is redundant, so this shows today's activity
+    # instead: genuinely different from the all-time total, and ties into
+    # the daily community posting rotation. Same UTC-midnight day boundary
+    # as the daily-post-limit check in create() below, for consistency.
+    today_start = datetime.combine(date.today(), datetime.min.time()).replace(tzinfo=timezone.utc)
+    posted_today = await col_questions().count_documents({"status": "published", "createdAt": {"$gte": today_start}})
 
     cat_pipe = [
         {"$match": {"status": "published"}},
@@ -42,7 +52,7 @@ async def dashboard(_user=Depends(guest_gate)):
 
     return {
         "totalQuestions": total,
-        "communityPosts": total,
+        "postedToday":    posted_today,
         "byCategory":     by_category,
         "byLevel":        by_level,
         "byType":         by_type,

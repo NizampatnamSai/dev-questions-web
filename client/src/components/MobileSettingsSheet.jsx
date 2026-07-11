@@ -6,6 +6,8 @@ import { useTheme } from "../context/ThemeContext";
 import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 import SharedToggle from "./Toggle";
+import GuestLockedModal from "./GuestLockedModal";
+import { isGuestAllowedPath } from "./ProtectedRoute";
 
 const FEATURE_LINKS = [
   {
@@ -25,6 +27,12 @@ const FEATURE_LINKS = [
     icon: "🎯",
     label: "Mock Interview",
     sub: "AI-scored interview simulation",
+  },
+  {
+    to: "/typing-race",
+    icon: "⌨️",
+    label: "Typing Race",
+    sub: "Race the clock, climb the team leaderboard",
   },
   {
     to: "/flashcards",
@@ -146,6 +154,7 @@ const ADMIN_LINKS = [
 export default function MobileSettingsSheet({ open, onClose }) {
   const { user, logout } = useAuth();
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
+  const [lockedOpen, setLockedOpen] = useState(false);
   const { theme, toggleTheme, snow, toggleSnow } = useTheme();
   const navigate = useNavigate();
   const {
@@ -209,26 +218,36 @@ export default function MobileSettingsSheet({ open, onClose }) {
                 Features
               </p>
               <div className="grid grid-cols-2 gap-2 mb-4">
-                {FEATURE_LINKS.map((f) => (
-                  <button
-                    key={f.to}
-                    onClick={() => {
-                      onClose();
-                      navigate(f.to);
-                    }}
-                    className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 text-left transition-all cursor-pointer"
-                  >
-                    <span className="text-xl flex-shrink-0">{f.icon}</span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
-                        {f.label}
-                      </p>
-                      <p className="text-[10px] text-slate-400 truncate">
-                        {f.sub}
-                      </p>
-                    </div>
-                  </button>
-                ))}
+                {FEATURE_LINKS.map((f) => {
+                  const locked = user?.isGuest && !isGuestAllowedPath(f.to);
+                  return (
+                    <button
+                      key={f.to}
+                      onClick={() => {
+                        if (locked) {
+                          setLockedOpen(true);
+                          return;
+                        }
+                        onClose();
+                        navigate(f.to);
+                      }}
+                      className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-black/5 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 text-left transition-all cursor-pointer"
+                    >
+                      <span className={`text-xl flex-shrink-0 ${locked ? "blur-[1.5px] select-none opacity-70" : ""}`}>
+                        {f.icon}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className={`text-xs font-semibold text-slate-700 dark:text-slate-200 truncate ${locked ? "select-none opacity-70" : ""}`}>
+                          {f.label}
+                        </p>
+                        <p className={`text-[10px] text-slate-400 truncate ${locked ? "select-none opacity-70" : ""}`}>
+                          {f.sub}
+                        </p>
+                      </div>
+                      {locked && <span className="text-xs flex-shrink-0">🔒</span>}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Admin section — only visible to admin/sub_admin, this is the

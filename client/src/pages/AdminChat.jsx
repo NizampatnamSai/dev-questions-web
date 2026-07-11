@@ -31,6 +31,9 @@ function stripHtmlForSearch(html) {
 // instead of firing a REST refetch just to learn what the server already
 // told us.
 function derivePreview(message) {
+  // A code-block message's stripped text IS the raw code — same special
+  // case as images, so it doesn't dump literal code into the chat list.
+  if ((message.html || "").includes("<pre")) return "💻 Code snippet";
   const text = stripHtmlForSearch(message.html).trim();
   if (text) return text.slice(0, 80);
   const n = (message.imageUrls || []).length;
@@ -323,7 +326,9 @@ export default function AdminChat() {
         delete next[activeChatId];
         return next;
       }
-      const draftPreview = preview ? preview.slice(0, 80) : "📷 Image";
+      const draftPreview = composerHtml.includes("<pre")
+        ? "💻 Code snippet"
+        : preview ? preview.slice(0, 80) : "📷 Image";
       return prev[activeChatId] === draftPreview ? prev : { ...prev, [activeChatId]: draftPreview };
     });
   }, [activeChatId, editingMessageId, composerHtml, pendingImageUrls]);
@@ -342,7 +347,9 @@ export default function AdminChat() {
       if (!draft) continue;
       const preview = stripHtmlForSearch(draft.html || "").trim();
       if (!preview && !(draft.imageUrls || []).length) continue;
-      found[key.slice(DRAFT_KEY_PREFIX.length)] = preview ? preview.slice(0, 80) : "📷 Image";
+      found[key.slice(DRAFT_KEY_PREFIX.length)] = (draft.html || "").includes("<pre")
+        ? "💻 Code snippet"
+        : preview ? preview.slice(0, 80) : "📷 Image";
     }
     setDraftsByChat(found);
   }, []);
@@ -558,6 +565,17 @@ export default function AdminChat() {
     el.scrollIntoView({ behavior: "smooth", block: "center" });
     setHighlightedMessageId(id);
     setTimeout(() => setHighlightedMessageId((cur) => (cur === id ? null : cur)), 1500);
+  };
+
+  const copyMessage = async (m) => {
+    const text = stripHtmlForSearch(m.html).trim() || (m.imageUrls?.length ? m.imageUrls.join("\n") : "");
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copied to clipboard");
+    } catch {
+      toast.error("Couldn't copy — your browser blocked clipboard access");
+    }
   };
 
   const togglePin = async (messageId, isPinned) => {
@@ -1252,7 +1270,7 @@ export default function AdminChat() {
                       className="w-full flex items-center gap-1.5 text-left text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2 py-1 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors"
                     >
                       <span className="flex-shrink-0">📌</span>
-                      <span className="truncate">{pm ? stripHtmlForSearch(pm.html).slice(0, 80) || "📷 Image" : "Pinned message"}</span>
+                      <span className="truncate">{pm ? derivePreview(pm) || "Pinned message" : "Pinned message"}</span>
                     </button>
                   );
                 })}
@@ -1277,7 +1295,7 @@ export default function AdminChat() {
                       <div
                         key={m.id}
                         ref={(el) => { if (el) messageRefs.current[m.id] = el; }}
-                        className={`group flex items-start gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
+                        className={`group flex items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                       >
                         <div className="max-w-[75%] flex flex-col">
                           {/* Disambiguates who sent what in a group — a DM's "other
@@ -1344,7 +1362,16 @@ export default function AdminChat() {
                         {/* Touch devices have no hover state — hover-only actions would be
                             permanently invisible on mobile, so they're always shown (dimmed)
                             below the sm: breakpoint and hover-revealed on larger screens. */}
-                        <div className="opacity-60 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 flex items-center gap-1.5 mt-2 transition-opacity flex-shrink-0">
+                        <div className="opacity-60 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 flex items-center gap-1.5 transition-opacity flex-shrink-0">
+                          {(m.html || m.imageUrls?.length > 0) && (
+                            <button
+                              onClick={() => copyMessage(m)}
+                              title="Copy message"
+                              className="text-slate-400 hover:text-indigo-500"
+                            >
+                              📋
+                            </button>
+                          )}
                           <button
                             onClick={() => togglePin(m.id, isPinned)}
                             title={isPinned ? "Unpin" : "Pin"}

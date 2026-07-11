@@ -43,7 +43,7 @@ function TaskCard({ task, myId, updating, onMove, onView, onToggleExpand, expand
         {/* Fixed-height content block — description/title overflow is handled by
             DescriptionPreview's own "View More", so every card stays the same
             height regardless of content length. */}
-        <div className="h-[110px] overflow-hidden">
+        <div className="h-[134px] overflow-hidden">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${PRIORITY_STYLE[task.priority]}`}>

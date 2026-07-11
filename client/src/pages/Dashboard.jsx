@@ -97,8 +97,8 @@ export default function Dashboard() {
             />
             <StatsCard
               icon="👥"
-              label="Community Posts"
-              value={stats.communityPosts ?? 0}
+              label="Posted Today"
+              value={stats.postedToday ?? 0}
               accent="from-emerald-400 to-teal-500"
             />
           </>

@@ -9,6 +9,8 @@ export default function APIDocumentation() {
     { method: "GET", path: "/api/questions/search/advanced", desc: "Advanced search with filters" },
     { method: "GET", path: "/api/profile/my/profile", desc: "Get current user profile" },
     { method: "PATCH", path: "/api/profile/my/profile", desc: "Update user profile" },
+    { method: "PATCH", path: "/api/profile/my/notifications-mute", desc: "Snooze all push + in-app notifications for 1d/2d/1w/permanent, or unmute with 'none'" },
+    { method: "POST", path: "/api/profile/my/app-version", desc: "Report the frontend's build version once per session, for Admin's Force Update panel" },
     { method: "POST", path: "/api/discussion/questions/{id}/comments", desc: "Create comment" },
     { method: "GET", path: "/api/discussion/questions/{id}/comments", desc: "Get comments" },
     { method: "POST", path: "/api/difficulty/questions/{id}/difficulty", desc: "Rate question difficulty" },
@@ -37,6 +39,16 @@ export default function APIDocumentation() {
     { method: "POST", path: "/api/workboard/posts/{id}/reply", desc: "Add a follow-up reply to your own post once the edit window has closed" },
     { method: "GET", path: "/api/workboard/export", desc: "Export a day's (or all) posts as CSV (admin only)" },
     { method: "PATCH", path: "/api/workboard/config", desc: "Update the reminder time and edit window (admin only)" },
+
+    // Typing Race — daily 3-snippet challenge, same set for everyone, ranked by total time
+    { method: "GET", path: "/api/game/typing-race/board", desc: "Single combined payload: today's 3 snippets, your own progress, and the full team roster" },
+    { method: "POST", path: "/api/game/typing-race/submit", desc: "Submit a completed snippet (one shot per snippet per day) — returns WPM/accuracy" },
+
+    // Admin Panel — app-wide config, force-update version tracking, community oversight
+    { method: "GET", path: "/api/admin/app-config", desc: "Get all app-wide settings, incl. reminder times (WorkBoard, task due-date, Typing Race, Community) — admin only" },
+    { method: "PUT", path: "/api/admin/app-config", desc: "Update app-wide settings; changing a reminder time live-reschedules that cron job — admin only" },
+    { method: "GET", path: "/api/admin/app-versions", desc: "Who's on the latest deployed build vs. an older one, from each user's last-reported app version — admin only" },
+    { method: "GET", path: "/api/admin/community/unanswered", desc: "Today's unanswered-question count in Community, plus the Mon-Fri posting roster — admin only" },
 
     // Study Hub progress
     { method: "GET", path: "/api/study/reviewed", desc: "Get your reviewed Study Hub topic ids (logged-in users only — guests use local storage)" },
@@ -71,6 +83,7 @@ export default function APIDocumentation() {
     // Ask AI — general chat, prompt improver, image understanding, image generation, humanize
     { method: "POST", path: "/api/ai/ask", desc: "General-purpose AI chat / prompt-improver mode" },
     { method: "POST", path: "/api/ai/humanize", desc: "Rewrite pasted AI-generated text to sound more natural (max 1000 words)" },
+    { method: "POST", path: "/api/ai/diagram", desc: "Turn a plain-English project/system description into a Mermaid.js diagram definition" },
     { method: "POST", path: "/api/ai/ask-image", desc: "Upload an image and ask about it — explain, describe, or extract text" },
     { method: "GET", path: "/api/ai/generate-image/usage", desc: "Today's text-to-image usage vs. daily limit" },
     { method: "POST", path: "/api/ai/generate-image", desc: "Generate an image from a text prompt (free, daily-limited)" },
@@ -191,7 +204,11 @@ export default function APIDocumentation() {
           <li>✅ In-app Project Chatbot scoped to explaining this app, with navigation help</li>
           <li>✅ Cloudinary-backed image uploads — only the URL is ever stored, never the image bytes</li>
           <li>✅ Scheduled/temporary user lockouts (hours/days/custom) that lift automatically</li>
-          <li>✅ Admin-toggleable guest mode with a custom message when disabled</li>
+          <li>✅ Admin-toggleable guest mode — full nav visible with locked items blurred, plus a login/signup/contact-admin prompt</li>
+          <li>✅ Per-user notification snooze (1d/2d/1w/permanent), independent of the admin-wide kill switch</li>
+          <li>✅ Force-update build tracking — admin can see who's on an old bundle after a deploy</li>
+          <li>✅ AI-generated Mermaid diagrams from a plain-English project/system description</li>
+          <li>✅ Daily 3-snippet Typing Race — same snippets for everyone, ranked by total time, canvas-rendered to resist copy/paste</li>
         </ul>
       </div>
 

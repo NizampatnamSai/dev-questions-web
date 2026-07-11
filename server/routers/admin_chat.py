@@ -8,7 +8,7 @@ message so the other side finds out even while offline."""
 import re
 import json
 import html as html_lib
-from datetime import timezone
+from datetime import datetime, timezone
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
@@ -90,6 +90,18 @@ def _strip_html(html: str) -> str:
 
 # ── WebSocket (real-time delivery) ──────────────────────────────────────────
 
+def _json_default(o):
+    # Message docs carry a raw pymongo datetime (sid() only stringifies
+    # _id) — Starlette's ws.send_json() calls stdlib json.dumps with no
+    # datetime support, so every broadcast that includes a message doc
+    # (new_message, edit_message, ...) used to raise inside send_to_user,
+    # get swallowed by the broad except below, and silently kill the
+    # socket. Serialize to text ourselves with this encoder instead.
+    if isinstance(o, datetime):
+        return o.isoformat()
+    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+
+
 class ChatConnectionManager:
     def __init__(self):
         self.connections: dict[str, list[WebSocket]] = {}
@@ -107,19 +119,21 @@ class ChatConnectionManager:
         return bool(self.connections.get(user_id))
 
     async def send_to_user(self, user_id: str, data: dict):
+        text = json.dumps(data, default=_json_default)
         for ws in list(self.connections.get(user_id, [])):
             try:
-                await ws.send_json(data)
+                await ws.send_text(text)
             except Exception:
                 self.disconnect(user_id, ws)
 
     async def broadcast(self, data: dict, exclude_user_id: str | None = None):
+        text = json.dumps(data, default=_json_default)
         for uid, conns in list(self.connections.items()):
             if uid == exclude_user_id:
                 continue
             for ws in list(conns):
                 try:
-                    await ws.send_json(data)
+                    await ws.send_text(text)
                 except Exception:
                     self.disconnect(uid, ws)
 
@@ -535,7 +549,15 @@ async def mark_read(chat_id: str, user=Depends(current_user)):
 MAX_IMAGES_PER_MESSAGE = 6
 
 
-def _preview_text(text: str, image_count: int) -> str:
+def _preview_text(html: str, image_count: int) -> str:
+    # A Quill code-block message's stripped text IS the raw code, which read
+    # as garbage in the conversation list ("import { usePathname } from...")
+    # instead of a clean summary — same problem images already had, so this
+    # gets the same special-cased treatment ("📷 Image") rather than dumping
+    # its literal content.
+    if "<pre" in (html or ""):
+        return "💻 Code snippet"
+    text = _strip_html(html)
     if text:
         return text[:80]
     if image_count > 1:
@@ -585,7 +607,7 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
     created["canEdit"] = True  # just sent — obviously still within the edit window
     created.update(_recipient_status(created, other_ids))
 
-    preview = _preview_text(text, len(body.imageUrls))
+    preview = _preview_text(body.html, len(body.imageUrls))
     await col_admin_chats().update_one(
         {"_id": oid(chat_id)},
         {"$set": {"lastMessageAt": now(), "lastMessagePreview": preview}},
@@ -673,7 +695,7 @@ async def edit_message(chat_id: str, message_id: str, body: EditMessageBody, use
     # show a summary of something other than the actual latest message.
     latest = await col_admin_chat_messages().find({"chatId": chat_id}).sort("createdAt", -1).to_list(1)
     if latest and str(latest[0]["_id"]) == message_id:
-        preview = _preview_text(text, len(body.imageUrls))
+        preview = _preview_text(body.html, len(body.imageUrls))
         await col_admin_chats().update_one({"_id": oid(chat_id)}, {"$set": {"lastMessagePreview": preview}})
 
     await manager.broadcast_to_many(

@@ -1,7 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Stamped once per build (not per request) — every deploy gets a unique,
+// naturally-ordered version string so the backend can tell which users are
+// still running an older bundle after admin flips Force Update on.
+const BUILD_VERSION = new Date().toISOString();
+
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(BUILD_VERSION),
+  },
   plugins: [react()],
   server: {
     port: 5173,

@@ -79,6 +79,7 @@ def col_community_schedule():   return mdb()["community_schedule"]
 def col_user_answers():         return mdb()["user_answers"]
 def col_user_notifications():   return mdb()["user_notifications"]
 def col_app_config():           return mdb()["app_config"]
+def col_game_scores():          return mdb()["game_scores"]
 
 
 async def notifications_enabled() -> bool:
@@ -87,6 +88,19 @@ async def notifications_enabled() -> bool:
     new features never spams real users' devices or bells."""
     doc = await col_app_config().find_one({"_id": "config"})
     return (doc or {}).get("notifications_enabled", True)
+
+
+async def user_notifications_muted(user_id: str) -> bool:
+    """Per-user 'snooze all notifications' — set from Profile settings.
+    Checked alongside notifications_enabled() at every send site so a muted
+    user gets neither push nor in-app notifications until muted_until passes."""
+    profile = await col_user_profiles().find_one({"userId": user_id})
+    muted_until = (profile or {}).get("notifyMutedUntil")
+    if not muted_until:
+        return False
+    if muted_until.tzinfo is None:
+        muted_until = muted_until.replace(tzinfo=timezone.utc)
+    return muted_until > datetime.now(timezone.utc)
 def col_feedback():             return mdb()["feedback"]
 def col_user_profiles():        return mdb()["user_profiles"]
 def col_question_ratings():     return mdb()["question_ratings"]

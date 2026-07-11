@@ -716,6 +716,78 @@ class AppConfigBody(BaseModel):
     ai_features_enabled: Optional[bool] = None
     ai_features_message: Optional[str] = None
     chat_edit_window_minutes: Optional[int] = None
+    task_due_reminder_time: Optional[str] = None   # "HH:MM" IST, e.g. "17:00"
+    typing_race_reminder_time: Optional[str] = None  # "HH:MM" IST, e.g. "11:00"
+
+
+@router.get("/community/unanswered")
+async def community_unanswered(admin=Depends(_require_admin)):
+    """Questions posted to Community today that have zero answers yet, plus the
+    roster of users allowed to post there (the Mon-Fri community_schedule
+    rotation) so admin knows who's around to jump in and answer."""
+    from datetime import timezone as _tz
+    from db_mongo import col_questions
+    from routers.questions import DEFAULT_COMMUNITY_SCHEDULE, DAY_NAMES, _load_community_schedule
+
+    today_start = datetime.combine(datetime.now(_tz.utc).date(), datetime.min.time()).replace(tzinfo=_tz.utc)
+    docs = await col_questions().find({
+        "createdAt": {"$gte": today_start},
+        "status": "published",
+        "$or": [{"commentCount": {"$exists": False}}, {"commentCount": 0}],
+    }).sort("createdAt", -1).to_list(200)
+
+    unanswered = [{
+        "id": str(d["_id"]),
+        "question": (d.get("question") or "")[:140],
+        "authorName": d.get("authorName", "Unknown"),
+        "createdAt": d.get("createdAt"),
+    } for d in docs]
+
+    schedule = await _load_community_schedule()
+    roster = []
+    for wd in range(5):
+        email = schedule.get(wd)
+        if not email:
+            continue
+        u = await col_users().find_one({"email": email})
+        roster.append({"day": DAY_NAMES[wd], "name": u.get("name") if u else email, "email": email})
+
+    return {"unansweredCount": len(unanswered), "unanswered": unanswered, "roster": roster}
+
+
+@router.get("/app-versions")
+async def get_app_versions(admin=Depends(_require_admin)):
+    """Which build each user's browser last reported (see profile.py's
+    POST /my/app-version, fired once per session from App.jsx). Lets admin
+    see who's still on an old bundle after turning Force Update on — the
+    newest version seen across all users is treated as 'current'."""
+    from db_mongo import col_user_profiles
+    from datetime import timezone as _tz
+    users = await col_users().find({}).to_list(2000)
+    profiles = {
+        p["userId"]: p
+        for p in await col_user_profiles().find({}).to_list(2000)
+    }
+    rows = []
+    latest_version = None
+    for u in users:
+        uid = str(u["_id"])
+        profile = profiles.get(uid, {})
+        version = profile.get("appVersion")
+        if version and (latest_version is None or version > latest_version):
+            latest_version = version
+        rows.append({
+            "userId": uid,
+            "name": u.get("name", ""),
+            "email": u.get("email", ""),
+            "role": u.get("role", "user"),
+            "appVersion": version,
+            "appVersionAt": profile.get("appVersionAt"),
+        })
+    for r in rows:
+        r["isLatest"] = bool(r["appVersion"]) and r["appVersion"] == latest_version
+    rows.sort(key=lambda r: r.get("appVersionAt") or datetime.min.replace(tzinfo=_tz.utc), reverse=True)
+    return {"latestVersion": latest_version, "users": rows}
 
 
 @router.get("/app-config/public")
@@ -756,6 +828,8 @@ async def get_app_config(admin=Depends(_require_admin)):
     doc.setdefault("ai_features_enabled", True)
     doc.setdefault("ai_features_message", "AI features are temporarily disabled by the admin.")
     doc.setdefault("chat_edit_window_minutes", 30)
+    doc.setdefault("task_due_reminder_time", "17:00")
+    doc.setdefault("typing_race_reminder_time", "11:00")
     return doc
 
 
@@ -796,6 +870,10 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["ai_features_message"] = body.ai_features_message
     if body.chat_edit_window_minutes is not None:
         update["chat_edit_window_minutes"] = body.chat_edit_window_minutes
+    if body.task_due_reminder_time is not None:
+        update["task_due_reminder_time"] = body.task_due_reminder_time
+    if body.typing_race_reminder_time is not None:
+        update["typing_race_reminder_time"] = body.typing_race_reminder_time
 
     if update:
         await col_app_config().update_one(
@@ -828,6 +906,30 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
             scheduler.reschedule_job("workboard_afternoon_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
         except Exception as e:
             import logging; logging.getLogger(__name__).warning(f"Failed to reschedule workboard afternoon job: {e}")
+
+    # If the task due-date reminder time changed, reschedule that job too
+    if body.task_due_reminder_time is not None:
+        try:
+            from main import scheduler
+            h, m = [int(x) for x in body.task_due_reminder_time.split(":")]
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            scheduler.reschedule_job("task_due_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
+        except Exception as e:
+            import logging; logging.getLogger(__name__).warning(f"Failed to reschedule task due reminder job: {e}")
+
+    # If the Typing Race reminder time changed, reschedule that job too
+    if body.typing_race_reminder_time is not None:
+        try:
+            from main import scheduler
+            h, m = [int(x) for x in body.typing_race_reminder_time.split(":")]
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            scheduler.reschedule_job("typing_race_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
+        except Exception as e:
+            import logging; logging.getLogger(__name__).warning(f"Failed to reschedule typing race reminder job: {e}")
 
     # If maintenance just turned OFF → notify all users
     if was_maintenance and body.maintenance is False:

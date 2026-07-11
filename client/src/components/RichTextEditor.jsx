@@ -83,7 +83,16 @@ export default function RichTextEditor({
           submitOnEnter: {
             key: "Enter",
             shiftKey: false,
-            handler() {
+            handler(range) {
+              // Inside a code block, Enter must insert a newline (that's how
+              // you write multi-line code) — this binding has no `format`
+              // restriction so it matched unconditionally, including there,
+              // which sent the message mid-code-block on every Enter press
+              // instead of letting Quill's own code-block newline run.
+              const formats = this.quill.getFormat(range);
+              if (formats["code-block"]) {
+                return true; // let Quill's default code-block Enter handling proceed
+              }
               onEnterSubmitRef.current?.();
               return false; // swallow — stops Quill's default newline-insert binding
             },

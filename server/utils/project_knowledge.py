@@ -119,13 +119,13 @@ ROUTES = {
     },
     "/community": {
         "label": "Community", "audience": "all",
-        "desc": "Public interview-question feed with a weekday posting rotation — only the day's assigned person (or admin, any day) can post. The reminder for that person now checks whether they've actually posted yet (no nag if they already have) and, if they're on leave that day, redirects the reminder to admins to cover the post instead of pinging someone who's out.",
-        "python": "routers/questions.py handles posting + the rotation gate (get_community_allowed_email(), checked in create()); col_community_schedule stores the per-weekday assignee plus the admin-configurable reminder time (default 3:00 PM IST). The reminder job itself (scheduler_tasks.py: fire_community_reminder) checks col_questions for a post from today's assignee before sending anything, checks utils/leaves.is_user_on_leave() to redirect to admins instead of the assignee when they're out, and CCs admins with a 'reminder sent' notification when it does ping the assignee.",
+        "desc": "Public interview-question feed with a weekday posting rotation — only the day's assigned person (or admin, any day) can post. Saturday is admin-only, and only on an 'even' Saturday (the 2nd or 4th of the month) — odd Saturdays are closed, same as Sunday. The reminder for the day's poster checks whether they've actually posted yet (no nag if they already have) and, if they're on leave that day, redirects the reminder to admins to cover the post instead of pinging someone who's out.",
+        "python": "routers/questions.py handles posting + the rotation gate (get_community_allowed_email(), checked in create()); col_community_schedule stores the per-weekday assignee plus the admin-configurable reminder time (default 3:00 PM IST). The even/odd Saturday check (_is_even_saturday(): week_number = (day-1)//7+1, even if that's 2 or 4) gates both the posting permission and the scheduler_tasks.py reminder job the same way, so the feed and the push notification never disagree about whether today is open. The reminder job itself (fire_community_reminder) checks col_questions for a post from today's assignee before sending anything, checks utils/leaves.is_user_on_leave() to redirect to admins instead of the assignee when they're out, and CCs admins with a 'reminder sent' notification when it does ping the assignee.",
     },
     "/ask": {
         "label": "Ask AI", "audience": "user",
-        "desc": "General-purpose AI chat for any dev question (with saved history), plus a Prompt Improver mode, an image-understanding mode, a text-to-image Create mode, and a Humanize mode that rewrites pasted AI-generated text to sound more natural — all as tabs on the same page.",
-        "python": "routers/ask.py. POST /ai/ask sends {system prompt + question} to Groq's chat completions endpoint via httpx, falls back to a smaller model on 429. Chat history is just Mongo documents (col_ai_history) with a messages array — no vector DB or embedding search involved, purely a saved transcript. POST /ai/humanize uses the same Groq call with a different system prompt tuned to cut generic AI phrasing/filler while preserving meaning and length; capped at 1000 words server-side, matching the UI's word counter.",
+        "desc": "General-purpose AI chat for any dev question (with saved history), plus a Prompt Improver mode, an image-understanding mode, a text-to-image Create mode, a Humanize mode that rewrites pasted AI-generated text to sound more natural, and a Diagram mode that turns a plain-English project/system description into an actual rendered diagram — all as tabs on the same page.",
+        "python": "routers/ask.py. POST /ai/ask sends {system prompt + question} to Groq's chat completions endpoint via httpx, falls back to a smaller model on 429. Chat history is just Mongo documents (col_ai_history) with a messages array — no vector DB or embedding search involved, purely a saved transcript. POST /ai/humanize uses the same Groq call with a different system prompt tuned to cut generic AI phrasing/filler while preserving meaning and length; capped at 1000 words server-side, matching the UI's word counter. POST /ai/diagram asks Groq for a Mermaid.js flowchart definition (strips accidental ```mermaid code fences from the response), which the frontend renders client-side into an actual SVG diagram via the mermaid npm package — no diagramming happens server-side, the AI only produces the text description of the diagram.",
     },
     "/js-coding": {
         "label": "JS Coding Questions", "audience": "user",
@@ -139,8 +139,8 @@ ROUTES = {
     },
     "/my-tasks": {
         "label": "My Tasks", "audience": "user",
-        "desc": "Personal task tracker.",
-        "python": "routers/tasks.py — plain CRUD against col_tasks(), status field constrained to a fixed set of stage strings (todo/started/completed etc.), migrated once at startup from an older 3-stage scheme via a one-time, idempotent update_many() in db_mongo.py's init_mongo().",
+        "desc": "Personal task tracker. Any assignee of a non-completed task due today gets an automatic reminder notification at an admin-configurable time (default 5:00 PM IST).",
+        "python": "routers/tasks.py — plain CRUD against col_tasks(), status field constrained to a fixed set of stage strings (todo/started/completed etc.), migrated once at startup from an older 3-stage scheme via a one-time, idempotent update_many() in db_mongo.py's init_mongo(). The due-date reminder itself is a separate APScheduler job (scheduler_tasks.py: fire_task_due_date_reminders), querying col_tasks() for dueDate == today and status != completed, then notifying every assignee who hasn't personally completed it yet.",
     },
     "/json-parser": {
         "label": "JSON Parser", "audience": "all",
@@ -214,8 +214,13 @@ ROUTES = {
     },
     "/mock-interview": {
         "label": "Mock Interview", "audience": "user",
-        "desc": "AI-simulated interview with follow-up questions.",
-        "python": "routers/advanced_study.py — each turn sends the conversation-so-far as context to Groq, asking it to both respond in-character as an interviewer and decide the next follow-up question, rather than a fixed decision tree.",
+        "desc": "AI-simulated interview with follow-up questions, voice or written answers, and AI scoring. One-tap role presets — 🎨 Frontend, ⚙️ Backend, 🚀 Full Stack — pre-select a curated mix of topics instead of multi-selecting individual tech categories by hand.",
+        "python": "routers/advanced_study.py — each turn sends the conversation-so-far as context to Groq, asking it to both respond in-character as an interviewer and decide the next follow-up question, rather than a fixed decision tree. The role presets are a purely client-side mapping (MockInterview.jsx) from a role name to a curated list of existing category ids — no separate backend endpoint, they just pre-fill the same category filter the manual chips use.",
+    },
+    "/typing-race": {
+        "label": "Typing Race", "audience": "user",
+        "desc": "Daily typing challenge — 3 code snippets, the SAME 3 for every user each day, one shot each (no skipping, no reroll). Submit only unlocks once your typed text exactly matches the snippet — no partial credit, and no way to submit something wrong at all (client-side the button just stays disabled; server-side a mismatched attempt is rejected outright and doesn't consume the shot). Type snippet 1, get it exactly right, submit, see your time, click Next, repeat for snippets 2 and 3; once all 3 are done you're ranked by total time on 'Today's Team' against everyone else who's finished (others show '2/3 done' if mid-way, or 'Not played today' — deactivated/pending/blocked users and anyone under an active lockout never appear here or get nagged by the reminder). Anyone who hasn't started gets an automatic reminder at an admin-configurable time (default 11:00 AM IST). Each snippet is drawn on a canvas rather than plain DOM text, and the answer box blocks pasting, dragging text in, Ctrl/Cmd+V, and its own right-click menu — so there's nothing to drag-select, Inspect-Element, or paste your way past (including text copied via something like Google Lens reading it off a screenshot) — the daily set is also fixed and can't be rerolled for an easier one.",
+        "python": "routers/game.py. GET /game/typing-race/board returns one combined payload — today's 3 snippets (derived deterministically via random.Random(date_string).sample(...), so every user and every server restart computes the identical set with zero stored state), the current user's own progress, and the full team roster — replacing what would otherwise be 3 separate round trips, same pattern as WorkBoard's own GET /board. POST /game/typing-race/submit takes a snippetIndex (0-2), rejects it if that index was already submitted today (one shot each), re-derives the expected snippet server-side (never trusts the client's copy of it), and rejects with a 400 if body.typed isn't an exact match rather than storing a loss — every doc that does get stored in col_game_scores() is therefore a verified correct attempt by construction, so the roster logic needs no separate 'wrong'/'disqualified' branch: completing all 3 always means ranked, sorted by summed timeMs. Both the roster query and the reminder job (scheduler_tasks.py: fire_typing_race_reminder) filter out pending/blocked/rejected/disabled or currently-locked-out users via a shared _is_active_user() check using the same status vocabulary deps.py's current_user() enforces at login.",
     },
     "/flashcards": {
         "label": "Flashcards", "audience": "user",
@@ -285,8 +290,8 @@ ROUTES = {
     # },
     "/messages": {
         "label": "Messages", "audience": "user",
-        "desc": "Private 1-to-1 chat between an admin and a user. Only an admin can start a new conversation — there is no user-to-user chat — but once a conversation exists, the user can reply freely with rich text or an image. A per-conversation blur toggle hides message content on screen until hovered, for privacy in shared spaces (same idea as Notes). Every message triggers both a push and in-app notification.",
-        "python": "routers/admin_chat.py stores conversations and messages in MongoDB and delivers new messages in real time over a per-user WebSocket (/api/admin-chat/ws), authenticated via a JWT passed as a ?token= query param rather than trusting a raw user id — the same pattern used by the WorkBoard and admin notification sockets. REST endpoints handle starting a chat, listing conversations with unread counts, fetching/marking messages read, and sending a message (which also fires the WebSocket push plus a notification).",
+        "desc": "Private 1-to-1 chat between an admin and a user. Only an admin can start a new conversation — there is no user-to-user chat — but once a conversation exists, the user can reply freely with rich text, a code block, or an image. Each message has a hover toolbar to copy its text, pin it, or (for longer messages) get an AI summary. A per-conversation blur toggle hides message content on screen until hovered, for privacy in shared spaces (same idea as Notes). Every message triggers both a push and in-app notification.",
+        "python": "routers/admin_chat.py stores conversations and messages in MongoDB and delivers new messages in real time over a per-user WebSocket (/api/admin-chat/ws), authenticated via a JWT passed as a ?token= query param rather than trusting a raw user id — the same pattern used by the WorkBoard and admin notification sockets. REST endpoints handle starting a chat, listing conversations with unread counts, fetching/marking messages read, and sending a message (which also fires the WebSocket push plus a notification). The conversation-list/draft preview text special-cases a Quill code-block message (detected by a `<pre` tag in the stored HTML) to show '💻 Code snippet' instead of dumping the raw code, the same way an image-only message shows '📷 Image'. The rich-text composer's Enter-to-send keyboard binding checks whether the cursor is inside a code block first and, if so, lets Quill insert a normal newline instead of submitting — otherwise every Enter press while writing multi-line code would send the message mid-block.",
     },
     "/meetings": {
         "label": "Meetings", "audience": "all",
@@ -295,8 +300,8 @@ ROUTES = {
     },
     "/profile": {
         "label": "My Profile", "audience": "user",
-        "desc": "Account details and preferences, plus a Settings panel: account info (email, member-since date), appearance (dark/light theme, snow effect), a change-password form, and a Leave/Holiday section — mark yourself out for a single day or a date range, and Work Board reminders + the Community posting rotation both respect it automatically.",
-        "python": "routers/profile.py for profile fields (bio, links, change-password), routers/uploads.py for the picture (streamed to Cloudinary, only the HTTPS URL is ever saved to MongoDB, never the image bytes), and routers/leaves.py for leave requests (col_user_leaves, a simple startDate/endDate string range — string comparison works fine since YYYY-MM-DD sorts lexicographically same as chronologically). Submitting a leave notifies all admins immediately. Theme/snow preferences are pure client-side localStorage state, no backend involved.",
+        "desc": "Account details and preferences, plus a Settings panel: account info (email, member-since date), appearance (dark/light theme, snow effect), a change-password form, a Notifications section to snooze all push + in-app notifications for 1 day/2 days/1 week/permanently, and a Leave/Holiday section — mark yourself out for a single day or a date range, and Work Board reminders + the Community posting rotation both respect it automatically.",
+        "python": "routers/profile.py for profile fields (bio, links, change-password) and the notification mute (PATCH /profile/my/notifications-mute stores a notifyMutedUntil timestamp on the user's profile doc; a shared db_mongo.user_notifications_muted() helper checks it, called from every recurring reminder in scheduler_tasks.py alongside the existing admin-wide notifications_enabled() kill switch), routers/uploads.py for the picture (streamed to Cloudinary, only the HTTPS URL is ever saved to MongoDB, never the image bytes), and routers/leaves.py for leave requests (col_user_leaves, a simple startDate/endDate string range — string comparison works fine since YYYY-MM-DD sorts lexicographically same as chronologically). Submitting a leave notifies all admins immediately. Theme/snow preferences are pure client-side localStorage state, no backend involved.",
     },
     "/devtools?tool=mock-api": {
         "label": "Mock API Generator", "audience": "user",
@@ -325,8 +330,8 @@ ROUTES = {
     },
     "/admin": {
         "label": "Admin Panel", "audience": "admin",
-        "desc": "User management, app-wide config (maintenance mode, guest mode, force update, WorkBoard reminder times, AI daily limits), notifications, feature docs, and the full backend API reference (/api-docs) — all admin-only, enforced both by hidden nav and by a route-level guard so they can't be reached by a direct URL either.",
-        "python": "routers/admin.py — the single largest router in the codebase. App-wide settings live in one MongoDB document ({_id: 'config'} in col_app_config()), read via a public GET (no secrets in it) and an admin-only GET (same doc, defaults filled in with setdefault()), written via a single PUT with a Pydantic model where every field is Optional so partial updates only touch what was actually sent.",
+        "desc": "User management, app-wide config (maintenance mode, guest mode, force update, WorkBoard reminder times, task due-date reminder time, Typing Race daily play reminder time, AI daily limits), a 'Who's updated?' list showing each user's last-reported app build version after a Force Update push, a Community panel showing today's unanswered-question count plus the posting roster, notifications, feature docs, and the full backend API reference (/api-docs) — all admin-only, enforced both by hidden nav and by a route-level guard so they can't be reached by a direct URL either.",
+        "python": "routers/admin.py — the single largest router in the codebase. App-wide settings live in one MongoDB document ({_id: 'config'} in col_app_config()), read via a public GET (no secrets in it) and an admin-only GET (same doc, defaults filled in with setdefault()), written via a single PUT with a Pydantic model where every field is Optional so partial updates only touch what was actually sent. GET /admin/app-versions cross-references every user against their last col_user_profiles.appVersion (reported once per session by the frontend via POST /profile/my/app-version, stamped at build time via Vite's __APP_VERSION__ define) to flag who's still on an older build. GET /admin/community/unanswered counts today's Community questions with commentCount 0 and returns the Mon-Fri posting-rotation roster from col_community_schedule.",
     },
 }
 
@@ -348,7 +353,33 @@ BEHIND_THE_SCENES = {
     "guest_mode": (
         "Guest mode is a purely client-side, no-account preview — no real backend session exists for "
         "guests. Admins can disable guest mode entirely from the Admin Panel; when off, anyone currently "
-        "browsing as a guest is signed out and shown a message instead of the app."
+        "browsing as a guest is signed out and shown a message instead of the app. Guests now see every "
+        "sidebar item (not a filtered subset) — the ones they can't actually open render blurred with a "
+        "lock icon, and clicking one opens a prompt to log in, sign up, or reach out to admin via the "
+        "Feedback modal for access, instead of just silently not appearing."
+    ),
+    "notification_muting": (
+        "A user can snooze all notifications (both push and in-app) for 1 day, 2 days, a week, or "
+        "permanently from Profile → Settings — stored as a notifyMutedUntil timestamp on their profile "
+        "doc. Every recurring reminder (WorkBoard, Community, task due-dates, Typing Race) checks this "
+        "alongside the separate admin-wide notifications_enabled kill switch before sending, through one "
+        "shared _should_notify() gate in scheduler_tasks.py, so muting is enforced consistently everywhere "
+        "rather than needing to be re-checked ad hoc in each reminder."
+    ),
+    "diagram_generation": (
+        "Ask AI's Diagram mode asks Groq for a Mermaid.js flowchart definition describing whatever project/"
+        "system structure you typed, then renders that definition into an actual SVG diagram entirely in "
+        "the browser via the mermaid npm package — the backend never generates an image, only the text "
+        "description of one. Nothing is persisted; regenerating with the same prompt can produce a "
+        "differently-worded (though similarly-shaped) diagram since it's a fresh AI call each time."
+    ),
+    "typing_race_daily_challenge": (
+        "Typing Race's daily 3 snippets are derived with Python's random.Random(date_string).sample(...) — "
+        "seeded purely by today's date, so every user (and the server itself, even across a restart) "
+        "independently computes the identical 3 snippets with nothing stored in the database for it. This "
+        "is also what makes it fair: a client can't request a different, easier set, and the server "
+        "re-derives the expected snippet for a given index at submit time rather than trusting whatever "
+        "text the client claims it was typing against."
     ),
     "scheduled_disable": (
         "Admins can disable a user permanently or schedule a temporary lockout (hours/days/custom time). "

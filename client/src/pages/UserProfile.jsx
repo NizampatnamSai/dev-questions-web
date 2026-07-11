@@ -79,6 +79,20 @@ export default function UserProfile() {
     }
   };
 
+  const [mutingNotifs, setMutingNotifs] = useState(false);
+  const handleMuteNotifications = async (duration) => {
+    setMutingNotifs(true);
+    try {
+      const { data } = await api.patch("/profile/my/notifications-mute", { duration });
+      setProfile((prev) => ({ ...prev, notifyMutedUntil: data.notifyMutedUntil }));
+      toast.success(duration === "none" ? "Notifications unmuted" : "Notifications muted");
+    } catch {
+      toast.error("Failed to update notification settings");
+    } finally {
+      setMutingNotifs(false);
+    }
+  };
+
   const loadProfile = async () => {
     try {
       const endpoint = isOwnProfile ? "/profile/my/profile" : `/profile/${userId}`;
@@ -402,6 +416,51 @@ export default function UserProfile() {
                 {snow ? "On" : "Off"}
               </button>
             </div>
+          </div>
+
+          {/* Notifications */}
+          <div className="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-700">
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">🔔 Notifications</h3>
+            {profile.notifyMutedUntil && new Date(profile.notifyMutedUntil) > new Date() ? (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-amber-50 dark:bg-amber-900/20 px-4 py-3 rounded-lg">
+                <span className="text-sm text-amber-700 dark:text-amber-400">
+                  🔕 Muted until{" "}
+                  {new Date(profile.notifyMutedUntil).getFullYear() > new Date().getFullYear() + 50
+                    ? "you turn it back on"
+                    : new Date(profile.notifyMutedUntil).toLocaleString()}
+                </span>
+                <button
+                  onClick={() => handleMuteNotifications("none")}
+                  disabled={mutingNotifs}
+                  className="self-start sm:self-auto px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-60 transition-colors"
+                >
+                  Unmute
+                </button>
+              </div>
+            ) : (
+              <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-3 rounded-lg space-y-2">
+                <p className="text-xs text-slate-400">
+                  Pause all reminders (push + in-app) for a while.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { key: "1d", label: "1 day" },
+                    { key: "2d", label: "2 days" },
+                    { key: "1w", label: "1 week" },
+                    { key: "permanent", label: "Permanently" },
+                  ].map((opt) => (
+                    <button
+                      key={opt.key}
+                      onClick={() => handleMuteNotifications(opt.key)}
+                      disabled={mutingNotifs}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 disabled:opacity-60 transition-colors"
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Change password */}

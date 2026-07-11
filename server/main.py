@@ -7,9 +7,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
-from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder
+from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder, fire_task_due_date_reminders, fire_typing_race_reminder
 from routers import auth, questions, stats, admin, comments, study
-from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel
+from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel, game
 
 app = FastAPI(title="Dev Life API")
 
@@ -75,11 +75,35 @@ async def startup():
         wb_pm_h_utc, wb_pm_m_utc = 9, 30
     print(f"[startup] workboard_afternoon_reminder scheduled at {wb_pm_h_utc:02d}:{wb_pm_m_utc:02d} UTC ({wb_pm_time} IST)", flush=True)
 
+    # Task due-date reminder: admin-configurable, default 17:00 IST (5pm)
+    task_due_time = (wb_doc or {}).get("task_due_reminder_time", "17:00")
+    try:
+        td_h_ist, td_m_ist = [int(x) for x in task_due_time.split(":")]
+        total_td_utc = td_h_ist * 60 + td_m_ist - 330
+        td_h_utc = (total_td_utc // 60) % 24
+        td_m_utc = total_td_utc % 60
+    except Exception:
+        td_h_utc, td_m_utc = 11, 30
+    print(f"[startup] task_due_reminder scheduled at {td_h_utc:02d}:{td_m_utc:02d} UTC ({task_due_time} IST)", flush=True)
+
+    # Typing Race daily play reminder: admin-configurable, default 11:00 IST
+    tr_time = (wb_doc or {}).get("typing_race_reminder_time", "11:00")
+    try:
+        tr_h_ist, tr_m_ist = [int(x) for x in tr_time.split(":")]
+        total_tr_utc = tr_h_ist * 60 + tr_m_ist - 330
+        tr_h_utc = (total_tr_utc // 60) % 24
+        tr_m_utc = total_tr_utc % 60
+    except Exception:
+        tr_h_utc, tr_m_utc = 5, 30
+    print(f"[startup] typing_race_reminder scheduled at {tr_h_utc:02d}:{tr_m_utc:02d} UTC ({tr_time} IST)", flush=True)
+
     scheduler.add_job(fire_scheduled_notifications,    "cron", second=0)
     scheduler.add_job(fire_challenge_notifications,    "cron", hour=4, minute=30, second=0)
     scheduler.add_job(fire_workboard_notifications,    "cron", hour=wb_h_utc, minute=wb_m_utc, second=0, id="workboard_reminder")
     scheduler.add_job(fire_workboard_afternoon_reminder, "cron", hour=wb_pm_h_utc, minute=wb_pm_m_utc, second=0, id="workboard_afternoon_reminder")
     scheduler.add_job(fire_community_reminder, "cron", hour=cr_hour, minute=cr_minute, second=0, id="community_reminder")
+    scheduler.add_job(fire_task_due_date_reminders, "cron", hour=td_h_utc, minute=td_m_utc, second=0, id="task_due_reminder")
+    scheduler.add_job(fire_typing_race_reminder, "cron", hour=tr_h_utc, minute=tr_m_utc, second=0, id="typing_race_reminder")
     scheduler.start()
     print("[startup] ✅ Scheduler started with all jobs", flush=True)
 
@@ -121,6 +145,7 @@ app.include_router(uploads.router,           prefix="/api/uploads")
 app.include_router(admin_chat.router,        prefix="/api/admin-chat")
 app.include_router(leaves.router,            prefix="/api/leaves")
 app.include_router(travel.router,            prefix="/api/travel")
+app.include_router(game.router,              prefix="/api/game")
 
 
 @app.get("/")

@@ -13,6 +13,27 @@ const CATEGORIES = [
   ...STUDY_CATEGORIES.map((c) => ({ id: c.id, label: `${c.label} ${c.icon}` })),
 ];
 
+// One-tap role presets — picks a curated mix of the fine-grained categories
+// above so "AI interviewer for Frontend/Backend" doesn't require manually
+// multi-selecting 6+ individual tech chips first.
+const ROLE_PRESETS = [
+  {
+    id: "frontend",
+    label: "🎨 Frontend Interview",
+    categories: ["html", "css", "javascript", "typescript", "react", "frontendsystemdesign", "performance", "accessibility"],
+  },
+  {
+    id: "backend",
+    label: "⚙️ Backend Interview",
+    categories: ["nodejs", "pybackend", "backend", "database", "networking", "websecurity", "devops"],
+  },
+  {
+    id: "fullstack",
+    label: "🚀 Full Stack Interview",
+    categories: ["javascript", "react", "nodejs", "database", "backend", "softwarearchitecture"],
+  },
+];
+
 const DIFFICULTIES = [
   { id: "", label: "All Levels" },
   { id: "Basic", label: "Basic" },
@@ -223,6 +244,34 @@ export default function MockInterview() {
             </div>
 
             <div className="glass-card p-6 space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">
+                  Interview for a role
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {ROLE_PRESETS.map((r) => {
+                    const active = r.categories.length === categories.length &&
+                      r.categories.every((id) => categories.includes(id));
+                    return (
+                      <button
+                        key={r.id}
+                        onClick={() => setCategories(active ? [] : r.categories)}
+                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                          active
+                            ? "bg-indigo-600 text-white"
+                            : "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-500/20"
+                        }`}
+                      >
+                        {r.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-slate-400 mt-1.5">
+                  Or pick individual topics below for a custom mix
+                </p>
+              </div>
+
               <div>
                 <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-2">
                   Category {categories.length > 0 && <span className="text-indigo-400 font-normal">({categories.length} selected)</span>}

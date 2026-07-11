@@ -19,6 +19,9 @@ dist/
 .env.production
 
 
+# Local tracking (not committed)
+FEATURE_BUG_LOG.md
+
 # OS
 .DS_Store
 Thumbs.db

@@ -1,10 +1,21 @@
 from datetime import datetime, date, timezone, timedelta
-from db_mongo import col_notify_schedules, col_fcm_tokens, col_challenge_progress, col_workboard_members, col_user_notifications, notifications_enabled
+from db_mongo import col_notify_schedules, col_fcm_tokens, col_challenge_progress, col_workboard_members, col_user_notifications, notifications_enabled, user_notifications_muted
 from utils.firebase import send_to_tokens
 
 
-async def _log_user_notification(user_id: str, title: str, body: str, notif_type: str):
+async def _should_notify(user_id: str) -> bool:
+    """Gate for every recurring/scheduled notification: respects both the
+    admin-wide kill switch and a user's own 'snooze notifications' setting
+    from Profile settings."""
     if not await notifications_enabled():
+        return False
+    if await user_notifications_muted(user_id):
+        return False
+    return True
+
+
+async def _log_user_notification(user_id: str, title: str, body: str, notif_type: str):
+    if not await _should_notify(user_id):
         return
     try:
         await col_user_notifications().insert_one({
@@ -75,6 +86,8 @@ async def fire_scheduled_notifications():
 
     for sched in schedules:
         uid         = sched["userId"]
+        if not await _should_notify(uid):
+            continue
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(length=50)
         tokens      = [t["token"] for t in tokens_docs]
         if not tokens:
@@ -102,6 +115,8 @@ async def fire_challenge_notifications():
 
     for prog in opted_in:
         uid = prog["userId"]
+        if not await _should_notify(uid):
+            continue
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
         if not tokens:
@@ -151,12 +166,15 @@ async def fire_workboard_notifications():
         if await is_user_on_leave(uid, today):
             skipped_leave += 1
             continue
+        if not await _should_notify(uid):
+            continue
+        sent += 1
+        await _log_user_notification(uid, "📋 Write about today's work", "Share your daily update with the team!", "workboard_reminder")
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
         if not tokens:
-            print(f"[workboard] no FCM token for userId={uid}", flush=True)
+            print(f"[workboard] no FCM token for userId={uid} — logged in-app only", flush=True)
             continue
-        sent += 1
         await send_to_tokens(tokens,
             title="📋 Write about today's work",
             body="Share your daily update with the team! 👀",
@@ -191,17 +209,19 @@ async def fire_workboard_afternoon_reminder():
         if await is_user_on_leave(uid, today):
             skipped_leave += 1
             continue
+        if not await _should_notify(uid):
+            continue
+        sent += 1
+        await _log_user_notification(uid, "⏰ Still haven't posted today?", "It's 3pm — don't forget to share your work update!", "workboard_reminder")
         tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
         tokens = [t["token"] for t in tokens_docs]
         if not tokens:
             continue
-        sent += 1
         await send_to_tokens(tokens,
             title="⏰ Still haven't posted today?",
             body="It's 3pm — don't forget to share your work update! 👀",
             data={"type": "workboard_reminder", "path": "/workboard"},
         )
-        await _log_user_notification(uid, "⏰ Still haven't posted today?", "It's 3pm — don't forget to share your work update!", "workboard_reminder")
     print(f"[workboard-3pm] done — reminded {sent} non-posters (of {len(members)} members, {len(posted_ids)} already posted, {skipped_leave} on leave)", flush=True)
 
 
@@ -240,7 +260,10 @@ async def fire_community_reminder():
         return  # Sunday closed unless explicitly set
 
     if wd == 5 and not email:
-        # Odd Saturday — notify admins
+        if not _is_even_saturday(now_ist):
+            print("[community_reminder] odd Saturday — closed, skipping", flush=True)
+            return
+        # Even Saturday (2nd/4th) — admin's turn to post, notify admins
         admins = await col_users().find({"role": {"$in": ["admin", "sub_admin"]}}).to_list(10)
         for admin in admins:
             toks = await col_fcm_tokens().find({"userId": str(admin["_id"])}).to_list(10)
@@ -295,6 +318,10 @@ async def fire_community_reminder():
         print(f"[community_reminder] {user_name} already posted today — skipping", flush=True)
         return
 
+    if not await _should_notify(uid):
+        print(f"[community_reminder] {user_name} has notifications muted — skipping", flush=True)
+        return
+
     toks = await col_fcm_tokens().find({"userId": uid}).to_list(10)
     tokens = [t["token"] for t in toks]
     if tokens:
@@ -314,3 +341,78 @@ async def fire_community_reminder():
         f"{user_name} hasn't posted to Community today — a reminder was sent.",
         "community_reminder_admin",
     )
+
+
+async def fire_task_due_date_reminders():
+    """Daily reminder (time set via admin app-config, default 5pm IST) for every
+    non-completed task whose due date is today — nudges each assignee who
+    hasn't marked their part done yet."""
+    from db_mongo import col_tasks
+    now_ist = datetime.now(IST)
+    today = now_ist.strftime("%Y-%m-%d")
+    print(f"[task_due] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
+
+    tasks = await col_tasks().find({"dueDate": today, "status": {"$ne": "completed"}}).to_list(500)
+    print(f"[task_due] {len(tasks)} task(s) due today", flush=True)
+
+    sent = 0
+    for task in tasks:
+        completed_by = set(task.get("completedBy", []))
+        title = "⏰ Task due today"
+        body = f"\"{task.get('title', 'Untitled task')}\" is due today — don't forget!"
+        for assignee in task.get("assignees", []):
+            uid = assignee["id"]
+            if uid in completed_by:
+                continue
+            if not await _should_notify(uid):
+                continue
+            sent += 1
+            await _log_user_notification(uid, title, body, "task_due_reminder")
+            tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+            tokens = [t["token"] for t in tokens_docs]
+            if tokens:
+                await send_to_tokens(
+                    tokens, title=title, body=body,
+                    data={"type": "task_due_reminder", "path": "/my-tasks"},
+                )
+    print(f"[task_due] done — sent {sent} reminder(s) across {len(tasks)} task(s)", flush=True)
+
+
+async def fire_typing_race_reminder():
+    """Daily nudge (time set via admin app-config, default 11:00 IST) for
+    anyone who hasn't played today's Typing Race yet — mirrors the WorkBoard
+    reminder's 'only non-posters' shape, just for the game instead of standups."""
+    from db_mongo import mdb, col_users
+    from routers.game import ist_today
+    from deps import is_locked_out
+    now_ist = datetime.now(IST)
+    today = ist_today()
+    print(f"[typing_race] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
+
+    col_game_scores = mdb()["game_scores"]
+    played_ids = set(await col_game_scores.distinct("userId", {"date": today}))
+
+    all_users = await col_users().find({}).to_list(2000)
+    users = [
+        u for u in all_users
+        if u.get("status", "approved") not in ("pending", "blocked", "rejected") and not is_locked_out(u)
+    ]
+    sent = 0
+    for u in users:
+        uid = str(u["_id"])
+        if uid in played_ids:
+            continue
+        if not await _should_notify(uid):
+            continue
+        sent += 1
+        await _log_user_notification(uid, "⌨️ Play today's Typing Race", "Race the clock — beat your best or climb the team leaderboard!", "typing_race_reminder")
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if tokens:
+            await send_to_tokens(
+                tokens,
+                title="⌨️ Play today's Typing Race",
+                body="Race the clock — beat your best or climb the team leaderboard!",
+                data={"type": "typing_race_reminder", "path": "/typing-race"},
+            )
+    print(f"[typing_race] done — reminded {sent} of {len(users)} users who hadn't played today", flush=True)

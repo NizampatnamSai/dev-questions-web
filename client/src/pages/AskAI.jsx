@@ -6,6 +6,7 @@ import api from "../api/axios";
 import toast from "react-hot-toast";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
+import MermaidDiagram from "../components/MermaidDiagram";
 
 const SUGGESTIONS = [
   "Explain how Python works internally",
@@ -433,6 +434,165 @@ function CreateImagePanel() {
   );
 }
 
+// ─── Diagram mode ───────────────────────────────────────────────────────────
+// Describe a project/system structure in plain English, AI turns it into a
+// Mermaid flowchart definition, rendered client-side as an actual diagram —
+// same self-contained shape as the Create (text-to-image) mode above.
+const DIAGRAM_SUGGESTIONS = [
+  "MERN stack project with a Jira-like task board",
+  "Microservices architecture with an API gateway and message queue",
+  "React app folder structure with Redux",
+  "CI/CD pipeline from git push to production deploy",
+];
+
+function DiagramPanel() {
+  const [description, setDescription] = useState("");
+  const [mermaidCode, setMermaidCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  useEffect(() => {
+    if (!previewOpen) return;
+    const handler = (e) => e.key === "Escape" && setPreviewOpen(false);
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [previewOpen]);
+
+  const generate = async (desc) => {
+    const d = (desc ?? description).trim();
+    if (!d) {
+      toast.error("Describe the project/system structure to diagram");
+      return;
+    }
+    setLoading(true);
+    setMermaidCode("");
+    try {
+      const { data } = await api.post("/ai/diagram", { description: d });
+      setMermaidCode(data.mermaid);
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to generate diagram");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyMermaid = async () => {
+    try {
+      await navigator.clipboard.writeText(mermaidCode);
+      toast.success("Mermaid code copied");
+    } catch {
+      toast.error("Couldn't copy");
+    }
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto px-1">
+      <div className="max-w-2xl mx-auto space-y-4 py-4">
+        <div className="flex gap-2 items-center">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), generate())}
+            rows={1}
+            placeholder="Describe a project structure to diagram… e.g. MERN stack project with Jira-like task board"
+            className="flex-1 min-w-0 resize-none text-sm px-4 py-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 dark:focus:border-cyan-400 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 max-h-32 overflow-y-auto"
+            style={{ fieldSizing: "content" }}
+          />
+          <button
+            onClick={() => generate()}
+            disabled={!description.trim() || loading}
+            className={`w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed ${
+              description.trim() && !loading
+                ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm"
+                : "bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500"
+            }`}
+          >
+            {loading
+              ? <span className="w-4 h-4 border-2 border-current/40 border-t-current rounded-full animate-spin" />
+              : <span className="text-lg">📐</span>}
+          </button>
+        </div>
+
+        {!mermaidCode && !loading && (
+          <div className="flex flex-wrap gap-2">
+            {DIAGRAM_SUGGESTIONS.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => { setDescription(s); generate(s); }}
+                className="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {loading && (
+          <div className="glass-card p-12 flex flex-col items-center justify-center gap-3 text-slate-400">
+            <span className="w-6 h-6 border-2 border-slate-300 dark:border-slate-600 border-t-indigo-500 rounded-full animate-spin" />
+            <span className="text-sm">Drawing the diagram…</span>
+          </div>
+        )}
+
+        {mermaidCode && !loading && (
+          <div className="glass-card p-4 space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs text-slate-400">Generated diagram</span>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setPreviewOpen(true)}
+                  className="text-xs text-indigo-500 hover:text-indigo-600 transition-colors"
+                >
+                  🔍 View full
+                </button>
+                <button
+                  onClick={copyMermaid}
+                  className="text-xs text-indigo-500 hover:text-indigo-600 transition-colors"
+                >
+                  📋 Copy diagram code
+                </button>
+              </div>
+            </div>
+            <MermaidDiagram code={mermaidCode} />
+          </div>
+        )}
+      </div>
+
+      {/* Fullscreen diagram preview — same lightbox pattern Messages uses for images */}
+      <AnimatePresence>
+        {previewOpen && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => setPreviewOpen(false)}
+            className="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <button
+              onClick={() => setPreviewOpen(false)}
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg"
+              title="Close"
+            >
+              ✕
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); copyMermaid(); }}
+              className="absolute top-4 right-16 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+              title="Copy diagram code"
+            >
+              📋
+            </button>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-full overflow-auto bg-white dark:bg-slate-900 rounded-xl p-6 cursor-default"
+            >
+              <MermaidDiagram code={mermaidCode} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 const MAX_HUMANIZE_WORDS = 1000;
 
 function HumanizeAIPanel() {
@@ -533,7 +693,7 @@ export default function AskAI() {
   const [isSaved, setIsSaved] = useState(false);
   const [autoSave, setAutoSave] = useState(() => localStorage.getItem("devquiz_ai_autosave") === "true");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [mode, setMode] = useState("chat"); // "chat" | "promptImprover" | "image" | "create" | "humanize"
+  const [mode, setMode] = useState("chat"); // "chat" | "promptImprover" | "image" | "create" | "humanize" | "diagram"
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   // Keep a ref so the auto-save inside async send() always sees the latest chatId
@@ -780,6 +940,8 @@ export default function AskAI() {
                   ? "Describe an image and generate it — free, with a daily limit."
                   : mode === "humanize"
                   ? "Paste AI-generated text and get back a more natural, human-sounding rewrite."
+                  : mode === "diagram"
+                  ? "Describe a project/system structure — get back an actual diagram of it."
                   : "Ask anything — Python internals, how Claude works, JS concepts…"}
               </p>
             </div>
@@ -820,8 +982,15 @@ export default function AskAI() {
             >
               🧑 <span className="hidden sm:inline">Humanize</span>
             </button>
+            <button
+              onClick={() => setMode("diagram")}
+              title="Describe a project structure — get back an actual diagram"
+              className={`flex-shrink-0 text-xs px-2.5 py-1.5 rounded-md font-semibold transition-colors ${mode === "diagram" ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400"}`}
+            >
+              📐 <span className="hidden sm:inline">Diagram</span>
+            </button>
           </div>
-          {!isEmpty && mode !== "image" && mode !== "create" && mode !== "humanize" && (
+          {!isEmpty && mode !== "image" && mode !== "create" && mode !== "humanize" && mode !== "diagram" && (
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Auto-save toggle */}
               <button
@@ -880,6 +1049,8 @@ export default function AskAI() {
           <CreateImagePanel />
         ) : mode === "humanize" ? (
           <HumanizeAIPanel />
+        ) : mode === "diagram" ? (
+          <DiagramPanel />
         ) : isEmpty ? (
           /* ── Hero / welcome state — centered, big pill composer ── */
           <div className="flex-1 flex flex-col items-center justify-center px-4">

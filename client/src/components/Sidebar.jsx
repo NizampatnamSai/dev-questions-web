@@ -7,6 +7,7 @@ import { useWeather } from "../context/WeatherContext";
 import { STATES_CAPITALS } from "../data/statesCapitals";
 import api from "../api/axios";
 import ConfirmModal from "./ConfirmModal";
+import GuestLockedModal from "./GuestLockedModal";
 import { isGuestAllowedPath } from "./ProtectedRoute";
 import SharedToggle from "./Toggle";
 
@@ -43,6 +44,7 @@ const BASE_LINKS = [
   { to: "/quiz", label: "Quiz Mode", icon: "🧠" },
   { to: "/study", label: "Study Hub", icon: "📚" },
   { to: "/mock-interview", label: "Mock Interview", icon: "🎯" },
+  { to: "/typing-race", label: "Typing Race", icon: "⌨️" },
   { to: "/flashcards", label: "Flashcards", icon: "🃏" },
   { to: "/my-questions", label: "My Questions", icon: "📝" },
   { to: "/my-answers", label: "My Answers", icon: "✍️" },
@@ -243,9 +245,11 @@ function Sidebar() {
       ]
     : baseFiltered;
 
-  const links = user?.isGuest
-    ? allLinks.filter((l) => isGuestAllowedPath(l.to))
-    : allLinks;
+  // Guests now see every nav item (previously the disallowed ones were
+  // filtered out entirely) — locked ones render blurred and open a
+  // login/signup prompt instead of navigating.
+  const links = allLinks;
+  const [lockedOpen, setLockedOpen] = useState(false);
 
   const initials = user?.name
     ?.split(" ")
@@ -287,55 +291,78 @@ function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 space-y-0.5">
-        {links.map((link, i) => (
-          <motion.div
-            key={link.to}
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.05 + 0.1 }}
-          >
-            <MotionNavLink
-              to={link.to}
-              end={!!link.exact}
-              initial="initial"
-              whileHover="hover"
-              className={({ isActive }) => {
-                const active = link.activeMatch
-                  ? fullPath === link.activeMatch
-                  : isActive;
-                return `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  active
-                    ? "nav-active-light shadow-sm"
-                    : `${textMuted} hover:bg-black/5 dark:hover:bg-white/8`
-                }`;
-              }}
+        {links.map((link, i) => {
+          const locked = user?.isGuest && !isGuestAllowedPath(link.to);
+          return (
+            <motion.div
+              key={link.to}
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05 + 0.1 }}
             >
-              {({ isActive }) => {
-                const active = link.activeMatch
-                  ? fullPath === link.activeMatch
-                  : isActive;
-                return (
-                  <>
-                    <motion.span variants={iconVariants} className="text-base">
-                      {link.icon}
-                    </motion.span>
-                    <span>{link.label}</span>
-                    {active && (
-                      // Plain conditional render, not a layoutId shared-layout
-                      // animation — that variant measured element position via
-                      // getBoundingClientRect() across the whole 48-link list
-                      // on every single route change, which is real, repeated
-                      // desktop-only cost (this list is only display:none, not
-                      // unmounted, on mobile, so mobile never paid for it).
-                      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400" />
-                    )}
-                  </>
-                );
-              }}
-            </MotionNavLink>
-          </motion.div>
-        ))}
+              <MotionNavLink
+                to={link.to}
+                end={!!link.exact}
+                initial="initial"
+                whileHover="hover"
+                onClick={(e) => {
+                  if (locked) {
+                    e.preventDefault();
+                    setLockedOpen(true);
+                  }
+                }}
+                className={({ isActive }) => {
+                  const active = link.activeMatch
+                    ? fullPath === link.activeMatch
+                    : isActive;
+                  return `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    locked
+                      ? `${textMuted} cursor-pointer hover:bg-black/5 dark:hover:bg-white/8`
+                      : active
+                        ? "nav-active-light shadow-sm"
+                        : `${textMuted} hover:bg-black/5 dark:hover:bg-white/8`
+                  }`;
+                }}
+              >
+                {({ isActive }) => {
+                  const active = link.activeMatch
+                    ? fullPath === link.activeMatch
+                    : isActive;
+                  return (
+                    <>
+                      <motion.span
+                        variants={iconVariants}
+                        className={`text-base ${locked ? "blur-[1.5px] select-none opacity-70" : ""}`}
+                      >
+                        {link.icon}
+                      </motion.span>
+                      <span className={locked ? "select-none opacity-70" : ""}>
+                        {link.label}
+                      </span>
+                      {locked && (
+                        <span className="ml-auto text-xs" title="Login required">
+                          🔒
+                        </span>
+                      )}
+                      {active && !locked && (
+                        // Plain conditional render, not a layoutId shared-layout
+                        // animation — that variant measured element position via
+                        // getBoundingClientRect() across the whole 48-link list
+                        // on every single route change, which is real, repeated
+                        // desktop-only cost (this list is only display:none, not
+                        // unmounted, on mobile, so mobile never paid for it).
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-cyan-400" />
+                      )}
+                    </>
+                  );
+                }}
+              </MotionNavLink>
+            </motion.div>
+          );
+        })}
       </nav>
+
+      <GuestLockedModal open={lockedOpen} onClose={() => setLockedOpen(false)} />
 
       {/* Dev Tools section */}
       {!user?.isGuest && (

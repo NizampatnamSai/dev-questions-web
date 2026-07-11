@@ -25,6 +25,12 @@ const PAGES = [
     keywords: "work tasks daily standup",
   },
   {
+    to: "/meetings",
+    label: "Meetings",
+    icon: "📹",
+    keywords: "meetings call video schedule calendar",
+  },
+  {
     to: "/challenge",
     label: "JS Challenge",
     icon: "🧩",
@@ -59,6 +65,12 @@ const PAGES = [
     label: "Mock Interview",
     icon: "🎯",
     keywords: "mock interview practice dsa",
+  },
+  {
+    to: "/typing-race",
+    label: "Typing Race",
+    icon: "⌨️",
+    keywords: "typing race game wpm speed leaderboard team engagement",
   },
   {
     to: "/flashcards",
@@ -328,6 +340,25 @@ const PAGES = [
     label: "Notes",
     icon: "📝",
     keywords: "notes personal encrypted private quill google keep",
+  },
+  {
+    to: "/devtools?tool=mock-api",
+    label: "Mock API Generator",
+    icon: "🎲",
+    keywords: "mock api generator fake data dev tools",
+  },
+  {
+    to: "/devtools?tool=css-calculator",
+    label: "CSS Calculator",
+    icon: "📐",
+    keywords: "css calculator dev tools",
+  },
+  {
+    to: "/admin/features-doc",
+    label: "Features & Docs",
+    icon: "📖",
+    keywords: "features docs documentation admin changelog",
+    adminOnly: true,
   },
 ];
 

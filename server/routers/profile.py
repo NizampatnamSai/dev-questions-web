@@ -3,7 +3,14 @@ from pydantic import BaseModel
 from db_mongo import col_users, col_user_profiles, sid, oid, now
 from deps import current_user
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+NOTIFY_MUTE_DURATIONS = {
+    "1d": timedelta(days=1),
+    "2d": timedelta(days=2),
+    "1w": timedelta(weeks=1),
+    "permanent": timedelta(days=365 * 100),
+}
 
 router = APIRouter()
 
@@ -54,7 +61,48 @@ async def get_my_profile(user=Depends(current_user)):
         "badges": profile.get("badges", []),
         "createdAt": user.get("createdAt", ""),
         "stats": profile.get("stats", {}),
+        "notifyMutedUntil": profile.get("notifyMutedUntil"),
     }
+
+
+@router.patch("/my/notifications-mute")
+async def set_notifications_mute(body: dict, user=Depends(current_user)):
+    """Snooze all notifications (push + in-app) for this user. duration is one
+    of '1d', '2d', '1w', 'permanent', or 'none' to unmute immediately."""
+    duration = body.get("duration")
+    if duration == "none":
+        await col_user_profiles().update_one(
+            {"userId": user["id"]},
+            {"$unset": {"notifyMutedUntil": ""}},
+            upsert=True,
+        )
+        return {"notifyMutedUntil": None}
+
+    if duration not in NOTIFY_MUTE_DURATIONS:
+        raise HTTPException(400, "duration must be one of: 1d, 2d, 1w, permanent, none")
+
+    muted_until = datetime.now(timezone.utc) + NOTIFY_MUTE_DURATIONS[duration]
+    await col_user_profiles().update_one(
+        {"userId": user["id"]},
+        {"$set": {"notifyMutedUntil": muted_until}},
+        upsert=True,
+    )
+    return {"notifyMutedUntil": muted_until.isoformat()}
+
+
+@router.post("/my/app-version")
+async def report_app_version(body: dict, user=Depends(current_user)):
+    """Frontend reports its build version (client/vite.config.js __APP_VERSION__)
+    on load, so Admin's Force Update panel can show who's still on an old build."""
+    version = body.get("version")
+    if not version:
+        raise HTTPException(400, "version required")
+    await col_user_profiles().update_one(
+        {"userId": user["id"]},
+        {"$set": {"appVersion": version, "appVersionAt": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
+    return {"ok": True}
 
 
 @router.patch("/my/profile")
@@ -88,7 +136,7 @@ async def update_profile(body: ProfileUpdate, user=Depends(current_user)):
 @router.post("/my/change-password")
 async def change_password(body: dict, user=Depends(current_user)):
     """Change user password"""
-    from utils.auth import hash_password, verify_password
+    from auth_utils import hash_password, verify_password
 
     old_password = body.get("old_password")
     new_password = body.get("new_password")
