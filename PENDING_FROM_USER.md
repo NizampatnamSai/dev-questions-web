@@ -17,6 +17,12 @@ sign-up from you. Nothing here is forgotten — just parked until you provide wh
 
 ## Needs a decision from you
 
+- **Email notifications** (2026-07-11) — you asked to add email as a third
+  notification channel alongside push + in-app. This needs a real
+  email-sending provider (a free tier still requires signing up + an API
+  key — options I raised: Resend, Brevo, or Gmail SMTP). You said "remind
+  me about this later" — flagging here so it doesn't get lost; bring it
+  back up whenever you're ready to pick one.
 - **Jobs page — India coverage.** Arbeitnow (the current free, no-key source) is
   Germany/Europe-only — its `location` filter doesn't actually work, confirmed by testing.
   There's no free, keyless job API with real India coverage. Adzuna has a free tier with
@@ -26,9 +32,9 @@ sign-up from you. Nothing here is forgotten — just parked until you provide wh
 
 ## Bigger asks, not started yet
 
-- **WhatsApp privacy extension** (separate project — hide names/messages/groups). Full
-  spec already written in `whatsapp-privacy-extension/PLAN.md`; not part of DevQuiz's
-  codebase, not started — waiting on your go-ahead since it's a separate project.
+- ~~WhatsApp privacy extension~~ — moved out to its own separate folder outside this
+  repo; no longer tracked here. (Original `PLAN.md` left behind in
+  `whatsapp-privacy-extension/` for reference only.)
 - **Chrome extension publishing to the Chrome Web Store** — needs a one-time $5 Google
   developer registration fee (the only real cost anywhere in this whole project) plus your
   Google account to actually submit it; I can prep everything else (icons, store listing

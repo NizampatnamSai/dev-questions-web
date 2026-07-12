@@ -7,6 +7,7 @@ export default function APIDocumentation() {
     { method: "GET", path: "/api/questions/community", desc: "Get community questions" },
     { method: "POST", path: "/api/questions/create", desc: "Create new question" },
     { method: "GET", path: "/api/questions/search/advanced", desc: "Advanced search with filters" },
+    { method: "POST", path: "/api/questions/{id}/react", desc: "Toggle an emoji reaction (👍 ❤️ 😂 🎉 😮 👀) on a question — same emoji toggles it off" },
     { method: "GET", path: "/api/profile/my/profile", desc: "Get current user profile" },
     { method: "PATCH", path: "/api/profile/my/profile", desc: "Update user profile" },
     { method: "PATCH", path: "/api/profile/my/notifications-mute", desc: "Snooze all push + in-app notifications for 1d/2d/1w/permanent, or unmute with 'none'" },
@@ -42,10 +43,15 @@ export default function APIDocumentation() {
 
     // Typing Race — daily 3-snippet challenge, same set for everyone, ranked by total time
     { method: "GET", path: "/api/game/typing-race/board", desc: "Single combined payload: today's 3 snippets, your own progress, and the full team roster" },
-    { method: "POST", path: "/api/game/typing-race/submit", desc: "Submit a completed snippet (one shot per snippet per day) — returns WPM/accuracy" },
+    { method: "POST", path: "/api/game/typing-race/submit", desc: "Submit a completed snippet (one shot per snippet per day, exact match required) — returns WPM, points earned, any new badge, and your current daily streak" },
+
+    // Mini Sudoku — unlimited plays, pick a size, ranked daily by cumulative marks
+    { method: "POST", path: "/api/game/sudoku/start", desc: "Start a new puzzle (size 6, 7, or 8) — returns a sessionId + the puzzle (never the solution)" },
+    { method: "POST", path: "/api/game/sudoku/submit", desc: "Submit a solved grid for a session (exact match required) — returns marks earned, points earned, any new badge, and your current daily streak" },
+    { method: "GET", path: "/api/game/sudoku/board", desc: "Today's cumulative-marks roster, plus your own today's total score, puzzle count, and current streak" },
 
     // Admin Panel — app-wide config, force-update version tracking, community oversight
-    { method: "GET", path: "/api/admin/app-config", desc: "Get all app-wide settings, incl. reminder times (WorkBoard, task due-date, Typing Race, Community) — admin only" },
+    { method: "GET", path: "/api/admin/app-config", desc: "Get all app-wide settings, incl. reminder times (WorkBoard, task due-date, Typing Race, Mini Sudoku, weekly digest, Community) — admin only" },
     { method: "PUT", path: "/api/admin/app-config", desc: "Update app-wide settings; changing a reminder time live-reschedules that cron job — admin only" },
     { method: "GET", path: "/api/admin/app-versions", desc: "Who's on the latest deployed build vs. an older one, from each user's last-reported app version — admin only" },
     { method: "GET", path: "/api/admin/community/unanswered", desc: "Today's unanswered-question count in Community, plus the Mon-Fri posting roster — admin only" },
@@ -116,6 +122,7 @@ export default function APIDocumentation() {
     { method: "GET", path: "/api/admin-chat/users", desc: "List users you can start a new conversation with (admin only)" },
     { method: "GET", path: "/api/admin-chat/{chatId}/messages", desc: "Get a conversation's messages and mark unread ones as read" },
     { method: "POST", path: "/api/admin-chat/{chatId}/messages", desc: "Send a rich-text message and/or image in a conversation" },
+    { method: "POST", path: "/api/admin-chat/{chatId}/messages/{messageId}/react", desc: "Toggle an emoji reaction on a message — broadcasts live to the other participant(s) over the chat WebSocket" },
     { method: "WS", path: "/api/admin-chat/ws", desc: "Real-time delivery of new messages (JWT via ?token= query param)" },
 
     // Project Chatbot — scoped to explaining this app only
@@ -209,6 +216,10 @@ export default function APIDocumentation() {
           <li>✅ Force-update build tracking — admin can see who's on an old bundle after a deploy</li>
           <li>✅ AI-generated Mermaid diagrams from a plain-English project/system description</li>
           <li>✅ Daily 3-snippet Typing Race — same snippets for everyone, ranked by total time, canvas-rendered to resist copy/paste</li>
+          <li>✅ Mini Sudoku — unlimited plays, choice of 6x6/7x7/8x8, ranked daily by cumulative marks</li>
+          <li>✅ Points, badges, and daily streaks for Typing Race + Mini Sudoku, feeding the same profile level everywhere else uses</li>
+          <li>✅ Emoji reactions (👍 ❤️ 😂 🎉 😮 👀) on Community questions and Messages, live over WebSocket for chat</li>
+          <li>✅ Weekly digest notification — Monday summary of each user's game activity, skipped for anyone inactive that week</li>
         </ul>
       </div>
 

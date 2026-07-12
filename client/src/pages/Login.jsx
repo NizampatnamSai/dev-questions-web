@@ -118,12 +118,22 @@ export default function Login() {
         className="glass-card w-full max-w-md p-8"
       >
         <div className="text-center mb-6">
-          <img
-            src="/logo192.png"
-            alt="Dev Life"
-            className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-indigo-500/30"
-          />
-          <h1 className="text-2xl font-bold mt-3">Dev Life</h1>
+          <div className="relative inline-block">
+            <img
+              src="/logo192.png"
+              alt="Dev Life"
+              className="w-16 h-16 rounded-2xl mx-auto shadow-lg shadow-indigo-500/30"
+            />
+            <span className="absolute -bottom-1 -right-2 text-[9px] font-extrabold leading-none px-1.5 py-0.5 rounded-full bg-indigo-600 text-white border-2 border-white dark:border-slate-950 shadow-sm">
+              AI
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold mt-3 flex items-center justify-center gap-1.5">
+            Dev Life
+            <span className="inline-flex items-center leading-none text-[10px] font-bold tracking-wide py-[4px] px-[6px] rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300">
+              AI
+            </span>
+          </h1>
           <p className="text-sm text-slate-400">Your Dev Companion</p>
         </div>
 

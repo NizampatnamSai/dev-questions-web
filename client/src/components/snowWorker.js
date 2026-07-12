@@ -1,6 +1,13 @@
-// Optimized snow using requestAnimationFrame (60 FPS instead of 24 FPS)
+// Snow drifts slowly, so it doesn't need a full 60 FPS to look smooth —
+// throttled to ~30 FPS, which halves how often this canvas repaints. That
+// matters more than it sounds: BrightnessControl.jsx overlays the whole
+// page with a mix-blend-mode layer whenever brightness isn't at 100%, and
+// mix-blend-mode forces the browser to recomposite everything beneath it
+// on every repaint of this canvas — halving the repaint rate roughly halves
+// that compositing cost too.
+const FRAME_INTERVAL_MS = 1000 / 30;
 let ctx, W, H, flakes, animationId, snowColor = "rgba(190,220,255,0.55)";
-let lastTime = 0;
+let lastDrawTime = 0;
 
 function initFlakes() {
   flakes = Array.from({ length: 35 }, () => ({  // Reduced from 45 for better perf
@@ -14,10 +21,16 @@ function initFlakes() {
 }
 
 function draw(timestamp) {
-  // Delta time for smooth frame-rate independent animation
-  if (!lastTime) lastTime = timestamp;
-  const deltaTime = Math.min((timestamp - lastTime) / 16.67, 2);  // 16.67ms = 60 FPS
-  lastTime = timestamp;
+  animationId = requestAnimationFrame(draw);
+
+  if (!lastDrawTime) lastDrawTime = timestamp;
+  const elapsed = timestamp - lastDrawTime;
+  if (elapsed < FRAME_INTERVAL_MS) return; // throttle to ~30 FPS
+
+  // Delta time (relative to the last actual draw, not every raf tick) for
+  // smooth frame-rate-independent animation regardless of the throttle above.
+  const deltaTime = Math.min(elapsed / 16.67, 2);  // 16.67ms = 60 FPS baseline
+  lastDrawTime = timestamp;
 
   // Clear once, draw all flakes efficiently
   ctx.clearRect(0, 0, W, H);
@@ -44,7 +57,6 @@ function draw(timestamp) {
   }
 
   ctx.fill();
-  animationId = requestAnimationFrame(draw);
 }
 
 self.onmessage = ({ data }) => {
@@ -71,7 +83,7 @@ self.onmessage = ({ data }) => {
   }
 
   if (data.type === "resume" && !animationId) {
-    lastTime = 0; // avoid a huge deltaTime jump after being paused
+    lastDrawTime = 0; // avoid a huge deltaTime jump after being paused
     animationId = requestAnimationFrame(draw);
   }
 

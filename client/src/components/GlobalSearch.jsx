@@ -73,6 +73,12 @@ const PAGES = [
     keywords: "typing race game wpm speed leaderboard team engagement",
   },
   {
+    to: "/mini-sudoku",
+    label: "Mini Sudoku",
+    icon: "🧩",
+    keywords: "sudoku puzzle game daily leaderboard team engagement",
+  },
+  {
     to: "/flashcards",
     label: "Flashcards",
     icon: "🃏",

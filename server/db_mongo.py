@@ -80,6 +80,8 @@ def col_user_answers():         return mdb()["user_answers"]
 def col_user_notifications():   return mdb()["user_notifications"]
 def col_app_config():           return mdb()["app_config"]
 def col_game_scores():          return mdb()["game_scores"]
+def col_sudoku_scores():        return mdb()["sudoku_scores"]
+def col_sudoku_sessions():      return mdb()["sudoku_sessions"]
 
 
 async def notifications_enabled() -> bool:

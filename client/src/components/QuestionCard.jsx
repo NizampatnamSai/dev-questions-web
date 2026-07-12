@@ -22,6 +22,8 @@ const CATEGORY_STYLES = {
     "bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-500/15 dark:text-indigo-300 dark:border-indigo-500/30",
 };
 
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "🎉", "😮", "👀"]; // matches server/routers/questions.py
+
 const LEVEL_STYLES = {
   Low: "bg-green-100  text-green-700  border-green-200  dark:bg-green-500/15   dark:text-green-300  dark:border-green-500/30",
   Medium:
@@ -200,6 +202,33 @@ function QuestionCard({
   const [revealed, setRevealed] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentCount, setCommentCount] = useState(q.commentCount ?? 0);
+  const [reactions, setReactions] = useState(q.reactions || {});
+  const [myReactions, setMyReactions] = useState(q.myReactions || []);
+  const [showReactionPicker, setShowReactionPicker] = useState(false);
+
+  const toggleReaction = async (emoji) => {
+    setShowReactionPicker(false);
+    // Optimistic: flip it locally right away instead of waiting on the
+    // round trip, same fix as Messages' reaction toggle — reverted on failure.
+    const prevReactions = reactions;
+    const prevMyReactions = myReactions;
+    const alreadyMine = myReactions.includes(emoji);
+    const nextReactions = { ...reactions };
+    const nextCount = (nextReactions[emoji] || 0) + (alreadyMine ? -1 : 1);
+    if (nextCount > 0) nextReactions[emoji] = nextCount;
+    else delete nextReactions[emoji];
+    setReactions(nextReactions);
+    setMyReactions(alreadyMine ? myReactions.filter((e) => e !== emoji) : [...myReactions, emoji]);
+    try {
+      const { data } = await api.post(`/questions/${q.id}/react`, { emoji });
+      setReactions(data.reactions || {});
+      setMyReactions(data.myReactions || []);
+    } catch {
+      setReactions(prevReactions);
+      setMyReactions(prevMyReactions);
+      toast.error("Failed to react");
+    }
+  };
 
   return (
     <motion.div
@@ -372,6 +401,47 @@ function QuestionCard({
             >
               {q.isBookmarked ? "🔖 Saved" : "🔖 Save"}
             </button>
+          )}
+
+          {/* Reactions */}
+          {!user?.isGuest && (
+            <div className="relative flex items-center gap-1 flex-wrap">
+              {Object.entries(reactions)
+                .filter(([, count]) => count > 0)
+                .map(([emoji, count]) => (
+                  <button
+                    key={emoji}
+                    onClick={() => toggleReaction(emoji)}
+                    className={`text-xs px-2 py-1 rounded-full border transition-colors ${
+                      myReactions.includes(emoji)
+                        ? "bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-500/20 dark:border-indigo-500/40 dark:text-indigo-300"
+                        : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
+                    }`}
+                  >
+                    {emoji} {count}
+                  </button>
+                ))}
+              <button
+                onClick={() => setShowReactionPicker((v) => !v)}
+                title="Add reaction"
+                className="text-xs px-2 py-1 rounded-full border border-slate-200 dark:border-white/10 text-slate-400 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors"
+              >
+                😊
+              </button>
+              {showReactionPicker && (
+                <div className="absolute bottom-full mb-1 right-0 flex items-center gap-1 bg-white dark:bg-slate-800 border border-black/10 dark:border-white/10 rounded-full px-2 py-1 shadow-lg z-10">
+                  {REACTION_EMOJIS.map((emoji) => (
+                    <button
+                      key={emoji}
+                      onClick={() => toggleReaction(emoji)}
+                      className="text-base hover:scale-125 transition-transform"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           {/* Edit removed intentionally */}

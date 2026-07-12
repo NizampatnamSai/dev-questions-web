@@ -214,7 +214,7 @@ export default function Generator() {
 
   // shared
   const [category, setCategory] = useState([]);
-  const [level, setLevel] = useState(LEVELS[0]);
+  const [level, setLevel] = useState("High");
   const [type, setType] = useState(TYPES[0]);
   const [usage, setUsage] = useState(null);
   const [dailyPost, setDailyPost] = useState(null);

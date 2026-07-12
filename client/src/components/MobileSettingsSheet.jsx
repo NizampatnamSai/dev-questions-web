@@ -35,6 +35,12 @@ const FEATURE_LINKS = [
     sub: "Race the clock, climb the team leaderboard",
   },
   {
+    to: "/mini-sudoku",
+    icon: "🧩",
+    label: "Mini Sudoku",
+    sub: "One daily 6x6 puzzle, ranked by solve time",
+  },
+  {
     to: "/flashcards",
     icon: "🃏",
     label: "Flashcards",

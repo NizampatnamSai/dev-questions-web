@@ -718,6 +718,8 @@ class AppConfigBody(BaseModel):
     chat_edit_window_minutes: Optional[int] = None
     task_due_reminder_time: Optional[str] = None   # "HH:MM" IST, e.g. "17:00"
     typing_race_reminder_time: Optional[str] = None  # "HH:MM" IST, e.g. "11:00"
+    sudoku_reminder_time: Optional[str] = None        # "HH:MM" IST, e.g. "11:00"
+    weekly_digest_time: Optional[str] = None          # "HH:MM" IST on Monday, e.g. "09:00"
 
 
 @router.get("/community/unanswered")
@@ -830,6 +832,8 @@ async def get_app_config(admin=Depends(_require_admin)):
     doc.setdefault("chat_edit_window_minutes", 30)
     doc.setdefault("task_due_reminder_time", "17:00")
     doc.setdefault("typing_race_reminder_time", "11:00")
+    doc.setdefault("sudoku_reminder_time", "11:00")
+    doc.setdefault("weekly_digest_time", "09:00")
     return doc
 
 
@@ -874,6 +878,10 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["task_due_reminder_time"] = body.task_due_reminder_time
     if body.typing_race_reminder_time is not None:
         update["typing_race_reminder_time"] = body.typing_race_reminder_time
+    if body.sudoku_reminder_time is not None:
+        update["sudoku_reminder_time"] = body.sudoku_reminder_time
+    if body.weekly_digest_time is not None:
+        update["weekly_digest_time"] = body.weekly_digest_time
 
     if update:
         await col_app_config().update_one(
@@ -930,6 +938,30 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
             scheduler.reschedule_job("typing_race_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
         except Exception as e:
             import logging; logging.getLogger(__name__).warning(f"Failed to reschedule typing race reminder job: {e}")
+
+    # If the Mini Sudoku reminder time changed, reschedule that job too
+    if body.sudoku_reminder_time is not None:
+        try:
+            from main import scheduler
+            h, m = [int(x) for x in body.sudoku_reminder_time.split(":")]
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            scheduler.reschedule_job("sudoku_reminder", trigger="cron", hour=utc_h, minute=utc_m, second=0)
+        except Exception as e:
+            import logging; logging.getLogger(__name__).warning(f"Failed to reschedule sudoku reminder job: {e}")
+
+    # If the weekly digest time changed, reschedule that job too (day stays Monday)
+    if body.weekly_digest_time is not None:
+        try:
+            from main import scheduler
+            h, m = [int(x) for x in body.weekly_digest_time.split(":")]
+            total_utc = h * 60 + m - 330
+            utc_h = (total_utc // 60) % 24
+            utc_m = total_utc % 60
+            scheduler.reschedule_job("weekly_digest", trigger="cron", day_of_week="mon", hour=utc_h, minute=utc_m, second=0)
+        except Exception as e:
+            import logging; logging.getLogger(__name__).warning(f"Failed to reschedule weekly digest job: {e}")
 
     # If maintenance just turned OFF → notify all users
     if was_maintenance and body.maintenance is False:

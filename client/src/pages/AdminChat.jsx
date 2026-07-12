@@ -16,6 +16,7 @@ const WS_BASE = _apiUrl
 
 const MAX_IMAGES_PER_MESSAGE = 6; // matches server/routers/admin_chat.py
 const MIN_SUMMARIZE_WORDS = 25; // matches server/routers/admin_chat.py — hides the button on short messages that would just 400
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "🎉", "😮", "👀"]; // matches server/routers/admin_chat.py
 
 function stripHtmlForSearch(html) {
   if (!html) return "";
@@ -273,6 +274,7 @@ export default function AdminChat() {
   const [dateJumpValue, setDateJumpValue] = useState("");
   const [summarizingMessageId, setSummarizingMessageId] = useState(null);
   const [summaryPopover, setSummaryPopover] = useState(null); // {messageId, text} | null
+  const [reactionPickerFor, setReactionPickerFor] = useState(null); // messageId | null
   const [draftsByChat, setDraftsByChat] = useState({}); // { chatId: previewText } — drives the sidebar's "Draft: ..." row
   const [lightboxImage, setLightboxImage] = useState(null); // image url currently shown full-size, or null
   const [showMentionPicker, setShowMentionPicker] = useState(false);
@@ -514,6 +516,12 @@ export default function AdminChat() {
                 : c,
             ),
           );
+        } else if (msg.type === "react_message") {
+          if (msg.chatId === activeChatIdRef.current) {
+            setMessages((prev) =>
+              prev.map((m) => (m.id === msg.messageId ? { ...m, reactions: msg.reactions } : m)),
+            );
+          }
         } else if (msg.type === "presence") {
           // Both directions patch locally now — computePresence() derives
           // the color from these two raw fields, so there's nothing a
@@ -589,6 +597,39 @@ export default function AdminChat() {
       }
     } catch (err) {
       toast.error(err.response?.data?.detail || "Failed to update pin");
+    }
+  };
+
+  const toggleReaction = async (messageId, emoji) => {
+    setReactionPickerFor(null);
+    // Optimistic: flip it locally right away rather than waiting on the
+    // round trip — a reaction that only appears after a network response
+    // (or worse, after the OTHER side's WS event echoes back) reads as
+    // "broken", not "a bit slow". Reverted on failure below.
+    let prevMessages;
+    setMessages((prev) => {
+      prevMessages = prev;
+      return prev.map((m) => {
+        if (m.id !== messageId) return m;
+        const alreadyMine = m.myReactions?.includes(emoji);
+        const reactions = { ...(m.reactions || {}) };
+        const nextCount = (reactions[emoji] || 0) + (alreadyMine ? -1 : 1);
+        if (nextCount > 0) reactions[emoji] = nextCount;
+        else delete reactions[emoji];
+        const myReactions = alreadyMine
+          ? (m.myReactions || []).filter((e) => e !== emoji)
+          : [...(m.myReactions || []), emoji];
+        return { ...m, reactions, myReactions };
+      });
+    });
+    try {
+      const { data } = await api.post(`/admin-chat/${activeChatId}/messages/${messageId}/react`, { emoji });
+      setMessages((prev) =>
+        prev.map((m) => (m.id === messageId ? { ...m, reactions: data.reactions, myReactions: data.myReactions } : m)),
+      );
+    } catch (err) {
+      setMessages(prevMessages);
+      toast.error(err.response?.data?.detail || "Failed to react");
     }
   };
 
@@ -682,7 +723,17 @@ export default function AdminChat() {
         memberIds: selectedMemberIds,
       });
       setShowGroupPicker(false);
-      await openChat(data.id); // already refreshes the conversation list itself
+      // Same fix as startChat: POST /group's response already has everything
+      // the header needs (type/groupName), it just was never added to
+      // `conversations` — splice it in now instead of leaving activeChat
+      // undefined until the next background refresh.
+      setConversations((prev) =>
+        prev.some((c) => c.id === data.id)
+          ? prev
+          : [{ ...data, unreadCount: 0, pinnedMessageIds: [], mutedByMe: false }, ...prev],
+      );
+      loadConversations();
+      await openChat(data.id);
     } catch (err) {
       toast.error(err.response?.data?.detail || "Failed to create group");
     } finally {
@@ -717,10 +768,36 @@ export default function AdminChat() {
       const { data } = await api.post("/admin-chat/start", { userId: targetUserId });
       setShowUserPicker(false);
       setPickerSearch("");
-      // openChat() already refreshes the conversation list itself after
-      // loading messages — a separate loadConversations() call here was a
-      // redundant extra round trip serialized before we could even start
-      // opening the chat, adding to the 2-3s wait with zero visual feedback.
+      // POST /start only returns the raw chat doc (adminId/userId/userName…),
+      // not the otherUserName/otherUserAvatar fields the sidebar/header read —
+      // those only exist on GET /conversations' aggregated shape. Without this,
+      // a brand-new chat wasn't in `conversations` at all yet, so the header
+      // rendered Avatar with no name → the "?" placeholder — until the next
+      // background loadConversations() (tab visibility change), which could be
+      // minutes away. Splice in an optimistic entry using data the picker
+      // already has, then reconcile for real in the background.
+      setConversations((prev) => {
+        if (prev.some((c) => c.id === data.id)) return prev;
+        const picked = pickerUsers.find((u) => u.id === targetUserId);
+        return [
+          {
+            id: data.id,
+            type: "dm",
+            otherUserId: targetUserId,
+            otherUserName: picked?.isSelf ? "Self (Me) — Notes to myself" : picked?.name || data.userName,
+            otherUserAvatar: picked?.avatar || null,
+            otherUserOnline: picked?.online || false,
+            otherUserLastActiveAt: picked?.lastActiveAt || null,
+            lastMessageAt: data.lastMessageAt,
+            lastMessagePreview: data.lastMessagePreview || "",
+            unreadCount: 0,
+            pinnedMessageIds: [],
+            mutedByMe: false,
+          },
+          ...prev,
+        ];
+      });
+      loadConversations(); // reconcile with the canonical shape in the background — not awaited, so it doesn't add to the wait
       await openChat(data.id);
     } catch (err) {
       toast.error(err.response?.data?.detail || "Failed to start chat");
@@ -1347,6 +1424,39 @@ export default function AdminChat() {
                               {mine && <MessageStatus m={m} isGroup={isGroup} />}
                             </p>
                           </div>
+                          {m.reactions && Object.keys(m.reactions).length > 0 && (
+                            <div className={`flex flex-wrap gap-1 mt-1 ${mine ? "justify-end" : "justify-start"}`}>
+                              {Object.entries(m.reactions).map(([emoji, count]) => (
+                                <button
+                                  key={emoji}
+                                  onClick={() => toggleReaction(m.id, emoji)}
+                                  className={`text-[11px] px-1.5 py-0.5 rounded-full border transition-colors ${
+                                    m.myReactions?.includes(emoji)
+                                      ? "bg-indigo-100 dark:bg-indigo-500/20 border-indigo-300 dark:border-indigo-500/40"
+                                      : "bg-slate-100 dark:bg-white/5 border-transparent hover:border-slate-300 dark:hover:border-white/20"
+                                  }`}
+                                >
+                                  {emoji} {count}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                          {reactionPickerFor === m.id && (
+                            <div className={`flex items-center gap-1 mt-1 bg-white dark:bg-slate-800 border border-black/10 dark:border-white/10 rounded-full px-2 py-1 shadow-lg w-fit ${mine ? "self-end" : "self-start"}`}>
+                              {REACTION_EMOJIS.map((emoji) => (
+                                <button
+                                  key={emoji}
+                                  onClick={() => toggleReaction(m.id, emoji)}
+                                  className="text-base hover:scale-125 transition-transform"
+                                >
+                                  {emoji}
+                                </button>
+                              ))}
+                              <button onClick={() => setReactionPickerFor(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs ml-0.5">
+                                ✕
+                              </button>
+                            </div>
+                          )}
                           {summaryPopover?.messageId === m.id && (
                             <div className="mt-1 text-xs bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 rounded-xl px-3 py-2 space-y-1">
                               <div className="flex items-center justify-between gap-2">
@@ -1372,6 +1482,13 @@ export default function AdminChat() {
                               📋
                             </button>
                           )}
+                          <button
+                            onClick={() => setReactionPickerFor((cur) => (cur === m.id ? null : m.id))}
+                            title="React"
+                            className={reactionPickerFor === m.id ? "text-indigo-500" : "text-slate-400 hover:text-indigo-500"}
+                          >
+                            😊
+                          </button>
                           <button
                             onClick={() => togglePin(m.id, isPinned)}
                             title={isPinned ? "Unpin" : "Pin"}

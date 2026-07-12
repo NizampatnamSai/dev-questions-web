@@ -1588,6 +1588,8 @@ function AppConfigPanel() {
     chat_edit_window_minutes: 30,
     task_due_reminder_time: "17:00",
     typing_race_reminder_time: "11:00",
+    sudoku_reminder_time: "11:00",
+    weekly_digest_time: "09:00",
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1716,6 +1718,50 @@ function AppConfigPanel() {
         typing_race_reminder_time: config.typing_race_reminder_time,
       }));
       toast.success("Typing Race reminder time updated");
+    } catch {
+      toast.error("Failed");
+    }
+    setSaving(false);
+  };
+
+  const hasSudokuChange =
+    !!initialConfig &&
+    config.sudoku_reminder_time !== initialConfig.sudoku_reminder_time;
+
+  const saveSudokuReminder = async () => {
+    if (!hasSudokuChange) return;
+    setSaving(true);
+    try {
+      await api.put("/admin/app-config", {
+        sudoku_reminder_time: config.sudoku_reminder_time,
+      });
+      setInitialConfig((prev) => ({
+        ...prev,
+        sudoku_reminder_time: config.sudoku_reminder_time,
+      }));
+      toast.success("Mini Sudoku reminder time updated");
+    } catch {
+      toast.error("Failed");
+    }
+    setSaving(false);
+  };
+
+  const hasWeeklyDigestChange =
+    !!initialConfig &&
+    config.weekly_digest_time !== initialConfig.weekly_digest_time;
+
+  const saveWeeklyDigest = async () => {
+    if (!hasWeeklyDigestChange) return;
+    setSaving(true);
+    try {
+      await api.put("/admin/app-config", {
+        weekly_digest_time: config.weekly_digest_time,
+      });
+      setInitialConfig((prev) => ({
+        ...prev,
+        weekly_digest_time: config.weekly_digest_time,
+      }));
+      toast.success("Weekly digest time updated");
     } catch {
       toast.error("Failed");
     }
@@ -2042,6 +2088,58 @@ function AppConfigPanel() {
 
       <div className="border-t border-black/5 dark:border-white/10" />
 
+      {/* Mini Sudoku Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          🧩 Mini Sudoku Settings
+        </p>
+        <div className="max-w-xs space-y-1">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Daily Play Reminder Time (IST)
+          </label>
+          <input
+            type="time"
+            value={config.sudoku_reminder_time || "11:00"}
+            onChange={(e) =>
+              setConfig((c) => ({ ...c, sudoku_reminder_time: e.target.value }))
+            }
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            Daily nudge to anyone who hasn't solved a Sudoku yet today
+          </p>
+        </div>
+        {hasSudokuChange && (
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() =>
+                setConfig((c) => ({
+                  ...c,
+                  sudoku_reminder_time: initialConfig.sudoku_reminder_time,
+                }))
+              }
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              ↺ Reset
+            </button>
+            <button
+              disabled={!hasSudokuChange || saving}
+              onClick={saveSudokuReminder}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                hasSudokuChange
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
       {/* Typing Race Settings */}
       <div className="space-y-4">
         <p className="font-semibold text-slate-700 dark:text-slate-200">
@@ -2082,6 +2180,58 @@ function AppConfigPanel() {
               onClick={saveTypingRaceReminder}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                 hasTypingRaceChange
+                  ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      {/* Weekly Digest Settings */}
+      <div className="space-y-4">
+        <p className="font-semibold text-slate-700 dark:text-slate-200">
+          📊 Weekly Digest Settings
+        </p>
+        <div className="max-w-xs space-y-1">
+          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Weekly Summary Time — Mondays (IST)
+          </label>
+          <input
+            type="time"
+            value={config.weekly_digest_time || "09:00"}
+            onChange={(e) =>
+              setConfig((c) => ({ ...c, weekly_digest_time: e.target.value }))
+            }
+            className="w-full text-sm px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 outline-none focus:border-indigo-400 text-slate-700 dark:text-slate-200"
+          />
+          <p className="text-[10px] text-slate-400">
+            Sends each user a Monday summary of their Typing Race + Mini Sudoku activity from the past week — skipped for anyone with no activity
+          </p>
+        </div>
+        {hasWeeklyDigestChange && (
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() =>
+                setConfig((c) => ({
+                  ...c,
+                  weekly_digest_time: initialConfig.weekly_digest_time,
+                }))
+              }
+              disabled={saving}
+              className="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              ↺ Reset
+            </button>
+            <button
+              disabled={!hasWeeklyDigestChange || saving}
+              onClick={saveWeeklyDigest}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                hasWeeklyDigestChange
                   ? "bg-indigo-600 text-white hover:bg-indigo-700"
                   : "bg-slate-200 dark:bg-white/10 text-slate-400 cursor-not-allowed"
               }`}

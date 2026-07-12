@@ -54,6 +54,7 @@ const QuestionDetail = lazy(() => import("./pages/QuestionDetail"));
 const StudyGuide = lazy(() => import("./pages/StudyGuide"));
 const MockInterview = lazy(() => import("./pages/MockInterview"));
 const TypingRace = lazy(() => import("./pages/TypingRace"));
+const MiniSudoku = lazy(() => import("./pages/MiniSudoku"));
 const Flashcards = lazy(() => import("./pages/Flashcards"));
 const Progress = lazy(() => import("./pages/Progress"));
 const JsCompiler = lazy(() => import("./pages/JsCompiler"));
@@ -169,12 +170,22 @@ function AppLayout({ children, fullWidth = false }) {
           {/* Top bar — mobile */}
           <div className="md:hidden flex items-center justify-between px-4 py-2.5 sticky top-0 z-30 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-black/5 dark:border-white/8">
             <div className="flex items-center gap-2">
-              <img
-                src="/logo192.png"
-                alt="Dev Life"
-                className="w-7 h-7 rounded-lg"
-              />
-              <span className="font-bold text-sm gradient-text">Dev Life</span>
+              <div className="relative flex-shrink-0">
+                <img
+                  src="/logo192.png"
+                  alt="Dev Life"
+                  className="w-7 h-7 rounded-lg"
+                />
+                <span className="absolute -bottom-1 -right-1 text-[6px] font-extrabold leading-none px-1 py-0.5 rounded-full bg-indigo-600 text-white border border-white dark:border-slate-950 shadow-sm">
+                  AI
+                </span>
+              </div>
+              <span className="font-bold text-sm gradient-text flex items-center gap-1">
+                Dev Life
+                <span className="inline-flex items-center leading-none text-[8px] font-bold tracking-wide py-[3px] px-[4px] rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300">
+                  AI
+                </span>
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <ProjectChatbot />
@@ -677,6 +688,14 @@ function AppInner() {
           element={
             <ProtectedPage path="/typing-race">
               <TypingRace />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/mini-sudoku"
+          element={
+            <ProtectedPage path="/mini-sudoku">
+              <MiniSudoku />
             </ProtectedPage>
           }
         />

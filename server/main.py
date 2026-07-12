@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
-from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder, fire_task_due_date_reminders, fire_typing_race_reminder
+from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder, fire_task_due_date_reminders, fire_typing_race_reminder, fire_sudoku_reminder, fire_weekly_digest
 from routers import auth, questions, stats, admin, comments, study
 from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel, game
 
@@ -97,6 +97,28 @@ async def startup():
         tr_h_utc, tr_m_utc = 5, 30
     print(f"[startup] typing_race_reminder scheduled at {tr_h_utc:02d}:{tr_m_utc:02d} UTC ({tr_time} IST)", flush=True)
 
+    # Mini Sudoku daily play reminder: admin-configurable, default 11:00 IST
+    sd_time = (wb_doc or {}).get("sudoku_reminder_time", "11:00")
+    try:
+        sd_h_ist, sd_m_ist = [int(x) for x in sd_time.split(":")]
+        total_sd_utc = sd_h_ist * 60 + sd_m_ist - 330
+        sd_h_utc = (total_sd_utc // 60) % 24
+        sd_m_utc = total_sd_utc % 60
+    except Exception:
+        sd_h_utc, sd_m_utc = 5, 30
+    print(f"[startup] sudoku_reminder scheduled at {sd_h_utc:02d}:{sd_m_utc:02d} UTC ({sd_time} IST)", flush=True)
+
+    # Weekly digest (Typing Race + Sudoku activity summary): admin-configurable, default 09:00 IST on Monday
+    wd_time = (wb_doc or {}).get("weekly_digest_time", "09:00")
+    try:
+        wd_h_ist, wd_m_ist = [int(x) for x in wd_time.split(":")]
+        total_wd_utc = wd_h_ist * 60 + wd_m_ist - 330
+        wd_h_utc = (total_wd_utc // 60) % 24
+        wd_m_utc = total_wd_utc % 60
+    except Exception:
+        wd_h_utc, wd_m_utc = 3, 30
+    print(f"[startup] weekly_digest scheduled at Mon {wd_h_utc:02d}:{wd_m_utc:02d} UTC ({wd_time} IST)", flush=True)
+
     scheduler.add_job(fire_scheduled_notifications,    "cron", second=0)
     scheduler.add_job(fire_challenge_notifications,    "cron", hour=4, minute=30, second=0)
     scheduler.add_job(fire_workboard_notifications,    "cron", hour=wb_h_utc, minute=wb_m_utc, second=0, id="workboard_reminder")
@@ -104,6 +126,8 @@ async def startup():
     scheduler.add_job(fire_community_reminder, "cron", hour=cr_hour, minute=cr_minute, second=0, id="community_reminder")
     scheduler.add_job(fire_task_due_date_reminders, "cron", hour=td_h_utc, minute=td_m_utc, second=0, id="task_due_reminder")
     scheduler.add_job(fire_typing_race_reminder, "cron", hour=tr_h_utc, minute=tr_m_utc, second=0, id="typing_race_reminder")
+    scheduler.add_job(fire_sudoku_reminder, "cron", hour=sd_h_utc, minute=sd_m_utc, second=0, id="sudoku_reminder")
+    scheduler.add_job(fire_weekly_digest, "cron", day_of_week="mon", hour=wd_h_utc, minute=wd_m_utc, second=0, id="weekly_digest")
     scheduler.start()
     print("[startup] ✅ Scheduler started with all jobs", flush=True)
 

@@ -101,6 +101,7 @@ def _ser(doc: dict, uid: str = None) -> dict:
     upvotes    = doc.get("upvotes",    [])
     bookmarks  = doc.get("bookmarks",  [])
     highlights = doc.get("highlights", [])
+    raw_reactions = doc.get("reactions", {})  # {emoji: [userIds]}
     return {
         "id":             qid,
         "userId":         doc.get("userId"),
@@ -120,6 +121,8 @@ def _ser(doc: dict, uid: str = None) -> dict:
         "isUpvoted":      uid in upvotes    if uid else False,
         "isBookmarked":   uid in bookmarks  if uid else False,
         "isHighlighted":  uid in highlights if uid else False,
+        "reactions":      {emoji: len(uids) for emoji, uids in raw_reactions.items() if uids},
+        "myReactions":    [emoji for emoji, uids in raw_reactions.items() if uid and uid in uids],
         "author": {"id": doc.get("userId"), "name": doc.get("authorName", "Unknown"), "avatarUrl": None},
     }
 
@@ -593,6 +596,37 @@ async def upvote(qid: str, user=Depends(current_user)):
         action = "removed"
     else:
         await col_questions().update_one({"_id": oid(qid)}, {"$addToSet": {"upvotes": uid}})
+        action = "added"
+    updated = await col_questions().find_one({"_id": oid(qid)})
+    return {**_ser(updated, uid), "action": action}
+
+
+# ── Emoji reaction toggle ─────────────────────────────────────────────────────
+# A small fixed emoji set (not a freeform picker) — much lighter to build than
+# a full emoji picker UI, and keeps reactions consistent/scannable across the
+# feed rather than a long tail of one-off emoji nobody else uses.
+
+REACTION_EMOJIS = ["👍", "❤️", "😂", "🎉", "😮", "👀"]
+
+
+class ReactBody(BaseModel):
+    emoji: str
+
+
+@router.post("/{qid}/react")
+async def react(qid: str, body: ReactBody, user=Depends(current_user)):
+    if body.emoji not in REACTION_EMOJIS:
+        raise HTTPException(400, f"emoji must be one of {REACTION_EMOJIS}")
+    uid = user["id"]
+    doc = await col_questions().find_one({"_id": oid(qid)})
+    if not doc: raise HTTPException(404, "Not found")
+    field = f"reactions.{body.emoji}"
+    already = uid in doc.get("reactions", {}).get(body.emoji, [])
+    if already:
+        await col_questions().update_one({"_id": oid(qid)}, {"$pull": {field: uid}})
+        action = "removed"
+    else:
+        await col_questions().update_one({"_id": oid(qid)}, {"$addToSet": {field: uid}})
         action = "added"
     updated = await col_questions().find_one({"_id": oid(qid)})
     return {**_ser(updated, uid), "action": action}

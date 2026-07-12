@@ -14,6 +14,18 @@ BADGES = {
     "streak_month": {"name": "Monthly Streak", "icon": "🔥🔥", "description": "Logged in 30 days in a row"},
     "level_5": {"name": "Level 5", "icon": "🎯", "description": "Reached level 5"},
     "level_10": {"name": "Level 10", "icon": "🏆", "description": "Reached level 10"},
+    "speed_typist": {"name": "Speed Typist", "icon": "⌨️", "description": "Completed all 3 Typing Race snippets in one day"},
+    "sudoku_solver": {"name": "Sudoku Solver", "icon": "🧩", "description": "Solved your first Mini Sudoku"},
+}
+
+POINTS_MAP = {
+    "question_posted": 50,
+    "answer_posted": 30,
+    "upvote_received": 10,
+    "comment_posted": 5,
+    "daily_login": 20,
+    "typing_race_snippet": 15,
+    "sudoku_solved": 15,
 }
 
 
@@ -61,22 +73,11 @@ async def get_user_stats(user=Depends(current_user)):
     }
 
 
-@router.post("/profile/add-points/{action}")
-async def add_points(action: str, user=Depends(current_user)):
-    """Add points for actions (internal use)"""
-    points_map = {
-        "question_posted": 50,
-        "answer_posted": 30,
-        "upvote_received": 10,
-        "comment_posted": 5,
-        "daily_login": 20,
-    }
-
-    if action not in points_map:
-        raise HTTPException(400, "Invalid action")
-
-    points = points_map[action]
-    profile = await col_user_profiles().find_one({"userId": user["id"]}) or {}
+async def award_points(user_id: str, points: int) -> dict:
+    """Shared points-awarding logic — used by POST /profile/add-points/{action}
+    below, and called directly (no HTTP round-trip) by other routers that
+    want to grant points, e.g. Typing Race and Mini Sudoku on a win."""
+    profile = await col_user_profiles().find_one({"userId": user_id}) or {}
 
     old_level = get_level_from_points(profile.get("points", 0))
     new_points = profile.get("points", 0) + points
@@ -91,7 +92,7 @@ async def add_points(action: str, user=Depends(current_user)):
             badges.append("level_10")
 
     await col_user_profiles().update_one(
-        {"userId": user["id"]},
+        {"userId": user_id},
         {"$set": {
             "points": new_points,
             "badges": badges,
@@ -101,6 +102,31 @@ async def add_points(action: str, user=Depends(current_user)):
     )
 
     return {"points": new_points, "level": new_level, "leveledUp": new_level != old_level}
+
+
+async def award_badge(user_id: str, badge_id: str) -> bool:
+    """Shared badge-awarding logic — returns True if the badge was newly
+    awarded (False if the user already had it), used by callers that want
+    to know whether to show a "New badge!" toast."""
+    profile = await col_user_profiles().find_one({"userId": user_id}) or {}
+    badges = profile.get("badges", [])
+    if badge_id in badges:
+        return False
+    badges.append(badge_id)
+    await col_user_profiles().update_one(
+        {"userId": user_id},
+        {"$set": {"badges": badges, "updatedAt": now()}},
+        upsert=True,
+    )
+    return True
+
+
+@router.post("/profile/add-points/{action}")
+async def add_points(action: str, user=Depends(current_user)):
+    """Add points for actions (internal use)"""
+    if action not in POINTS_MAP:
+        raise HTTPException(400, "Invalid action")
+    return await award_points(user["id"], POINTS_MAP[action])
 
 
 @router.post("/profile/add-badge/{target_user_id}/{badge_id}")

@@ -72,6 +72,17 @@ def _recipient_status(msg: dict, other_ids: list[str]) -> dict:
     }
 
 
+REACTION_EMOJIS = ["👍", "❤️", "😂", "🎉", "😮", "👀"]
+
+
+def _reaction_summary(msg: dict, uid: str) -> dict:
+    raw = msg.get("reactions", {})  # {emoji: [userIds]}
+    return {
+        "reactions": {emoji: len(uids) for emoji, uids in raw.items() if uids},
+        "myReactions": [emoji for emoji, uids in raw.items() if uid in uids],
+    }
+
+
 async def _get_chat_or_403(chat_id: str, user: dict) -> dict:
     chat = await col_admin_chats().find_one({"_id": oid(chat_id)})
     if not chat:
@@ -531,7 +542,7 @@ async def get_messages(chat_id: str, user=Depends(current_user)):
     for d in docs:
         can_edit = d["senderId"] == user["id"] and _can_edit_message(d, window_minutes)
         msg_other_ids = _other_participant_ids(chat, d["senderId"])
-        result.append({**sid(d), "canEdit": can_edit, **_recipient_status(d, msg_other_ids)})
+        result.append({**sid(d), "canEdit": can_edit, **_recipient_status(d, msg_other_ids), **_reaction_summary(d, user["id"])})
     return result
 
 
@@ -606,6 +617,7 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
     created = sid(await col_admin_chat_messages().find_one({"_id": result.inserted_id}))
     created["canEdit"] = True  # just sent — obviously still within the edit window
     created.update(_recipient_status(created, other_ids))
+    created.update(_reaction_summary(created, user["id"]))
 
     preview = _preview_text(body.html, len(body.imageUrls))
     await col_admin_chats().update_one(
@@ -689,6 +701,7 @@ async def edit_message(chat_id: str, message_id: str, body: EditMessageBody, use
     updated = sid(await col_admin_chat_messages().find_one({"_id": oid(message_id)}))
     updated["canEdit"] = _can_edit_message(updated, window_minutes)
     updated.update(_recipient_status(updated, _other_participant_ids(chat, user["id"])))
+    updated.update(_reaction_summary(updated, user["id"]))
 
     # Keep the conversation-list preview in sync, but only if this was the
     # most recent message — editing an older message shouldn't make the list
@@ -741,6 +754,37 @@ async def unpin_message(chat_id: str, message_id: str, user=Depends(current_user
         _other_participant_ids(chat, user["id"]), {"type": "unpin_message", "chatId": chat_id, "messageId": message_id},
     )
     return {"pinnedMessageIds": updated_ids}
+
+
+class MessageReactBody(BaseModel):
+    emoji: str
+
+
+@router.post("/{chat_id}/messages/{message_id}/react")
+async def react_message(chat_id: str, message_id: str, body: MessageReactBody, user=Depends(current_user)):
+    if body.emoji not in REACTION_EMOJIS:
+        raise HTTPException(400, f"emoji must be one of {REACTION_EMOJIS}")
+    chat = await _get_chat_or_403(chat_id, user)
+    msg = await col_admin_chat_messages().find_one({"_id": oid(message_id), "chatId": chat_id})
+    if not msg:
+        raise HTTPException(404, "Message not found")
+
+    uid = user["id"]
+    field = f"reactions.{body.emoji}"
+    already = uid in msg.get("reactions", {}).get(body.emoji, [])
+    if already:
+        await col_admin_chat_messages().update_one({"_id": oid(message_id)}, {"$pull": {field: uid}})
+    else:
+        await col_admin_chat_messages().update_one({"_id": oid(message_id)}, {"$addToSet": {field: uid}})
+
+    updated = await col_admin_chat_messages().find_one({"_id": oid(message_id)})
+    summary = _reaction_summary(updated, uid)
+
+    await manager.broadcast_to_many(
+        _other_participant_ids(chat, uid),
+        {"type": "react_message", "chatId": chat_id, "messageId": message_id, "reactions": summary["reactions"]},
+    )
+    return summary
 
 
 @router.post("/{chat_id}/mute")

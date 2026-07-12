@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import GuestLockedModal from "../components/GuestLockedModal";
 
 // Some categories' real brand colors don't work as a solid fill with white
 // text — JS yellow and React's light cyan are too light (poor contrast),
@@ -501,16 +502,27 @@ function AiExplainer() {
               </div>
 
               {/* Input */}
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && e.metaKey && explain()}
-                placeholder={
-                  "Paste code, an error message, or any concept…\n\nExamples:\n• useCallback(() => ..., [deps])\n• Cannot read properties of undefined\n• What is the event loop?"
-                }
-                rows={7}
-                className="w-full text-sm px-4 py-3 rounded-xl border border-violet-200 dark:border-violet-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-violet-400 resize-none font-mono"
-              />
+              <div className="relative">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && e.metaKey && explain()}
+                  placeholder={
+                    "Paste code, an error message, or any concept…\n\nExamples:\n• useCallback(() => ..., [deps])\n• Cannot read properties of undefined\n• What is the event loop?"
+                  }
+                  rows={7}
+                  className="w-full text-sm px-4 py-3 pr-16 rounded-xl border border-violet-200 dark:border-violet-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-violet-400 resize-none font-mono"
+                />
+                {input && (
+                  <button
+                    onClick={() => setInput("")}
+                    title="Clear input"
+                    className="absolute top-2 right-2 text-xs px-2 py-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+                  >
+                    ✕ Clear
+                  </button>
+                )}
+              </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">
@@ -554,10 +566,8 @@ function AiExplainer() {
                         🤖 AI Explanation
                       </span>
                       <button
-                        onClick={() => {
-                          setInput("");
-                          setResult(null);
-                        }}
+                        onClick={() => setResult(null)}
+                        title="Clear explanation (keeps your input)"
                         className="text-xs text-slate-400 hover:text-slate-600"
                       >
                         ✕ Clear
@@ -608,6 +618,7 @@ export default function StudyGuide() {
   const [search, setSearch] = useState("");
   const [reviewed, setReviewed] = useState(loadReviewed);
   const [openId, setOpenId] = useState(null);
+  const [guestLockOpen, setGuestLockOpen] = useState(false);
 
   // Logged-in users get DB-backed progress (syncs any local guest progress up
   // on first login); guests keep using localStorage only.
@@ -679,8 +690,27 @@ export default function StudyGuide() {
         </p>
       </div>
 
-      {/* AI Explainer */}
-      <AiExplainer />
+      {/* AI Explainer — needs a real login (calls an authenticated AI
+          endpoint), so guests get a blurred, locked preview instead of a
+          working-looking panel that silently 401s. */}
+      {user?.isGuest ? (
+        <div className="relative">
+          <div className="blur-sm pointer-events-none select-none opacity-70">
+            <AiExplainer />
+          </div>
+          <button
+            onClick={() => setGuestLockOpen(true)}
+            className="absolute inset-0 flex items-center justify-center rounded-2xl"
+          >
+            <span className="px-4 py-2 rounded-full bg-black/60 text-white text-sm font-semibold flex items-center gap-2">
+              🔒 Login to use AI Explainer
+            </span>
+          </button>
+        </div>
+      ) : (
+        <AiExplainer />
+      )}
+      <GuestLockedModal open={guestLockOpen} onClose={() => setGuestLockOpen(false)} />
 
       {/* Dev Tools */}
       {/* <DevTools /> */}

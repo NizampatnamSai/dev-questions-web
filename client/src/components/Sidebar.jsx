@@ -45,6 +45,7 @@ const BASE_LINKS = [
   { to: "/study", label: "Study Hub", icon: "📚" },
   { to: "/mock-interview", label: "Mock Interview", icon: "🎯" },
   { to: "/typing-race", label: "Typing Race", icon: "⌨️" },
+  { to: "/mini-sudoku", label: "Mini Sudoku", icon: "🧩" },
   { to: "/flashcards", label: "Flashcards", icon: "🃏" },
   { to: "/my-questions", label: "My Questions", icon: "📝" },
   { to: "/my-answers", label: "My Answers", icon: "✍️" },
@@ -274,14 +275,22 @@ function Sidebar() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <img
-          src="/logo192.png"
-          alt="Dev Life"
-          className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30"
-        />
+        <div className="relative flex-shrink-0">
+          <img
+            src="/logo192.png"
+            alt="Dev Life"
+            className="w-9 h-9 rounded-xl shadow-lg shadow-indigo-500/30"
+          />
+          <span className="absolute -bottom-1 -right-1.5 text-[7px] font-extrabold leading-none px-1 py-0.5 rounded-full bg-indigo-600 text-white border-2 border-white dark:border-slate-950 shadow-sm">
+            AI
+          </span>
+        </div>
         <div className="flex-1 min-w-0">
-          <p className="text-base font-bold tracking-tight gradient-text">
+          <p className="text-base font-bold tracking-tight gradient-text flex items-center gap-1.5">
             Dev Life
+            <span className="inline-flex items-center leading-none text-[9px] font-bold tracking-wide py-[3px] px-[5px] rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300">
+              AI
+            </span>
           </p>
           <p className="text-[10px] text-slate-400 -mt-0.5">
             Your Dev Companion

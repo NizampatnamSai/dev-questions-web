@@ -101,6 +101,7 @@ export default function TypingRace() {
   const [loading, setLoading] = useState(true);
   const [roster, setRoster] = useState([]);
   const [loadingBoard, setLoadingBoard] = useState(true);
+  const [streak, setStreak] = useState(0);
   const inputRef = useRef(null);
 
   const currentIndex = completed.length;
@@ -117,6 +118,7 @@ export default function TypingRace() {
         setSnippets(data.snippets);
         setCompleted(data.completed);
         setRoster(data.roster);
+        setStreak(data.streak || 0);
       })
       .catch(() => toast.error("Failed to load today's Typing Race"))
       .finally(() => {
@@ -152,6 +154,10 @@ export default function TypingRace() {
       setLastResult(data);
       setTyped("");
       setStartedAt(null);
+      toast.success(`+${data.pointsEarned} points`, { icon: "⭐", duration: 2000 });
+      if (data.newBadge) {
+        setTimeout(() => toast.success("🏆 New badge: Speed Typist!", { duration: 4000 }), 400);
+      }
       loadBoard();
     } catch (err) {
       toast.error(err.response?.data?.detail || "Failed to submit score");
@@ -174,6 +180,9 @@ export default function TypingRace() {
         <p className="text-slate-500 dark:text-slate-400">
           3 snippets a day, same for everyone — one shot each, ranked by total time. No skipping.
         </p>
+        {streak > 1 && (
+          <p className="text-xs text-amber-500 font-semibold mt-2">🔥 {streak}-day streak</p>
+        )}
       </div>
 
       <div className="glass-card p-6 space-y-4">

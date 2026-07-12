@@ -416,3 +416,126 @@ async def fire_typing_race_reminder():
                 data={"type": "typing_race_reminder", "path": "/typing-race"},
             )
     print(f"[typing_race] done — reminded {sent} of {len(users)} users who hadn't played today", flush=True)
+
+
+async def fire_sudoku_reminder():
+    """Daily nudge (time set via admin app-config, default 11:00 IST) for
+    anyone who hasn't solved any Mini Sudoku yet today — same 'only nudge
+    who hasn't done it' shape as the Typing Race reminder."""
+    from db_mongo import mdb, col_users
+    from routers.game import ist_today
+    from deps import is_locked_out
+    now_ist = datetime.now(IST)
+    today = ist_today()
+    print(f"[sudoku] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
+
+    col_sudoku_scores = mdb()["sudoku_scores"]
+    played_ids = set(await col_sudoku_scores.distinct("userId", {"date": today}))
+
+    all_users = await col_users().find({}).to_list(2000)
+    users = [
+        u for u in all_users
+        if u.get("status", "approved") not in ("pending", "blocked", "rejected") and not is_locked_out(u)
+    ]
+    sent = 0
+    for u in users:
+        uid = str(u["_id"])
+        if uid in played_ids:
+            continue
+        if not await _should_notify(uid):
+            continue
+        sent += 1
+        await _log_user_notification(uid, "🧩 Solve today's Mini Sudoku", "Pick a size, beat the clock, climb the team leaderboard!", "sudoku_reminder")
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if tokens:
+            await send_to_tokens(
+                tokens,
+                title="🧩 Solve today's Mini Sudoku",
+                body="Pick a size, beat the clock, climb the team leaderboard!",
+                data={"type": "sudoku_reminder", "path": "/mini-sudoku"},
+            )
+    print(f"[sudoku] done — reminded {sent} of {len(users)} users who hadn't played today", flush=True)
+
+
+async def fire_weekly_digest():
+    """Weekly summary (Monday morning, time set via admin app-config, default
+    09:00 IST) of each user's Typing Race + Mini Sudoku activity over the past
+    7 days — snippets typed, sudokus solved, and current streaks. Skips anyone
+    with zero activity in the window so it never nags a user who's never
+    touched these games."""
+    from db_mongo import mdb, col_users, col_user_profiles
+    from routers.game import ist_today
+    from deps import is_locked_out
+    from datetime import date as _date, timedelta as _timedelta
+
+    now_ist = datetime.now(IST)
+    print(f"[weekly_digest] fired at {now_ist.strftime('%A %Y-%m-%d %H:%M')} IST", flush=True)
+
+    today = ist_today()
+    week_dates = [(_date.fromisoformat(today) - _timedelta(days=i)).isoformat() for i in range(7)]
+
+    col_game_scores = mdb()["game_scores"]
+    col_sudoku_scores = mdb()["sudoku_scores"]
+
+    typing_counts = {
+        row["_id"]: row["count"]
+        for row in await col_game_scores.aggregate([
+            {"$match": {"date": {"$in": week_dates}}},
+            {"$group": {"_id": "$userId", "count": {"$sum": 1}}},
+        ]).to_list(2000)
+    }
+    sudoku_counts = {
+        row["_id"]: row["count"]
+        for row in await col_sudoku_scores.aggregate([
+            {"$match": {"date": {"$in": week_dates}}},
+            {"$group": {"_id": "$userId", "count": {"$sum": 1}}},
+        ]).to_list(2000)
+    }
+
+    all_users = await col_users().find({}).to_list(2000)
+    users = [
+        u for u in all_users
+        if u.get("status", "approved") not in ("pending", "blocked", "rejected") and not is_locked_out(u)
+    ]
+    profiles = {p["userId"]: p for p in await col_user_profiles().find({}).to_list(2000)}
+
+    sent = 0
+    for u in users:
+        uid = str(u["_id"])
+        typed = typing_counts.get(uid, 0)
+        solved = sudoku_counts.get(uid, 0)
+        if typed == 0 and solved == 0:
+            continue
+        if not await _should_notify(uid):
+            continue
+
+        profile = profiles.get(uid, {})
+        ts = profile.get("typingRaceStreak", 0)
+        ss = profile.get("sudokuStreak", 0)
+
+        parts = []
+        if typed:
+            parts.append(f"⌨️ {typed} snippet{'s' if typed != 1 else ''} typed")
+        if solved:
+            parts.append(f"🧩 {solved} sudoku{'s' if solved != 1 else ''} solved")
+        streak_bits = []
+        if ts > 1:
+            streak_bits.append(f"⌨️🔥{ts}")
+        if ss > 1:
+            streak_bits.append(f"🧩🔥{ss}")
+        title = "📊 Your week in Dev Life"
+        body = " · ".join(parts)
+        if streak_bits:
+            body += f" ({', '.join(streak_bits)} streak)"
+
+        sent += 1
+        await _log_user_notification(uid, title, body, "weekly_digest")
+        tokens_docs = await col_fcm_tokens().find({"userId": uid}).to_list(10)
+        tokens = [t["token"] for t in tokens_docs]
+        if tokens:
+            await send_to_tokens(
+                tokens, title=title, body=body,
+                data={"type": "weekly_digest", "path": "/typing-race"},
+            )
+    print(f"[weekly_digest] done — sent {sent} of {len(users)} users with weekly activity", flush=True)
