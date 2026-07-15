@@ -157,6 +157,12 @@ const PAGES = [
     keywords: "compiler run javascript code",
   },
   {
+    to: "/ts-compiler",
+    label: "TS Compiler",
+    icon: "🔷",
+    keywords: "compiler run typescript code types interfaces generics",
+  },
+  {
     to: "/json-parser",
     label: "JSON Parser",
     icon: "🔍",

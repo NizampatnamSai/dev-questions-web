@@ -30,6 +30,7 @@ const BASE_LINKS = [
   { to: "/my-tasks", label: "My Tasks", icon: "📋", hideForAdmin: true },
   { to: "/json-parser", label: "JSON Parser", icon: "🔍" },
   { to: "/js-compiler", label: "JS Compiler", icon: "⚡" },
+  { to: "/ts-compiler", label: "TS Compiler", icon: "🔷" },
   { to: "/regex-tester", label: "Regex Tester", icon: "🧬" },
   { to: "/cron-builder", label: "Cron Builder", icon: "⏰" },
   { to: "/jwt-decoder", label: "JWT Decoder", icon: "🔑" },
