@@ -520,7 +520,10 @@ async def create(body: CreateBody, user=Depends(current_user)):
     if status == "published":
         short_q = body.question[:80] + ("…" if len(body.question) > 80 else "")
         from db_mongo import col_fcm_tokens
-        rows = await col_fcm_tokens().find({}).to_list(length=1000)
+        # Excludes the poster's own tokens — this was notifying people about
+        # their own post ("New question by <you>") since the query had no
+        # filter at all.
+        rows = await col_fcm_tokens().find({"userId": {"$ne": uid}}).to_list(length=1000)
         from utils.firebase import send_to_tokens
         tokens = [r["token"] for r in rows]
         await send_to_tokens(tokens, f"New question by {user['name']}", short_q, {
@@ -630,6 +633,22 @@ async def react(qid: str, body: ReactBody, user=Depends(current_user)):
         action = "added"
     updated = await col_questions().find_one({"_id": oid(qid)})
     return {**_ser(updated, uid), "action": action}
+
+
+@router.get("/{qid}/reactors")
+async def get_reactors(qid: str, emoji: str, user=Depends(current_user)):
+    """Who reacted with a given emoji — fetched lazily on hover from the
+    frontend rather than embedded in every question payload (reactor names
+    are rarely looked at, so resolving them eagerly on every list/feed
+    request would be wasted work for the common case)."""
+    doc = await col_questions().find_one({"_id": oid(qid)})
+    if not doc:
+        raise HTTPException(404, "Not found")
+    uids = doc.get("reactions", {}).get(emoji, [])
+    if not uids:
+        return []
+    users = await col_users().find({"_id": {"$in": [oid(u) for u in uids]}}).to_list(len(uids))
+    return [{"id": str(u["_id"]), "name": u.get("name", "Unknown")} for u in users]
 
 
 # ── Bookmark toggle ───────────────────────────────────────────────────────────
@@ -796,8 +815,8 @@ async def admin_auto_post(body: AutoPostBody, admin=Depends(current_user)):
     }
     result = await col_questions().insert_one(new_doc)
 
-    # Notify all users
-    rows = await col_fcm_tokens().find({}).to_list(1000)
+    # Notify all users except the admin who just triggered this post
+    rows = await col_fcm_tokens().find({"userId": {"$ne": admin["id"]}}).to_list(1000)
     tokens = [r["token"] for r in rows]
     short_q = q_doc.get("question", "")[:80]
     await send_to_tokens(tokens, f"New question by {display_name}", short_q,

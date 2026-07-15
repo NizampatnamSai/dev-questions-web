@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 import AnswerBlock from "../components/AnswerBlock";
-import { fmtDate, fmtTime } from "../utils/time";
+import { fmtDateTime } from "../utils/time";
 import ConfirmModal from "../components/ConfirmModal";
 
 function DraftCard({ q, onPublish, onDelete, onUpdate, publishing, communityToday }) {
@@ -54,7 +54,7 @@ function DraftCard({ q, onPublish, onDelete, onUpdate, publishing, communityToda
           {q.type === "Coding" ? "💻 Coding" : "🧩 Technical"}
         </span>
         <span className="ml-auto text-[10px] text-slate-400">
-          {fmtDate(q.createdAt)} {fmtTime(q.createdAt)}
+          {fmtDateTime(q.createdAt)}
         </span>
       </div>
 

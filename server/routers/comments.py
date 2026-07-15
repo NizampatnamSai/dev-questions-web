@@ -69,7 +69,9 @@ async def add_comment(qid: str, body: CommentBody, user=Depends(current_user)):
     created = await col_comments().find_one({"_id": result.inserted_id})
 
     try:
-        rows   = await col_fcm_tokens().find({}).to_list(length=1000)
+        # Excludes the commenter's own tokens — same self-notification bug as
+        # the Community "new question" push.
+        rows   = await col_fcm_tokens().find({"userId": {"$ne": user["id"]}}).to_list(length=1000)
         tokens = [r["token"] for r in rows]
         short_q = q.get("question", "")[:60] + ("…" if len(q.get("question", "")) > 60 else "")
         short_c = text[:80]

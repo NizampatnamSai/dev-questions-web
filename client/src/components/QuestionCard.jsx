@@ -1,12 +1,12 @@
 import toast from "react-hot-toast";
 import { createPortal } from "react-dom";
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnswerBlock from "./AnswerBlock";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-import { fmtDate, fmtTime } from "../utils/time";
+import { fmtDateTime } from "../utils/time";
 import ConfirmModal from "./ConfirmModal";
 
 const CATEGORY_STYLES = {
@@ -23,6 +23,49 @@ const CATEGORY_STYLES = {
 };
 
 const REACTION_EMOJIS = ["👍", "❤️", "😂", "🎉", "😮", "👀"]; // matches server/routers/questions.py
+
+// A reaction chip that lazily fetches "who reacted" on hover (not eagerly —
+// most reactions never get hovered, so resolving names on every list render
+// would be wasted work) and shows them in a small tooltip above the chip.
+function ReactionChip({ emoji, count, mine, onClick, fetchReactors }) {
+  const [tooltip, setTooltip] = useState(null); // null | "loading" | string[]
+  const timerRef = useRef(null);
+
+  const handleEnter = () => {
+    timerRef.current = setTimeout(async () => {
+      setTooltip("loading");
+      try {
+        setTooltip(await fetchReactors(emoji));
+      } catch {
+        setTooltip(null);
+      }
+    }, 250);
+  };
+  const handleLeave = () => {
+    clearTimeout(timerRef.current);
+    setTooltip(null);
+  };
+
+  return (
+    <div className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <button
+        onClick={onClick}
+        className={`text-xs px-2 py-1 rounded-full border transition-colors ${
+          mine
+            ? "bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-500/20 dark:border-indigo-500/40 dark:text-indigo-300"
+            : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
+        }`}
+      >
+        {emoji} {count}
+      </button>
+      {tooltip && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1 rounded-lg bg-slate-900 dark:bg-slate-700 text-white text-[11px] whitespace-nowrap shadow-lg z-20">
+          {tooltip === "loading" ? "…" : tooltip.length ? tooltip.join(", ") : "No one yet"}
+        </div>
+      )}
+    </div>
+  );
+}
 
 const LEVEL_STYLES = {
   Low: "bg-green-100  text-green-700  border-green-200  dark:bg-green-500/15   dark:text-green-300  dark:border-green-500/30",
@@ -128,7 +171,7 @@ function CommentsSection({ qid, onCommentCountChange }) {
                     </span>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] text-slate-400">
-                        {fmtDate(c.createdAt)} {fmtTime(c.createdAt)}
+                        {fmtDateTime(c.createdAt)}
                       </span>
                       {(user?.id === c.author?.id ||
                         user?.role === "admin" ||
@@ -262,7 +305,7 @@ function QuestionCard({
           </span>
         )}
         <span className="ml-auto text-xs text-slate-400 whitespace-nowrap">
-          {fmtDate(q.createdAt)} {fmtTime(q.createdAt)}
+          {fmtDateTime(q.createdAt)}
         </span>
       </div>
 
@@ -409,17 +452,17 @@ function QuestionCard({
               {Object.entries(reactions)
                 .filter(([, count]) => count > 0)
                 .map(([emoji, count]) => (
-                  <button
+                  <ReactionChip
                     key={emoji}
+                    emoji={emoji}
+                    count={count}
+                    mine={myReactions.includes(emoji)}
                     onClick={() => toggleReaction(emoji)}
-                    className={`text-xs px-2 py-1 rounded-full border transition-colors ${
-                      myReactions.includes(emoji)
-                        ? "bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-500/20 dark:border-indigo-500/40 dark:text-indigo-300"
-                        : "border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
-                    }`}
-                  >
-                    {emoji} {count}
-                  </button>
+                    fetchReactors={async (e) => {
+                      const { data } = await api.get(`/questions/${q.id}/reactors`, { params: { emoji: e } });
+                      return data.map((u) => u.name);
+                    }}
+                  />
                 ))}
               <button
                 onClick={() => setShowReactionPicker((v) => !v)}
