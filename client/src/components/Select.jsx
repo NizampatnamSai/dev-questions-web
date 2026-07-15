@@ -6,7 +6,7 @@ import { useClickOutside } from "../hooks/useClickOutside";
 // checkmark on the selected row, subtle hover states) replacing the native
 // <select>, which renders inconsistently across browsers/OSes and can't be
 // styled beyond the trigger itself.
-export default function Select({ value, onChange, options, placeholder = "Select…", className = "", disabled = false }) {
+export default function Select({ value, onChange, options, placeholder = "Select…", className = "", disabled = false, variant = "default" }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useClickOutside(ref, () => setOpen(false), open);
@@ -14,13 +14,22 @@ export default function Select({ value, onChange, options, placeholder = "Select
   const normalized = options.map((o) => (typeof o === "string" ? { value: o, label: o } : o));
   const current = normalized.find((o) => o.value === value);
 
+  // "input" variant matches .input-light's box (padding/height/border/bg)
+  // exactly, for rows that pair a Select next to a plain text/number input —
+  // the default variant is shorter and borderless, which looks visually
+  // inconsistent side-by-side with an actual <input>.
+  const triggerClass =
+    variant === "input"
+      ? "input-light w-full flex items-center justify-between gap-2 font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+      : "w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
+
   return (
     <div ref={ref} className={`relative ${className}`}>
       <button
         type="button"
         disabled={disabled}
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className={triggerClass}
       >
         <span className="truncate">{current ? current.label : placeholder}</span>
         <svg

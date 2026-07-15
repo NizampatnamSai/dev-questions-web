@@ -323,6 +323,7 @@ export default function SnippetLibrary() {
                   <div>
                     <label className="text-xs font-semibold text-slate-500 mb-1 block">Language</label>
                     <Select
+                      variant="input"
                       value={form.language}
                       onChange={(v) => setForm((f) => ({ ...f, language: v }))}
                       options={COMMON_LANGUAGES.map((l) => ({ value: l, label: l }))}

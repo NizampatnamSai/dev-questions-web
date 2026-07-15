@@ -202,6 +202,7 @@ function UserForm({ initial = {}, onSave, onClose, isCreate }) {
             Role
           </label>
           <Select
+            variant="input"
             value={form.role}
             onChange={(v) => set("role", v)}
             options={ROLES.map((r) => ({ value: r, label: r }))}
@@ -2703,6 +2704,7 @@ export default function Admin() {
                   "Role",
                   "Daily Limit",
                   "Posts",
+                  "Solved",
                   "Joined",
                   "Actions",
                 ].map((h) => (
@@ -2736,6 +2738,9 @@ export default function Admin() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="h-8 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg" />
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="h-3 w-8 bg-slate-200 dark:bg-slate-700 rounded" />
                     </td>
                     <td className="px-4 py-3">
                       <div className="h-3 w-8 bg-slate-200 dark:bg-slate-700 rounded" />
@@ -2822,6 +2827,11 @@ export default function Admin() {
                       <td className="px-4 py-3">
                         <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
                           {u.questionCount ?? 0}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400" title="Distinct questions this user has personally answered via My Answers">
+                          ✅ {u.solvedCount ?? 0}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-xs text-slate-400">

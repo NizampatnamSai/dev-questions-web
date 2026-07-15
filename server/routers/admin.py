@@ -27,6 +27,7 @@ def _safe_user(doc: dict) -> dict:
         "dailyLimit":   doc.get("dailyLimit", 25),
         "createdAt":    doc["createdAt"].isoformat() if isinstance(doc.get("createdAt"), datetime) else str(doc.get("createdAt", "")),
         "questionCount": doc.get("questionCount", 0),
+        "solvedCount":  doc.get("solvedCount", 0),
         "status":         doc.get("status", "approved"),
         "disabledUntil":  disabled_until.isoformat() if isinstance(disabled_until, datetime) else None,
         "autoDisableAt":  auto_disable_at.isoformat() if isinstance(auto_disable_at, datetime) else None,
@@ -38,7 +39,7 @@ def _safe_user(doc: dict) -> dict:
 
 @router.get("/users")
 async def list_users(admin=Depends(_require_admin)):
-    from db_mongo import col_questions, col_user_profiles
+    from db_mongo import col_questions, col_user_profiles, col_user_answers
     cursor = col_users().find({"status": {"$ne": "rejected"}}).sort("createdAt", -1)
     docs   = await cursor.to_list(length=500)
     user_ids = [str(d["_id"]) for d in docs]
@@ -54,11 +55,21 @@ async def list_users(admin=Depends(_require_admin)):
         {"$group": {"_id": "$userId", "count": {"$sum": 1}}},
     ]).to_list(length=len(user_ids) or 1)
     qcount_by_id = {r["_id"]: r["count"] for r in count_rows}
+    # "Solved" = distinct questions the user has personally answered via the
+    # AI-graded My Answers flow (col_user_answers) — a user can save more
+    # than one answer per question, so $addToSet dedupes before counting.
+    solved_rows = await col_user_answers().aggregate([
+        {"$match": {"userId": {"$in": user_ids}}},
+        {"$group": {"_id": "$userId", "questionIds": {"$addToSet": "$questionId"}}},
+        {"$project": {"count": {"$size": "$questionIds"}}},
+    ]).to_list(length=len(user_ids) or 1)
+    solved_by_id = {r["_id"]: r["count"] for r in solved_rows}
     result = []
     for doc in docs:
         u = sid(doc)
         uid = u["id"]
         u["questionCount"] = qcount_by_id.get(uid, 0)
+        u["solvedCount"] = solved_by_id.get(uid, 0)
         u["avatarUrl"] = avatar_by_id.get(uid)
         result.append(_safe_user(u))
     return result
