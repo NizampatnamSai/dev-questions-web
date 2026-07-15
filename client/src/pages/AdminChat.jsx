@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import RichTextEditor, { isRichTextEmpty } from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
 import { useClickOutside } from "../hooks/useClickOutside";
+import { fmtDateTime, fmtDateDivider, dayKey } from "../utils/time";
 
 const _apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 const WS_BASE = _apiUrl
@@ -199,6 +200,49 @@ function MessageStatus({ m, isGroup }) {
   );
 }
 
+// A reaction chip that lazily fetches "who reacted" on hover instead of
+// resolving names eagerly on every message fetch — same pattern as
+// Community's QuestionCard.jsx reaction chips.
+function ReactionChip({ emoji, count, mine, onClick, fetchReactors }) {
+  const [tooltip, setTooltip] = useState(null); // null | "loading" | string[]
+  const timerRef = useRef(null);
+
+  const handleEnter = () => {
+    timerRef.current = setTimeout(async () => {
+      setTooltip("loading");
+      try {
+        setTooltip(await fetchReactors(emoji));
+      } catch {
+        setTooltip(null);
+      }
+    }, 250);
+  };
+  const handleLeave = () => {
+    clearTimeout(timerRef.current);
+    setTooltip(null);
+  };
+
+  return (
+    <div className="relative inline-block" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <button
+        onClick={onClick}
+        className={`text-[11px] px-1.5 py-0.5 rounded-full border transition-colors ${
+          mine
+            ? "bg-indigo-100 dark:bg-indigo-500/20 border-indigo-300 dark:border-indigo-500/40"
+            : "bg-slate-100 dark:bg-white/5 border-transparent hover:border-slate-300 dark:hover:border-white/20"
+        }`}
+      >
+        {emoji} {count}
+      </button>
+      {tooltip && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1 rounded-lg bg-slate-900 dark:bg-slate-700 text-white text-[11px] whitespace-nowrap shadow-lg z-20">
+          {tooltip === "loading" ? "…" : tooltip.length ? tooltip.join(", ") : "No one yet"}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function GroupAvatar({ size = "w-9 h-9" }) {
   return (
     <div className={`${size} rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white text-sm flex-shrink-0`}>
@@ -244,6 +288,11 @@ export default function AdminChat() {
   const [composerHtml, setComposerHtml] = useState("");
   const [sending, setSending] = useState(false);
   const [pendingImageUrls, setPendingImageUrls] = useState([]);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [scheduledFor, setScheduledFor] = useState("");
+  const [scheduling, setScheduling] = useState(false);
+  const [scheduledMessages, setScheduledMessages] = useState([]);
+  const [showScheduledPanel, setShowScheduledPanel] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [blurOn, setBlurOn] = useState(() => localStorage.getItem("devquiz_chat_blur") === "true");
   const [showUserPicker, setShowUserPicker] = useState(false);
@@ -289,6 +338,8 @@ export default function AdminChat() {
   const activeChatRef = useRef(null);
   const messageRefs = useRef({});
   const messagesContainerRef = useRef(null);
+  const dateDividerRefs = useRef({}); // dayKey -> {el, label}
+  const [floatingDateLabel, setFloatingDateLabel] = useState(null);
 
   useEffect(() => { activeChatIdRef.current = activeChatId; }, [activeChatId]);
 
@@ -556,10 +607,57 @@ export default function AdminChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
+  // Recompute the floating date pill whenever the message list changes —
+  // covers opening a chat, a new message arriving, and switching chats.
+  // rAF lets the new dividers' ref callbacks commit first.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => updateFloatingDateLabel());
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
+
+  // Drives the floating "Today"/"Monday, 13 July" pill — computed from
+  // scroll position directly rather than via CSS `position: sticky`. Sticky
+  // needs every single flex ancestor between it and the scrolling container
+  // to have min-h-0 (a notoriously easy-to-miss flexbox gotcha, and this
+  // page nests several levels deep: AppLayout > main > PageWrapper > this
+  // component's own row/column wrappers > the Thread panel > this list) —
+  // one missed level anywhere in that chain silently breaks it with no
+  // console warning. Computing it from scroll position + each divider's
+  // measured offsetTop sidesteps the whole fragile chain entirely.
+  const updateFloatingDateLabel = () => {
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    // isConnected filters out entries left behind by a previous chat's
+    // dividers whose DOM nodes have since been removed (e.g. after
+    // switching chats) — a detached node's getBoundingClientRect() would
+    // otherwise resolve to all-zeros and could wrongly look "at the top".
+    const entries = Object.values(dateDividerRefs.current).filter((d) => d.el?.isConnected);
+    if (!entries.length) return setFloatingDateLabel(null);
+    // Barely scrolled (or not at all) — the very first in-flow divider is
+    // already sitting right at the top of the list on its own, so showing
+    // the floating pill too would just stack a duplicate label on top of it.
+    if (el.scrollTop <= 20) return setFloatingDateLabel(null);
+    // getBoundingClientRect (viewport-relative, always reflects the current
+    // scroll position) rather than offsetTop — offsetTop is measured
+    // relative to the nearest POSITIONED ancestor, which here is a wrapper
+    // div ABOVE the scrolling container, not the scrolling container
+    // itself, so it doesn't move as you scroll and can't be compared
+    // against scrollTop directly.
+    const containerTop = el.getBoundingClientRect().top;
+    let current = null;
+    for (const d of entries) {
+      if (d.el.getBoundingClientRect().top - containerTop <= 4) current = d;
+      else break;
+    }
+    setFloatingDateLabel(current ? current.label : entries[0].label);
+  };
+
   const handleMessagesScroll = () => {
     const el = messagesContainerRef.current;
     if (!el) return;
     setIsNearBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 80);
+    updateFloatingDateLabel();
   };
 
   const scrollToBottom = () => {
@@ -670,6 +768,9 @@ export default function AdminChat() {
     setChatSearchOpen(false);
     setChatSearchQuery("");
     setSummaryPopover(null);
+    setShowScheduledPanel(false);
+    setScheduledMessages([]);
+    loadScheduledMessages(chatId);
     setLoadingMessages(true);
     try {
       const { data } = await api.get(`/admin-chat/${chatId}/messages`);
@@ -1007,6 +1108,48 @@ export default function AdminChat() {
     }
   };
 
+  const loadScheduledMessages = (chatId) => {
+    if (!chatId) return;
+    api.get(`/admin-chat/${chatId}/messages/scheduled/list`)
+      .then(({ data }) => setScheduledMessages(data))
+      .catch(() => {});
+  };
+
+  const scheduleMessage = async () => {
+    if (isRichTextEmpty(composerHtml) && pendingImageUrls.length === 0) return;
+    if (!scheduledFor) return toast.error("Pick a date and time");
+    const iso = new Date(scheduledFor).toISOString();
+    if (new Date(iso) <= new Date()) return toast.error("Scheduled time must be in the future");
+    setScheduling(true);
+    try {
+      await api.post(`/admin-chat/${activeChatId}/messages/schedule`, {
+        html: composerHtml,
+        imageUrls: pendingImageUrls,
+        scheduledFor: iso,
+      });
+      toast.success("Message scheduled");
+      setComposerHtml("");
+      setPendingImageUrls([]);
+      setScheduleOpen(false);
+      setScheduledFor("");
+      loadScheduledMessages(activeChatId);
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to schedule message");
+    } finally {
+      setScheduling(false);
+    }
+  };
+
+  const cancelScheduledMessage = async (id) => {
+    try {
+      await api.delete(`/admin-chat/${activeChatId}/messages/scheduled/${id}`);
+      setScheduledMessages((prev) => prev.filter((m) => m.id !== id));
+      toast.success("Scheduled message canceled");
+    } catch {
+      toast.error("Failed to cancel");
+    }
+  };
+
   const activeChat = conversations.find((c) => c.id === activeChatId);
   useEffect(() => { activeChatRef.current = activeChat; }, [activeChat]);
   const activeChatPresence =
@@ -1089,7 +1232,7 @@ export default function AdminChat() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] gap-4">
+    <div className="flex-1 min-h-0 flex gap-4">
       {/* Conversation list — on mobile this whole panel (not just the inner
           list) must hide once a chat is open, otherwise its header keeps
           claiming full width as a flex sibling and squeezes the Thread panel
@@ -1190,7 +1333,7 @@ export default function AdminChat() {
       </div>
 
       {/* Thread */}
-      <div className={`flex-1 glass-card p-0 flex flex-col overflow-hidden ${!activeChatId ? "hidden sm:flex" : ""}`}>
+      <div className={`flex-1 min-h-0 glass-card p-0 flex flex-col overflow-hidden ${!activeChatId ? "hidden sm:flex" : ""}`}>
         {!activeChatId ? (
           <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
             Select a conversation
@@ -1277,6 +1420,17 @@ export default function AdminChat() {
                   {activeChat.mutedByMe ? "🔕" : "🔔"}
                 </button>
               )}
+              {scheduledMessages.length > 0 && (
+                <button
+                  onClick={() => setShowScheduledPanel((v) => !v)}
+                  title="Pending scheduled messages"
+                  className={`text-xs px-2.5 py-1 rounded-full font-semibold transition-colors whitespace-nowrap ${
+                    showScheduledPanel ? "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400" : "bg-slate-100 dark:bg-white/10 text-slate-400"
+                  }`}
+                >
+                  🕒 {scheduledMessages.length}
+                </button>
+              )}
               <button
                 onClick={() => setBlurOn((v) => !v)}
                 title="Blur message content for privacy — hover a bubble to reveal"
@@ -1287,6 +1441,25 @@ export default function AdminChat() {
                 {blurOn ? "🙈 Blur: On" : "👁 Blur: Off"}
               </button>
             </div>
+
+            {showScheduledPanel && scheduledMessages.length > 0 && (
+              <div className="px-3 py-2 border-b border-black/5 dark:border-white/10 space-y-1.5 flex-shrink-0">
+                {scheduledMessages.map((m) => (
+                  <div key={m.id} className="flex items-center justify-between gap-2 text-xs bg-amber-50 dark:bg-amber-500/10 rounded-lg px-2.5 py-1.5">
+                    <div className="min-w-0">
+                      <p className="truncate text-slate-700 dark:text-slate-200">{stripHtmlForSearch(m.html) || "📷 Image"}</p>
+                      <p className="text-[10px] text-amber-600 dark:text-amber-400">Sends {fmtDateTime(m.scheduledFor)}</p>
+                    </div>
+                    <button
+                      onClick={() => cancelScheduledMessage(m.id)}
+                      className="text-[10px] px-2 py-1 rounded-lg border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 flex-shrink-0"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {chatSearchOpen && (
               <div className="px-3 py-2 border-b border-black/5 dark:border-white/10 flex items-center gap-2 flex-shrink-0">
@@ -1355,6 +1528,17 @@ export default function AdminChat() {
             )}
 
             <div className="relative flex-1 min-h-0">
+              {/* Floating "Today"/"Monday, 13 July" pill — WhatsApp-style,
+                  always shows whichever day's messages are currently at the
+                  top of the visible scroll area. pointer-events-none so it
+                  never blocks clicking a message underneath it. */}
+              {floatingDateLabel && (
+                <div className="absolute top-2 left-0 right-0 z-10 flex justify-center pointer-events-none">
+                  <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm px-3 py-1 rounded-full whitespace-nowrap shadow-md border border-black/5 dark:border-white/10">
+                    {floatingDateLabel}
+                  </span>
+                </div>
+              )}
               <div ref={messagesContainerRef} onScroll={handleMessagesScroll} className="h-full overflow-y-auto p-4 space-y-3">
                 {loadingMessages ? (
                   <div className="flex-1 h-full flex items-center justify-center text-slate-400 gap-2 text-sm">
@@ -1362,15 +1546,34 @@ export default function AdminChat() {
                     Loading messages…
                   </div>
                 ) : (
-                  messages.map((m) => {
+                  messages.map((m, i) => {
                     const mine = m.senderId === user?.id;
                     const isGroup = activeChat?.type === "group";
                     const images = m.imageUrls || (m.imageUrl ? [m.imageUrl] : []);
                     const isPinned = activeChat?.pinnedMessageIds?.includes(m.id);
                     const canSummarize = stripHtmlForSearch(m.html).trim().split(/\s+/).filter(Boolean).length >= MIN_SUMMARIZE_WORDS;
+                    const prevMsg = messages[i - 1];
+                    const showDateDivider = !prevMsg || dayKey(m.createdAt) !== dayKey(prevMsg.createdAt);
                     return (
+                      <Fragment key={m.id}>
+                      {showDateDivider && (
+                        // Plain in-flow marker of where the day changes —
+                        // the actual "pinned while scrolling" effect is a
+                        // separate floating pill (see updateFloatingDateLabel)
+                        // computed from scroll position, not CSS `sticky`.
+                        <div
+                          ref={(el) => {
+                            const label = fmtDateDivider(m.createdAt);
+                            if (el) dateDividerRefs.current[dayKey(m.createdAt)] = { el, label };
+                          }}
+                          className="flex justify-center py-2"
+                        >
+                          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/10 px-3 py-1 rounded-full whitespace-nowrap shadow-sm">
+                            {fmtDateDivider(m.createdAt)}
+                          </span>
+                        </div>
+                      )}
                       <div
-                        key={m.id}
                         ref={(el) => { if (el) messageRefs.current[m.id] = el; }}
                         className={`group flex items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                       >
@@ -1427,17 +1630,17 @@ export default function AdminChat() {
                           {m.reactions && Object.keys(m.reactions).length > 0 && (
                             <div className={`flex flex-wrap gap-1 mt-1 ${mine ? "justify-end" : "justify-start"}`}>
                               {Object.entries(m.reactions).map(([emoji, count]) => (
-                                <button
+                                <ReactionChip
                                   key={emoji}
+                                  emoji={emoji}
+                                  count={count}
+                                  mine={m.myReactions?.includes(emoji)}
                                   onClick={() => toggleReaction(m.id, emoji)}
-                                  className={`text-[11px] px-1.5 py-0.5 rounded-full border transition-colors ${
-                                    m.myReactions?.includes(emoji)
-                                      ? "bg-indigo-100 dark:bg-indigo-500/20 border-indigo-300 dark:border-indigo-500/40"
-                                      : "bg-slate-100 dark:bg-white/5 border-transparent hover:border-slate-300 dark:hover:border-white/20"
-                                  }`}
-                                >
-                                  {emoji} {count}
-                                </button>
+                                  fetchReactors={async (e) => {
+                                    const { data } = await api.get(`/admin-chat/${activeChatId}/messages/${m.id}/reactors`, { params: { emoji: e } });
+                                    return data.map((u) => u.name);
+                                  }}
+                                />
                               ))}
                             </div>
                           )}
@@ -1517,6 +1720,7 @@ export default function AdminChat() {
                           )}
                         </div>
                       </div>
+                      </Fragment>
                     );
                   })
                 )}
@@ -1632,6 +1836,49 @@ export default function AdminChat() {
                 >
                   {uploadingImage ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "📎"}
                 </button>
+                {!editingMessageId && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setScheduleOpen((v) => !v)}
+                      disabled={isRichTextEmpty(composerHtml) && pendingImageUrls.length === 0}
+                      title="Schedule for later"
+                      className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-colors disabled:opacity-40 ${
+                        scheduleOpen
+                          ? "bg-amber-500 text-white"
+                          : "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/15"
+                      }`}
+                    >
+                      🕒
+                    </button>
+                    {scheduleOpen && (
+                      <div className="absolute bottom-full right-0 mb-2 w-64 bg-white dark:bg-slate-800 border border-black/10 dark:border-white/10 rounded-xl shadow-xl p-3 space-y-2 z-20">
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">Send at…</p>
+                        <input
+                          type="datetime-local"
+                          value={scheduledFor}
+                          onChange={(e) => setScheduledFor(e.target.value)}
+                          min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
+                          className="w-full text-sm px-2 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setScheduleOpen(false)}
+                            className="flex-1 text-xs py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={scheduleMessage}
+                            disabled={scheduling}
+                            className="flex-1 text-xs py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold disabled:opacity-50"
+                          >
+                            {scheduling ? "Scheduling…" : "Schedule"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <button
                   onClick={send}
                   disabled={sending || (isRichTextEmpty(composerHtml) && pendingImageUrls.length === 0)}

@@ -119,6 +119,12 @@ export default [
       "Pre-computes item positions — enables scrollToIndex without rendering all intermediary items. Required for scrollToIndex and scrollToOffset to work reliably on large lists.",
     code: "<FlatList\n  data={data}\n  getItemLayout={(_, index) => ({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index })}\n  removeClippedSubviews\n  maxToRenderPerBatch={10}\n  updateCellsBatchingPeriod={50}\n  windowSize={5}\n  keyExtractor={item => item.id}\n/>",
     interviewQuestion: "What is getItemLayout and when is it required?",
+    optimization: {
+      problem: "A social feed with 2,000+ posts (each containing an image + text) drops frames and shows a blank white flash while scrolling fast",
+      fix: "Add getItemLayout (skips a measurement pass per row), removeClippedSubviews (unmounts off-screen views), and tune windowSize/maxToRenderPerBatch down from their defaults for heavy rows.",
+      code: "<FlatList\n  data={posts}\n  getItemLayout={(_, i) => ({ length: ROW_HEIGHT, offset: ROW_HEIGHT * i, index: i })}\n  removeClippedSubviews\n  windowSize={5}          // default is 21 — way more than needed for heavy rows\n  maxToRenderPerBatch={8}\n  renderItem={({ item }) => <PostCard post={item} />}\n/>",
+      impact: "Fast-scroll frame rate on a 2,000-post feed went from ~25fps with visible blank flashes to a steady 58-60fps.",
+    },
   },
   {
     id: "reactnative-animations-animated-api",
@@ -155,6 +161,12 @@ export default [
       "Precompiled bytecode (faster cold start), lower memory, built-in debugging. Default since RN 0.70. Disadvantage: slightly behind V8 on some language features (mostly caught up).",
     code: "// android/app/build.gradle\nproject.ext.react = [\n  enableHermes: true // default since 0.70\n]\n// iOS: Podfile\nuse_hermes!",
     interviewQuestion: "Hermes advantages?",
+    optimization: {
+      problem: "An app running on JavaScriptCore takes 2-3 seconds to show its first screen on a low-end Android device, especially right after install",
+      fix: "Enable Hermes (default since RN 0.70, but worth verifying on older projects) — it ships precompiled bytecode instead of parsing raw JS at startup, and uses less memory on constrained devices.",
+      code: "// android/app/build.gradle — confirm Hermes is on for older RN upgrades\nproject.ext.react = [\n  enableHermes: true\n]\n// iOS Podfile\nuse_hermes!",
+      impact: "Cold start (install-to-first-screen) on a budget Android device dropped from ~2.8s to ~1.1s after enabling Hermes on a project still defaulting to JSC.",
+    },
   },
   {
     id: "reactnative-platform-specific",
@@ -239,6 +251,12 @@ export default [
       "No tree shaking (bundles everything imported). Different module resolution. Limited plugin ecosystem. But: very fast incremental builds, built-in HMR, supports iOS/Android simultaneously.",
     code: "// metro.config.js\nconst { getDefaultConfig } = require('@react-native/metro-config');\nmodule.exports = (() => {\n  const config = getDefaultConfig(__dirname);\n  config.resolver.sourceExts.push('cjs');\n  config.transformer.babelTransformerPath =\n    require.resolve('react-native-svg-transformer');\n  return config;\n})();",
     interviewQuestion: "Metro limitations vs Webpack?",
+    optimization: {
+      problem: "A large app's JS bundle balloons past 15MB because Metro has no tree shaking — importing one function from a utility library pulls in the whole library",
+      fix: "Import only the specific submodule/function path instead of the library's index barrel, and enable the RAM bundle / Hermes bytecode precompilation so the bundle format itself is more compact and faster to parse.",
+      code: "// BAD: pulls in the ENTIRE lodash library into the bundle\nimport _ from 'lodash';\n_.debounce(fn, 300);\n\n// GOOD: only bundles the one function actually used\nimport debounce from 'lodash/debounce';\ndebounce(fn, 300);",
+      impact: "Switching lodash-wide imports to per-function imports across a large screen cut that screen's chunk of the bundle by several hundred KB — no tree shaking meant every unused export was previously dead weight.",
+    },
   },
   {
     id: "reactnative-image-caching",
@@ -251,6 +269,12 @@ export default [
       "No built-in memory cache for <Image> from remote URLs. Use FastImage (react-native-fast-image) which uses SDWebImage (iOS) and Glide (Android) with proper disk+memory caching.",
     code: "import FastImage from 'react-native-fast-image';\n<FastImage\n  source={{\n    uri: user.avatar,\n    priority: FastImage.priority.high,\n    cache: FastImage.cacheControl.immutable\n  }}\n  style={{ width: 48, height: 48, borderRadius: 24 }}\n  resizeMode={FastImage.resizeMode.cover}\n/>",
     interviewQuestion: "Why do images flicker on re-render?",
+    optimization: {
+      problem: "A contacts list with 500 avatar thumbnails re-downloads every image from the network on every screen visit — visible flicker and wasted mobile data",
+      fix: "Swap the built-in <Image> for FastImage with an immutable cache-control policy — it caches decoded images to disk/memory (SDWebImage/Glide under the hood) instead of re-fetching on every mount.",
+      code: "// BAD: built-in Image re-fetches every time the list remounts\n<Image source={{ uri: user.avatar }} style={styles.avatar} />\n\n// GOOD: cached across app sessions, not just component lifetime\n<FastImage\n  source={{ uri: user.avatar, cache: FastImage.cacheControl.immutable }}\n  style={styles.avatar}\n/>",
+      impact: "Re-opening the contacts screen went from ~500 network requests (visible flicker per row) to 0 — every avatar loaded instantly from disk cache.",
+    },
   },
   {
     id: "reactnative-js-thread",
@@ -646,6 +670,15 @@ export default [
     code: "import { SectionList, Text, View } from 'react-native';\n\nconst sections = [\n  { title: 'A', data: ['Alice', 'Adam'] },\n  { title: 'B', data: ['Bob', 'Bella'] },\n];\n\nexport default function ContactList() {\n  return (\n    <SectionList\n      sections={sections}\n      keyExtractor={(item, index) => item + index}\n      renderItem={({ item }) => <Text>{item}</Text>}\n      renderSectionHeader={({ section: { title } }) => (\n        <View><Text style={{ fontWeight: 'bold' }}>{title}</Text></View>\n      )}\n      stickySectionHeadersEnabled\n    />\n  );\n}",
     interviewQuestion:
       "Why would you choose SectionList over FlatList for a contacts screen grouped alphabetically, and what do they share under the hood?",
+    comparison: {
+      vs: "FlatList",
+      rows: [
+        { aspect: "Data shape", a: "sections, each with its own data array + optional header", b: "a single flat array of items" },
+        { aspect: "Sticky headers", a: "built-in via renderSectionHeader + stickySectionHeadersEnabled", b: "you'd have to hand-roll it by injecting fake header items" },
+        { aspect: "Underlying implementation", a: "VirtualizedList — same virtualization/perf props as FlatList", b: "VirtualizedList — identical windowSize/initialNumToRender tuning" },
+      ],
+      takeaway: "Use SectionList the moment your data is naturally grouped (contacts by letter, settings by category) — it's built on the same VirtualizedList as FlatList, so you lose nothing and gain sticky headers for free.",
+    },
   },
   {
     id: "reactnative-splash-screen-app-icon-setup",
@@ -863,6 +896,15 @@ export default [
     code: "import FastImage from 'react-native-fast-image';\n\nfunction Avatar({ uri }) {\n  return (\n    <FastImage\n      style={{ width: 64, height: 64, borderRadius: 32 }}\n      source={{\n        uri,\n        priority: FastImage.priority.high,\n        cache: FastImage.cacheControl.immutable,\n      }}\n      resizeMode={FastImage.resizeMode.cover}\n    />\n  );\n}",
     interviewQuestion:
       "Why might a long FlatList of remote images flicker when scrolling with the core Image component, and how does FastImage address it?",
+    comparison: {
+      vs: "core Image",
+      rows: [
+        { aspect: "Caching", a: "delegates to native SDWebImage (iOS) / Glide (Android) — aggressive disk+memory cache", b: "platform-default caching — inconsistent between iOS and Android" },
+        { aspect: "List-scroll flicker", a: "rare — cached images load instantly on remount", b: "common — often re-fetches images that should already be cached" },
+        { aspect: "Extra controls", a: "priority hints, preload(), explicit cache-control (immutable/web/cacheOnly)", b: "none of the above" },
+      ],
+      takeaway: "Use FastImage (or expo-image on the new architecture) for any list of remote images — the built-in Image's inconsistent caching is the #1 cause of scroll flicker in RN apps.",
+    },
   },
   {
     id: "reactnative-mmkv-vs-asyncstorage",

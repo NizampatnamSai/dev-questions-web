@@ -227,13 +227,20 @@ async def get_single_chat(chat_id: str, user=Depends(current_user)):
 async def save_chat(body: SaveChatBody, user=Depends(current_user)):
     if not body.messages:
         raise HTTPException(400, "No messages to save")
-    title = body.title.strip() or (body.messages[0]["text"][:60] if body.messages else "Chat")
     ts = now()
     count = len(body.messages)
     if body.chat_id:
+        existing = await col_ai_history().find_one({"_id": oid(body.chat_id), "userId": user["id"]})
+        # Once a user has manually renamed a chat, every subsequent auto-save
+        # (fired on every new message) must NOT silently overwrite it back to
+        # an auto-derived "first message" title — only recompute the title
+        # here if it's still on the default, non-custom title.
+        update = {"messages": body.messages, "messageCount": count, "updatedAt": ts}
+        if not (existing or {}).get("isCustomTitle"):
+            update["title"] = body.title.strip() or (body.messages[0]["text"][:60] if body.messages else "Chat")
         await col_ai_history().update_one(
             {"_id": oid(body.chat_id), "userId": user["id"]},
-            {"$set": {"messages": body.messages, "title": title, "messageCount": count, "updatedAt": ts}}
+            {"$set": update}
         )
         return {"id": body.chat_id, "message": "Updated"}
     else:
@@ -246,6 +253,29 @@ async def save_chat(body: SaveChatBody, user=Depends(current_user)):
             "updatedAt": ts,
         })
         return {"id": str(result.inserted_id), "message": "Saved"}
+
+
+class RenameChatBody(BaseModel):
+    title: str
+
+
+@router.patch("/history/{chat_id}/title")
+async def rename_chat(chat_id: str, body: RenameChatBody, user=Depends(current_user)):
+    title = body.title.strip()
+    if not title:
+        raise HTTPException(400, "Title cannot be empty")
+    if len(title) > 100:
+        raise HTTPException(400, "Title too long (max 100 chars)")
+    result = await col_ai_history().update_one(
+        {"_id": oid(chat_id), "userId": user["id"]},
+        # isCustomTitle marks this chat as manually renamed — save_chat()
+        # checks this flag so future auto-saves (fired on every new message)
+        # don't quietly overwrite the rename back to an auto-derived title.
+        {"$set": {"title": title, "isCustomTitle": True}},
+    )
+    if result.matched_count == 0:
+        raise HTTPException(404, "Chat not found")
+    return {"id": chat_id, "title": title}
 
 
 @router.delete("/history/{chat_id}")

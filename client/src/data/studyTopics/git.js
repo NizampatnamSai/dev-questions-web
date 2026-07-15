@@ -66,6 +66,15 @@ export default [
     code: "# Rebase feature onto latest main\ngit checkout feature/login\ngit rebase main\n\n# Interactive rebase: clean up last 3 commits\ngit rebase -i HEAD~3\n\n# In the editor:\n# pick abc1234 add login form\n# squash def5678 fix typo\n# reword ghi9012 add validation\n\n# After conflict during rebase:\ngit add resolved-file.js\ngit rebase --continue\n\n# Abort rebase\ngit rebase --abort",
     interviewQuestion:
       "What is the difference between git merge and git rebase? When would you choose each?",
+    comparison: {
+      vs: "merge (--no-ff)",
+      rows: [
+        { aspect: "History shape", a: "linear — commits replayed on top, no merge commit", b: "preserves both branches' shape via a merge commit" },
+        { aspect: "Commit SHAs", a: "rewritten — never rebase commits already pushed/shared", b: "unchanged — original commits stay exactly as they were" },
+        { aspect: "Audit trail", a: "loses the fact a feature branch ever existed", b: "full history of when/how branches diverged and joined" },
+      ],
+      takeaway: "Use rebase for your own not-yet-shared local commits, to keep history clean before merging. Use a merge commit once a branch is shared, or when you want a real audit trail of feature branches.",
+    },
   },
   {
     id: "git-reset-revert",
@@ -275,6 +284,15 @@ export default [
     code: "# Download without touching your branch\ngit fetch origin\n\n# See what's new on remote main\ngit log origin/main --oneline\n\n# Merge after reviewing\ngit merge origin/main\n\n# OR: pull and rebase in one step\ngit pull --rebase origin main\n\n# Set rebase as default for all pulls\ngit config --global pull.rebase true",
     interviewQuestion:
       "What is the difference between git fetch and git pull? When would you use each?",
+    comparison: {
+      vs: "git pull",
+      rows: [
+        { aspect: "Touches your branch", a: "no — only updates origin/main, your local branch is untouched", b: "yes — immediately merges (or rebases) into your current branch" },
+        { aspect: "Safety", a: "safe — inspect with git log origin/main before integrating anything", b: "can surprise you with an unexpected merge commit" },
+        { aspect: "Equivalent to", a: "just the download step", b: "git fetch + git merge (or + git rebase with --rebase)" },
+      ],
+      takeaway: "Use fetch when you want to see what changed before deciding how to integrate it. Use pull for the common case where you just want to be up to date, ideally with --rebase for cleaner history.",
+    },
   },
   {
     id: "git-hooks",

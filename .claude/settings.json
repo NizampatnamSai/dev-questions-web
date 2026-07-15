@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"backend: %{http_code}\\\\n\" http://localhost:8000/api/admin/app-config/public)",
+      "Bash(curl -s -o /dev/null -w \"frontend: %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(grep -n \"Array.from\\({ length: size }, \\(_, i\\) => i + 1\\)\" /Users/apple/Desktop/devquiz/client/src/pages/MiniSudoku.jsx)",
+      "Bash(rm -rf /Users/apple/Desktop/devquiz/client/dist)",
+      "Bash(nohup ./venv/bin/python run.py)",
+      "Bash(python3 -m py_compile routers/tasks.py db_mongo.py)",
+      "Bash(python3 -m py_compile routers/tasks.py scheduler_tasks.py main.py db_mongo.py)",
+      "Bash(curl -s http://localhost:8000/openapi.json)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -X OPTIONS http://localhost:8000/api/tasks/schedule)",
+      "Bash(curl -s -o /dev/null -w 'OPTIONS preflight: %{http_code}\\\\n' -X OPTIONS http://localhost:8000/api/tasks/schedule -H 'Origin: http://localhost:5173' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: content-type,authorization')",
+      "Bash(curl -s -o /dev/null -w \"POST without auth: %{http_code}\\\\n\" -X POST http://localhost:8000/api/tasks/schedule -H \"Content-Type: application/json\" -d '{}')",
+      "Bash(python3 -m py_compile routers/admin.py)",
+      "Bash(sed -n '/id: \"css-flexbox\"/,/^  },/p' css.js)",
+      "Bash(sed -n '/id: \"css-grid\"/,/^  },/p' css.js)",
+      "Bash(sed -n '/id: \"python-lists-deep-dive\"/,/^  },/p' python.js)",
+      "Bash(sed -n '/id: \"python-tuples\"/,/^  },/p' python.js)",
+      "Bash(sed -n '/id: \"git-rebase\"/,/^  },/p' git.js)",
+      "Bash(sed -n '/id: \"git-squash-merge\"/,/^  },/p' git.js)",
+      "Bash(sed -n '/id: \"react-react-memo\"/,/^  },/p' react.js)",
+      "Bash(sed -n '/id: \"react-usememo-usecallback\"/,/^  },/p' react.js)",
+      "Bash(python3 -m py_compile routers/admin.py routers/ask.py routers/tasks.py db_mongo.py main.py scheduler_tasks.py)",
+      "Bash(python3 -m py_compile main.py scheduler_tasks.py db_mongo.py routers/tasks.py routers/admin_chat.py)",
+      "Bash(python3 -m py_compile main.py scheduler_tasks.py db_mongo.py routers/tasks.py routers/admin_chat.py routers/ask.py routers/admin.py)",
+      "Bash(sed -n '/id: \"typescript-interface-vs-type-alias\"/,/^  },/p' typescript.js)",
+      "Bash(sed -n '/id: \"typescript-unknown-vs-any\"/,/^  },/p' typescript.js)",
+      "Bash(sed -n '/id: \"javascript-object-methods\"/,/^  },/p' javascript.js)",
+      "Bash(sed -n '/id: \"javascript-map-2\"/,/^  },/p' javascript.js)",
+      "Bash(sed -n '/id: \"reactnative-sectionlist-vs-flatlist\"/,/^  },/p' reactnative.js)",
+      "Bash(sed -n '/id: \"reactnative-fast-image-vs-image\"/,/^  },/p' reactnative.js)"
+    ]
+  }
+}

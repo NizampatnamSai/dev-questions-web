@@ -1,7 +1,8 @@
+from datetime import datetime, timezone
 from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from db_mongo import col_tasks, col_task_comments, col_users, col_fcm_tokens, col_user_profiles, sid, oid, now
+from db_mongo import col_tasks, col_task_comments, col_users, col_fcm_tokens, col_user_profiles, col_scheduled_tasks, sid, oid, now
 from deps import current_user
 from utils.firebase import send_to_tokens
 
@@ -24,9 +25,13 @@ class TaskCreate(BaseModel):
     assigneeIds: List[str]
     priority: str = "medium"   # low | medium | high
     dueDate: Optional[str] = None  # ISO string or None
+    imageUrls: List[str] = []
 
 class TaskComment(BaseModel):
     text: str
+
+class ScheduleTaskBody(TaskCreate):
+    scheduledFor: str  # ISO datetime — the task isn't created/assigned until this moment
 
 class StatusUpdate(BaseModel):
     status: str  # todo | started | testing | completed
@@ -67,59 +72,124 @@ async def _enrich_tasks(docs: list) -> list:
 
 # ── Admin: create task ────────────────────────────────────────────────────────
 
-@router.post("")
-async def create_task(body: TaskCreate, user=Depends(current_user)):
-    if not _is_admin(user):
-        raise HTTPException(403, "Admins only")
-    if not body.assigneeIds:
-        raise HTTPException(400, "Must assign to at least one user")
-
-    # Resolve assignee names
+async def _resolve_assignees(assignee_ids: list[str]) -> list[dict]:
     assignees = []
-    for uid in body.assigneeIds:
+    for uid in assignee_ids:
         try:
             u = await col_users().find_one({"_id": oid(uid)})
             if u:
                 assignees.append({"id": uid, "name": u.get("name", "Unknown")})
         except Exception:
             pass
+    return assignees
 
+
+async def _notify_assignees(assignee_ids: list[str], exclude_id: str, title: str, body_text: str):
+    # No point push-notifying whoever triggered this about their own action —
+    # same reasoning used everywhere else self-notification was a bug.
+    ids = [i for i in assignee_ids if i != exclude_id]
+    if not ids:
+        return
+    tokens_docs = await col_fcm_tokens().find({"userId": {"$in": ids}}).to_list(length=(len(ids) * 5) or 1)
+    tokens = list({t["token"] for t in tokens_docs})
+    if tokens:
+        await send_to_tokens(tokens, title, body_text, {"type": "task", "path": "/my-tasks"})
+
+
+async def _create_task_now(body: TaskCreate, creator_id: str, creator_name: str) -> dict:
+    """Shared by the immediate POST /tasks endpoint and fire_scheduled_tasks()
+    (scheduler_tasks.py) — inserts the task doc and notifies assignees
+    identically whether creation was immediate or a deferred schedule firing."""
+    assignees = await _resolve_assignees(body.assigneeIds)
     if not assignees:
         raise HTTPException(400, "No valid users found")
 
     doc = {
         "title":       body.title,
         "description": body.description,
+        "imageUrls":   body.imageUrls,
         "priority":    body.priority,
         "dueDate":     body.dueDate,
         "status":      "todo",
         "assignees":   assignees,
         "assigneeIds": [a["id"] for a in assignees],
-        "createdBy":   user["id"],
-        "createdByName": user.get("name", "Admin"),
+        "createdBy":   creator_id,
+        "createdByName": creator_name,
         "createdAt":   now(),
         "updatedAt":   now(),
         "completedBy": [],   # list of userIds who marked done
     }
     result = await col_tasks().insert_one(doc)
-    task_id = str(result.inserted_id)
+    await _notify_assignees(
+        doc["assigneeIds"], creator_id,
+        "📋 New Task Assigned", f"{body.title} — assigned by {creator_name}",
+    )
+    return await col_tasks().find_one({"_id": result.inserted_id})
 
-    # Notify all assignees except the creator — one batched query instead of
-    # one per assignee. No point push-notifying an admin about a task they
-    # just assigned to themselves.
-    assignee_ids = [a["id"] for a in assignees if a["id"] != user["id"]]
-    tokens_docs = await col_fcm_tokens().find({"userId": {"$in": assignee_ids}}).to_list(length=(len(assignee_ids) * 5) or 1)
-    tokens = list({t["token"] for t in tokens_docs})
-    if tokens:
-        await send_to_tokens(
-            tokens,
-            "📋 New Task Assigned",
-            f"{body.title} — assigned by {user.get('name', 'Admin')}",
-            {"type": "task", "path": "/my-tasks"},
-        )
 
-    created = await col_tasks().find_one({"_id": result.inserted_id})
+@router.post("")
+async def create_task(body: TaskCreate, user=Depends(current_user)):
+    if not _is_admin(user):
+        raise HTTPException(403, "Admins only")
+    if not body.assigneeIds:
+        raise HTTPException(400, "Must assign to at least one user")
+    created = await _create_task_now(body, user["id"], user.get("name", "Admin"))
     return await _enrich_task(created)
+
+
+# ── Admin: schedule a task for later ──────────────────────────────────────────
+# Genuinely deferred creation — the task doesn't exist in col_tasks (and the
+# assignee sees/gets notified about nothing) until scheduledFor arrives, at
+# which point fire_scheduled_tasks() (scheduler_tasks.py, runs every minute)
+# calls the exact same _create_task_now() the immediate endpoint uses.
+
+@router.post("/schedule")
+async def schedule_task(body: ScheduleTaskBody, user=Depends(current_user)):
+    if not _is_admin(user):
+        raise HTTPException(403, "Admins only")
+    if not body.assigneeIds:
+        raise HTTPException(400, "Must assign to at least one user")
+    try:
+        scheduled_dt = datetime.fromisoformat(body.scheduledFor.replace("Z", "+00:00"))
+        if scheduled_dt.tzinfo is None:
+            scheduled_dt = scheduled_dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        raise HTTPException(400, "Invalid scheduledFor datetime")
+    if scheduled_dt <= datetime.now(timezone.utc):
+        raise HTTPException(400, "scheduledFor must be in the future")
+
+    doc = {
+        "title":         body.title,
+        "description":   body.description,
+        "imageUrls":     body.imageUrls,
+        "assigneeIds":   body.assigneeIds,
+        "priority":      body.priority,
+        "dueDate":       body.dueDate,
+        "scheduledFor":  scheduled_dt,
+        "createdBy":     user["id"],
+        "createdByName": user.get("name", "Admin"),
+        "createdAt":     now(),
+    }
+    result = await col_scheduled_tasks().insert_one(doc)
+    return sid(await col_scheduled_tasks().find_one({"_id": result.inserted_id}))
+
+
+@router.get("/scheduled/list")
+async def list_scheduled_tasks(user=Depends(current_user)):
+    if not _is_admin(user):
+        raise HTTPException(403, "Admins only")
+    docs = await col_scheduled_tasks().find({}).sort("scheduledFor", 1).to_list(200)
+    return [sid(d) for d in docs]
+
+
+@router.delete("/scheduled/{scheduled_id}")
+async def cancel_scheduled_task(scheduled_id: str, user=Depends(current_user)):
+    if not _is_admin(user):
+        raise HTTPException(403, "Admins only")
+    result = await col_scheduled_tasks().delete_one({"_id": oid(scheduled_id)})
+    if result.deleted_count == 0:
+        raise HTTPException(404, "Scheduled task not found")
+    return {"ok": True}
 
 
 # ── Admin: list all tasks ─────────────────────────────────────────────────────
@@ -166,14 +236,7 @@ async def update_task(task_id: str, body: TaskCreate, user=Depends(current_user)
     if not doc:
         raise HTTPException(404, "Task not found")
 
-    assignees = []
-    for uid in body.assigneeIds:
-        try:
-            u = await col_users().find_one({"_id": oid(uid)})
-            if u:
-                assignees.append({"id": uid, "name": u.get("name", "Unknown")})
-        except Exception:
-            pass
+    assignees = await _resolve_assignees(body.assigneeIds)
 
     # Notify newly added assignees, excluding the admin making the change —
     # same reasoning as create_task, no self-notification.
@@ -194,6 +257,7 @@ async def update_task(task_id: str, body: TaskCreate, user=Depends(current_user)
     await col_tasks().update_one({"_id": oid(task_id)}, {"$set": {
         "title":       body.title,
         "description": body.description,
+        "imageUrls":   body.imageUrls,
         "priority":    body.priority,
         "dueDate":     body.dueDate,
         "assignees":   assignees,

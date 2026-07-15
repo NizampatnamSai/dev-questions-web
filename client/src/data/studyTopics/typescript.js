@@ -35,6 +35,15 @@ export default [
       "Interface: extendable (declaration merging), better error messages, prefer for public API. Type: required for unions, intersections, tuples, mapped types, computed types. In practice: either works for objects.",
     code: "interface User { name: string; }\ninterface User { age: number; } // merges! User = {name, age}\n\ntype ID = string | number; // union -- can't use interface\ntype Readonly<T> = { readonly [K in keyof T]: T[K] }; // mapped -- can't use interface",
     interviewQuestion: "When should you use interface over type?",
+    comparison: {
+      vs: "Type alias",
+      rows: [
+        { aspect: "Declaration merging", a: "yes — two interfaces with the same name merge automatically", b: "no — duplicate type names are a compile error" },
+        { aspect: "Can express", a: "object/class shapes only", b: "unions, tuples, mapped types, primitives — anything" },
+        { aspect: "Error messages", a: "generally clearer, since the name is preserved", b: "can show the fully expanded shape, which gets noisy for complex types" },
+      ],
+      takeaway: "Prefer interface for public object/class shapes (extendable, clean errors). Reach for type when you need a union, tuple, or mapped type — interface literally can't express those.",
+    },
   },
   {
     id: "typescript-enums",
@@ -521,6 +530,15 @@ export default [
     code: 'function parseJson(text: string): unknown {\n  return JSON.parse(text);\n}\n\nconst data = parseJson(\'{"name":"Alice"}\');\n// data.name; // Error: \'data\' is of type \'unknown\'\n\nif (typeof data === "object" && data !== null && "name" in data) {\n  console.log((data as { name: string }).name); // now safe to use\n}\n\nfunction risky(value: any) {\n  value.foo.bar.baz(); // No compile error, but may crash at runtime\n}',
     interviewQuestion:
       "Why is unknown considered safer than any, and how would you refactor a function that returns any from JSON.parse to use unknown instead?",
+    comparison: {
+      vs: "any",
+      rows: [
+        { aspect: "Type checking", a: "fully disabled — TypeScript won't catch any mistakes on this value", b: "fully enforced — you must narrow the type before using it" },
+        { aspect: "Calling methods/props", a: "allowed on anything, even if it crashes at runtime", b: "blocked until you narrow via typeof/instanceof/a type guard" },
+        { aspect: "Right tool for", a: "rare deliberate opt-outs, or gradual JS→TS migration", b: "genuinely unknown external data — JSON.parse results, caught errors" },
+      ],
+      takeaway: "Default to unknown for anything from the outside world (API responses, JSON.parse, catch blocks) — it forces validation. Reserve any for rare, deliberate escape hatches.",
+    },
   },
   {
     id: "typescript-indexed-access-types",

@@ -87,6 +87,15 @@ export default [
     explanation: "Slicing uses the [start:stop:step] syntax and always returns a new list, supporting negative indices and reversal via [::-1]. In-place methods like append(), extend(), insert(), pop(), and sort() mutate the original list, while functions like sorted() return a new one. A common pitfall is confusing append() (adds one element) with extend() (adds each element of an iterable).",
     code: 'nums = [5, 3, 8, 1, 9, 2]\n\n# Slicing\nprint(nums[1:4])     # [3, 8, 1]\nprint(nums[::-1])    # [2, 9, 1, 8, 3, 5]\nprint(nums[:3])      # [5, 3, 8]\n\n# Mutating methods\nnums.append(100)     # add single item\nnums.extend([7, 6])  # add each item\nnums.insert(0, -1)   # insert at index\nnums.sort()           # in-place sort\nprint(nums)\n\n# Non-mutating\nnew_sorted = sorted(nums, reverse=True)\nprint(nums.pop())    # removes & returns last item',
     interviewQuestion: "What is the difference between list.append() and list.extend()? What does a negative step in slicing do?",
+    comparison: {
+      vs: "Tuples",
+      rows: [
+        { aspect: "Mutability", a: "mutable — append/insert/sort/pop change it in place", b: "immutable — once created, elements can't be reassigned" },
+        { aspect: "Hashable", a: "no — can't be used as a dict key or set element", b: "yes (if contents are) — commonly used as dict keys" },
+        { aspect: "Signals intent", a: "a collection that will change over time", b: "a fixed record/shape (a point, a row, multiple return values)" },
+      ],
+      takeaway: "Use a list when the collection will grow/shrink/reorder. Use a tuple for a fixed-size, unchanging group of values — and when you need it as a dict key.",
+    },
   },
   {
     id: "python-tuples",
@@ -98,6 +107,15 @@ export default [
     explanation: "Once created, a tuple's elements cannot be reassigned, though a tuple can hold mutable objects like lists whose contents can still change. Tuples support unpacking, including extended unpacking with *rest, and are commonly used as dictionary keys or set elements because they are hashable (when their contents are). A single-element tuple requires a trailing comma, e.g. (1,).",
     code: 'point = (3, 4)\nx, y = point  # unpacking\nprint(x, y)\n\n# Extended unpacking\nfirst, *middle, last = (1, 2, 3, 4, 5)\nprint(first, middle, last)  # 1 [2, 3, 4] 5\n\n# Single-element tuple needs a comma\nsingle = (5,)\nnot_a_tuple = (5)\nprint(type(single), type(not_a_tuple))\n\n# Tuples as dict keys (hashable)\nlocations = {(0, 0): "origin", (1, 1): "diagonal"}\nprint(locations[(0, 0)])',
     interviewQuestion: "Why are tuples hashable but lists are not, and how does that affect their use as dictionary keys?",
+    comparison: {
+      vs: "Lists",
+      rows: [
+        { aspect: "Mutability", a: "immutable — once created, elements can't be reassigned", b: "mutable — append/insert/sort/pop change it in place" },
+        { aspect: "Hashable", a: "yes (if contents are) — commonly used as dict keys", b: "no — can't be used as a dict key or set element" },
+        { aspect: "Signals intent", a: "a fixed record/shape (a point, a row, multiple return values)", b: "a collection that will change over time" },
+      ],
+      takeaway: "Use a tuple for a fixed-size, unchanging group of values — and when you need it as a dict key. Use a list when the collection will grow/shrink/reorder.",
+    },
   },
   {
     id: "python-sets",

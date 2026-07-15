@@ -171,6 +171,33 @@ export default function MyTasks() {
   const [newComment, setNewComment] = useState({});
   const [updating, setUpdating] = useState({});
   const [confirmModal, setConfirmModal] = useState({ open: false, taskId: null, status: null, taskTitle: "" });
+  const [lightboxImage, setLightboxImage] = useState(null); // image url currently shown full-size, or null
+
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const handler = (e) => e.key === "Escape" && setLightboxImage(null);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxImage]);
+
+  const downloadImage = async (url) => {
+    try {
+      const res = await fetch(url, { mode: "cors" });
+      if (!res.ok) throw new Error("fetch failed");
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = url.split("/").pop().split("?")[0] || "image.jpg";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast.error("Couldn't download — opening in a new tab instead");
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
 
   useEffect(() => {
     loadTasks();
@@ -350,6 +377,22 @@ export default function MyTasks() {
                       />
                     </div>
                   )}
+                  {viewTask.imageUrls?.length > 0 && (
+                    <div>
+                      <h3 className="font-semibold mb-2">Images</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {viewTask.imageUrls.map((url, i) => (
+                          <img
+                            key={i}
+                            src={url}
+                            alt="attachment"
+                            onClick={() => setLightboxImage(url)}
+                            className="w-24 h-24 rounded-lg object-cover border border-slate-200 dark:border-white/10 hover:opacity-90 transition-opacity cursor-zoom-in"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   <div>
                     <h3 className="font-semibold mb-2">Assigned Team</h3>
                     <div className="space-y-2">
@@ -381,6 +424,40 @@ export default function MyTasks() {
           </AnimatePresence>,
           document.body,
         )}
+
+      {createPortal(
+        <AnimatePresence>
+          {lightboxImage && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setLightboxImage(null)}
+              className="fixed inset-0 bg-black/90 z-[70] flex items-center justify-center p-4 cursor-zoom-out"
+            >
+              <button
+                onClick={() => setLightboxImage(null)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg"
+                title="Close"
+              >
+                ✕
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); downloadImage(lightboxImage); }}
+                className="absolute top-4 right-16 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+                title="Download image"
+              >
+                ⬇
+              </button>
+              <img
+                src={lightboxImage}
+                alt="attachment full size"
+                onClick={(e) => e.stopPropagation()}
+                className="max-w-full max-h-full object-contain rounded-lg cursor-default"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
 
       {loading ? (
         <div className="grid md:grid-cols-4 gap-4">

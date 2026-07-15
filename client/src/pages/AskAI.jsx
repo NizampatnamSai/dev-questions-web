@@ -184,15 +184,32 @@ function parseUTC(str) {
   return isNaN(d) ? new Date(str) : d;
 }
 
-function HistoryItem({ chat, active, onSelect, onDelete }) {
+function HistoryItem({ chat, active, onSelect, onDelete, onRename }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(chat.title || "");
+  const inputRef = useRef(null);
+
   const date = parseUTC(chat.updatedAt);
   const isToday = date.toDateString() === new Date().toDateString();
   const label = isToday
     ? date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     : date.toLocaleDateString([], { month: "short", day: "numeric" });
 
+  const startEdit = (e) => {
+    e.stopPropagation();
+    setDraft(chat.title || "");
+    setEditing(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  const commit = () => {
+    setEditing(false);
+    if (draft.trim() && draft.trim() !== chat.title) onRename(chat.id, draft.trim());
+  };
+
   return (
-    <div onClick={() => onSelect(chat)}
+    <div onClick={() => !editing && onSelect(chat)}
+      onDoubleClick={onRename ? startEdit : undefined}
       className={`group relative flex items-start gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
         active
           ? "bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30"
@@ -200,17 +217,44 @@ function HistoryItem({ chat, active, onSelect, onDelete }) {
       }`}
     >
       <span className="text-base flex-shrink-0 mt-0.5">💬</span>
-      <div className="flex-1 min-w-0 pr-4">
-        <p className={`text-xs font-medium truncate leading-snug ${active ? "text-indigo-700 dark:text-indigo-300" : "text-slate-700 dark:text-slate-300"}`}>
-          {chat.title || "Chat"}
-        </p>
+      <div className="flex-1 min-w-0 pr-8">
+        {editing ? (
+          <input
+            ref={inputRef}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") { e.preventDefault(); commit(); }
+              if (e.key === "Escape") { e.preventDefault(); setEditing(false); }
+            }}
+            onBlur={commit}
+            maxLength={100}
+            className="w-full text-xs font-medium bg-white dark:bg-slate-800 border border-indigo-300 dark:border-indigo-500 rounded-lg px-1.5 py-0.5 outline-none text-slate-700 dark:text-slate-200"
+          />
+        ) : (
+          <p className={`text-xs font-medium truncate leading-snug ${active ? "text-indigo-700 dark:text-indigo-300" : "text-slate-700 dark:text-slate-300"}`}>
+            {chat.title || "Chat"}
+          </p>
+        )}
         <p className="text-[10px] text-slate-400 mt-0.5">{label} · {chat.messageCount || 0} msgs</p>
       </div>
-      <button
-        onClick={e => { e.stopPropagation(); onDelete(chat.id); }}
-        className="absolute right-2 top-2.5 opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 transition-all text-[10px] leading-none"
-        title="Delete"
-      >✕</button>
+      {!editing && (
+        <div className="absolute right-2 top-2.5 opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1.5">
+          {onRename && (
+            <button
+              onClick={startEdit}
+              className="text-slate-400 hover:text-indigo-500 text-[10px] leading-none"
+              title="Rename"
+            >✏️</button>
+          )}
+          <button
+            onClick={e => { e.stopPropagation(); onDelete(chat.id); }}
+            className="text-slate-400 hover:text-red-500 text-[10px] leading-none"
+            title="Delete"
+          >✕</button>
+        </div>
+      )}
     </div>
   );
 }
@@ -761,6 +805,15 @@ export default function AskAI() {
     } catch { toast.error("Failed to delete"); }
   };
 
+  const renameChat = async (id, title) => {
+    const trimmed = title.trim();
+    if (!trimmed) return;
+    try {
+      await api.patch(`/ai/history/${id}/title`, { title: trimmed });
+      setHistory(h => h.map(c => (c.id === id ? { ...c, title: trimmed } : c)));
+    } catch { toast.error("Failed to rename"); }
+  };
+
   const deleteAll = () => {
     confirm({
       title: "Delete all saved chats?",
@@ -862,7 +915,7 @@ export default function AskAI() {
   // ── Layout: sidebar + chat side by side ───────────────────────────────────
   return (
     <>
-    <div className="flex gap-4" style={{ height: "calc(100vh - 10rem)" }}>
+    <div className="flex-1 min-h-0 flex gap-4">
 
       {/* ── Sidebar ── */}
       {/* Mobile overlay */}
@@ -888,6 +941,7 @@ export default function AskAI() {
           onNew={startNewChat}
           onSelect={openChat}
           onDelete={deleteChat}
+          onRename={renameChat}
           onDeleteAll={deleteAll}
           onExportAll={exportAll}
         />
@@ -908,6 +962,7 @@ export default function AskAI() {
               onNew={startNewChat}
               onSelect={openChat}
               onDelete={deleteChat}
+              onRename={renameChat}
               onDeleteAll={deleteAll}
               onExportAll={exportAll}
               onClose={() => setSidebarOpen(false)}
@@ -1032,12 +1087,6 @@ export default function AskAI() {
                 </button>
               )}
 
-              <button
-                onClick={startNewChat}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-medium hover:bg-slate-200 dark:hover:bg-white/15 transition-colors"
-              >
-                ✏️ New
-              </button>
             </div>
           )}
           </div>
@@ -1173,7 +1222,7 @@ export default function AskAI() {
 }
 
 // ─── Sidebar content (shared desktop + mobile) ────────────────────────────────
-function SidebarContent({ grouped, activeChatId, historyLoading, onNew, onSelect, onDelete, onDeleteAll, onExportAll, onClose }) {
+function SidebarContent({ grouped, activeChatId, historyLoading, onNew, onSelect, onDelete, onRename, onDeleteAll, onExportAll, onClose }) {
   const hasAny = Object.keys(grouped).length > 0;
   return (
     <>
@@ -1208,7 +1257,7 @@ function SidebarContent({ grouped, activeChatId, historyLoading, onNew, onSelect
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-2 mb-1">{label}</p>
               {items.map(chat => (
                 <HistoryItem key={chat.id} chat={chat} active={activeChatId === chat.id}
-                  onSelect={onSelect} onDelete={onDelete} />
+                  onSelect={onSelect} onDelete={onDelete} onRename={onRename} />
               ))}
             </div>
           ))

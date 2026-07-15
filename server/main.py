@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, col_app_config
-from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder, fire_task_due_date_reminders, fire_typing_race_reminder, fire_sudoku_reminder, fire_weekly_digest
+from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder, fire_task_due_date_reminders, fire_typing_race_reminder, fire_sudoku_reminder, fire_weekly_digest, fire_scheduled_tasks, fire_scheduled_messages
 from routers import auth, questions, stats, admin, comments, study
 from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel, game
 
@@ -128,6 +128,8 @@ async def startup():
     scheduler.add_job(fire_typing_race_reminder, "cron", hour=tr_h_utc, minute=tr_m_utc, second=0, id="typing_race_reminder")
     scheduler.add_job(fire_sudoku_reminder, "cron", hour=sd_h_utc, minute=sd_m_utc, second=0, id="sudoku_reminder")
     scheduler.add_job(fire_weekly_digest, "cron", day_of_week="mon", hour=wd_h_utc, minute=wd_m_utc, second=0, id="weekly_digest")
+    scheduler.add_job(fire_scheduled_tasks, "cron", second=0, id="scheduled_tasks")
+    scheduler.add_job(fire_scheduled_messages, "cron", second=0, id="scheduled_messages")
     scheduler.start()
     print("[startup] ✅ Scheduler started with all jobs", flush=True)
 

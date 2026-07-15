@@ -73,6 +73,15 @@ export default [
       "flex:1 = flex: 1 1 0 (basis 0 — share space proportionally). flex:auto = flex: 1 1 auto (basis = content size). flex:1 is usually what you want for equal columns.",
     code: "/* Equal columns regardless of content */\n.parent { display: flex; }\n.child { flex: 1; }\n/* Don't shrink below content */\n.no-shrink { flex-shrink: 0; }\n/* Center anything */\n.center { display: flex; place-items: center; }",
     interviewQuestion: "What does flex:1 vs flex:auto mean?",
+    comparison: {
+      vs: "Grid",
+      rows: [
+        { aspect: "Dimension", a: "1D — lays items out in a single row or column", b: "2D — controls rows AND columns at once" },
+        { aspect: "Sizing driven by", a: "content size, unless you force basis/grow/shrink", b: "the track definitions you declare upfront" },
+        { aspect: "Best for", a: "navbars, toolbars, button groups, centering", b: "page layouts, card grids, anything with real rows+columns" },
+      ],
+      takeaway: "Use Flexbox for one-dimensional flows (a row or a column). Use Grid when you need to control both rows and columns together.",
+    },
   },
   {
     id: "css-grid",
@@ -85,6 +94,15 @@ export default [
       "auto-fill: creates as many tracks as fit, leaving empty columns. auto-fit: collapses empty tracks — items stretch to fill. Use auto-fit for responsive cards.",
     code: "/* Responsive cards -- no breakpoints needed */\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 1rem;\n}\n/* Named areas */\n.layout {\n  grid-template-areas:\n    'header header'\n    'sidebar main'\n    'footer footer';\n}",
     interviewQuestion: "What is the difference between auto-fill and auto-fit?",
+    comparison: {
+      vs: "Flexbox",
+      rows: [
+        { aspect: "Dimension", a: "2D — controls rows AND columns at once", b: "1D — lays items out in a single row or column" },
+        { aspect: "Sizing driven by", a: "the track definitions you declare upfront", b: "content size, unless you force basis/grow/shrink" },
+        { aspect: "Best for", a: "page layouts, card grids, anything with real rows+columns", b: "navbars, toolbars, button groups, centering" },
+      ],
+      takeaway: "Use Grid when you need to control both rows and columns together. Use Flexbox for one-dimensional flows (a row or a column).",
+    },
   },
   {
     id: "css-grid-subgrid",

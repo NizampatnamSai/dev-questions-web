@@ -23,6 +23,12 @@ export default [
       "Replaces. Use functional update with spread for objects: setState(prev => ({...prev, field: val})).",
     code: "const [user, setUser] = useState({ name: '', age: 0 });\n// WRONG -- loses age\nsetUser({ name: 'Alice' });\n// CORRECT\nsetUser(prev => ({ ...prev, name: 'Alice' }));\n// Lazy init for expensive default\nconst [data, setData] = useState(() => JSON.parse(localStorage.getItem('data') ?? 'null'));",
     interviewQuestion: "Does setState merge or replace state?",
+    optimization: {
+      problem: "Expensive default state (e.g. parsing localStorage or a large JSON blob) re-runs on every single render",
+      fix: "Pass a function to useState (lazy initialization) instead of calling the expensive computation directly in the argument — React only calls it once, on mount.",
+      code: "// BAD: JSON.parse runs on every render, result thrown away every time except mount\nconst [data, setData] = useState(JSON.parse(localStorage.getItem('cart')));\n\n// GOOD: the function only runs once, on the very first render\nconst [data, setData] = useState(() => JSON.parse(localStorage.getItem('cart')));",
+      impact: "A checkout page with a large cached cart in localStorage went from re-parsing ~50KB of JSON on every keystroke in an unrelated form field to parsing it exactly once.",
+    },
   },
   {
     id: "react-useeffect",
@@ -35,6 +41,12 @@ export default [
       "All values from component scope used inside useEffect must be in deps. Omitting causes stale closures. ESLint exhaustive-deps enforces this.",
     code: "// Mount only\nuseEffect(() => { subscribe(); return () => unsubscribe(); }, []);\n// On userId change\nuseEffect(() => { fetchUser(userId); }, [userId]);\n// No array = every render (rarely needed)\nuseEffect(() => { document.title = title; });",
     interviewQuestion: "What is the dependency array contract?",
+    optimization: {
+      problem: "One big useEffect handling multiple unrelated concerns (subscribing to a socket, syncing document.title, and fetching data) re-runs ALL of it whenever ANY dependency changes",
+      fix: "Split into separate useEffect calls, one per concern, each with its own tight dependency array — unrelated state changes no longer trigger unrelated work.",
+      code: "// BAD: title updates re-subscribe the socket unnecessarily\nuseEffect(() => {\n  document.title = title;\n  const sub = socket.subscribe(roomId);\n  return () => sub.unsubscribe();\n}, [title, roomId]);\n\n// GOOD: each effect only reruns for its own dependency\nuseEffect(() => { document.title = title; }, [title]);\nuseEffect(() => {\n  const sub = socket.subscribe(roomId);\n  return () => sub.unsubscribe();\n}, [roomId]);",
+      impact: "A chat room component stopped tearing down and reconnecting its WebSocket every time an unrelated typing-indicator title updated — reconnect churn dropped to zero.",
+    },
   },
   {
     id: "react-useref",
@@ -60,6 +72,12 @@ export default [
       "(1) Expensive computation >1ms. (2) Reference equality matters (object/array passed to memoized child). Premature memoization adds overhead.",
     code: "const filtered = useMemo(\n  () => items.filter(i => i.active && i.tag === tag),\n  [items, tag]\n);\nconst handleSelect = useCallback(\n  (id: string) => onSelect(id),\n  [onSelect] // stable ref for memo'd children\n);",
     interviewQuestion: "When does memoization actually help?",
+    optimization: {
+      problem: "A search-as-you-type feature re-runs a heavy client-side filter+sort over 10,000 items on every keystroke, causing visible input lag",
+      fix: "useMemo the expensive filter/sort so it only recomputes when the actual inputs (items, query) change — not on every render caused by unrelated state (e.g. a focus/blur flag).",
+      code: "const results = useMemo(() => {\n  return items\n    .filter(i => i.name.toLowerCase().includes(query.toLowerCase()))\n    .sort((a, b) => a.name.localeCompare(b.name));\n}, [items, query]); // recomputes ONLY when items or query change",
+      impact: "Keystroke-to-render latency on a 10k-item list dropped from ~120ms (visible lag) to <5ms once the filter/sort stopped re-running on unrelated re-renders.",
+    },
   },
   {
     id: "react-usereducer",
@@ -85,6 +103,12 @@ export default [
     code: "const ThemeCtx = createContext<Theme>('light');\nconst UserCtx  = createContext<User | null>(null);\n// Split by frequency: theme rarely changes, user might\nfunction useTheme() { return useContext(ThemeCtx); }\nfunction useUser()  { return useContext(UserCtx); }",
     interviewQuestion:
       "Does useContext cause all consumers to re-render on change?",
+    optimization: {
+      problem: "A single AppContext bundling theme, current user, AND a live notification count re-renders the entire app tree every few seconds when the notification count ticks up",
+      fix: "Split one big context into several narrow ones by how often each piece changes — components that only read theme/user never re-render just because the notification count changed.",
+      code: "// BAD: one context, everything re-renders on any change\nconst AppCtx = createContext({ theme, user, notifCount });\n\n// GOOD: split by update frequency\nconst ThemeCtx = createContext(theme);       // rarely changes\nconst UserCtx = createContext(user);         // changes on login/logout\nconst NotifCtx = createContext(notifCount);  // changes every few seconds",
+      impact: "A dashboard with a live notification badge stopped re-rendering ~40 unrelated components (sidebar, settings panel, static header) every time a new notification arrived.",
+    },
   },
   {
     id: "react-useid",
@@ -133,6 +157,12 @@ export default [
       "No — shallow comparison by reference. Objects/arrays passed as new literals each render bypass memo. Pass custom compareFn as second arg for deep comparison.",
     code: "const Card = React.memo(\n  ({ user }: { user: User }) => <div>{user.name}</div>,\n  (prev, next) => prev.user.id === next.user.id\n);\n// BROKEN: new object every render -- memo useless\n<Card user={{ name: 'Alice' }} />",
     interviewQuestion: "Does React.memo do deep comparison?",
+    optimization: {
+      problem: "A 500-row data table re-renders every single row whenever the parent's unrelated state changes (e.g. a search input keystroke)",
+      fix: "Wrap the row component in React.memo AND make sure the props it receives are stable references (primitives, or memoized objects/callbacks) — memo is useless if the parent passes a brand-new object/array literal every render.",
+      code: "const Row = React.memo(function Row({ row, onSelect }) {\n  return <tr onClick={() => onSelect(row.id)}>{row.name}</tr>;\n});\n\nfunction Table({ rows, query }) {\n  // Stable across renders unless `rows` itself changes\n  const handleSelect = useCallback((id) => console.log('selected', id), []);\n  return rows.map(row => <Row key={row.id} row={row} onSelect={handleSelect} />);\n}",
+      impact: "Typing in the search box went from re-rendering all 500 rows per keystroke to re-rendering 0 — only the filtered subset that actually appears/disappears re-renders.",
+    },
   },
   {
     id: "react-reconciliation-keys",
@@ -427,6 +457,15 @@ export default [
     code: 'function NameForm() {\n  // Controlled\n  const [name, setName] = React.useState(\'\');\n\n  // Uncontrolled\n  const emailRef = React.useRef(null);\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    console.log(name, emailRef.current.value);\n  };\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input value={name} onChange={(e) => setName(e.target.value)} />\n      <input ref={emailRef} defaultValue="" />\n      <button type="submit">Submit</button>\n    </form>\n  );\n}',
     interviewQuestion:
       "When would you choose an uncontrolled component over a controlled one, and what are the tradeoffs?",
+    comparison: {
+      vs: "uncontrolled components",
+      rows: [
+        { aspect: "Source of truth", a: "React state (value/onChange) — every keystroke re-renders", b: "the DOM itself — read on demand via a ref" },
+        { aspect: "Validation/formatting", a: "straightforward — you see every change as it happens", b: "harder — you only know the value when you go look for it" },
+        { aspect: "Performance on large forms", a: "can get expensive — a re-render per keystroke", b: "cheaper — no re-render until you explicitly read the ref" },
+      ],
+      takeaway: "Use controlled inputs when you need live validation/formatting/conditional UI. Use uncontrolled (or a library like React Hook Form built on refs) for large forms or file inputs, which can only be uncontrolled.",
+    },
   },
   {
     id: "react-prop-drilling",
@@ -512,6 +551,15 @@ export default [
     code: 'function Tooltip({ targetRef, text }) {\n  const [style, setStyle] = React.useState({});\n\n  React.useLayoutEffect(() => {\n    const rect = targetRef.current.getBoundingClientRect();\n    // Measure and position before paint to avoid flicker\n    setStyle({ top: rect.bottom, left: rect.left });\n  }, [targetRef]);\n\n  return <div className="tooltip" style={style}>{text}</div>;\n}',
     interviewQuestion:
       "You notice a brief flicker when a tooltip repositions itself based on a measured DOM element. Would you use useEffect or useLayoutEffect to fix it, and why?",
+    comparison: {
+      vs: "useEffect",
+      rows: [
+        { aspect: "Timing", a: "synchronous, right after DOM commit, BEFORE the browser paints", b: "asynchronous, scheduled AFTER the browser paints" },
+        { aspect: "Blocks painting", a: "yes — the browser waits for it to finish", b: "no — the user may briefly see pre-effect UI" },
+        { aspect: "Use it for", a: "measuring/mutating the DOM to avoid a visible flicker (tooltips, layout)", b: "data fetching, subscriptions, logging — anything that doesn't need to block paint" },
+      ],
+      takeaway: "Default to useEffect. Reach for useLayoutEffect only when you're measuring or mutating the DOM and a one-frame flicker would be visibly wrong.",
+    },
   },
   {
     id: "react-virtual-dom-diffing",
@@ -598,6 +646,15 @@ export default [
     code: "// Context: simple, infrequent updates\nconst ThemeContext = React.createContext('light');\n\n// Redux Toolkit: complex, frequent, selective updates\nimport { createSlice, configureStore } from '@reduxjs/toolkit';\n\nconst cartSlice = createSlice({\n  name: 'cart',\n  initialState: { items: [] },\n  reducers: {\n    addItem: (state, action) => { state.items.push(action.payload); },\n  },\n});\n\nconst store = configureStore({ reducer: { cart: cartSlice.reducer } });\n// useSelector(state => state.cart.items) only re-renders on items change",
     interviewQuestion:
       "Your app's Context-based cart state causes the entire product listing page to re-render on every quantity change. Would you fix this within Context or migrate to Redux/Zustand? Justify your answer.",
+    comparison: {
+      vs: "Redux",
+      rows: [
+        { aspect: "Selective re-renders", a: "no — every consumer re-renders on any value change, unless manually split", b: "yes — useSelector only re-renders on the specific slice that changed" },
+        { aspect: "Setup", a: "built-in, zero dependencies", b: "extra library (Redux Toolkit), a store, reducers/actions" },
+        { aspect: "Best for", a: "simple, low-frequency shared values (theme, auth user, locale)", b: "complex, high-frequency, cross-cutting state, middleware, devtools" },
+      ],
+      takeaway: "Use Context for simple, infrequently-changing shared values. Reach for Redux (or Zustand/Jotai) once state is complex, updates frequently, or you need selective subscriptions to avoid re-render fan-out.",
+    },
   },
   {
     id: "react-usecallback-dependency-pitfalls",

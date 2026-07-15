@@ -1,0 +1,15 @@
+# Hashed build assets (Vite content-hashes every filename on each build) —
+# safe to cache forever since a new build always gets new filenames.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Every other path — including every SPA route, which Netlify's /* rewrite
+# (see _redirects/netlify.toml) serves index.html for — must always
+# revalidate. Without this, a browser can hold onto a cached index.html that
+# references JS/CSS chunk filenames from a previous deploy; once those old
+# files are gone from the server (overwritten by the next deploy), a fresh
+# tab loading that stale HTML 404s on its own bundle and renders blank —
+# while an already-open tab keeps working fine since its bundle is already
+# loaded in memory, which is what made this look tab-specific.
+/*
+  Cache-Control: public, max-age=0, must-revalidate

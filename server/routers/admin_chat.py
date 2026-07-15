@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisco
 from pydantic import BaseModel
 from db_mongo import (
     col_admin_chats, col_admin_chat_messages, col_users, col_user_profiles,
-    col_fcm_tokens, col_user_notifications, col_app_config, sid, oid, now,
+    col_fcm_tokens, col_user_notifications, col_app_config, col_scheduled_messages, sid, oid, now,
 )
 from deps import current_user, require_ai_enabled
 from auth_utils import decode_token
@@ -581,30 +581,24 @@ class SendMessageBody(BaseModel):
     imageUrls: List[str] = []
 
 
-@router.post("/{chat_id}/messages")
-async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current_user)):
-    chat = await _get_chat_or_403(chat_id, user)
-    text = _strip_html(body.html)
-    if not text and not body.imageUrls:
-        raise HTTPException(400, "Message cannot be empty")
-    if len(body.html) > 10000:
-        raise HTTPException(400, "Message too long")
-    if len(body.imageUrls) > MAX_IMAGES_PER_MESSAGE:
-        raise HTTPException(400, f"Up to {MAX_IMAGES_PER_MESSAGE} images per message")
-
+async def _send_message_now(chat: dict, chat_id: str, sender_id: str, sender_name: str, html: str, image_urls: list[str]) -> dict:
+    """Shared by the immediate POST /{chat_id}/messages endpoint and
+    fire_scheduled_messages() (scheduler_tasks.py) — inserts the message and
+    fans out the WS broadcast + push/in-app notification identically whether
+    sending was immediate or a deferred schedule firing."""
     msg_doc = {
         "chatId": chat_id,
-        "senderId": user["id"],
-        "senderName": user.get("name", "Unknown"),
-        "html": body.html,
-        "imageUrls": body.imageUrls,
+        "senderId": sender_id,
+        "senderName": sender_name,
+        "html": html,
+        "imageUrls": image_urls,
         "createdAt": now(),
-        "readBy": [user["id"]],
+        "readBy": [sender_id],
         "deliveredTo": [],
     }
     result = await col_admin_chat_messages().insert_one(msg_doc)
 
-    other_ids = _other_participant_ids(chat, user["id"])
+    other_ids = _other_participant_ids(chat, sender_id)
     # Anyone already connected right now got the WS push instantly below —
     # that IS delivery, no need to wait for them to separately fetch it.
     online_recipient_ids = [uid for uid in other_ids if manager.is_online(uid)]
@@ -617,9 +611,9 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
     created = sid(await col_admin_chat_messages().find_one({"_id": result.inserted_id}))
     created["canEdit"] = True  # just sent — obviously still within the edit window
     created.update(_recipient_status(created, other_ids))
-    created.update(_reaction_summary(created, user["id"]))
+    created.update(_reaction_summary(created, sender_id))
 
-    preview = _preview_text(body.html, len(body.imageUrls))
+    preview = _preview_text(html, len(image_urls))
     await col_admin_chats().update_one(
         {"_id": oid(chat_id)},
         {"$set": {"lastMessageAt": now(), "lastMessagePreview": preview}},
@@ -637,12 +631,12 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
     # a muted chat still updates instantly if you have it open, it just
     # doesn't ping you when you don't.
     muted_by = set(chat.get("mutedBy", []))
-    notify_ids = [i for i in other_ids if i != user["id"] and i not in muted_by]
+    notify_ids = [i for i in other_ids if i != sender_id and i not in muted_by]
     if notify_ids:
         is_group = chat.get("type") == "group"
         title = (
-            f"💬 {user.get('name', 'Someone')} sent a message in {chat.get('groupName', 'a group')}"
-            if is_group else f"💬 {user.get('name', 'Someone')} sent you a message"
+            f"💬 {sender_name} sent a message in {chat.get('groupName', 'a group')}"
+            if is_group else f"💬 {sender_name} sent you a message"
         )
         # Deep-links straight to the conversation and the exact message,
         # instead of just the bare /messages list — mirrors the ?userId=
@@ -663,6 +657,85 @@ async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current
             await send_to_tokens(tokens, title=title, body=preview, data={"type": "admin_chat", "path": deep_link})
 
     return created
+
+
+@router.post("/{chat_id}/messages")
+async def send_message(chat_id: str, body: SendMessageBody, user=Depends(current_user)):
+    chat = await _get_chat_or_403(chat_id, user)
+    text = _strip_html(body.html)
+    if not text and not body.imageUrls:
+        raise HTTPException(400, "Message cannot be empty")
+    if len(body.html) > 10000:
+        raise HTTPException(400, "Message too long")
+    if len(body.imageUrls) > MAX_IMAGES_PER_MESSAGE:
+        raise HTTPException(400, f"Up to {MAX_IMAGES_PER_MESSAGE} images per message")
+    return await _send_message_now(chat, chat_id, user["id"], user.get("name", "Unknown"), body.html, body.imageUrls)
+
+
+# ── Schedule a message for later ──────────────────────────────────────────────
+# Genuinely deferred send — the message doesn't exist in col_admin_chat_messages
+# (and nobody sees/hears about it) until scheduledFor arrives, at which point
+# fire_scheduled_messages() (scheduler_tasks.py, runs every minute) calls the
+# exact same _send_message_now() the immediate endpoint uses. Any participant
+# can schedule a message, same as any participant can send one normally.
+
+class ScheduleMessageBody(BaseModel):
+    html: str = ""
+    imageUrls: List[str] = []
+    scheduledFor: str  # ISO datetime — the message isn't sent until this moment
+
+
+@router.post("/{chat_id}/messages/schedule")
+async def schedule_message(chat_id: str, body: ScheduleMessageBody, user=Depends(current_user)):
+    await _get_chat_or_403(chat_id, user)
+    text = _strip_html(body.html)
+    if not text and not body.imageUrls:
+        raise HTTPException(400, "Message cannot be empty")
+    if len(body.html) > 10000:
+        raise HTTPException(400, "Message too long")
+    if len(body.imageUrls) > MAX_IMAGES_PER_MESSAGE:
+        raise HTTPException(400, f"Up to {MAX_IMAGES_PER_MESSAGE} images per message")
+    try:
+        scheduled_dt = datetime.fromisoformat(body.scheduledFor.replace("Z", "+00:00"))
+        if scheduled_dt.tzinfo is None:
+            scheduled_dt = scheduled_dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        raise HTTPException(400, "Invalid scheduledFor datetime")
+    if scheduled_dt <= datetime.now(timezone.utc):
+        raise HTTPException(400, "scheduledFor must be in the future")
+
+    doc = {
+        "chatId": chat_id,
+        "senderId": user["id"],
+        "senderName": user.get("name", "Unknown"),
+        "html": body.html,
+        "imageUrls": body.imageUrls,
+        "scheduledFor": scheduled_dt,
+        "createdAt": now(),
+    }
+    result = await col_scheduled_messages().insert_one(doc)
+    return sid(await col_scheduled_messages().find_one({"_id": result.inserted_id}))
+
+
+@router.get("/{chat_id}/messages/scheduled/list")
+async def list_scheduled_messages(chat_id: str, user=Depends(current_user)):
+    await _get_chat_or_403(chat_id, user)
+    docs = await col_scheduled_messages().find({"chatId": chat_id}).sort("scheduledFor", 1).to_list(200)
+    return [sid(d) for d in docs]
+
+
+@router.delete("/{chat_id}/messages/scheduled/{scheduled_id}")
+async def cancel_scheduled_message(chat_id: str, scheduled_id: str, user=Depends(current_user)):
+    await _get_chat_or_403(chat_id, user)
+    doc = await col_scheduled_messages().find_one({"_id": oid(scheduled_id), "chatId": chat_id})
+    if not doc:
+        raise HTTPException(404, "Scheduled message not found")
+    # Only the person who scheduled it can cancel it — same as only the
+    # sender being able to edit an already-sent message.
+    if doc["senderId"] != user["id"]:
+        raise HTTPException(403, "Not your scheduled message")
+    await col_scheduled_messages().delete_one({"_id": oid(scheduled_id)})
+    return {"ok": True}
 
 
 class EditMessageBody(BaseModel):

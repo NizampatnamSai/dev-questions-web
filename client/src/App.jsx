@@ -58,6 +58,7 @@ const MiniSudoku = lazy(() => import("./pages/MiniSudoku"));
 const Flashcards = lazy(() => import("./pages/Flashcards"));
 const Progress = lazy(() => import("./pages/Progress"));
 const JsCompiler = lazy(() => import("./pages/JsCompiler"));
+const TsCompiler = lazy(() => import("./pages/TsCompiler"));
 const ProjectGuide = lazy(() => import("./pages/ProjectGuide"));
 const JSChallenge = lazy(() => import("./pages/JSChallenge"));
 const JsCodingQuestions = lazy(() => import("./pages/JsCodingQuestions"));
@@ -107,20 +108,25 @@ const pageVariants = {
   exit: { opacity: 0, transition: { duration: 0.08 } },
 };
 
-function PageWrapper({ children }) {
+function PageWrapper({ children, fillHeight = false }) {
   return (
     <motion.div
       variants={pageVariants}
       initial="initial"
       animate="animate"
       exit="exit"
+      // Only a flex item/container when the page needs it (Ask AI,
+      // Messages) — display:flex changes margin-collapsing behavior, so
+      // this stays a no-op div for every other page rather than applying
+      // globally and risking subtle layout shifts across the whole app.
+      className={fillHeight ? "flex-1 flex flex-col min-h-0" : undefined}
     >
       {children}
     </motion.div>
   );
 }
 
-function AppLayout({ children, fullWidth = false }) {
+function AppLayout({ children, fullWidth = false, hideFooter = false }) {
   const [sidebarHidden, setSidebarHidden] = useState(() => {
     try {
       return localStorage.getItem("devquiz_sidebar_hidden") === "true";
@@ -139,16 +145,40 @@ function AppLayout({ children, fullWidth = false }) {
     });
   };
 
+  // hideFooter pages (Ask AI, Messages) are chat-style UIs that size their
+  // own message list to fill exactly the space left after the chrome above
+  // them — previously via `calc(100vh - Nrem)` with a hand-guessed rem
+  // value that never quite matched the real topbar+padding height, causing
+  // the OUTER page to also need a scroll just to reveal a few px of extra
+  // content. Real fix: make the whole shell a fixed h-screen box for these
+  // pages (min-h-0 at every flex level so children can actually shrink —
+  // the classic flexbox gotcha) so the page itself can never overflow, and
+  // let the page's own content fill via h-full/flex-1 with zero magic
+  // numbers, instead of both fighting over the same viewport height.
+  const shellClass = hideFooter ? "flex h-screen flex-col overflow-hidden" : "flex min-h-screen flex-col";
+  const innerRowClass = hideFooter ? "flex flex-1 min-h-0" : "flex flex-1";
+  const contentColClass = hideFooter ? "flex-1 flex flex-col min-w-0 min-h-0" : "flex-1 flex flex-col min-w-0";
+  // BottomNav is `fixed bottom-0` + md:hidden — on mobile it overlays
+  // whatever's beneath it. Normal pages get clearance from `pb-28` since
+  // they scroll normally and eventually reveal that padding; this fixed
+  // h-screen shell doesn't scroll at the page level at all, so without an
+  // explicit bottom inset here the chat's own last message / input row
+  // renders (and stays) hidden behind the nav bar instead of just needing
+  // a scroll to reach it.
+  const mainClass = hideFooter
+    ? "flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-20 md:pb-6 mx-auto w-full max-w-full overflow-hidden"
+    : "flex-1 p-4 md:p-6 pb-28 md:pb-8 mx-auto w-full max-w-full";
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className={shellClass}>
       <GuestBanner />
-      <div className="flex flex-1">
+      <div className={innerRowClass}>
         {!sidebarHidden && (
           <div className="hidden md:block flex-shrink-0 w-64">
             <Sidebar />
           </div>
         )}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className={contentColClass}>
           {/* Top bar — desktop */}
           <div className="hidden md:flex items-center justify-between gap-2 px-4 py-3 sticky top-0 z-30 bg-white/95 dark:bg-slate-950/95 border-b border-black/5 dark:border-white/8">
             <button
@@ -195,10 +225,16 @@ function AppLayout({ children, fullWidth = false }) {
           {/* Every page is full-width now — the old max-w-4xl default made most
               pages look cramped on real screens; `fullWidth` prop is kept as a
               no-op on call sites so nothing needs to change there. */}
-          <main className="flex-1 p-4 md:p-6 pb-28 md:pb-8 mx-auto w-full max-w-full">
+          <main className={mainClass}>
             {children}
           </main>
-          <Footer />
+          {/* Chat-style pages (Ask AI, Messages) size their own panel to
+              calc(100vh - Nrem) so only the message list scrolls internally
+              — rendering the Footer below that always pushed total page
+              height past one viewport, forcing an outer page-level scroll
+              just to reveal a few pixels of "Powered by…" text. Skipped on
+              those pages instead of chasing an ever-more-precise offset. */}
+          {!hideFooter && <Footer />}
         </div>
         <BottomNav />
         <ScrollToTopBtn />
@@ -207,11 +243,11 @@ function AppLayout({ children, fullWidth = false }) {
   );
 }
 
-function ProtectedPage({ children, path, fullWidth = false, adminOnly = false }) {
+function ProtectedPage({ children, path, fullWidth = false, adminOnly = false, hideFooter = false }) {
   return (
     <ProtectedRoute path={path} adminOnly={adminOnly}>
-      <AppLayout fullWidth={fullWidth}>
-        <PageWrapper>{children}</PageWrapper>
+      <AppLayout fullWidth={fullWidth} hideFooter={hideFooter}>
+        <PageWrapper fillHeight={hideFooter}>{children}</PageWrapper>
       </AppLayout>
     </ProtectedRoute>
   );
@@ -540,7 +576,7 @@ function AppInner() {
         <Route
           path="/ask"
           element={
-            <ProtectedPage path="/ask" fullWidth>
+            <ProtectedPage path="/ask" fullWidth hideFooter>
               <AskAI />
             </ProtectedPage>
           }
@@ -638,7 +674,7 @@ function AppInner() {
         <Route
           path="/messages"
           element={
-            <ProtectedPage path="/messages">
+            <ProtectedPage path="/messages" hideFooter>
               <AdminChat />
             </ProtectedPage>
           }
@@ -728,6 +764,14 @@ function AppInner() {
           element={
             <ProtectedPage path="/js-compiler">
               <JsCompiler />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/ts-compiler"
+          element={
+            <ProtectedPage path="/ts-compiler">
+              <TsCompiler />
             </ProtectedPage>
           }
         />

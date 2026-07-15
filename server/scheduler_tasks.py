@@ -539,3 +539,71 @@ async def fire_weekly_digest():
                 data={"type": "weekly_digest", "path": "/typing-race"},
             )
     print(f"[weekly_digest] done — sent {sent} of {len(users)} users with weekly activity", flush=True)
+
+
+async def fire_scheduled_tasks():
+    """Runs every minute (see main.py) — promotes any scheduled task whose
+    fire time has arrived into a real task via the exact same
+    _create_task_now() the immediate POST /tasks endpoint uses, so a
+    scheduled task is indistinguishable from one an admin created by hand
+    at that moment (same notification, same doc shape). Scheduled tasks
+    live in a separate collection until fired, so assignees see/hear
+    nothing about them beforehand."""
+    from db_mongo import col_scheduled_tasks
+    from routers.tasks import _create_task_now, TaskCreate
+
+    due = await col_scheduled_tasks().find(
+        {"scheduledFor": {"$lte": datetime.now(timezone.utc)}}
+    ).to_list(100)
+    if not due:
+        return
+
+    for doc in due:
+        body = TaskCreate(
+            title=doc["title"],
+            description=doc.get("description", ""),
+            assigneeIds=doc["assigneeIds"],
+            priority=doc.get("priority", "medium"),
+            dueDate=doc.get("dueDate"),
+            imageUrls=doc.get("imageUrls", []),
+        )
+        try:
+            await _create_task_now(body, doc["createdBy"], doc.get("createdByName", "Admin"))
+        except Exception as e:
+            print(f"[scheduled_tasks] failed to fire scheduled task {doc['_id']}: {e}", flush=True)
+        await col_scheduled_tasks().delete_one({"_id": doc["_id"]})
+
+    print(f"[scheduled_tasks] fired {len(due)} scheduled task(s)", flush=True)
+
+
+async def fire_scheduled_messages():
+    """Runs every minute (see main.py) — promotes any scheduled chat message
+    whose fire time has arrived into a real message via the exact same
+    _send_message_now() the immediate POST /{chat_id}/messages endpoint
+    uses, so a scheduled message is indistinguishable from one sent by hand
+    at that moment (same WS broadcast, same push/in-app notification).
+    Scheduled messages live in a separate collection until fired, so nobody
+    sees/hears about them beforehand."""
+    from bson import ObjectId
+    from db_mongo import col_scheduled_messages, col_admin_chats
+    from routers.admin_chat import _send_message_now
+
+    due = await col_scheduled_messages().find(
+        {"scheduledFor": {"$lte": datetime.now(timezone.utc)}}
+    ).to_list(100)
+    if not due:
+        return
+
+    for doc in due:
+        chat = await col_admin_chats().find_one({"_id": ObjectId(doc["chatId"])})
+        if chat:
+            try:
+                await _send_message_now(
+                    chat, doc["chatId"], doc["senderId"], doc.get("senderName", "Unknown"),
+                    doc.get("html", ""), doc.get("imageUrls", []),
+                )
+            except Exception as e:
+                print(f"[scheduled_messages] failed to fire scheduled message {doc['_id']}: {e}", flush=True)
+        await col_scheduled_messages().delete_one({"_id": doc["_id"]})
+
+    print(f"[scheduled_messages] fired {len(due)} scheduled message(s)", flush=True)

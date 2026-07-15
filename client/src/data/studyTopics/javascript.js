@@ -23,6 +23,15 @@ export default [
       "Plain objects — they are not iterable by default. Use for...in for keys, or Object.entries() with for...of. for...of works on anything with [Symbol.iterator].",
     code: "for (const char of 'hello') console.log(char); // h e l l o\nfor (const [k, v] of new Map([['a',1]])) console.log(k, v);\nfor (const item of new Set([1,2,2,3])) console.log(item); // 1 2 3",
     interviewQuestion: "What can you NOT iterate with for...of?",
+    comparison: {
+      vs: "for...in",
+      rows: [
+        { aspect: "Iterates", a: "values of any iterable (arrays, strings, Maps, Sets)", b: "enumerable string KEYS of an object" },
+        { aspect: "Works on plain objects", a: "no — not iterable by default", b: "yes — that's its main use case" },
+        { aspect: "Array gotcha", a: "gives you the values directly, in order", b: "gives you index strings, including inherited/prototype keys" },
+      ],
+      takeaway: "Use for...of when you want values from arrays/strings/Maps/Sets. Use for...in only to enumerate a plain object's own keys (with an Object.hasOwn guard).",
+    },
   },
   {
     id: "javascript-for-in",
@@ -35,6 +44,15 @@ export default [
       "It iterates prototype chain keys too, and key order isn't guaranteed for numeric indices in all engines. Use for...of or forEach for arrays.",
     code: "const obj = { a: 1, b: 2 };\nfor (const key in obj) {\n  if (Object.hasOwn(obj, key)) // skip prototype props\n    console.log(key, obj[key]);\n}",
     interviewQuestion: "Why is for...in dangerous on arrays?",
+    comparison: {
+      vs: "for...of",
+      rows: [
+        { aspect: "Iterates", a: "enumerable string KEYS of an object", b: "values of any iterable (arrays, strings, Maps, Sets)" },
+        { aspect: "Works on plain objects", a: "yes — that's its main use case", b: "no — not iterable by default" },
+        { aspect: "Array gotcha", a: "gives you index strings, including inherited/prototype keys", b: "gives you the values directly, in order" },
+      ],
+      takeaway: "Use for...in only to enumerate a plain object's own keys (with an Object.hasOwn guard). Use for...of when you want values from arrays/strings/Maps/Sets.",
+    },
   },
   {
     id: "javascript-while-do-while",
@@ -59,6 +77,15 @@ export default [
       "No. return inside forEach only exits the callback, not the loop. You cannot break out early. Use for...of if you need break/return, or .some() for early exit.",
     code: "[1,2,3].forEach((n, index, arr) => {\n  console.log(n, index);\n  return; // only exits callback, loop continues\n});\n// Early exit trick\n[1,2,3].some(n => { console.log(n); return n === 2; }); // stops at 2",
     interviewQuestion: "Does forEach respect return or break?",
+    comparison: {
+      vs: "map",
+      rows: [
+        { aspect: "Return value", a: "always undefined — the original array is untouched", b: "new array built from the callback's return values" },
+        { aspect: "Use it when", a: "you just need a side effect (logging, DOM updates, pushing to another array)", b: "you need a transformed array (chaining, rendering a list)" },
+        { aspect: "Chaining", a: "not chainable, returns undefined", b: "chainable — .map().filter().reduce()" },
+      ],
+      takeaway: "Use forEach when you only care about the side effect and don't need a return value. Use map when you want a new array out the other end.",
+    },
   },
   {
     id: "javascript-switch-statement",
@@ -119,6 +146,15 @@ export default [
       "Yes. map, filter, reduce skip holes (empty slots) in sparse arrays. forEach also skips them. Array.from does not — fills with undefined.",
     code: "const nums = [1, 2, 3];\nconst doubled = nums.map(n => n * 2); // [2, 4, 6]\n// With index\nconst indexed = nums.map((n, i) => ({ index: i, value: n }));",
     interviewQuestion: "Does map skip empty slots in sparse arrays?",
+    comparison: {
+      vs: "forEach",
+      rows: [
+        { aspect: "Return value", a: "new array built from the callback's return values", b: "always undefined — the original array is untouched" },
+        { aspect: "Use it when", a: "you need a transformed array (chaining, rendering a list)", b: "you just need a side effect (logging, DOM updates, pushing to another array)" },
+        { aspect: "Chaining", a: "chainable — .map().filter().reduce()", b: "not chainable, returns undefined" },
+      ],
+      takeaway: "Use map when you want a new array out the other end. Use forEach when you only care about the side effect and don't need a return value.",
+    },
   },
   {
     id: "javascript-filter",
@@ -239,6 +275,15 @@ export default [
       "freeze: no add, no delete, no modify. seal: no add, no delete, but CAN modify existing values. Both are shallow — nested objects are not frozen/sealed.",
     code: "const cfg = Object.freeze({ db: 'mongo', port: 27017 });\ncfg.port = 9999; // silently ignored (TypeError in strict mode)\n\nconst obj = Object.seal({ x: 1 });\nobj.x = 2;   // allowed\nobj.y = 3;   // silently ignored",
     interviewQuestion: "What is Object.freeze vs Object.seal?",
+    comparison: {
+      vs: "Map",
+      rows: [
+        { aspect: "Key types", a: "strings/symbols only (numbers get coerced to strings)", b: "any type — objects, functions, even NaN" },
+        { aspect: "Key order", a: "mostly insertion order, but integer-like keys sort first (a footgun)", b: "always guaranteed insertion order" },
+        { aspect: "Size / iteration", a: "no .length — must Object.keys(obj).length; not directly iterable", b: "has .size; directly iterable with for...of" },
+      ],
+      takeaway: "Use plain objects for simple, known, string-keyed records (config, JSON-shaped data). Use Map when keys aren't strings, order matters, or you're adding/removing entries frequently.",
+    },
   },
   {
     id: "javascript-getters-setters",
@@ -407,6 +452,15 @@ export default [
       "Map: any key type (objects, functions), maintains insertion order, has .size, no prototype pollution, better performance for frequent add/delete.",
     code: "const map = new Map();\nmap.set('key', 'value');\nmap.set({id:1}, 'obj key'); // objects as keys!\nmap.get('key');    // 'value'\nmap.has('key');    // true\nmap.size;          // 2\n// Iterate\nfor (const [k, v] of map) console.log(k, v);",
     interviewQuestion: "When to use Map over plain object?",
+    comparison: {
+      vs: "plain Object",
+      rows: [
+        { aspect: "Key types", a: "any type — objects, functions, even NaN", b: "strings/symbols only (numbers get coerced to strings)" },
+        { aspect: "Key order", a: "always guaranteed insertion order", b: "mostly insertion order, but integer-like keys sort first (a footgun)" },
+        { aspect: "Size / iteration", a: "has .size; directly iterable with for...of", b: "no .length — must Object.keys(obj).length; not directly iterable" },
+      ],
+      takeaway: "Use Map when keys aren't strings, order matters, or you're adding/removing entries frequently. Use plain objects for simple, known, string-keyed records (config, JSON-shaped data).",
+    },
   },
   {
     id: "javascript-set",
@@ -1515,6 +1569,15 @@ export default [
     explanation: "Blob (Binary Large Object) instances hold data that may come from files, canvas exports, or in-memory arrays, along with a 'type' property describing the MIME type. Blobs are immutable but slice-able, and they can be converted to text, ArrayBuffer, or a ReadableStream via their instance methods. A common pattern is creating a Blob from generated content (like a CSV string) and turning it into a downloadable link using URL.createObjectURL().",
     code: "const csvContent = 'name,age\\nAlice,30\\nBob,25';\nconst blob = new Blob([csvContent], { type: 'text/csv' });\n\nconsole.log(blob.size, blob.type);\n\nconst url = URL.createObjectURL(blob);\nconst link = document.createElement('a');\nlink.href = url;\nlink.download = 'data.csv';\nlink.click();\nURL.revokeObjectURL(url);",
     interviewQuestion: "How would you let a user download dynamically generated CSV data as a file using a Blob?",
+    comparison: {
+      vs: "File",
+      rows: [
+        { aspect: "Represents", a: "raw binary data + a MIME type — nothing more", b: "a Blob PLUS filesystem metadata (name, lastModified)" },
+        { aspect: "Where it comes from", a: "usually generated in-memory (canvas export, a string you built)", b: "usually a real file — <input type='file'>, drag-and-drop" },
+        { aspect: "Relationship", a: "the base type", b: "extends Blob — every Blob method (text(), slice()) works on a File too" },
+      ],
+      takeaway: "File IS a Blob with extra metadata. Use Blob for data you generated yourself; you'll be handed a File when the data came from an actual file input or drop.",
+    },
   },
   {
     id: "javascript-file-object",
@@ -1526,6 +1589,15 @@ export default [
     explanation: "Because File inherits from Blob, every Blob method (text(), arrayBuffer(), slice()) works on File objects too. The extra properties — name, lastModified, and webkitRelativePath — make File suitable for representing actual filesystem entries selected via an <input type='file'> element or a drag-and-drop DataTransfer object. You can also construct a File manually with new File([data], filename, options) when you need to send generated content to an API as if it were a real uploaded file.",
     code: "const input = document.querySelector('input[type=\"file\"]');\ninput.addEventListener('change', async () => {\n  const file = input.files[0];\n  console.log(file.name, file.size, file.type, file.lastModified);\n\n  const text = await file.text();\n  console.log(text.slice(0, 100));\n});\n\n// constructing a File manually\nconst generated = new File(['hello world'], 'note.txt', { type: 'text/plain' });",
     interviewQuestion: "What extra information does a File object carry compared to a plain Blob, and where does that data typically come from?",
+    comparison: {
+      vs: "Blob",
+      rows: [
+        { aspect: "Represents", a: "a Blob PLUS filesystem metadata (name, lastModified)", b: "raw binary data + a MIME type — nothing more" },
+        { aspect: "Where it comes from", a: "usually a real file — <input type='file'>, drag-and-drop", b: "usually generated in-memory (canvas export, a string you built)" },
+        { aspect: "Relationship", a: "extends Blob — every Blob method (text(), slice()) works on a File too", b: "the base type" },
+      ],
+      takeaway: "File IS a Blob with extra metadata. You'll be handed a File when the data came from an actual file input or drop; use Blob for data you generated yourself.",
+    },
   },
   {
     id: "javascript-arraybuffer-typedarray",

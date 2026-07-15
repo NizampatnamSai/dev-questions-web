@@ -1,7 +1,9 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { STUDY_CATEGORIES, STUDY_TOPICS } from "../data/studyGuide";
+import { STUDY_CATEGORIES } from "../data/studyCategories";
+import { STUDY_TOPIC_TOTAL } from "../data/studyTopicCounts";
+import { loadTopicsForCategory } from "../data/studyTopicsLoader";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import GuestLockedModal from "../components/GuestLockedModal";
@@ -386,6 +388,59 @@ function TopicCard({ topic, reviewed, onToggle, openId, setOpenId }) {
                 </div>
               )}
 
+              {/* Difference/comparison — only present on topics that have a
+                  natural "vs" counterpart (for-in vs for-of, Map vs forEach,
+                  etc.), shown at the bottom of the topic regardless of which
+                  tab is active rather than behind another tab click. */}
+              {topic.comparison && (
+                <div className="bg-fuchsia-50 dark:bg-fuchsia-950/30 border border-fuchsia-200 dark:border-fuchsia-800 rounded-xl p-3 space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-fuchsia-400">
+                    🆚 Difference
+                  </p>
+                  <p className="text-sm font-semibold text-fuchsia-700 dark:text-fuchsia-300 -mt-1">
+                    {topic.title} vs {topic.comparison.vs}
+                  </p>
+                  <div className="space-y-1.5">
+                    {topic.comparison.rows.map((r, i) => (
+                      <div key={i} className="text-xs bg-white dark:bg-slate-900/40 rounded-lg p-2 grid grid-cols-[auto_1fr_1fr] gap-2 items-start">
+                        <span className="font-bold text-fuchsia-500 dark:text-fuchsia-400 uppercase tracking-wide text-[10px] pt-0.5">
+                          {r.aspect}
+                        </span>
+                        <span className="text-slate-600 dark:text-slate-300">{r.a}</span>
+                        <span className="text-slate-600 dark:text-slate-300">{r.b}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-fuchsia-700 dark:text-fuchsia-300 font-medium leading-relaxed pt-1 border-t border-fuchsia-200/60 dark:border-fuchsia-800/60">
+                    💡 {topic.comparison.takeaway}
+                  </p>
+                </div>
+              )}
+
+              {/* Optimization — only present on topics (mainly React/React
+                  Native) with a concrete real-world performance angle. */}
+              {topic.optimization && (
+                <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl p-3 space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                    ⚡ Optimization
+                  </p>
+                  <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300 -mt-1">
+                    {topic.optimization.problem}
+                  </p>
+                  <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+                    {topic.optimization.fix}
+                  </p>
+                  {topic.optimization.code && (
+                    <pre className="bg-slate-900 dark:bg-black rounded-xl p-3 overflow-x-auto text-xs text-emerald-300 leading-relaxed whitespace-pre">
+                      <code>{topic.optimization.code}</code>
+                    </pre>
+                  )}
+                  <p className="text-xs text-emerald-700 dark:text-emerald-300 font-medium leading-relaxed pt-1 border-t border-emerald-200/60 dark:border-emerald-800/60">
+                    📈 Real-world impact: {topic.optimization.impact}
+                  </p>
+                </div>
+              )}
+
               <AnimatePresence>
                 {showAi && (
                   <AiPanel
@@ -619,6 +674,26 @@ export default function StudyGuide() {
   const [reviewed, setReviewed] = useState(loadReviewed);
   const [openId, setOpenId] = useState(null);
   const [guestLockOpen, setGuestLockOpen] = useState(false);
+  // Topics for the active category only, fetched on demand (see
+  // ../data/studyTopicsLoader) instead of eagerly importing all 30
+  // categories' ~2.3MB combined — that eager import was the whole cause of
+  // Study Hub's page load taking 4-5s.
+  const [allInCat, setAllInCat] = useState([]);
+  const [loadingTopics, setLoadingTopics] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoadingTopics(true);
+    loadTopicsForCategory(activeCat).then((topics) => {
+      if (!cancelled) {
+        setAllInCat(topics);
+        setLoadingTopics(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeCat]);
 
   // Logged-in users get DB-backed progress (syncs any local guest progress up
   // on first login); guests keep using localStorage only.
@@ -649,7 +724,6 @@ export default function StudyGuide() {
     });
 
   const cat = STUDY_CATEGORIES.find((c) => c.id === activeCat);
-  const allInCat = STUDY_TOPICS.filter((t) => t.category === activeCat);
 
   // Close open card when switching category or filters
   const handleCatChange = (id) => {
@@ -686,7 +760,7 @@ export default function StudyGuide() {
           📚 Study Hub
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-          {STUDY_TOPICS.length} topics · {STUDY_CATEGORIES.length} technologies · AI-powered explanations & Q&A
+          {STUDY_TOPIC_TOTAL} topics · {STUDY_CATEGORIES.length} technologies · AI-powered explanations & Q&A
         </p>
       </div>
 
@@ -811,21 +885,32 @@ export default function StudyGuide() {
       </p>
 
       <div className="space-y-2">
-        {filtered.map((t) => (
-          <TopicCard
-            key={t.id}
-            topic={t}
-            reviewed={reviewed.has(t.id)}
-            onToggle={toggleReview}
-            openId={openId}
-            setOpenId={setOpenId}
-          />
-        ))}
-        {filtered.length === 0 && (
-          <div className="text-center py-16 text-slate-400">
-            <p className="text-3xl mb-2">🔍</p>
-            <p className="text-sm">No topics match your filters.</p>
-          </div>
+        {loadingTopics ? (
+          Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-14 rounded-xl bg-slate-100 dark:bg-slate-800/60 animate-pulse"
+            />
+          ))
+        ) : (
+          <>
+            {filtered.map((t) => (
+              <TopicCard
+                key={t.id}
+                topic={t}
+                reviewed={reviewed.has(t.id)}
+                onToggle={toggleReview}
+                openId={openId}
+                setOpenId={setOpenId}
+              />
+            ))}
+            {filtered.length === 0 && (
+              <div className="text-center py-16 text-slate-400">
+                <p className="text-3xl mb-2">🔍</p>
+                <p className="text-sm">No topics match your filters.</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

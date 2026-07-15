@@ -75,6 +75,37 @@ export default function AdminTasks() {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [viewTask, setViewTask] = useState(null);
+  const [lightboxImage, setLightboxImage] = useState(null); // image url currently shown full-size, or null
+
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const handler = (e) => e.key === "Escape" && setLightboxImage(null);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxImage]);
+
+  const downloadImage = async (url) => {
+    try {
+      // Fetched as a blob rather than a plain <a download> — the download
+      // attribute is silently ignored for cross-origin links (these are
+      // served from Cloudinary), so without this it just opens the image
+      // in a new tab instead of actually downloading it.
+      const res = await fetch(url, { mode: "cors" });
+      if (!res.ok) throw new Error("fetch failed");
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = url.split("/").pop().split("?")[0] || "image.jpg";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast.error("Couldn't download — opening in a new tab instead");
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editTask, setEditTask] = useState(null);
@@ -94,6 +125,72 @@ export default function AdminTasks() {
     priority: "medium",
     dueDate: "",
   });
+  const [pendingImageUrls, setPendingImageUrls] = useState([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
+  const MAX_TASK_IMAGES = 6;
+
+  // Schedule-for-later — create-only (editing an already-created task has
+  // no "when should this be created" concept, it already exists).
+  const [scheduleEnabled, setScheduleEnabled] = useState(false);
+  const [scheduledFor, setScheduledFor] = useState("");
+  const [scheduling, setScheduling] = useState(false);
+  const [scheduledTasks, setScheduledTasks] = useState([]);
+  const [showScheduled, setShowScheduled] = useState(false);
+
+  const loadScheduledTasks = () => {
+    api.get("/tasks/scheduled/list").then(({ data }) => setScheduledTasks(data)).catch(() => {});
+  };
+
+  useEffect(() => {
+    loadScheduledTasks();
+  }, []);
+
+  const cancelScheduledTask = async (id) => {
+    try {
+      await api.delete(`/tasks/scheduled/${id}`);
+      setScheduledTasks((prev) => prev.filter((t) => t.id !== id));
+      toast.success("Scheduled task canceled");
+    } catch {
+      toast.error("Failed to cancel");
+    }
+  };
+
+  const pickImages = async (fileList) => {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    if (pendingImageUrls.length + files.length > MAX_TASK_IMAGES) {
+      toast.error(`Up to ${MAX_TASK_IMAGES} images per task`);
+      return;
+    }
+    for (const file of files) {
+      if (!file.type.startsWith("image/")) { toast.error("Please select image files only"); return; }
+      if (file.size > 5 * 1024 * 1024) { toast.error("Each image must be under 5MB"); return; }
+    }
+    setUploadingImage(true);
+    try {
+      const uploaded = await Promise.all(
+        files.map(async (file) => {
+          const form = new FormData();
+          form.append("file", file);
+          const { data } = await api.post("/uploads/image", form, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          return data.url;
+        }),
+      );
+      setPendingImageUrls((prev) => [...prev, ...uploaded]);
+    } catch {
+      toast.error("Failed to upload image");
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const removePendingImage = (idx) => {
+    setPendingImageUrls((prev) => prev.filter((_, i) => i !== idx));
+  };
 
   useEffect(() => {
     loadTasks();
@@ -148,6 +245,9 @@ export default function AdminTasks() {
       priority: "medium",
       dueDate: "",
     });
+    setPendingImageUrls([]);
+    setScheduleEnabled(false);
+    setScheduledFor("");
     setShowForm(true);
   };
 
@@ -160,6 +260,9 @@ export default function AdminTasks() {
       priority: task.priority,
       dueDate: task.dueDate || "",
     });
+    setPendingImageUrls(task.imageUrls || []);
+    setScheduleEnabled(false);
+    setScheduledFor("");
     setShowForm(true);
   };
 
@@ -167,14 +270,32 @@ export default function AdminTasks() {
     if (!form.title.trim()) return toast.error("Title is required");
     if (!form.assigneeIds.length)
       return toast.error("Select at least one user");
+    if (!editTask && scheduleEnabled) {
+      if (!scheduledFor) return toast.error("Pick a date and time");
+      const iso = new Date(scheduledFor).toISOString();
+      if (new Date(iso) <= new Date()) return toast.error("Scheduled time must be in the future");
+      setScheduling(true);
+      try {
+        await api.post("/tasks/schedule", { ...form, imageUrls: pendingImageUrls, scheduledFor: iso });
+        toast.success("Task scheduled");
+        loadScheduledTasks();
+        setShowForm(false);
+      } catch (e) {
+        toast.error(e.response?.data?.detail || "Failed to schedule task");
+      } finally {
+        setScheduling(false);
+      }
+      return;
+    }
     setSaving(true);
+    const payload = { ...form, imageUrls: pendingImageUrls };
     try {
       if (editTask) {
-        const { data } = await api.patch(`/tasks/${editTask.id}`, form);
+        const { data } = await api.patch(`/tasks/${editTask.id}`, payload);
         setTasks((prev) => prev.map((t) => (t.id === editTask.id ? data : t)));
         toast.success("Task updated");
       } else {
-        const { data } = await api.post("/tasks", form);
+        const { data } = await api.post("/tasks", payload);
         setTasks((prev) => [data, ...prev]);
         toast.success("Task created & users notified");
       }
@@ -273,10 +394,53 @@ export default function AdminTasks() {
             Create and assign tasks to team members
           </p>
         </div>
-        <button onClick={openCreate} className="btn-primary">
-          + New Task
-        </button>
+        <div className="flex items-center gap-2">
+          {scheduledTasks.length > 0 && (
+            <button
+              onClick={() => setShowScheduled((v) => !v)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium border transition-colors ${
+                showScheduled
+                  ? "bg-amber-100 dark:bg-amber-500/20 border-amber-300 dark:border-amber-500/40 text-amber-700 dark:text-amber-300"
+                  : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+              }`}
+            >
+              🕒 Scheduled ({scheduledTasks.length})
+            </button>
+          )}
+          <button onClick={openCreate} className="btn-primary">
+            + New Task
+          </button>
+        </div>
       </div>
+
+      {showScheduled && scheduledTasks.length > 0 && (
+        <div className="glass-card p-4 space-y-2">
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            🕒 Pending Scheduled Tasks
+          </p>
+          {scheduledTasks.map((t) => (
+            <div
+              key={t.id}
+              className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-slate-50 dark:bg-white/5 flex-wrap"
+            >
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
+                  {t.title}
+                </p>
+                <p className="text-xs text-slate-400">
+                  Fires {fmtDateTime(t.scheduledFor)} · {t.assigneeIds.length} assignee{t.assigneeIds.length === 1 ? "" : "s"}
+                </p>
+              </div>
+              <button
+                onClick={() => cancelScheduledTask(t.id)}
+                className="text-xs px-3 py-1.5 rounded-lg border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors flex-shrink-0"
+              >
+                Cancel
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Filter tabs */}
       <div className="flex gap-2 flex-wrap">
@@ -656,6 +820,23 @@ export default function AdminTasks() {
                     </div>
                   )}
 
+                  {viewTask.imageUrls?.length > 0 && (
+                    <div>
+                      <p className="font-semibold mb-2">Images</p>
+                      <div className="flex flex-wrap gap-2">
+                        {viewTask.imageUrls.map((url, i) => (
+                          <img
+                            key={i}
+                            src={url}
+                            alt="attachment"
+                            onClick={() => setLightboxImage(url)}
+                            className="w-24 h-24 rounded-lg object-cover border border-slate-200 dark:border-white/10 hover:opacity-90 transition-opacity cursor-zoom-in"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <p className="font-semibold mb-2">Move to</p>
                     <div className="flex items-center gap-1.5 flex-wrap">
@@ -760,7 +941,54 @@ export default function AdminTasks() {
                         setForm((f) => ({ ...f, description: html }))
                       }
                       placeholder="Task description…"
+                      onPasteImage={(file) => pickImages([file])}
                     />
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs font-semibold text-slate-500">
+                        Images (optional)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingImage || pendingImageUrls.length >= MAX_TASK_IMAGES}
+                        className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/15 text-slate-600 dark:text-slate-300 disabled:opacity-40 transition-colors"
+                      >
+                        {uploadingImage ? "Uploading…" : "📎 Attach"}
+                      </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={(e) => pickImages(e.target.files)}
+                      />
+                    </div>
+                    <p className="text-[10px] text-slate-400 mb-1.5">
+                      You can also paste a screenshot directly into the description above.
+                    </p>
+                    {pendingImageUrls.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {pendingImageUrls.map((url, i) => (
+                          <div key={i} className="relative group/img">
+                            <img
+                              src={url}
+                              alt="attachment"
+                              className="w-16 h-16 rounded-lg object-cover border border-slate-200 dark:border-white/10"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removePendingImage(i)}
+                              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-80 hover:opacity-100"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -768,6 +996,7 @@ export default function AdminTasks() {
                         Priority
                       </label>
                       <Select
+                        variant="input"
                         value={form.priority}
                         onChange={(v) => setForm((f) => ({ ...f, priority: v }))}
                         options={[
@@ -791,6 +1020,33 @@ export default function AdminTasks() {
                       />
                     </div>
                   </div>
+                  {!editTask && (
+                    <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3 space-y-2">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <CheckboxBox
+                          checked={scheduleEnabled}
+                          onChange={() => setScheduleEnabled((v) => !v)}
+                        />
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                          🕒 Schedule for later
+                        </span>
+                      </label>
+                      {scheduleEnabled && (
+                        <div>
+                          <p className="text-[10px] text-slate-400 mb-1.5">
+                            This task won't be created or assigned until the date/time below — assignees see and hear nothing about it until then.
+                          </p>
+                          <input
+                            type="datetime-local"
+                            value={scheduledFor}
+                            onChange={(e) => setScheduledFor(e.target.value)}
+                            min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
+                            className="input-light"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div>
                     <label className="text-xs font-semibold text-slate-500 mb-2 block">
                       Assign to *{" "}
@@ -835,26 +1091,30 @@ export default function AdminTasks() {
                 <div className="flex gap-2 pt-1">
                   <button
                     onClick={() => setShowForm(false)}
-                    disabled={saving}
+                    disabled={saving || scheduling}
                     className="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={submitForm}
-                    disabled={saving}
+                    disabled={saving || scheduling}
                     className="flex-1 btn-primary flex items-center justify-center gap-2 disabled:opacity-70"
                   >
-                    {saving && (
+                    {(saving || scheduling) && (
                       <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                     )}
-                    {saving
-                      ? "Saving..."
-                      : editTask
-                        ? "Save Changes"
-                        : form.assigneeIds.length === 1 && form.assigneeIds[0] === me?.id
-                          ? "Create Task"
-                          : "Create & Notify"}
+                    {scheduling
+                      ? "Scheduling..."
+                      : saving
+                        ? "Saving..."
+                        : editTask
+                          ? "Save Changes"
+                          : scheduleEnabled
+                            ? "🕒 Schedule Task"
+                            : form.assigneeIds.length === 1 && form.assigneeIds[0] === me?.id
+                              ? "Create Task"
+                              : "Create & Notify"}
                   </button>
                 </div>
               </div>
@@ -862,6 +1122,40 @@ export default function AdminTasks() {
           </>
         )}
       </AnimatePresence>
+
+      {createPortal(
+        <AnimatePresence>
+          {lightboxImage && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setLightboxImage(null)}
+              className="fixed inset-0 bg-black/90 z-[70] flex items-center justify-center p-4 cursor-zoom-out"
+            >
+              <button
+                onClick={() => setLightboxImage(null)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg"
+                title="Close"
+              >
+                ✕
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); downloadImage(lightboxImage); }}
+                className="absolute top-4 right-16 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+                title="Download image"
+              >
+                ⬇
+              </button>
+              <img
+                src={lightboxImage}
+                alt="attachment full size"
+                onClick={(e) => e.stopPropagation()}
+                className="max-w-full max-h-full object-contain rounded-lg cursor-default"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
 
       <ConfirmModal {...confirmProps} />
     </div>
