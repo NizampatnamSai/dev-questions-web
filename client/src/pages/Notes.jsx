@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
@@ -86,6 +86,44 @@ export default function Notes() {
 
   const [notes, setNotes] = useState([]); // decrypted: [{id, title, body, createdAt, updatedAt}]
   const [loadingNotes, setLoadingNotes] = useState(false);
+
+  // Advanced search — entirely client-side, since notes are end-to-end
+  // encrypted and the server never sees plaintext to search against. All
+  // filtering runs against the already-decrypted `notes` state in memory.
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [searchRange, setSearchRange] = useState("all");
+  const [searchCustomStart, setSearchCustomStart] = useState("");
+  const [searchCustomEnd, setSearchCustomEnd] = useState("");
+  const [sortBy, setSortBy] = useState("newest"); // newest | oldest | title
+
+  const filteredNotes = useMemo(() => {
+    let result = notes;
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      result = result.filter(
+        (n) => n.title.toLowerCase().includes(q) || stripHtml(n.body).toLowerCase().includes(q),
+      );
+    }
+    if (searchRange !== "all") {
+      const [start, end] = rangeToDates(searchRange, searchCustomStart, searchCustomEnd);
+      if (start && end) {
+        result = result.filter((n) => {
+          const d = new Date(n.updatedAt || n.createdAt);
+          return d >= start && d <= end;
+        });
+      }
+    }
+    result = [...result].sort((a, b) => {
+      if (sortBy === "title") return a.title.localeCompare(b.title);
+      const da = new Date(a.updatedAt || a.createdAt);
+      const db = new Date(b.updatedAt || b.createdAt);
+      return sortBy === "oldest" ? da - db : db - da;
+    });
+    return result;
+  }, [notes, searchQuery, searchRange, searchCustomStart, searchCustomEnd, sortBy]);
+
+  const hasActiveSearch = searchQuery.trim() !== "" || searchRange !== "all";
   const [editing, setEditing] = useState(null); // null | "new" | note object
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
@@ -542,6 +580,103 @@ export default function Notes() {
         </div>
       </div>
 
+      {notes.length > 0 && (
+        <div className="mb-6 space-y-2">
+          <div className="flex gap-2 flex-wrap items-center">
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="🔍 Search notes by title or content…"
+              className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+            <button
+              onClick={() => setShowAdvanced((v) => !v)}
+              className={`px-4 py-2.5 rounded-xl text-sm font-semibold border transition-colors whitespace-nowrap ${
+                showAdvanced || searchRange !== "all" || sortBy !== "newest"
+                  ? "bg-indigo-100 dark:bg-indigo-500/20 border-indigo-300 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300"
+                  : "bg-slate-100 dark:bg-slate-800 border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+              }`}
+            >
+              ⚙️ Advanced {showAdvanced ? "▲" : "▼"}
+            </button>
+          </div>
+
+          <AnimatePresence>
+            {showAdvanced && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="glass-card p-4 flex flex-wrap gap-4 items-end">
+                  <div>
+                    <label className="text-xs font-semibold text-slate-500 mb-1 block">Date range</label>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {[{ id: "all", label: "All time" }, ...RANGE_PRESETS].map((r) => (
+                        <button
+                          key={r.id}
+                          onClick={() => setSearchRange(r.id)}
+                          className={`text-xs px-3 py-1.5 rounded-full font-medium border transition-colors ${
+                            searchRange === r.id
+                              ? "bg-indigo-600 text-white border-indigo-600"
+                              : "border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-indigo-400"
+                          }`}
+                        >
+                          {r.label}
+                        </button>
+                      ))}
+                    </div>
+                    {searchRange === "custom" && (
+                      <div className="flex gap-2 mt-2">
+                        <input type="date" value={searchCustomStart} onChange={(e) => setSearchCustomStart(e.target.value)} className="px-2 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-sm" />
+                        <input type="date" value={searchCustomEnd} onChange={(e) => setSearchCustomEnd(e.target.value)} className="px-2 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-sm" />
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-slate-500 mb-1 block">Sort by</label>
+                    <div className="flex gap-1.5">
+                      {[
+                        { id: "newest", label: "Newest first" },
+                        { id: "oldest", label: "Oldest first" },
+                        { id: "title", label: "Title A-Z" },
+                      ].map((s) => (
+                        <button
+                          key={s.id}
+                          onClick={() => setSortBy(s.id)}
+                          className={`text-xs px-3 py-1.5 rounded-full font-medium border transition-colors ${
+                            sortBy === s.id
+                              ? "bg-indigo-600 text-white border-indigo-600"
+                              : "border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-indigo-400"
+                          }`}
+                        >
+                          {s.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {hasActiveSearch && (
+                    <button
+                      onClick={() => { setSearchQuery(""); setSearchRange("all"); setSortBy("newest"); }}
+                      className="text-xs px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 underline"
+                    >
+                      Clear all filters
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {hasActiveSearch && (
+            <p className="text-xs text-slate-400">
+              Showing <strong className="text-slate-600 dark:text-slate-300">{filteredNotes.length}</strong> of {notes.length} note{notes.length === 1 ? "" : "s"}
+            </p>
+          )}
+        </div>
+      )}
+
       {loadingNotes ? (
         <div className="grid md:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => <div key={i} className="glass-card h-40 animate-pulse" />)}
@@ -551,9 +686,14 @@ export default function Notes() {
           <p className="text-4xl mb-2">🗒️</p>
           <p>No notes yet — click "+ New Note" to write your first one.</p>
         </div>
+      ) : filteredNotes.length === 0 ? (
+        <div className="text-center py-20 text-slate-400">
+          <p className="text-4xl mb-2">🔍</p>
+          <p>No notes match your search.</p>
+        </div>
       ) : (
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {notes.map((n) => (
+          {filteredNotes.map((n) => (
             <motion.div
               key={n.id}
               initial={{ opacity: 0, y: 8 }}
