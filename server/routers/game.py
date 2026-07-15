@@ -222,21 +222,22 @@ async def typing_race_board(user=Depends(current_user)):
 # day (bigger grids are worth more, faster solves earn a bonus) rather than
 # by a single time, since users can play as many as they want.
 
-SUDOKU_SIZES = (6, 7, 8)
+SUDOKU_SIZES = (6, 7, 8, 9)
 
 # Box dims per size — (box_h, box_w) or None for no box constraint at all.
 # 7 is prime, so a 7x7 grid has no clean rectangular box subdivision; it's
 # played as a pure Latin square (unique digit per row/column only, no box
-# rule) rather than forcing a nonstandard box shape onto it.
-SUDOKU_BOX_DIMS = {6: (2, 3), 7: None, 8: (2, 4)}
-SUDOKU_CLUE_RATIO = {6: 0.50, 7: 0.49, 8: 0.47}  # fraction of cells pre-filled
+# rule) rather than forcing a nonstandard box shape onto it. 9 is the
+# classic/standard Sudoku size, with the usual 3x3 boxes.
+SUDOKU_BOX_DIMS = {6: (2, 3), 7: None, 8: (2, 4), 9: (3, 3)}
+SUDOKU_CLUE_RATIO = {6: 0.50, 7: 0.49, 8: 0.47, 9: 0.45}  # fraction of cells pre-filled
 
 # Marks formula: base points for the size, scaled by how your time compares
 # to a "par" time for that size — at par you get exactly the base amount,
 # faster earns up to 1.5x, slower decays down to a 0.4x floor (still
 # rewards finishing a big grid slowly over not finishing a small one).
-SUDOKU_BASE_POINTS = {6: 100, 7: 160, 8: 220}
-SUDOKU_PAR_SECONDS = {6: 90, 7: 150, 8: 240}
+SUDOKU_BASE_POINTS = {6: 100, 7: 160, 8: 220, 9: 280}
+SUDOKU_PAR_SECONDS = {6: 90, 7: 150, 8: 240, 9: 360}
 SUDOKU_MAX_TIME_MS = 2 * 60 * 60 * 1000  # 2h sanity cap, not a real limit
 
 

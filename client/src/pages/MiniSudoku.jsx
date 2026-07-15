@@ -5,9 +5,10 @@ import { useAuth } from "../context/AuthContext";
 
 // Mirrors server-side SUDOKU_BOX_DIMS in routers/game.py — 7 is prime, so a
 // 7x7 board has no clean rectangular box subdivision and is played as a
-// pure Latin square (row/column uniqueness only, no box rule).
-const BOX_DIMS = { 6: [2, 3], 7: null, 8: [2, 4] };
-const SIZES = [6, 7, 8];
+// pure Latin square (row/column uniqueness only, no box rule). 9 is the
+// classic/standard Sudoku size, with the usual 3x3 boxes.
+const BOX_DIMS = { 6: [2, 3], 7: null, 8: [2, 4], 9: [3, 3] };
+const SIZES = [6, 7, 8, 9];
 
 function getConflicts(grid, size, boxDims) {
   const conflicts = new Set();
@@ -193,6 +194,37 @@ export default function MiniSudoku() {
     });
   };
 
+  // Keyboard input — number keys fill the selected cell (no need to click
+  // the on-screen pad), Backspace/Delete/0 clears it, arrow keys move the
+  // selection so typing a whole row/column doesn't require re-clicking cells.
+  useEffect(() => {
+    if (phase !== "playing" || !selected) return;
+    const handler = (e) => {
+      const [r, c] = selected;
+      if (e.key >= "1" && e.key <= String(size)) {
+        e.preventDefault();
+        inputNumber(Number(e.key));
+      } else if (e.key === "Backspace" || e.key === "Delete" || e.key === "0") {
+        e.preventDefault();
+        clearCell();
+      } else if (e.key === "ArrowUp" && r > 0) {
+        e.preventDefault();
+        selectCell(r - 1, c);
+      } else if (e.key === "ArrowDown" && r < size - 1) {
+        e.preventDefault();
+        selectCell(r + 1, c);
+      } else if (e.key === "ArrowLeft" && c > 0) {
+        e.preventDefault();
+        selectCell(r, c - 1);
+      } else if (e.key === "ArrowRight" && c < size - 1) {
+        e.preventDefault();
+        selectCell(r, c + 1);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [phase, selected, size]);
+
   const submit = async () => {
     if (submitting || !grid || !isGridValid(grid, size, boxDims)) return;
     setSubmitting(true);
@@ -247,7 +279,7 @@ export default function MiniSudoku() {
         {phase === "picker" && (
           <div className="text-center py-4 space-y-5">
             <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">Choose a size</p>
-            <div className="flex justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-3">
               {SIZES.map((s) => (
                 <button
                   key={s}
@@ -260,7 +292,7 @@ export default function MiniSudoku() {
                 >
                   <span className="text-lg">{s}×{s}</span>
                   <span className="text-[10px] font-normal opacity-80">
-                    {s === 6 ? "quick" : s === 7 ? "medium" : "harder"}
+                    {s === 6 ? "quick" : s === 7 ? "medium" : s === 8 ? "harder" : "classic"}
                   </span>
                 </button>
               ))}
@@ -372,6 +404,9 @@ export default function MiniSudoku() {
                 ✕
               </button>
             </div>
+            <p className="text-center text-[10px] text-slate-400">
+              Tip: you can also just type a number on your keyboard — arrow keys move between cells.
+            </p>
 
             <div className="flex items-center justify-between">
               <button
