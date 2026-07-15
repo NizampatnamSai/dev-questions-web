@@ -13,6 +13,13 @@ class ChallengeStartRequest(BaseModel):
     questions_count: int = 5
 
 
+# Seconds per question, scaled by difficulty — previously flat 60s/question
+# regardless of difficulty, so "Low" never actually felt easier than
+# "Medium"/"High" despite showing easier questions (time pressure was
+# identical across all three).
+SECONDS_PER_QUESTION = {"Low": 90, "Medium": 60, "High": 40}
+
+
 class ChallengeSubmit(BaseModel):
     question_id: str
     answer: str
@@ -22,6 +29,8 @@ class ChallengeSubmit(BaseModel):
 @router.post("/challenges/start")
 async def start_timed_challenge(body: ChallengeStartRequest, user=Depends(current_user)):
     """Start a timed challenge"""
+    seconds_per_q = SECONDS_PER_QUESTION.get(body.difficulty, 60)
+    time_limit = body.questions_count * seconds_per_q
     challenge_doc = {
         "userId": user["id"],
         "userName": user.get("name", ""),
@@ -33,14 +42,14 @@ async def start_timed_challenge(body: ChallengeStartRequest, user=Depends(curren
         "answers": [],
         "totalTime": 0,
         "score": 0,
-        "timeLimit": body.questions_count * 60,  # 1 min per question
+        "timeLimit": time_limit,
     }
 
     result = await col_challenges().insert_one(challenge_doc)
 
     return {
         "challenge_id": str(result.inserted_id),
-        "time_limit": body.questions_count * 60,
+        "time_limit": time_limit,
         "questions": body.questions_count,
     }
 
