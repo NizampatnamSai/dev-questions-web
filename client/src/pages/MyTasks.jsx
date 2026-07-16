@@ -81,7 +81,13 @@ function TaskCard({ task, myId, updating, onMove, onView, onToggleExpand, expand
         {/* Move between columns — regular assignees move one stage at a time and
             can't self-mark "completed" (an admin signs off on that); admins have
             full control here too, in case a task is assigned to them directly. */}
-        <div className="flex gap-1 flex-wrap pt-1">
+        {updating && (
+          <div className="flex items-center gap-1.5 text-[11px] font-medium text-indigo-500 dark:text-indigo-400">
+            <span className="w-3 h-3 border-2 border-indigo-400/40 border-t-indigo-500 rounded-full animate-spin" />
+            Moving…
+          </div>
+        )}
+        <div className={`flex gap-1 flex-wrap pt-1 ${updating ? "opacity-50 pointer-events-none" : ""}`}>
           {TASK_STATUSES.map((s, i) => {
             const isCurrent = s.key === task.status;
             const blocked = !isAdmin && !isCurrent && (s.key === "completed" || i > curIdx + 1);

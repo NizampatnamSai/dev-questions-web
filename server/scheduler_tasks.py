@@ -558,22 +558,32 @@ async def fire_scheduled_tasks():
     if not due:
         return
 
+    fired = 0
     for doc in due:
+        # Atomically claim the doc before firing it — two overlapping ticks
+        # (e.g. old + new instance both running during a zero-downtime
+        # deploy) can otherwise both see the same due doc from their own
+        # find() above and both create a real task from it. find_one_and_delete
+        # only ever succeeds for one of them; the loser gets None and skips.
+        claimed = await col_scheduled_tasks().find_one_and_delete({"_id": doc["_id"]})
+        if not claimed:
+            continue
         body = TaskCreate(
-            title=doc["title"],
-            description=doc.get("description", ""),
-            assigneeIds=doc["assigneeIds"],
-            priority=doc.get("priority", "medium"),
-            dueDate=doc.get("dueDate"),
-            imageUrls=doc.get("imageUrls", []),
+            title=claimed["title"],
+            description=claimed.get("description", ""),
+            assigneeIds=claimed["assigneeIds"],
+            priority=claimed.get("priority", "medium"),
+            dueDate=claimed.get("dueDate"),
+            imageUrls=claimed.get("imageUrls", []),
         )
         try:
-            await _create_task_now(body, doc["createdBy"], doc.get("createdByName", "Admin"))
+            await _create_task_now(body, claimed["createdBy"], claimed.get("createdByName", "Admin"))
+            fired += 1
         except Exception as e:
-            print(f"[scheduled_tasks] failed to fire scheduled task {doc['_id']}: {e}", flush=True)
-        await col_scheduled_tasks().delete_one({"_id": doc["_id"]})
+            print(f"[scheduled_tasks] failed to fire scheduled task {claimed['_id']}: {e}", flush=True)
 
-    print(f"[scheduled_tasks] fired {len(due)} scheduled task(s)", flush=True)
+    if fired:
+        print(f"[scheduled_tasks] fired {fired} scheduled task(s)", flush=True)
 
 
 async def fire_scheduled_messages():
@@ -594,16 +604,24 @@ async def fire_scheduled_messages():
     if not due:
         return
 
+    fired = 0
     for doc in due:
-        chat = await col_admin_chats().find_one({"_id": ObjectId(doc["chatId"])})
+        # Atomically claim before firing — see fire_scheduled_tasks() above
+        # for why: prevents two overlapping ticks from both sending the
+        # same scheduled message.
+        claimed = await col_scheduled_messages().find_one_and_delete({"_id": doc["_id"]})
+        if not claimed:
+            continue
+        chat = await col_admin_chats().find_one({"_id": ObjectId(claimed["chatId"])})
         if chat:
             try:
                 await _send_message_now(
-                    chat, doc["chatId"], doc["senderId"], doc.get("senderName", "Unknown"),
-                    doc.get("html", ""), doc.get("imageUrls", []),
+                    chat, claimed["chatId"], claimed["senderId"], claimed.get("senderName", "Unknown"),
+                    claimed.get("html", ""), claimed.get("imageUrls", []),
                 )
+                fired += 1
             except Exception as e:
-                print(f"[scheduled_messages] failed to fire scheduled message {doc['_id']}: {e}", flush=True)
-        await col_scheduled_messages().delete_one({"_id": doc["_id"]})
+                print(f"[scheduled_messages] failed to fire scheduled message {claimed['_id']}: {e}", flush=True)
 
-    print(f"[scheduled_messages] fired {len(due)} scheduled message(s)", flush=True)
+    if fired:
+        print(f"[scheduled_messages] fired {fired} scheduled message(s)", flush=True)

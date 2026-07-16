@@ -32,6 +32,9 @@ export default function APIDocumentation() {
     { method: "GET", path: "/api/tasks/{id}/comments", desc: "Get a task's comment thread" },
     { method: "POST", path: "/api/tasks/{id}/comments", desc: "Post a comment on a task" },
     { method: "DELETE", path: "/api/tasks/{id}/comments/{commentId}", desc: "Delete your own comment (or any, if admin)" },
+    { method: "POST", path: "/api/tasks/schedule", desc: "Schedule a task for deferred creation — it doesn't exist or notify assignees until the picked date/time arrives (admin only)" },
+    { method: "GET", path: "/api/tasks/scheduled/list", desc: "List still-pending scheduled tasks (admin only)" },
+    { method: "DELETE", path: "/api/tasks/scheduled/{id}", desc: "Cancel a pending scheduled task before it fires (admin only)" },
 
     // Work Board
     { method: "GET", path: "/api/workboard/posts", desc: "Get today's (or a given date's) work board posts" },
@@ -124,6 +127,9 @@ export default function APIDocumentation() {
     { method: "POST", path: "/api/admin-chat/{chatId}/messages", desc: "Send a rich-text message and/or image in a conversation" },
     { method: "POST", path: "/api/admin-chat/{chatId}/messages/{messageId}/react", desc: "Toggle an emoji reaction on a message — broadcasts live to the other participant(s) over the chat WebSocket" },
     { method: "WS", path: "/api/admin-chat/ws", desc: "Real-time delivery of new messages (JWT via ?token= query param)" },
+    { method: "POST", path: "/api/admin-chat/{chatId}/messages/schedule", desc: "Schedule a message for deferred send — it doesn't exist or notify anyone until the picked date/time arrives" },
+    { method: "GET", path: "/api/admin-chat/{chatId}/messages/scheduled/list", desc: "List your still-pending scheduled messages in a conversation" },
+    { method: "DELETE", path: "/api/admin-chat/{chatId}/messages/scheduled/{scheduledId}", desc: "Cancel a pending scheduled message before it fires" },
 
     // Project Chatbot — scoped to explaining this app only
     { method: "POST", path: "/api/project-chat/ask", desc: "Ask the in-app assistant about a Dev Life feature or how to get somewhere (open to guests)" },

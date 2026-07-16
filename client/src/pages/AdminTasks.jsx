@@ -8,6 +8,7 @@ import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
 import Select from "../components/Select";
 import { CheckboxBox } from "../components/Checkbox";
+import DateTimePicker from "../components/DateTimePicker";
 import { TASK_STATUSES, statusMeta } from "../utils/taskStatus";
 import RichTextEditor from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
@@ -137,6 +138,7 @@ export default function AdminTasks() {
   const [scheduling, setScheduling] = useState(false);
   const [scheduledTasks, setScheduledTasks] = useState([]);
   const [showScheduled, setShowScheduled] = useState(false);
+  const scheduledForPast = scheduleEnabled && !!scheduledFor && new Date(scheduledFor) <= new Date();
 
   const loadScheduledTasks = () => {
     api.get("/tasks/scheduled/list").then(({ data }) => setScheduledTasks(data)).catch(() => {});
@@ -363,6 +365,7 @@ export default function AdminTasks() {
       const { data } = await api.patch(`/tasks/${task.id}/status`, { status });
       setTasks((prev) => prev.map((t) => (t.id === task.id ? data : t)));
       if (viewTask?.id === task.id) setViewTask(data);
+      toast.success("Task moved.");
     } catch {
       toast.error("Failed to move task");
     } finally {
@@ -577,7 +580,13 @@ export default function AdminTasks() {
                         )}
 
                         {/* Move pills */}
-                        <div className="flex items-center gap-1 flex-wrap mt-3">
+                        {moving[task.id] && (
+                          <div className="flex items-center gap-1.5 text-[11px] font-medium text-indigo-500 dark:text-indigo-400 mt-3">
+                            <span className="w-3 h-3 border-2 border-indigo-400/40 border-t-indigo-500 rounded-full animate-spin" />
+                            Moving…
+                          </div>
+                        )}
+                        <div className={`flex items-center gap-1 flex-wrap mt-3 ${moving[task.id] ? "opacity-50 pointer-events-none" : ""}`}>
                           {TASK_STATUSES.map((s) => (
                             <button
                               key={s.key}
@@ -838,8 +847,16 @@ export default function AdminTasks() {
                   )}
 
                   <div>
-                    <p className="font-semibold mb-2">Move to</p>
-                    <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="font-semibold mb-2 flex items-center gap-2">
+                      Move to
+                      {moving[viewTask.id] && (
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-indigo-500 dark:text-indigo-400">
+                          <span className="w-3 h-3 border-2 border-indigo-400/40 border-t-indigo-500 rounded-full animate-spin" />
+                          Moving…
+                        </span>
+                      )}
+                    </p>
+                    <div className={`flex items-center gap-1.5 flex-wrap ${moving[viewTask.id] ? "opacity-50 pointer-events-none" : ""}`}>
                       {TASK_STATUSES.map((s) => (
                         <button
                           key={s.key}
@@ -1027,7 +1044,7 @@ export default function AdminTasks() {
                           checked={scheduleEnabled}
                           onChange={() => setScheduleEnabled((v) => !v)}
                         />
-                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 leading-none">
                           🕒 Schedule for later
                         </span>
                       </label>
@@ -1036,12 +1053,11 @@ export default function AdminTasks() {
                           <p className="text-[10px] text-slate-400 mb-1.5">
                             This task won't be created or assigned until the date/time below — assignees see and hear nothing about it until then.
                           </p>
-                          <input
-                            type="datetime-local"
+                          <DateTimePicker
                             value={scheduledFor}
-                            onChange={(e) => setScheduledFor(e.target.value)}
+                            onChange={setScheduledFor}
                             min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
-                            className="input-light"
+                            className="input-light w-full"
                           />
                         </div>
                       )}
@@ -1098,7 +1114,7 @@ export default function AdminTasks() {
                   </button>
                   <button
                     onClick={submitForm}
-                    disabled={saving || scheduling}
+                    disabled={saving || scheduling || scheduledForPast}
                     className="flex-1 btn-primary flex items-center justify-center gap-2 disabled:opacity-70"
                   >
                     {(saving || scheduling) && (
