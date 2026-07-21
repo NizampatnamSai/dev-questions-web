@@ -52,6 +52,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 const Quiz = lazy(() => import("./pages/Quiz"));
 const QuestionDetail = lazy(() => import("./pages/QuestionDetail"));
 const StudyGuide = lazy(() => import("./pages/StudyGuide"));
+const IbpsPoPrep = lazy(() => import("./pages/IbpsPoPrep"));
 const MockInterview = lazy(() => import("./pages/MockInterview"));
 const TypingRace = lazy(() => import("./pages/TypingRace"));
 const MiniSudoku = lazy(() => import("./pages/MiniSudoku"));
@@ -700,6 +701,14 @@ function AppInner() {
           element={
             <ProtectedPage path="/study">
               <StudyGuide />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/ibps-po"
+          element={
+            <ProtectedPage path="/ibps-po">
+              <IbpsPoPrep />
             </ProtectedPage>
           }
         />

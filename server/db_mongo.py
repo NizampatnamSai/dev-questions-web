@@ -128,6 +128,8 @@ def col_admin_chats():          return mdb()["admin_chats"]
 def col_admin_chat_messages():  return mdb()["admin_chat_messages"]
 def col_user_leaves():          return mdb()["user_leaves"]
 def col_geocode_cache():        return mdb()["geocode_cache"]
+def col_mock_tests():           return mdb()["mock_tests"]
+
 
 
 # ── ID helpers ────────────────────────────────────────────────────────────────

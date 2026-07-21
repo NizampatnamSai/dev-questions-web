@@ -2,10 +2,15 @@ import random
 import httpx
 from datetime import datetime, timezone, timedelta, date
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import Optional
+from bson import ObjectId
 from deps import current_user, require_ai_enabled
 from utils.ai import _groq_call, _ollama_text_action, GROQ_MODEL, GROQ_API_KEY
-from db_mongo import col_streaks, col_progress, col_study_reviewed, col_weak_area_insights, col_voice_transcripts, now
+from db_mongo import (
+    col_streaks, col_progress, col_study_reviewed, col_weak_area_insights,
+    col_voice_transcripts, col_mock_tests, now, sid, oid
+)
 
 router = APIRouter()
 
@@ -32,15 +37,23 @@ class SummariseReq(BaseModel):
     summary: str
     explanation: str
     code: str | None = None
+    category: str | None = None
 
 
 @router.post("/summarise")
 async def ai_summarise(req: SummariseReq, _=Depends(require_ai_enabled)):
-    system = (
-        "You are a senior developer mentor. "
-        "Give a concise, clear summary of the given topic for a developer preparing for interviews. "
-        "Use plain English. Keep it under 120 words. No markdown, no bullet points."
-    )
+    if req.category and "ibpspo" in req.category:
+        system = (
+            "You are an expert IBPS PO Exam preparation coach. "
+            "Give a concise, clear summary of the banking concept, aptitude trick, or reasoning topic for an aspirant. "
+            "Use clear language. Keep it under 120 words. No markdown, no bullet points."
+        )
+    else:
+        system = (
+            "You are a senior developer mentor. "
+            "Give a concise, clear summary of the given topic for a developer preparing for interviews. "
+            "Use plain English. Keep it under 120 words. No markdown, no bullet points."
+        )
     user = (
         f"Topic: {req.topic} — {req.title}\n\n"
         f"Key concept: {req.summary}\n\n"
@@ -66,15 +79,23 @@ class AskReq(BaseModel):
     explanation: str
     code: str | None = None
     question: str
+    category: str | None = None
 
 
 @router.post("/ask")
 async def ai_ask(req: AskReq, _=Depends(require_ai_enabled)):
-    system = (
-        "You are a senior developer mentor answering developer interview questions. "
-        "Be concise, accurate, and practical. Max 200 words. No markdown headers. "
-        "Use plain English. You may use short code examples inline."
-    )
+    if req.category and "ibpspo" in req.category:
+        system = (
+            "You are an expert IBPS PO Exam preparation coach. Answer the banking, aptitude, or reasoning question. "
+            "Be concise, accurate, and provide step-by-step logic if explaining math/reasoning. Max 200 words. "
+            "No markdown headers. Use clear English."
+        )
+    else:
+        system = (
+            "You are a senior developer mentor answering developer interview questions. "
+            "Be concise, accurate, and practical. Max 200 words. No markdown headers. "
+            "Use plain English. You may use short code examples inline."
+        )
     user = (
         f"Topic context: {req.topic} — {req.title}\n"
         f"Explanation: {req.explanation}\n"
@@ -89,6 +110,267 @@ async def ai_ask(req: AskReq, _=Depends(require_ai_enabled)):
         except Exception:
             text = "Sorry, AI is unavailable right now. Please try again."
     return {"answer": text}
+
+
+# ── Interview Review ──────────────────────────────────────────────────────────
+
+class InterviewReviewReq(BaseModel):
+    question: str
+    modelAnswer: str
+    userAnswer: str
+
+
+@router.post("/ibps-po/review-interview")
+async def review_ibpspo_interview(req: InterviewReviewReq, _=Depends(require_ai_enabled)):
+    if not req.userAnswer.strip():
+        return {"feedback": "Please type an answer to be reviewed.", "score": 0, "improvements": ""}
+    
+    system = (
+        "You are an expert IBPS PO Interview Panelist. "
+        "Analyze the candidate's answer for the given question, compare it with the model answer, and provide constructive feedback. "
+        "Keep it concise. Respond in this EXACT JSON format:\n"
+        '{"feedback": "2-3 sentences of feedback highlighting strengths and weaknesses", '
+        '"score": 7, '
+        '"improvements": "1-2 bullet points or suggestions for improvement"}\n'
+        "Rules:\n"
+        "- score: An integer from 1 to 10 rating the answer.\n"
+        "- Respond ONLY with valid JSON. No markdown, no extra text."
+    )
+    user = (
+        f"Question: {req.question}\n"
+        f"Model Answer: {req.modelAnswer}\n"
+        f"Candidate's Answer: {req.userAnswer}"
+    )
+    import json as _json
+    try:
+        raw = await _groq_plain(system, user, 500)
+        start = raw.find("{")
+        end   = raw.rfind("}") + 1
+        data  = _json.loads(raw[start:end]) if start != -1 else {}
+        return data
+    except Exception:
+        return {
+            "feedback": "AI is unavailable right now to review your answer.",
+            "score": 0,
+            "improvements": "Please check your network and try again."
+        }
+
+
+
+class GenerateMockReq(BaseModel):
+    count: int = 15
+
+@router.post("/ibps-po/generate-mock")
+async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enabled)):
+    system = (
+        "You are an expert IBPS PO Exam Paper Setter with 20+ years of experience. "
+        "Your task is to generate a dynamic set of high-quality mock test questions representing the real exam. "
+        "Output ONLY a raw JSON array matching this exact schema: \n"
+        "[{\n"
+        "  \"id\": \"string (unique, e.g. mock-eng-1)\",\n"
+        "  \"section\": \"English Language | Quantitative Aptitude | Reasoning Ability\",\n"
+        "  \"topic\": \"string (e.g., Reading Comprehension, Quadratic Equations, Syllogism, Seating Arrangement)\",\n"
+        "  \"difficulty\": \"Easy | Moderate | Hard\",\n"
+        "  \"marks\": 1.0,\n"
+        "  \"negativeMarks\": -0.25,\n"
+        "  \"expectedTime\": 45,\n"
+        "  \"question\": \"string\",\n"
+        "  \"passage\": \"string or null\",\n"
+        "  \"table\": {\"columns\": [\"col1\", \"col2\"], \"rows\": [[\"val1\", \"val2\"]]} or null,\n"
+        "  \"options\": {\"A\": \"...\", \"B\": \"...\", \"C\": \"...\", \"D\": \"...\", \"E\": \"...\"},\n"
+        "  \"correctAnswer\": \"A | B | C | D | E\",\n"
+        "  \"explanation\": \"string\",\n"
+        "  \"shortcut\": \"string\",\n"
+        "  \"commonMistake\": \"string\",\n"
+        "  \"concept\": \"string\",\n"
+        "  \"previousYearSimilarity\": \"string\"\n"
+        "}]\n"
+        "STRICT UNIQUENESS RULES — violating any rule makes the output invalid:\n"
+        "1. Every question MUST have a completely different question stem. No two questions can ask the same thing.\n"
+        "2. Every set of options MUST be unique across all questions. Do NOT reuse the same A/B/C/D/E option values.\n"
+        "3. If generating Reading Comprehension questions from the same passage, each question MUST ask about a DIFFERENT aspect: "
+        "   e.g. one asks about the main idea, another about a specific fact, another about inference, another about vocabulary meaning, etc.\n"
+        "4. Use varied question formats: direct fact, inference, vocabulary-in-context, logical reasoning from the passage.\n"
+        "5. Quantitative questions must use different numbers and scenarios — no two word problems can be about the same scenario.\n"
+        "6. Do NOT add a '(Question N)' or '(Scenario N)' suffix to any question — the question itself must be self-contained and unique.\n"
+        "7. Do NOT use placeholder values or simple templates. Every question must be a genuinely distinct exam-quality item.\n"
+        "8. Avoid formatting or wrapping with markdown block syntax (do NOT use ```json or ```).\n"
+        "9. Output exactly the requested number of questions divided equally among English Language, Quantitative Aptitude, and Reasoning Ability.\n"
+        "10. The output must be pure, valid JSON."
+    )
+
+    user = (
+        f"Generate {req.count} unique, high-quality IBPS PO mock test questions. "
+        "Each section must have equal weight (5 questions each for 15 total). "
+        "English: Mix of Reading Comprehension (pick ONE passage and write 2 distinct RC questions asking about different facts/inferences), "
+        "Error Detection (with different sentence each), Cloze Test (different blanks), and Sentence Improvement. "
+        "Quantitative: Mix of Approximation (different expressions), Quadratic Equations (different coefficients), "
+        "Number Series (different patterns), and Data Interpretation. "
+        "Reasoning: Mix of Syllogism (different statements), Inequalities (different variables), and Seating Arrangement (different puzzle). "
+        "Generate authentic passages and data tables where necessary. Ensure every question has a distinct and unique stem, "
+        "distinct options, and a thorough explanation. Double-check that no two questions are asking the same thing."
+    )
+
+    import json as _json
+    import os as _os
+    try:
+        raw = await _groq_plain(system, user, 4500)
+        start = raw.find("[")
+        end   = raw.rfind("]") + 1
+        if start != -1 and end > start:
+            qs = _json.loads(raw[start:end])
+            # Post-process: remove any duplicate question stems
+            seen_stems = set()
+            unique_qs = []
+            for q in qs:
+                stem = q.get("question", "").strip()[:100]
+                if stem not in seen_stems:
+                    seen_stems.add(stem)
+                    unique_qs.append(q)
+            return {"questions": unique_qs}
+        else:
+            raise HTTPException(500, "Invalid JSON format returned by AI.")
+    except Exception as e:
+        try:
+            p = "client/src/data/ibpspo-mock-test.json"
+            if not _os.path.exists(p):
+                p = _os.path.join(_os.path.dirname(__file__), "..", "..", "client", "src", "data", "ibpspo-mock-test.json")
+            with open(p, "r") as f:
+                data = _json.load(f)
+            # Deduplicate fallback by picking questions with unique stems
+            all_qs = data["questions"]
+            seen = set()
+            deduped = []
+            for q in all_qs:
+                stem = q.get("question", "")[:80]
+                if stem not in seen:
+                    seen.add(stem)
+                    deduped.append(q)
+            return {"questions": deduped[:req.count]}
+        except Exception as e_fallback:
+            raise HTTPException(500, f"Failed to generate questions: {str(e)}. Fallback failed: {str(e_fallback)}")
+
+
+# ── Mock Test Save / Load / Submit (user-scoped) ───────────────────────────────
+
+class SaveMockTestReq(BaseModel):
+    title: str
+    questions: list
+
+class SubmitMockTestReq(BaseModel):
+    answers: dict
+    results: dict
+
+
+@router.post("/ibps-po/mock-tests/save")
+async def save_mock_test(req: SaveMockTestReq, user: dict = Depends(current_user)):
+    """Save generated questions for later without starting the exam."""
+    doc = {
+        "userId": user["id"],
+        "title": req.title.strip() or f"Mock Test — {datetime.now(timezone.utc).strftime('%b %d, %I:%M %p')}",
+        "questions": req.questions,
+        "status": "saved",
+        "answers": None,
+        "results": None,
+        "createdAt": datetime.now(timezone.utc),
+        "attemptedAt": None,
+    }
+    result = await col_mock_tests().insert_one(doc)
+    return {"id": str(result.inserted_id), "title": doc["title"]}
+
+
+@router.get("/ibps-po/mock-tests")
+async def list_mock_tests(user: dict = Depends(current_user)):
+    """List all saved mock tests for the current user (newest first)."""
+    cursor = col_mock_tests().find(
+        {"userId": user["id"]},
+        {"questions": 0}  # exclude heavy questions array from list view
+    ).sort("createdAt", -1).limit(50)
+    tests = []
+    async for doc in cursor:
+        tests.append({
+            "id": str(doc["_id"]),
+            "title": doc.get("title", ""),
+            "status": doc.get("status", "saved"),
+            "results": doc.get("results"),
+            "createdAt": doc.get("createdAt"),
+            "attemptedAt": doc.get("attemptedAt"),
+        })
+    return {"tests": tests}
+
+
+@router.get("/ibps-po/mock-tests/{test_id}")
+async def get_mock_test(test_id: str, user: dict = Depends(current_user)):
+    """Load a specific saved mock test (only owner can access)."""
+    try:
+        obj_id = oid(test_id)
+    except Exception:
+        raise HTTPException(400, "Invalid test ID")
+    doc = await col_mock_tests().find_one({"_id": obj_id, "userId": user["id"]})
+    if not doc:
+        raise HTTPException(404, "Test not found")
+    return {
+        "id": str(doc["_id"]),
+        "title": doc.get("title", ""),
+        "questions": doc.get("questions", []),
+        "status": doc.get("status", "saved"),
+        "answers": doc.get("answers"),
+        "results": doc.get("results"),
+        "createdAt": doc.get("createdAt"),
+        "attemptedAt": doc.get("attemptedAt"),
+    }
+
+
+@router.post("/ibps-po/mock-tests/{test_id}/submit")
+async def submit_mock_test(test_id: str, req: SubmitMockTestReq, user: dict = Depends(current_user)):
+    """Submit answers for a saved test and save results."""
+    try:
+        obj_id = oid(test_id)
+    except Exception:
+        raise HTTPException(400, "Invalid test ID")
+    result = await col_mock_tests().update_one(
+        {"_id": obj_id, "userId": user["id"]},
+        {"$set": {
+            "status": "attempted",
+            "answers": req.answers,
+            "results": req.results,
+            "attemptedAt": datetime.now(timezone.utc),
+        }}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(404, "Test not found")
+    return {"ok": True}
+
+
+@router.post("/ibps-po/mock-tests/auto-save")
+async def auto_save_mock_test(req: SaveMockTestReq, user: dict = Depends(current_user)):
+    """Auto-save a test that was attempted but not manually saved (called on submit)."""
+    doc = {
+        "userId": user["id"],
+        "title": req.title.strip() or f"Mock Test — {datetime.now(timezone.utc).strftime('%b %d, %I:%M %p')}",
+        "questions": req.questions,
+        "status": "saved",
+        "answers": None,
+        "results": None,
+        "createdAt": datetime.now(timezone.utc),
+        "attemptedAt": None,
+    }
+    result = await col_mock_tests().insert_one(doc)
+    return {"id": str(result.inserted_id), "title": doc["title"]}
+
+
+@router.delete("/ibps-po/mock-tests/{test_id}")
+async def delete_mock_test(test_id: str, user: dict = Depends(current_user)):
+    """Delete a saved mock test (only owner can delete)."""
+    try:
+        obj_id = oid(test_id)
+    except Exception:
+        raise HTTPException(400, "Invalid test ID")
+    result = await col_mock_tests().delete_one({"_id": obj_id, "userId": user["id"]})
+    if result.deleted_count == 0:
+        raise HTTPException(404, "Test not found")
+    return {"ok": True}
+
 
 
 # ── AI Explain (paste anything) ───────────────────────────────────────────────

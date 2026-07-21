@@ -44,6 +44,7 @@ const BASE_LINKS = [
   // Remaining, in previous relative order
   { to: "/quiz", label: "Quiz Mode", icon: "🧠" },
   { to: "/study", label: "Study Hub", icon: "📚" },
+  { to: "/ibps-po", label: "IBPS PO Prep", icon: "🏛️" },
   { to: "/mock-interview", label: "Mock Interview", icon: "🎯" },
   { to: "/typing-race", label: "Typing Race", icon: "⌨️" },
   { to: "/mini-sudoku", label: "Mini Sudoku", icon: "🧩" },
