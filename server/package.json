@@ -5,7 +5,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "python run.py",
+    "dev": "python3 run.py",
     "start": "python3 run.py"
   },
   "dependencies": {
