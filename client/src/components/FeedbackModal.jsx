@@ -12,6 +12,35 @@ export default function FeedbackModal({ open, onClose, isGuest }) {
   const [rating, setRating] = useState(5);
   const [guestName, setGuestName] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [images, setImages] = useState([]);      // uploaded Cloudinary URLs
+  const [uploading, setUploading] = useState(false);
+
+  const MAX_IMAGES = 4;
+
+  // Uploads go through the existing POST /uploads/image (Cloudinary), which
+  // requires a login — so guests get the picker hidden rather than a 401 after
+  // they have already chosen a file.
+  const pickImages = async (files) => {
+    const chosen = Array.from(files || []);
+    if (!chosen.length) return;
+    const room = MAX_IMAGES - images.length;
+    if (room <= 0) return toast.error(`You can attach at most ${MAX_IMAGES} images`);
+    setUploading(true);
+    try {
+      for (const file of chosen.slice(0, room)) {
+        const form = new FormData();
+        form.append("file", file);
+        const { data } = await api.post("/uploads/image", form, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        setImages((prev) => [...prev, data.url]);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const submit = async () => {
     if (!title.trim() || isRichTextEmpty(message)) {
@@ -30,6 +59,7 @@ export default function FeedbackModal({ open, onClose, isGuest }) {
         message,
         rating,
         guestName: isGuest ? guestName.trim() : undefined,
+        images,
       });
       toast.success("Thank you for your feedback! 💙");
       resetForm();
@@ -47,6 +77,7 @@ export default function FeedbackModal({ open, onClose, isGuest }) {
     setMessage("");
     setRating(5);
     setGuestName("");
+    setImages([]);
   };
 
   return (
@@ -159,6 +190,56 @@ export default function FeedbackModal({ open, onClose, isGuest }) {
                   />
                 </div>
               </div>
+
+              {/* Screenshots — hidden for guests, since /uploads/image needs a login */}
+              {!isGuest && (
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                    Screenshots <span className="font-normal text-slate-400">(optional, up to {MAX_IMAGES})</span>
+                  </label>
+                  <div className="mt-1 flex flex-wrap gap-2">
+                    {images.map((url) => (
+                      <div key={url} className="relative group">
+                        <img
+                          src={url}
+                          alt="Attached screenshot"
+                          className="h-16 w-16 object-cover rounded-lg border border-slate-200 dark:border-white/10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setImages((prev) => prev.filter((u) => u !== url))}
+                          aria-label="Remove screenshot"
+                          className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-slate-800 text-white text-xs font-bold leading-none opacity-90 hover:bg-red-600"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    {images.length < MAX_IMAGES && (
+                      <label
+                        className={`h-16 w-16 flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 dark:border-white/15 text-slate-400 cursor-pointer hover:border-indigo-400 hover:text-indigo-400 transition-colors ${
+                          uploading ? "opacity-60 pointer-events-none" : ""
+                        }`}
+                      >
+                        <span className="text-lg leading-none">{uploading ? "…" : "+"}</span>
+                        <span className="text-[9px] font-semibold mt-0.5">
+                          {uploading ? "Uploading" : "Add"}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/png,image/jpeg,image/webp,image/gif"
+                          multiple
+                          className="hidden"
+                          onChange={(e) => {
+                            pickImages(e.target.files);
+                            e.target.value = ""; // let the same file be picked again after a remove
+                          }}
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex gap-2 pt-2">

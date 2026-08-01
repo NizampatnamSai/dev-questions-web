@@ -61,6 +61,13 @@ const PAGES = [
     keywords: "ai study lab advanced smart",
   },
   {
+    to: "/ibps-po",
+    label: "IBPS PO Prep",
+    icon: "🏛️",
+    keywords:
+      "ibps po bank banking prelims mains interview mock test exam competitive probationary officer reasoning quantitative aptitude english sectional",
+  },
+  {
     to: "/mock-interview",
     label: "Mock Interview",
     icon: "🎯",

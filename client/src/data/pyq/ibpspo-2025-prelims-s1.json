@@ -1,0 +1,1562 @@
+{
+ "id": "ibpspo-2025-prelims-s1",
+ "questions": [
+  {
+   "id": "2025-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between E and G?",
+   "options": {
+    "A": "One",
+    "B": "Two",
+    "C": "Three",
+    "D": "Four",
+    "E": "More than four"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2025-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following sits third to the left of G?",
+   "options": {
+    "A": "B",
+    "B": "E",
+    "C": "A",
+    "D": "C",
+    "E": "D"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2025-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit in the row?",
+   "options": {
+    "A": "9",
+    "B": "13",
+    "C": "12",
+    "D": "None of the given options",
+    "E": "10"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2025-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many meaningful words can be formed from the 3rd, 5th, 8th and 12th letter from the left end of\nthe word FERMENTATION. If no word is formed, then mark the answer as @ and if more than three\nwords are formed, then mark the answer as #, else choose the correct answer from given options?",
+   "options": {
+    "A": "1",
+    "B": "2",
+    "C": "3",
+    "D": "#",
+    "E": "@"
+   },
+   "correctAnswer": "B",
+   "explanation": "EARN, NEAR"
+  },
+  {
+   "id": "2025-q5",
+   "section": "Reasoning Ability",
+   "topic": "Number Series",
+   "question": "How many pair of digits can be formed in the number 73915243, which have same number of digits\nbetween then as in the number series (both forward and backward direction)?",
+   "options": {
+    "A": "None",
+    "B": "Two",
+    "C": "Three",
+    "D": "More than three",
+    "E": "One"
+   },
+   "correctAnswer": "D",
+   "explanation": "Solutions (6-8):"
+  },
+  {
+   "id": "2025-q6",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How is G related to E?",
+   "options": {
+    "A": "Wife",
+    "B": "Sister",
+    "C": "Sister-in-law",
+    "D": "Mother",
+    "E": "Can’t be determined"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (6-8): Study the information carefully and answer the questions given below.\nEight persons A, B, C, D, E, F, G and H are members of a three-generation family, with no single parent. G\nis the daughter-in-law of D. B has no daughter. H is the aunt of A. G is the sister-in-law of C. C is married\nmember of the family. B is the grandfather of A. C and A are of opposite gender. E is the brother of F and\nhas no child."
+  },
+  {
+   "id": "2025-q7",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How many male members are there in the family?",
+   "options": {
+    "A": "Two",
+    "B": "Three",
+    "C": "Five",
+    "D": "Four",
+    "E": "None of these"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (6-8): Study the information carefully and answer the questions given below.\nEight persons A, B, C, D, E, F, G and H are members of a three-generation family, with no single parent. G\nis the daughter-in-law of D. B has no daughter. H is the aunt of A. G is the sister-in-law of C. C is married\nmember of the family. B is the grandfather of A. C and A are of opposite gender. E is the brother of F and\nhas no child."
+  },
+  {
+   "id": "2025-q8",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "Who among the following is the mother of E?",
+   "options": {
+    "A": "H",
+    "B": "A",
+    "C": "D",
+    "D": "C",
+    "E": "Can’t be determined"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (6-8): Study the information carefully and answer the questions given below.\nEight persons A, B, C, D, E, F, G and H are members of a three-generation family, with no single parent. G\nis the daughter-in-law of D. B has no daughter. H is the aunt of A. G is the sister-in-law of C. C is married\nmember of the family. B is the grandfather of A. C and A are of opposite gender. E is the brother of F and\nhas no child."
+  },
+  {
+   "id": "2025-q9",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: O > S = G ≤ R ≥ K; L ≤ R =P; T < J = P\nConclusions:\nI. S < L\nII. J ≥ G",
+   "options": {
+    "A": "If only conclusion I is true",
+    "B": "If only conclusion II is true",
+    "C": "If either conclusion I or II is true",
+    "D": "If both conclusions I and II are true",
+    "E": "If neither conclusion I nor II is true"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (9-11): In these questions, the relationship between different elements is shown in\nthe statements. The statements are followed by two conclusions. Study the conclusions based on\nthe given statements and select the appropriate answer:",
+   "explanation": "I. S < L (False)\nII. J ≥ G (True)"
+  },
+  {
+   "id": "2025-q10",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: Q ≤ M > D > E = T; F = G ≥ H < C < T ≥ A\nConclusions:\nI. A ≤ M\nII. F > Q",
+   "options": {
+    "A": "If only conclusion I is true",
+    "B": "If only conclusion II is true",
+    "C": "If either conclusion I or II is true",
+    "D": "If both conclusions I and II are true",
+    "E": "If neither conclusion I nor II is true"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (9-11): In these questions, the relationship between different elements is shown in\nthe statements. The statements are followed by two conclusions. Study the conclusions based on\nthe given statements and select the appropriate answer:",
+   "explanation": "I. A ≤ M (False)\nII. F > Q (False)"
+  },
+  {
+   "id": "2025-q11",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: Z = X < Y > O ≤ W, P ≥ Q = R < S > W\nConclusions:\nI. X > R\nII. Z ≤ Q",
+   "options": {
+    "A": "If only conclusion I is true",
+    "B": "If only conclusion II is true",
+    "C": "If either conclusion I or II is true",
+    "D": "If both conclusions I and II are true",
+    "E": "If neither conclusion I nor II is true"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (9-11): In these questions, the relationship between different elements is shown in\nthe statements. The statements are followed by two conclusions. Study the conclusions based on\nthe given statements and select the appropriate answer:",
+   "explanation": "I. X > R (False)\nII. Z ≤ Q (False)\nBoth the conclusions are individually false but satisfy\nZ=X and Q= R\n22 Add\nthe either-or case as:\nda247 App\nSolutions (12-16):\nMonths Dates\nApril 9\n26\nJuly 9\n26\nSeptember 9\n26"
+  },
+  {
+   "id": "2025-q12",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Who among the following was born on 9th July?",
+   "options": {
+    "A": "C",
+    "B": "The one who likes green color",
+    "C": "F",
+    "D": "The one who likes pink color",
+    "E": "D"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (12-16): Study the following information carefully and answer the questions given\nbelow:\nSix persons – A, B, C, D, E and F – were born in different months – April, July, and September – on two\ndifferent dates, i.e., 9th and 26th of the same year. Each person likes a different colour – Red, Blue, Pink,\nGreen, White, and Yellow. All the information is not necessarily used in the same order\nTwo persons were born between F and the person who likes red. D was born immediately before F on\nan odd date and in the month having even number of days. The one who likes pink was born two persons\nbefore C. E was born immediately before C on an even date. Two persons were born between the ones\nwho like pink and blue. A was born before the one who likes green and two persons after the one who\nlikes yellow. E doesn’t like yellow."
+  },
+  {
+   "id": "2025-q13",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which among the following pairs is correct?",
+   "options": {
+    "A": "B – Green, 26th September",
+    "B": "C – Red, 26th July",
+    "C": "F – White, 26th April",
+    "D": "E – Green, 26th April",
+    "E": "D – Yellow, 9th September"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (12-16): Study the following information carefully and answer the questions given\nbelow:\nSix persons – A, B, C, D, E and F – were born in different months – April, July, and September – on two\ndifferent dates, i.e., 9th and 26th of the same year. Each person likes a different colour – Red, Blue, Pink,\nGreen, White, and Yellow. All the information is not necessarily used in the same order\nTwo persons were born between F and the person who likes red. D was born immediately before F on\nan odd date and in the month having even number of days. The one who likes pink was born two persons\nbefore C. E was born immediately before C on an even date. Two persons were born between the ones\nwho like pink and blue. A was born before the one who likes green and two persons after the one who\nlikes yellow. E doesn’t like yellow."
+  },
+  {
+   "id": "2025-q14",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many persons were born between F and the one who likes blue color?",
+   "options": {
+    "A": "Four",
+    "B": "Two",
+    "C": "One",
+    "D": "None",
+    "E": "Three"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (12-16): Study the following information carefully and answer the questions given\nbelow:\nSix persons – A, B, C, D, E and F – were born in different months – April, July, and September – on two\ndifferent dates, i.e., 9th and 26th of the same year. Each person likes a different colour – Red, Blue, Pink,\nGreen, White, and Yellow. All the information is not necessarily used in the same order\nTwo persons were born between F and the person who likes red. D was born immediately before F on\nan odd date and in the month having even number of days. The one who likes pink was born two persons\nbefore C. E was born immediately before C on an even date. Two persons were born between the ones\nwho like pink and blue. A was born before the one who likes green and two persons after the one who\nlikes yellow. E doesn’t like yellow."
+  },
+  {
+   "id": "2025-q15",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Who among the following likes white color?",
+   "options": {
+    "A": "The one who was born four persons before B",
+    "B": "C",
+    "C": "A",
+    "D": "The one who was born on 26th September",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (12-16): Study the following information carefully and answer the questions given\nbelow:\nSix persons – A, B, C, D, E and F – were born in different months – April, July, and September – on two\ndifferent dates, i.e., 9th and 26th of the same year. Each person likes a different colour – Red, Blue, Pink,\nGreen, White, and Yellow. All the information is not necessarily used in the same order\nTwo persons were born between F and the person who likes red. D was born immediately before F on\nan odd date and in the month having even number of days. The one who likes pink was born two persons\nbefore C. E was born immediately before C on an even date. Two persons were born between the ones\nwho like pink and blue. A was born before the one who likes green and two persons after the one who\nlikes yellow. E doesn’t like yellow."
+  },
+  {
+   "id": "2025-q16",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which of the following statements is/are incorrect?\nI. C was born before D.\nII. No person was born between F and the one who likes pink color.\nIII. E was born in the month having odd number of days and likes green color.",
+   "options": {
+    "A": "Both II and III",
+    "B": "Only I",
+    "C": "Both I and III",
+    "D": "Only III",
+    "E": "All I, II and III"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (12-16): Study the following information carefully and answer the questions given\nbelow:\nSix persons – A, B, C, D, E and F – were born in different months – April, July, and September – on two\ndifferent dates, i.e., 9th and 26th of the same year. Each person likes a different colour – Red, Blue, Pink,\nGreen, White, and Yellow. All the information is not necessarily used in the same order\nTwo persons were born between F and the person who likes red. D was born immediately before F on\nan odd date and in the month having even number of days. The one who likes pink was born two persons\nbefore C. E was born immediately before C on an even date. Two persons were born between the ones\nwho like pink and blue. A was born before the one who likes green and two persons after the one who\nlikes yellow. E doesn’t like yellow.",
+   "explanation": "utions (17-21):\nPersons Cars\nE Sedan\nA Limousine\nD Hatchback\nF Coupe\nC Convertible\nB SUV"
+  },
+  {
+   "id": "2025-q17",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following bought the Limousine?",
+   "options": {
+    "A": "E",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "A"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (17-21): Read the given instructions carefully and answer the related questions:\nSix persons – A, B, C, D, E and F – bought six different types of cars – Sedan, SUV, Hatchback, Limousine,\nCoupe, and Convertible – one after the other, but not necessarily in the same order.\nThe one who bought Sedan purchased it three persons before F. As many persons bought car before F\nas after the one who purchased Hatchback. Two persons bought cars between the ones who purchased\nHatchback and SUV. E bought the car before the one who purchased SUV but immediately before A.\nCoupe was bought two persons after A but immediately bought before convertible. Convertible was\nbought before B but after D."
+  },
+  {
+   "id": "2025-q18",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who bought the car three persons after that person who bought the car immediately before\nD?",
+   "options": {
+    "A": "C",
+    "B": "B",
+    "C": "F",
+    "D": "A",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (17-21): Read the given instructions carefully and answer the related questions:\nSix persons – A, B, C, D, E and F – bought six different types of cars – Sedan, SUV, Hatchback, Limousine,\nCoupe, and Convertible – one after the other, but not necessarily in the same order.\nThe one who bought Sedan purchased it three persons before F. As many persons bought car before F\nas after the one who purchased Hatchback. Two persons bought cars between the ones who purchased\nHatchback and SUV. E bought the car before the one who purchased SUV but immediately before A.\nCoupe was bought two persons after A but immediately bought before convertible. Convertible was\nbought before B but after D."
+  },
+  {
+   "id": "2025-q19",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If A is related to Hatchback and in the same way E is related to limousine then, C is related\nto which type of car?",
+   "options": {
+    "A": "Coupe",
+    "B": "Convertible",
+    "C": "SUV",
+    "D": "Sedan",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (17-21): Read the given instructions carefully and answer the related questions:\nSix persons – A, B, C, D, E and F – bought six different types of cars – Sedan, SUV, Hatchback, Limousine,\nCoupe, and Convertible – one after the other, but not necessarily in the same order.\nThe one who bought Sedan purchased it three persons before F. As many persons bought car before F\nas after the one who purchased Hatchback. Two persons bought cars between the ones who purchased\nHatchback and SUV. E bought the car before the one who purchased SUV but immediately before A.\nCoupe was bought two persons after A but immediately bought before convertible. Convertible was\nbought before B but after D.",
+   "explanation": "C is related to SUV. Logic here is - the car was"
+  },
+  {
+   "id": "2025-q20",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "The number of cars bought between E and the one who purchased Hatchback is one more\nthan the number of cars bought after the one who purchased _______.",
+   "options": {
+    "A": "Convertible",
+    "B": "SUV",
+    "C": "Coupe",
+    "D": "Limousine",
+    "E": "Sedan"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (17-21): Read the given instructions carefully and answer the related questions:\nSix persons – A, B, C, D, E and F – bought six different types of cars – Sedan, SUV, Hatchback, Limousine,\nCoupe, and Convertible – one after the other, but not necessarily in the same order.\nThe one who bought Sedan purchased it three persons before F. As many persons bought car before F\nas after the one who purchased Hatchback. Two persons bought cars between the ones who purchased\nHatchback and SUV. E bought the car before the one who purchased SUV but immediately before A.\nCoupe was bought two persons after A but immediately bought before convertible. Convertible was\nbought before B but after D."
+  },
+  {
+   "id": "2025-q21",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Sedan was purchased by who among the following person?",
+   "options": {
+    "A": "A",
+    "B": "D",
+    "C": "E",
+    "D": "F",
+    "E": "C"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (17-21): Read the given instructions carefully and answer the related questions:\nSix persons – A, B, C, D, E and F – bought six different types of cars – Sedan, SUV, Hatchback, Limousine,\nCoupe, and Convertible – one after the other, but not necessarily in the same order.\nThe one who bought Sedan purchased it three persons before F. As many persons bought car before F\nas after the one who purchased Hatchback. Two persons bought cars between the ones who purchased\nHatchback and SUV. E bought the car before the one who purchased SUV but immediately before A.\nCoupe was bought two persons after A but immediately bought before convertible. Convertible was\nbought before B but after D."
+  },
+  {
+   "id": "2025-q22",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nOnly a few club is court\nSome court is allow\nNo allow is revenue\nConclusions:\nI. Some club being allow is a possibility\nII. Some court are not revenue.",
+   "options": {
+    "A": "If only conclusion I follows",
+    "B": "If only conclusion II follows",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows",
+    "E": "If both conclusions I and II follow"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (22-24): In this question below, some statements are given followed by two\nconclusions numbered I and II. You have to take the given statements to be true even if they seem\nto be at variance with commonly known facts. Read all the conclusions and then decide which of\nthe given conclusions logically follows from the given statements, disregarding commonly\nknown facts. Give answer-",
+   "explanation": "Persons - Colours\nD - Yellow\nF - White\nA - Pink\nE - Green\nC - Red\nB - Blue\nbought immediately after the person given."
+  },
+  {
+   "id": "2025-q23",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nOnly a few Edition is investors\nAll investors are verdict.\nNo verdict is affect\nConclusions:\nI. No edition is affect\nII. All investors being affect is a possibility",
+   "options": {
+    "A": "If only conclusion I follows",
+    "B": "If only conclusion II follows",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows",
+    "E": "If both conclusions I and II follow"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (22-24): In this question below, some statements are given followed by two\nconclusions numbered I and II. You have to take the given statements to be true even if they seem\nto be at variance with commonly known facts. Read all the conclusions and then decide which of\nthe given conclusions logically follows from the given statements, disregarding commonly\nknown facts. Give answer-"
+  },
+  {
+   "id": "2025-q24",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nAll skipper is win\nSome win is player\nOnly a few player is hear\nConclusions:\nI. All skipper being hear is a possibility\nII. No win is hear",
+   "options": {
+    "A": "If only conclusion I follows",
+    "B": "If only conclusion II follows",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows",
+    "E": "If both conclusions I and II follow"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (22-24): In this question below, some statements are given followed by two\nconclusions numbered I and II. You have to take the given statements to be true even if they seem\nto be at variance with commonly known facts. Read all the conclusions and then decide which of\nthe given conclusions logically follows from the given statements, disregarding commonly\nknown facts. Give answer-"
+  },
+  {
+   "id": "2025-q25",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Find the odd one out?",
+   "options": {
+    "A": "JLMP",
+    "B": "ACDG",
+    "C": "EGHK",
+    "D": "LNOR",
+    "E": "QSTU"
+   },
+   "correctAnswer": "E",
+   "explanation": "Except QSTU, Logic is here:\nSolutions (26-30):\nYear Ages Persons\n1947 78 B\n1959 66 G\n1964 61 D\n1973 52 E\n1978 47 A\n1988 37 F\n2001 24 C"
+  },
+  {
+   "id": "2025-q26",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following was born on 1973?",
+   "options": {
+    "A": "G",
+    "B": "B",
+    "C": "E",
+    "D": "A",
+    "E": "C"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (26-30): Read the information carefully and an\nSeven persons A, B, C, D, E, F and G were born on seven different\n1988 and 2001 on the same month and same date. (Base year is\nThe sum of the ages of C and F is equal to the age of D. G’s age\nis a prime number. A is just older than F. The sum of the age of"
+  },
+  {
+   "id": "2025-q27",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons were born between A and B?",
+   "options": {
+    "A": "Two",
+    "B": "More than four",
+    "C": "Four",
+    "D": "One",
+    "E": "Three"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (26-30): Read the information carefully and an\nSeven persons A, B, C, D, E, F and G were born on seven different\n1988 and 2001 on the same month and same date. (Base year is\nThe sum of the ages of C and F is equal to the age of D. G’s age\nis a prime number. A is just older than F. The sum of the age of"
+  },
+  {
+   "id": "2025-q28",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the difference between the age of C and D?",
+   "options": {
+    "A": "12 years",
+    "B": "10 years",
+    "C": "24 years",
+    "D": "37years",
+    "E": "38 years\nnswer the questions given below:\nt years i.e., 1947, 1959, 1964, 1973, 1978,\ns considered as 2025 for age calculation).\nis divisible by 6. The total age of A and G\nB and A is divisible by 5.\np"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (26-30): Read the information carefully and an\nSeven persons A, B, C, D, E, F and G were born on seven different\n1988 and 2001 on the same month and same date. (Base year is\nThe sum of the ages of C and F is equal to the age of D. G’s age\nis a prime number. A is just older than F. The sum of the age of"
+  },
+  {
+   "id": "2025-q29",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following is the oldest person?",
+   "options": {
+    "A": "E",
+    "B": "B",
+    "C": "G",
+    "D": "D",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (26-30): Read the information carefully and an\nSeven persons A, B, C, D, E, F and G were born on seven different\n1988 and 2001 on the same month and same date. (Base year is\nThe sum of the ages of C and F is equal to the age of D. G’s age\nis a prime number. A is just older than F. The sum of the age of"
+  },
+  {
+   "id": "2025-q30",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the age of G?",
+   "options": {
+    "A": "37 years",
+    "B": "24 years",
+    "C": "47 years",
+    "D": "52 years",
+    "E": "66 years"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (26-30): Read the information carefully and an\nSeven persons A, B, C, D, E, F and G were born on seven different\n1988 and 2001 on the same month and same date. (Base year is\nThe sum of the ages of C and F is equal to the age of D. G’s age\nis a prime number. A is just older than F. The sum of the age of",
+   "explanation": "utions (31-35):"
+  },
+  {
+   "id": "2025-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following faces R?",
+   "options": {
+    "A": "G",
+    "B": "D",
+    "C": "B",
+    "D": "C",
+    "E": "A"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (31-35): Read the information carefully and answer the questions given below:\nFourteen persons are sitting in two parallel rows containing seven persons each. In row 1 - A, B, C, D, E,\nF and G are seated and all of them are facing north. While P, Q, R, S, T, U and V are sitting in row-2 and\nfacing south direction but not necessarily in the same order. Persons of row 1 face the persons of row 2.\nQ sits two places away from the one who faces E. E is the only immediate neighbour of D. U faces the one\nwho sits third to the right of C. The number of persons sit to the right of Q is same as the number of\npersons sit to the left of G. B sits second to the left of G. One person sits between R and V and both of\nthem do not sit at the extreme ends. S sits right of T but not sit at the extreme ends. A faces the one who\nsits second to the right of R."
+  },
+  {
+   "id": "2025-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement(s) is/are true?",
+   "options": {
+    "A": "Two persons sit between G and A",
+    "B": "U faces E",
+    "C": "V sits left of R",
+    "D": "C doesn’t sit at extreme ends",
+    "E": "All are true"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (31-35): Read the information carefully and answer the questions given below:\nFourteen persons are sitting in two parallel rows containing seven persons each. In row 1 - A, B, C, D, E,\nF and G are seated and all of them are facing north. While P, Q, R, S, T, U and V are sitting in row-2 and\nfacing south direction but not necessarily in the same order. Persons of row 1 face the persons of row 2.\nQ sits two places away from the one who faces E. E is the only immediate neighbour of D. U faces the one\nwho sits third to the right of C. The number of persons sit to the right of Q is same as the number of\npersons sit to the left of G. B sits second to the left of G. One person sits between R and V and both of\nthem do not sit at the extreme ends. S sits right of T but not sit at the extreme ends. A faces the one who\nsits second to the right of R."
+  },
+  {
+   "id": "2025-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way and hence form a group. Who among the\nfollowing does not belong to that group?",
+   "options": {
+    "A": "T",
+    "B": "F",
+    "C": "S",
+    "D": "U",
+    "E": "G"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (31-35): Read the information carefully and answer the questions given below:\nFourteen persons are sitting in two parallel rows containing seven persons each. In row 1 - A, B, C, D, E,\nF and G are seated and all of them are facing north. While P, Q, R, S, T, U and V are sitting in row-2 and\nfacing south direction but not necessarily in the same order. Persons of row 1 face the persons of row 2.\nQ sits two places away from the one who faces E. E is the only immediate neighbour of D. U faces the one\nwho sits third to the right of C. The number of persons sit to the right of Q is same as the number of\npersons sit to the left of G. B sits second to the left of G. One person sits between R and V and both of\nthem do not sit at the extreme ends. S sits right of T but not sit at the extreme ends. A faces the one who\nsits second to the right of R."
+  },
+  {
+   "id": "2025-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit to the left of the one who faces S?",
+   "options": {
+    "A": "Two",
+    "B": "More than four",
+    "C": "Four",
+    "D": "One",
+    "E": "Three"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (31-35): Read the information carefully and answer the questions given below:\nFourteen persons are sitting in two parallel rows containing seven persons each. In row 1 - A, B, C, D, E,\nF and G are seated and all of them are facing north. While P, Q, R, S, T, U and V are sitting in row-2 and\nfacing south direction but not necessarily in the same order. Persons of row 1 face the persons of row 2.\nQ sits two places away from the one who faces E. E is the only immediate neighbour of D. U faces the one\nwho sits third to the right of C. The number of persons sit to the right of Q is same as the number of\npersons sit to the left of G. B sits second to the left of G. One person sits between R and V and both of\nthem do not sit at the extreme ends. S sits right of T but not sit at the extreme ends. A faces the one who\nsits second to the right of R."
+  },
+  {
+   "id": "2025-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following sits second to the right of the one who faces F?",
+   "options": {
+    "A": "V",
+    "B": "T",
+    "C": "R",
+    "D": "Q",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Read the information carefully and answer the questions given below:\nFourteen persons are sitting in two parallel rows containing seven persons each. In row 1 - A, B, C, D, E,\nF and G are seated and all of them are facing north. While P, Q, R, S, T, U and V are sitting in row-2 and\nfacing south direction but not necessarily in the same order. Persons of row 1 face the persons of row 2.\nQ sits two places away from the one who faces E. E is the only immediate neighbour of D. U faces the one\nwho sits third to the right of C. The number of persons sit to the right of Q is same as the number of\npersons sit to the left of G. B sits second to the left of G. One person sits between R and V and both of\nthem do not sit at the extreme ends. S sits right of T but not sit at the extreme ends. A faces the one who\nsits second to the right of R."
+  },
+  {
+   "id": "2025-q36",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "What is the underlying reason cloud kitchens have enabled more entrepreneurs to enter\nthe food business?",
+   "options": {
+    "A": "The emergence of global food trends requiring innovative business models.",
+    "B": "The increase in food delivery app usage that encourages mass entry.",
+    "C": "The substantial decrease in start-up and operational costs associated with running a food business.",
+    "D": "The ability to access a wider consumer base without geographical limitations.",
+    "E": "The availability of shared kitchen infrastructure and government subsidies in urban areas."
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "The passage notes: “cloud kitchens have made it possible with lower investment and quicker setup.”\nand “By eliminating the expenses of prime-location rentals, heavy décor, and customer service staff…”\nThus, the underlying reason is the decrease in start-up and operational costs, not just app usage or\nsubsidies.\nCorrect answer: (c)\nDetailed Analysis of Options:\n• (a) The emergence of global food trends requiring innovative business models.\n• While global food trends are influencing business models, the passage clearly highlights cost\nefficiency as the main reason entrepreneurs are able to start restaurants more easily. Hence, this is\nnot the underlying reason.\n• (b) The increase in food delivery app usage that encourages mass entry.\n• Food delivery apps boost consumer demand, but they are not the primary enabler for entrepreneurs\nto start food businesses. They support the growth of cloud kitchens but do not reduce the barrier to\nentry.\n• (c) The substantial decrease in start-up and operational costs associated with running a food\nbusiness.\n• This is directly supported by the passage: “By eliminating the expenses of prime-location rentals,\nheavy décor, and customer service staff, bus"
+  },
+  {
+   "id": "2025-q37",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following statements is/are CORRECT according to the passage?\n(I) Technological tools and mobile apps have played a significant role in the adoption of cloud kitchens.\n(II) Britain experienced a stagnant cloud kitchen market until 2023.\n(III) Many cloud kitchens fail to comply with food safety rules due to operational urgency.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (I) and (III)",
+    "C": "Only (II)",
+    "D": "Both (II) and (III)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "Both (I) and (III)\nStatement-wise Analysis:\n• (I) Technological tools and mobile apps have played a significant role in the adoption of cloud\nkitchens.\n• Correct. The passage mentions: “Much of this growth has been driven by the popularity of food\ndelivery apps where customers need to tap once on their screens to get a meal delivered.”\n• This clearly highlights the role of technology and apps.\n• (II) Britain experienced a stagnant cloud kitchen market until 2023.\n• Incorrect. The passage states: “In Britain, the industry witnessed a dramatic transformation in 2023,\nexpanding nearly threefold compared to previous years.”\n• The word “stagnant” is not mentioned. The market grew rapidly in 2023 but not necessarily from\nstagnation.\n• (III) Many cloud kitchens fail to comply with food safety rules due to operational urgency.\n• Correct. The passage states: “The lack of regular inspections and the rush to meet demand often lead\nto corners being cut, raising questions about consumer safety.”\n• This supports the statement."
+  },
+  {
+   "id": "2025-q38",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following situations best explains the concern highlighted in the passage?",
+   "options": {
+    "A": "A cloud kitchen receives a five-star rating for speedy delivery despite complaints about poor food\nquality.",
+    "B": "A traditional restaurant installs a robot chef to improve efficiency and reduce labor costs.",
+    "C": "A local food vendor switches to cloud kitchen services and increases profits.",
+    "D": "A delivery app offers discounts to promote lesser-known cloud kitchens.",
+    "E": "A food safety authority mandates regular inspections for dine-in restaurants only."
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "The final paragraph emphasizes the tension between rapid growth and compromised food safety\nor quality:\n“Yet, their true potential will only be realized when strict adherence to regulations ensures that quality\nand safety are never compromised.”\nOption (a) exemplifies that—business success despite compromised food standards.\nCorrect answer: (a)\nOption-wise Analysis:\n• (a) A cloud kitchen receives a five-star rating for speedy delivery despite complaints about\npoor food quality.\n• Correct. The passage points out that in the rush to meet demand, cloud kitchens often compromise\non hygiene and quality standards. This situation directly reflects the concern raised.\n• (b) A traditional restaurant installs a robot chef to improve efficiency and reduce labor costs.\n• Incorrect. This shows innovation in operations but does not connect with the issue of safety or\nregulation.\n• (c) A local food vendor switches to cloud kitchen services and increases profits.\n• Incorrect. This represents economic benefit, not the highlighted concern about compromised quality\nand safety.\n• (d) A delivery app offers discounts to promote lesser-known cloud kitchens.\n• Incorrect. This emphasizes promotional strate"
+  },
+  {
+   "id": "2025-q39",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "What does the passage say about cloud kitchens in Britain?",
+   "options": {
+    "A": "They were banned in 2023 due to safety issues.",
+    "B": "They grew three times larger in 2023 compared to earlier years.",
+    "C": "They replaced all traditional restaurants by 2023.",
+    "D": "They focused only on packaging and delivery.",
+    "E": "They were introduced for the first time in 2023."
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "From the passage: “In Britain, the industry witnessed a dramatic transformation in 2023, expanding\nnearly threefold…”\nCorrect answer: (b)\nOption-wise Analysis:\n• (a) They were banned in 2023 due to safety issues.\n• Incorrect. The passage does mention safety concerns, but nowhere does it say cloud kitchens were\nbanned in Britain.\n• (b) They grew three times larger in 2023 compared to earlier years.\n• Correct. The passage clearly states: “In Britain, the industry witnessed a dramatic transformation in\n2023, expanding nearly threefold compared to previous years.” This matches the option exactly.\n• (c) They replaced all traditional restaurants by 2023.\n• Incorrect. The passage does not claim that cloud kitchens completely replaced traditional\nrestaurants.\n• (d) They focused only on packaging and delivery.\n• Incorrect. Cloud kitchens focus on online orders and delivery, but the passage does not state that\nBritain’s cloud kitchens focused only on packaging and delivery.\n• (e) They were introduced for the first time in 2023.\n• Incorrect. The passage never suggests 2023 was the starting year; instead, it highlights major growth\nin that year."
+  },
+  {
+   "id": "2025-q40",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following statements is/are factually INCORRECT based on the passage?\n(I) The global rise of cloud kitchens has had little to no impact on auxiliary sectors such as food supply\nchains and packaging.\n(II) In the United States, cloud kitchens are projected to contribute nearly $27 billion to the economy by\nthe year 2027 alone.\n(III) One of the key reasons behind the proliferation of cloud kitchens is the substantial reduction in\nfixed operational costs.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (I) and (II)",
+    "C": "Only (III)",
+    "D": "Both (I) and (III)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "Analysis:\nStatement (I): \"The global rise of cloud kitchens has had little to no impact on auxiliary sectors such as\nfood supply chains and packaging.\"\n→ Incorrect. The passage clearly states: “They also encourage collaborations with delivery platforms and\nboost allied sectors like packaging manufacturing and food supply chains.”\nHence, Statement I contradicts the passage.\nStatement (II): \"In the United States, cloud kitchens are projected to contribute nearly $27 billion to the\neconomy by the year 2027 alone.\"\n→ Incorrect. The passage says: “The United States has set an ambitious target, aiming to generate around\n$27 billion from cloud kitchen operations between 2027 and 2032.”\nThis means the amount is projected over a span of 5 years, not just by 2027. So the statement is factually\nwrong.\nStatement (III): \"One of the key reasons behind the proliferation of cloud kitchens is the substantial\nreduction in fixed operational costs.\"\n→ Correct. The passage says: “One of the most significant economic advantages of cloud kitchens is cost\nefficiency. By eliminating the expenses of prime-location rentals, heavy décor, and customer service staff…”\nThis validates Statement III.\nThus, only St"
+  },
+  {
+   "id": "2025-q41",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Choose the most suitable phrase for the given blank.",
+   "options": {
+    "A": "in broad daylight",
+    "B": "without permission",
+    "C": "on live television",
+    "D": "behind the scenes",
+    "E": "under pressure"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "The context of the sentence implies that the work is important but not visible to the public, yet\nstill contributes significantly to the economy. The phrase “behind the scenes” perfectly captures this\nidea — referring to actions that occur out of public view but are essential.\nNow, let’s check each option:\n• (a) in broad daylight\n• Incorrect. This phrase means something done openly and visibly, which contradicts the idea of work\nbeing quietly done.\n• (b) without permission\n• Incorrect. The passage does not suggest that the work is unauthorized; rather, it stresses quiet\ncontributions.\n• (c) on live television\n• Incorrect. This would mean publicly broadcasted, which again contradicts the “quietly done”\ncontext.\n• (d) behind the scenes\n• Correct. This phrase means work being done quietly, without much public attention, yet still crucial.\nIt perfectly fits the context.\n• (e) under pressure\n• Incorrect. Though urgency is mentioned elsewhere, here the emphasis is on quiet, unnoticed\ncontributions, not stress."
+  },
+  {
+   "id": "2025-q42",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Choose the word that is grammatically and contextually most suitable to replace \"elusive\" as used\nin the passage:",
+   "options": {
+    "A": "Obvious",
+    "B": "Achievable",
+    "C": "Unattainable",
+    "D": "Defining",
+    "E": "Difficult"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "“Elusive” = difficult to catch, achieve, or define.\nMeanings:\nOption-wise Analysis:\n• (a) Obvious\no English meaning: Easily seen, clear, or self-evident.\no Hindi meaning: स्पष्ट, साफ़\no Incorrect, because the dream of launching a restaurant was not \"clear\" or \"evident\"; it was\ndifficult.\n• (b) Achievable\no English meaning: Possible to do or attain.\no Hindi meaning: प्राप्त करने योग्य, हाससल सकया जा सकने वाला\no Incorrect, because the passage conveys the opposite idea—that the dream was not achievable\nearlier.\n• (c) Unattainable\no English meaning: Impossible to achieve or reach.\no Hindi meaning: अप्राप्य, न हाससल होने वाला\no Correct, as it directly matches the sense of “elusive dream” being out of reach.\n• (d) Defining\no English meaning: Critically important, decisive, or setting a clear meaning.\no Hindi meaning: सनर्ाायक, पररभासित करने वाला\no Incorrect, because the passage talks about possibility, not definition.\n• (e) Difficult\no English meaning: Hard to do or deal with.\no Hindi meaning: कसिन, मुश्किल\no Partially correct, but not as strong as “unattainable.” “Elusive” goes beyond just “difficult” — it\nimplies nearly impossible.\nCorrect answer: (c)"
+  },
+  {
+   "id": "2025-q43",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "What is the closest meaning of the word “done” as used in the passage?",
+   "options": {
+    "A": "Completed",
+    "B": "Final",
+    "C": "Avoided",
+    "D": "Attained",
+    "E": "Repeated"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "In this context, “done behind the scenes” refers to work that is carried out or completed quietly,\nwithout public attention.\nOption-wise Meanings and Analysis:\n• (a) Completed\no English meaning: Finished, carried out successfully.\no Hindi meaning: पूरा सकया हुआ, संपन्न\no Correct, as “done” here refers to work being completed in the background.\n• (b) Final\no English meaning: Last stage, ultimate, not to be changed.\no Hindi meaning: अंसतम, अंसतम रूप से तय\no Incorrect, since the passage is not about something being the last stage but about work being\ncarried out.\n• (c) Avoided\no English meaning: Kept away from, prevented.\no Hindi meaning: टाला गया, बचा सलया गया\no Incorrect, because “done” means work performed, not avoided.\n• (d) Attained\no English meaning: Reached or achieved a goal.\no Hindi meaning: प्राप्त सकया हुआ, हाससल सकया\no Incorrect, as “done” here refers to action completed, not something achieved.\n• (e) Repeated\no English meaning: Done again, performed more than once.\no Hindi meaning: दोहराया हुआ, बार-बार सकया गया\no Incorrect, because “done” means carried out once, not repeated."
+  },
+  {
+   "id": "2025-q44",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "What is the most appropriate meaning of the word “tap” as used in this context?",
+   "options": {
+    "A": "Strike",
+    "B": "Click",
+    "C": "Extract",
+    "D": "Control",
+    "E": "Attach"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-44): Read the following passage and answer the given questions.\nThe concept of cloud kitchens, also known as virtual or ghost kitchens, has become one of the fastest-\ngrowing trends in the food industry. Unlike traditional restaurants, cloud kitchens operate without a\ndine-in facility, focusing entirely on online orders and delivery services. This model has gained\nmomentum due to changing consumer habits, technological integration, and the growing demand for\nconvenience.\nOne of the most significant economic advantages of cloud kitchens is cost efficiency. By eliminating the\nexpenses of prime-location rentals, heavy de cor, and customer service staff, businesses can focus\nresources on food quality, marketing, and delivery logistics. For many entrepreneurs, launching a\nrestaurant earlier seemed like an elusive dream, but cloud kitchens have made it possible with lower\ninvestment and quicker setup.\nThe global growth of cloud kitchens is impressive. In Britain, the industry witnessed a dramatic\ntransformation in 2023, expanding nearly threefold compared to previous years. Much of this growth\nhas been driven by the popularity of food delivery apps where customers need to tap once on their\nscreens to get a meal delivered. Similarly, the United States has set an ambitious target, aiming to\ngenerate around $27 billion from cloud kitchen operations between 2027 and 2032. Such projections\nunderline the crucial role cloud kitchens will play in the food economy of the future.\nBeyond profits, cloud kitchens contribute positively to the overall economy by creating jobs in cooking,\npackaging, logistics, and technology support. They also encourage collaborations with delivery\nplatforms and boost allied sectors like packaging manufacturing and food supply chains. Much of this\nwork is quietly done __________________, yet it strengthens multiple layers of the economy.\nHowever, this rapid growth has raised concerns. While governments have issued regulations concerning\nhygiene, licensing, and safety standards, many restaurants operating as cloud kitchens fail to comply\nstrictly with these rules. The lack of regular inspections and the rush to meet demand often lead to\ncorners being cut, raising questions about consumer safety and long-term sustainability.\nIn conclusion, cloud kitchens represent a transformative shift in the food and service industry. They are\ncost-effective, scalable, and job-generating, making them vital for economic growth. Yet, their true\npotential will only be realized when strict adherence to regulations ensures that quality and safety are\nnever compromised.",
+   "explanation": "The correct answer is “Click”.\nOption-wise Meanings and Analysis:\n• (a) Strike\no English meaning: Hit forcefully.\no Hindi meaning: प्रहार करना, मारना\no Incorrect. “Tap” here does not mean hitting hard, but lightly touching a screen.\n• (b) Click\no English meaning: Press or select something on a screen with a finger or mouse.\no Hindi meaning: दबाना, श्किक करना\no Correct. Fits perfectly with “tap once on their screens” in the context of using apps.\n• (c) Extract\no English meaning: Remove or take out something.\no Hindi meaning: सनकालना, उतारना\no Incorrect, as the passage does not talk about removing but about screen interaction.\n• (d) Control\no English meaning: To direct, manage, or regulate something.\no Hindi meaning: सनयंसित करना, काबू रखना\no Incorrect, since “tap” does not imply controlling.\n• (e) Attach\no English meaning: To join or fix something.\no Hindi meaning: जोड़ना, संलग्न करना\no Incorrect, as this has no relevance to the digital screen action described."
+  },
+  {
+   "id": "2025-q45",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The dentist had to _____________ the decayed tooth to prevent further infection.",
+   "options": {
+    "A": "modify",
+    "B": "excuse",
+    "C": "recruit",
+    "D": "amplify",
+    "E": "remove"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (45-49): The following question contains a sentence with a blank. Choose the most\nappropriate word or phrase from the given options that can most suitably replace the blank in\nthe sentence.",
+   "explanation": "The correct answer is: (e) remove\nSentence:\nThe dentist had to _____________ the decayed tooth to prevent further infection.\nContext: A decayed tooth can cause infection, so the dentist would take it out (remove).\nOption Analysis:\n(a) modify\n• English: to change slightly.\n• Hindi: संशोसित करना\n• Example: The teacher modified the lesson plan.\n• Incorrect – you cannot “modify” a decayed tooth to stop infection.\n(b) excuse\n• English: to forgive or justify.\n• Hindi: माफ़ करना\n• Example: Please excuse my mistake.\n• Incorrect – meaningless in this context.\n(c) recruit\n• English: to hire or enlist.\n• Hindi: भती करना\n• Example: The company will recruit new employees.\n• Incorrect – irrelevant to teeth.\n(d) amplify\n• English: to increase or make stronger.\n• Hindi: बढाना\n• Example: The microphone amplified his voice.\n• Incorrect – opposite meaning; dentist reduces infection, not amplifies it.\n(e) remove\n• English: to take away, eliminate.\n• Hindi: सनकालना / हटाना\n• Example: The surgeon removed the tumor successfully.\n• Correct – dentist removes the tooth to prevent infection.\nFinal Answer: (e) remove"
+  },
+  {
+   "id": "2025-q46",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The new technology promises to ________________ the way we perform everyday tasks.",
+   "options": {
+    "A": "impede",
+    "B": "acclaim",
+    "C": "stagnate",
+    "D": "deteriorate",
+    "E": "augment"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (45-49): The following question contains a sentence with a blank. Choose the most\nappropriate word or phrase from the given options that can most suitably replace the blank in\nthe sentence.",
+   "explanation": "The correct answer is: (e) augment\nSentence:\nThe new technology promises to ________________ the way we perform everyday tasks.\nContext: new technology → should improve/enhance daily work, not block or worsen it.\nOption Analysis:\n(a) impede\n• English: hinder, obstruct.\n• Hindi: बािा डालना\n• Example: Heavy traffic impeded our progress.\n• Incorrect – opposite meaning; technology is meant to help, not block.\n(b) acclaim\n• English: praise, applaud.\n• Hindi: प्रशंसा करना\n• Example: The film was acclaimed by critics.\n• Incorrect – technology doesn’t “praise” the way we perform tasks.\n(c) stagnate\n• English: stop developing, remain inactive.\n• Hindi: िहर जाना, रुक जाना\n• Example: Without innovation, companies stagnate.\n• Incorrect – opposite of what technology does.\n(d) deteriorate\n• English: worsen, decline.\n• Hindi: सबगड़ना\n• Example: The patient’s health deteriorated rapidly.\n• Incorrect – technology doesn’t worsen task performance.\n(e) augment\n• English: enhance, improve, increase in effectiveness.\n• Hindi: बढाना, सुिारना\n• Example: AI can augment human abilities in problem-solving.\n• Correct – technology promises to augment = make tasks easier, better, more efficient.\nFinal Answer: ("
+  },
+  {
+   "id": "2025-q47",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The athlete's rigorous training and unwavering determination _________________ to their\nremarkable success.",
+   "options": {
+    "A": "contributed",
+    "B": "detracted",
+    "C": "underestimated",
+    "D": "isolated",
+    "E": "impeded"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (45-49): The following question contains a sentence with a blank. Choose the most\nappropriate word or phrase from the given options that can most suitably replace the blank in\nthe sentence.",
+   "explanation": "The correct answer is: (a) contributed\nSentence:\nThe athlete's rigorous training and unwavering determination _________________ to their\nremarkable success.\nContext: training + determination → these are positive factors that led to success.\nOption Analysis:\n(a) contributed\n• English: helped to bring about, played a role in.\n• Hindi: योगदान देना\n• Example: Her hard work contributed to the team’s victory.\n• Correct – perfectly fits: training and determination contributed to success.\n(b) detracted\n• English: reduced the value, took away from.\n• Hindi: घटाना, कम करना\n• Example: His rude comment detracted from the speech.\n• Incorrect – opposite meaning.\n(c) underestimated\n• English: judged something as less important than it is.\n• Hindi: कम आंका\n• Example: They underestimated the difficulty of the exam\n• Incorrect – doesn’t fit with success.\n(d) isolated\n• English: set apart, separated.\n• Hindi: अलग करना\n• Example: The illness isolated him from his friends.\n• Incorrect – irrelevant to success.\n(e) impeded\n• English: hindered, obstructed.\n• Hindi: बािा डालना\n• Example: The rain impeded construction work.\n• Incorrect – opposite of what’s implied.\nFinal Answer: (a) contributed"
+  },
+  {
+   "id": "2025-q48",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The new regulations aim to _________________ fair competition among all market participants.",
+   "options": {
+    "A": "infringe",
+    "B": "enforce",
+    "C": "relinquish",
+    "D": "constrain",
+    "E": "fragment"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (45-49): The following question contains a sentence with a blank. Choose the most\nappropriate word or phrase from the given options that can most suitably replace the blank in\nthe sentence.",
+   "explanation": "The correct answer is: (b) enforce\nSentence:\nThe new regulations aim to _________________ fair competition\nContext: Regulations exist to ensure / enforce fairness in the\nOption Analysis:\n(a) infringe\n• English: to violate, break a rule.\n• Hindi: उल्लंघन करना\n• Example: The policy infringes on people’s rights.\n• Incorrect – opposite meaning.\n(b) enforce\n• English: to make sure laws or rules are obeyed.\n• Hindi: लागू करना, अमल कराना\n• Example: The police enforce traffic laws.\n• Correct – regulations enforce fair competition.\n(c) relinquish\n• English: to give up, surrender.\n• Hindi: छोड़ देना\n• Example: He relinquished control of the company.\n• Incorrect – unrelated to regulations.\nm.\nn among all market participants.\nmarket.\np\n(d) constrain\n• English: to limit, restrict.\n• Hindi: बासित करना\n• Example: Lack of funds constrained the project.\n• Incorrect – opposite effect, rules don’t restrict competition\n(e) fragment\n• English: to break into pieces.\n• Hindi: टुकड़े करना\n• Example: The glass fragmented on impact.\n• Incorrect – illogical here.\nFinal Answer: (b) enforce"
+  },
+  {
+   "id": "2025-q49",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The exam rules must be ___________ followed to ensure fairness for all students.",
+   "options": {
+    "A": "scarcely",
+    "B": "preciously",
+    "C": "strictly",
+    "D": "hardly",
+    "E": "mostly"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (45-49): The following question contains a sentence with a blank. Choose the most\nappropriate word or phrase from the given options that can most suitably replace the blank in\nthe sentence.",
+   "explanation": "The correct answer is: (c) strictly\nSentence:\nThe exam rules must be ___________ followed to ensure fairness\nContext: Rules → need to be firmly/strictly obeyed.\nOption Analysis:\n(a) scarcely\n• English: barely, hardly.\n• Hindi: मुश्किल से, शायद ही\n• Example: He scarcely had time to eat before leaving.\n• Incorrect – meaning doesn’t fit; rules must be followed str\n(b) preciously\n• English: dearly, of great value.\n• Hindi: बहुमूल्य ढंग से\n• Example: She held the necklace preciously.\n• Incorrect – doesn’t collocate with “rules.”\n(c) strictly\n• English: firmly, without exceptions.\n• Hindi: सख्ती से\n• Example: Mobile phones are strictly prohibited in exams.\n• Correct – rules are strictly followed.\n(d) hardly\n• English: almost not, barely.\n• Hindi: शायद ही / मुश्किल से\n• Example: He could hardly see in the dark.\n• Incorrect – wrong meaning in context.\n(e) mostly\n• English: mainly, generally.\n• Hindi: असिकतर\n• Example: The students are mostly attentive.\n• Incorrect – “mostly followed” is weak and imprecise.\nFinal Answer: (c) strictly\nn, they promote fairness.\nfor all students.\nrongly, not “barely.”"
+  },
+  {
+   "id": "2025-q50",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following is the FIRST sentence after rearrangement?",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "E"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (50-54): Rearrange the following sentences to form a meaningful paragraph.\n(A) Many people now prefer taking extended vacations to unwind and reconnect with themselves.\n(B) Travel has increasingly become a way not just to see new places but to momentarily escape the\npressures of daily routines.\n(C) In today’s fast-paced world, hectic schedules and constant digital connectivity often leave\nindividuals drained.\n(D) Meeting new people, exploring unfamiliar cultures, and disconnecting from work helps rejuvenate\nthe mind.\n(E) This shift in travel behavior reflects a growing awareness about mental well-being and the need for\nintentional breaks.",
+   "explanation": "Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior."
+  },
+  {
+   "id": "2025-q51",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following is the SECOND sentence after rearrangement?",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "E"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (50-54): Rearrange the following sentences to form a meaningful paragraph.\n(A) Many people now prefer taking extended vacations to unwind and reconnect with themselves.\n(B) Travel has increasingly become a way not just to see new places but to momentarily escape the\npressures of daily routines.\n(C) In today’s fast-paced world, hectic schedules and constant digital connectivity often leave\nindividuals drained.\n(D) Meeting new people, exploring unfamiliar cultures, and disconnecting from work helps rejuvenate\nthe mind.\n(E) This shift in travel behavior reflects a growing awareness about mental well-being and the need for\nintentional breaks.",
+   "explanation": "Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior."
+  },
+  {
+   "id": "2025-q52",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following is the THIRD sentence after rearrangement?",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "E"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (50-54): Rearrange the following sentences to form a meaningful paragraph.\n(A) Many people now prefer taking extended vacations to unwind and reconnect with themselves.\n(B) Travel has increasingly become a way not just to see new places but to momentarily escape the\npressures of daily routines.\n(C) In today’s fast-paced world, hectic schedules and constant digital connectivity often leave\nindividuals drained.\n(D) Meeting new people, exploring unfamiliar cultures, and disconnecting from work helps rejuvenate\nthe mind.\n(E) This shift in travel behavior reflects a growing awareness about mental well-being and the need for\nintentional breaks.",
+   "explanation": "Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior."
+  },
+  {
+   "id": "2025-q53",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following is the FOURTH sentence after rearrangement?",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "E"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (50-54): Rearrange the following sentences to form a meaningful paragraph.\n(A) Many people now prefer taking extended vacations to unwind and reconnect with themselves.\n(B) Travel has increasingly become a way not just to see new places but to momentarily escape the\npressures of daily routines.\n(C) In today’s fast-paced world, hectic schedules and constant digital connectivity often leave\nindividuals drained.\n(D) Meeting new people, exploring unfamiliar cultures, and disconnecting from work helps rejuvenate\nthe mind.\n(E) This shift in travel behavior reflects a growing awareness about mental well-being and the need for\nintentional breaks.",
+   "explanation": "Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior."
+  },
+  {
+   "id": "2025-q54",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following is the FIFTH sentence after rearrangement?",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "E"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (50-54): Rearrange the following sentences to form a meaningful paragraph.\n(A) Many people now prefer taking extended vacations to unwind and reconnect with themselves.\n(B) Travel has increasingly become a way not just to see new places but to momentarily escape the\npressures of daily routines.\n(C) In today’s fast-paced world, hectic schedules and constant digital connectivity often leave\nindividuals drained.\n(D) Meeting new people, exploring unfamiliar cultures, and disconnecting from work helps rejuvenate\nthe mind.\n(E) This shift in travel behavior reflects a growing awareness about mental well-being and the need for\nintentional breaks.",
+   "explanation": "Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior."
+  },
+  {
+   "id": "2025-q55",
+   "section": "English Language",
+   "topic": "Word Swap",
+   "question": "Be careful (A) not to microwave (B) the hot plate (C) when you take the food out of the catch\n(D).",
+   "options": {
+    "A": "A-B",
+    "B": "B-C & A-D",
+    "C": "A-B & C-D",
+    "D": "B-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (55-58): In the question below, a sentence is given with four words highlighted. These\nfour words are may not be in their correct position. The sentence is then followed by options\nwith the correct combination of words that should replace each other in order to make the\nsentence grammatically and contextually correct. Find the correct combination of the words that\nreplace each other.",
+   "explanation": "Original sentence:\nBe careful (A) not to microwave (B) the hot plate (C) when you take the food out of the catch (D).\nThe words microwave (B) and catch (D) are misplaced.\nCorrected sentence after swap:\nBe careful (A) not to catch (D) the hot plate (C) when you take the food out of the microwave (B).\nWord-by-word meanings & explanation\n(A) careful\n• English: cautious, paying attention to avoid danger.\n• Hindi: साविान\n• Example: Be careful when crossing the road.\n• Correct – fits the warning tone of the sentence.\n(B) microwave\n• English: an oven that cooks food using microwaves.\n• Hindi: माइक्रोवेव (भोजन पकाने की मशीन)\n• Example: She heated the soup in the microwave.\n• Incorrect in original place – \"microwave the hot plate\" is illogical. Correct at the end → out of\nthe microwave.\n(C) plate\n• English: flat dish used to serve food.\n• Hindi: प्लेट\n• Example: He put the cake on a large plate.\n• Correct – “hot plate” makes sense as something to avoid touching directly.\n(D) catch\n• English: to hold, grab, or seize.\n• Hindi: पकड़ना\n• Example: Be careful not to catch the pan when it’s hot.\n• Incorrect in original place – “out of the catch” is meaningless. Correct when swapped → not to\ncatch "
+  },
+  {
+   "id": "2025-q56",
+   "section": "English Language",
+   "topic": "Word Swap",
+   "question": "India is system (A) digitising its healthcare rapidly (B), and artificial intelligence (AI) offers a\nhuge transformation (C) to super-charge this opportunity (D).",
+   "options": {
+    "A": "A-B and C-D",
+    "B": "B-C",
+    "C": "A-C and B-D",
+    "D": "B-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (55-58): In the question below, a sentence is given with four words highlighted. These\nfour words are may not be in their correct position. The sentence is then followed by options\nwith the correct combination of words that should replace each other in order to make the\nsentence grammatically and contextually correct. Find the correct combination of the words that\nreplace each other.",
+   "explanation": "Original sentence:\nIndia is system (A) digitising its healthcare rapidly (B), and artificial intelligence (AI) offers a\nhuge transformation (C) to super-charge this opportunity (D).\nThe correct answer is (a) A–B and C–D.\nCorrected sentence after swaps:\nIndia is rapidly (B) digitising its healthcare system (A), and artificial intelligence (AI) offers a\nhuge opportunity (D) to super-charge this transformation (C).\nWord-by-word meanings & explanation\n(A) system\n• English: an organized set of principles or methods; here → healthcare system.\n• Hindi: प्रर्ाली, व्यवस्था\n• Example: The education system needs reform.\n• Incorrect in original place → “India is system digitising” is ungrammatical. Correct after swap:\nhealthcare system.\n(B) rapidly\n• English: quickly, with great speed.\n• Hindi: तेजी से\n• Example: Technology is rapidly changing our world.\n• Incorrect in original place → “healthcare rapidly” is awkward. Correct at start: is rapidly\ndigitising.\n(C) transformation\n• English: major change, improvement.\n• Hindi: पररवतान\n• Example: Digital transformation is reshaping industries.\n• Incorrect in original place → “offers a huge transformation” is odd when followed by “super-\ncharge this"
+  },
+  {
+   "id": "2025-q57",
+   "section": "English Language",
+   "topic": "Word Swap",
+   "question": "Astronomical (A) temperatures (B) are usually estimated from spectroscopic (C)\nmeasurements (D).",
+   "options": {
+    "A": "A-B",
+    "B": "B-C",
+    "C": "A-C",
+    "D": "B-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (55-58): In the question below, a sentence is given with four words highlighted. These\nfour words are may not be in their correct position. The sentence is then followed by options\nwith the correct combination of words that should replace each other in order to make the\nsentence grammatically and contextually correct. Find the correct combination of the words that\nreplace each other.",
+   "explanation": "Original sentence:\nAstronomical (A) temperatures (B) are usually estimated from spectroscopic (C) measurements\n(D).This sentence is already grammatically and contextually correct.\n• In astronomy, scientists estimate the temperatures of stars (astronomical temperatures)\nusing spectroscopic measurements (light spectrum analysis).\n• So, no swap is needed.\nWord-by-word meanings & explanation\n(A) Astronomical\n• English: relating to astronomy (the study of space, stars, planets). Also means extremely large.\n• Hindi: खगोल संबंिी / बहुत बड़ा\n• Example: Astronomical observations help us understand galaxies.\n• Correct here – “astronomical temperatures” = temperatures of stars/planets.\n(B) Temperatures\n• English: degree of heat present in an object.\n• Hindi: तापमान\n• Example: The sun’s temperature is millions of degrees.\n• Correct here – what is being estimated in astronomy.\n(C) Spectroscopic\n• English: relating to the study of spectra (light split into colors/wavelengths).\n• Hindi: वर्ाक्रमीय\n• Example: Spectroscopic methods reveal the composition of stars.\n• Correct here – modifies measurements.\n(D) Measurements\n• English: the act of determining size, amount, or degree.\n• Hindi: माप\n• Examp"
+  },
+  {
+   "id": "2025-q58",
+   "section": "English Language",
+   "topic": "Word Swap",
+   "question": "Growing (A) children in involving (B) and nurturing a few plants at home can open (C) up the\nmagical (D) world of nature and science to them",
+   "options": {
+    "A": "A-B",
+    "B": "B-C",
+    "C": "A-C and B-D",
+    "D": "B-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (55-58): In the question below, a sentence is given with four words highlighted. These\nfour words are may not be in their correct position. The sentence is then followed by options\nwith the correct combination of words that should replace each other in order to make the\nsentence grammatically and contextually correct. Find the correct combination of the words that\nreplace each other.",
+   "explanation": "Original sentence:\nGrowing (A) children in involving (B) and nurturing a few plants at home can open (C) up the\nmagical (D) world of nature and science to them.\nProblem:\n• Growing children is illogical in this context.\n• Correct sense is: Involving children in growing and nurturing plants.\n• So, we must swap (A) Growing ↔ (B) involving.\nCorrected sentence after swap (A–B):\nInvolving (B) children in growing (A) and nurturing a few plants at home can open (C) up the\nmagical (D) world of nature and science to them.\nWord-by-word meanings & explanation\n(A) Growing\n• English: developing, cultivating, increasing in size.\n• Hindi: उगाना / बढना\n• Example: She enjoys growing vegetables in her garden.\n• Incorrect in original place – “Growing children” gives the wrong meaning. Correct after swap\n→ “growing plants.”\n(B) Involving\n• English: engaging, including in an activity.\n• Hindi: शासमल करना\n• Example: The teacher is involving students in practical activities.\n• Incorrect in original place – “children in involving” is awkward. Correct after swap → “Involving\nchildren …”\n(C) Open\n• English: to make accessible, to introduce.\n• Hindi: खोलना / पररचय कराना\n• Example: Books can open up new worlds"
+  },
+  {
+   "id": "2025-q59",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Match the parts of sentences given in Column I and Column II to form meaningful and\ngrammatically correct complete sentences. Choose the option that contains all the correct\ncombinations.\nCOLUMN I COLUMN II\nA. The new cybersecurity policy mandates D. to support the growing number of EV\norganizations users nationwide\nB. Electric vehicle manufacturers are E. to perform complex surgeries with\nexpanding their charging networks minimal invasion\nC. Rising sea levels and erratic weather F. that are currently beyond the scope of\npatterns classical computers",
+   "options": {
+    "A": "None of these",
+    "B": "A-F",
+    "C": "B-D",
+    "D": "A-E, B-F",
+    "E": "A-F, B-D, C-E"
+   },
+   "correctAnswer": "C",
+   "explanation": "The correct combination is B-D.\nB-D: Electric vehicle manufacturers are expanding their charging networks to support the growing\nnumber of EV users nationwide.\nAnalysis:\nColumn Matching\n• A. The new cybersecurity policy mandates organizations\no Correct match: F. that are currently beyond the scope of classical computers? Doesn’t fit\nlogically.\no Correct match: E. to perform complex surgeries with minimal invasion? Not related to\ncybersecurity.\no Correct match: D. to support the growing number of EV users nationwide? Not connected.\no So, A has no correct match here.\n• B. Electric vehicle manufacturers are expanding their charging networks\no Correct match: D. to support the growing number of EV users nationwide. Logical and\ngrammatically correct.\n• C. Rising sea levels and erratic weather patterns\no Correct match: E. to perform complex surgeries with minimal invasion? Doesn’t make sense.\no Correct match: F. that are currently beyond the scope of classical computers? Not logical.\no Correct match: D. to support the growing number of EV users nationwide? Not related.\no So, C has no correct match."
+  },
+  {
+   "id": "2025-q60",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "A phrase has been given in the question and used in the sentences below. Identify the\nstatements where the phrase has been used in a contextually and grammatically correct manner.\nDARK HORSE\n(I) Nobody expected her to win the competition, but she turned out to be the dark horse of the event.\n(II) The painter was a dark horse, known by few but admired once his work was revealed.\n(III) The farmer bought a dark horse and a white cow from the village market.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Only (II)",
+    "C": "Both (I) and (II)",
+    "D": "All of these",
+    "E": "Both (II) and (III)"
+   },
+   "correctAnswer": "C",
+   "explanation": "Meaning of the Phrase: DARK HORSE\n• English: A dark horse is a person who is not well-known but unexpectedly succeeds or shows\nremarkable ability.\n• Hindi: Dark horse का अथा है — ऐसा व्यश्कि जो बहुत कम जाना जाता है, लेसकन अचानक से सफलता प्राप्त कर\nलेता है या अपनी असािारर् क्षमता सदखाता है।\nSentence-wise Analysis\n(I) Nobody expected her to win the competition, but she turned out to be the dark horse of the\nevent.\n• Analysis:\n• Here, dark horse is used correctly because she was unexpected to win, but surprised everyone with\nher success.\n• Correct\n• Eg: In the elections, the little-known candidate became the dark horse by defeating the favorite.\n(II) The painter was a dark horse, known by few but admired once his work was revealed.\n• Analysis:\n• Correct usage — the painter was not famous earlier (known by few), but when his work was shown,\npeople admired him. This fits perfectly with the meaning of dark horse.\n• Correct\n• Eg: That writer was a dark horse; nobody knew him until his novel won an award.\n(III) The farmer bought a dark horse and a white cow from the village market.\n• Analysis:\n• This is incorrect usage because here dark horse is being used in its literal sense (a horse wit"
+  },
+  {
+   "id": "2025-q61",
+   "section": "English Language",
+   "topic": "Error Spotting",
+   "question": "The Prime Minister promised (A)/ to improving infrastructure (B)/ in rural districts by\nallocating (C)/ additional funds in the next budget. (D)",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "No error"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (61-65): The sentence is divided into four segments: (A), (B), (C), and (D). Identify the\nsegment that contains a grammatical error. If the sentence is both grammatically and\ncontextually correct, select “No error” as the correct answer.",
+   "explanation": "Sentence in Question\nThe Prime Minister promised (A)/ to improving infrastructure (B)/ in rural districts by\nallocating (C)/ additional funds in the next budget. (D)\nSegment-wise Analysis\n(A) The Prime Minister promised\n• Grammar Rule:\n• The verb “promise” is a transitive verb that usually takes an infinitive (to + base verb) or a clause\nas its complement.\no Example: She promised to help her friend.\no Example: He promised that he would arrive early.\n• Correct Usage Here:\n• “The Prime Minister promised” is grammatically correct because it correctly introduces what\nwas promised.\nNo error in (A).\n(B) to improving infrastructure\n• Grammar Rule:\n• After verbs like promise, decide, plan, hope, agree, etc., we use the infinitive (to + base verb),\nnot the gerund (-ing form).\no Wrong: He promised to helping his brother.\no Correct: He promised to help his brother.\n• Error:\n• Here, “to improving” is incorrect because “promised” requires an infinitive, so it should be “to\nimprove.”\nError in (B).\n(C) in rural districts by allocating\n• Grammar Rule:\n• Preposition + noun phrase (in rural districts) is correct.\n• The phrase “by allocating” is a participial phrase showing the means or method of ful"
+  },
+  {
+   "id": "2025-q62",
+   "section": "English Language",
+   "topic": "Error Spotting",
+   "question": "She enjoys hiking in the mountains, (A)/ swimming in the lake, (B)/ and to explore ancient\nruins (C)/ during her travels abroad. (D)",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "No error"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (61-65): The sentence is divided into four segments: (A), (B), (C), and (D). Identify the\nsegment that contains a grammatical error. If the sentence is both grammatically and\ncontextually correct, select “No error” as the correct answer.",
+   "explanation": "Sentence in Question\nShe enjoys hiking in the mountains, (A)/ swimming in the lake, (B)/ and to explore ancient ruins\n(C)/ during her travels abroad. (D)\nSegment-wise Analysis\n(A) She enjoys hiking in the mountains\n• Grammar Rule:\n• After verbs like enjoy, dislike, avoid, suggest, etc., we use the gerund (-ing form), not the\ninfinitive.\no Example: She enjoys reading novels.\n• Usage Here:\n• “enjoys hiking in the mountains” follows the correct rule.\nCorrect → (A)\n(B) swimming in the lake\n• Grammar Rule:\n• This is parallel to the previous phrase (“hiking”), and it also uses the gerund form correctly.\no Example: He enjoys hiking, swimming, and cycling.\n• Usage Here:\n• “swimming in the lake” is consistent and correct.\nCorrect → (B)\n(C) and to explore ancient ruins\n• Grammar Rule:\n• When listing activities in parallel structure, all items must be in the same grammatical form.\n• Here, the first two are gerunds (hiking, swimming), so the third must also be a gerund (exploring),\nnot an infinitive (to explore).\no Incorrect: She enjoys hiking, swimming, and to explore.\no Correct: She enjoys hiking, swimming, and exploring.\nIncorrect → (C)\n(D) during her travels abroad\n• Grammar Rule:\n• Prepos"
+  },
+  {
+   "id": "2025-q63",
+   "section": "English Language",
+   "topic": "Error Spotting",
+   "question": "The orchestra have (A)/ started rehearsing (B)/ for the upcoming international music\nfestival (C)/ scheduled in Vienna next month. (D)",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "No error"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (61-65): The sentence is divided into four segments: (A), (B), (C), and (D). Identify the\nsegment that contains a grammatical error. If the sentence is both grammatically and\ncontextually correct, select “No error” as the correct answer.",
+   "explanation": "Sentence in Question\nThe orchestra have (A)/ started rehearsing (B)/ for the upcoming international music festival\n(C)/ scheduled in Vienna next month. (D)\nSegment-wise Analysis\n(A) The orchestra have\n• Grammar Rule:\n• Collective nouns (e.g., orchestra, committee, team, audience) are singular when the group is seen\nas a single unit, so they take a singular verb.\no Incorrect: The orchestra have started rehearsal.\no Correct: The orchestra has started rehearsal.\n• Error Here:\n• “orchestra have” is incorrect. It should be “orchestra has.”\nIncorrect → (A)\n(B) started rehearsing\n• Grammar Rule:\n• Present perfect tense (has/have + past participle) is correct, and the verb “rehearse” naturally\ntakes the gerund “rehearsing” in this context.\no Example: She has started working.\n• Usage Here:\n• “started rehearsing” is grammatically correct.\nCorrect → (B)\n(C) for the upcoming international music festival\n• Grammar Rule:\n• Preposition + noun phrase is used correctly. The phrase is clear and grammatically sound.\no Example: She prepared for the annual event.\nCorrect → (C)\n(D) scheduled in Vienna next month\n• Grammar Rule:\n• Reduced relative clause is correct here.\no Full form: which is scheduled i"
+  },
+  {
+   "id": "2025-q64",
+   "section": "English Language",
+   "topic": "Error Spotting",
+   "question": "A unexpected spike in volcano activity (A)/ has forced authorities to evacuate (B)/ nearby\nvillages as a safety (C)/ measure to prevent casualties. (D)",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "No error"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (61-65): The sentence is divided into four segments: (A), (B), (C), and (D). Identify the\nsegment that contains a grammatical error. If the sentence is both grammatically and\ncontextually correct, select “No error” as the correct answer.",
+   "explanation": "Sentence in Question\nA unexpected spike in volcano activity (A)/ has forced authorities to evacuate (B)/ nearby\nvillages as a safety (C)/ measure to prevent casualties. (D)\nSegment-wise Analysis\n(A) A unexpected spike in volcano activity\n• Grammar Rule:\n• The article “a” is used before words beginning with a consonant sound, while “an” is used\nbefore words beginning with a vowel sound.\no Incorrect: a apple\no Correct: an apple\n• Error Here:\n• “unexpected” begins with a vowel sound (ʌ), so the correct form is “an unexpected.”\nIncorrect → (A)\n(B) has forced authorities to evacuate\n• Grammar Rule:\n• Present perfect tense (has + past participle) is correct, and “to evacuate” correctly follows\n“forced.”\no Example: The storm has forced people to leave.\nCorrect → (B)\n(C) nearby villages as a safety\n• Grammar Rule:\n• “as a safety measure” is the correct collocation.\n• “safety” here functions as an adjective modifying “measure.”\nCorrect → (C)\n(D) measure to prevent casualties\n• Grammar Rule:\n• Noun phrase (measure) + infinitive phrase (to prevent casualties) is correct.\nCorrect → (D)\nCorrect Answer: (a) A\nCorrected Sentence\nAn unexpected spike in volcano activity has forced authorities to ev"
+  },
+  {
+   "id": "2025-q65",
+   "section": "English Language",
+   "topic": "Error Spotting",
+   "question": "The ambassador (A)/ said the reports have (B)/ being examined carefully by his staff (C)/\nbefore making any comment. (D)",
+   "options": {
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
+    "E": "No error"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (61-65): The sentence is divided into four segments: (A), (B), (C), and (D). Identify the\nsegment that contains a grammatical error. If the sentence is both grammatically and\ncontextually correct, select “No error” as the correct answer.",
+   "explanation": "Sentence in Question\nThe ambassador (A)/ said the reports have (B)/ being examined carefully by his staff (C)/ before\nmaking any comment. (D)\nSegment-wise Analysis\n(A) The ambassador\n• Grammar Rule:\n• Subject of the sentence is clear and correct. No article error here because ambassador is a\nsingular countable noun referring to a specific person.\no Example: The ambassador met the press.\nCorrect → (A)\n(B) said the reports have\n• Grammar Rule:\n• “said” introduces reported speech.\n• The structure “said + (that) + clause” is correct.\no Example: He said the documents have been checked.\nCorrect → (B)\n(C) being examined carefully by his staff\n• Grammar Rule:\n• After have, we must use the past participle (been), not the present participle (being).\no Incorrect: The reports have being checked.\no Correct: The reports have been checked.\n• Error Here:\n• “being” should be replaced with “been.”\nIncorrect → (C)\n(D) before making any comment\n• Grammar Rule:\n• “before + gerund” is correct, as gerunds often follow prepositions.\no Example: Think carefully before answering.\nCorrect → (D)\nCorrect Answer: (c) C\nCorrected Sentence\nThe ambassador said the reports have been examined\ncomment.\nKey Rule Recap\n"
+  },
+  {
+   "id": "2025-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "I. x2 – 10x+24 = 0\nII. 5y2 – 16y + 12 = 0",
+   "options": {
+    "A": "If x=y or no relation can be established",
+    "B": "If x>y",
+    "C": "If x<y",
+    "D": "If x≥y",
+    "E": "If x≤y"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (66-69): In each question two equations num\nsolve both the equations and mark appropriate answer.",
+   "explanation": "I. x2 -6x - 4x + 24 = 0\nx(x-6) - 4(x-6) = 0\n(x-4) (x-6) =0\nx = 4 & 6\nII. 5y2 -10y - 6y + 12 = 0\n5y(y-2) - 6(y-2)=0\n(5y -6) (y-2) = 0\ny = 6/5 & 2\ny = 1.2 & 2\nx y Relation\n4 1.2 x > y\n4 2 x > y\n6 1.2 x > y\n6 2 x > y\nSo, x>y"
+  },
+  {
+   "id": "2025-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "I. 2x2 – 9x +10 = 0\nII. y2 – 12y+ 35 = 0",
+   "options": {
+    "A": "If x=y or no relation can be established",
+    "B": "If x>y",
+    "C": "If x<y",
+    "D": "If x≥y",
+    "E": "If x≤y"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (66-69): In each question two equations num\nsolve both the equations and mark appropriate answer.",
+   "explanation": "I. 2x2 - 4x - 5x + 10 = 0\n2x(x-2) - 5(x-2) = 0\n(2x-5) (x-2) =0\nx = 5/2 & 2\nx = 2.5 & 2\nII. y2 - 7y - 5y + 35 = 0\ny(y-7) - 5(y-7) = 0\n(y-7) (y-5) = 0\ny = 7 & 5\nx y Relation\n2.5 7 y > x\n2.5 5 y > x\n2 7 y > x\n2 5 y > x\nSo, x<y\ncarefully by his staff before making any\nApp"
+  },
+  {
+   "id": "2025-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "I. 6x2 – 7x + 2 = 0\nII. 10y2 – 11y + 3 =0",
+   "options": {
+    "A": "If x=y or no relation can be established",
+    "B": "If x>y",
+    "C": "If x<y",
+    "D": "If x≥y",
+    "E": "If x≤y"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (66-69): In each question two equations num\nsolve both the equations and mark appropriate answer.",
+   "explanation": "I. 6x2 – 4x – 3x + 2 = 0\n2x(3x-2) – 1(3x -2) = 0\n(2x -1) (3x -2) = 0\n1 2\nx = &\n2 3\nx = 0.5 & 0.66\nII. 10y2 – 6y – 5y + 3 = 0\n2y(5y -3) – 1(5y -3) = 0\n(2y – 1) (5y-3) = 0\n1 3\ny = &\n2 5\ny = 0.5 & 0.60\nx y Relation\n0.5 0.5 y = x\n0.5 0.60 y > x\n0.66 0.5 x > y\n0.66 0.6 x > y\nSo, no relation can be established"
+  },
+  {
+   "id": "2025-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "I. 2x2 + 19x + 42 = 0\nII. 2y2 + 7y + 5 = 0",
+   "options": {
+    "A": "If x=y or no relation can be established",
+    "B": "If x>y",
+    "C": "If x<y",
+    "D": "If x≥y",
+    "E": "If x≤y"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (66-69): In each question two equations num\nsolve both the equations and mark appropriate answer.",
+   "explanation": "I. 2x2 + 12y + 7y + 42 = 0\n2x(x+6) + 7(y+6) = 0\n(2x+7) (y+6) = 0\n7\nx = - & - 6\n2\nx = - 3.5 & - 6\nII. 2y2 + 2y + 5y + 5 = 0\n2y(y+1) +5(y+1) = 0\n(2y+5) + (y+1) =0\n5\ny =- & -1\n2\ny = - 2.5 & - 1\nx y Relation\n-3.5 -2.5 y > x\n-3.5 - 1 y > x\n-6 -2.5 y > x\n-6 -1 y > x\nSo, x<y"
+  },
+  {
+   "id": "2025-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "+ 4.98 + 23 = x% of 60.03\n13",
+   "options": {
+    "A": "187",
+    "B": "121",
+    "C": "169",
+    "D": "147",
+    "E": "177"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (70-73): What approximate value come in the\n779.23",
+   "explanation": "780 𝑥\n+ 5 + 23 = ×60\n13 100\n3\n60 + 5 + 23 = 𝑥×\n5\n88×5\nx =\n3\nx = 146.66 ≈ 147\n46 A"
+  },
+  {
+   "id": "2025-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "39.98% of 249.99 + √196.04 = x2 + 55.93",
+   "options": {
+    "A": "6",
+    "B": "9",
+    "C": "5",
+    "D": "8",
+    "E": "4"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (70-73): What approximate value come in the\n779.23",
+   "explanation": "40\n×250 + 14 = x2 + 56\n100\n100 + 14 = x2 + 56\nx2 = 58\nx ≈ 8"
+  },
+  {
+   "id": "2025-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "20.992−24.97% 𝑜𝑓 220.02−?= 131.13",
+   "options": {
+    "A": "225",
+    "B": "125",
+    "C": "255",
+    "D": "145",
+    "E": "290\nmber (I) and (II) are given. You should\nplace of ‘x’ in the following questions.\npp"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (70-73): What approximate value come in the\n779.23",
+   "explanation": "25\n212 - ×220 - ? = 131\n100\n441 – 55 - ? = 131\n? = 386 – 131\n? = 255"
+  },
+  {
+   "id": "2025-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "24.212+12.16 =?×(49.99% 𝑜𝑓 55.98)",
+   "options": {
+    "A": "25",
+    "B": "29",
+    "C": "21",
+    "D": "17",
+    "E": "33"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (70-73): What approximate value come in the\n779.23",
+   "explanation": "242 +12 =?×(50% 𝑜𝑓 56)\n576+12 =?×28\n21 =?\nSol (74-79)\nIn bag A,\nPercentage of blue balls = 100 – 62.5 = 37.5%\n(62.5 – 37.5)% = 60\n25% = 60\n240 = 100%\nRed balls = 62.5% of 240 = 150\nBlue balls = 240 – 150 = 90\nSimilarly,\nTotal bags Total balls Red\nA 240 150\nB 600 399\nC 470 392\nD 380 228\nE 750 540"
+  },
+  {
+   "id": "2025-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The number of Red ball in A and E together is what perce\nand E together.",
+   "options": {
+    "A": "230",
+    "B": "220",
+    "C": "240",
+    "D": "280",
+    "E": "260"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (74-79): The table given below shows the total num\ndifferent bags (A, B, C, D & E). it also shows the difference\npercentage of red balls with respect to total balls.\nTotal Difference between red and blue Percentage\nbags balls balls\nA 60 62.5%\nB 198 66.5%\nC 188 70%\nD 76 60%\nE 330 72%",
+   "explanation": "Required answer = ×100 = 230%\n90 + 210"
+  },
+  {
+   "id": "2025-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The sum of number of blue balls in B and number of red\nnumber of red balls in E.",
+   "options": {
+    "A": "55",
+    "B": "53",
+    "C": "50",
+    "D": "58",
+    "E": "56"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (74-79): The table given below shows the total num\ndifferent bags (A, B, C, D & E). it also shows the difference\npercentage of red balls with respect to total balls.\nTotal Difference between red and blue Percentage\nbags balls balls\nA 60 62.5%\nB 198 66.5%\nC 188 70%\nD 76 60%\nE 330 72%",
+   "explanation": "Required answer = (201 + 392) – 540 = 53"
+  },
+  {
+   "id": "2025-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of number of red balls in A and E together t",
+   "options": {
+    "A": "23:10",
+    "B": "23:11",
+    "C": "23:3",
+    "D": "18:19",
+    "E": "21:22"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (74-79): The table given below shows the total num\ndifferent bags (A, B, C, D & E). it also shows the difference\npercentage of red balls with respect to total balls.\nTotal Difference between red and blue Percentage\nbags balls balls\nA 60 62.5%\nB 198 66.5%\nC 188 70%\nD 76 60%\nE 330 72%",
+   "explanation": "Required answer = 150 + 540 : 90 = 690 : 90 =\n47 A\nballs Blue balls\n90\n201\n141\n152\n210\n23:3"
+  },
+  {
+   "id": "2025-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the average number of red balls in B, D and E.",
+   "options": {
+    "A": "355",
+    "B": "353",
+    "C": "350",
+    "D": "389",
+    "E": "386\nmber of red and blue balls in five\nbetween red and blue balls and\nof red ball with respect to total\nentage of number of blue balls in A\nballs in C are how many less than\nto number of blue balls in A."
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (74-79): The table given below shows the total num\ndifferent bags (A, B, C, D & E). it also shows the difference\npercentage of red balls with respect to total balls.\nTotal Difference between red and blue Percentage\nbags balls balls\nA 60 62.5%\nB 198 66.5%\nC 188 70%\nD 76 60%\nE 330 72%",
+   "explanation": "Required answer = = 389\n3"
+  },
+  {
+   "id": "2025-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The number of balls in bag F is 25% more than red balls in E and the ratio of red balls in A\nand blue balls in F is 2:1. Find the red balls in F.",
+   "options": {
+    "A": "685",
+    "B": "680",
+    "C": "630",
+    "D": "620",
+    "E": "600"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (74-79): The table given below shows the total num\ndifferent bags (A, B, C, D & E). it also shows the difference\npercentage of red balls with respect to total balls.\nTotal Difference between red and blue Percentage\nbags balls balls\nA 60 62.5%\nB 198 66.5%\nC 188 70%\nD 76 60%\nE 330 72%",
+   "explanation": "Total balls in F = 125% of 540 = 675\n1\nBlue balls in F = ×150 = 75\n2\nRed balls in F = 600"
+  },
+  {
+   "id": "2025-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If 20% of total balls in A taken out and put into bag C and number of red balls in C become\n400. Find the blue balls taken out from bag A.",
+   "options": {
+    "A": "40",
+    "B": "50",
+    "C": "20",
+    "D": "30",
+    "E": "55"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (74-79): The table given below shows the total num\ndifferent bags (A, B, C, D & E). it also shows the difference\npercentage of red balls with respect to total balls.\nTotal Difference between red and blue Percentage\nbags balls balls\nA 60 62.5%\nB 198 66.5%\nC 188 70%\nD 76 60%\nE 330 72%",
+   "explanation": "Taken out balls = 20% of 240 = 48\nTaken out Red balls from A = 400 – 392 = 8\nTaken out blue balls from A = 48 – 8 = 40\nSol (80 – 85)\nIn shop A,\nTotal TV sold = 320\nCell phone – TV = 200\nCell phone = 200 + 320 = 520\nTotal items sold = 520 + 200 = 720\nSimilarly,\nShops Total items Total TV sold Cell phone sold\nA 840 320 520\nB 1480 600 880\nC 1760 680 1080\nD 2040 760 1280\nE 520 80 440"
+  },
+  {
+   "id": "2025-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total item sold by E is what percentage more/less than total TV sold by D.",
+   "options": {
+    "A": "31.57%",
+    "B": "30%",
+    "C": "36%",
+    "D": "31%",
+    "E": "31.25%"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (80-85): The line graph given below shows the total number of TV sold and difference\nbetween cell phone and TV sold by five different shops (A, B, C, D and E).\n800\n600\n400\n200\n0\nA B C D E\nTotal TV sold Difference between Cellphone and TV sold\nNote – Total cell phones sold by all the shops are more than the total TV sold.\nItems = cell phone + TV\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required percentage = ×100 = 31.57%\n760"
+  },
+  {
+   "id": "2025-q81",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total items sold by Shop F is 20% more than that by shop C and the ratio of total TV sold\nand cell phone sold by shop F is 7:15. Find the number of TV sold by F.",
+   "options": {
+    "A": "685",
+    "B": "620",
+    "C": "672",
+    "D": "670",
+    "E": "666"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (80-85): The line graph given below shows the total number of TV sold and difference\nbetween cell phone and TV sold by five different shops (A, B, C, D and E).\n800\n600\n400\n200\n0\nA B C D E\nTotal TV sold Difference between Cellphone and TV sold\nNote – Total cell phones sold by all the shops are more than the total TV sold.\nItems = cell phone + TV\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Total items sold by F = 120% of 1760 = 2112\nLet TV and Cellphone sold by F be 7x and 15x\n22x = 2112\n96 = x\nTv old by F = 7x = 672"
+  },
+  {
+   "id": "2025-q82",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the difference between sum of cell phone sold by C and E together and total items sold\nby A.",
+   "options": {
+    "A": "685",
+    "B": "620",
+    "C": "600",
+    "D": "680",
+    "E": "660"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (80-85): The line graph given below shows the total number of TV sold and difference\nbetween cell phone and TV sold by five different shops (A, B, C, D and E).\n800\n600\n400\n200\n0\nA B C D E\nTotal TV sold Difference between Cellphone and TV sold\nNote – Total cell phones sold by all the shops are more than the total TV sold.\nItems = cell phone + TV\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required answer = (1080+440) – 840 = 680"
+  },
+  {
+   "id": "2025-q83",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of TV sold by D to cell phones sold by B.",
+   "options": {
+    "A": "19:10",
+    "B": "19:11",
+    "C": "10:19",
+    "D": "18:19",
+    "E": "19:22"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (80-85): The line graph given below shows the total number of TV sold and difference\nbetween cell phone and TV sold by five different shops (A, B, C, D and E).\n800\n600\n400\n200\n0\nA B C D E\nTotal TV sold Difference between Cellphone and TV sold\nNote – Total cell phones sold by all the shops are more than the total TV sold.\nItems = cell phone + TV\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required ratio = 760 : 880= 19:22\n48 Adda24\n47 App"
+  },
+  {
+   "id": "2025-q84",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If 12.5% of TV sold by D are defective and total items sold by D that are defective is 280.\nFind the defective cell phones sold by D.",
+   "options": {
+    "A": "185",
+    "B": "120",
+    "C": "100",
+    "D": "180",
+    "E": "186"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (80-85): The line graph given below shows the total number of TV sold and difference\nbetween cell phone and TV sold by five different shops (A, B, C, D and E).\n800\n600\n400\n200\n0\nA B C D E\nTotal TV sold Difference between Cellphone and TV sold\nNote – Total cell phones sold by all the shops are more than the total TV sold.\nItems = cell phone + TV\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Defective TV sold by D = 12.5% of 760 =\nDefective cellphone = 280 – 95 = 185"
+  },
+  {
+   "id": "2025-q85",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Average number of cell phone sold by B, C and E.",
+   "options": {
+    "A": "900",
+    "B": "720",
+    "C": "400",
+    "D": "800",
+    "E": "720"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (80-85): The line graph given below shows the total number of TV sold and difference\nbetween cell phone and TV sold by five different shops (A, B, C, D and E).\n800\n600\n400\n200\n0\nA B C D E\nTotal TV sold Difference between Cellphone and TV sold\nNote – Total cell phones sold by all the shops are more than the total TV sold.\nItems = cell phone + TV\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required average = = 800\n3\nSolutions (86-90):\nLet denote lab assistant in C be x.\nColleges Professor\nA y\nB\nC x+6\nx+6 + x = 82 + 24\n2x + 6 = 106\n50 = x\nAlso,\ny = x+4 – 44 =10\ntotal professor in al the college is 102\ntotal professor in B = 102 – y – x – 6 = 36\nColleges Professor\nA 10\nB 36\nC 56"
+  },
+  {
+   "id": "2025-q86",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the total staff in B.",
+   "options": {
+    "A": "90",
+    "B": "80",
+    "C": "60",
+    "D": "65",
+    "E": "70"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (86-90): Read the information and answer the following question given below.\nThe information is about the staffs (lab assistant and professor) in three colleges.\nFor A – total lab assistant and total professor is 82.\nFor B – total lab assistant is 4 more than total lab assistant in C.\nFor C – total lab assistant is 6 less than total professor\nNote – total professor in A is 44 less than total lab assistant in B.\nTotal staffs in C is 24 more than that in A and total professor in al the college is 102.",
+   "explanation": "Required answer = 90"
+  },
+  {
+   "id": "2025-q87",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the ratio of total professors in B to tot",
+   "options": {
+    "A": "6:1",
+    "B": "6:7",
+    "C": "6:5",
+    "D": "1:2",
+    "E": "3:1"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (86-90): Read the information and answer the following question given below.\nThe information is about the staffs (lab assistant and professor) in three colleges.\nFor A – total lab assistant and total professor is 82.\nFor B – total lab assistant is 4 more than total lab assistant in C.\nFor C – total lab assistant is 6 less than total professor\nNote – total professor in A is 44 less than total lab assistant in B.\nTotal staffs in C is 24 more than that in A and total professor in al the college is 102.",
+   "explanation": "Required answer = 36:72 = 1:2"
+  },
+  {
+   "id": "2025-q88",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of total staff is in college D to lab\nless than that in C. Find the professor in D.",
+   "options": {
+    "A": "24",
+    "B": "25",
+    "C": "20",
+    "D": "30",
+    "E": "50"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (86-90): Read the information and answer the following question given below.\nThe information is about the staffs (lab assistant and professor) in three colleges.\nFor A – total lab assistant and total professor is 82.\nFor B – total lab assistant is 4 more than total lab assistant in C.\nFor C – total lab assistant is 6 less than total professor\nNote – total professor in A is 44 less than total lab assistant in B.\nTotal staffs in C is 24 more than that in A and total professor in al the college is 102.",
+   "explanation": "Total staff in D = ×72 = 54\n4\nLab assistant in D = 50 – 20 = 30\nRequired answer = 54 – 30 = 24"
+  },
+  {
+   "id": "2025-q89",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Total professor in A is what percentage of t",
+   "options": {
+    "A": "9.09%",
+    "B": "11.11%",
+    "C": "12.5%",
+    "D": "30%",
+    "E": "25%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (86-90): Read the information and answer the following question given below.\nThe information is about the staffs (lab assistant and professor) in three colleges.\nFor A – total lab assistant and total professor is 82.\nFor B – total lab assistant is 4 more than total lab assistant in C.\nFor C – total lab assistant is 6 less than total professor\nNote – total professor in A is 44 less than total lab assistant in B.\nTotal staffs in C is 24 more than that in A and total professor in al the college is 102.",
+   "explanation": "Required answer = ×100 = 11.11%\n90"
+  },
+  {
+   "id": "2025-q90",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the average of total lab assistant in A",
+   "options": {
+    "A": "61",
+    "B": "62",
+    "C": "63",
+    "D": "64",
+    "E": "65"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (86-90): Read the information and answer the following question given below.\nThe information is about the staffs (lab assistant and professor) in three colleges.\nFor A – total lab assistant and total professor is 82.\nFor B – total lab assistant is 4 more than total lab assistant in C.\nFor C – total lab assistant is 6 less than total professor\nNote – total professor in A is 44 less than total lab assistant in B.\nTotal staffs in C is 24 more than that in A and total professor in al the college is 102.",
+   "explanation": "Required answer = = 61\nLab assistant Staffs\n82 – y 82\nx+4\nx\nLab assistant Staffs\n72 82\n54 90\n50 106"
+  },
+  {
+   "id": "2025-q91",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The boat goes downstream X kilometer in\nupstream in three hours. If the speed of stream",
+   "options": {
+    "A": "12",
+    "B": "18",
+    "C": "18",
+    "D": "24",
+    "E": "30\n19 A\ntal lab assistant in A.\nassistant in A is 3:4. Total lab assistant in D is 20\ntotal staff in B.\nand C.\ntwo hours. The same distance covered by boat in\nis of 3km/h, then find 2X?"
+   },
+   "correctAnswer": "D",
+   "explanation": "Given Information:\nThe boat goes downstream a distance of X km in 2 hours\nThe same distance is covered upstream in 3 hours\nThe speed of the stream is \"s\" km/h\nExplanation:\nDownstream speed = (b + s) and it covers X km in 2 hours,\nSo, b + s = X / 2\nUpstream speed = (b - s) and it covers X km in 3 hours,\nSo, b - s = X / 3\nAdding both equations:\n2b = (X / 2) + (X / 3)\n2b = 5X / 6\nb = 5X / 12\nSubstitute b = 5X / 12 into b + s = X / 2:\n(5X / 12) + s = X / 2\nSolve for s:\ns = X / 12\nTo find 2X, we get:\n2X = 24"
+  },
+  {
+   "id": "2025-q92",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A invest Rs. 6400 and B invest Rs. 7200 in a business. After 4 months, A withdrawal 30% of\nthe initial investment and C join with 40% of initial investment of B. After one year, the total\nprofit is 90000. Find the profit of A and C(in Rs.) approximate?",
+   "options": {
+    "A": "48486",
+    "B": "42486",
+    "C": "44494",
+    "D": "57640",
+    "E": "77865"
+   },
+   "correctAnswer": "C",
+   "explanation": "Profit sharing ratio of A, B and C\n70 40\n= 6400 × 4 + (6400 × ) × 8 : 7200 × 12 : 7200 × ×8\n100 100\n= 32 : 45 : 12\n(32+12)\nRequired profit share = ×90000 ≈ 44494 Rs.\n(32+45+12)"
+  },
+  {
+   "id": "2025-q93",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A jar contains milk and water. The ratio of milk and water is 8 : x. When 5 liters of milk and\n30 liters of water is added into the jar, then the ratio of milk to water becomes 1 : 1. Find x.",
+   "options": {
+    "A": "6",
+    "B": "2",
+    "C": "5",
+    "D": "3",
+    "E": "Can’t Determined"
+   },
+   "correctAnswer": "E",
+   "explanation": "Let initial quantity of milk = 8y liters\nAnd initial quantity of water = xy liters\n8𝑦+5 1\nATQ, =\n𝑥𝑦+30 1\n8y +5 = xy + 30\n8y – xy = 25 ---- (i)\nSo, we can’t determine the value of ‘x’ because it will be satisfied\nof ‘y’ here"
+  },
+  {
+   "id": "2025-q94",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A rectangular park having twice length of the breadth. A half pathway width of 4 cm having\narea of is 352 m². Find the length of the rectangular park (in meters)?",
+   "options": {
+    "A": "92",
+    "B": "180",
+    "C": "184",
+    "D": "176",
+    "E": "88"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let the breadth of the rectangular park = x meters\nAnd, length of rectangular park = 2x meters\nLength with pathway = 2x+8\nIf area of half pathway = 352\nSo, for full pathway = 352 ×2 meters\non both 6 and also non integer value\nArea of pathway = area of rectangular park with pathway – area of\nx× (2x+8) - 2x × x = 352 × 2\nx2 + 4x – x2 = 352\n4x = 352\nx = 88\nLength of rectangular park = 88×2 = 176 meters"
+  },
+  {
+   "id": "2025-q95",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The speed of a train is 72 km/h and it crosses a platform in 25 seconds. If the train crosses\nan athlete whose speed is 18 km/h running in same direction of train in 10 seconds, then find\nthe length of platform (in meters)?",
+   "options": {
+    "A": "150",
+    "B": "400",
+    "C": "450",
+    "D": "350",
+    "E": "500"
+   },
+   "correctAnswer": "D",
+   "explanation": "Information Given:\nSpeed of train = 72 km/h = 20 m/s\nSpeed of athlete = 18 km/h = 5 m/s\nTime to cross athlete = 10 seconds\nTime to cross platform = 25 seconds\nExplanation:\nRelative speed of the train and athlete = 20 m/s - 5 m/s = 15 m/s.\nLength of the train = Relative speed × Time = 15 m/s × 10 s = 150\nThe distance covered by the train in 25 seconds (time to cross the\nDistance = Speed × Time = 20 m/s × 25 s = 500 meters.\nThe length of the platform = Total distance covered - Length of the\nLength of platform = 500 meters - 150 meters = 350 meters."
+  },
+  {
+   "id": "2025-q96",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The selling price of an article is Rs. 624 and a shopkeeper got a loss of 22%. If he marks up\nsame article at 30% above the cost price and get a profit of Rs. 84, then find the discount\npercentage allowed by the shopkeeper?",
+   "options": {
+    "A": "7.5%",
+    "B": "5%",
+    "C": "20%",
+    "D": "10%",
+    "E": "15%"
+   },
+   "correctAnswer": "E",
+   "explanation": "Information Given:\nSelling price (SP) = Rs. 624\nLoss = 22%\nMark-up = 30% above the cost price\nProfit = Rs. 84\nExplanation:\nSP = 78% of C.P.\n624 = 0.78 × C.P.\nC.P. = 624 / 0.78 = Rs. 800\nThe marked price is 30% more than the cost price:\nM.P. = C.P. + 30% of C.P.\nM.P. = 800 + 30% of 800\nM.P. = 800 + 240 = Rs. 1040\nSelling Price (SP) = C.P. + Profit\nSP = 800 + 84 = Rs. 884\nDiscount = M.P. - SP\nDiscount = 1040 - 884 = Rs. 156\nDiscount percentage = (Discount / M.P.) × 100\nDiscount percentage = (156 / 1040) × 100 = 15%\nf rectangular park\nmeters.\nplatform) is:\ne train:"
+  },
+  {
+   "id": "2025-q97",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Gopi invested Rs. X in scheme A at rate of 15% p.a. for two years. The amount received by\nGopi from scheme A is reinvest in scheme B at the rate of 10% p.a. for two years on compound\ninterest. If the difference between interest received from A and B is 32.4, then find X?",
+   "options": {
+    "A": "1500 Rs.",
+    "B": "1200 Rs.",
+    "C": "1000 Rs.",
+    "D": "1800 Rs.",
+    "E": "800 Rs."
+   },
+   "correctAnswer": "B",
+   "explanation": "Simple interest = (P × R × T) / 100\nP = principle, R = rate of interest and T = Time\n10×10\nAlso, equivalent rate of interest at rate of 10% p.a. for two years = (10+10+ )%\n100\n= 21%\n𝑋×15×2\nInterest received for A = = 0.3X\n100\nATQ, Amount invested in scheme B = X+0.3X = 1.3X Rs.\n21\nInterest received from scheme B = 1.3X × = 0.273X\n100\n0.3X – 0.273 = 32.4\nX = 1200 Rs."
+  },
+  {
+   "id": "2025-q98",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "7 men, 15 women can complete a piece of work in 15 days and the same work is completed\nby 18 men and 20 women in eight days. If X men and 20 women can complete the work in 10\ndays. Then find X.",
+   "options": {
+    "A": "18",
+    "B": "16",
+    "C": "24",
+    "D": "12",
+    "E": "20"
+   },
+   "correctAnswer": "D",
+   "explanation": "Given:\n7 men and 15 women can complete the work in 15 days.\n18 men and 20 women can complete the work in 8 days.\nX men and 20 women can complete the work in 10 days.\nWe need to find X.\nExplanation:\nLet the work done by one man in one day be M and the work done by one woman in one day be W.\nTotal work = (7M + 15W) × 15 = 1 unit of work\n(7M + 15W) × 15 = 1\n7M + 15W = 1/15 (Equation 1)\nFrom the second condition (18 men and 20 women complete the work in 8 days):\nTotal work = (18M + 20W) × 8 = 1 unit of work\nSo, (18M + 20W) × 8 = 1\n18M + 20W = 1/8 (Equation 2)\n7M + 15W = 1/15\n18M + 20W = 1/8\nMultiply the first equation by 8 and the second equation by 15 to eliminate fractions:\n(7M + 15W) × 8 = (1/15) × 8 → 56M + 120W = 8/15 (Equation 3)\n(18M + 20W) × 15 = (1/8) × 15 → 270M + 300W = 15/8 (Equation 4)\nEquation 3: 56M + 120W = 8/15\nEquation 4: 270M + 300W = 15/8\nEquation 5: 280M + 600W = 40/15\nEquation 6: 540M + 600W = 30/8\nNow, subtract Equation 5 from Equation 6:\n(540M + 600W) - (280M + 600W) = 30/8 - 40/15\nSimplify:\n260M = (30/8 - 40/15)\n260M = 450/120 - 320/120\n260M = 130/120\n260M = 13/12\nSo,\nM = (13/12) / 260 = 13 / (12 × 260) = 13 / 3120 = 1 / 240\nSubstitute M = 1/240 into Equation 1"
+  },
+  {
+   "id": "2025-q99",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "A set of four consecutive multiple of four, and its average is 30. If another series which is\nfive consecutive even number series which lowest number is equal to second lowest multiple of\nthese four consecutive multiples of four. Find the highest number of five consecutive even\nnumber series?",
+   "options": {
+    "A": "36",
+    "B": "34",
+    "C": "32",
+    "D": "30",
+    "E": "38"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let the four consecutive multiples of 4 be:\n4n, 4n + 4, 4n + 8, 4n + 12\nThe average of these four numbers is given as 30.\nThe formula for the average of these numbers is:\n(4n + (4n + 4) + (4n + 8) + (4n + 12)) / 4 = 30\nSimplify the equation:\n(16n + 24) / 4 = 30\n16n + 24 = 120\n16n = 96\nn = 6\nThus, the four consecutive multiples of 4 are:\n4n = 4 × 6 = 24\n4n + 4 = 24 + 4 = 28\n4n + 8 = 24 + 8 = 32\n4n + 12 = 24 + 12 = 36\nLet the five consecutive even numbers be:\n28, 30, 32, 34, 36\nThe highest number in the series is 36."
+  },
+  {
+   "id": "2025-q100",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The sum of the present ages of P & Q and R & Q is 64 years and 56 years, respectively. The\nratio of the age of P after 12 years to the age of Q six years ago is 4:X. If the age of R after 12 years\nis 32 years, then find X.",
+   "options": {
+    "A": "scarcely\n• English: barely, hardly.\n• Hindi: मुश्किल से, शायद ही\n• Example: He scarcely had time to eat before leaving.\n• Incorrect – meaning doesn’t fit; rules must be followed str",
+    "B": "preciously\n• English: dearly, of great value.\n• Hindi: बहुमूल्य ढंग से\n• Example: She held the necklace preciously.\n• Incorrect – doesn’t collocate with “rules.”",
+    "C": "strictly\n• English: firmly, without exceptions.\n• Hindi: सख्ती से\n• Example: Mobile phones are strictly prohibited in exams.\n• Correct – rules are strictly followed.",
+    "D": "hardly\n• English: almost not, barely.\n• Hindi: शायद ही / मुश्किल से\n• Example: He could hardly see in the dark.\n• Incorrect – wrong meaning in context.",
+    "E": "mostly\n• English: mainly, generally.\n• Hindi: असिकतर\n• Example: The students are mostly attentive.\n• Incorrect – “mostly followed” is weak and imprecise.\nFinal Answer: (c) strictly\nn, they promote fairness.\nfor all students.\nrongly, not “barely.”\nS50. Ans.(c)\nSol. Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior.\nS51. Ans.(b)\nSol. Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior.\nS52. Ans.(a)\nSol. Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior.\nS53. Ans.(d)\nSol. Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior.\nS54. Ans.(e)\nSol. Correct Sequence: C - B - A - D - E\nExplanation:\n1. (C) starts the paragraph logically by establishing the context: a hectic, fast-paced modern lifestyle\nleading to exhaustion.\n2. Key role: Sets up the problem or situation.\n3. (B) follows by introducing travel as a solution—an escape from this hectic routine.\n4. Key role: Introduces travel as a theme and its growing significance.\n5. (A) naturally builds on (B) by explaining how people are now taking longer vacations to unwind.\n6. Key role: Develops the idea of how people are choosing to escape.\n7. (D) continues the thought by detailing what people do during these vacations—meeting people,\nexploring cultures, and recharging.\n8. Key role: Adds depth to the benefits of travel.\n9. (E) concludes by generalizing the trend, noting a broader shift in mindset toward mental well-\nbeing.\n10. Key role: Offers a concluding insight into the motivation behind the behavior.\nS55. Ans.(d)\nSol. Original sentence:\nBe careful (A) not to microwave (B) the hot plate (C) when you take the food out of the catch (D).\nThe words microwave (B) and catch (D) are misplaced.\nCorrected sentence after swap:\nBe careful (A) not to catch (D) the hot plate (C) when you take the food out of the microwave (B).\nWord-by-word meanings & explanation\n(A) careful\n• English: cautious, paying attention to avoid danger.\n• Hindi: साविान\n• Example: Be careful when crossing the road.\n• Correct – fits the warning tone of the sentence.\n(B) microwave\n• English: an oven that cooks food using microwaves.\n• Hindi: माइक्रोवेव (भोजन पकाने की मशीन)\n• Example: She heated the soup in the microwave.\n• Incorrect in original place – \"microwave the hot plate\" is illogical. Correct at the end → out of\nthe microwave.\n(C) plate\n• English: flat dish used to serve food.\n• Hindi: प्लेट\n• Example: He put the cake on a large plate.\n• Correct – “hot plate” makes sense as something to avoid touching directly.\n(D) catch\n• English: to hold, grab, or seize.\n• Hindi: पकड़ना\n• Example: Be careful not to catch the pan when it’s hot.\n• Incorrect in original place – “out of the catch” is meaningless. Correct when swapped → not to\ncatch the hot plate.\nFinal Corrected Sentence:\nBe careful not to catch the hot plate when you take the food out of the microwave.\nFinal Answer: (d) B–D\nS56. Ans.(a)\nSol. Original sentence:\nIndia is system (A) digitising its healthcare rapidly (B), and artificial intelligence (AI) offers a\nhuge transformation (C) to super-charge this opportunity (D).\nThe correct answer is (a) A–B and C–D.\nCorrected sentence after swaps:\nIndia is rapidly (B) digitising its healthcare system (A), and artificial intelligence (AI) offers a\nhuge opportunity (D) to super-charge this transformation (C).\nWord-by-word meanings & explanation\n(A) system\n• English: an organized set of principles or methods; here → healthcare system.\n• Hindi: प्रर्ाली, व्यवस्था\n• Example: The education system needs reform.\n• Incorrect in original place → “India is system digitising” is ungrammatical. Correct after swap:\nhealthcare system.\n(B) rapidly\n• English: quickly, with great speed.\n• Hindi: तेजी से\n• Example: Technology is rapidly changing our world.\n• Incorrect in original place → “healthcare rapidly” is awkward. Correct at start: is rapidly\ndigitising.\n(C) transformation\n• English: major change, improvement.\n• Hindi: पररवतान\n• Example: Digital transformation is reshaping industries.\n• Incorrect in original place → “offers a huge transformation” is odd when followed by “super-\ncharge this opportunity.” Correct at the end: super-charge this transformation.\n(D) opportunity\n• English: a chance, favorable condition.\n• Hindi: अवसर\n• Example: Education gives everyone the opportunity to succeed.\n• Incorrect in original place → “super-charge this opportunity” does not fit well. Correct after\nswap: offers a huge opportunity.\nFinal Corrected Sentence:\nIndia is rapidly digitising its healthcare system, and artificial intelligence (AI) offers a huge\nopportunity to super-charge this transformation.\nFinal Answer: (a) A–B and C–D\nS57. Ans.(e)\nSol. Original sentence:\nAstronomical (A) temperatures (B) are usually estimated from spectroscopic (C) measurements\n(D).This sentence is already grammatically and contextually correct.\n• In astronomy, scientists estimate the temperatures of stars (astronomical temperatures)\nusing spectroscopic measurements (light spectrum analysis).\n• So, no swap is needed.\nWord-by-word meanings & explanation\n(A) Astronomical\n• English: relating to astronomy (the study of space, stars, planets). Also means extremely large.\n• Hindi: खगोल संबंिी / बहुत बड़ा\n• Example: Astronomical observations help us understand galaxies.\n• Correct here – “astronomical temperatures” = temperatures of stars/planets.\n(B) Temperatures\n• English: degree of heat present in an object.\n• Hindi: तापमान\n• Example: The sun’s temperature is millions of degrees.\n• Correct here – what is being estimated in astronomy.\n(C) Spectroscopic\n• English: relating to the study of spectra (light split into colors/wavelengths).\n• Hindi: वर्ाक्रमीय\n• Example: Spectroscopic methods reveal the composition of stars.\n• Correct here – modifies measurements.\n(D) Measurements\n• English: the act of determining size, amount, or degree.\n• Hindi: माप\n• Example: Accurate measurements are vital in experiments.\n• Correct here – spectroscopic measurements are a real scientific method.\nWhy Others Are Incorrect in Short\n• (a) A-B → “temperatures astronomical” = wrong order.\n• (b) B-C → “spectroscopic temperatures” is not the main phrase; temps are derived, not\nspectroscopic.\n• (c) A-C → “spectroscopic temperatures” + “astronomical measurements” breaks scientific meaning.\n• (d) B-D → “spectroscopic temperatures” again incorrect usage.\nFinal Corrected Sentence (unchanged):\nAstronomical temperatures are usually estimated from spectroscopic measurements.\nFinal Answer: (e) No interchange required\nS58. Ans.(a)\nSol. Original sentence:\nGrowing (A) children in involving (B) and nurturing a few plants at home can open (C) up the\nmagical (D) world of nature and science to them.\nProblem:\n• Growing children is illogical in this context.\n• Correct sense is: Involving children in growing and nurturing plants.\n• So, we must swap (A) Growing ↔ (B) involving.\nCorrected sentence after swap (A–B):\nInvolving (B) children in growing (A) and nurturing a few plants at home can open (C) up the\nmagical (D) world of nature and science to them.\nWord-by-word meanings & explanation\n(A) Growing\n• English: developing, cultivating, increasing in size.\n• Hindi: उगाना / बढना\n• Example: She enjoys growing vegetables in her garden.\n• Incorrect in original place – “Growing children” gives the wrong meaning. Correct after swap\n→ “growing plants.”\n(B) Involving\n• English: engaging, including in an activity.\n• Hindi: शासमल करना\n• Example: The teacher is involving students in practical activities.\n• Incorrect in original place – “children in involving” is awkward. Correct after swap → “Involving\nchildren …”\n(C) Open\n• English: to make accessible, to introduce.\n• Hindi: खोलना / पररचय कराना\n• Example: Books can open up new worlds for children.\n• Correct – “can open up the magical world …” is perfectly logical.\n(D) Magical\n• English: wonderful, enchanting.\n• Hindi: जादुई\n• Example: The sunset created a magical atmosphere.\n• Correct – fits well to describe “the world of nature and science.”\nFinal Corrected Sentence:\nInvolving children in growing and nurturing a few plants at home can open up the magical world\nof nature and science to them.\nFinal Answer: (a) A–B\nS59. Ans.(c)\nSol. The correct combination is B-D.\nB-D: Electric vehicle manufacturers are expanding their charging networks to support the growing\nnumber of EV users nationwide.\nAnalysis:\nColumn Matching\n• A. The new cybersecurity policy mandates organizations\no Correct match: F. that are currently beyond the scope of classical computers? Doesn’t fit\nlogically.\no Correct match: E. to perform complex surgeries with minimal invasion? Not related to\ncybersecurity.\no Correct match: D. to support the growing number of EV users nationwide? Not connected.\no So, A has no correct match here.\n• B. Electric vehicle manufacturers are expanding their charging networks\no Correct match: D. to support the growing number of EV users nationwide. Logical and\ngrammatically correct.\n• C. Rising sea levels and erratic weather patterns\no Correct match: E. to perform complex surgeries with minimal invasion? Doesn’t make sense.\no Correct match: F. that are currently beyond the scope of classical computers? Not logical.\no Correct match: D. to support the growing number of EV users nationwide? Not related.\no So, C has no correct match.\nS60. Ans.(c)\nSol. Meaning of the Phrase: DARK HORSE\n• English: A dark horse is a person who is not well-known but unexpectedly succeeds or shows\nremarkable ability.\n• Hindi: Dark horse का अथा है — ऐसा व्यश्कि जो बहुत कम जाना जाता है, लेसकन अचानक से सफलता प्राप्त कर\nलेता है या अपनी असािारर् क्षमता सदखाता है।\nSentence-wise Analysis\n(I) Nobody expected her to win the competition, but she turned out to be the dark horse of the\nevent.\n• Analysis:\n• Here, dark horse is used correctly because she was unexpected to win, but surprised everyone with\nher success.\n• Correct\n• Eg: In the elections, the little-known candidate became the dark horse by defeating the favorite.\n(II) The painter was a dark horse, known by few but admired once his work was revealed.\n• Analysis:\n• Correct usage — the painter was not famous earlier (known by few), but when his work was shown,\npeople admired him. This fits perfectly with the meaning of dark horse.\n• Correct\n• Eg: That writer was a dark horse; nobody knew him until his novel won an award.\n(III) The farmer bought a dark horse and a white cow from the village market.\n• Analysis:\n• This is incorrect usage because here dark horse is being used in its literal sense (a horse with dark\ncolor), not in the idiomatic sense of an unexpectedly successful or little-known person. Idioms must\nbe used figuratively, not literally.\n• Incorrect\n• Eg: Wrong usage: He purchased a dark horse from the stable. (literal color, not idiomatic)\nCorrect Answer: (c) Both (I) and (II)\nFinal Note:\n• Dark horse = Hidden talent / Unexpected winner.\n• सही प्रयोग तब है जब सकसी व्यश्कि की सछपी हुई क्षमता सामने आती है।\n• रंग के सलए \"dark horse\" कहना मुहावरे का गलत प्रयोग है।\nS61. Ans.(b)\nSol. Sentence in Question\nThe Prime Minister promised (A)/ to improving infrastructure (B)/ in rural districts by\nallocating (C)/ additional funds in the next budget. (D)\nSegment-wise Analysis\n(A) The Prime Minister promised\n• Grammar Rule:\n• The verb “promise” is a transitive verb that usually takes an infinitive (to + base verb) or a clause\nas its complement.\no Example: She promised to help her friend.\no Example: He promised that he would arrive early.\n• Correct Usage Here:\n• “The Prime Minister promised” is grammatically correct because it correctly introduces what\nwas promised.\nNo error in (A).\n(B) to improving infrastructure\n• Grammar Rule:\n• After verbs like promise, decide, plan, hope, agree, etc., we use the infinitive (to + base verb),\nnot the gerund (-ing form).\no Wrong: He promised to helping his brother.\no Correct: He promised to help his brother.\n• Error:\n• Here, “to improving” is incorrect because “promised” requires an infinitive, so it should be “to\nimprove.”\nError in (B).\n(C) in rural districts by allocating\n• Grammar Rule:\n• Preposition + noun phrase (in rural districts) is correct.\n• The phrase “by allocating” is a participial phrase showing the means or method of fulfilling the\npromise.\no Example: He improved the system by investing more funds.\n• Correct Usage Here:\n• “in rural districts by allocating” is grammatically correct.\nNo error in (C).\n(D) additional funds in the next budget\n• Grammar Rule:\n• Noun phrase (additional funds) + prepositional phrase (in the next budget) is correct.\no Example: The government will provide extra support in the next fiscal year.\n• Correct Usage Here:\n• “additional funds in the next budget” is grammatically correct.\nNo error in (D).\nCorrect Answer: (b) B\nCorrected Sentence\nThe Prime Minister promised to improve infrastructure in rural districts by allocating additional\nfunds in the next budget.\nKey Rule Recap\n• Promise + infinitive (to + V1), not gerund (-ing):\no He promised to helping. (incorrect)\no He promised to help. (correct)\nS62. Ans.(c)\nSol. Sentence in Question\nShe enjoys hiking in the mountains, (A)/ swimming in the lake, (B)/ and to explore ancient ruins\n(C)/ during her travels abroad. (D)\nSegment-wise Analysis\n(A) She enjoys hiking in the mountains\n• Grammar Rule:\n• After verbs like enjoy, dislike, avoid, suggest, etc., we use the gerund (-ing form), not the\ninfinitive.\no Example: She enjoys reading novels.\n• Usage Here:\n• “enjoys hiking in the mountains” follows the correct rule.\nCorrect → (A)\n(B) swimming in the lake\n• Grammar Rule:\n• This is parallel to the previous phrase (“hiking”), and it also uses the gerund form correctly.\no Example: He enjoys hiking, swimming, and cycling.\n• Usage Here:\n• “swimming in the lake” is consistent and correct.\nCorrect → (B)\n(C) and to explore ancient ruins\n• Grammar Rule:\n• When listing activities in parallel structure, all items must be in the same grammatical form.\n• Here, the first two are gerunds (hiking, swimming), so the third must also be a gerund (exploring),\nnot an infinitive (to explore).\no Incorrect: She enjoys hiking, swimming, and to explore.\no Correct: She enjoys hiking, swimming, and exploring.\nIncorrect → (C)\n(D) during her travels abroad\n• Grammar Rule:\n• Prepositional phrase (“during her travels abroad”) correctly modifies the whole action.\no Example: He made many friends during his travels abroad.\n• Usage Here:\n• This is grammatically and contextually correct.\nCorrect → (D)\nCorrect Answer: (c) C\nCorrected Sentence\nShe enjoys hiking in the mountains, swimming in the lake, and exploring ancient ruins during\nher travels abroad.\nKey Rule Recap\n• Parallelism in lists:\no All items in a series must be in the same grammatical form.\no Example: He likes running, jumping, and climbing. (all gerunds)\nS63. Ans.(a)\nSol.\nSentence in Question\nThe orchestra have (A)/ started rehearsing (B)/ for the upcoming international music festival\n(C)/ scheduled in Vienna next month. (D)\nSegment-wise Analysis\n(A) The orchestra have\n• Grammar Rule:\n• Collective nouns (e.g., orchestra, committee, team, audience) are singular when the group is seen\nas a single unit, so they take a singular verb.\no Incorrect: The orchestra have started rehearsal.\no Correct: The orchestra has started rehearsal.\n• Error Here:\n• “orchestra have” is incorrect. It should be “orchestra has.”\nIncorrect → (A)\n(B) started rehearsing\n• Grammar Rule:\n• Present perfect tense (has/have + past participle) is correct, and the verb “rehearse” naturally\ntakes the gerund “rehearsing” in this context.\no Example: She has started working.\n• Usage Here:\n• “started rehearsing” is grammatically correct.\nCorrect → (B)\n(C) for the upcoming international music festival\n• Grammar Rule:\n• Preposition + noun phrase is used correctly. The phrase is clear and grammatically sound.\no Example: She prepared for the annual event.\nCorrect → (C)\n(D) scheduled in Vienna next month\n• Grammar Rule:\n• Reduced relative clause is correct here.\no Full form: which is scheduled in Vienna next month\no Reduced form: scheduled in Vienna next month\nCorrect → (D)\nCorrect Answer: (a) A\nCorrected Sentence\nThe orchestra has started rehearsing for the upcoming international music festival scheduled in\nVienna next month.\nKey Rule Recap\n• Collective nouns → singular verb when the group acts as one unit.\no Correct: The team is winning.\no Incorrect: The team are winning. (unless emphasizing individuals separately, which is rare in\nexam usage).\nS64. Ans.(a)\nSol. Sentence in Question\nA unexpected spike in volcano activity (A)/ has forced authorities to evacuate (B)/ nearby\nvillages as a safety (C)/ measure to prevent casualties. (D)\nSegment-wise Analysis\n(A) A unexpected spike in volcano activity\n• Grammar Rule:\n• The article “a” is used before words beginning with a consonant sound, while “an” is used\nbefore words beginning with a vowel sound.\no Incorrect: a apple\no Correct: an apple\n• Error Here:\n• “unexpected” begins with a vowel sound (ʌ), so the correct form is “an unexpected.”\nIncorrect → (A)\n(B) has forced authorities to evacuate\n• Grammar Rule:\n• Present perfect tense (has + past participle) is correct, and “to evacuate” correctly follows\n“forced.”\no Example: The storm has forced people to leave.\nCorrect → (B)\n(C) nearby villages as a safety\n• Grammar Rule:\n• “as a safety measure” is the correct collocation.\n• “safety” here functions as an adjective modifying “measure.”\nCorrect → (C)\n(D) measure to prevent casualties\n• Grammar Rule:\n• Noun phrase (measure) + infinitive phrase (to prevent casualties) is correct.\nCorrect → (D)\nCorrect Answer: (a) A\nCorrected Sentence\nAn unexpected spike in volcano activity has forced authorities to evacuate nearby villages as a\nsafety measure to prevent casualties.\nKey Rule Recap\n• Articles and vowel sounds:\no Use a before consonant sounds → a book, a university (“u” here sounds like /juː/)\no Use an before vowel sounds → an apple, an hour, an unexpected event\nS65. Ans.(c)\nSol. Sentence in Question\nThe ambassador (A)/ said the reports have (B)/ being examined carefully by his staff (C)/ before\nmaking any comment. (D)\nSegment-wise Analysis\n(A) The ambassador\n• Grammar Rule:\n• Subject of the sentence is clear and correct. No article error here because ambassador is a\nsingular countable noun referring to a specific person.\no Example: The ambassador met the press.\nCorrect → (A)\n(B) said the reports have\n• Grammar Rule:\n• “said” introduces reported speech.\n• The structure “said + (that) + clause” is correct.\no Example: He said the documents have been checked.\nCorrect → (B)\n(C) being examined carefully by his staff\n• Grammar Rule:\n• After have, we must use the past participle (been), not the present participle (being).\no Incorrect: The reports have being checked.\no Correct: The reports have been checked.\n• Error Here:\n• “being” should be replaced with “been.”\nIncorrect → (C)\n(D) before making any comment\n• Grammar Rule:\n• “before + gerund” is correct, as gerunds often follow prepositions.\no Example: Think carefully before answering.\nCorrect → (D)\nCorrect Answer: (c) C\nCorrected Sentence\nThe ambassador said the reports have been examined\ncomment.\nKey Rule Recap\n• Perfect tenses:\no Structure: have/has + past participle (V3)\no Wrong: have being\no Correct: have been\nS66. Ans.(b)\nSol.\nI. x2 -6x - 4x + 24 = 0\nx(x-6) - 4(x-6) = 0\n(x-4) (x-6) =0\nx = 4 & 6\nII. 5y2 -10y - 6y + 12 = 0\n5y(y-2) - 6(y-2)=0\n(5y -6) (y-2) = 0\ny = 6/5 & 2\ny = 1.2 & 2\nx y Relation\n4 1.2 x > y\n4 2 x > y\n6 1.2 x > y\n6 2 x > y\nSo, x>y\nS67. Ans.(c)\nSol.\nI. 2x2 - 4x - 5x + 10 = 0\n2x(x-2) - 5(x-2) = 0\n(2x-5) (x-2) =0\nx = 5/2 & 2\nx = 2.5 & 2\nII. y2 - 7y - 5y + 35 = 0\ny(y-7) - 5(y-7) = 0\n(y-7) (y-5) = 0\ny = 7 & 5\nx y Relation\n2.5 7 y > x\n2.5 5 y > x\n2 7 y > x\n2 5 y > x\nSo, x<y\ncarefully by his staff before making any\nApp\nS68. Ans.(a)\nSol.\nI. 6x2 – 4x – 3x + 2 = 0\n2x(3x-2) – 1(3x -2) = 0\n(2x -1) (3x -2) = 0\n1 2\nx = &\n2 3\nx = 0.5 & 0.66\nII. 10y2 – 6y – 5y + 3 = 0\n2y(5y -3) – 1(5y -3) = 0\n(2y – 1) (5y-3) = 0\n1 3\ny = &\n2 5\ny = 0.5 & 0.60\nx y Relation\n0.5 0.5 y = x\n0.5 0.60 y > x\n0.66 0.5 x > y\n0.66 0.6 x > y\nSo, no relation can be established\nS69. Ans.(c)\nSol.\nI. 2x2 + 12y + 7y + 42 = 0\n2x(x+6) + 7(y+6) = 0\n(2x+7) (y+6) = 0\n7\nx = - & - 6\n2\nx = - 3.5 & - 6\nII. 2y2 + 2y + 5y + 5 = 0\n2y(y+1) +5(y+1) = 0\n(2y+5) + (y+1) =0\n5\ny =- & -1\n2\ny = - 2.5 & - 1\nx y Relation\n-3.5 -2.5 y > x\n-3.5 - 1 y > x\n-6 -2.5 y > x\n-6 -1 y > x\nSo, x<y\nS70. Ans.(d)\nSol.\n780 𝑥\n+ 5 + 23 = ×60\n13 100\n3\n60 + 5 + 23 = 𝑥×\n5\n88×5\nx =\n3\nx = 146.66 ≈ 147\n46 A\n\nS71. Ans.(d)\nSol.\n40\n×250 + 14 = x2 + 56\n100\n100 + 14 = x2 + 56\nx2 = 58\nx ≈ 8\nS72. Ans.(c)\nSol.\n25\n212 - ×220 - ? = 131\n100\n441 – 55 - ? = 131\n? = 386 – 131\n? = 255\nS73. Ans.(c)\nSol.\n242 +12 =?×(50% 𝑜𝑓 56)\n576+12 =?×28\n21 =?\nSol (74-79)\nIn bag A,\nPercentage of blue balls = 100 – 62.5 = 37.5%\n(62.5 – 37.5)% = 60\n25% = 60\n240 = 100%\nRed balls = 62.5% of 240 = 150\nBlue balls = 240 – 150 = 90\nSimilarly,\nTotal bags Total balls Red\nA 240 150\nB 600 399\nC 470 392\nD 380 228\nE 750 540\nS74. Ans.(a)\n150 + 540\nSol. Required answer = ×100 = 230%\n90 + 210\nS75. Ans.(b)\nSol. Required answer = (201 + 392) – 540 = 53\nS76. Ans.(c)\nSol. Required answer = 150 + 540 : 90 = 690 : 90 =\n47 A\nballs Blue balls\n90\n201\n141\n152\n210\n23:3\nS77. Ans.(d)\n399+228+540\nSol. Required answer = = 389\n3\nS78. Ans.(e)\nSol. Total balls in F = 125% of 540 = 675\n1\nBlue balls in F = ×150 = 75\n2\nRed balls in F = 600\nS79. Ans.(a)\nSol. Taken out balls = 20% of 240 = 48\nTaken out Red balls from A = 400 – 392 = 8\nTaken out blue balls from A = 48 – 8 = 40\nSol (80 – 85)\nIn shop A,\nTotal TV sold = 320\nCell phone – TV = 200\nCell phone = 200 + 320 = 520\nTotal items sold = 520 + 200 = 720\nSimilarly,\nShops Total items Total TV sold Cell phone sold\nA 840 320 520\nB 1480 600 880\nC 1760 680 1080\nD 2040 760 1280\nE 520 80 440\nS80. Ans.(a)\n760− 520\nSol. Required percentage = ×100 = 31.57%\n760\nS81. Ans.(c)\nSol. Total items sold by F = 120% of 1760 = 2112\nLet TV and Cellphone sold by F be 7x and 15x\n22x = 2112\n96 = x\nTv old by F = 7x = 672\nS82. Ans.(d)\nSol. Required answer = (1080+440) – 840 = 680\nS83. Ans.(e)\nSol. Required ratio = 760 : 880= 19:22\n48 Adda24\n47 App\nS84. Ans.(a)\nSol. Defective TV sold by D = 12.5% of 760 =\nDefective cellphone = 280 – 95 = 185\nS85. Ans.(d)\n880+1080+440\nSol. Required average = = 800\n3\nSolutions (86-90):\nLet denote lab assistant in C be x.\nColleges Professor\nA y\nB\nC x+6\nx+6 + x = 82 + 24\n2x + 6 = 106\n50 = x\nAlso,\ny = x+4 – 44 =10\ntotal professor in al the college is 102\ntotal professor in B = 102 – y – x – 6 = 36\nColleges Professor\nA 10\nB 36\nC 56\nS86. Ans.(a)\nSol. Required answer = 90\nS87. Ans.(d)\nSol. Required answer = 36:72 = 1:2\nS88. Ans.(a)\n3\nSol. Total staff in D = ×72 = 54\n4\nLab assistant in D = 50 – 20 = 30\nRequired answer = 54 – 30 = 24\nS89. Ans.(b)\n10\nSol. Required answer = ×100 = 11.11%\n90\nS90. Ans.(a)\n72+50\nSol. Required answer = = 61\nLab assistant Staffs\n82 – y 82\nx+4\nx\nLab assistant Staffs\n72 82\n54 90\n50 106\nS91. Ans.(d)\nSol. Given Information:\nThe boat goes downstream a distance of X km in 2 hours\nThe same distance is covered upstream in 3 hours\nThe speed of the stream is \"s\" km/h\nExplanation:\nDownstream speed = (b + s) and it covers X km in 2 hours,\nSo, b + s = X / 2\nUpstream speed = (b - s) and it covers X km in 3 hours,\nSo, b - s = X / 3\nAdding both equations:\n2b = (X / 2) + (X / 3)\n2b = 5X / 6\nb = 5X / 12\nSubstitute b = 5X / 12 into b + s = X / 2:\n(5X / 12) + s = X / 2\nSolve for s:\ns = X / 12\nTo find 2X, we get:\n2X = 24\nS92. Ans.(c)\nSol. Profit sharing ratio of A, B and C\n70 40\n= 6400 × 4 + (6400 × ) × 8 : 7200 × 12 : 7200 × ×8\n100 100\n= 32 : 45 : 12\n(32+12)\nRequired profit share = ×90000 ≈ 44494 Rs.\n(32+45+12)\nS93. Ans.(e)\nSol. Let initial quantity of milk = 8y liters\nAnd initial quantity of water = xy liters\n8𝑦+5 1\nATQ, =\n𝑥𝑦+30 1\n8y +5 = xy + 30\n8y – xy = 25 ---- (i)\nSo, we can’t determine the value of ‘x’ because it will be satisfied\nof ‘y’ here\nS94. Ans.(d)\nSol. Let the breadth of the rectangular park = x meters\nAnd, length of rectangular park = 2x meters\nLength with pathway = 2x+8\nIf area of half pathway = 352\nSo, for full pathway = 352 ×2 meters\non both 6 and also non integer value\nArea of pathway = area of rectangular park with pathway – area of\nx× (2x+8) - 2x × x = 352 × 2\nx2 + 4x – x2 = 352\n4x = 352\nx = 88\nLength of rectangular park = 88×2 = 176 meters\nS95. Ans.(d)\nSol. Information Given:\nSpeed of train = 72 km/h = 20 m/s\nSpeed of athlete = 18 km/h = 5 m/s\nTime to cross athlete = 10 seconds\nTime to cross platform = 25 seconds\nExplanation:\nRelative speed of the train and athlete = 20 m/s - 5 m/s = 15 m/s.\nLength of the train = Relative speed × Time = 15 m/s × 10 s = 150\nThe distance covered by the train in 25 seconds (time to cross the\nDistance = Speed × Time = 20 m/s × 25 s = 500 meters.\nThe length of the platform = Total distance covered - Length of the\nLength of platform = 500 meters - 150 meters = 350 meters.\nS96. Ans.(e)\nSol. Information Given:\nSelling price (SP) = Rs. 624\nLoss = 22%\nMark-up = 30% above the cost price\nProfit = Rs. 84\nExplanation:\nSP = 78% of C.P.\n624 = 0.78 × C.P.\nC.P. = 624 / 0.78 = Rs. 800\nThe marked price is 30% more than the cost price:\nM.P. = C.P. + 30% of C.P.\nM.P. = 800 + 30% of 800\nM.P. = 800 + 240 = Rs. 1040\nSelling Price (SP) = C.P. + Profit\nSP = 800 + 84 = Rs. 884\nDiscount = M.P. - SP\nDiscount = 1040 - 884 = Rs. 156\nDiscount percentage = (Discount / M.P.) × 100\nDiscount percentage = (156 / 1040) × 100 = 15%\nf rectangular park\nmeters.\nplatform) is:\ne train:\nS97. Ans.(b)\nSol. Simple interest = (P × R × T) / 100\nP = principle, R = rate of interest and T = Time\n10×10\nAlso, equivalent rate of interest at rate of 10% p.a. for two years = (10+10+ )%\n100\n= 21%\n𝑋×15×2\nInterest received for A = = 0.3X\n100\nATQ, Amount invested in scheme B = X+0.3X = 1.3X Rs.\n21\nInterest received from scheme B = 1.3X × = 0.273X\n100\n0.3X – 0.273 = 32.4\nX = 1200 Rs.\nS98. Ans.(d)\nSol. Given:\n7 men and 15 women can complete the work in 15 days.\n18 men and 20 women can complete the work in 8 days.\nX men and 20 women can complete the work in 10 days.\nWe need to find X.\nExplanation:\nLet the work done by one man in one day be M and the work done by one woman in one day be W.\nTotal work = (7M + 15W) × 15 = 1 unit of work\n(7M + 15W) × 15 = 1\n7M + 15W = 1/15 (Equation 1)\nFrom the second condition (18 men and 20 women complete the work in 8 days):\nTotal work = (18M + 20W) × 8 = 1 unit of work\nSo, (18M + 20W) × 8 = 1\n18M + 20W = 1/8 (Equation 2)\n7M + 15W = 1/15\n18M + 20W = 1/8\nMultiply the first equation by 8 and the second equation by 15 to eliminate fractions:\n(7M + 15W) × 8 = (1/15) × 8 → 56M + 120W = 8/15 (Equation 3)\n(18M + 20W) × 15 = (1/8) × 15 → 270M + 300W = 15/8 (Equation 4)\nEquation 3: 56M + 120W = 8/15\nEquation 4: 270M + 300W = 15/8\nEquation 5: 280M + 600W = 40/15\nEquation 6: 540M + 600W = 30/8\nNow, subtract Equation 5 from Equation 6:\n(540M + 600W) - (280M + 600W) = 30/8 - 40/15\nSimplify:\n260M = (30/8 - 40/15)\n260M = 450/120 - 320/120\n260M = 130/120\n260M = 13/12\nSo,\nM = (13/12) / 260 = 13 / (12 × 260) = 13 / 3120 = 1 / 240\nSubstitute M = 1/240 into Equation 1:\n7M + 15W = 1/15\n7 × (1/240) + 15W = 1/15\n7/240 + 15W = 1/15\n15W = 1/15 - 7/240\n15W = (16/240 - 7/240) = 9/240\nW = 9 / (240 × 15) = 9 / 3600 = 1 / 400\n(X men + 20 women) × 10 = 1 unit of work\n(X × M + 20 × W) × 10 = 1\nX × (1/240) + 20 × (1/400) = 1/10\nX/240 + 20/400 = 1/10\nX/240 + 1/20 = 1/10\nMultiply the entire equation by 240 to eliminate fractions:\nX + 12 = 24\nThus, X = 24 - 12 = 12\nS99. Ans.(a)\nSol. Let the four consecutive multiples of 4 be:\n4n, 4n + 4, 4n + 8, 4n + 12\nThe average of these four numbers is given as 30.\nThe formula for the average of these numbers is:\n(4n + (4n + 4) + (4n + 8) + (4n + 12)) / 4 = 30\nSimplify the equation:\n(16n + 24) / 4 = 30\n16n + 24 = 120\n16n = 96\nn = 6\nThus, the four consecutive multiples of 4 are:\n4n = 4 × 6 = 24\n4n + 4 = 24 + 4 = 28\n4n + 8 = 24 + 8 = 32\n4n + 12 = 24 + 12 = 36\nLet the five consecutive even numbers be:\n28, 30, 32, 34, 36\nThe highest number in the series is 36.\nS100. Ans.(c)\nSol. The present age of R = 32 – 12 = 20 years\nThe present age of Q = 56 – 20 = 36 years\nThe present age of P = 64 – 36 = 28 years\nATQ,\n28+12 4\n=\n36−6 𝑋\n40 4\n=\n30 𝑋\nX = 3\n7 App"
+   },
+   "correctAnswer": "C",
+   "explanation": "The present age of R = 32 – 12 = 20 years\nThe present age of Q = 56 – 20 = 36 years\nThe present age of P = 64 – 36 = 28 years\nATQ,\n28+12 4\n=\n36−6 𝑋\n40 4\n=\n30 𝑋\nX = 3\n7 App"
+  }
+ ]
+}

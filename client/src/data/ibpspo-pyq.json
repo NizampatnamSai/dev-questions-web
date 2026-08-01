@@ -1,0 +1,279 @@
+{
+ "_readme": "Previous-year IBPS PO Prelims papers. IBPS does not publish official question papers, so every paper here is a memory-based reconstruction. Set `source` honestly on each paper — it is shown to the user in the UI.",
+ "_schema": {
+  "papers": [
+   {
+    "id": "unique-slug, e.g. ibpspo-2024-shift1",
+    "name": "Display name, e.g. IBPS PO Prelims 2024 — Shift 1",
+    "year": "2024",
+    "shift": "Shift 1 · 19 Oct 2024",
+    "source": "memory-based | user-supplied",
+    "note": "Optional line shown under the paper name",
+    "questions": [
+     {
+      "id": "unique within the paper",
+      "section": "English Language | Quantitative Aptitude | Reasoning Ability",
+      "topic": "e.g. Reading Comprehension",
+      "difficulty": "Easy | Moderate | Hard",
+      "marks": "number — leave out and it is filled from SECTION_PLAN",
+      "negativeMarks": "number — leave out and it is filled from SECTION_PLAN",
+      "question": "stem",
+      "passage": "shared passage/clue block on the FIRST question of a set, else null",
+      "table": {
+       "columns": [
+        "..."
+       ],
+       "rows": [
+        [
+         "..."
+        ]
+       ]
+      },
+      "options": {
+       "A": "...",
+       "B": "...",
+       "C": "...",
+       "D": "...",
+       "E": "..."
+      },
+      "correctAnswer": "A",
+      "explanation": "full working",
+      "shortcut": "optional"
+     }
+    ]
+   }
+  ]
+ },
+ "papers": [
+  {
+   "id": "ibpspo-2025-prelims-s1",
+   "name": "IBPS PO Prelims 2025 — Shift 1",
+   "year": "2025",
+   "shift": "Shift 1 · 23 Aug 2025",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    },
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2025-prelims-s2",
+   "name": "IBPS PO Prelims 2025 — Shift 2",
+   "year": "2025",
+   "shift": "Shift 2 · 23 Aug 2025",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    },
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2024-prelims",
+   "name": "IBPS PO Prelims 2024",
+   "year": "2024",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    },
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2023-prelims",
+   "name": "IBPS PO Prelims 2023",
+   "year": "2023",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2022-prelims",
+   "name": "IBPS PO Prelims 2022",
+   "year": "2022",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2021-prelims",
+   "name": "IBPS PO Prelims 2021",
+   "year": "2021",
+   "shift": "Based on 4 Dec 2021",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2020-prelims",
+   "name": "IBPS PO Prelims 2020",
+   "year": "2020",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2019-prelims",
+   "name": "IBPS PO Prelims 2019",
+   "year": "2019",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2018-prelims",
+   "name": "IBPS PO Prelims 2018",
+   "year": "2018",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 97,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 27
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "ibpspo-2017-prelims",
+   "name": "IBPS PO Prelims 2017",
+   "year": "2017",
+   "shift": "Memory-based reconstruction",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
+   "total": 88,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 33
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 25
+    }
+   ]
+  }
+ ]
+}

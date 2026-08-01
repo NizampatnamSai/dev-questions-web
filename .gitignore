@@ -29,3 +29,7 @@ devquiz.apk/
 # APK builds
 client/public/*.apk
 client/public/*.aab
+
+# Source PDFs for IBPS PO previous-year papers — transcribed into
+# client/src/data/ibpspo-pyq.json, the raw files stay local.
+client/src/data/pyq-source/

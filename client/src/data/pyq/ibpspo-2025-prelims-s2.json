@@ -1,0 +1,1552 @@
+{
+ "id": "ibpspo-2025-prelims-s2",
+ "questions": [
+  {
+   "id": "2025-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following statement(s) is/are true?\nI. A lives on the topmost floor\nII. G and C live on the same floor\nIII. No one lives to the west of E",
+   "options": {
+    "A": "Only I",
+    "B": "Both I and II",
+    "C": "Both II and III",
+    "D": "Only III",
+    "E": "All are true"
+   },
+   "correctAnswer": "E",
+   "explanation": "Floor Flat P Flat Q\n4 A D\n3 F B\n2 C G\n1 E H"
+  },
+  {
+   "id": "2025-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way and thus form a group. Find the one who\ndoesn’t belong to group?",
+   "options": {
+    "A": "F",
+    "B": "D",
+    "C": "B",
+    "D": "C",
+    "E": "G"
+   },
+   "correctAnswer": "B",
+   "explanation": "Floor Flat P Flat Q\n4 A D\n3 F B\n2 C G\n1 E H"
+  },
+  {
+   "id": "2025-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following lives in flat Q of the 3rd floor?",
+   "options": {
+    "A": "A",
+    "B": "E",
+    "C": "B",
+    "D": "F",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "explanation": "Floor Flat P Flat Q\n4 A D\n3 F B\n2 C G\n1 E H"
+  },
+  {
+   "id": "2025-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction F lives with respect to G?",
+   "options": {
+    "A": "North-east",
+    "B": "North-west",
+    "C": "North",
+    "D": "South- east",
+    "E": "South-west"
+   },
+   "correctAnswer": "B",
+   "explanation": "Floor Flat P Flat Q\n4 A D\n3 F B\n2 C G\n1 E H"
+  },
+  {
+   "id": "2025-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What will be the sum of the floor number",
+   "options": {
+    "A": "3",
+    "B": "4",
+    "C": "6",
+    "D": "5",
+    "E": "7"
+   },
+   "correctAnswer": "D",
+   "explanation": "Floor Flat P Flat Q\n4 A D\n3 F B\n2 C G\n1 E H"
+  },
+  {
+   "id": "2025-q6",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many pairs of digits are in the number\nthem (both forward and backward direction) as",
+   "options": {
+    "A": "Two",
+    "B": "More than four",
+    "C": "Four",
+    "D": "One",
+    "E": "Three"
+   },
+   "correctAnswer": "E",
+   "explanation": "Three pairs found\nSolutions"
+  },
+  {
+   "id": "2025-q7",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nOnly a few master is impressive\nSome impressive is crashed\nNo crashed is champion\nConclusions:\nI. No master is crashed\nII. Some impressive are not champion",
+   "options": {
+    "A": "If only conclusion I follows",
+    "B": "If only conclusion II follows",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows",
+    "E": "If both conclusions I and II follow"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (7-9): In each question below, som\nnumbered I and II. You have to take the give\nvariance with commonly known facts. Read\ngiven conclusions logically follows from the\nfacts. Give answer-"
+  },
+  {
+   "id": "2025-q8",
+   "section": "Reasoning Ability",
+   "topic": "Number Series",
+   "question": "Statements:\nOnly a few Trophy is good\nAll good is down\nNo down is hunger\nConclusions:\nI. Some good is hunger\nII. Some trophy being hunger is a possibility\nr of A and H?\n6281837’, each of which have as many digits between\nthey have between them in the number series?\nme statements are given followed by two conclusions\nen statements to be true even if they seem to be at\nall the conclusions and then decide which of the\ngiven statements, disregarding commonly known",
+   "options": {
+    "A": "If only conclusion I follows",
+    "B": "If only conclusion II follows",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows",
+    "E": "If both conclusions I and II follow"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (7-9): In each question below, som\nnumbered I and II. You have to take the give\nvariance with commonly known facts. Read\ngiven conclusions logically follows from the\nfacts. Give answer-"
+  },
+  {
+   "id": "2025-q9",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nAll compare is cup.\nSome cup is play\nOnly a few play is waiting\nConclusions:\nI. Some compare being waiting is a possibility\nII. All cup is waiting",
+   "options": {
+    "A": "If only conclusion I follows",
+    "B": "If only conclusion II follows",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows",
+    "E": "If both conclusions I and II follow"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (7-9): In each question below, som\nnumbered I and II. You have to take the give\nvariance with commonly known facts. Read\ngiven conclusions logically follows from the\nfacts. Give answer-"
+  },
+  {
+   "id": "2025-q10",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following is the heaviest?",
+   "options": {
+    "A": "A",
+    "B": "C",
+    "C": "E",
+    "D": "B",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (10-12): Read the following information carefully\nbelow:\nSix persons– A, B, C, D, E and F compare their weights on a weighing\nsame order.\nB is heavier than E. F is lighter than D. A is heavier than E. F is hea\nheavier than B. D is not the heaviest person. E is heavier than C."
+  },
+  {
+   "id": "2025-q11",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons are lighter to D?",
+   "options": {
+    "A": "Two",
+    "B": "More than four",
+    "C": "Four",
+    "D": "One",
+    "E": "Three\nand answer the questions given\nmachine, but not necessarily in the\navier than E but lighter than B. D is"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (10-12): Read the following information carefully\nbelow:\nSix persons– A, B, C, D, E and F compare their weights on a weighing\nsame order.\nB is heavier than E. F is lighter than D. A is heavier than E. F is hea\nheavier than B. D is not the heaviest person. E is heavier than C."
+  },
+  {
+   "id": "2025-q12",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who is exactly between A and E?",
+   "options": {
+    "A": "A",
+    "B": "C",
+    "C": "E",
+    "D": "B",
+    "E": "None of these"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (10-12): Read the following information carefully\nbelow:\nSix persons– A, B, C, D, E and F compare their weights on a weighing\nsame order.\nB is heavier than E. F is lighter than D. A is heavier than E. F is hea\nheavier than B. D is not the heaviest person. E is heavier than C.",
+   "explanation": "25 A"
+  },
+  {
+   "id": "2025-q13",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Find the odd one out?",
+   "options": {
+    "A": "CDF",
+    "B": "NOQ",
+    "C": "STW",
+    "D": "KLN",
+    "E": "QRT"
+   },
+   "correctAnswer": "C",
+   "explanation": "Except STW, logic is here:"
+  },
+  {
+   "id": "2025-q14",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which of the following color does Q like?",
+   "options": {
+    "A": "Green",
+    "B": "White",
+    "C": "Red",
+    "D": "Yellow",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (14-18): Read the information carefully and answer the questions given below:\nSeven persons- M, N, O, P, Q, R and S are going to Holiday trip in different months i.e. January, March,\nApril, May, June, July and August. Each of them like different colors- Red, Green, Yellow, Blue, White,\nBlack and Grey but not necessarily in the same order.\nTwo persons go between N and the one who likes red. N goes in the month which has even number of\ndays. Only one person goes between the one who likes blue and S. S likes black. The one who likes blue\ngoes just before the one who likes green. The one who likes green goes in the month which has even\nnumber of days. P goes after N. R goes just after P. Q does not like grey. Four persons go between M and\nthe one who likes yellow. The one who likes white goes after the one who likes yellow. N does not like\nwhite. Neither P nor O likes green and white.",
+   "explanation": "Months Persons - Colors\nJanuary O - Yellow\nMarch S - black\nApril N - Grey\nMay P - Blue\nJune R - Green\nJuly M - Red\nAugust Q - White"
+  },
+  {
+   "id": "2025-q15",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Who among the following goes on holiday trip in July?",
+   "options": {
+    "A": "M",
+    "B": "P",
+    "C": "R",
+    "D": "O",
+    "E": "Q"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (14-18): Read the information carefully and answer the questions given below:\nSeven persons- M, N, O, P, Q, R and S are going to Holiday trip in different months i.e. January, March,\nApril, May, June, July and August. Each of them like different colors- Red, Green, Yellow, Blue, White,\nBlack and Grey but not necessarily in the same order.\nTwo persons go between N and the one who likes red. N goes in the month which has even number of\ndays. Only one person goes between the one who likes blue and S. S likes black. The one who likes blue\ngoes just before the one who likes green. The one who likes green goes in the month which has even\nnumber of days. P goes after N. R goes just after P. Q does not like grey. Four persons go between M and\nthe one who likes yellow. The one who likes white goes after the one who likes yellow. N does not like\nwhite. Neither P nor O likes green and white.",
+   "explanation": "Months Persons - Colors\nJanuary O - Yellow\nMarch S - black\nApril N - Grey\nMay P - Blue\nJune R - Green\nJuly M - Red\nAugust Q - White"
+  },
+  {
+   "id": "2025-q16",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many persons go on trip between O and the one who likes Blue?",
+   "options": {
+    "A": "Two",
+    "B": "More than four",
+    "C": "Four",
+    "D": "One",
+    "E": "Three"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (14-18): Read the information carefully and answer the questions given below:\nSeven persons- M, N, O, P, Q, R and S are going to Holiday trip in different months i.e. January, March,\nApril, May, June, July and August. Each of them like different colors- Red, Green, Yellow, Blue, White,\nBlack and Grey but not necessarily in the same order.\nTwo persons go between N and the one who likes red. N goes in the month which has even number of\ndays. Only one person goes between the one who likes blue and S. S likes black. The one who likes blue\ngoes just before the one who likes green. The one who likes green goes in the month which has even\nnumber of days. P goes after N. R goes just after P. Q does not like grey. Four persons go between M and\nthe one who likes yellow. The one who likes white goes after the one who likes yellow. N does not like\nwhite. Neither P nor O likes green and white.",
+   "explanation": "Months Persons - Colors\nJanuary O - Yellow\nMarch S - black\nApril N - Grey\nMay P - Blue\nJune R - Green\nJuly M - Red\nAugust Q - White\n26 A"
+  },
+  {
+   "id": "2025-q17",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "If all the persons go according to alphabetical order starts from January, then the position\nof how many persons remains unchanged?",
+   "options": {
+    "A": "Two",
+    "B": "More than four",
+    "C": "Four",
+    "D": "One",
+    "E": "Three"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (14-18): Read the information carefully and answer the questions given below:\nSeven persons- M, N, O, P, Q, R and S are going to Holiday trip in different months i.e. January, March,\nApril, May, June, July and August. Each of them like different colors- Red, Green, Yellow, Blue, White,\nBlack and Grey but not necessarily in the same order.\nTwo persons go between N and the one who likes red. N goes in the month which has even number of\ndays. Only one person goes between the one who likes blue and S. S likes black. The one who likes blue\ngoes just before the one who likes green. The one who likes green goes in the month which has even\nnumber of days. P goes after N. R goes just after P. Q does not like grey. Four persons go between M and\nthe one who likes yellow. The one who likes white goes after the one who likes yellow. N does not like\nwhite. Neither P nor O likes green and white.",
+   "explanation": "Months Persons - Colors\nJanuary O - Yellow\nMarch S - black\nApril N - Grey\nMay P - Blue\nJune R - Green\nJuly M - Red\nAugust Q - White"
+  },
+  {
+   "id": "2025-q18",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Who among the following goes just after P?",
+   "options": {
+    "A": "M",
+    "B": "The one who likes green",
+    "C": "S",
+    "D": "N",
+    "E": "O"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (14-18): Read the information carefully and answer the questions given below:\nSeven persons- M, N, O, P, Q, R and S are going to Holiday trip in different months i.e. January, March,\nApril, May, June, July and August. Each of them like different colors- Red, Green, Yellow, Blue, White,\nBlack and Grey but not necessarily in the same order.\nTwo persons go between N and the one who likes red. N goes in the month which has even number of\ndays. Only one person goes between the one who likes blue and S. S likes black. The one who likes blue\ngoes just before the one who likes green. The one who likes green goes in the month which has even\nnumber of days. P goes after N. R goes just after P. Q does not like grey. Four persons go between M and\nthe one who likes yellow. The one who likes white goes after the one who likes yellow. N does not like\nwhite. Neither P nor O likes green and white.",
+   "explanation": "Months Persons - Colors\nJanuary O - Yellow\nMarch S - black\nApril N - Grey\nMay P - Blue\nJune R - Green\nJuly M - Red\nAugust Q - White"
+  },
+  {
+   "id": "2025-q19",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If the third, sixth, seventh, eighth and eleventh letters (from left) of the word “CONSEQUENCES”\nare combined to form a meaningful word, then what will be the third letter from the right end of the\nmeaningful word formed? If more than one such word can be formed, mark the answer as X and if no\nsuch word can be formed, mark the answer as Y.",
+   "options": {
+    "A": "N",
+    "B": "Q",
+    "C": "E",
+    "D": "X",
+    "E": "Y"
+   },
+   "correctAnswer": "C",
+   "explanation": "QUEEN"
+  },
+  {
+   "id": "2025-q20",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How is A related to C?",
+   "options": {
+    "A": "Father",
+    "B": "Grandfather",
+    "C": "Brother",
+    "D": "Uncle",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (20-22): Study the following information carefully and answer the questions given\nbelow.\nIn a family of three generations, there are eight members: A, B, C, D, E, F, G, and H.\nF is the sister of G. A is father of B. C is the granddaughter of G. B is the wife of D. H is the brother of D. E\nis the niece of H. A is the brother-in-law of F. F is not married."
+  },
+  {
+   "id": "2025-q21",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How is the sister-in-law of H related to E?",
+   "options": {
+    "A": "Aunt",
+    "B": "Sister",
+    "C": "Niece",
+    "D": "Grandmother",
+    "E": "Mother"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (20-22): Study the following information carefully and answer the questions given\nbelow.\nIn a family of three generations, there are eight members: A, B, C, D, E, F, G, and H.\nF is the sister of G. A is father of B. C is the granddaughter of G. B is the wife of D. H is the brother of D. E\nis the niece of H. A is the brother-in-law of F. F is not married."
+  },
+  {
+   "id": "2025-q22",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How many female members are there in the family?",
+   "options": {
+    "A": "Five",
+    "B": "Four",
+    "C": "Three",
+    "D": "Two",
+    "E": "One"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (20-22): Study the following information carefully and answer the questions given\nbelow.\nIn a family of three generations, there are eight members: A, B, C, D, E, F, G, and H.\nF is the sister of G. A is father of B. C is the granddaughter of G. B is the wife of D. H is the brother of D. E\nis the niece of H. A is the brother-in-law of F. F is not married.",
+   "explanation": "27 A"
+  },
+  {
+   "id": "2025-q23",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following works in the HR department?",
+   "options": {
+    "A": "B",
+    "B": "D",
+    "C": "The one who likes red colour",
+    "D": "The one who likes green colour",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons – A, B, C, D, E, F and G – work in a company. Each of them belongs to one of the three\ndepartments: Finance, HR and Marketing. Not less than two and more than three persons work in the\nsame department. Each person likes a different colour among – Red, Blue, Green, Yellow, White, Black,\nand Orange.\nF and A works in different departments but both of them doesn’t work in HR. D and the one who likes\nwhite works in the same department, but not with F and A. D doesn’t like white. E likes red and works\nin the same department as A. C only works with the one who likes blue. F likes yellow. C doesn’t like\nblue. B and E works in different department. The one who likes black and orange works in the same\ndepartment. G works in Finance. A and G doesn’t like orange. The one who likes black doesn’t work in\nmarketing."
+  },
+  {
+   "id": "2025-q24",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following combination is correct?",
+   "options": {
+    "A": "B – Finance – Black",
+    "B": "A – Marketing – Green",
+    "C": "B – HR – Blue",
+    "D": "G – Finance – White",
+    "E": "D – HR – Black"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons – A, B, C, D, E, F and G – work in a company. Each of them belongs to one of the three\ndepartments: Finance, HR and Marketing. Not less than two and more than three persons work in the\nsame department. Each person likes a different colour among – Red, Blue, Green, Yellow, White, Black,\nand Orange.\nF and A works in different departments but both of them doesn’t work in HR. D and the one who likes\nwhite works in the same department, but not with F and A. D doesn’t like white. E likes red and works\nin the same department as A. C only works with the one who likes blue. F likes yellow. C doesn’t like\nblue. B and E works in different department. The one who likes black and orange works in the same\ndepartment. G works in Finance. A and G doesn’t like orange. The one who likes black doesn’t work in\nmarketing."
+  },
+  {
+   "id": "2025-q25",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which colour is liked by the person who works in the same department as E?",
+   "options": {
+    "A": "Black",
+    "B": "Orange",
+    "C": "Yellow",
+    "D": "White",
+    "E": "Green"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons – A, B, C, D, E, F and G – work in a company. Each of them belongs to one of the three\ndepartments: Finance, HR and Marketing. Not less than two and more than three persons work in the\nsame department. Each person likes a different colour among – Red, Blue, Green, Yellow, White, Black,\nand Orange.\nF and A works in different departments but both of them doesn’t work in HR. D and the one who likes\nwhite works in the same department, but not with F and A. D doesn’t like white. E likes red and works\nin the same department as A. C only works with the one who likes blue. F likes yellow. C doesn’t like\nblue. B and E works in different department. The one who likes black and orange works in the same\ndepartment. G works in Finance. A and G doesn’t like orange. The one who likes black doesn’t work in\nmarketing."
+  },
+  {
+   "id": "2025-q26",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statements is not true?",
+   "options": {
+    "A": "The one who likes blue works in HR",
+    "B": "A works in Marketing department",
+    "C": "B and D work in the same department",
+    "D": "A likes Green",
+    "E": "The one who likes orange works in Finance department"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons – A, B, C, D, E, F and G – work in a company. Each of them belongs to one of the three\ndepartments: Finance, HR and Marketing. Not less than two and more than three persons work in the\nsame department. Each person likes a different colour among – Red, Blue, Green, Yellow, White, Black,\nand Orange.\nF and A works in different departments but both of them doesn’t work in HR. D and the one who likes\nwhite works in the same department, but not with F and A. D doesn’t like white. E likes red and works\nin the same department as A. C only works with the one who likes blue. F likes yellow. C doesn’t like\nblue. B and E works in different department. The one who likes black and orange works in the same\ndepartment. G works in Finance. A and G doesn’t like orange. The one who likes black doesn’t work in\nmarketing.",
+   "explanation": "28 A"
+  },
+  {
+   "id": "2025-q27",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following groups of persons definitely belong to the same department?",
+   "options": {
+    "A": "C, D and the one who likes Green",
+    "B": "A, E and the one who likes white",
+    "C": "D and A",
+    "D": "F, B and the one who likes Black",
+    "E": "C and G"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons – A, B, C, D, E, F and G – work in a company. Each of them belongs to one of the three\ndepartments: Finance, HR and Marketing. Not less than two and more than three persons work in the\nsame department. Each person likes a different colour among – Red, Blue, Green, Yellow, White, Black,\nand Orange.\nF and A works in different departments but both of them doesn’t work in HR. D and the one who likes\nwhite works in the same department, but not with F and A. D doesn’t like white. E likes red and works\nin the same department as A. C only works with the one who likes blue. F likes yellow. C doesn’t like\nblue. B and E works in different department. The one who likes black and orange works in the same\ndepartment. G works in Finance. A and G doesn’t like orange. The one who likes black doesn’t work in\nmarketing."
+  },
+  {
+   "id": "2025-q28",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction is point G with respect to point A?",
+   "options": {
+    "A": "North",
+    "B": "East",
+    "C": "North-east",
+    "D": "West",
+    "E": "North-west"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (28-30): Study the following information carefully and answer the questions given\nbelow:\nRitika starts walking from point A towards the east. After walking 7m, she reaches point B, from there\nshe turns right and walks 2m to reach point C. Now she turns left and walks 9m to reach point E. Then\nshe turns left again and walks 4m to reach point G. From there, she turns and take two consecutive left\nturns and walks 2m each to reach Point D. From there, she turns right and walks 6m to reach point K.\nNow finally she takes the right turn again and walks for 5m to reach Point L."
+  },
+  {
+   "id": "2025-q29",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the shortest distance between point L and point\nE?",
+   "options": {
+    "A": "13m",
+    "B": "11m",
+    "C": "√113m",
+    "D": "113m",
+    "E": "√117m"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (28-30): Study the following information carefully and answer the questions given\nbelow:\nRitika starts walking from point A towards the east. After walking 7m, she reaches point B, from there\nshe turns right and walks 2m to reach point C. Now she turns left and walks 9m to reach point E. Then\nshe turns left again and walks 4m to reach point G. From there, she turns and take two consecutive left\nturns and walks 2m each to reach Point D. From there, she turns right and walks 6m to reach point K.\nNow finally she takes the right turn again and walks for 5m to reach Point L."
+  },
+  {
+   "id": "2025-q30",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are similar in a certain way. Who among the following does not\nbelong to the group?",
+   "options": {
+    "A": "Point A and Point B",
+    "B": "Point B and Point D",
+    "C": "Point C and Point E",
+    "D": "Point K and Point D",
+    "E": "Point E and Point G"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (28-30): Study the following information carefully and answer the questions given\nbelow:\nRitika starts walking from point A towards the east. After walking 7m, she reaches point B, from there\nshe turns right and walks 2m to reach point C. Now she turns left and walks 9m to reach point E. Then\nshe turns left again and walks 4m to reach point G. From there, she turns and take two consecutive left\nturns and walks 2m each to reach Point D. From there, she turns right and walks 6m to reach point K.\nNow finally she takes the right turn again and walks for 5m to reach Point L.",
+   "explanation": "Except Point E and Point G, in other options first\npoint is to the west of second point."
+  },
+  {
+   "id": "2025-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following is designated as Senior Manager (SM)?",
+   "options": {
+    "A": "The one who is designated immediately junior to D",
+    "B": "A",
+    "C": "The one who is designated three persons senior to F",
+    "D": "G",
+    "E": "B"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nEight persons – A, B, C, D, E, F, G and H are designated at the eight different designations – Chairman,\nManaging Director (MD), General Manager (GM), Deputy General Manager (DGM), Senior Manager (SM),\nManager, Assistant Manager (AM) and Clerk, but not necessarily in the same order. The order of the\ndesignations is in decreasing order of seniority such that Chairman is the seniormost designation and\nClerk is the junior-most.\nG is designated three designations senior to D. The number of persons designated junior to D is two\nmore than the number of person designated senior to E. Three persons are designated between E and\nH. C is designated junior to H. A is designated senior to Manager. F is designated four persons junior to\nA. B is designated senior to DGM.",
+   "explanation": "Designations Persons\nChairman E\nMD B\nGM G\nDGM A\nSM H\nManager D\nAM C\nClerk F"
+  },
+  {
+   "id": "2025-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons are designated between B and the one who is designated immediately\nsenior to F?",
+   "options": {
+    "A": "Three",
+    "B": "Five",
+    "C": "Four",
+    "D": "Six",
+    "E": "Two"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nEight persons – A, B, C, D, E, F, G and H are designated at the eight different designations – Chairman,\nManaging Director (MD), General Manager (GM), Deputy General Manager (DGM), Senior Manager (SM),\nManager, Assistant Manager (AM) and Clerk, but not necessarily in the same order. The order of the\ndesignations is in decreasing order of seniority such that Chairman is the seniormost designation and\nClerk is the junior-most.\nG is designated three designations senior to D. The number of persons designated junior to D is two\nmore than the number of person designated senior to E. Three persons are designated between E and\nH. C is designated junior to H. A is designated senior to Manager. F is designated four persons junior to\nA. B is designated senior to DGM.",
+   "explanation": "Designations Persons\nChairman E\nMD B\nGM G\nDGM A\nSM H\nManager D\nAM C\nClerk F"
+  },
+  {
+   "id": "2025-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following is the designation of D?",
+   "options": {
+    "A": "Managing Director",
+    "B": "Deputy General Manager",
+    "C": "Senior Manager",
+    "D": "Manager",
+    "E": "Assistant Manager"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nEight persons – A, B, C, D, E, F, G and H are designated at the eight different designations – Chairman,\nManaging Director (MD), General Manager (GM), Deputy General Manager (DGM), Senior Manager (SM),\nManager, Assistant Manager (AM) and Clerk, but not necessarily in the same order. The order of the\ndesignations is in decreasing order of seniority such that Chairman is the seniormost designation and\nClerk is the junior-most.\nG is designated three designations senior to D. The number of persons designated junior to D is two\nmore than the number of person designated senior to E. Three persons are designated between E and\nH. C is designated junior to H. A is designated senior to Manager. F is designated four persons junior to\nA. B is designated senior to DGM.",
+   "explanation": "Designations Persons\nChairman E\nMD B\nGM G\nDGM A\nSM H\nManager D\nAM C\nClerk F"
+  },
+  {
+   "id": "2025-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "The number of persons designated senior to A is same as the number of persons designated\njunior to ______.",
+   "options": {
+    "A": "D",
+    "B": "H",
+    "C": "C",
+    "D": "G",
+    "E": "F"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nEight persons – A, B, C, D, E, F, G and H are designated at the eight different designations – Chairman,\nManaging Director (MD), General Manager (GM), Deputy General Manager (DGM), Senior Manager (SM),\nManager, Assistant Manager (AM) and Clerk, but not necessarily in the same order. The order of the\ndesignations is in decreasing order of seniority such that Chairman is the seniormost designation and\nClerk is the junior-most.\nG is designated three designations senior to D. The number of persons designated junior to D is two\nmore than the number of person designated senior to E. Three persons are designated between E and\nH. C is designated junior to H. A is designated senior to Manager. F is designated four persons junior to\nA. B is designated senior to DGM.",
+   "explanation": "Designations Persons\nChairman E\nMD B\nGM G\nDGM A\nSM H\nManager D\nAM C\nClerk F\n30 A"
+  },
+  {
+   "id": "2025-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If B is related to Deputy General Manager and in the same way D is related to clerk then, E\nis related to who among the following?",
+   "options": {
+    "A": "Managing Director",
+    "B": "Clerk",
+    "C": "General Manager",
+    "D": "Manager",
+    "E": "Senior Manager"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nEight persons – A, B, C, D, E, F, G and H are designated at the eight different designations – Chairman,\nManaging Director (MD), General Manager (GM), Deputy General Manager (DGM), Senior Manager (SM),\nManager, Assistant Manager (AM) and Clerk, but not necessarily in the same order. The order of the\ndesignations is in decreasing order of seniority such that Chairman is the seniormost designation and\nClerk is the junior-most.\nG is designated three designations senior to D. The number of persons designated junior to D is two\nmore than the number of person designated senior to E. Three persons are designated between E and\nH. C is designated junior to H. A is designated senior to Manager. F is designated four persons junior to\nA. B is designated senior to DGM.",
+   "explanation": "Designations Persons\nChairman E\nMD B\nGM G\nDGM A\nSM H\nManager D\nAM C\nClerk F\nE is related to General Manager. Logic here is - the first person is designated two persons senior to the\ndesignation given."
+  },
+  {
+   "id": "2025-q36",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "(A) In all, this cycle repeats several times during a typical night’s sleep.\n(B) Human sleep is divided into REM and non-REM stages.\n(C) Whereas comparatively non-REM sleep includes stages of deep, restorative rest.\n(D) During REM sleep, dreams are most vivid and brain activity is high.\n(E) Each stage plays a vital role in physical and mental recovery.",
+   "options": {
+    "A": "B – A – D – C – A",
+    "B": "B – D – C – E – A",
+    "C": "B – D – C – A – E",
+    "D": "D – C– B – E – A",
+    "E": "No rearrangement required"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-39): Rearrange the following sentences to form a meaningful paragraph.",
+   "explanation": "Final Correct Sequence:\nB – D – C – E – A\nStep-by-step Analysis:\n1. (B) is the logical opening sentence.\n2. It introduces the structure of sleep:\n3. \"Human sleep is divided into REM and non-REM stages.\"\n4. (D) follows naturally by elaborating on REM sleep, which was introduced in (B):\n5. \"During REM sleep, dreams are most vivid and brain activity is high.\"\n6. (C) contrasts REM with non-REM sleep, using \"whereas comparatively\":\n7. \"Whereas comparatively non-REM sleep includes stages of deep, restorative rest.\"\n8. This must follow (D) to maintain the contrast.\n9. (E) generalizes the importance of both stages:\n10. \"Each stage plays a vital role in physical and mental recovery.\"\n11. (A) concludes by noting the repetition of the REM–non-REM cycle:\n12. \"In all, this cycle repeats several times during a typical night’s sleep.\"\n13. “This cycle” clearly refers to the REM and non-REM stages discussed."
+  },
+  {
+   "id": "2025-q37",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "(A) Many users share personal data without realizing the consequences.\n(B) This can lead to identity theft and targeted surveillance.\n(C) Internet privacy is a growing concern in the digital age.\n(D) Companies often collect and store user information for various purposes.\n(E) Therefore, users must take steps to protect their online identity.",
+   "options": {
+    "A": "C – D – A – B – E",
+    "B": "A – D – B – C – E",
+    "C": "B – D – A – C – E",
+    "D": "D – A – C – B – E",
+    "E": "No rearrangement required"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-39): Rearrange the following sentences to form a meaningful paragraph.",
+   "explanation": "Correct Sequence: C – D – A – B – E\nStep-by-step Analysis:\n1. Sentence (C) is the most general and introduces the main idea:\n2. \"Internet privacy is a growing concern in the digital age.\"\n3. This must be the opening sentence.\n4. After introducing the concern, the paragraph should describe who collects user data and how.\n5. So, (D) fits next:\n6. \"Companies often collect and store user information...\"\n7. Then, (A) highlights user behavior in this context:\n8. \"Many users share personal data without realizing the consequences.\"\n9. Logically follows (D), as both deal with how data gets exposed.\n10. Next, we explain the consequences of this data sharing — that’s (B):\n11. \"This can lead to identity theft and targeted surveillance.\"\n12. Finally, (E) concludes with a recommendation:\n13. \"Therefore, users must take steps to protect their online identity.\"\n14. The word \"Therefore\" shows it's a conclusion based on the previous problems."
+  },
+  {
+   "id": "2025-q38",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "(A) Oceans absorb a significant amount of the Earth's heat.\n(B) This heat absorption regulates global climate and weather patterns.\n(C) These changes highlight the link between oceans and climate change.\n(D) Warmer oceans disrupt marine ecosystems and intensify storms.\n(E) However, excess heat is causing ocean temperatures to rise.",
+   "options": {
+    "A": "B – D – A – C – E",
+    "B": "A – C – B – D – E",
+    "C": "B – A – D – C – E",
+    "D": "A – B – E – D – C",
+    "E": "No rearrangement required"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-39): Rearrange the following sentences to form a meaningful paragraph.",
+   "explanation": "Correct sequence: (d) A – B – E – D – C\nStep-by-step Analysis:\n1. Sentence (A) introduces the topic by stating that oceans absorb Earth's heat. This is the logical\nstarting point.\n2. Sentence (B) follows, explaining the effect of that heat absorption—regulation of climate and\nweather. \"This heat absorption\" clearly refers to (A).\n3. Sentence (E) introduces a contrast with the word \"however,\" showing that too much heat is now\nbeing absorbed, leading to warming oceans.\n4. Sentence (D) continues the cause-effect sequence, showing the consequences of warmer oceans.\n5. Sentence (C) serves as the conclusion, summarizing that these changes connect oceans to climate\nchange."
+  },
+  {
+   "id": "2025-q39",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "(A) On one hand, reading enhances vocabulary.\n(B) It improves concentration and strengthens language skills.\n(C) Developing a regular reading habit has multiple cognitive benefits.\n(D) On the other hand, in a world of distractions, reading offers a focused mental exercise.\n(E) These advantages make reading an essential lifelong habit.",
+   "options": {
+    "A": "C – A – B – D – E",
+    "B": "A – C – B – D – E",
+    "C": "C – B – A – D – E",
+    "D": "C – A – D – B – E",
+    "E": "No rearrangement required"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-39): Rearrange the following sentences to form a meaningful paragraph.",
+   "explanation": "Correct sequence: (a) C – A – B – D – E\nStep-by-step Analysis:\n1. Sentence (C) is the most general and introductory in nature:\n2. \"Developing a regular reading habit has multiple cognitive benefits.\"\n3. This sets the topic and must come first.\n4. Sentence (A) begins the first point using the phrase \"On one hand,\" which requires a contrast later.\n5. So (A) should come right after the introduction (C).\n6. Sentence (B) supports and adds to (A) by listing additional benefits.\n7. \"It improves concentration...\" refers back to reading.\n8. Sentence (D) introduces a contrast with \"On the other hand,\" continuing the structured comparison\nstarted in (A).\n9. It presents another kind of benefit: focus in a distracted world.\n10. Sentence (E) concludes the paragraph:\n11. \"These advantages...\" refers back to all the benefits described, making it a natural closing line."
+  },
+  {
+   "id": "2025-q40",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "What is the central irony described in the passage regarding digital payment gateways in\nChina?",
+   "options": {
+    "A": "Consumers believe digital platforms are free, though they are highly profitable.",
+    "B": "Platforms intended to help small merchants are instead contributing to their collapse.",
+    "C": "China developed digital payment systems for rural areas but they are only used in cities.",
+    "D": "Regulatory authorities fail to notice the dominance of platforms like Alipay and WeChat Pay.",
+    "E": "Consumers benefit more than merchants due to government subsidies on transactions."
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "The key irony is found in: \"Ironically, the very gateways that were expected to boost inclusivity are\nnow becoming a source of financial strain.\" This points to the contradiction between the intended benefit\nand the actual outcome.\nDetailed Analysis of Options:\n• (a) Consumers believe digital platforms are free, though they are highly profitable.\n• This is not the central irony. The passage does not state that consumers believe the platforms are\nfree; rather, it highlights that consumers are unaware of overcharging because costs are hidden in\nproduct prices.\n• (b) Platforms intended to help small merchants are instead contributing to their collapse.\n• This captures the irony well. Digital gateways were meant to provide convenience and support\nbusiness growth, but the hidden charges and high fees have pushed many small firms into losses or\nclosure. Hence, instead of being an enabler, they have become a burden.\n• (c) China developed digital payment systems for rural areas but they are only used in cities.\n• This is not mentioned in the passage. The text focuses on transaction fees and market dominance,\nnot geographical distribution.\n• (d) Regulatory authorities fail to notice the dom"
+  },
+  {
+   "id": "2025-q41",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "How does the overall state of the economy affect the problems caused by digital payment\nplatforms, according to the passage?",
+   "options": {
+    "A": "It helps small merchants adapt faster to digital systems.",
+    "B": "It makes overcharging practices more acceptable to the public.",
+    "C": "It increases the burden of overcharging due to financial pressures like inflation.",
+    "D": "It incentivizes payment firms to reduce fees.",
+    "E": "It drives consumers away from digital platforms."
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "From: “the weather of the broader economy—rising inflation, slowing exports…—makes these\ncharges even harder to digest.” Hence, the economic stress compounds the burden.\nDetailed Analysis of Options:\n• (a) It helps small merchants adapt faster to digital systems.\n• This is incorrect. The passage does not suggest that the economy helps merchants adapt. In fact,\nsmall merchants are struggling more because of financial pressures.\n• (b) It makes overcharging practices more acceptable to the public.\n• Incorrect. The public is largely unaware of overcharging, but there is no mention that it becomes\nmore \"acceptable.\" The tone of the passage stresses the negative impact.\n• (c) It increases the burden of overcharging due to financial pressures like inflation.\n• Correct. The passage explicitly mentions that rising inflation, slowing exports, and unpredictable\ngrowth make these charges harder to digest. Thus, the already weak economic climate worsens the\neffects of hidden fees.\n• (d) It incentivizes payment firms to reduce fees.\n• Incorrect. The passage makes no mention of firms reducing fees; instead, it shows they continue\nexploiting merchants.\n• (e) It drives consumers away from digital p"
+  },
+  {
+   "id": "2025-q42",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following statements can be inferred to be TRUE based on the passage?\n(I) Digital payment systems were initially perceived as tools to improve financial accessibility.\n(II) Delays in settlement and penalties are part of the challenges faced by merchants using Chinese\ndigital payment platforms.\n(III) Consumers have protested en masse against overcharging practices by payment firms.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (I) and (II)",
+    "C": "Only (III)",
+    "D": "Both (I) and (III)",
+    "E": "All (I), (II) and (III)"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "(b) Both (I) and (II)\nStatement-wise Analysis:\n• (I) Digital payment systems were initially perceived as tools to improve financial accessibility.\n• True. The passage mentions that platforms like Alipay and WeChat Pay “revolutionized the financial\nlandscape, providing convenience and speed.” This implies they were seen as a way to improve\naccess and efficiency.\n• (II) Delays in settlement and penalties are part of the challenges faced by merchants using\nChinese digital payment platforms.\n• True. The passage clearly states that merchants face “delays in settlement, mandatory promotional\ntie-ins, and penalties for using alternative platforms.”\n• (III) Consumers have protested en masse against overcharging practices by payment firms.\n• False. The passage highlights that “consumers remain largely unaware of the scale of overcharging.”\nHence, there is no mention of widespread protests."
+  },
+  {
+   "id": "2025-q43",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following statements is/are FALSE according to the passage?\n(I) The majority of consumers are well-informed about the extra transaction charges added by payment\nfirms.\n(II) The convenience of digital payments has completely eliminated financial dependency on dominant\nplatforms.\n(III) All Chinese digital gateways charge uniformly between 1% and 3% per transaction.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Only (II)",
+    "C": "Both (I) and (II)",
+    "D": "Both (I) and (III)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "(e) All (I), (II), and (III)\nStatement-wise Analysis:\n• (I) The majority of consumers are well-informed about the extra transaction charges added\nby payment firms.\n• False. The passage clearly states that “consumers remain largely unaware of the scale of\novercharging.”\n• (II) The convenience of digital payments has completely eliminated financial dependency on\ndominant platforms.\n• False. The passage says the opposite — instead of encouraging financial freedom, these practices\n“contribute to a sense of dependency on a few dominant players.”\n• (III) All Chinese digital gateways charge uniformly between 1% and 3% per transaction.\n• False. The passage points out that international credit card companies charge between 1–3%, but\nChinese gateways often impose hidden charges that push rates even higher. Thus, the statement is\ninaccurate."
+  },
+  {
+   "id": "2025-q44",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Choose the most suitable word for the given blank.",
+   "options": {
+    "A": "informs",
+    "B": "produces",
+    "C": "change",
+    "D": "highlights",
+    "E": "payment"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "Correct Answer:\n(d) highlights\nBecause the sentence needs a word that shows or emphasizes the point being made. The collapse of\nbusinesses highlights how dependency distorts competition.\nWord Meanings & Usage\n1. Informs\n• English meaning: Gives information about something.\n• Example: The teacher informs students about the exam schedule.\n• Hindi meaning: सूचित करना / जानकारी देना\n2. Produces\n• English meaning: To create, make, or bring forth.\n• Example: The factory produces thousands of cars every year.\n• Hindi meaning: उत्पादन करना / बनाना\n3. Change\n• English meaning: To make or become different.\n• Example: The weather can change suddenly in the mountains.\n• Hindi meaning: बदलना / पररवततन\n4. Highlights\n• English meaning: To emphasize or make something stand out.\n• Example: This case highlights the need for stricter safety rules.\n• Hindi meaning: उजागर करना / प्रमुखता देना\n5. Payment\n• English meaning: The act of giving money for goods or services.\n• Example: She made the payment through online banking.\n• Hindi meaning: भुगतान"
+  },
+  {
+   "id": "2025-q45",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Choose the word that can best replace the word “weather” in the passage.",
+   "options": {
+    "A": "Atmosphere",
+    "B": "Condition",
+    "C": "Climate",
+    "D": "Situation",
+    "E": "Storm"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "The relevant line is:\n“In a way, the weather of the broader economy—rising inflation, slowing exports, and\nunpredictable growth—makes these charges even harder to digest.”\nHere, “weather” is not used in the literal sense of climate or atmosphere. Instead, it metaphorically\nrefers to the overall condition/situation of the economy.\nOption Analysis:\n• (a) Atmosphere\n• Too literal. Refers to air or surroundings, not suitable in this economic context.\n• (b) Condition\n• Close, but still a bit too general.\n• (c) Climate\n• Again too literal, though sometimes used metaphorically for “business climate.” Still, not the best fit.\n• (d) Situation\n• Best fit. The passage describes the situation of the broader economy (inflation, slowing exports,\ngrowth issues).\n• (e) Storm\n• Implies chaos or trouble, but the passage is broader and neutral in tone — not about a literal storm."
+  },
+  {
+   "id": "2025-q46",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following is the most appropriate synonym of “firms” in the context of the passage?",
+   "options": {
+    "A": "Companies",
+    "B": "Holds",
+    "C": "Contracts",
+    "D": "Stubborn",
+    "E": "Customers"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "The passage uses “firms” in lines such as:\n“Merchants across sectors have complained… Small firms, in particular, feel the burden…”\nHere, “firms” clearly refers to business organizations/companies.\nWord meanings:\n(a) Companies (Correct Synonym of “Firms”)\n• Meaning (English): Business organizations that sell goods or services.\n• Example (English): Several companies are competing in the digital payment industry.\n• Meaning (Hindi): कंपचनयााँ / व्यवसाचयक संगठन\n(b) Holds\n• Meaning (English): To grasp, carry, or keep in possession.\n• Example (English): She holds the keys to the office.\n• Meaning (Hindi): पकड़ / थामना\n(c) Contracts\n• Meaning (English): A written or spoken agreement that is legally binding.\n• Example (English): The company signed two new contracts with suppliers.\n• Meaning (Hindi): अनुबंध / समझौता\n(d) Stubborn\n• Meaning (English): Unwilling to change one’s opinion or behavior despite reason.\n• Example (English): He is too stubborn to admit his mistake.\n• Meaning (Hindi): च़िद्दी / हठी\n(e) Customers\n• Meaning (English): People who buy goods or services from a business.\n• Example (English): The shop has many loyal customers.\n• Meaning (Hindi): ग्राहक"
+  },
+  {
+   "id": "2025-q47",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "In the sentence, what is the most suitable synonym for “folded”?",
+   "options": {
+    "A": "Expanded",
+    "B": "Closed",
+    "C": "Shrunk",
+    "D": "Evolved",
+    "E": "Joined"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (40-47): Read the following passage and answer the given questions.\nIn recent years, China’s economy has expanded rapidly, with consumer spending playing a pivotal role.\nFrom groceries to luxury items, nearly every purchase now passes through digital payment gateways\nsuch as Alipay and WeChat Pay. These platforms have revolutionized the financial landscape, providing\nconvenience and speed. However, beneath this innovation lies a growing concern: the overcharging\npractices of these payment firms.\nMerchants across sectors have complained that the transaction fees are often higher than advertised.\nSmall firms, in particular, feel the burden, as they rely heavily on digital payments to stay competitive in\na market where cash is steadily declining. Many local businesses, unable to bear the pressure of\nmounting costs, have folded within months of adopting these systems. This _____________ how\ndependence on a few gateways can distort fair competition.\nA recent report highlights that while international credit card companies charge between 1% and 3%\nper transaction, some Chinese gateways impose hidden charges that push the effective rate even higher.\nThe issue is not just about percentages; merchants also face delays in settlement, mandatory\npromotional tie-ins, and penalties for using alternative platforms. These tactics create an environment\nwhere firms have little choice but to comply.\nInterestingly, consumers remain largely unaware of the scale of overcharging because the extra costs\nare often folded into the final prices of goods and services. In a way, the weather of the broader\neconomy—rising inflation, slowing exports, and unpredictable growth—makes these charges even\nharder to digest. Instead of encouraging financial freedom, these practices contribute to a sense of\ndependency on a few dominant players.\nObservers warn that if unchecked, this trend could harm innovation in the long run. The monopolistic\ngrip of payment giants not only squeezes small firms but also discourages new entrants from\nexperimenting with alternative solutions. Unless greater transparency and regulatory oversight are\nintroduced, the promise of a seamless digital economy may end up costing more than it delivers.",
+   "explanation": "“Many local businesses, unable to bear the pressure of mounting costs, have folded within\nmonths of adopting these systems.”\nHere, “folded” means shut down or closed due to failure — not literally folding paper.\nWord meanings:\n(a) Expanded\n• Meaning (English): To increase in size, number, or importance.\n• Example (English): The company expanded its operations to three more countries.\n• Meaning (Hindi): चवस्तार करना\n(b) Closed (Correct synonym for folded in passage)\n• Meaning (English): To shut down, stop operations, or bring something to an end.\n• Example (English): The shop closed last year due to high rents.\n• Meaning (Hindi): बंद करना / समाप्त करना\n(c) Shrunk\n• Meaning (English): To become smaller in size, amount, or value.\n• Example (English): The sweater shrunk after being washed in hot water.\n• Meaning (Hindi): चसकुड़ना / छोटा होना\n(d) Evolved\n• Meaning (English): To gradually develop or change into a better or more advanced form.\n• Example (English): Human beings have evolved over millions of years.\n• Meaning (Hindi): चवकचसत होना / क्रचमक पररवततन होना\n(e) Joined\n• Meaning (English): To become a member of or connect with something.\n• Example (English): She joined the new scho"
+  },
+  {
+   "id": "2025-q48",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the question below, four sentences have been given. Out of four sentences, one sentence\nis error-free. Find out which of the following sentences is error-free. If all the given sentences\nhave errors, then choose option ‘All are incorrect’ as your answer choice.",
+   "options": {
+    "A": "The Indian Ocean is strategically important for global trade and shipping.",
+    "B": "Front running involves illegal trading based on non-public information above transactions.",
+    "C": "The Marrakech Agreement focuses on global climate action since sustainable development.",
+    "D": "Blackbucks are graceful antelopes find primarily in the Indian subcontinent.",
+    "E": "None are correct"
+   },
+   "correctAnswer": "A",
+   "explanation": "(a) The Indian Ocean is strategically important for global trade and shipping.\n• Analysis:\n• Grammatically correct: subject (The Indian Ocean) + linking verb (is) + complement (strategically\nimportant for global trade and shipping).\n• Contextually correct: The Indian Ocean is indeed crucial for trade and shipping routes.\nError-free\n(b) Front running involves illegal trading based on non-public information above transactions.\n• Error:\n• The preposition “above” is wrong. The correct phrase is “based on non-public information about\ntransactions.”\no Incorrect: information above transactions\no Correct: information about transactions\nIncorrect\n(c) The Marrakech Agreement focuses on global climate action since sustainable development.\n• Error:\n• Wrong connector. “since” indicates time or cause, which is incorrect here. It should be “and” or “for”.\no Correct: The Marrakech Agreement focuses on global climate action and sustainable development.\nIncorrect\n(d) Blackbucks are graceful antelopes find primarily in the Indian subcontinent.\n• Error:\n• The verb form is wrong. Instead of “find”, it should be the past participle “found.”\no Correct: Blackbucks are graceful antelopes found primarily in"
+  },
+  {
+   "id": "2025-q49",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the question below, four sentences have been given. Out of four sentences, one sentence\nis error-free. Find out which of the following sentences is error-free. If all the given sentences\nhave errors, then choose option ‘All are incorrect’ as your answer choice.",
+   "options": {
+    "A": "Patachitra painting is an ancient Indian art form known for storytelling.",
+    "B": "Critical minerals is essential for technology, energy, and industrial applications worldwide.",
+    "C": "Drip pricing adds extra charges to advertising prices, deceiving consumers.",
+    "D": "Migration affects economies, creating opportunities and challenges to both regions.",
+    "E": "None are correct"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let’s carefully check each option step by step.\n(a) Patachitra painting is an ancient Indian art form known for storytelling.\n• Analysis:\n• Grammatically correct: Subject (Patachitra painting) + verb (is) + complement (an ancient Indian art\nform known for storytelling).\n• Contextually correct: Patachitra is indeed a traditional art form famous for narrative painting.\nCorrect\n(b) Critical minerals is essential for technology, energy, and industrial applications worldwide.\n• Error:\n• Subject–verb disagreement. “Critical minerals” is plural, so verb should be “are”, not “is.”\no Correct: Critical minerals are essential for technology, energy, and industrial applications worldwide.\nIncorrect\n(c) Drip pricing adds extra charges to advertising prices, deceiving consumers.\n• Error:\n• Wrong preposition. It should be “on advertised prices” (or “to advertised prices”), not “to advertising\nprices.”\no Correct: Drip pricing adds extra charges to advertised prices, deceiving consumers.\nIncorrect\n(d) Migration affects economies, creating opportunities and challenges to both regions.\n• Error:\n• Wrong preposition. It should be “challenges for both regions”, not “challenges to both regions.”\no Correc"
+  },
+  {
+   "id": "2025-q50",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the question below, four sentences have been given. Out of four sentences, one sentence\nis error-free. Find out which of the following sentences is error-free. If all the given sentences\nhave errors, then choose option ‘All are incorrect’ as your answer choice.",
+   "options": {
+    "A": "Sailfin catfish is freshwater fish with distinctive fins and vibrant coloration.",
+    "B": "Meitei Sagol is a traditional breeds of horse in Manipur.",
+    "C": "Foot rot disease affects livestock, causing pain, lameness, and productive loss.",
+    "D": "Areca nut is widely consumed across Asia for its stimulant properties.",
+    "E": "None are correct"
+   },
+   "correctAnswer": "D",
+   "explanation": "(a) Sailfin catfish is freshwater fish with distinctive fins and vibrant coloration.\n• Error: Missing article.\n• It should be “a freshwater fish” not “freshwater fish.”\no Correct: Sailfin catfish is a freshwater fish with distinctive fins and vibrant coloration.\nIncorrect\n(b) Meitei Sagol is a traditional breeds of horse in Manipur.\n• Error: Subject–noun mismatch.\n• “a traditional breeds” is wrong because “a” (singular) cannot modify breeds (plural).\no Correct: Meitei Sagol is a traditional breed of horse in Manipur.\nIncorrect\n(c) Foot rot disease affects livestock, causing pain, lameness, and productive loss.\n• Error: Wrong word choice.\n• It should be “loss of productivity” or “production loss”, not “productive loss.”\no Correct: Foot rot disease affects livestock, causing pain, lameness, and loss of productivity.\nIncorrect\n(d) Areca nut is widely consumed across Asia for its stimulant properties.\n• Analysis:\n• Grammatically correct: subject (Areca nut) + verb (is) + complement (widely consumed across Asia\nfor its stimulant properties).\n• Contextually correct: Areca nut (betel nut) is indeed consumed widely in Asia.\nCorrect\nCorrect Answer: (d) Areca nut is widely consumed across As"
+  },
+  {
+   "id": "2025-q51",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the question below, four sentences have been given. Out of four sentences, one sentence\nis error-free. Find out which of the following sentences is error-free. If all the given sentences\nhave errors, then choose option ‘All are incorrect’ as your answer choice.",
+   "options": {
+    "A": "Bhishm Cube is an intricate puzzle challenge logical thinking and strategy.",
+    "B": "India VIX measured market volatility and investor sentiment in Indian markets.",
+    "C": "The paradox of thrift suggests saving most would harm economic growth.",
+    "D": "The Panama Canal connects the Atlantic and Pacific Oceans, enabling global trade.",
+    "E": "None are correct"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let’s carefully analyze step by step.\n(a) Bhishm Cube is an intricate puzzle challenge logical thinking and strategy.\n• Error: Missing participle.\n• It should be “puzzle challenging logical thinking and strategy,” not “puzzle challenge.”\no Correct: Bhishm Cube is an intricate puzzle challenging logical thinking and strategy.\nIncorrect\n(b) India VIX measured market volatility and investor sentiment in Indian markets.\n• Error: Wrong tense.\n• India VIX is an index that still measures volatility → should be “measures”, not “measured.”\no Correct: India VIX measures market volatility and investor sentiment in Indian markets.\nIncorrect\n(c) The paradox of thrift suggests saving most would harm economic growth.\n• Error: Wrong word choice.\n• It should be “saving more” not “saving most.”\no Correct: The paradox of thrift suggests saving more would harm economic growth.\nIncorrect\n(d) The Panama Canal connects the Atlantic and Pacific Oceans, enabling global trade.\n• Analysis:\n• Grammatically correct: subject (The Panama Canal) + verb (connects) + object (the Atlantic and\nPacific Oceans).\n• Contextually correct: The Panama Canal indeed connects both oceans and facilitates global trade.\nCorrect\nC"
+  },
+  {
+   "id": "2025-q52",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following word best fits in blank A?",
+   "options": {
+    "A": "demand",
+    "B": "growth",
+    "C": "offer",
+    "D": "review",
+    "E": "wait"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (52-57): In the following passage, there are blanks, each of which has been denoted\nby a letter. For each blank, five options are given. Choose the most appropriate word from the\noptions that fits the blank appropriately.\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors. Newcomers often feel ___________(B) when trying to understand their roles and\nresponsibilities. A helpful senior can ___________(C) the learning process by sharing experiences and\nproviding useful tips. This not only builds confidence but also ___________(D) stronger team relationships.\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively. Hence,\nmutual cooperation and mentorship are ___________(F) for maintaining a productive workplace.",
+   "explanation": "The correct answer is: (c) offer\nSentence with Blank A:\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors.\nSeniors don’t demand or wait — they give/offer guidance.\nOption Analysis:\n(a) demand\n• English: to ask forcefully, require.\n• Hindi: मांगना\n• Example: He demanded an explanation.\n• Incorrect – seniors don’t “demand guidance,” they provide it.\n(b) growth\n• English: development, increase.\n• Hindi: वृचि, चवकास\n• Example: The company saw rapid growth last year.\n• Incorrect – grammatically doesn’t fit.\n(c) offer\n• English: to provide, give willingly.\n• Hindi: प्रदान करना / पेश करना\n• Example: Teachers offer guidance to their students.\n• Correct – seniors offer guidance and support.\n(d) review\n• English: to examine, evaluate.\n• Hindi: समीक्षा करना\n• Example: The manager reviewed the project report.\n• Incorrect – doesn’t fit the context of giving guidance.\n(e) wait\n• English: to stay in place until something happens.\n• Hindi: प्रतीक्षा करना\n• Example: We waited for the bus.\n• Incorrect – meaningless here.\nFinal Answer: (c) offer"
+  },
+  {
+   "id": "2025-q53",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following word best fits in blank B?",
+   "options": {
+    "A": "nervous",
+    "B": "lazy",
+    "C": "empty",
+    "D": "anxiety",
+    "E": "complete"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (52-57): In the following passage, there are blanks, each of which has been denoted\nby a letter. For each blank, five options are given. Choose the most appropriate word from the\noptions that fits the blank appropriately.\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors. Newcomers often feel ___________(B) when trying to understand their roles and\nresponsibilities. A helpful senior can ___________(C) the learning process by sharing experiences and\nproviding useful tips. This not only builds confidence but also ___________(D) stronger team relationships.\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively. Hence,\nmutual cooperation and mentorship are ___________(F) for maintaining a productive workplace.",
+   "explanation": "The correct answer is: (a) nervous\nSentence with Blank B:\nNewcomers often feel ___________(B) when trying to understand\nContext: New employees → unsure, lacking confidence → they feel\nOption Analysis:\n(a) nervous\n• English: anxious, uneasy.\n• Hindi: घबराया हुआ\n• Example: She was nervous before her first interview.\n• Correct – perfectly matches newcomers adjusting to a new role\n(b) lazy\n• English: unwilling to work.\n• Hindi: आलसी\n• Example: He is too lazy to finish his homework.\n• Incorrect – doesn’t fit; newcomers aren’t lazy, they’re adjusting\ntheir roles and responsibilities.\nnervous.\ne.\ng.\n(c) empty\n• English: not filled.\n• Hindi: खाली\n• Example: The bottle is empty.\n• Incorrect – irrelevant to emotions at work.\n(d) anxiety\n• English: feeling of worry (noun).\n• Hindi: चिंता\n• Example: He suffers from anxiety before presentations.\n• Incorrect form – needs an adjective (anxious/nervous), not\n(e) complete\n• English: whole, finished.\n• Hindi: पूरा\n• Example: She completed her assignment on time.\n• Incorrect – doesn’t fit.\nFinal Answer: (a) nervous"
+  },
+  {
+   "id": "2025-q54",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following word best fits in blank C?",
+   "options": {
+    "A": "delay",
+    "B": "confuse",
+    "C": "recruit",
+    "D": "guess",
+    "E": "speed"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (52-57): In the following passage, there are blanks, each of which has been denoted\nby a letter. For each blank, five options are given. Choose the most appropriate word from the\noptions that fits the blank appropriately.\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors. Newcomers often feel ___________(B) when trying to understand their roles and\nresponsibilities. A helpful senior can ___________(C) the learning process by sharing experiences and\nproviding useful tips. This not only builds confidence but also ___________(D) stronger team relationships.\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively. Hence,\nmutual cooperation and mentorship are ___________(F) for maintaining a productive workplace.",
+   "explanation": "The correct answer is: (e) speed\nSentence with Blank C:\nA helpful senior can ___________(C) the learning process by\nuseful tips.\nContext: Seniors help juniors → they make learning faster/easi\nOption Analysis:\n(a) delay\n• English: to make late, slow down.\n• Hindi: चवलंब करना\n• Example: Heavy traffic delayed the bus.\n• Incorrect – opposite meaning.\n(b) confuse\n• English: to make unclear.\n• Hindi: उलझाना\n• Example: The instructions confused the students.\n• Incorrect – seniors are supposed to help, not confuse.\n(c) recruit\n• English: to hire or enlist.\n• Hindi: भती करना\n• Example: The company recruited new employees.\n• Incorrect – irrelevant here.\n(d) guess\n• English: to estimate without certainty.\n• Hindi: अनुमान लगाना\n• Example: She guessed the answer correctly.\n• Incorrect – doesn’t fit with learning support.\na noun.\nsharing experiences and providing\nier → correct word = speed.\n(e) speed\n• English: to make faster. (often used as speed up).\n• Hindi: गचत देना\n• Example: Technology can speed up the learning process.\n• Correct – seniors speed the learning process.\nFinal Answer: (e) speed"
+  },
+  {
+   "id": "2025-q55",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following word best fits in blank D?",
+   "options": {
+    "A": "blocks",
+    "B": "pursues",
+    "C": "fulfilled",
+    "D": "fosters",
+    "E": "integrate"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (52-57): In the following passage, there are blanks, each of which has been denoted\nby a letter. For each blank, five options are given. Choose the most appropriate word from the\noptions that fits the blank appropriately.\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors. Newcomers often feel ___________(B) when trying to understand their roles and\nresponsibilities. A helpful senior can ___________(C) the learning process by sharing experiences and\nproviding useful tips. This not only builds confidence but also ___________(D) stronger team relationships.\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively. Hence,\nmutual cooperation and mentorship are ___________(F) for maintaining a productive workplace.",
+   "explanation": "The correct answer is: (d) fosters\nSentence with Blank D:\nThis not only builds confidence but also ___________(D) stronger team relationships.\nContext: Building confidence → positive effect → it encourages/nurtures team relationships.\nOption Analysis:\n(a) blocks\n• English: to stop, obstruct.\n• Hindi: रोकना\n• Example: A wall blocks the view.\n• Incorrect – opposite of the positive meaning.\n(b) pursues\n• English: to follow, chase, try to achieve.\n• Hindi: पीछा करना / प्रयास करना\n• Example: She pursues a career in medicine.\n• Incorrect – not about “relationships.”\n(c) fulfilled\n• English: satisfied, completed.\n• Hindi: पूरा करना / संतुष्ट करना\n• Example: She felt fulfilled after achieving her dream.\n• Incorrect – wrong form; does not collocate with “team relationships.”\n(d) fosters\n• English: encourages, promotes, nurtures.\n• Hindi: बढावा देना / पोषण करना\n• Example: Teamwork fosters strong bonds among employees.\n• Correct – fits perfectly: confidence fosters stronger relationships.\n(e) integrate\n• English: to combine, bring together.\n• Hindi: एकीकृत करना\n• Example: The new software integrates multiple functions.\n• Incorrect – grammatically off here.\nFinal Answer: (d) fosters"
+  },
+  {
+   "id": "2025-q56",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following word best fits in blank E?",
+   "options": {
+    "A": "adhered",
+    "B": "welcomed",
+    "C": "tired",
+    "D": "regulated",
+    "E": "restricted"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (52-57): In the following passage, there are blanks, each of which has been denoted\nby a letter. For each blank, five options are given. Choose the most appropriate word from the\noptions that fits the blank appropriately.\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors. Newcomers often feel ___________(B) when trying to understand their roles and\nresponsibilities. A helpful senior can ___________(C) the learning process by sharing experiences and\nproviding useful tips. This not only builds confidence but also ___________(D) stronger team relationships.\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively. Hence,\nmutual cooperation and mentorship are ___________(F) for maintaining a productive workplace.",
+   "explanation": "The correct answer is: (b) welcomed\nSentence with Blank E:\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively.\nContext: If juniors are respected → the parallel positive feeling is welcomed.\nOption Analysis:\n(a) adhered\n• English: stuck to, followed.\n• Hindi: पालन करना / चिपकना\n• Example: He adhered to the rules strictly.\n• Incorrect – doesn’t fit with “respected.”\n(b) welcomed\n• English: received with friendliness, accepted warmly.\n• Hindi: स्वागत ककया गया / अपनाया गया\n• Example: New employees felt welcomed by their team.\n• Correct – juniors who feel respected and welcomed con\n(c) tired\n• English: fatigued, exhausted.\n• Hindi: थका हुआ\n• Example: He was tired after a long day.\n• Incorrect – negative, doesn’t fit the positive context.\n(d) regulated\n• English: controlled by rules.\n• Hindi: चनयंचित\n• Example: The government regulated online payments.\n• Incorrect – irrelevant to emotions of juniors.\n(e) restricted\n• English: limited, confined.\n• Hindi: सीचमत\n• Example: Access to the area was restricted.\n• Incorrect – opposite of welcomed.\nFinal Answer: (b) welcomed"
+  },
+  {
+   "id": "2025-q57",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following word best fits in blank F?",
+   "options": {
+    "A": "critical",
+    "B": "nominal",
+    "C": "analytical",
+    "D": "accrual",
+    "E": "minimal"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (52-57): In the following passage, there are blanks, each of which has been denoted\nby a letter. For each blank, five options are given. Choose the most appropriate word from the\noptions that fits the blank appropriately.\nIn a healthy office environment, it is important that senior employees ___________(A) guidance and\nsupport to their juniors. Newcomers often feel ___________(B) when trying to understand their roles and\nresponsibilities. A helpful senior can ___________(C) the learning process by sharing experiences and\nproviding useful tips. This not only builds confidence but also ___________(D) stronger team relationships.\nWhen juniors feel respected and ___________(E), they are more likely to contribute effectively. Hence,\nmutual cooperation and mentorship are ___________(F) for maintaining a productive workplace.",
+   "explanation": "The correct answer is: (a) critical\nSentence with Blank F:\nHence, mutual cooperation and mentorship are ___\nworkplace.\nHere the sentence emphasizes how essential cooperation\nOption Analysis:\n(a) critical\n• English: extremely important, essential.\n• Hindi: अत्यावश्यक / बेहद महत्वपूण त\n• Example: Trust is critical for a successful relationship.\n• Correct – fits perfectly with “maintaining a productive\n(b) nominal\n• English: very small, in name only.\n• Hindi: नाममाि / बहुत कम\n• Example: The students paid a nominal fee.\n• Incorrect – opposite meaning, not about importance.\nntribute more.\n_________(F) for maintaining a productive\nand mentorship are → best word = critical.\nworkplace.”\n7 App\n(c) analytical\n• English: relating to analysis or logical thinking.\n• Hindi: चवश्लेषणात्मक\n• Example: He has an analytical approach to problems.\n• Incorrect – irrelevant in this context.\n(d) accrual\n• English: gradual accumulation, growth.\n• Hindi: संिय / वृचि\n• Example: The accrual of interest was noted in the account.\n• Incorrect – unrelated to mentorship.\n(e) minimal\n• English: the least possible, very small.\n• Hindi: न्यूनतम / बहुत कम\n• Example: The risks were minimal.\n• Incorrect – opposite meani"
+  },
+  {
+   "id": "2025-q58",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Recent space relentless (A) highlight humanity's breakthroughs (B) pursuit of cosmic\nknowledge, propelling (C) us toward a future of exploration (D) and discovery.\"",
+   "options": {
+    "A": "B-C & A-D",
+    "B": "A-B",
+    "C": "C-D",
+    "D": "A-C & B-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (58-61): In the question below four words are given in bold. These four words are may\nnot be in their correct position. The sentence is then followed by options with the correct\ncombination of words that should replace each other in order to make the sentence\ngrammatically and contextually correct. Find the correct combination of the words that replace\neach other.",
+   "explanation": "Original Sentence:\nRecent space relentless (A) highlight humanity's breakthroughs (B) pursuit of cosmic\nknowledge, propelling (C) us toward a future of exploration (D) and discovery.\nProblem: space relentless does not make sense. The intended phrase is space breakthroughs. Similarly,\nhumanity’s breakthroughs pursuit is awkward; it should be humanity’s relentless pursuit.\nSo, swap (A) relentless ↔ (B) breakthroughs.\nCorrected Sentence:\nRecent space breakthroughs (B) highlight humanity's relentless (A) pursuit of cosmic\nknowledge, propelling (C) us toward a future of exploration (D) and discovery.\nWord-by-word Meanings & Explanation\n(A) relentless\n• English: continuing without stopping, determined.\n• Hindi: चनरंतर / अटल\n• Example: She showed relentless effort in preparing for the exam.\n• Incorrect in original place → “space relentless” is meaningless. Correct after swap: relentless\npursuit.\n(B) breakthroughs\n• English: major discoveries or advancements.\n• Hindi: बड़ी खोजें / प्रगचत\n• Example: Medical breakthroughs saved thousands of lives.\n• Incorrect in original place → “humanity’s breakthroughs pursuit” is wrong. Correct after swap:\nspace breakthroughs.\n(C) propelling\n• English: dr"
+  },
+  {
+   "id": "2025-q59",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Global including (A) for sustainability, initiatives (B) reforestation, signal a safeguard (C)\ncommitment to collective (D) our planet's future.",
+   "options": {
+    "A": "A-D",
+    "B": "B-C",
+    "C": "A-B & C-D",
+    "D": "D-B & C-A",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (58-61): In the question below four words are given in bold. These four words are may\nnot be in their correct position. The sentence is then followed by options with the correct\ncombination of words that should replace each other in order to make the sentence\ngrammatically and contextually correct. Find the correct combination of the words that replace\neach other.",
+   "explanation": "Original Sentence:\nGlobal including (A) for sustainability, initiatives (B) reforestation, signal a safeguard (C)\ncommitment to collective (D) our planet's future.\nProblem:\n• Global including doesn’t fit. Correct should be Global initiatives.\n• safeguard commitment to collective our planet’s future is awkward. Correct should be collective\ncommitment to safeguard our planet’s future.\n• So we must swap A–B and C–D.\nCorrected Sentence:\nGlobal initiatives (B) for sustainability, including (A) reforestation, signal a collective (D)\ncommitment to safeguard (C) our planet's future.\nWord-by-word Meanings & Explanation\n(A) including\n• English: containing as part of the whole.\n• Hindi: सचममचलत करना\n• Example: The package includes books, pens, and pencils.\n• Incorrect in original place – “Global including” is wrong. Correct after swap → including\nreforestation.\n(B) initiatives\n• English: plans, programs, actions started for a purpose.\n• Hindi: पहल / योजनाएाँ\n• Example: The government launched initiatives for clean energy.\n• Incorrect in original place – “initiatives reforestation” doesn’t work. Correct after swap → Global\ninitiatives.\n(C) safeguard\n• English: to protect.\n• Hindi: सुरक्षा करना"
+  },
+  {
+   "id": "2025-q60",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Innovative (A) educational tech, from (B) virtual classrooms to interactive apps, is reshaping\n(C) learning, offering dynamic and personalized (D) experiences.",
+   "options": {
+    "A": "D-B & C-A",
+    "B": "A-D",
+    "C": "B-C",
+    "D": "A-B & C-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (58-61): In the question below four words are given in bold. These four words are may\nnot be in their correct position. The sentence is then followed by options with the correct\ncombination of words that should replace each other in order to make the sentence\ngrammatically and contextually correct. Find the correct combination of the words that replace\neach other.",
+   "explanation": "Original Sentence:\nInnovative (A) educational tech, from (B) virtual classrooms to interactive apps, is reshaping (C)\nlearning, offering dynamic and personalized (D) experiences.\nThis sentence already makes complete grammatical and contextual sense:\n• Innovative educational tech → correct collocation.\n• from virtual classrooms to interactive apps → correct prepositional phrase.\n• is reshaping learning → correct verb form and logical meaning.\n• offering dynamic and personalized experiences → correct parallel phrase.\nThus, no swaps are needed.\nWord-by-word Meanings & Explanation\n(A) Innovative\n• English: creative, introducing something new.\n• Hindi: नवािारी / नवीन\n• Example: The company launched innovative solutions for energy saving.\n• Correct here – “Innovative educational tech” fits perfectly.\n(B) From\n• English: indicating a starting point or source.\n• Hindi: से / द्वारा\n• Example: She traveled from Mumbai to Delhi.\n• Correct here – “from virtual classrooms to interactive apps” is the right range expression.\n(C) Reshaping\n• English: changing the form, reforming.\n• Hindi: नया रूप देना / पुनगतठन करना\n• Example: AI is reshaping the future of work.\n• Correct here – “is reshaping lear"
+  },
+  {
+   "id": "2025-q61",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Artificial Intelligence transforms (A) healthcare with precise diagnostics (B) and personalized\ntreatments, era (C) in a new ushering (D) of medical advancements.",
+   "options": {
+    "A": "A-B & C-D",
+    "B": "A-C & B-D",
+    "C": "C-D",
+    "D": "A-D",
+    "E": "No interchange required"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (58-61): In the question below four words are given in bold. These four words are may\nnot be in their correct position. The sentence is then followed by options with the correct\ncombination of words that should replace each other in order to make the sentence\ngrammatically and contextually correct. Find the correct combination of the words that replace\neach other.",
+   "explanation": "Original Sentence:\nArtificial Intelligence transforms (A) healthcare with precise diagnostics (B) and personalized\ntreatments, era (C) in a new ushering (D) of medical advancements.\nProblem:\n• era in a new ushering → grammatically wrong.\n• Correct phrase should be ushering in a new era.\nSo, swap (C) era ↔ (D) ushering.\nCorrected Sentence:\nArtificial Intelligence transforms healthcare with precise diagnostics and personalized\ntreatments, ushering (D) in a new era (C) of medical advancements.\nWord-by-word Meanings & Explanation\n(A) transforms\n• English: changes completely, revolutionizes.\n• Hindi: बदलना / रूपांतररत करना\n• Example: Technology transforms the way we live.\n• Correct – “AI transforms healthcare” makes sense.\n(B) diagnostics\n• English: identification of a disease or problem.\n• Hindi: चनदान / रोग-पहिान\n• Example: Early diagnostics save lives.\n• Correct – “precise diagnostics” is a standard collocation.\n(C) era\n• English: a long distinct period of history.\n• Hindi: युग / काल\n• Example: We live in the digital era.\n• Incorrect in original place – “era in a new ushering” is ungrammatical. Correct after swap → “new\nera.”\n(D) ushering\n• English: beginning or introducing something"
+  },
+  {
+   "id": "2025-q62",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "COLUMN I\n(A) As the orchestra played, the harmonious\n(B) Setting off on an impromptu journey, they unearthed\n(C) The classroom buzzed with intellectual curiosity\nCOLUMN II\n(D) that a well-prepared meal brings to the table\n(E) at home can open up the magical world\n(F) hidden treasures, crafting indelible memories",
+   "options": {
+    "A": "C-E & A-D",
+    "B": "B-F",
+    "C": "B-D & C-F",
+    "D": "A-E",
+    "E": "None of the above"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (62-63): In the question below, a few phrases are given in two columns. Choose the\nbest possible combination of phrases as the answer from the given options, in order to form a\nmeaningful sentence.",
+   "explanation": "COLUMN I – COLUMN II Matching\n(A) As the orchestra played, the harmonious …\n• Best fit: (D) that a well-prepared meal brings to the table illogical (orchestra ≠ meal).\n• (E) doesn’t match.\n• (F) orchestra ≠ hidden treasures.\n• No proper match for A.\n(B) Setting off on an impromptu journey, they unearthed …\n• Best fit: (F) hidden treasures, crafting indelible memories (makes perfect sense).\n(C) The classroom buzzed with intellectual curiosity …\n• Best fit: (E) at home can open up the magical world mismatch (classroom ≠ at home).\n• (D) irrelevant.\n• (F) illogical.\n• No proper match for C.\nCheck Options\n(a) C-E & A-D – both mismatched.\n(b) B-F – correct and meaningful.\n(c) B-D & C-F – nonsense.\n(d) A-E – nonsense.\n(e) None of the above – because B-F works well.\nCorrect Sentence:\n(B–F) Setting off on an impromptu journey, they unearthed hidden treasures, crafting indelible\nmemories.\nFinal Answer: (b) B-F"
+  },
+  {
+   "id": "2025-q63",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "COLUMN I\n(A) Amidst challenges, a glimmer of hope emerged,\n(B) Beneath the starlit sky, the rhythmic sounds of\n(C) Before sleep, dreams painted vibrant landscapes\nCOLUMN II\n(D) echoing the timeless beauty of nature's embrace.\n(E) of unexplored possibilities and aspirations\n(F) while mysteries that once seemed vulnerable",
+   "options": {
+    "A": "C-E",
+    "B": "B-D & A-E",
+    "C": "C-D & B-F",
+    "D": "A-F",
+    "E": "None of the above"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (62-63): In the question below, a few phrases are given in two columns. Choose the\nbest possible combination of phrases as the answer from the given options, in order to form a\nmeaningful sentence.",
+   "explanation": "(a) C–E\nWhy:\n• C–E forms a smooth, grammatical sentence:\n• “Before sleep, dreams painted vibrant landscapes of unexplored possibilities and aspirations.” —\nnatural and coherent.\n• B–D (option b) is awkward: “the rhythmic sounds of echoing …” needs a noun after “of”.\n• C–D & B–F (option c): C–D is fine, but B–F is nonsensical.\n• A–F (option d) is incomplete/ill-formed.\n• Hence, the best valid pairing is C–E only."
+  },
+  {
+   "id": "2025-q64",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Bring up\n(I) She decided to bring up the issue of salary during the meeting.\n(II) They had to bring up the old furniture from the basement.\n(III) Her grandparents brought her up after her parents passed away.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Only (II)",
+    "C": "Both (I) and (II)",
+    "D": "Both (I) and (III)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (64-65): In each question, a phrasal verb is provided. Identify the sentence(s) in\nwhich the phrasal verb has been used correctly.",
+   "explanation": "Analysis:\n(I) Correct. “Bring up an issue” means to mention it. Example: He brought up politics at the dinner table.\nHindi: बात छेड़ना\n(II) Incorrect. “Bring up” is not used for moving objects from one place to another. The correct usage\nwould be “bring out” or “carry up.” Example: They brought out the boxes from storage. Hindi: बाहर लाना\n(III) Correct. “Bring up a child” means to raise or nurture a child. Example: She was brought up by her\naunt. Hindi: पालन-पोषण करना\nAnswer: Both (I) and (III) → option (d)"
+  },
+  {
+   "id": "2025-q65",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Look after\n(I) She stayed home to look after her younger brother.\n(II) The manager promised to look after the complaints personally.\n(III) He wanted to look after the documents before signing the contract.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Only (II)",
+    "C": "Both (I) and (II)",
+    "D": "Both (I) and (III)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (64-65): In each question, a phrasal verb is provided. Identify the sentence(s) in\nwhich the phrasal verb has been used correctly.",
+   "explanation": "Analysis:\n(I) Correct. “Look after” means to care for someone. Example: Parents look after their children. Hindi:\nदेखभाल करना\n(II) Correct. Here “look after the complaints” means to handle or manage them. Example: The teacher\nlooks after discipline in the school. Hindi: ध्यान रखना या संभालना\n(III) Incorrect. “Look after” does not mean to examine carefully. The correct phrasal verb is “look over.”\nExample: He looked over the report before submitting it. Hindi: जांिना या परखना\nAnswer: Both (I) and (II) → option (c)"
+  },
+  {
+   "id": "2025-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of cost of total mechanical pencil in A and B together to cost of total wooden\npencil in D.",
+   "options": {
+    "A": "16:5",
+    "B": "5:1",
+    "C": "1:6",
+    "D": "1:5",
+    "E": "1:2"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (66-70): The table given below shows the total number of wooden and mechanical\npencils in five shops and it also shows the price of total mechanical and wooden pencils.\nTotal number of wooden and mechanical Price of total mechanical and wooden\nShops\npencils pencils\nA 38 490\nB 47 415\nC 112 1310\nD 75 900\nE 40 425\nNote – Cost of wooden pencil and mechanical pencil is Rs 5 and Rs 20 respectively.",
+   "explanation": "Let the wooden and mechanical pencil be x and\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nShops Total wooden Total cost of\npencils wooden pencil\nA 18 90\nB 35 175\nC 62 310\nD 40 200\nE 25 125\nRequired ratio = 400 + 240 : 200 = 16:5"
+  },
+  {
+   "id": "2025-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the total mechanical pencil in C is what percentage of total wooden pencil in E.",
+   "options": {
+    "A": "100",
+    "B": "200",
+    "C": "160",
+    "D": "150",
+    "E": "102"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (66-70): The table given below shows the total number of wooden and mechanical\npencils in five shops and it also shows the price of total mechanical and wooden pencils.\nTotal number of wooden and mechanical Price of total mechanical and wooden\nShops\npencils pencils\nA 38 490\nB 47 415\nC 112 1310\nD 75 900\nE 40 425\nNote – Cost of wooden pencil and mechanical pencil is Rs 5 and Rs 20 respectively.",
+   "explanation": "Let the wooden and mechanical pencil be x and\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nTotal wooden Total cost of\nShops\npencils wooden pencil\nA 18 90\nB 35 175\nC 62 310\nD 40 200\nE 25 125"
+  },
+  {
+   "id": "2025-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the average number of wooden pencil in A, mechanical pencil in B and E.",
+   "options": {
+    "A": "10",
+    "B": "5",
+    "C": "16",
+    "D": "15",
+    "E": "12"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (66-70): The table given below shows the total number of wooden and mechanical\npencils in five shops and it also shows the price of total mechanical and wooden pencils.\nTotal number of wooden and mechanical Price of total mechanical and wooden\nShops\npencils pencils\nA 38 490\nB 47 415\nC 112 1310\nD 75 900\nE 40 425\nNote – Cost of wooden pencil and mechanical pencil is Rs 5 and Rs 20 respectively.",
+   "explanation": "Let the wooden and mechanical pencil be x and\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\n48 A\ny.\nTotal mechanical Total cost of\npencils mechanical pencil\n20 400\n12 240\n50 1000\n35 700\n15 300\ny.\nTotal mechanical Total cost of\npencils mechanical pencil\n20 400\n12 240\n50 1000\n35 700\n15 300\ny.\nSimilarly for others\nShops Total wooden Total cost of Total\npencils wooden pencil pencils\nA 18 90 20\nB 35 175 12\nC 62 310 50\nD 40 200 35\nE 25 125 15"
+  },
+  {
+   "id": "2025-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Shop B sold 20% of wooden pencil at the profit of 20%\nthe total selling price of wooden pencil.",
+   "options": {
+    "A": "292",
+    "B": "215",
+    "C": "246",
+    "D": "232",
+    "E": "252"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (66-70): The table given below shows the total number of wooden and mechanical\npencils in five shops and it also shows the price of total mechanical and wooden pencils.\nTotal number of wooden and mechanical Price of total mechanical and wooden\nShops\npencils pencils\nA 38 490\nB 47 415\nC 112 1310\nD 75 900\nE 40 425\nNote – Cost of wooden pencil and mechanical pencil is Rs 5 and Rs 20 respectively.",
+   "explanation": "Let the wooden and mechanical pencil be x and y.\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nShops Total wooden Total cost of Total\npencils wooden pencil pencils\nA 18 90 20\nB 35 175 12\nC 62 310 50\nD 40 200 35\nE 25 125 15\nProfit on 20% of the wooden pencil = 20% of 35 ×5×120%=4\nProfit on 80% of wooden pencil = 80% of 35×5×150%= 210\nTotal = 42 + 210 = Rs 252"
+  },
+  {
+   "id": "2025-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The ratio of total pencil in F to total pencil in C is 5: 7 and\npencil than D. Find the mechanical pencils in F is what percent\nsold by E.",
+   "options": {
+    "A": "102%",
+    "B": "105%",
+    "C": "106%",
+    "D": "112%",
+    "E": "110%"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (66-70): The table given below shows the total number of wooden and mechanical\npencils in five shops and it also shows the price of total mechanical and wooden pencils.\nTotal number of wooden and mechanical Price of total mechanical and wooden\nShops\npencils pencils\nA 38 490\nB 47 415\nC 112 1310\nD 75 900\nE 40 425\nNote – Cost of wooden pencil and mechanical pencil is Rs 5 and Rs 20 respectively.",
+   "explanation": "Let the wooden and mechanical pencil be x and y.\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nShops Total wooden Total cost of Total\npencils wooden pencil pencils\nA 18 90 20\nB 35 175 12\nC 62 310 50\nD 40 200 35\nE 25 125 15\nmechanical Total cost of\nmechanical pencil\n400\n240\n1000\n700\n300\nmechanical Total cost of\nmechanical pencil\n400\n240\n1000\n700\n300\n42\nmechanical Total cost of\nmechanical pencil\n400\n240\n1000\n700\n300\npp"
+  },
+  {
+   "id": "2025-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of items sold by A and B togethe",
+   "options": {
+    "A": "39:10",
+    "B": "20:19",
+    "C": "40:41",
+    "D": "32:39",
+    "E": "22:21"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (71-75): The bar graph shows the total item manu\nand D. It also shows the total item sold by these companies.\nNote – Profit amount of each item of A, B, C & D are 20, 25, 85, 90.\nand rest at the profit of 50%. Find\nshop F has 30% more than wooden\ntage more/less than wooden pencil\nufactured by four companies A, B, C\n.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Manufactured items Items sold items\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nRequired answer = 80 + 76 : 20 + 20 = 156 : 40 = 39:10"
+  },
+  {
+   "id": "2025-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Unsold items of A, B and C is what percentage",
+   "options": {
+    "A": "42%",
+    "B": "66.66%",
+    "C": "40%",
+    "D": "32%",
+    "E": "33.33%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (71-75): The bar graph shows the total item manu\nand D. It also shows the total item sold by these companies.\nNote – Profit amount of each item of A, B, C & D are 20, 25, 85, 90.\nand rest at the profit of 50%. Find\nshop F has 30% more than wooden\ntage more/less than wooden pencil\nufactured by four companies A, B, C\n.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Manufactured items Items sold items\nA 120 80\nB 96 76\nC 140 120\nD 80 60"
+  },
+  {
+   "id": "2025-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the cost price of Article A and D is 100 and\ntotal selling price of all the sold items in A and D.",
+   "options": {
+    "A": "14800",
+    "B": "18000",
+    "C": "14000",
+    "D": "31200",
+    "E": "18600"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (71-75): The bar graph shows the total item manu\nand D. It also shows the total item sold by these companies.\nNote – Profit amount of each item of A, B, C & D are 20, 25, 85, 90.\nand rest at the profit of 50%. Find\nshop F has 30% more than wooden\ntage more/less than wooden pencil\nufactured by four companies A, B, C\n.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Manufactured items Items sold\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nSelling price of article A = 100 + 20 = 120\nSelling price of article D = 60 + 90 = 150\nselling price of all the sold items in A and D= 80×120+60×150=1"
+  },
+  {
+   "id": "2025-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the total selling price of all the sold items of\nof items manufactured by B.",
+   "options": {
+    "A": "4200",
+    "B": "2000",
+    "C": "4000",
+    "D": "3200",
+    "E": "2200"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (71-75): The bar graph shows the total item manu\nand D. It also shows the total item sold by these companies.\nNote – Profit amount of each item of A, B, C & D are 20, 25, 85, 90.\nand rest at the profit of 50%. Find\nshop F has 30% more than wooden\ntage more/less than wooden pencil\nufactured by four companies A, B, C\n.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Manufactured items Items sold\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nUnsold items\n40\n20\n20\n20\nUnsold items\n40\n20\n20\n20\nitems Unsold items\n40\n20\n20\n20\n18600\nitems Unsold items"
+  },
+  {
+   "id": "2025-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the item C is marked up by 20% of cost price\nprice of the each item of C.",
+   "options": {
+    "A": "1292",
+    "B": "1275",
+    "C": "1245",
+    "D": "1235",
+    "E": "1220\n18 Adda\ner to unsold items of C and D together.\nof total items sold by C.\n60 respectively. Find the difference between\nB is Rs.15200, then find the cost price of 10%\ne and give a discount of 10%. Find the marked\na247 App"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (71-75): The bar graph shows the total item manu\nand D. It also shows the total item sold by these companies.\nNote – Profit amount of each item of A, B, C & D are 20, 25, 85, 90.\nand rest at the profit of 50%. Find\nshop F has 30% more than wooden\ntage more/less than wooden pencil\nufactured by four companies A, B, C\n.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Manufactured items\nA 120\nB 96\nC 140\nD 80\nLet the cost price be 100x\nMarked price = 120% of 100x = 120x\nSelling price = 90% of 120x = 108x\nGiven in the note = 108x – 100x = 85\n8x = 85\n10.625 = x\nRequired answer = 120x = 1275"
+  },
+  {
+   "id": "2025-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A shopkeeper marked up an article 2R%\nsold it loss of 19% at Rs. 648. Find the value of",
+   "options": {
+    "A": "8",
+    "B": "6",
+    "C": "5",
+    "D": "4",
+    "E": "3"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2025-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "8, 129, 298, 587, 950, 1477, 2318",
+   "options": {
+    "A": "8",
+    "B": "129",
+    "C": "1477",
+    "D": "950",
+    "E": "2318"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (77-81): In each series one term is\nseries.",
+   "explanation": "Pattern of series –\nSquare of consecutive price number start from 11\n8 + 112 = 129\n129 + 133 = 298\n298 + 172 = 587\n587 + 192 = 948\n948 + 232 = 1477\n1477 + 292 = 2318"
+  },
+  {
+   "id": "2025-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "7, 8, 16, 39, 55, 180, 216",
+   "options": {
+    "A": "8",
+    "B": "216",
+    "C": "180",
+    "D": "55",
+    "E": "16"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (77-81): In each series one term is\nseries.",
+   "explanation": "Pattern of series –\n7 + 13 = 8\n8 + 22 = 12\n12 + 33 = 39\n39 + 42 = 55\n55 + 53 = 180\n180 + 62 = 216\n51 A\nItems sold items Unsold items\n80 40\n76 20\n120 20\n60 20"
+  },
+  {
+   "id": "2025-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "110, 115, 120, 120, 100, 125, 95",
+   "options": {
+    "A": "110",
+    "B": "120",
+    "C": "95",
+    "D": "100",
+    "E": "125"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (77-81): In each series one term is\nseries.",
+   "explanation": "Pattern of series –\n110 + 5 = 115\n115 – 10 = 105\n105 + 15 = 120\n120 – 20 = 100\n100 + 25 = 125\n125 – 30 = 95"
+  },
+  {
+   "id": "2025-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "3, 6, 27, 100, 505, 3036, 21259",
+   "options": {
+    "A": "21259",
+    "B": "505",
+    "C": "6",
+    "D": "27",
+    "E": "100\nabove cost price and allow a discount of 25% and\n‘R’?\ns wrong you have to find the wring term of each"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (77-81): In each series one term is\nseries.",
+   "explanation": "Pattern of series –\n3 ×2+2 = 8\n8 ×3+3 = 27\n27 ×4+4 = 100\n100 ×5+5 = 505\n505 ×6+6 = 3036\n3036 ×7+7 = 21259"
+  },
+  {
+   "id": "2025-q81",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "213, 221, 331, 345, 365, 395, 431",
+   "options": {
+    "A": "213",
+    "B": "221",
+    "C": "345",
+    "D": "395",
+    "E": "431"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (77-81): In each series one term is\nseries.",
+   "explanation": "Pattern of series –"
+  },
+  {
+   "id": "2025-q82",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "1620.03 ÷ 44.93+ 8836÷ (46.98)² = ?",
+   "options": {
+    "A": "50",
+    "B": "42",
+    "C": "48",
+    "D": "40",
+    "E": "45"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (82-86): What approximate value\nquestions."
+  },
+  {
+   "id": "2025-q83",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "(11.99)² + (28.86)² - {(425+ 655) ÷ (6)3} = ?",
+   "options": {
+    "A": "1030",
+    "B": "980",
+    "C": "1065",
+    "D": "1090",
+    "E": "1025"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (82-86): What approximate value\nquestions."
+  },
+  {
+   "id": "2025-q84",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "3875 ÷(4.99)3 = ? -{(24)2÷47.98}",
+   "options": {
+    "A": "45",
+    "B": "49",
+    "C": "41",
+    "D": "47",
+    "E": "43"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (82-86): What approximate value\nquestions.",
+   "explanation": "52 A"
+  },
+  {
+   "id": "2025-q85",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q85 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "662",
+    "B": "735",
+    "C": "679",
+    "D": "701",
+    "E": "726"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (82-86): What approximate value\nquestions."
+  },
+  {
+   "id": "2025-q86",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "(? ÷17.99)×5.99=319.87% of 60",
+   "options": {
+    "A": "560",
+    "B": "568",
+    "C": "554",
+    "D": "576",
+    "E": "578\n20 A\nshould come in place of (?) in the following"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (82-86): What approximate value\nquestions."
+  },
+  {
+   "id": "2025-q87",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A spend 25% of his monthly income on rent and 20% of remaining in food, 40% remaining\nin traveling and rest he saved. If total monthly saving of A is Rs.10800, then find the monthly\nincome of A. (in Rs.)?",
+   "options": {
+    "A": "25000",
+    "B": "30000",
+    "C": "21000",
+    "D": "40000",
+    "E": "48000"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2025-q88",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Two trains, A and B, are moving at speeds of 60 km/h and 80 km/h respectively. Train A\ncrosses a platform that is 150 meters long in 15 seconds, while Train B crosses a pole in 18\nseconds. What the sum of length of both trains A and B (in meters)?",
+   "options": {
+    "A": "320",
+    "B": "160",
+    "C": "420",
+    "D": "400",
+    "E": "500"
+   },
+   "correctAnswer": "E",
+   "explanation": "Let the length of train A and train B be x\nRequired answer = 100+400= 500 meters"
+  },
+  {
+   "id": "2025-q89",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "In a mixture, the ratio of milk to water is 5:1. When 20 liters of water is added into the\nmixture, then the ratio of milk to water becomes equal. Find the quantity of milk in the final\nmixture (in liter).",
+   "options": {
+    "A": "25",
+    "B": "24",
+    "C": "5",
+    "D": "20",
+    "E": "15"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let the quantity of of milk and water be 5x\nQuantity of milk = 5x = 25 liters\nand y respectively.\nand x respectively."
+  },
+  {
+   "id": "2025-q90",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ Some options for this question are printed as images in the source paper and could not be extracted.\n\nA can complete 40% of a work in 8 days, while B takes four more days than that of A to\ncomplete the same work. Find the time taken by A and B together to complete the same work (in\ndays)?",
+   "options": {
+    "A": "(b)",
+    "C": "(d) 10",
+    "E": ""
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2025-q91",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The length of the rectangle is 20% more than its breadth. If the side of a square is equal to\nthe breadth of rectangle, then find the respective ratio of area of square to that of rectangle?",
+   "options": {
+    "A": "5 : 6",
+    "B": "1 : 6",
+    "C": "6 : 5",
+    "D": "6 :7",
+    "E": "5 :1"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2025-q92",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A boat covers 120 km in six hours in downstream. The respective ratio of speed of boat in\nstill water and speed of stream is 3: 1. If speed of stream is increased by 80%, then find in how\nmuch time the boat will cover 84 km in upstream?",
+   "options": {
+    "A": "12 hours",
+    "B": "14 hours",
+    "C": "10 hours",
+    "D": "15 hours",
+    "E": "16 hours"
+   },
+   "correctAnswer": "B",
+   "explanation": "Let speed of boat in still water and speed of stream b\nATQ,\nSo, speed of boat in still water and speed of stream is 15"
+  },
+  {
+   "id": "2025-q93",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A invests Rs.5600 on simple interest at R% for four years and he invested Rs.4800 on\ncompound interest at 10% p.a. for two years. If the simple interest is Rs.672 more than that of\ncompound interest, then find the value of R.",
+   "options": {
+    "A": "7.5",
+    "B": "8",
+    "C": "1.5",
+    "D": "10",
+    "E": "12"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2025-q94",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A and B started a business with an investment of Rs X and Rs X+800, respectively. After eight\nmonths A left, C joined with Rs 2400. If, at the end of the year, the profit share of B is Rs 5400 out\nof the total profit of Rs 9300, then find X.",
+   "options": {
+    "A": "2500",
+    "B": "4000",
+    "C": "1600",
+    "D": "5000",
+    "E": "6500"
+   },
+   "correctAnswer": "B",
+   "explanation": "Profit sharing ratio of A, B and C = X×8 :(X+800)×12\n54 Adda2\nbe 3a kmph and a kmph respectively.\nkmph and 5 kmph respectively.\n:2400×4\n247 App"
+  },
+  {
+   "id": "2025-q95",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The average weight of 75 students in a class is 20 kg. The average weight of boys and girls\nis 22 kg and X kg, respectively. If the ratio of boys and girls in the class is 2:1, respectively, then\nfind X?",
+   "options": {
+    "A": "16",
+    "B": "24",
+    "C": "48",
+    "D": "8",
+    "E": "32"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2025-q96",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of present age of A to B’s is 3 : 2. Five years ago, A age was twice than that of B age\nat that time. Five years hence, sum of ages of A and B is equal to C age at that time. Find present\nage of C (in years)?",
+   "options": {
+    "A": "35",
+    "B": "40",
+    "C": "20",
+    "D": "25",
+    "E": "30"
+   },
+   "correctAnswer": "E",
+   "explanation": "Information given:\nThe ratio of present age of A to B’s is 3 : 2\nFive years ago, A age was twice than that of B age at that time\nFive years hence, sum of ages of A and B is equal to C age at that time\nExplanation:\nLet present age of B = x\nPresent age of A = 1.5x\nB age five years ago = x – 5\nA age five years ago = 2(x-5) = 2x – 10\nBut A age five years ago also equals to (1.5x – 5)\n2x – 10 = 1.5x – 5\n0.5x = 5\nx = 10\nC age five years hence = 10 + 5 + 1.5 × 10 + 5\n= 15 + 15 + 5\n= 35\nC present age = 35 – 5 = 30 years"
+  },
+  {
+   "id": "2025-q97",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Set X contains seven consecutive even numbers which sum is 630. Set Y contains five\nconsecutive odd numbers whose sum is 295.\nQuantity I: What is average of first four consecutive even number of the set X.\nQuantity II: 27 more than average of first two numbers of set Y.",
+   "options": {
+    "A": "Quantity I > Quantity II",
+    "B": "Quantity I < Quantity II",
+    "C": "Quantity I ≥ Quantity II",
+    "D": "Quantity I ≤ Quantity II",
+    "E": "Quantity I = Quantity II or no relation"
+   },
+   "correctAnswer": "A",
+   "explanation": "Information Given: The sum of seven consecutive even numbers of set X = 630\nThe sum of five consecutive odd numbers of set Y = 295\nFormula used: Average = (Sum of unit)/(number of units)\nExplanation: Average of set X = 630/7 = 90\nPoint to Remember: When a set of odd-numbered consecutive terms (like 3, 5, 7, etc.) is given, the\naverage is always the middle term.\nSo, it is an average of 7 consecutive even numbers, then this average must be the 4th number of the set\nSo, the first four numbers of the set X = 84, 86, 88, and 90\nit is an average of 5 consecutive odd numbers, then this average must be the 3rd number of the set\nAverage of set Y = 295/5=59\nSo, first two numbers if set Y = 55 & 57\nQuantity I: Average of first four consecutive even number of set X = (84+86+88+90)/4==87\nQuantity II: Average of first two numbers of odd numbers of set Y = (55+57)/2=56\nRequired value = 56+27 = 83\nSo, Quantity I > Quantity II"
+  },
+  {
+   "id": "2025-q98",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "What is the S.I accrued on a principle of Rs.6000 in 5 years.\nQuantity I – The rate of interest for the first 2 years is 10% and for the last 3 years is 15%.\nQuantity II – Rs.3900",
+   "options": {
+    "A": "Quantity I > Quantity II",
+    "B": "Quantity I < Quantity II",
+    "C": "Quantity I ≥ Quantity II",
+    "D": "Quantity I ≤ Quantity II",
+    "E": "Quantity I = Quantity II or no relation"
+   },
+   "correctAnswer": "E",
+   "explanation": "Quantity I = Quantity II"
+  },
+  {
+   "id": "2025-q99",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "In the given question, two quantities are given, one as ‘Quantity I’ and another as ‘Quantity\nII’. You have to determine relationship between two quantities and choose the appropriate\noption.\nQuantity I : A mixture contains 120 liters of milk and water in the ratio of 3:5, respectively. If Y liters of\nmixture are taken out and 10 liters of milk and 15 liters of water are added to the mixture, then the ratio\nof milk to water becomes 8:13. Find Y.\nQuantity II : 60",
+   "options": {
+    "A": "Quantity I > Quantity II",
+    "B": "Quantity I < Quantity II",
+    "C": "Quantity I ≥ Quantity II",
+    "D": "Quantity I ≤ Quantity II",
+    "E": "Quantity I = Quantity II or no relation"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2025-q100",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "In the given questions, two quantities are given, one as ‘Quantity I’ and another as ‘Quantity II’.\nYou have to determine relationship between two quantities and choose the appropriate option.\nQuantity I: The average age of 21 people is 64 years. If the age of a new person is added the new average\nage becomes 64.5 years, then find the age of new person.\nQuantity II: There are 14 people in a family and the average age of all the family members is 30 years.\nA new baby born in a family, after 4 years what will be the average age of the all-family member.",
+   "options": {
+    "A": "C-E & A-D – both mismatched.",
+    "B": "B-F – correct and meaningful.",
+    "C": "B-D & C-F – nonsense.",
+    "D": "A-E – nonsense.",
+    "E": "None of the above – because B-F works well.\nCorrect Sentence:\n(B–F) Setting off on an impromptu journey, they unearthed hidden treasures, crafting indelible\nmemories.\nFinal Answer: (b) B-F\nS63. Ans.(a)\nSol. (a) C–E\nWhy:\n• C–E forms a smooth, grammatical sentence:\n• “Before sleep, dreams painted vibrant landscapes of unexplored possibilities and aspirations.” —\nnatural and coherent.\n• B–D (option b) is awkward: “the rhythmic sounds of echoing …” needs a noun after “of”.\n• C–D & B–F (option c): C–D is fine, but B–F is nonsensical.\n• A–F (option d) is incomplete/ill-formed.\n• Hence, the best valid pairing is C–E only.\nS64. Ans.(d)\nSol. Analysis:\n(I) Correct. “Bring up an issue” means to mention it. Example: He brought up politics at the dinner table.\nHindi: बात छेड़ना\n(II) Incorrect. “Bring up” is not used for moving objects from one place to another. The correct usage\nwould be “bring out” or “carry up.” Example: They brought out the boxes from storage. Hindi: बाहर लाना\n(III) Correct. “Bring up a child” means to raise or nurture a child. Example: She was brought up by her\naunt. Hindi: पालन-पोषण करना\nAnswer: Both (I) and (III) → option (d)\nS65. Ans.(c)\nSol. Analysis:\n(I) Correct. “Look after” means to care for someone. Example: Parents look after their children. Hindi:\nदेखभाल करना\n(II) Correct. Here “look after the complaints” means to handle or manage them. Example: The teacher\nlooks after discipline in the school. Hindi: ध्यान रखना या संभालना\n(III) Incorrect. “Look after” does not mean to examine carefully. The correct phrasal verb is “look over.”\nExample: He looked over the report before submitting it. Hindi: जांिना या परखना\nAnswer: Both (I) and (II) → option (c)\nS66. Ans.(a)\nSol. Let the wooden and mechanical pencil be x and\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nShops Total wooden Total cost of\npencils wooden pencil\nA 18 90\nB 35 175\nC 62 310\nD 40 200\nE 25 125\nRequired ratio = 400 + 240 : 200 = 16:5\nS67. Ans.(b)\nSol. Let the wooden and mechanical pencil be x and\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nTotal wooden Total cost of\nShops\npencils wooden pencil\nA 18 90\nB 35 175\nC 62 310\nD 40 200\nE 25 125\nS68. Ans.(d)\nSol. Let the wooden and mechanical pencil be x and\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\n48 A\ny.\nTotal mechanical Total cost of\npencils mechanical pencil\n20 400\n12 240\n50 1000\n35 700\n15 300\ny.\nTotal mechanical Total cost of\npencils mechanical pencil\n20 400\n12 240\n50 1000\n35 700\n15 300\ny.\nSimilarly for others\nShops Total wooden Total cost of Total\npencils wooden pencil pencils\nA 18 90 20\nB 35 175 12\nC 62 310 50\nD 40 200 35\nE 25 125 15\nS69. Ans.(e)\nSol. Let the wooden and mechanical pencil be x and y.\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nShops Total wooden Total cost of Total\npencils wooden pencil pencils\nA 18 90 20\nB 35 175 12\nC 62 310 50\nD 40 200 35\nE 25 125 15\nProfit on 20% of the wooden pencil = 20% of 35 ×5×120%=4\nProfit on 80% of wooden pencil = 80% of 35×5×150%= 210\nTotal = 42 + 210 = Rs 252\nS70. Ans.(d)\nSol. Let the wooden and mechanical pencil be x and y.\nx + y = 38 (i)\nx×5+y×20=490\n5x + 20y = 490\nx + 4y = 98 (ii)\nsolving (i) and (ii)\n20 = y and 18 = x\nSimilarly for others\nShops Total wooden Total cost of Total\npencils wooden pencil pencils\nA 18 90 20\nB 35 175 12\nC 62 310 50\nD 40 200 35\nE 25 125 15\nmechanical Total cost of\nmechanical pencil\n400\n240\n1000\n700\n300\nmechanical Total cost of\nmechanical pencil\n400\n240\n1000\n700\n300\n42\nmechanical Total cost of\nmechanical pencil\n400\n240\n1000\n700\n300\npp\nS71. Ans.(a)\nSol.\nManufactured items Items sold items\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nRequired answer = 80 + 76 : 20 + 20 = 156 : 40 = 39:10\nS72. Ans.(b)\nSol.\nManufactured items Items sold items\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nS73. Ans.(e)\nSol.\nManufactured items Items sold\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nSelling price of article A = 100 + 20 = 120\nSelling price of article D = 60 + 90 = 150\nselling price of all the sold items in A and D= 80×120+60×150=1\nS74. Ans.(a)\nSol.\nManufactured items Items sold\nA 120 80\nB 96 76\nC 140 120\nD 80 60\nUnsold items\n40\n20\n20\n20\nUnsold items\n40\n20\n20\n20\nitems Unsold items\n40\n20\n20\n20\n18600\nitems Unsold items\nS75. Ans.(b)\nSol.\nManufactured items\nA 120\nB 96\nC 140\nD 80\nLet the cost price be 100x\nMarked price = 120% of 100x = 120x\nSelling price = 90% of 120x = 108x\nGiven in the note = 108x – 100x = 85\n8x = 85\n10.625 = x\nRequired answer = 120x = 1275\nS76. Ans.(d)\nSol.\nS77. Ans.(d)\nSol. Pattern of series –\nSquare of consecutive price number start from 11\n8 + 112 = 129\n129 + 133 = 298\n298 + 172 = 587\n587 + 192 = 948\n948 + 232 = 1477\n1477 + 292 = 2318\nS78. Ans.(e)\nSol. Pattern of series –\n7 + 13 = 8\n8 + 22 = 12\n12 + 33 = 39\n39 + 42 = 55\n55 + 53 = 180\n180 + 62 = 216\n51 A\nItems sold items Unsold items\n80 40\n76 20\n120 20\n60 20\nS79. Ans.(b)\nSol. Pattern of series –\n110 + 5 = 115\n115 – 10 = 105\n105 + 15 = 120\n120 – 20 = 100\n100 + 25 = 125\n125 – 30 = 95\nS80. Ans.(c)\nSol. Pattern of series –\n3 ×2+2 = 8\n8 ×3+3 = 27\n27 ×4+4 = 100\n100 ×5+5 = 505\n505 ×6+6 = 3036\n3036 ×7+7 = 21259\nS81. Ans.(d)\nSol. Pattern of series –\nS82. Ans.(d)\nSol.\nS83. Ans.(b)\nSol.\nS84. Ans.(e)\nSol.\n52 A\n\nS85. Ans.(a)\nSol.\nS86. Ans.(d)\nSol.\nS87. Ans.(b)\nSol.\nS88. Ans.(e)\nSol. Let the length of train A and train B be x\nRequired answer = 100+400= 500 meters\nS89. Ans.(a)\nSol. Let the quantity of of milk and water be 5x\nQuantity of milk = 5x = 25 liters\nand y respectively.\nand x respectively.\nS90. Ans.(e)\nSol.\nS91. Ans.(a)\nSol.\nS92. Ans.(b)\nSol. Let speed of boat in still water and speed of stream b\nATQ,\nSo, speed of boat in still water and speed of stream is 15\nS93. Ans.(a)\nSol.\nS94. Ans.(b)\nSol. Profit sharing ratio of A, B and C = X×8 :(X+800)×12\n54 Adda2\nbe 3a kmph and a kmph respectively.\nkmph and 5 kmph respectively.\n:2400×4\n247 App\nS95. Ans.(a)\nSol.\nS96. Ans.(e)\nSol. Information given:\nThe ratio of present age of A to B’s is 3 : 2\nFive years ago, A age was twice than that of B age at that time\nFive years hence, sum of ages of A and B is equal to C age at that time\nExplanation:\nLet present age of B = x\nPresent age of A = 1.5x\nB age five years ago = x – 5\nA age five years ago = 2(x-5) = 2x – 10\nBut A age five years ago also equals to (1.5x – 5)\n2x – 10 = 1.5x – 5\n0.5x = 5\nx = 10\nC age five years hence = 10 + 5 + 1.5 × 10 + 5\n= 15 + 15 + 5\n= 35\nC present age = 35 – 5 = 30 years\nS97. Ans.(a)\nSol. Information Given: The sum of seven consecutive even numbers of set X = 630\nThe sum of five consecutive odd numbers of set Y = 295\nFormula used: Average = (Sum of unit)/(number of units)\nExplanation: Average of set X = 630/7 = 90\nPoint to Remember: When a set of odd-numbered consecutive terms (like 3, 5, 7, etc.) is given, the\naverage is always the middle term.\nSo, it is an average of 7 consecutive even numbers, then this average must be the 4th number of the set\nSo, the first four numbers of the set X = 84, 86, 88, and 90\nit is an average of 5 consecutive odd numbers, then this average must be the 3rd number of the set\nAverage of set Y = 295/5=59\nSo, first two numbers if set Y = 55 & 57\nQuantity I: Average of first four consecutive even number of set X = (84+86+88+90)/4==87\nQuantity II: Average of first two numbers of odd numbers of set Y = (55+57)/2=56\nRequired value = 56+27 = 83\nSo, Quantity I > Quantity II\nS98. Ans.(e)\nSol.\nQuantity I = Quantity II\nS99. Ans.(b)\nSol.\nS100. Ans.(a)\nSol.\n56 A"
+   },
+   "correctAnswer": "A",
+   "explanation": "56 A"
+  }
+ ]
+}

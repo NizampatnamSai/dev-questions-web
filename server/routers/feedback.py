@@ -19,6 +19,9 @@ async def _guest_feedback_enabled() -> bool:
     return (doc or {}).get("guest_feedback_enabled", False)
 
 
+MAX_IMAGES = 4
+
+
 class FeedbackBody(BaseModel):
     type: str  # "bug", "feature", "improvement", "other"
     title: str
@@ -26,6 +29,10 @@ class FeedbackBody(BaseModel):
     email: str = ""
     rating: int = 5  # 1-5
     guestName: str = ""  # only used when submitting without an account
+    # Cloudinary URLs from POST /api/uploads/image — a screenshot says more about
+    # a bug than a paragraph does. Only URLs are stored, never image bytes, so
+    # feedback documents stay small.
+    images: list[str] = []
 
 
 @router.post("")
@@ -46,6 +53,9 @@ async def submit_feedback(body: FeedbackBody, user=Depends(optional_user)):
         "title": body.title,
         "message": body.message,
         "rating": max(1, min(5, body.rating)),
+        # Only our own Cloudinary URLs — the field is client-supplied, so an
+        # arbitrary URL here would otherwise render in the admin's browser.
+        "images": [u for u in body.images if isinstance(u, str) and u.startswith("https://res.cloudinary.com/")][:MAX_IMAGES],
         "createdAt": now(),
         "read": False,
         "status": "pending",

@@ -158,97 +158,237 @@ async def review_ibpspo_interview(req: InterviewReviewReq, _=Depends(require_ai_
 
 
 class GenerateMockReq(BaseModel):
-    count: int = 15
+    # Full IBPS PO Prelims pattern by default. A smaller count still produces a
+    # correctly proportioned paper rather than a run of one section.
+    count: int = 100
+    # Restrict the paper to ONE section, for a 20-minute single-section drill —
+    # a full 60-minute sitting is not something you can fit into a lunch break.
+    # None (the default) keeps the full three-section pattern.
+    section: str | None = None
+
+
+# Official IBPS PO Prelims 2026 pattern: 100 questions / 100 marks / 60 minutes,
+# with 20 minutes of sectional timing each.
+#   name -> (questions, section marks, marks per question, negative per question)
+IBPS_SECTION_PLAN = [
+    ("English Language",      30, 30, 1.0,  -0.25),
+    ("Quantitative Aptitude", 35, 30, 0.86, -0.215),
+    ("Reasoning Ability",     35, 40, 1.14, -0.285),
+]
+
+# Topic rotation per section. Each AI call is given ONE focus area, which is what
+# actually stops the model collapsing into a single templated stem repeated N times.
+IBPS_TOPIC_POOL = {
+    "English Language": [
+        "Reading Comprehension (one passage, each question on a different aspect)",
+        "Cloze Test with contextual blanks",
+        "Error Spotting on subject-verb agreement, prepositions and parallelism",
+        "Para Jumble and sentence rearrangement",
+        "Sentence Improvement and phrase replacement",
+        "Single and double Fillers, plus Word Swap",
+    ],
+    "Quantitative Aptitude": [
+        "Approximation and Simplification",
+        "Quadratic Equation comparison of x and y",
+        "Number Series, both missing term and wrong term",
+        "Table or Pie chart Data Interpretation with a shared data set",
+        "Arithmetic: percentage, profit and loss, simple and compound interest",
+        "Arithmetic: time and work, time-speed-distance, boats, pipes, mixtures",
+    ],
+    "Reasoning Ability": [
+        "Linear seating arrangement",
+        "Circular seating arrangement facing the centre",
+        "Floor or box based puzzle",
+        "Syllogism including 'Only a few' and possibility conclusions",
+        "Inequalities, direct and coded",
+        "Blood relations, direction sense, order and ranking, coding-decoding",
+    ],
+}
+
+
+def _normalise_stem(text: str) -> str:
+    """Collapse a question to a comparable form.
+
+    The previous implementation compared raw stems, so a model that emitted the
+    same question ten times with '(Question 1)'..'(Question 10)' appended slipped
+    through as ten distinct items. Stripping that suffix and all punctuation is
+    what actually catches it.
+    """
+    import re as _re
+    t = _re.sub(r"\s*\((?:Question|Scenario|Set|Q)\s*\d+\)\s*$", "", text or "", flags=_re.I)
+    t = _re.sub(r"[^a-z0-9]+", " ", t.lower())
+    return t.strip()
+
+
+def _option_signature(q: dict) -> str:
+    opts = q.get("options") or {}
+    return "|".join(sorted(str(v).strip().lower() for v in opts.values() if v))
+
+
+def _load_fallback_bank() -> list:
+    import json as _json
+    import os as _os
+    p = "client/src/data/ibpspo-mock-test.json"
+    if not _os.path.exists(p):
+        p = _os.path.join(_os.path.dirname(__file__), "..", "..", "client", "src", "data", "ibpspo-mock-test.json")
+    with open(p, "r") as f:
+        return _json.load(f).get("questions", [])
+
 
 @router.post("/ibps-po/generate-mock")
 async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enabled)):
-    system = (
-        "You are an expert IBPS PO Exam Paper Setter with 20+ years of experience. "
-        "Your task is to generate a dynamic set of high-quality mock test questions representing the real exam. "
-        "Output ONLY a raw JSON array matching this exact schema: \n"
-        "[{\n"
-        "  \"id\": \"string (unique, e.g. mock-eng-1)\",\n"
-        "  \"section\": \"English Language | Quantitative Aptitude | Reasoning Ability\",\n"
-        "  \"topic\": \"string (e.g., Reading Comprehension, Quadratic Equations, Syllogism, Seating Arrangement)\",\n"
-        "  \"difficulty\": \"Easy | Moderate | Hard\",\n"
-        "  \"marks\": 1.0,\n"
-        "  \"negativeMarks\": -0.25,\n"
-        "  \"expectedTime\": 45,\n"
-        "  \"question\": \"string\",\n"
-        "  \"passage\": \"string or null\",\n"
-        "  \"table\": {\"columns\": [\"col1\", \"col2\"], \"rows\": [[\"val1\", \"val2\"]]} or null,\n"
-        "  \"options\": {\"A\": \"...\", \"B\": \"...\", \"C\": \"...\", \"D\": \"...\", \"E\": \"...\"},\n"
-        "  \"correctAnswer\": \"A | B | C | D | E\",\n"
-        "  \"explanation\": \"string\",\n"
-        "  \"shortcut\": \"string\",\n"
-        "  \"commonMistake\": \"string\",\n"
-        "  \"concept\": \"string\",\n"
-        "  \"previousYearSimilarity\": \"string\"\n"
-        "}]\n"
-        "STRICT UNIQUENESS RULES — violating any rule makes the output invalid:\n"
-        "1. Every question MUST have a completely different question stem. No two questions can ask the same thing.\n"
-        "2. Every set of options MUST be unique across all questions. Do NOT reuse the same A/B/C/D/E option values.\n"
-        "3. If generating Reading Comprehension questions from the same passage, each question MUST ask about a DIFFERENT aspect: "
-        "   e.g. one asks about the main idea, another about a specific fact, another about inference, another about vocabulary meaning, etc.\n"
-        "4. Use varied question formats: direct fact, inference, vocabulary-in-context, logical reasoning from the passage.\n"
-        "5. Quantitative questions must use different numbers and scenarios — no two word problems can be about the same scenario.\n"
-        "6. Do NOT add a '(Question N)' or '(Scenario N)' suffix to any question — the question itself must be self-contained and unique.\n"
-        "7. Do NOT use placeholder values or simple templates. Every question must be a genuinely distinct exam-quality item.\n"
-        "8. Avoid formatting or wrapping with markdown block syntax (do NOT use ```json or ```).\n"
-        "9. Output exactly the requested number of questions divided equally among English Language, Quantitative Aptitude, and Reasoning Ability.\n"
-        "10. The output must be pure, valid JSON."
-    )
+    """Build a full-pattern mock paper.
 
-    user = (
-        f"Generate {req.count} unique, high-quality IBPS PO mock test questions. "
-        "Each section must have equal weight (5 questions each for 15 total). "
-        "English: Mix of Reading Comprehension (pick ONE passage and write 2 distinct RC questions asking about different facts/inferences), "
-        "Error Detection (with different sentence each), Cloze Test (different blanks), and Sentence Improvement. "
-        "Quantitative: Mix of Approximation (different expressions), Quadratic Equations (different coefficients), "
-        "Number Series (different patterns), and Data Interpretation. "
-        "Reasoning: Mix of Syllogism (different statements), Inequalities (different variables), and Seating Arrangement (different puzzle). "
-        "Generate authentic passages and data tables where necessary. Ensure every question has a distinct and unique stem, "
-        "distinct options, and a thorough explanation. Double-check that no two questions are asking the same thing."
-    )
-
+    Generation is split into one call per (section, topic) chunk and run
+    concurrently. A single large call was the root cause of repeated questions:
+    asked for 15 items at once the model padded the tail by re-emitting earlier
+    stems with a '(Question N)' suffix.
+    """
+    import asyncio as _asyncio
     import json as _json
-    import os as _os
-    try:
-        raw = await _groq_plain(system, user, 4500)
-        start = raw.find("[")
-        end   = raw.rfind("]") + 1
-        if start != -1 and end > start:
-            qs = _json.loads(raw[start:end])
-            # Post-process: remove any duplicate question stems
-            seen_stems = set()
-            unique_qs = []
-            for q in qs:
-                stem = q.get("question", "").strip()[:100]
-                if stem not in seen_stems:
-                    seen_stems.add(stem)
-                    unique_qs.append(q)
-            return {"questions": unique_qs}
-        else:
-            raise HTTPException(500, "Invalid JSON format returned by AI.")
-    except Exception as e:
+
+    total = max(1, min(req.count, 100))
+
+    # A single-section request keeps that section's OWN full question count
+    # rather than scaling it down — an English drill is 30 questions in 20
+    # minutes, exactly as it is inside the full paper, so the pacing a candidate
+    # practises is the pacing they will sit.
+    plan = IBPS_SECTION_PLAN
+    if req.section:
+        plan = [s for s in IBPS_SECTION_PLAN if s[0] == req.section]
+        if not plan:
+            raise HTTPException(400, f"Unknown section '{req.section}'")
+
+    section_targets = []
+    if req.section:
+        name, qcount, _sm, per, neg = plan[0]
+        section_targets.append((name, min(total, qcount) if req.count != 100 else qcount, per, neg))
+    else:
+        scale = total / 100.0
+        for name, qcount, _sm, per, neg in plan:
+            n = max(1, round(qcount * scale))
+            section_targets.append((name, n, per, neg))
+
+    system = (
+        "You are an expert IBPS PO paper setter. Output ONLY a raw JSON array — no prose, no markdown fences.\n"
+        "Each element must match this schema exactly:\n"
+        "{\n"
+        '  "topic": "string",\n'
+        '  "difficulty": "Easy | Moderate | Hard",\n'
+        '  "question": "string",\n'
+        '  "passage": "string or null",\n'
+        '  "table": {"columns": ["..."], "rows": [["..."]]} or null,\n'
+        '  "options": {"A": "...", "B": "...", "C": "...", "D": "...", "E": "..."},\n'
+        '  "correctAnswer": "A | B | C | D | E",\n'
+        '  "explanation": "string — full working, not just the answer",\n'
+        '  "shortcut": "string"\n'
+        "}\n"
+        "HARD RULES:\n"
+        "1. Never append '(Question N)', '(Set N)' or any similar counter to a question. "
+        "Every stem must stand alone and differ substantively from the others.\n"
+        "2. Never reuse a stem, a scenario, a number set or an option list across questions.\n"
+        "3. If several questions share one passage or data table, put the full text in 'passage' "
+        "(or 'table') on the FIRST question only and set it to null on the rest, and make each "
+        "question ask about a genuinely different aspect.\n"
+        "4. correctAnswer must be a key that exists in options, and the correct option must not "
+        "always be the same letter across the set.\n"
+        "5. Every question must be solvable purely from what you provide, and the explanation must "
+        "actually derive the stated answer.\n"
+        "6. Return valid JSON and nothing else."
+    )
+
+    async def _chunk(section: str, topic_focus: str, n: int) -> list:
+        user = (
+            f"Generate exactly {n} IBPS PO Prelims questions for the section '{section}'.\n"
+            f"Focus area for this batch: {topic_focus}.\n"
+            "Match genuine IBPS PO Prelims difficulty and phrasing. "
+            "Verify each answer before returning it."
+        )
         try:
-            p = "client/src/data/ibpspo-mock-test.json"
-            if not _os.path.exists(p):
-                p = _os.path.join(_os.path.dirname(__file__), "..", "..", "client", "src", "data", "ibpspo-mock-test.json")
-            with open(p, "r") as f:
-                data = _json.load(f)
-            # Deduplicate fallback by picking questions with unique stems
-            all_qs = data["questions"]
-            seen = set()
-            deduped = []
-            for q in all_qs:
-                stem = q.get("question", "")[:80]
-                if stem not in seen:
-                    seen.add(stem)
-                    deduped.append(q)
-            return {"questions": deduped[:req.count]}
-        except Exception as e_fallback:
-            raise HTTPException(500, f"Failed to generate questions: {str(e)}. Fallback failed: {str(e_fallback)}")
+            raw = await _groq_plain(system, user, 3000)
+            s, e = raw.find("["), raw.rfind("]") + 1
+            if s == -1 or e <= s:
+                return []
+            items = _json.loads(raw[s:e])
+            return [i for i in items if isinstance(i, dict)]
+        except Exception:
+            return []   # one bad batch must not lose the whole paper
+
+    # Build the batch list: split each section across its topic pool.
+    jobs = []
+    for section, n, _per, _neg in section_targets:
+        pool = IBPS_TOPIC_POOL[section]
+        # ~6 questions per call keeps output quality high and stays inside the token budget
+        batches = max(1, min(len(pool), (n + 5) // 6))
+        base, extra = divmod(n, batches)
+        for b in range(batches):
+            size = base + (1 if b < extra else 0)
+            if size:
+                jobs.append((section, pool[b % len(pool)], size))
+
+    results = await _asyncio.gather(*[_chunk(s, t, n) for s, t, n in jobs])
+
+    # Collect per section, rejecting duplicates by normalised stem AND option set.
+    seen_stems, seen_opts = set(), set()
+    by_section = {name: [] for name, _n, _p, _g in section_targets}
+
+    for (section, _topic, _size), items in zip(jobs, results):
+        for q in items:
+            stem = _normalise_stem(q.get("question", ""))
+            if len(stem) < 12:
+                continue
+            opts = q.get("options") or {}
+            if q.get("correctAnswer") not in opts:
+                continue
+            if len([v for v in opts.values() if v]) < 4:
+                continue
+            sig = _option_signature(q)
+            if stem in seen_stems or (sig and sig in seen_opts):
+                continue
+            seen_stems.add(stem)
+            if sig:
+                seen_opts.add(sig)
+            by_section[section].append(q)
+
+    # Top up any short section from the curated bank — section-matched and shuffled,
+    # never the first N of a section-ordered file.
+    try:
+        bank = _load_fallback_bank()
+    except Exception:
+        bank = []
+    bank_by_section = {}
+    for q in bank:
+        bank_by_section.setdefault(q.get("section"), []).append(q)
+
+    questions = []
+    for section, n, per, neg in section_targets:
+        got = by_section.get(section, [])[:n]
+        if len(got) < n:
+            pool = [q for q in bank_by_section.get(section, [])
+                    if _normalise_stem(q.get("question", "")) not in seen_stems]
+            random.shuffle(pool)
+            for q in pool[: n - len(got)]:
+                seen_stems.add(_normalise_stem(q.get("question", "")))
+                got.append(q)
+
+        for idx, q in enumerate(got, start=1):
+            q["section"] = section
+            q["marks"] = per
+            q["negativeMarks"] = neg
+            q.setdefault("expectedTime", 45)
+            q.setdefault("passage", None)
+            q.setdefault("table", None)
+            q["id"] = f"mock-{section.split()[0].lower()}-{idx}"
+            questions.append(q)
+
+    if not questions:
+        raise HTTPException(503, "Could not build a mock paper — AI unavailable and the question bank could not be read.")
+
+    return {"questions": questions, "exam": {
+        "duration": 60, "totalQuestions": len(questions), "totalMarks": 100,
+        "sections": [{"name": n, "totalQuestions": c, "marks": m, "time": 20}
+                     for n, c, m, _p, _g in IBPS_SECTION_PLAN],
+    }}
 
 
 # ── Mock Test Save / Load / Submit (user-scoped) ───────────────────────────────
@@ -260,6 +400,16 @@ class SaveMockTestReq(BaseModel):
 class SubmitMockTestReq(BaseModel):
     answers: dict
     results: dict
+
+
+class PauseMockTestReq(BaseModel):
+    """Everything needed to resume a half-finished attempt exactly where it stopped."""
+    answers: dict = {}
+    sectionIdx: int = 0
+    timeLeft: int = 0
+    currentQIndex: int = 0
+    marked: list = []
+    visited: list = []
 
 
 @router.post("/ibps-po/mock-tests/save")
@@ -295,6 +445,16 @@ async def list_mock_tests(user: dict = Depends(current_user)):
             "results": doc.get("results"),
             "createdAt": doc.get("createdAt"),
             "attemptedAt": doc.get("attemptedAt"),
+            "pausedAt": doc.get("pausedAt"),
+            # enough to show "resume at Q37, Reasoning" without shipping the answers
+            "progressSummary": (
+                {
+                    "answered": len(doc.get("progress", {}).get("answers", {}) or {}),
+                    "sectionIdx": doc.get("progress", {}).get("sectionIdx", 0),
+                    "currentQIndex": doc.get("progress", {}).get("currentQIndex", 0),
+                }
+                if doc.get("status") == "paused" else None
+            ),
         })
     return {"tests": tests}
 
@@ -318,6 +478,8 @@ async def get_mock_test(test_id: str, user: dict = Depends(current_user)):
         "results": doc.get("results"),
         "createdAt": doc.get("createdAt"),
         "attemptedAt": doc.get("attemptedAt"),
+        "pausedAt": doc.get("pausedAt"),
+        "progress": doc.get("progress"),
     }
 
 
@@ -335,10 +497,39 @@ async def submit_mock_test(test_id: str, req: SubmitMockTestReq, user: dict = De
             "answers": req.answers,
             "results": req.results,
             "attemptedAt": datetime.now(timezone.utc),
-        }}
+        },
+         "$unset": {"progress": "", "pausedAt": ""}}
     )
     if result.matched_count == 0:
         raise HTTPException(404, "Test not found")
+    return {"ok": True}
+
+
+@router.post("/ibps-po/mock-tests/{test_id}/pause")
+async def pause_mock_test(test_id: str, req: PauseMockTestReq, user: dict = Depends(current_user)):
+    """Park a half-finished attempt so it can be resumed from the same question,
+    section and remaining sectional time."""
+    try:
+        obj_id = oid(test_id)
+    except Exception:
+        raise HTTPException(400, "Invalid test ID")
+    result = await col_mock_tests().update_one(
+        {"_id": obj_id, "userId": user["id"], "status": {"$ne": "attempted"}},
+        {"$set": {
+            "status": "paused",
+            "progress": {
+                "answers": req.answers,
+                "sectionIdx": req.sectionIdx,
+                "timeLeft": req.timeLeft,
+                "currentQIndex": req.currentQIndex,
+                "marked": req.marked,
+                "visited": req.visited,
+            },
+            "pausedAt": datetime.now(timezone.utc),
+        }}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(404, "Test not found, or it has already been submitted")
     return {"ok": True}
 
 

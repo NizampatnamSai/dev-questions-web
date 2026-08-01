@@ -5,6 +5,263 @@ import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import mockTestData from "../data/ibpspo-mock-test.json";
+import pyqData from "../data/ibpspo-pyq.json";
+import { ENGLISH_RULES, QUANT_FORMULAS } from "../data/ibpspo-formulas";
+import { loadPaperQuestions } from "../data/pyqLoader";
+import ConfirmModal from "../components/ConfirmModal";
+import useConfirm from "../hooks/useConfirm";
+
+// Official IBPS PO Prelims 2026 pattern: 100 questions / 100 marks / 60 minutes,
+// with 20 minutes of sectional timing per section (sections are attempted in
+// order and cannot be revisited once their window closes).
+// perQuestion = section marks / questions, rounded to 2dp so the three sections
+// still total exactly 100. negative = one fourth of that question's own marks,
+// which is the IBPS rule (not a flat -0.25 across the paper).
+const SECTION_PLAN = [
+  { name: "English Language",      questions: 30, marks: 30, seconds: 20 * 60,
+    perQuestion: 1.0,  negative: -0.25,  medium: "English",
+    topics: "Reading Comprehension, Cloze Test, Para Jumbles, Error Spotting, Sentence Improvement, Fillers, Word Swap" },
+  { name: "Quantitative Aptitude", questions: 35, marks: 30, seconds: 20 * 60,
+    perQuestion: 0.86, negative: -0.215, medium: "English and Hindi",
+    topics: "Data Interpretation, Approximation, Number Series, Quadratic Equations, Arithmetic word problems" },
+  { name: "Reasoning Ability",     questions: 35, marks: 40, seconds: 20 * 60,
+    perQuestion: 1.14, negative: -0.285, medium: "English and Hindi",
+    topics: "Puzzles & Seating Arrangement, Syllogism, Inequalities, Blood Relations, Direction Sense, Coding-Decoding, Order & Ranking" },
+];
+// Per-section attack plan. Weights are the typical question counts seen in recent
+// IBPS PO Prelims papers, which is what should drive both preparation and the
+// order you attempt things in during the 20-minute window.
+const SECTION_STRATEGY = {
+  "English Language": {
+    target: "22–25 attempts at 85%+ accuracy",
+    weights: [
+      { topic: "Reading Comprehension", qs: "8–10", note: "Highest weight, but slowest. Leave it for last unless the passage is familiar." },
+      { topic: "Cloze Test", qs: "5–6", note: "One passage, several blanks. High reward for the time spent." },
+      { topic: "Error Spotting / Sentence Improvement", qs: "5", note: "Pure rules. Fastest marks in the section." },
+      { topic: "Para Jumble", qs: "4–5", note: "Find the opener and one mandatory pair, then eliminate." },
+      { topic: "Fillers & Word Swap", qs: "5", note: "Collocation-driven. Attempt first — often under 30 seconds each." },
+    ],
+    order: [
+      "Fillers and Word Swap first — 3 min",
+      "Error Spotting and Sentence Improvement — 4 min",
+      "Cloze Test as one block — 4 min",
+      "Para Jumble — 3 min",
+      "Reading Comprehension last — 6 min",
+    ],
+    rule: "Never open the section with a dense RC passage. If you burn 8 minutes there and it goes badly, the 20 easy marks behind it are gone.",
+  },
+  "Quantitative Aptitude": {
+    target: "20–24 attempts at 85%+ accuracy",
+    weights: [
+      { topic: "Data Interpretation", qs: "10–15", note: "Two or three sets. The single biggest block — but pick your set carefully." },
+      { topic: "Approximation / Simplification", qs: "5–6", note: "Fastest marks in the paper. Always attempt all of them." },
+      { topic: "Number Series", qs: "5", note: "Look at all five. 20-second rule: pattern visible, solve it; not visible, mark it and come back — do not abandon the question, only the attempt." },
+      { topic: "Quadratic Equations", qs: "0–5", note: "Mechanical once factorising is fluent." },
+      { topic: "Arithmetic word problems", qs: "8–10", note: "Mixed topics. Cherry-pick single-concept ones." },
+    ],
+    order: [
+      "Approximation — 3 min",
+      "Quadratic Equations — 2 min",
+      "Number Series, 20-second rule on each — 2 min",
+      "Cleanest DI set, hard stop at 5 minutes — 5 min",
+      "Arithmetic singles you recognise — 5 min",
+      "Second DI set, or revisit what you marked — 3 min",
+    ],
+    rule: "Scan every DI set for 30 seconds before starting one — a tabular set with direct values takes half the time of a caselet with missing figures worth the same marks. Then hold a hard stop: if the chosen set is not finished at 5 minutes, leave it and take the arithmetic. Swap steps 4 and 5 if DI is your weak area — but do not push DI past step 5, because 10–15 marks cannot be recovered in the last three minutes.",
+  },
+  "Reasoning Ability": {
+    target: "24–28 attempts at 90%+ accuracy",
+    weights: [
+      { topic: "Puzzles & Seating Arrangement", qs: "20–25", note: "Dominates the section. You cannot clear the cut-off by skipping these." },
+      { topic: "Inequalities", qs: "3", note: "Near-free marks. Do them first, every time." },
+      { topic: "Syllogism", qs: "3", note: "Fast once the combination table is memorised." },
+      { topic: "Blood Relations / Direction / Ranking", qs: "4–6", note: "Standalone and quick — bank them before the puzzles." },
+      { topic: "Coding-Decoding, Alphanumeric", qs: "2–4", note: "Attempt only if the rule is visible immediately." },
+    ],
+    order: [
+      "Inequalities — 2 min",
+      "Syllogism — 2 min",
+      "Blood Relations, Direction, Ranking, Coding — 4 min",
+      "Easiest puzzle set (most absolute clues) — 4 min",
+      "Second puzzle set — 4 min",
+      "Third puzzle set only if 4+ min remain — 4 min",
+    ],
+    rule: "Rank the puzzle sets before solving any: a set opening with two absolute clues (an extreme end, a fixed floor, 'sits opposite') resolves far faster than one built entirely on relative clues.",
+  },
+};
+
+const EXAM_RULES = [
+  { icon: "⏳", title: "The 30-second rule",
+    body: "If you cannot see the route to the answer within 30 seconds, leave it and move on. The question will still be there if time remains — your 20 minutes will not be." },
+  { icon: "🚫", title: "Never chase sunk cost",
+    body: "Three minutes into a puzzle that is not resolving, abandon it. The minutes already spent are gone either way; the only question is whether you spend more." },
+  { icon: "🎯", title: "Accuracy over volume",
+    body: "With negative marking, four careless wrong answers wipe out a correct one. 22 attempts at 90% beats 30 attempts at 70% in every section." },
+  { icon: "🔍", title: "Scan before you start",
+    body: "Spend the first 30 seconds of each section reading what is on offer, not answering. Choosing the right set is worth more than solving faster." },
+  { icon: "⛔", title: "Watch the clock at the end",
+    body: "Do not begin a new puzzle or DI set with under 4 minutes left. A half-solved set scores zero and costs the standalone questions you could have banked." },
+  { icon: "✅", title: "Guess only when you have narrowed it",
+    body: "A blind guess is negative expected value. Eliminating two options first makes it positive — that is the only time to guess." },
+];
+
+// Previous-cycle cut-offs. These are the OVERALL prelims cut-offs out of 100,
+// reported category-wise on an all-India basis (state-wise allotment happens
+// later, at the final stage). Figures are as widely reported for each cycle —
+// always confirm against your own IBPS scorecard, since IBPS revises and
+// normalises scores and cut-offs move every year with paper difficulty.
+const CUTOFF_CATEGORIES = [
+  { key: "gen", label: "General / UR", alias: "OC" },
+  { key: "ews", label: "EWS", alias: null },
+  { key: "obc", label: "OBC", alias: "BC" },
+  { key: "sc", label: "SC", alias: null },
+  { key: "st", label: "ST", alias: null },
+];
+
+// `disputed` marks cells where the reported figures differ between sources, so
+// the number is shown with a dagger rather than as settled fact.
+const CUTOFF_HISTORY = [
+  { year: "2025", gen: 49.21, ews: 49.21, obc: 49.21, sc: 45.96, st: 40.96, disputed: [] },
+  { year: "2024", gen: 48.5,  ews: 48.5,  obc: 48.5,  sc: 48.0,  st: 41.0,  disputed: ["sc", "st"] },
+  { year: "2023", gen: 54.25, ews: 54.25, obc: 54.25, sc: 49.0,  st: 43.0,  disputed: ["sc"] },
+];
+
+// Indicative only. IBPS applies sectional qualification, but does not publish a
+// clean per-section figure each cycle the way it does the overall cut-off, so
+// these are coaching-reported estimates rather than confirmed numbers.
+const SECTIONAL_CUTOFF_ESTIMATE = {
+  "English Language": 13.25,
+  "Quantitative Aptitude": 6.25,
+  "Reasoning Ability": 9.75,
+};
+
+// "8–10" / "20–25" / "5" -> the upper bound, used to scale the weight bars.
+function weightUpperBound(w) {
+  const nums = String(w.qs).match(/\d+/g);
+  return nums ? Math.max(...nums.map(Number)) : 0;
+}
+
+// "Approximation — 3 min" -> ["Approximation", "3 min"], so the time budget can
+// sit in its own right-hand column instead of trailing the sentence.
+function splitStep(step) {
+  const i = String(step).lastIndexOf("—");
+  if (i === -1) return [step, null];
+  return [step.slice(0, i).trim(), step.slice(i + 1).trim()];
+}
+
+// Flatten the whole pattern + strategy into one context blob so the Ask-AI panel
+// answers from what is actually on this page rather than from general knowledge.
+function buildStrategyContext() {
+  const pattern = SECTION_PLAN.map(
+    (s) => `${s.name}: ${s.questions} questions, ${s.marks} marks, ${s.seconds / 60} min, ` +
+           `${s.perQuestion} marks per question, ${s.negative} negative per wrong answer. Topics: ${s.topics}`
+  ).join("\n");
+
+  const strategy = Object.entries(SECTION_STRATEGY).map(([name, st]) =>
+    `${name} — target ${st.target}\n` +
+    `  Topic weight: ${st.weights.map((w) => `${w.topic} (${w.qs} Qs) — ${w.note}`).join("; ")}\n` +
+    `  Order of attempt: ${st.order.join(" -> ")}\n` +
+    `  Key rule: ${st.rule}`
+  ).join("\n\n");
+
+  const rules = EXAM_RULES.map((r) => `${r.title}: ${r.body}`).join("\n");
+
+  const cutoffs = CUTOFF_HISTORY.map(
+    (r) => `${r.year} — General/EWS/OBC ${r.gen}, SC ${r.sc ?? "n/a"}, ST ${r.st ?? "n/a"} (out of ${TOTAL_MARKS})`
+  ).join("\n");
+
+  return (
+    `EXAM PATTERN (total ${TOTAL_QUESTIONS} questions, ${TOTAL_MARKS} marks, ${TOTAL_MINUTES} minutes, ` +
+    `sectional timing of ${SECTION_PLAN[0].seconds / 60} minutes per section, attempted in order and not revisitable):\n${pattern}\n\n` +
+    `SECTION STRATEGY:\n${strategy}\n\n` +
+    `IN-EXAM SELECTION RULES:\n${rules}\n\n` +
+    `PREVIOUS-YEAR OVERALL CUT-OFFS:\n${cutoffs}\n` +
+    `Note: prelims is qualifying only; sectional figures are indicative, not officially published per cycle.`
+  );
+}
+
+const SECTION_NAMES = SECTION_PLAN.map((s) => s.name);
+// Sections present in a given question set, in official order. Used to scope an
+// attempt to what the paper actually contains — see examPlan below.
+function planFor(questions) {
+  const present = SECTION_PLAN.filter((s) => questions.some((q) => q.section === s.name));
+  return present.length ? present : SECTION_PLAN;
+}
+const TOTAL_QUESTIONS = SECTION_PLAN.reduce((n, s) => n + s.questions, 0);
+const TOTAL_MARKS = SECTION_PLAN.reduce((n, s) => n + s.marks, 0);
+const TOTAL_MINUTES = SECTION_PLAN.reduce((n, s) => n + s.seconds, 0) / 60;
+
+// Real prelims weighting inside each section: Reasoning is dominated by puzzle
+// sets and Quant by DI. Picking only by section count would let a paper come out
+// as 35 standalone reasoning questions, which is nothing like the actual exam.
+const GROUP_QUOTA = {
+  "Reasoning Ability": { puzzle: 22, other: 13 },
+  "Quantitative Aptitude": { di: 13, other: 22 },
+  "English Language": { other: 30 },
+};
+const PUZZLE_RE = /Seating|Puzzle/i;
+const DI_RE = /DI|Data Interpretation|Caselet|Pie Chart/i;
+export function groupOf(q) {
+  if (q.section === "Reasoning Ability") return PUZZLE_RE.test(q.topic || "") ? "puzzle" : "other";
+  if (q.section === "Quantitative Aptitude") return DI_RE.test(q.topic || "") ? "di" : "other";
+  return "other";
+}
+
+const shuffled = (arr) => {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+// Pick a correctly proportioned paper out of the bundled bank. Slicing the first
+// N of a section-ordered file is what previously produced an all-English paper.
+function pickFallbackPaper(bank) {
+  const out = [];
+  SECTION_PLAN.forEach((plan) => {
+    const quota = GROUP_QUOTA[plan.name] || { other: plan.questions };
+    const taken = [];
+    Object.entries(quota).forEach(([group, n]) => {
+      const pool = shuffled(bank.filter((q) => q.section === plan.name && groupOf(q) === group));
+      taken.push(...pool.slice(0, n));
+    });
+    // if any group ran short, top up from anything else in the section
+    if (taken.length < plan.questions) {
+      const rest = shuffled(bank.filter((q) => q.section === plan.name && !taken.includes(q)));
+      taken.push(...rest.slice(0, plan.questions - taken.length));
+    }
+    // Group a set's questions together AND keep the passage-bearing one first —
+    // the clues/table live only on the first question of each set.
+    taken.sort((a, b) => {
+      const t = (a.topic || "").localeCompare(b.topic || "");
+      if (t !== 0) return t;
+      return (b.passage || b.table ? 1 : 0) - (a.passage || a.table ? 1 : 0);
+    });
+    out.push(...taken.slice(0, plan.questions));
+  });
+  return out;
+}
+
+// The rules sheet marks the operative word with **…**, because that word IS the
+// point of the rule ("married **to**") and a wall of unemphasised text is
+// useless to revise from.
+function Emphasise({ text }) {
+  return (
+    <>
+      {String(text).split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+          <strong key={i} className="font-bold text-amber-600 dark:text-amber-400">
+            {part.slice(2, -2)}
+          </strong>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
 
 const DIFF_STYLES = {
   Basic: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
@@ -29,18 +286,22 @@ function ScoreRing({ score, size = 80 }) {
   );
 }
 
-function AiPanel({ topic, category, onClose }) {
-  const [mode, setMode] = useState("summary");
+// `seedQuestion` opens the panel straight on the chat tab with that question
+// prefilled, so the suggested prompts on the strategy page are one click.
+function AiPanel({ topic, category, onClose, seedQuestion = "" }) {
+  const [mode, setMode] = useState(seedQuestion ? "ask" : "summary");
   const [summary, setSummary] = useState("");
   const [loadingSum, setLoadSum] = useState(false);
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState(seedQuestion);
   const [messages, setMessages] = useState([]);
   const [loadingAsk, setLoadAsk] = useState(false);
   const chatRef = useRef(null);
 
+  // Only prefetch the summary when the panel actually opens on that tab —
+  // opening straight into a seeded question should not burn an AI call.
   useEffect(() => {
-    fetchSummary();
-  }, []);
+    if (mode === "summary" && !summary && !loadingSum) fetchSummary();
+  }, [mode]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -514,6 +775,7 @@ export default function IbpsPoPrep() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState(null);
+  const { confirm, confirmProps } = useConfirm();
 
   // ── Mock Test States ────────────────────────────────────────────────────────
   const [generatedQuestions, setGeneratedQuestions] = useState([]); // after AI generates, before exam starts
@@ -525,20 +787,49 @@ export default function IbpsPoPrep() {
   const [markedReview, setMarkedReview] = useState(new Set());
   const [visitedSet, setVisitedSet] = useState(new Set());
   const [currentQIndex, setCurrentQIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(900); // 15 mins for 15 Questions
-  const [examSection, setExamSection] = useState("English Language");
+  const [timeLeft, setTimeLeft] = useState(SECTION_PLAN[0].seconds); // remaining time in the CURRENT section
+  const [sectionIdx, setSectionIdx] = useState(0);
+  // The sections THIS attempt actually runs. A full paper has all three, but a
+  // previous-year paper may be single-subject (the 2016–2019 papers are
+  // published one subject at a time), and a paper is imported section by
+  // section while it is being transcribed. Running the full plan regardless
+  // left the missing section's 20-minute window with no questions in it, and
+  // sectionBounds' "section not found" fallback then widened navigation to the
+  // WHOLE paper — reopening sections that sectional timing had already closed.
+  const examPlan = useMemo(() => planFor(examQuestions), [examQuestions]);
+  const examSectionNames = useMemo(() => examPlan.map((s) => s.name), [examPlan]);
+  const examSection = examSectionNames[sectionIdx] ?? examSectionNames[0];
   const timerRef = useRef(null);
   // Save/Load states
   const [savedTestId, setSavedTestId] = useState(null); // set when test was pre-saved
   const [savedTests, setSavedTests] = useState([]);
   const [loadingSavedTests, setLoadingSavedTests] = useState(false);
   const [savingTest, setSavingTest] = useState(false);
+  const [pausing, setPausing] = useState(false);
+  const [testMode, setTestMode] = useState("ai"); // ai | pyq
+  const [formulaTab, setFormulaTab] = useState("quant"); // english | quant
+  const [loadingPaperId, setLoadingPaperId] = useState(null); // PYQ paper being fetched
+  // "all" = the full 60-minute paper; a section name = a 20-minute sectional
+  // drill. Applies to both the AI mock and previous-year papers.
+  const [examSectionChoice, setExamSectionChoice] = useState("all");
+  const [paperTitle, setPaperTitle] = useState(null); // set when a PYQ paper is running
+  const [showStrategyAi, setShowStrategyAi] = useState(false);
+  const [strategySeed, setStrategySeed] = useState("");
+  const [reviewMode, setReviewMode] = useState(false); // reading a finished attempt, not taking it
+  const autoSaveCalledRef = useRef(false);
 
   // Load study topics on tab change
   useEffect(() => {
     if (activeTab === "mocktest") {
       setLoading(false);
       fetchSavedTests();
+      return;
+    }
+    // Only prelims/mains/interview have a study-topic module behind them.
+    // "pattern" and "formulas" render static content, so asking the loader for
+    // an "ibpspo-formulas" category just resolves to an empty list.
+    if (activeTab === "pattern" || activeTab === "formulas") {
+      setLoading(false);
       return;
     }
     let cancelled = false;
@@ -574,14 +865,34 @@ export default function IbpsPoPrep() {
     }
   };
 
-  // Exam Countdown Timer
+  // Move to the next section (or submit if this was the last one). Sectional
+  // timing means a closed section can never be reopened.
+  const advanceSection = () => {
+    setSectionIdx((prev) => {
+      const next = prev + 1;
+      if (next >= examPlan.length) {
+        submitExam();
+        return prev;
+      }
+      const firstIdx = examQuestions.findIndex((q) => q.section === examSectionNames[next]);
+      if (firstIdx !== -1) {
+        setCurrentQIndex(firstIdx);
+        handleVisited(examQuestions[firstIdx].id);
+      }
+      setTimeLeft(examPlan[next].seconds);
+      toast(`${examSectionNames[next]} — ${formatTime(examPlan[next].seconds)} on the clock.`, { icon: "⏭️" });
+      return next;
+    });
+  };
+
+  // Sectional countdown — 20 minutes per section, auto-advancing on expiry
   useEffect(() => {
     if (examStarted && !examSubmitted) {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             clearInterval(timerRef.current);
-            submitExam();
+            advanceSection();
             return 0;
           }
           return prev - 1;
@@ -589,48 +900,178 @@ export default function IbpsPoPrep() {
       }, 1000);
     }
     return () => clearInterval(timerRef.current);
-  }, [examStarted, examSubmitted]);
+  }, [examStarted, examSubmitted, sectionIdx, examQuestions]);
 
   // Step 1: Generate questions (does NOT start the exam yet)
   const generateQuestions = async () => {
     setGenerating(true);
+    // A single-section drill is still an AI mock, but its history entry has to
+    // say WHICH section — "Mock Test — 1 Aug" tells you nothing when half your
+    // attempts are 20-minute English drills.
+    setPaperTitle(examSectionChoice === "all" ? null : `${examSectionChoice} — Sectional`);
     try {
-      const { data } = await api.post("/study/ibps-po/generate-mock", { count: 15 });
+      const { data } = await api.post("/study/ibps-po/generate-mock", {
+        count: examSectionChoice === "all"
+          ? TOTAL_QUESTIONS
+          : SECTION_PLAN.find((s) => s.name === examSectionChoice).questions,
+        section: examSectionChoice === "all" ? undefined : examSectionChoice,
+      });
       if (data && data.questions && data.questions.length > 0) {
-        setGeneratedQuestions(data.questions);
+        setGeneratedQuestions(orderBySection(data.questions));
         setSavedTestId(null); // fresh generation, not yet saved
         toast.success(`${data.questions.length} questions generated! Start or save for later.`);
       } else {
         throw new Error("No questions returned");
       }
     } catch (err) {
-      toast.error("AI generation failed. Loaded fallback questions.");
-      const fallback = mockTestData.questions.slice(0, 15);
-      setGeneratedQuestions(fallback);
+      toast.error("AI generation failed. Loaded a paper from the offline bank.");
+      // Honour the section choice in the fallback too — asking for a 20-minute
+      // English drill and being handed a 60-minute full paper is not a fallback.
+      const bank =
+        examSectionChoice === "all"
+          ? mockTestData.questions
+          : mockTestData.questions.filter((q) => q.section === examSectionChoice);
+      setGeneratedQuestions(orderBySection(pickFallbackPaper(bank)));
       setSavedTestId(null);
     } finally {
       setGenerating(false);
     }
   };
 
-  // Step 2a: Begin the exam with generated questions
-  const beginExam = (questions) => {
+  // Paper METADATA only — name, year and per-section counts, enough to render
+  // the cards. The questions are fetched by loadPaperQuestions when an attempt
+  // starts; see pyqLoader.js for why they are not bundled here.
+  const pyqPapers = useMemo(() => pyqData.papers || [], []);
+
+  const startPyqPaper = async (paper) => {
+    if (!paper.total) return toast.error("This paper has no questions loaded yet.");
+    setLoadingPaperId(paper.id);
+    try {
+      const all = await loadPaperQuestions(paper.id, SECTION_PLAN);
+      // Sectional drill on a real paper — planFor() then runs it as a single
+      // 20-minute section, so the same engine covers both without a second path.
+      const questions =
+        examSectionChoice === "all" ? all : all.filter((q) => q.section === examSectionChoice);
+      if (!questions.length) {
+        toast.error(`${paper.name} has no ${examSectionChoice} questions.`);
+        return;
+      }
+      const title = examSectionChoice === "all" ? paper.name : `${paper.name} — ${examSectionChoice}`;
+      setSavedTestId(null);
+      setGeneratedQuestions([]);
+      setPaperTitle(title);
+      beginExam(questions);
+      toast.success(`Started: ${title}`);
+    } catch {
+      toast.error("Could not load that paper. Please try again.");
+    } finally {
+      setLoadingPaperId(null);
+    }
+  };
+
+  // A PYQ attempt should be identifiable in history, not just "Mock Test — <date>".
+  const makeTestTitle = () => {
+    const stamp = new Date().toLocaleDateString("en-IN", {
+      day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+    return paperTitle ? `${paperTitle} — ${stamp}` : `Mock Test — ${stamp}`;
+  };
+
+  // Questions must be grouped by section in the official order, whatever order
+  // they arrive in, because sectional timing walks the list front to back.
+  const orderBySection = (questions) =>
+    SECTION_NAMES.flatMap((name) => questions.filter((q) => q.section === name)).concat(
+      questions.filter((q) => !SECTION_NAMES.includes(q.section))
+    );
+
+  // Step 2a: Begin the exam. Pass `progress` to resume a paused attempt at the
+  // exact question, section and remaining sectional time it was left at.
+  const beginExam = (rawQuestions, progress = null) => {
+    const questions = orderBySection(rawQuestions);
+    // Derived from the local list, not the examPlan memo — setExamQuestions has
+    // not flushed yet at this point, so the memo still holds the PREVIOUS
+    // attempt's plan.
+    const plan = planFor(questions);
     setExamQuestions(questions);
-    setExamAnswers({});
-    setMarkedReview(new Set());
-    setVisitedSet(new Set([questions[0]?.id]));
-    setCurrentQIndex(0);
-    setTimeLeft(900);
-    setExamSection(questions[0]?.section || "English Language");
+    setReviewMode(false);
+    autoSaveCalledRef.current = false;
+    if (progress) {
+      const resumeIdx = Math.min(progress.sectionIdx || 0, plan.length - 1);
+      setExamAnswers(progress.answers || {});
+      setMarkedReview(new Set(progress.marked || []));
+      setVisitedSet(new Set(progress.visited || [questions[0]?.id]));
+      setCurrentQIndex(Math.min(progress.currentQIndex || 0, questions.length - 1));
+      setSectionIdx(resumeIdx);
+      setTimeLeft(progress.timeLeft > 0 ? progress.timeLeft : plan[resumeIdx].seconds);
+    } else {
+      setExamAnswers({});
+      setMarkedReview(new Set());
+      setVisitedSet(new Set([questions[0]?.id]));
+      setCurrentQIndex(0);
+      setSectionIdx(0);
+      setTimeLeft(plan[0].seconds);
+    }
     setExamStarted(true);
     setExamSubmitted(false);
+  };
+
+  // Pause: park the attempt so it can be picked up later. A test generated but
+  // never saved has no id yet, so save it first and then attach the progress.
+  const pauseExam = async () => {
+    clearInterval(timerRef.current);
+    setPausing(true);
+    try {
+      let id = savedTestId;
+      if (!id) {
+        const title = makeTestTitle();
+        const { data } = await api.post("/study/ibps-po/mock-tests/save", { title, questions: examQuestions });
+        id = data.id;
+        setSavedTestId(id);
+      }
+      await api.post(`/study/ibps-po/mock-tests/${id}/pause`, {
+        answers: examAnswers,
+        sectionIdx,
+        timeLeft,
+        currentQIndex,
+        marked: [...markedReview],
+        visited: [...visitedSet],
+      });
+      setExamStarted(false);
+      setExamSubmitted(false);
+      fetchSavedTests();
+      toast.success("Paused. Pick it up from 'My Saved Tests' whenever you're ready.");
+    } catch {
+      toast.error("Could not pause the test. Your progress is still on screen — try again.");
+    } finally {
+      setPausing(false);
+    }
+  };
+
+  // Open a finished attempt read-only, with the answers that were given, so the
+  // solutions and explanations can be reviewed.
+  const viewSolutions = async (testId) => {
+    try {
+      const { data } = await api.get(`/study/ibps-po/mock-tests/${testId}`);
+      if (!data.questions?.length) return toast.error("This test has no saved questions.");
+      autoSaveCalledRef.current = true;   // never re-save a test we are only reading
+      setSavedTestId(testId);
+      setGeneratedQuestions([]);
+      setExamQuestions(orderBySection(data.questions));
+      setExamAnswers(data.answers || {});
+      setReviewMode(true);
+      setExamStarted(true);
+      setExamSubmitted(true);
+      toast.success("Showing your answers and the full solutions.");
+    } catch {
+      toast.error("Could not load the solutions.");
+    }
   };
 
   // Step 2b: Save questions for later (without starting)
   const saveTestForLater = async (questions) => {
     setSavingTest(true);
     try {
-      const title = `Mock Test — ${new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}`;
+      const title = makeTestTitle();
       const { data } = await api.post("/study/ibps-po/mock-tests/save", { title, questions });
       setSavedTestId(data.id);
       setGeneratedQuestions([]); // clear preview
@@ -643,14 +1084,20 @@ export default function IbpsPoPrep() {
     }
   };
 
-  // Load a saved test and start it
-  const loadAndStartTest = async (testId) => {
+  // Load a saved test. A paused one resumes where it stopped; anything else
+  // starts a clean attempt.
+  const loadAndStartTest = async (testId, { resume = false } = {}) => {
     try {
       const { data } = await api.get(`/study/ibps-po/mock-tests/${testId}`);
       setSavedTestId(testId);
       setGeneratedQuestions([]);
-      beginExam(data.questions);
-      toast.success(`Loaded: ${data.title}`);
+      const progress = resume && data.status === "paused" ? data.progress : null;
+      beginExam(data.questions, progress);
+      toast.success(
+        progress
+          ? `Resumed: ${data.title} — ${SECTION_NAMES[progress.sectionIdx || 0]}, ${formatTime(progress.timeLeft || 0)} left`
+          : `Loaded: ${data.title}`
+      );
     } catch {
       toast.error("Failed to load test.");
     }
@@ -686,7 +1133,7 @@ export default function IbpsPoPrep() {
     } else {
       // Auto-save since user actually attempted it
       try {
-        const title = `Mock Test — ${new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}`;
+        const title = makeTestTitle();
         const { data } = await api.post("/study/ibps-po/mock-tests/save", { title, questions: examQuestions });
         const newId = data.id;
         await api.post(`/study/ibps-po/mock-tests/${newId}/submit`, {
@@ -712,22 +1159,33 @@ export default function IbpsPoPrep() {
     });
   };
 
+  // Index range of the section currently open. Navigation is confined to it —
+  // under sectional timing a candidate cannot wander into another section.
+  const sectionBounds = useMemo(() => {
+    const first = examQuestions.findIndex((q) => q.section === examSection);
+    // Empty range, NOT the whole paper — a section with no questions must not
+    // become a doorway back into the sections already closed.
+    if (first === -1) return { first: 0, last: -1 };
+    let last = first;
+    while (last + 1 < examQuestions.length && examQuestions[last + 1].section === examSection) last++;
+    return { first, last };
+  }, [examQuestions, examSection]);
+
   const jumpToQuestion = (idx) => {
     const q = examQuestions[idx];
-    if (!q) return;
+    if (!q || q.section !== examSection) return;
     setCurrentQIndex(idx);
-    setExamSection(q.section);
     handleVisited(q.id);
   };
 
   const saveAndNext = () => {
-    if (currentQIndex < examQuestions.length - 1) {
+    if (currentQIndex < sectionBounds.last) {
       jumpToQuestion(currentQIndex + 1);
     }
   };
 
   const prevQuestion = () => {
-    if (currentQIndex > 0) {
+    if (currentQIndex > sectionBounds.first) {
       jumpToQuestion(currentQIndex - 1);
     }
   };
@@ -774,12 +1232,16 @@ export default function IbpsPoPrep() {
       const studentAns = examAnswers[q.id] || null;
       const isCorrect = studentAns === q.correctAnswer;
       const isSkipped = studentAns === null;
+      // Marks differ per section (English 1.00, Quant 0.86, Reasoning 1.14) and
+      // the penalty is one quarter of that question's own marks.
+      const qMarks = typeof q.marks === "number" ? q.marks : 1.0;
+      const qNeg = typeof q.negativeMarks === "number" ? Math.abs(q.negativeMarks) : qMarks / 4;
       if (isCorrect) {
         correct++;
-        score += 1.0;
+        score += qMarks;
       } else if (!isSkipped) {
         wrong++;
-        score -= 0.25;
+        score -= qNeg;
       }
       return {
         ...q,
@@ -788,13 +1250,43 @@ export default function IbpsPoPrep() {
       };
     });
 
+    score = Math.round(score * 100) / 100; // fractional section marks would otherwise trail decimals
+
     const totalAttempted = correct + wrong;
     const accuracy = totalAttempted > 0 ? ((correct / totalAttempted) * 100).toFixed(1) : 0;
-    const passThreshold = examQuestions.length * 0.55;
-    const cutoffPrediction = score >= passThreshold ? "Likely Qualified" : score >= passThreshold - 1 ? "Likely Borderline" : "Likely Not Qualified";
+    // Base the cut-off on marks available, not question count — the two differ
+    // per section now (Quant is 35 questions for 30 marks).
+    const marksAvailable = examQuestions.reduce(
+      (sum, q) => sum + (typeof q.marks === "number" ? q.marks : 1.0), 0
+    );
+    const passThreshold = marksAvailable * 0.55;
+    const cutoffPrediction = score >= passThreshold ? "Likely Qualified" : score >= passThreshold - 2 ? "Likely Borderline" : "Likely Not Qualified";
+
+    // Section-wise breakdown — IBPS applies sectional cut-offs, so an overall
+    // score alone hides the section that actually failed.
+    const sectionwise = examSectionNames.map((name) => {
+      const qs = details.filter((d) => d.section === name);
+      const c = qs.filter((d) => d.status === "Correct").length;
+      const w = qs.filter((d) => d.status === "Wrong").length;
+      const marks = qs.reduce((sum, d) => {
+        const m = typeof d.marks === "number" ? d.marks : 1.0;
+        const n = typeof d.negativeMarks === "number" ? Math.abs(d.negativeMarks) : m / 4;
+        return d.status === "Correct" ? sum + m : d.status === "Wrong" ? sum - n : sum;
+      }, 0);
+      return {
+        name,
+        total: qs.length,
+        correct: c,
+        wrong: w,
+        skipped: qs.length - c - w,
+        score: Math.round(marks * 100) / 100,
+        accuracy: c + w > 0 ? ((c / (c + w)) * 100).toFixed(1) : "0.0",
+      };
+    }).filter((s) => s.total > 0);
 
     const resultsObj = {
       score,
+      sectionwise,
       correct,
       wrong,
       skipped: examQuestions.length - totalAttempted,
@@ -807,9 +1299,10 @@ export default function IbpsPoPrep() {
     return resultsObj;
   }, [examSubmitted, examAnswers, examQuestions]);
 
-  // Auto-save results once after submission (side effect — must not be inside useMemo)
-  const autoSaveCalledRef = useRef(false);
+  // Auto-save results once after submission (side effect — must not be inside useMemo).
+  // Skipped in review mode: reopening an old attempt must never overwrite it.
   useEffect(() => {
+    if (reviewMode) return;
     if (examSubmitted && results && !autoSaveCalledRef.current) {
       autoSaveCalledRef.current = true;
       autoSaveAfterSubmit(results);
@@ -817,7 +1310,7 @@ export default function IbpsPoPrep() {
     if (!examSubmitted) {
       autoSaveCalledRef.current = false; // reset for next exam
     }
-  }, [examSubmitted, results]);
+  }, [examSubmitted, results, reviewMode]);
 
   // Sub-categories lists depending on tab
   const subCategories = useMemo(() => {
@@ -832,7 +1325,13 @@ export default function IbpsPoPrep() {
         "English Language & Descriptive",
       ];
     } else if (activeTab === "interview") {
-      return ["All", "HR / Personal", "Banking Concepts", "Situational Scenarios"];
+      return [
+        "All",
+        "HR / Personal",
+        "Banking Concepts",
+        "Situational Scenarios",
+        "Current Affairs & Economy",
+      ];
     }
     return [];
   }, [activeTab]);
@@ -872,19 +1371,25 @@ export default function IbpsPoPrep() {
 
       {/* Main Tabs */}
       {!examStarted && (
-        <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800 pb-px">
+        // Six tabs with flex-1 on a phone gave each ~62px, of which px-4 ate 32 —
+        // labels like "🧮 Formulas & Rules" wrapped onto four lines. Scroll the
+        // bar horizontally on small screens instead and let each tab keep its
+        // natural width.
+        <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800 pb-px overflow-x-auto scrollbar-thin">
           {[
             { id: "prelims", label: "📋 Prelims Prep" },
             { id: "mains", label: "🏆 Mains Expert" },
             { id: "interview", label: "🎯 Mock Interview" },
             { id: "mocktest", label: "✍️ Timed Mock Test" },
+            { id: "formulas", label: "🧮 Formulas & Rules" },
+            { id: "pattern", label: "📊 Exam Pattern" },
           ].map((t) => {
             const active = activeTab === t.id;
             return (
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id)}
-                className={`flex-1 md:flex-none text-center px-4 py-3 text-sm font-bold border-b-2 transition-all ${
+                className={`flex-shrink-0 whitespace-nowrap text-center px-4 py-3 text-sm font-bold border-b-2 transition-all ${
                   active
                     ? "border-amber-500 text-amber-600 dark:text-amber-400"
                     : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
@@ -898,7 +1403,7 @@ export default function IbpsPoPrep() {
       )}
 
       {/* Study Sections (Prelims, Mains, Interview) */}
-      {activeTab !== "mocktest" && (
+      {activeTab !== "mocktest" && activeTab !== "pattern" && activeTab !== "formulas" && (
         <>
           <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 space-y-4">
             <div className="flex gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
@@ -992,7 +1497,159 @@ export default function IbpsPoPrep() {
           {/* Pre-Exam rules & trigger — shown when not in active exam */}
           {!examStarted && !examSubmitted && (
             <div className="space-y-6 max-w-3xl mx-auto">
+              {/* Mode switch — same engine, two sources of questions */}
+              <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl">
+                {[
+                  { id: "ai", label: "🤖 AI Mock Test" },
+                  { id: "pyq", label: `📚 Previous Year Papers${pyqPapers.length ? ` (${pyqPapers.length})` : ""}` },
+                ].map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setTestMode(m.id)}
+                    className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${
+                      testMode === m.id
+                        ? "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm"
+                        : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                    }`}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Sectional drill picker — applies to BOTH sources. A full paper
+                  needs an uninterrupted hour; a single section is 20 minutes and
+                  fits into a break, which is the only way most people practise. */}
+              <div className="space-y-2">
+                <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">
+                  What to sit
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { id: "all", label: "Full Paper", meta: `${TOTAL_QUESTIONS} Qs · ${TOTAL_MINUTES} min` },
+                    ...SECTION_PLAN.map((s) => ({
+                      id: s.name,
+                      label: s.name.replace(" Language", "").replace(" Aptitude", "").replace(" Ability", ""),
+                      meta: `${s.questions} Qs · ${s.seconds / 60} min`,
+                    })),
+                  ].map((opt) => {
+                    const on = examSectionChoice === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => setExamSectionChoice(opt.id)}
+                        className={`flex-1 min-w-[140px] px-3 py-2.5 rounded-xl border text-left transition-all ${
+                          on
+                            ? "border-amber-500 bg-amber-50 dark:bg-amber-900/20"
+                            : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+                        }`}
+                      >
+                        <span className={`block text-sm font-bold ${on ? "text-amber-700 dark:text-amber-300" : "text-slate-700 dark:text-slate-200"}`}>
+                          {opt.label}
+                        </span>
+                        <span className="block text-[10px] text-slate-400 mt-0.5">{opt.meta}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* ── Previous Year Papers ─────────────────────────────────── */}
+              {testMode === "pyq" && (
+                <div className="glass-card p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-5">
+                  <div className="text-center space-y-2">
+                    <span className="text-5xl">📚</span>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Previous Year Papers</h2>
+                    <p className="text-sm text-slate-500">
+                      Sat under real conditions — {SECTION_PLAN[0].seconds / 60} minutes per section, attempted in
+                      order and not revisitable, with the same pause, history and solutions as the AI mock. A paper
+                      covering only some sections runs only those, so its clock is shorter than the full {TOTAL_MINUTES} minutes.
+                    </p>
+                  </div>
+
+                  {pyqPapers.length === 0 ? (
+                    <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 text-center space-y-3">
+                      <span className="text-3xl">📥</span>
+                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">No papers loaded yet</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+                        Send the question papers over — as PDF, images or plain text — and they will be converted
+                        and attached here. Each paper appears as a card below and runs through this same exam engine.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {pyqPapers.map((p) => {
+                        // Only the sections this paper actually has — it runs
+                        // exactly those, so the card must advertise exactly those.
+                        // Counts come from the index; the questions themselves
+                        // are not loaded until Start Paper is pressed.
+                        const present = (p.sections || []).reduce((m, s) => ({ ...m, [s.name]: s.count }), {});
+                        // What this card will actually run, given the sectional
+                        // choice above — not what the paper contains in full.
+                        const plan = SECTION_PLAN.filter(
+                          (s) => present[s.name] && (examSectionChoice === "all" || s.name === examSectionChoice),
+                        );
+                        const runQs = plan.reduce((n, s) => n + present[s.name], 0);
+                        const missingSection = examSectionChoice !== "all" && !present[examSectionChoice];
+                        const counts = plan.map(
+                          (s) => `${present[s.name]} ${s.medium === "English" ? "Eng" : s.name.split(" ")[0]}`
+                        );
+                        const runMinutes = plan.reduce((n, s) => n + s.seconds, 0) / 60;
+                        const complete = p.total === TOTAL_QUESTIONS;
+                        const busy = loadingPaperId === p.id;
+                        return (
+                          <div
+                            key={p.id}
+                            className="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl"
+                          >
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{p.name}</p>
+                              <div className="flex flex-wrap items-center gap-2">
+                                {p.shift && <span className="text-[10px] text-slate-400">{p.shift}</span>}
+                                <span className="text-[10px] text-slate-400">
+                                  {runQs} Qs · {counts.join(" / ")} · {runMinutes} min
+                                </span>
+                                {!complete && (
+                                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 uppercase">
+                                    Partial
+                                  </span>
+                                )}
+                                {p.source === "memory-based" && (
+                                  <span
+                                    className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 uppercase"
+                                    title="IBPS does not publish official papers — this is a memory-based reconstruction."
+                                  >
+                                    Memory-based
+                                  </span>
+                                )}
+                              </div>
+                              {p.note && <p className="text-[11px] text-slate-500 dark:text-slate-400">{p.note}</p>}
+                            </div>
+                            <button
+                              onClick={() => startPyqPaper(p)}
+                              disabled={busy || loadingPaperId !== null || missingSection}
+                              title={missingSection ? `This paper has no ${examSectionChoice} questions` : undefined}
+                              className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-colors"
+                            >
+                              {busy ? "Loading…" : missingSection ? "Not in this paper" : examSectionChoice === "all" ? "▶ Start Paper" : `▶ Start ${examSectionChoice.split(" ")[0]}`}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                    <strong className="text-slate-700 dark:text-slate-200">Note:</strong> IBPS does not publicly
+                    release its question papers or answer keys, so anything labelled a previous-year paper — here or
+                    anywhere else — is a memory-based reconstruction compiled from candidate recall, not an official
+                    document.
+                  </p>
+                </div>
+              )}
+
               {/* Main card */}
+              {testMode === "ai" && (
               <div className="glass-card p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6">
                 <div className="text-center space-y-2">
                   <span className="text-5xl">✍️</span>
@@ -1000,27 +1657,70 @@ export default function IbpsPoPrep() {
                   <p className="text-sm text-slate-500">Practice under real-time exam conditions with unique questions generated live by Groq AI</p>
                 </div>
 
-                <div className="border-t border-b border-slate-100 dark:border-slate-800 py-4 grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Duration</p>
-                    <p className="text-lg font-bold text-slate-800 dark:text-slate-100">15 Mins</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Questions</p>
-                    <p className="text-lg font-bold text-slate-800 dark:text-slate-100">15</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Marks</p>
-                    <p className="text-lg font-bold text-slate-800 dark:text-slate-100">15.0</p>
-                  </div>
+                {/* Reflects the sectional choice — showing 100 Qs / 60 min above
+                    a button that generates a 30-question English drill would be
+                    a lie about what you are about to sit. */}
+                {(() => {
+                  const chosen = examSectionChoice === "all" ? null : SECTION_PLAN.find((s) => s.name === examSectionChoice);
+                  const mins = chosen ? chosen.seconds / 60 : TOTAL_MINUTES;
+                  const qs = chosen ? chosen.questions : TOTAL_QUESTIONS;
+                  const marks = chosen ? chosen.marks : TOTAL_MARKS;
+                  return (
+                    <div className="border-t border-b border-slate-100 dark:border-slate-800 py-4 grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Duration</p>
+                        <p className="text-lg font-bold text-slate-800 dark:text-slate-100">{mins} Mins</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Questions</p>
+                        <p className="text-lg font-bold text-slate-800 dark:text-slate-100">{qs}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                          {chosen ? "Section Marks" : "Total Marks"}
+                        </p>
+                        <p className="text-lg font-bold text-slate-800 dark:text-slate-100">{marks}</p>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Official pattern breakdown */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="text-slate-400 border-b border-slate-100 dark:border-slate-800">
+                        <th className="text-left font-semibold py-2">Section</th>
+                        <th className="text-right font-semibold py-2">Qs</th>
+                        <th className="text-right font-semibold py-2">Marks</th>
+                        <th className="text-right font-semibold py-2">Time</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-slate-600 dark:text-slate-300">
+                      {SECTION_PLAN.map((s) => (
+                        <tr key={s.name} className="border-b border-slate-50 dark:border-slate-800/60">
+                          <td className="py-2 font-medium">{s.name}</td>
+                          <td className="py-2 text-right">{s.questions}</td>
+                          <td className="py-2 text-right">{s.marks}</td>
+                          <td className="py-2 text-right">{s.seconds / 60} min</td>
+                        </tr>
+                      ))}
+                      <tr className="font-bold text-slate-800 dark:text-slate-100">
+                        <td className="py-2">Total</td>
+                        <td className="py-2 text-right">{TOTAL_QUESTIONS}</td>
+                        <td className="py-2 text-right">{TOTAL_MARKS}</td>
+                        <td className="py-2 text-right">{TOTAL_MINUTES} min</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
                 <div className="space-y-3">
                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Test Instructions:</h3>
                   <ul className="text-xs text-slate-500 dark:text-slate-400 space-y-2 list-disc list-inside">
-                    <li>Questions are dynamically generated by Groq AI — every test is unique.</li>
-                    <li>Sections: <strong>English (5 Qs), Quant (5 Qs), and Reasoning (5 Qs)</strong>.</li>
-                    <li>Marking Scheme: <strong>+1.0</strong> for correct answer, <strong>-0.25</strong> for wrong answer.</li>
+                    <li>Questions are dynamically generated by Groq AI — every test is unique. If AI is unavailable, a paper is drawn from the offline bank in the same pattern.</li>
+                    <li><strong>Sectional timing:</strong> 20 minutes per section, attempted in the order above. When a section's time runs out it closes automatically and <strong>cannot be reopened</strong>.</li>
+                    <li>Negative marking is <strong>one fourth</strong> of the marks carried by that question (English −0.25, Quant −0.215, Reasoning −0.285).</li>
                     <li>You can <strong>Save</strong> the generated questions and attempt later, or <strong>Start</strong> immediately.</li>
                     <li>Your results are automatically saved once you submit a test.</li>
                   </ul>
@@ -1084,8 +1784,9 @@ export default function IbpsPoPrep() {
                   </div>
                 )}
               </div>
+              )}
 
-              {/* My Saved Tests */}
+              {/* My Saved Tests — shared by both modes */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">📂 My Saved Tests</h3>
@@ -1119,10 +1820,24 @@ export default function IbpsPoPrep() {
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                           test.status === "attempted"
                             ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                            : test.status === "paused"
+                            ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
                             : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
                         }`}>
-                          {test.status === "attempted" ? "✓ Attempted" : "⏳ Saved"}
+                          {test.status === "attempted" ? "✓ Attempted" : test.status === "paused" ? "⏸ Paused" : "⏳ Saved"}
                         </span>
+                        {test.status === "paused" && test.progressSummary && (
+                          <span className="text-[10px] text-blue-500 font-medium">
+                            {/* sectionIdx is an index into THIS attempt's plan, not
+                                the global three. A paused Quant-only drill sits at
+                                index 0, which read as "English Language" before —
+                                so for a sectional test take the name from its title. */}
+                            {SECTION_NAMES.find((n) => (test.title || "").includes(n)) ||
+                              SECTION_NAMES[test.progressSummary.sectionIdx] ||
+                              "In progress"}{" "}
+                            · {test.progressSummary.answered} answered
+                          </span>
+                        )}
                         {test.status === "attempted" && test.results && (
                           <span className="text-[10px] text-slate-400 font-medium">
                             Score: {test.results.score?.toFixed(2)} · {test.results.accuracy}% acc
@@ -1135,12 +1850,30 @@ export default function IbpsPoPrep() {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* Always visible — these used to appear only on hover, which
+                        made them unreachable on touch devices. */}
+                    <div className="flex items-center gap-2 flex-wrap justify-end">
+                      {test.status === "paused" && (
+                        <button
+                          onClick={() => loadAndStartTest(test.id, { resume: true })}
+                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors"
+                        >
+                          ▶ Continue
+                        </button>
+                      )}
+                      {test.status === "attempted" && (
+                        <button
+                          onClick={() => viewSolutions(test.id)}
+                          className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors"
+                        >
+                          📖 Solutions
+                        </button>
+                      )}
                       <button
                         onClick={() => loadAndStartTest(test.id)}
                         className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-colors"
                       >
-                        {test.status === "attempted" ? "Re-attempt" : "▶ Start"}
+                        {test.status === "attempted" ? "Re-attempt" : test.status === "paused" ? "Restart" : "▶ Start"}
                       </button>
                       <button
                         onClick={() => deleteSavedTest(test.id)}
@@ -1163,31 +1896,71 @@ export default function IbpsPoPrep() {
                 {/* Exam Sub-Header */}
                 <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl">
                   {/* Section Jumper */}
+                  {/* Section status — sectional timing means these are indicators, not jumps */}
                   <div className="flex gap-1.5 overflow-x-auto">
-                    {["English Language", "Quantitative Aptitude", "Reasoning Ability"].map((sec) => (
-                      <button
-                        key={sec}
-                        onClick={() => {
-                          const firstQ = examQuestions.find((q) => q.section === sec);
-                          if (firstQ) {
-                            const idx = examQuestions.indexOf(firstQ);
-                            jumpToQuestion(idx);
+                    {examSectionNames.map((sec, i) => {
+                      const state = i < sectionIdx ? "closed" : i === sectionIdx ? "active" : "upcoming";
+                      return (
+                        <span
+                          key={sec}
+                          title={
+                            state === "closed"
+                              ? "This section is closed — sectional timing does not allow returning."
+                              : state === "active"
+                              ? "Currently open"
+                              : "Opens after the current section's 20 minutes end."
                           }
-                        }}
-                        className={`text-xs px-3 py-1.5 rounded-xl font-bold transition-colors whitespace-nowrap ${
-                          examSection === sec
-                            ? "bg-slate-800 text-white dark:bg-white dark:text-slate-800"
-                            : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
-                        }`}
-                      >
-                        {sec}
-                      </button>
-                    ))}
+                          className={`text-xs px-3 py-1.5 rounded-xl font-bold whitespace-nowrap ${
+                            state === "active"
+                              ? "bg-slate-800 text-white dark:bg-white dark:text-slate-800"
+                              : state === "closed"
+                              ? "bg-slate-100 dark:bg-slate-800 text-slate-400 line-through"
+                              : "bg-white dark:bg-slate-800 text-slate-400 border border-dashed border-slate-300 dark:border-slate-700"
+                          }`}
+                        >
+                          {state === "closed" ? "🔒 " : state === "upcoming" ? "🔓 " : ""}
+                          {sec}
+                        </span>
+                      );
+                    })}
                   </div>
 
-                  {/* Timer Display */}
-                  <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-mono text-lg font-bold">
-                    ⏱️ {formatTime(timeLeft)}
+                  {/* Sectional timer + explicit early exit */}
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`flex items-center gap-2 font-mono text-lg font-bold ${
+                        timeLeft <= 60 ? "text-red-600 dark:text-red-400 animate-pulse" : "text-slate-700 dark:text-slate-200"
+                      }`}
+                    >
+                      ⏱️ {formatTime(timeLeft)}
+                      <span className="text-[10px] font-sans font-semibold text-slate-400 uppercase tracking-wider">
+                        section {sectionIdx + 1}/{examPlan.length}
+                      </span>
+                    </div>
+                    <button
+                      onClick={pauseExam}
+                      disabled={pausing}
+                      title="Stop the clock and save your progress — resume later from My Saved Tests."
+                      className="text-xs px-3 py-1.5 rounded-xl font-bold bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white"
+                    >
+                      {pausing ? "Saving…" : "⏸ Pause"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        const last = sectionIdx === examPlan.length - 1;
+                        confirm({
+                          title: last ? "Submit the whole test now?" : `Move on to ${examSectionNames[sectionIdx + 1]}?`,
+                          message: last
+                            ? "This cannot be undone."
+                            : `You will not be able to return to ${examSection}.`,
+                          confirmLabel: last ? "Submit" : "Next Section",
+                          onConfirm: advanceSection,
+                        });
+                      }}
+                      className="text-xs px-3 py-1.5 rounded-xl font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600"
+                    >
+                      {sectionIdx === examPlan.length - 1 ? "Finish ▶" : "Next Section ▶"}
+                    </button>
                   </div>
                 </div>
 
@@ -1199,7 +1972,11 @@ export default function IbpsPoPrep() {
                     <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 space-y-6" style={{fontFamily: "'Inter', 'Segoe UI', sans-serif"}}>
                       <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
                         <span style={{fontFamily: "'Inter', sans-serif", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase"}} className="text-slate-400">
-                          Question {currentQIndex + 1} of {examQuestions.length}
+                          {examSection} — Question {currentQIndex - sectionBounds.first + 1} of{" "}
+                          {sectionBounds.last - sectionBounds.first + 1}
+                          <span className="normal-case tracking-normal text-slate-300 dark:text-slate-600">
+                            {"  "}({currentQIndex + 1}/{examQuestions.length} overall)
+                          </span>
                         </span>
                         <span style={{fontFamily: "'Inter', sans-serif", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.06em"}} className="text-slate-400 uppercase">
                           Marks: {q.marks} | Neg: {q.negativeMarks}
@@ -1294,15 +2071,15 @@ export default function IbpsPoPrep() {
                         <div className="flex gap-2">
                           <button
                             onClick={prevQuestion}
-                            disabled={currentQIndex === 0}
+                            disabled={currentQIndex <= sectionBounds.first}
                             className="px-4 py-2 bg-slate-100 dark:bg-slate-700 disabled:opacity-40 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl"
                           >
                             ◀ Previous
                           </button>
                           <button
                             onClick={saveAndNext}
-                            disabled={currentQIndex === examQuestions.length - 1}
-                            className="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl"
+                            disabled={currentQIndex >= sectionBounds.last}
+                            className="px-5 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl"
                           >
                             Save & Next ▶
                           </button>
@@ -1325,12 +2102,15 @@ export default function IbpsPoPrep() {
               >
                 <div className="text-center">
                   <h3 style={{fontFamily: "'Inter', sans-serif", fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.12em"}} className="text-slate-700 dark:text-slate-200 uppercase">Question Palette</h3>
-                  <p style={{fontSize: "0.68rem"}} className="text-slate-400 mt-0.5">Click numbers to jump directly</p>
+                  <p style={{fontSize: "0.68rem"}} className="text-slate-400 mt-0.5">
+                    {examSection} — {sectionBounds.last - sectionBounds.first + 1} questions
+                  </p>
                 </div>
 
-                {/* 15 Qs Grid */}
+                {/* Current section only — closed sections cannot be navigated to */}
                 <div className="grid grid-cols-5 gap-2 p-1.5">
-                  {examQuestions.map((q, idx) => {
+                  {examQuestions.slice(sectionBounds.first, sectionBounds.last + 1).map((q, offset) => {
+                    const idx = sectionBounds.first + offset;
                     const isVisited = visitedSet.has(q.id);
                     const isAnswered = examAnswers[q.id] !== undefined;
                     const isMarked = markedReview.has(q.id);
@@ -1392,6 +2172,20 @@ export default function IbpsPoPrep() {
           {/* Results Dashboard Post-Submission */}
           {examSubmitted && results && (
             <div className="space-y-6">
+              {reviewMode && (
+                <div className="flex flex-wrap items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl">
+                  <span className="text-xl">📖</span>
+                  <p className="flex-1 text-sm text-emerald-800 dark:text-emerald-200 font-medium">
+                    Reviewing a past attempt — your saved answers are shown against the correct ones below. Nothing here is re-scored or overwritten.
+                  </p>
+                  <button
+                    onClick={() => { setReviewMode(false); setExamStarted(false); setExamSubmitted(false); }}
+                    className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-xl"
+                  >
+                    ← Back to tests
+                  </button>
+                </div>
+              )}
               {/* Score summary panel */}
               <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
                 <div className="text-center md:border-r border-slate-150 dark:border-slate-700 py-2 space-y-1">
@@ -1427,45 +2221,40 @@ export default function IbpsPoPrep() {
                   }`}>
                     {results.cutoffPrediction}
                   </p>
-                  <p className="text-[10px] text-slate-400">Predicted Cutoff: 55% Marks</p>
+                  <p className="text-[10px] text-slate-400">Predicted cutoff: 55% of marks available</p>
                 </div>
               </div>
 
               {/* Section wise stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                  { name: "English Language", target: examQuestions.filter(q => q.section === "English Language").length },
-                  { name: "Quantitative Aptitude", target: examQuestions.filter(q => q.section === "Quantitative Aptitude").length },
-                  { name: "Reasoning Ability", target: examQuestions.filter(q => q.section === "Reasoning Ability").length },
-                ].map((sec) => {
-                  const secQuestions = examQuestions.filter((q) => q.section === sec.name);
-                  let secCorrect = 0;
-                  let secWrong = 0;
-                  secQuestions.forEach((q) => {
-                    const studentAns = examAnswers[q.id];
-                    if (studentAns === q.correctAnswer) secCorrect++;
-                    else if (studentAns !== undefined) secWrong++;
-                  });
-                  const secScore = secCorrect - secWrong * 0.25;
-
+                {(results.sectionwise || []).map((sec) => {
+                  const plan = SECTION_PLAN.find((p) => p.name === sec.name);
                   return (
                     <div key={sec.name} className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4">
                       <h4 className="font-bold text-sm text-slate-800 dark:text-slate-100">{sec.name}</h4>
                       <div className="grid grid-cols-3 gap-2 text-center text-xs">
                         <div>
                           <p className="text-[9px] text-slate-400 font-semibold uppercase">Score</p>
-                          <p className="text-base font-black text-slate-800 dark:text-slate-100">{secScore.toFixed(2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-[9px] text-slate-400 font-semibold uppercase">Accuracy</p>
-                          <p className="text-base font-black text-blue-500">
-                            {secCorrect + secWrong > 0 ? ((secCorrect / (secCorrect + secWrong)) * 100).toFixed(0) : 0}%
+                          <p className="text-base font-black text-slate-800 dark:text-slate-100">
+                            {sec.score.toFixed(2)}
+                            <span className="text-[10px] font-bold text-slate-400">/{plan ? plan.marks : sec.total}</span>
                           </p>
                         </div>
                         <div>
-                          <p className="text-[9px] text-slate-400 font-semibold uppercase">Questions</p>
-                          <p className="text-base font-black text-slate-400">{sec.target}</p>
+                          <p className="text-[9px] text-slate-400 font-semibold uppercase">Accuracy</p>
+                          <p className="text-base font-black text-blue-500">{sec.accuracy}%</p>
                         </div>
+                        <div>
+                          <p className="text-[9px] text-slate-400 font-semibold uppercase">Attempted</p>
+                          <p className="text-base font-black text-slate-400">
+                            {sec.correct + sec.wrong}/{sec.total}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 text-[10px] font-semibold text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-2">
+                        <span className="text-green-600">✓ {sec.correct}</span>
+                        <span className="text-red-500">✗ {sec.wrong}</span>
+                        <span>— {sec.skipped} skipped</span>
                       </div>
                     </div>
                   );
@@ -1615,6 +2404,562 @@ export default function IbpsPoPrep() {
           )}
         </>
       )}
+
+      {/* ── Exam Pattern ─────────────────────────────────────────────────── */}
+      {/* ── Formulas & Rules — quick-revision sheet ─────────────────────────── */}
+      {activeTab === "formulas" && (
+        <div className="space-y-6 max-w-5xl mx-auto">
+          <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl">
+            {[
+              { id: "english", label: `📘 English (${ENGLISH_RULES.reduce((n, g) => n + g.rows.length, 0)} rules)` },
+              { id: "quant", label: `🧮 Quant (${QUANT_FORMULAS.reduce((n, g) => n + g.items.length, 0)} formulas)` },
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setFormulaTab(t.id)}
+                className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${
+                  formulaTab === t.id
+                    ? "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {formulaTab === "english" && (
+            <div className="space-y-6">
+              <div className="text-center space-y-1">
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">English</h2>
+                <p className="text-sm text-slate-500">
+                  Usage rules the English section tests every year. The highlighted word is the whole point of the rule.
+                </p>
+              </div>
+              {ENGLISH_RULES.map((g) => (
+                <div key={g.group} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                  <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+                    <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">{g.group}</h3>
+                  </div>
+                  {/* Four columns is too wide for a phone, so the table scrolls
+                      inside its own box rather than the page scrolling sideways. */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse min-w-[640px]">
+                      <thead>
+                        <tr className="text-[10px] uppercase tracking-wider text-slate-400">
+                          <th className="px-4 py-2 font-bold">Topic</th>
+                          <th className="px-4 py-2 font-bold">Rule</th>
+                          <th className="px-4 py-2 font-bold">Example</th>
+                          <th className="px-4 py-2 font-bold">Trick</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {g.rows.map((r) => (
+                          <tr key={r.topic} className="border-t border-slate-100 dark:border-slate-800/70 align-top">
+                            <td className="px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">{r.topic}</td>
+                            <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300"><Emphasise text={r.rule} /></td>
+                            <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-300 italic"><Emphasise text={r.example} /></td>
+                            <td className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">{r.trick}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {formulaTab === "quant" && (
+            <div className="space-y-6">
+              <div className="text-center space-y-1">
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Quantitative Aptitude</h2>
+                <p className="text-sm text-slate-500">
+                  Every formula the {SECTION_PLAN[1].name} section can ask for, grouped by topic.
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4 items-start">
+                {QUANT_FORMULAS.map((g) => (
+                  <div key={g.group} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">{g.group}</h3>
+                      <span className="text-[10px] text-slate-400 font-semibold">{g.items.length}</span>
+                    </div>
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800/70">
+                      {g.items.map((it) => (
+                        <div key={it.name} className="px-5 py-3 space-y-1">
+                          <p className="text-xs font-bold text-slate-700 dark:text-slate-200">{it.name}</p>
+                          <p className="text-sm font-mono text-amber-700 dark:text-amber-300 break-words">{it.formula}</p>
+                          {it.note && <p className="text-[11px] text-slate-500 dark:text-slate-400">{it.note}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "pattern" && (
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                IBPS PO Prelims — Exam Pattern
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                {TOTAL_QUESTIONS} questions · {TOTAL_MARKS} marks · {TOTAL_MINUTES} minutes, with{" "}
+                {SECTION_PLAN[0].seconds / 60} minutes of sectional timing per section.
+              </p>
+            </div>
+
+            {/* Marks and timing table */}
+            <div className="overflow-x-auto -mx-2 px-2">
+              <table className="w-full text-sm border-collapse min-w-[640px]">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                    <th className="text-left font-bold py-3 pr-3">Section</th>
+                    <th className="text-right font-bold py-3 px-3">Questions</th>
+                    <th className="text-right font-bold py-3 px-3">Marks</th>
+                    <th className="text-right font-bold py-3 px-3">Marks / Question</th>
+                    <th className="text-right font-bold py-3 px-3">Negative / Question</th>
+                    <th className="text-right font-bold py-3 px-3">Time</th>
+                    <th className="text-left font-bold py-3 pl-3">Medium</th>
+                  </tr>
+                </thead>
+                <tbody className="text-slate-700 dark:text-slate-200">
+                  {SECTION_PLAN.map((s) => (
+                    <tr key={s.name} className="border-b border-slate-100 dark:border-slate-800">
+                      <td className="py-3 pr-3 font-semibold">{s.name}</td>
+                      <td className="py-3 px-3 text-right tabular-nums">{s.questions}</td>
+                      <td className="py-3 px-3 text-right tabular-nums">{s.marks}</td>
+                      <td className="py-3 px-3 text-right tabular-nums font-semibold text-emerald-600 dark:text-emerald-400">
+                        +{s.perQuestion.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-3 text-right tabular-nums font-semibold text-red-500">
+                        {s.negative}
+                      </td>
+                      <td className="py-3 px-3 text-right tabular-nums">{s.seconds / 60} min</td>
+                      <td className="py-3 pl-3 text-slate-500 dark:text-slate-400 text-xs">{s.medium}</td>
+                    </tr>
+                  ))}
+                  <tr className="font-black text-slate-900 dark:text-white">
+                    <td className="py-3 pr-3">Total</td>
+                    <td className="py-3 px-3 text-right tabular-nums">{TOTAL_QUESTIONS}</td>
+                    <td className="py-3 px-3 text-right tabular-nums">{TOTAL_MARKS}</td>
+                    <td className="py-3 px-3 text-right text-slate-300 dark:text-slate-600">—</td>
+                    <td className="py-3 px-3 text-right text-slate-300 dark:text-slate-600">—</td>
+                    <td className="py-3 px-3 text-right tabular-nums">{TOTAL_MINUTES} min</td>
+                    <td className="py-3 pl-3 text-slate-300 dark:text-slate-600">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Marking rules */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  icon: "➕",
+                  title: "Marks per question",
+                  body: `Marks are not uniform across sections. Each section's marks are divided by its question count — English ${SECTION_PLAN[0].perQuestion.toFixed(2)}, Quant ${SECTION_PLAN[1].perQuestion.toFixed(2)}, Reasoning ${SECTION_PLAN[2].perQuestion.toFixed(2)}. A Reasoning question is worth about a third more than a Quant one.`,
+                },
+                {
+                  icon: "➖",
+                  title: "Negative marking",
+                  body: "One fourth of the marks carried by that question is deducted for a wrong answer — so it varies by section too. Unattempted questions carry no penalty.",
+                },
+                {
+                  icon: "⏱️",
+                  title: "Sectional timing",
+                  body: `Each section gets exactly ${SECTION_PLAN[0].seconds / 60} minutes and must be attempted in order. Once a section's window closes you cannot return to it, so unattempted questions there are lost.`,
+                },
+              ].map((c) => (
+                <div key={c.title} className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-2">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                    {c.icon} {c.title}
+                  </p>
+                  <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">{c.body}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Worked marking example */}
+            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-2xl p-4 space-y-2">
+              <p className="text-sm font-bold text-amber-800 dark:text-amber-300">How a score is worked out</p>
+              <p className="text-xs leading-relaxed text-amber-900/80 dark:text-amber-200/80">
+                Say you get 20 English correct with 4 wrong, 18 Quant correct with 6 wrong, and 22 Reasoning correct with 5 wrong.
+                English gives {(20 * 1.0).toFixed(2)} − {(4 * 0.25).toFixed(2)} = <strong>{(20 * 1.0 - 4 * 0.25).toFixed(2)}</strong>.
+                Quant gives {(18 * 0.86).toFixed(2)} − {(6 * 0.215).toFixed(2)} = <strong>{(18 * 0.86 - 6 * 0.215).toFixed(2)}</strong>.
+                Reasoning gives {(22 * 1.14).toFixed(2)} − {(5 * 0.285).toFixed(2)} = <strong>{(22 * 1.14 - 5 * 0.285).toFixed(2)}</strong>.
+                Total = <strong>{(20 * 1.0 - 4 * 0.25 + 18 * 0.86 - 6 * 0.215 + 22 * 1.14 - 5 * 0.285).toFixed(2)}</strong> out of {TOTAL_MARKS}.
+              </p>
+            </div>
+          </div>
+
+          {/* Topics per section */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Syllabus covered in each section</h3>
+            <div className="space-y-3">
+              {SECTION_PLAN.map((s) => (
+                <div key={s.name} className="border-l-2 border-amber-400 pl-4 py-1">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                    {s.name}{" "}
+                    <span className="text-xs font-medium text-slate-400">
+                      · {s.questions} Qs · {s.marks} marks · {s.seconds / 60} min
+                    </span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{s.topics}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Cut-offs ─────────────────────────────────────────────────── */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-6">
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                Previous years' cut-offs
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Overall Prelims cut-off out of {TOTAL_MARKS}, reported category-wise on an all-India basis.
+                If you use state terminology: <strong>OC</strong> maps to General/UR and <strong>BC</strong> to OBC.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto -mx-2 px-2">
+              <table className="w-full text-sm border-collapse min-w-[560px]">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                    <th className="text-left font-bold py-3 pr-3">Year</th>
+                    {CUTOFF_CATEGORIES.map((c) => (
+                      <th key={c.key} className="text-right font-bold py-3 px-3">
+                        {c.label}
+                        {c.alias && (
+                          <span className="block font-medium normal-case tracking-normal text-slate-300 dark:text-slate-600">
+                            ({c.alias})
+                          </span>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="text-slate-700 dark:text-slate-200">
+                  {CUTOFF_HISTORY.map((row, i) => (
+                    <tr key={row.year} className="border-b border-slate-100 dark:border-slate-800">
+                      <td className="py-3 pr-3 font-semibold">
+                        {row.year}
+                        {i === 0 && (
+                          <span className="ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">
+                            LATEST
+                          </span>
+                        )}
+                      </td>
+                      {CUTOFF_CATEGORIES.map((c) => {
+                        const disputed = (row.disputed || []).includes(c.key);
+                        return (
+                          <td key={c.key} className="py-3 px-3 text-right tabular-nums">
+                            {row[c.key] === null ? (
+                              <span className="text-slate-300 dark:text-slate-600" title="Not confirmed for this cycle">
+                                n/a
+                              </span>
+                            ) : (
+                              <span
+                                className={disputed ? "text-slate-500 dark:text-slate-400" : ""}
+                                title={disputed ? "Reported figures differ between sources — verify on ibps.in" : undefined}
+                              >
+                                {row[c.key].toFixed(2)}
+                                {disputed && <sup className="text-orange-500 font-bold ml-0.5">†</sup>}
+                              </span>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              <sup className="text-orange-500 font-bold">†</sup> Sources disagree on these cells. The 2024 SC/ST and
+              2023 SC figures are reported variously as 48.00/41.00 and 49.00–49.50; the General, EWS and OBC
+              figures are consistent across sources. The difference does not change what you should target.
+            </p>
+
+            {/* Derived target */}
+            {(() => {
+              const peak = Math.max(...CUTOFF_HISTORY.map((r) => r.gen));
+              return (
+                <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-4 space-y-1.5">
+                  <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">🎯 What to aim for</p>
+                  <p className="text-xs leading-relaxed text-emerald-900/80 dark:text-emerald-200/80">
+                    The highest General cut-off across these cycles was <strong>{peak.toFixed(2)}</strong>. Target a
+                    safe score of <strong>{Math.round(peak + 8)}–{Math.round(peak + 12)}</strong> out of {TOTAL_MARKS} —
+                    comfortably clear in a hard year, and a wide margin in an easy one. Chasing the exact cut-off is
+                    risky, because an easier paper pushes it upward.
+                  </p>
+                </div>
+              );
+            })()}
+
+            {/* Sectional — clearly separated because confidence is lower */}
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-baseline gap-2">
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Sectional cut-offs</p>
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 uppercase tracking-wider">
+                  Indicative only
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {SECTION_PLAN.map((s) => (
+                  <div key={s.name} className="bg-slate-50 dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-4">
+                    <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">{s.name}</p>
+                    <p className="text-2xl font-black text-slate-700 dark:text-slate-200 tabular-nums mt-1">
+                      ~{SECTIONAL_CUTOFF_ESTIMATE[s.name]?.toFixed(2)}
+                      <span className="text-xs font-bold text-slate-400"> / {s.marks}</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
+                You must clear the sectional qualification <em>and</em> the overall cut-off — a strong total cannot
+                rescue one weak section. Two caveats though. First, unlike the overall figure, IBPS does not publish
+                a clean per-section cut-off each cycle, so these are coaching-reported estimates rather than
+                confirmed values. Second, they come from cycles whose section marks were split differently
+                (35/35 for Quant and Reasoning rather than the {SECTION_PLAN[1].marks}/{SECTION_PLAN[2].marks} above),
+                so the denominators are not strictly comparable. Treat them as a rough floor to stay clear of, never
+                as a target.
+              </p>
+            </div>
+
+            <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1.5">
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-200">⚠️ Before you rely on these</p>
+              <ul className="text-[11px] text-slate-500 dark:text-slate-400 space-y-1 list-disc list-inside leading-relaxed">
+                <li>Cut-offs move every cycle with paper difficulty and vacancy count — an easier paper raises them.</li>
+                <li>IBPS normalises scores across shifts, so your raw mock score is not directly comparable.</li>
+                <li>These are compiled from published reports, not from an official IBPS release. Confirm against
+                    your scorecard and the notification on <strong>ibps.in</strong>.</li>
+                <li>Prelims is qualifying only — these marks do not carry into the final merit list.</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* ── Strategy: topic weights + the 20-minute plan ─────────────── */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-6">
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                Strategy — what carries weight, and how to spend the 20 minutes
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Question counts below are what recent papers have typically carried. Prepare in proportion to weight, and attempt in order of speed — not in the order the paper prints.
+              </p>
+            </div>
+
+            {SECTION_PLAN.map((s) => {
+              const st = SECTION_STRATEGY[s.name];
+              if (!st) return null;
+              return (
+                <div key={s.name} className="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+                  <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700">
+                    <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{s.name}</p>
+                    <p className="text-[11px] font-semibold text-amber-600 dark:text-amber-400">
+                      Realistic target: {st.target}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 lg:divide-x divide-slate-100 dark:divide-slate-800">
+                    {/* topic weights — bars make the proportions readable at a glance,
+                        and the fixed-width count column keeps every title left-aligned */}
+                    <div className="space-y-3 min-w-0">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Topic weight</p>
+                        <p className="text-[10px] text-slate-400">of {s.questions} questions</p>
+                      </div>
+                      {st.weights.map((w) => {
+                        const peak = Math.max(...st.weights.map(weightUpperBound));
+                        const pct = Math.round((weightUpperBound(w) / peak) * 100);
+                        return (
+                          <div key={w.topic} className="min-w-0">
+                            <div className="flex items-center gap-2.5">
+                              <span className="shrink-0 w-11 text-center text-[10px] font-black tabular-nums px-1 py-1 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">
+                                {w.qs}
+                              </span>
+                              <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
+                                {w.topic}
+                              </p>
+                            </div>
+                            <div className="pl-[3.375rem] mt-1 space-y-1">
+                              <div className="h-1 rounded-full bg-slate-200 dark:bg-slate-700/70 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-amber-500/80 dark:bg-amber-500/70"
+                                  style={{ width: `${pct}%` }}
+                                />
+                              </div>
+                              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{w.note}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* 20-minute plan — time chips pulled to the right so the
+                        minute budget reads as its own column */}
+                    <div className="space-y-3 min-w-0 lg:pl-6">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Order of attempt</p>
+                        <p className="text-[10px] text-slate-400">{s.seconds / 60} min total</p>
+                      </div>
+                      <ol className="space-y-1.5">
+                        {st.order.map((step, i) => {
+                          const [label, mins] = splitStep(step);
+                          return (
+                            <li
+                              key={step}
+                              className="flex items-center gap-2.5 py-1.5 px-2 rounded-lg odd:bg-slate-50 dark:odd:bg-slate-900/40"
+                            >
+                              <span className="shrink-0 w-4 h-4 rounded-full bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 text-[9px] font-black flex items-center justify-center">
+                                {i + 1}
+                              </span>
+                              <span className="flex-1 min-w-0 text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+                                {label}
+                              </span>
+                              {mins && (
+                                <span className="shrink-0 text-[10px] font-bold tabular-nums text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                                  {mins}
+                                </span>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ol>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <strong className="text-slate-700 dark:text-slate-200">Key rule:</strong> {st.rule}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Ask AI about the strategy on this page */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Ask about this strategy</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Answers are grounded in the pattern, weights, timings and cut-offs on this page — not generic advice.
+                </p>
+              </div>
+              {!showStrategyAi && (
+                <button
+                  onClick={() => setShowStrategyAi(true)}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-colors shrink-0"
+                >
+                  🤖 Ask AI
+                </button>
+              )}
+            </div>
+
+            {!showStrategyAi && (
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "I keep running out of time in Reasoning. What should I cut?",
+                  "Which topics give the most marks per minute?",
+                  "Is 22 attempts at 90% accuracy enough to clear the cut-off?",
+                  "How do I decide which DI set to attempt first?",
+                  "My English is weak. How should I split the 20 minutes?",
+                ].map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => { setStrategySeed(q); setShowStrategyAi(true); }}
+                    className="text-[11px] px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors text-left"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {showStrategyAi && (
+              <AiPanel
+                topic={{
+                  id: "ibps-strategy",
+                  title: "IBPS PO Prelims — pattern, marking and section strategy",
+                  topic: "Exam Strategy",
+                  summary: `${TOTAL_QUESTIONS} questions, ${TOTAL_MARKS} marks, ${TOTAL_MINUTES} minutes with ${SECTION_PLAN[0].seconds / 60}-minute sectional timing.`,
+                  explanation: buildStrategyContext(),
+                  code: null,
+                }}
+                category="ibpspo-prelims"
+                seedQuestion={strategySeed}
+                onClose={() => { setShowStrategyAi(false); setStrategySeed(""); }}
+              />
+            )}
+          </div>
+
+          {/* In-exam selection rules */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Choosing questions wisely</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {EXAM_RULES.map((r) => (
+                <div key={r.title} className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1.5">
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{r.icon} {r.title}</p>
+                  <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">{r.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Preparation plan */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">How to prepare</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { icon: "📅", title: "Daily",
+                  items: ["2 puzzle sets and 1 seating set, timed", "1 DI set plus 10 approximation sums", "1 RC passage and 15 new words in context", "Reread yesterday's mistakes before starting"] },
+                { icon: "🗓️", title: "Weekly",
+                  items: ["2 full mocks under real sectional timing", "1 sectional test for your weakest section", "Revise formula and combination tables", "Rebuild any puzzle you failed, from scratch"] },
+                { icon: "🔬", title: "After every mock",
+                  items: ["Classify each error: concept gap, calculation slip, misread, or time pressure", "Only concept gaps need study — the rest need habit changes", "Track attempts and accuracy per section, not just the total", "Note which sets you should have skipped"] },
+              ].map((c) => (
+                <div key={c.title} className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-2">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{c.icon} {c.title}</p>
+                  <ul className="text-[11px] text-slate-500 dark:text-slate-400 space-y-1.5 list-disc list-inside leading-relaxed">
+                    {c.items.map((i) => <li key={i}>{i}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+              <strong className="text-slate-700 dark:text-slate-200">The one that matters most:</strong> analysing a mock takes longer than sitting it, and is where the improvement actually comes from. A mock you did not analyse was practice at being slow.
+            </p>
+          </div>
+
+          {/* Qualification note */}
+          <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-2">
+            <p className="text-sm font-bold text-slate-800 dark:text-slate-100">📌 Worth remembering</p>
+            <ul className="text-xs text-slate-500 dark:text-slate-400 space-y-1.5 list-disc list-inside leading-relaxed">
+              <li>Prelims is <strong>qualifying only</strong> — the marks do not carry into the final merit list, which is decided by Mains and the Interview.</li>
+              <li>You must clear <strong>both</strong> the sectional cut-offs and the overall cut-off. A strong total cannot rescue one weak section.</li>
+              <li>Prelims cut-offs are released <strong>category-wise on an all-India basis</strong>; state-wise vacancies matter at the final allotment stage, not here. See the Cut-offs section above.</li>
+              <li>Accuracy beats volume: at roughly one mark a question, four careless wrong answers cancel a correct one.</li>
+            </ul>
+          </div>
+
+          <button
+            onClick={() => setActiveTab("mocktest")}
+            className="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-2xl shadow-md transition-colors text-center"
+          >
+            ✍️ Take a mock test in this exact pattern
+          </button>
+        </div>
+      )}
+
+      <ConfirmModal {...confirmProps} />
     </div>
   );
 }

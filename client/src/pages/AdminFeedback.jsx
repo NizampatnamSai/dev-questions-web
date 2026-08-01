@@ -66,6 +66,19 @@ function FeedbackCard({ feedback, onRead, onDelete, onReply, onComplete }) {
             html={feedback.message}
             className="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed"
           />
+          {feedback.images?.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {feedback.images.map((url) => (
+                <a key={url} href={url} target="_blank" rel="noopener noreferrer" title="Open full size">
+                  <img
+                    src={url}
+                    alt="Screenshot attached to this feedback"
+                    className="h-20 w-20 object-cover rounded-lg border border-slate-200 dark:border-white/10 hover:opacity-80 transition-opacity"
+                  />
+                </a>
+              ))}
+            </div>
+          )}
           <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 flex-wrap">
             <span>Rating: {"⭐".repeat(feedback.rating)}</span>
             <span className="truncate max-w-full">{feedback.userEmail}</span>

@@ -179,6 +179,23 @@ function computePresence(online, lastActiveAt) {
 // come from the server (_recipient_status in routers/admin_chat.py); a DM's
 // totalRecipients is always 1, a group's can be N.
 function MessageStatus({ m, isGroup }) {
+  // In flight — a spinner stands in for the ticks until the server confirms,
+  // so "still sending" is visibly different from "sent but nobody has it yet"
+  // (which is what a single tick means).
+  if (m._pending) {
+    return (
+      <span title="Sending…" className="inline-flex items-center">
+        <svg className="animate-spin h-3 w-3 text-indigo-200" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+        </svg>
+        <span className="sr-only">Sending</span>
+      </span>
+    );
+  }
+  if (m._failed) {
+    return <span title="Failed to send" className="text-red-300 font-bold">!</span>;
+  }
   if (m.totalRecipients == null || m.totalRecipients === 0) return null;
   if (isGroup) {
     const seenGroup = m.readCount > 0;
@@ -1084,14 +1101,45 @@ export default function AdminChat() {
         setComposerHtml("");
         setPendingImageUrls([]);
       } else {
-        const { data } = await api.post(`/admin-chat/${activeChatId}/messages`, {
+        // Optimistic send: the bubble appears the instant you hit send, showing
+        // a spinner where its ticks will go, and is swapped for the server's
+        // real message once the POST returns. Waiting for the round trip before
+        // rendering anything made the app feel like it had ignored the tap.
+        const tempId = `pending-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const optimistic = {
+          id: tempId,
+          _pending: true,
+          senderId: user?.id,
+          senderName: user?.name,
           html: composerHtml,
           imageUrls: pendingImageUrls,
-        });
-        setMessages((prev) => [...prev, data]);
+          createdAt: new Date().toISOString(),
+          reactions: [],
+          // No tick counts yet — MessageStatus renders the spinner off _pending.
+          totalRecipients: null,
+        };
+        const sentHtml = composerHtml;
+        const sentImages = pendingImageUrls;
+        setMessages((prev) => [...prev, optimistic]);
         setComposerHtml("");
         setPendingImageUrls([]);
         setIsNearBottom(true); // always snap to your own just-sent message
+
+        let data;
+        try {
+          ({ data } = await api.post(`/admin-chat/${activeChatId}/messages`, {
+            html: sentHtml,
+            imageUrls: sentImages,
+          }));
+        } catch (err) {
+          // Keep the bubble and mark it failed rather than silently dropping
+          // what the user typed — the composer has already been cleared.
+          setMessages((prev) =>
+            prev.map((m) => (m.id === tempId ? { ...m, _pending: false, _failed: true } : m)),
+          );
+          throw err;
+        }
+        setMessages((prev) => prev.map((m) => (m.id === tempId ? data : m)));
         // Already have everything needed to patch the sidebar locally — no
         // need for a full GET /conversations just to learn what we just sent.
         const preview = derivePreview(data);

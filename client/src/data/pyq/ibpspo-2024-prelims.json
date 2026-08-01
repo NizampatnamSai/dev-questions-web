@@ -1,0 +1,1550 @@
+{
+ "id": "ibpspo-2024-prelims",
+ "questions": [
+  {
+   "id": "2024-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following sits second to the right of E?",
+   "options": {
+    "A": "A",
+    "B": "D",
+    "C": "C",
+    "D": "F",
+    "E": "G"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2024-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following pair of persons faces the same direction?",
+   "options": {
+    "A": "G and C",
+    "B": "A and E",
+    "C": "E and D",
+    "D": "C and F",
+    "E": "None of these"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2024-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between B and F (counting clockwise from F)?",
+   "options": {
+    "A": "One",
+    "B": "Three",
+    "C": "Four",
+    "D": "Two",
+    "E": "None"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2024-q4",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Four of the following five persons are alike in a certain way based on their seating arrangement.\nFind the odd one.",
+   "options": {
+    "A": "F",
+    "B": "C",
+    "C": "B",
+    "D": "D",
+    "E": "A"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2024-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following statements is/are true?\nI. G faces towards the centre.\nII. Both F and A face away from the centre.\nIII. Two persons sit between C and D when counted clockwise from D.",
+   "options": {
+    "A": "Only I",
+    "B": "Only III",
+    "C": "Both I and II",
+    "D": "Both II and III",
+    "E": "All I, II, and III"
+   },
+   "correctAnswer": "C",
+   "explanation": "utions (6-8):"
+  },
+  {
+   "id": "2024-q6",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "Four of the following five are similar in a certain manner, who among the following is dissimilar\nto others?",
+   "options": {
+    "A": "O",
+    "B": "R",
+    "C": "P",
+    "D": "N",
+    "E": "V"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (6-8): Read the given information carefully and answer the related questions:\nM is spouse of O and parent of R. O is father-in-law of T who has two children. N is the only son of R who\nhas no sibling. T is mother-in-law of P. V is married to P.",
+   "explanation": "Except V, all are males"
+  },
+  {
+   "id": "2024-q7",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "Who among the following is grandmother of V?",
+   "options": {
+    "A": "T",
+    "B": "M",
+    "C": "R",
+    "D": "O",
+    "E": "N"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (6-8): Read the given information carefully and answer the related questions:\nM is spouse of O and parent of R. O is father-in-law of T who has two children. N is the only son of R who\nhas no sibling. T is mother-in-law of P. V is married to P."
+  },
+  {
+   "id": "2024-q8",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "What is the relation of P with respect to R?",
+   "options": {
+    "A": "Son-in-law",
+    "B": "Son",
+    "C": "Nephew",
+    "D": "Daughter",
+    "E": "None of the above"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (6-8): Read the given information carefully and answer the related questions:\nM is spouse of O and parent of R. O is father-in-law of T who has two children. N is the only son of R who\nhas no sibling. T is mother-in-law of P. V is married to P."
+  },
+  {
+   "id": "2024-q9",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If we form a four-letter meaningful word by using the third, fourth, fifth and seventh letter from\nthe left end of the word ‘EXACTITUDE’, then which of the following will be the second letter of the\nmeaningful word thus formed. If more than one word is formed mark Z as your answer. If no\nmeaningful word is formed, mark X as your answer?",
+   "options": {
+    "A": "C",
+    "B": "A",
+    "C": "X",
+    "D": "T",
+    "E": "Z"
+   },
+   "correctAnswer": "B",
+   "explanation": "TACT\n22 www.bankersadd\nby A & B and total games lose by C.\nSolutions\nSolutions (10-14):\nYear Age Persons\n1955 69 P\n1967 57 O\n1973 51 L\n1980 44 M\n1987 37 N\n1991 33 K\n2003 21 Q"
+  },
+  {
+   "id": "2024-q10",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following was born in 1967?",
+   "options": {
+    "A": "N",
+    "B": "P",
+    "C": "M",
+    "D": "O",
+    "E": "K"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (10-14): Read the given information carefully and answer the related questions:\nSeven persons was born on same date and same month but in different years – 1955, 1967, 1973 1980,\n1987, 1991, 2003. Consider the base year 2024 to calculate the ages.\nL’s age is multiple of 3. Three persons were born between L and Q. Number of persons born before Q is\nsame as the number of persons born after P. Difference between the age of Q and K is 12 years. M is 7 years\nolder to N. N is younger to O."
+  },
+  {
+   "id": "2024-q11",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is age difference between M and Q?",
+   "options": {
+    "A": "25 years",
+    "B": "24 years",
+    "C": "23 years",
+    "D": "30 years",
+    "E": "20 years"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (10-14): Read the given information carefully and answer the related questions:\nSeven persons was born on same date and same month but in different years – 1955, 1967, 1973 1980,\n1987, 1991, 2003. Consider the base year 2024 to calculate the ages.\nL’s age is multiple of 3. Three persons were born between L and Q. Number of persons born before Q is\nsame as the number of persons born after P. Difference between the age of Q and K is 12 years. M is 7 years\nolder to N. N is younger to O."
+  },
+  {
+   "id": "2024-q12",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "M was born in which year?",
+   "options": {
+    "A": "1973",
+    "B": "1980",
+    "C": "1987",
+    "D": "1967",
+    "E": "1955"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (10-14): Read the given information carefully and answer the related questions:\nSeven persons was born on same date and same month but in different years – 1955, 1967, 1973 1980,\n1987, 1991, 2003. Consider the base year 2024 to calculate the ages.\nL’s age is multiple of 3. Three persons were born between L and Q. Number of persons born before Q is\nsame as the number of persons born after P. Difference between the age of Q and K is 12 years. M is 7 years\nolder to N. N is younger to O."
+  },
+  {
+   "id": "2024-q13",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the total age of K and N?",
+   "options": {
+    "A": "84 years",
+    "B": "65 years",
+    "C": "81 years",
+    "D": "58 years",
+    "E": "70 years"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (10-14): Read the given information carefully and answer the related questions:\nSeven persons was born on same date and same month but in different years – 1955, 1967, 1973 1980,\n1987, 1991, 2003. Consider the base year 2024 to calculate the ages.\nL’s age is multiple of 3. Three persons were born between L and Q. Number of persons born before Q is\nsame as the number of persons born after P. Difference between the age of Q and K is 12 years. M is 7 years\nolder to N. N is younger to O."
+  },
+  {
+   "id": "2024-q14",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If P is related to L, N is related to Q, then M is",
+   "options": {
+    "A": "K",
+    "B": "O",
+    "C": "L",
+    "D": "None of these",
+    "E": "N"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (10-14): Read the given information carefully and answer the related questions:\nSeven persons was born on same date and same month but in different years – 1955, 1967, 1973 1980,\n1987, 1991, 2003. Consider the base year 2024 to calculate the ages.\nL’s age is multiple of 3. Three persons were born between L and Q. Number of persons born before Q is\nsame as the number of persons born after P. Difference between the age of Q and K is 12 years. M is 7 years\nolder to N. N is younger to O.",
+   "explanation": "utions (15-19):\nWords Codes\nThe ud\nPlay uk\nSeen ua\nIn um\nSame/Game us/ut\nJar/Is uh/uw\nPlayed ub"
+  },
+  {
+   "id": "2024-q15",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code for ‘same’?",
+   "options": {
+    "A": "uh",
+    "B": "ut",
+    "C": "um",
+    "D": "ub",
+    "E": "ud\nrelated to ___.\narefully and answer the related questions:"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (15-19): Read the given information ca\nIn a certain code language\n‘Play the same game.’ is coded as ‘us ud ut uk’\n‘Seen in the play.’ is coded as ‘uk ua ud um’\n‘The jar is seen.’ is coded as ‘ud ua uh uw’\n‘The same game played’ is coded as ‘ut ud ub us’"
+  },
+  {
+   "id": "2024-q16",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "If the code of ‘Jar’ is ‘uh’, then the code of ‘is played’ will b",
+   "options": {
+    "A": "ua ud",
+    "B": "uw ut",
+    "C": "ua us",
+    "D": "uw ub",
+    "E": "uw ut"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (15-19): Read the given information ca\nIn a certain code language\n‘Play the same game.’ is coded as ‘us ud ut uk’\n‘Seen in the play.’ is coded as ‘uk ua ud um’\n‘The jar is seen.’ is coded as ‘ud ua uh uw’\n‘The same game played’ is coded as ‘ut ud ub us’"
+  },
+  {
+   "id": "2024-q17",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code of ‘play’?",
+   "options": {
+    "A": "ud",
+    "B": "us",
+    "C": "uk",
+    "D": "ut",
+    "E": "um"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (15-19): Read the given information ca\nIn a certain code language\n‘Play the same game.’ is coded as ‘us ud ut uk’\n‘Seen in the play.’ is coded as ‘uk ua ud um’\n‘The jar is seen.’ is coded as ‘ud ua uh uw’\n‘The same game played’ is coded as ‘ut ud ub us’"
+  },
+  {
+   "id": "2024-q18",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What will be the possible code for ‘game is played’?",
+   "options": {
+    "A": "uh ud ub",
+    "B": "ut us ua",
+    "C": "us uh ub",
+    "D": "ut ub ud",
+    "E": "uh uw uk"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (15-19): Read the given information ca\nIn a certain code language\n‘Play the same game.’ is coded as ‘us ud ut uk’\n‘Seen in the play.’ is coded as ‘uk ua ud um’\n‘The jar is seen.’ is coded as ‘ud ua uh uw’\n‘The same game played’ is coded as ‘ut ud ub us’"
+  },
+  {
+   "id": "2024-q19",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "Which word is coded as ‘um’?",
+   "options": {
+    "A": "In",
+    "B": "The",
+    "C": "Play",
+    "D": "Seen",
+    "E": "None of the above"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (15-19): Read the given information ca\nIn a certain code language\n‘Play the same game.’ is coded as ‘us ud ut uk’\n‘Seen in the play.’ is coded as ‘uk ua ud um’\n‘The jar is seen.’ is coded as ‘ud ua uh uw’\n‘The same game played’ is coded as ‘ut ud ub us’",
+   "explanation": "utions (20-24):"
+  },
+  {
+   "id": "2024-q20",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following likes Guava?",
+   "options": {
+    "A": "A",
+    "B": "D",
+    "C": "C",
+    "D": "F",
+    "E": "None of these\nbe?\nwer the questions given below.\nface in the north direction. They all like\nBanana but not necessarily in the same\nleft of the one who likes Guava. A sits 2nd\nto the right of E but not sit at any extreme\nthe left of the one who likes Apple."
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (20-24): Study the information carefully and answ\nSix persons i.e. A, B, C, D, E and F sit in row such that all of them\ndifferent fruits i.e. Mango, Strawberry, Guava, Orange, Apple and\norder.\nThe one who likes Strawberry sits at the right end. B sits 3rd to the\nto the left of the one who likes Mango, and likes Banana. C sits 3rd to\nends. There are as many persons sit to the right of D is same as to"
+  },
+  {
+   "id": "2024-q21",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between C and the one who likes Orange?",
+   "options": {
+    "A": "Three",
+    "B": "Two",
+    "C": "One",
+    "D": "None",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (20-24): Study the information carefully and answ\nSix persons i.e. A, B, C, D, E and F sit in row such that all of them\ndifferent fruits i.e. Mango, Strawberry, Guava, Orange, Apple and\norder.\nThe one who likes Strawberry sits at the right end. B sits 3rd to the\nto the left of the one who likes Mango, and likes Banana. C sits 3rd to\nends. There are as many persons sit to the right of D is same as to"
+  },
+  {
+   "id": "2024-q22",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following sits third to the left of the one who likes Guava?",
+   "options": {
+    "A": "The one who sits immediate left of E",
+    "B": "F",
+    "C": "The one who likes Orange",
+    "D": "A",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (20-24): Study the information carefully and answ\nSix persons i.e. A, B, C, D, E and F sit in row such that all of them\ndifferent fruits i.e. Mango, Strawberry, Guava, Orange, Apple and\norder.\nThe one who likes Strawberry sits at the right end. B sits 3rd to the\nto the left of the one who likes Mango, and likes Banana. C sits 3rd to\nends. There are as many persons sit to the right of D is same as to"
+  },
+  {
+   "id": "2024-q23",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement is true?",
+   "options": {
+    "A": "C sits to the immediate left of the one who likes Apple.",
+    "B": "The one who likes Mango sits 3rd from the extreme right end.",
+    "C": "B likes Orange.",
+    "D": "A sits third to the left of D.",
+    "E": "None is true"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (20-24): Study the information carefully and answ\nSix persons i.e. A, B, C, D, E and F sit in row such that all of them\ndifferent fruits i.e. Mango, Strawberry, Guava, Orange, Apple and\norder.\nThe one who likes Strawberry sits at the right end. B sits 3rd to the\nto the left of the one who likes Mango, and likes Banana. C sits 3rd to\nends. There are as many persons sit to the right of D is same as to"
+  },
+  {
+   "id": "2024-q24",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way and hence form a group. Which of the\nfollowing does not belong to that group?",
+   "options": {
+    "A": "B- Banana",
+    "B": "F-Orange",
+    "C": "E-Guava",
+    "D": "A-Apple",
+    "E": "C-Mango"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (20-24): Study the information carefully and answ\nSix persons i.e. A, B, C, D, E and F sit in row such that all of them\ndifferent fruits i.e. Mango, Strawberry, Guava, Orange, Apple and\norder.\nThe one who likes Strawberry sits at the right end. B sits 3rd to the\nto the left of the one who likes Mango, and likes Banana. C sits 3rd to\nends. There are as many persons sit to the right of D is same as to"
+  },
+  {
+   "id": "2024-q25",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Find odd one out?",
+   "options": {
+    "A": "FBI",
+    "B": "PLR",
+    "C": "EAH",
+    "D": "IEL",
+    "E": "RNU"
+   },
+   "correctAnswer": "B",
+   "explanation": "Logic - FBI\nFirst letter is fourth next letter of second letter and third letter is third\nnext letter of first letter.\nSolutions (26-30):\nBox Types\nD Brass\nC Jute\nF Iron\nB Leather\nA Wood\nE Steel"
+  },
+  {
+   "id": "2024-q26",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many boxes are placed between brass box and box A?",
+   "options": {
+    "A": "None",
+    "B": "Three",
+    "C": "One",
+    "D": "Two",
+    "E": "Four"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (26-30): Read the given information carefully and answer the related questions:\nSix boxes - A, B, C, D, E and F are placed one above another. These boxes are of different types – Jute, Steel,\nIron, Wood, Leather, Brass. All the information is not necessarily in the same order.\nBox D is placed three places above leather box. Same number of boxes are placed above box D and below\nsteel box. Box B is placed just below box F and juts above wood box. Box A is placed two places below iron\nbox. More than one box is placed below box C which is placed below brass box."
+  },
+  {
+   "id": "2024-q27",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which of the following statement is incorrect?",
+   "options": {
+    "A": "Box E is bottommost box",
+    "B": "Box B is leather box",
+    "C": "Box D is placed above box F",
+    "D": "Box A and B are adjacent to each other",
+    "E": "Box C is brass box"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (26-30): Read the given information carefully and answer the related questions:\nSix boxes - A, B, C, D, E and F are placed one above another. These boxes are of different types – Jute, Steel,\nIron, Wood, Leather, Brass. All the information is not necessarily in the same order.\nBox D is placed three places above leather box. Same number of boxes are placed above box D and below\nsteel box. Box B is placed just below box F and juts above wood box. Box A is placed two places below iron\nbox. More than one box is placed below box C which is placed below brass box."
+  },
+  {
+   "id": "2024-q28",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Box F is of which type?",
+   "options": {
+    "A": "Iron",
+    "B": "Jute",
+    "C": "Brass",
+    "D": "Steel",
+    "E": "Leather"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (26-30): Read the given information carefully and answer the related questions:\nSix boxes - A, B, C, D, E and F are placed one above another. These boxes are of different types – Jute, Steel,\nIron, Wood, Leather, Brass. All the information is not necessarily in the same order.\nBox D is placed three places above leather box. Same number of boxes are placed above box D and below\nsteel box. Box B is placed just below box F and juts above wood box. Box A is placed two places below iron\nbox. More than one box is placed below box C which is placed below brass box."
+  },
+  {
+   "id": "2024-q29",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "If box E is related to wood box, box A is related to leather\nbox is related to jute box?",
+   "options": {
+    "A": "Box D",
+    "B": "Box F",
+    "C": "Box B",
+    "D": "Box C",
+    "E": "None of the above"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (26-30): Read the given information carefully and answer the related questions:\nSix boxes - A, B, C, D, E and F are placed one above another. These boxes are of different types – Jute, Steel,\nIron, Wood, Leather, Brass. All the information is not necessarily in the same order.\nBox D is placed three places above leather box. Same number of boxes are placed above box D and below\nsteel box. Box B is placed just below box F and juts above wood box. Box A is placed two places below iron\nbox. More than one box is placed below box C which is placed below brass box."
+  },
+  {
+   "id": "2024-q30",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "As many boxes are placed above box D as below box ___.",
+   "options": {
+    "A": "Box C",
+    "B": "Box B",
+    "C": "Box E",
+    "D": "Box A",
+    "E": "Box F"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (26-30): Read the given information carefully and answer the related questions:\nSix boxes - A, B, C, D, E and F are placed one above another. These boxes are of different types – Jute, Steel,\nIron, Wood, Leather, Brass. All the information is not necessarily in the same order.\nBox D is placed three places above leather box. Same number of boxes are placed above box D and below\nsteel box. Box B is placed just below box F and juts above wood box. Box A is placed two places below iron\nbox. More than one box is placed below box C which is placed below brass box."
+  },
+  {
+   "id": "2024-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In the word ‘ORGANIZE’, how many pairs of the letters have\nthem (both forward and backward direction) in the word as in",
+   "options": {
+    "A": "Four",
+    "B": "Two",
+    "C": "One",
+    "D": "Three",
+    "E": "More than four\n?\nr box, then in similar manner, which\nthe same number of letters between\nthe alphabet?"
+   },
+   "correctAnswer": "C",
+   "explanation": "Solutions (32-34):"
+  },
+  {
+   "id": "2024-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the possible weight of S?",
+   "options": {
+    "A": "39kg",
+    "B": "34kg",
+    "C": "53kg",
+    "D": "67kg",
+    "E": "62kg"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (32-34): Study the information carefully answer the questions given below.\nSix persons P, Q, R, S, T and U in a family have different weights. The third heaviest person weight is 40kg.\nQ’s weight is in odd number and is lighter than S but heavier than R. The number of persons lighter than S\nis one more than P. T is heavier than R and U. T is 20kg more than P who is heavier than Q. The second\nlightest person is not Q."
+  },
+  {
+   "id": "2024-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If R’s weight is 15kg less than P and 5 kg more than U then what is the sum weight of R and U?",
+   "options": {
+    "A": "38kg",
+    "B": "45kg",
+    "C": "50kg",
+    "D": "40kg",
+    "E": "35kg"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (32-34): Study the information carefully answer the questions given below.\nSix persons P, Q, R, S, T and U in a family have different weights. The third heaviest person weight is 40kg.\nQ’s weight is in odd number and is lighter than S but heavier than R. The number of persons lighter than S\nis one more than P. T is heavier than R and U. T is 20kg more than P who is heavier than Q. The second\nlightest person is not Q."
+  },
+  {
+   "id": "2024-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "The numbers of persons heavier than P is same as the numbers of persons lighter than _______.",
+   "options": {
+    "A": "S",
+    "B": "T",
+    "C": "Q",
+    "D": "P",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (32-34): Study the information carefully answer the questions given below.\nSix persons P, Q, R, S, T and U in a family have different weights. The third heaviest person weight is 40kg.\nQ’s weight is in odd number and is lighter than S but heavier than R. The number of persons lighter than S\nis one more than P. T is heavier than R and U. T is 20kg more than P who is heavier than Q. The second\nlightest person is not Q."
+  },
+  {
+   "id": "2024-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If in the given word “CONVERSION”, if we replaced all odd position letter (from left) with its\njust next letter and replace all the even position letter (from left) with its just previous letter then\nfind how many letters are repeated there in the new arrangement?",
+   "options": {
+    "A": "One",
+    "B": "Two",
+    "C": "Four",
+    "D": "Three",
+    "E": "None"
+   },
+   "correctAnswer": "E",
+   "explanation": "CONVERSION\nDNOUFQTHPM"
+  },
+  {
+   "id": "2024-q36",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "According to the passage, which of the following statement(s) is/ are true?\n(I) Emotional intelligence (EQ) is primarily shaped by biological factors, with little influence from\nsocialization.\n(II) Women tend to excel in empathy, social responsibility, and interpersonal relationships according to\nresearch.\n(III) Assertiveness and stress tolerance are often considered key emotional competencies where men\nperform better.",
+   "options": {
+    "A": "Only (I) is true",
+    "B": "Only (II) is true",
+    "C": "Both (II) and (III) are true",
+    "D": "Only (III) is true",
+    "E": "All statements are true"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "According to the passage, emotional intelligence is shaped significantly by socialization, not just\nbiological factors, making statement (I) false. However, statements (II) and (III) are true because the\npassage states that women excel in empathy, social responsibility, and interpersonal relationships, while\nmen perform better in assertiveness and stress tolerance.\nAnalysis:\n1. (I) Emotional intelligence (EQ) is primarily shaped by biological factors, with little influence\nfrom socialization.\no The passage states that both biological factors and socialization shape emotional intelligence, but it\nemphasizes that socialization plays a significant role in shaping gender-specific EQ strengths.\nTherefore, this statement is false because it incorrectly downplays the role of socialization.\n2. (II) Women tend to excel in empathy, social responsibility, and interpersonal relationships\naccording to research.\no The passage directly supports this claim: “Women often score higher in areas such as empathy,\ninterpersonal relationships, and social responsibility.”\no This statement is true.\n3. (III) Assertiveness and stress tolerance are often considered key emotional competencies where\nmen perform"
+  },
+  {
+   "id": "2024-q37",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following statements is incorrect based on the passage?",
+   "options": {
+    "A": "Men’s assertiveness and self-regard give them an advantage in hierarchical leadership positions.",
+    "B": "Women’s relational strengths are particularly well-suited for competitive, high-pressure roles in\nleadership.",
+    "C": "Boys are often encouraged to be decisive and assertive from an early age.",
+    "D": "Socialization influences the development of emotional competencies for both genders.",
+    "E": "Emotional intelligence skills learned in childhood are reinforced by societal norms as individuals grow\nolder."
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "Statement (b) is false because the passage highlights that men's assertiveness and self-regard give\nthem an advantage in competitive and hierarchical leadership roles, not women’s relational strengths.\nWomen’s strengths are better suited for teamwork and collaborative settings. The other statements\naccurately reflect the passage.\nAnalysis:\n1. (a) Men’s assertiveness and self-regard give them an advantage in hierarchical leadership\npositions.\no The passage states: “Men’s strengths in assertiveness and self-regard often give them an advantage in\ncompetitive environments, helping them excel in leadership positions.”\no This statement is correct.\n2. (b) Women’s relational strengths are particularly well-suited for competitive, high-pressure\nroles in leadership.\no The passage contrasts men’s assertiveness and confidence with women’s strengths in empathy and\ninterpersonal relationships. It suggests that women’s skills are well-suited for teamwork and\ncollaboration but implies that these skills may not always be valued in competitive leadership\nroles.\no This statement is incorrect because women’s relational strengths are described as better suited\nfor team-oriented roles, not high-pressure"
+  },
+  {
+   "id": "2024-q38",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "According to the passage, which of the following statement(s) is/ are true?\n(I) Women’s emotional intelligence strengths are undervalued in hierarchical structures, particularly in\nleadership positions.\n(II) Men tend to perform better in teamwork and collaborative settings due to their confidence.\n(III) Societal expectations reinforce the emotional competencies that boys and girls develop early in life.",
+   "options": {
+    "A": "Only (I) is true",
+    "B": "Both (I) and (III) are true",
+    "C": "Both (II) and (III) are true",
+    "D": "Only (II) is true",
+    "E": "All statements are true"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "Statement (I) is true because the passage explains that women’s emotional intelligence strengths like\nempathy and relational skills are undervalued in leadership roles. Statement (III) is also true, as the passage\nindicates that societal norms reinforce the emotional skills developed in childhood. However, statement\n(II) is false because men are said to excel in competitive environments, not necessarily in teamwork and\ncollaborative settings, which are associated more with women’s strengths.\nAnalysis:\n1. (I) Women’s emotional intelligence strengths are undervalued in hierarchical structures,\nparticularly in leadership positions.\no The passage mentions: “Women’s strengths in empathy and interpersonal relationships make them\nhighly effective in teamwork and collaborative settings, though these skills are sometimes undervalued\nin leadership hierarchies.”\no This statement is true.\n2. (II) Men tend to perform better in teamwork and collaborative settings due to their confidence.\no The passage does not suggest that men excel in teamwork and collaboration due to their confidence.\nIn fact, it states that women are better suited for collaborative environments due to their empathy\nand relati"
+  },
+  {
+   "id": "2024-q39",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following words has the similar meaning as “lay” (as used in the passage)?",
+   "options": {
+    "A": "Establish",
+    "B": "Cover",
+    "C": "Remove",
+    "D": "Complicate",
+    "E": "Dismiss"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "In the context of the passage, “lay” is used in the phrase “lay the foundation,” which means to establish\nor set the groundwork for something. Therefore, the word that has a similar meaning is establish (a). The\nother options do not fit this context.\nMeanings:\n1. (a) Establish – This means to set up or lay the foundation for something. This matches the meaning of\n\"lay\" in the passage.\no Hindi meaning: स्थापित करना\n2. (b) Cover – This means to place something over or conceal something.\no Hindi meaning: ढकना\n3. (c) Remove – This means to take away or eliminate.\no Hindi meaning: हटाना\n4. (d) Complicate – This means to make something more difficult or complex.\no Hindi meaning: जटटल बनाना\n5. (e) Dismiss – This means to send away or reject.\no Hindi meaning: खाटरज करना"
+  },
+  {
+   "id": "2024-q40",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Based on the passage, which of the following can be logically inferred about gender differences\nin emotional intelligence?",
+   "options": {
+    "A": "Women’s strengths in empathy and interpersonal relationships make them more suitable for leadership\nroles than men.",
+    "B": "Men’s performance in assertiveness and confidence is exclusively the result of societal conditioning,\nwith no biological factors involved.",
+    "C": "Organizations that recognize and value both genders' emotional strengths can create more balanced\nand effective leadership.",
+    "D": "Women are less likely to succeed in competitive environments because they lack confidence and\nassertiveness.",
+    "E": "Emotional intelligence competencies between men and women are so different that they cannot\neffectively collaborate in professional settings."
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "The passage suggests that recognizing and valuing both genders' emotional strengths can foster a\nmore inclusive and balanced leadership. Thus, (c) can be inferred. (a) is incorrect because the passage notes\nthat women’s strengths are often undervalued in leadership. (b) is false because both societal and biological\nfactors contribute to these differences. (d) oversimplifies the issue, while (e) is incorrect as collaboration\nbetween genders is possible, given their complementary emotional competencies.\nAnalysis:\n1. (a) Women’s strengths in empathy and interpersonal relationships make them more suitable for\nleadership roles than men.\no The passage does not state that women are more suitable for leadership roles than men. It indicates\nthat women excel in empathy and relationships but that these strengths may be undervalued in\nhierarchical leadership positions.\no This statement is incorrect.\n2. (b) Men’s performance in assertiveness and confidence is exclusively the result of societal\nconditioning, with no biological factors involved.\no The passage mentions that both biological factors and socialization shape emotional\ncompetencies, so it is incorrect to say that men’s performance is e"
+  },
+  {
+   "id": "2024-q41",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Which of the following can be inferred about the role of societal norms in shaping emotional\nintelligence, based on the passage?",
+   "options": {
+    "A": "Societal norms only affect women’s emotional intelligence, particularly in developing empathy and\ninterpersonal skills.",
+    "B": "Boys and girls are socialized in a way that equally promotes both assertiveness and empathy in both\ngenders.",
+    "C": "Emotional intelligence is fixed and cannot be influenced or altered once societal norms have shaped it\nduring childhood.",
+    "D": "Societal expectations reinforce gender-specific emotional skills, leading to men excelling in competitive\nenvironments and women in teamwork.",
+    "E": "Societal norms have no influence on emotional competencies, which are purely biologically determined."
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "The passage clearly explains that societal norms play a significant role in reinforcing gender-specific\nemotional skills, where men excel in assertiveness and competition, and women in empathy and\nteamwork. Hence, (d) is the correct inference. (a) is incorrect as societal norms affect both genders. (b) is\nfalse because boys and girls are socialized to develop different emotional skills. (c) is incorrect since\nemotional intelligence can evolve. (e) contradicts the passage, which emphasizes the influence of\nsocialization.\nAnalysis:\n1. (a) Societal norms only affect women’s emotional intelligence, particularly in developing\nempathy and interpersonal skills.\no The passage states that societal norms influence both men and women, shaping different emotional\ncompetencies for each gender (assertiveness for men and empathy for women).\no This statement is incorrect because societal norms affect both genders, not just women.\n2. (b) Boys and girls are socialized in a way that equally promotes both assertiveness and empathy\nin both genders.\no The passage explicitly states that boys and girls are socialized differently, with boys encouraged to\nbe assertive and girls encouraged to be empathetic. "
+  },
+  {
+   "id": "2024-q42",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "What is the antonym of “approach”?",
+   "options": {
+    "A": "Withdraw",
+    "B": "Assist",
+    "C": "Destroy",
+    "D": "Engage",
+    "E": "leverage"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "The word “approach” means to move closer or come near something. The opposite of this would be to\nwithdraw or move away from something, making withdraw (a) the correct antonym. The other options\ndo not provide an opposite meaning to “approach.”\nMeanings:\n1. (a) Withdraw – This means to pull back or move away, which is the opposite of “approach.”\no Hindi meaning: िीछे हटना\no This is the correct antonym of \"approach.\"\n2. (b) Assist – This means to help or support, which is not the opposite of “approach.”\no Hindi meaning: सहायता करना\n3. (c) Destroy – This means to completely ruin or demolish, which doesn’t directly relate to the meaning\nof \"approach.\"\no Hindi meaning: नष्ट करना\n4. (d) Engage – This means to involve or participate, which is not the opposite of “approach.”\no Hindi meaning: संलग्न करना\n5. (e) Leverage – This means to use something to its maximum advantage, which is not related to the\nopposite of \"approach.\"\no Hindi meaning: लाभ उठाना"
+  },
+  {
+   "id": "2024-q43",
+   "section": "English Language",
+   "topic": "Reading Comprehension",
+   "question": "Choose the correct word to fill in the blank:",
+   "options": {
+    "A": "persuaded",
+    "B": "discouraged",
+    "C": "encouraged",
+    "D": "influenced",
+    "E": "restricted"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-43): Read the following passage and answer the given questions. Certain words are\nhighlighted to answer some of the questions.\nEmotional intelligence (EQ) is increasingly recognized as a key component of success in both personal and\nprofessional realms. While men and women may possess similar overall levels of EQ, research consistently\nshows that they tend to excel in different emotional competencies. Women often score higher in areas such\nas empathy, interpersonal relationships, and social responsibility, whereas men tend to perform better in\nassertiveness, stress tolerance, and self-regard (or confidence). These differences lay the foundation for\nthe distinct emotional approaches each gender brings to the workplace, shaped by both biological factors\nand the powerful process of socialization.\nSocialization plays a significant role in determining these gender-specific strengths. From an early age, boys\nand girls receive different messages about how they should behave. Boys are often ___________ to be\ncompetitive, confident, assertive, and decisive, and are taught that winning is of primary importance. Girls,\non the other hand, are socialized to be nurturing, empathetic, and emotionally expressive. They learn to\nvalue relationships and cooperation over competition. These early experiences influence the development\nof specific emotional intelligence skills, with boys becoming more assertive and confident and girls\nexcelling in empathy and interpersonal communication.\nAs boys and girls grow into adults, these learned behaviors are reinforced by societal norms and\nexpectations. In the workplace, these socialized behaviors manifest in ways that can impact professional\nroles and leadership opportunities. Men’s strengths in assertiveness and self-regard often give them an\nadvantage in competitive environments, helping them excel in leadership positions. Meanwhile, women’s\nstrengths in empathy and interpersonal relationships make them highly effective in teamwork and\ncollaborative settings, though these skills are sometimes undervalued in leadership hierarchies.\nThese gender-based differences in emotional intelligence may contribute to the leadership gender gap.\nMen's natural tendencies toward assertiveness and confidence can help them rise in hierarchical\nstructures, while women’s empathy and relational strengths are often better suited for team-oriented roles.\nRecognizing and valuing these differences can help organizations leverage the diverse emotional strengths\nof both genders, fostering a more balanced and inclusive leadership landscape.",
+   "explanation": "The correct word is encouraged (c), as the passage explains that boys are socially conditioned to\ndevelop traits such as competitiveness and assertiveness. The other options do not accurately reflect the\npositive reinforcement described in the sentence.\nMeanings:\n1. (a) Persuaded – This means to convince someone to do something. It can work in the sentence, but it\nimplies a personal choice rather than societal influence.\no Hindi meaning: मनाना, राजी करना\n2. (b) Discouraged – This means to deter someone from doing something, which is the opposite of what\nthe sentence is suggesting (as boys are not discouraged from being competitive and assertive).\no Hindi meaning: हतोत्सापहत करना\n3. (c) Encouraged – This means to inspire or motivate someone to do something, which fits the context\nof boys being pushed toward competitiveness and assertiveness.\no Hindi meaning: प्रोत्सापहत करना\no This is the correct word for the blank.\n4. (d) Influenced – This means to have an effect on someone, but it’s a broader term and doesn’t\nspecifically fit the sentence in the way “encouraged” does.\no Hindi meaning: प्रभापित करना\n5. (e) Restricted – This means to limit or confine, which doesn’t fit the context, "
+  },
+  {
+   "id": "2024-q44",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The children's favorite activities at the camp was hiking through the forest trails.",
+   "options": {
+    "A": "favorite",
+    "B": "activities",
+    "C": "trails",
+    "D": "hiking",
+    "E": "All are correct"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (44-45): In each of the following questions, a sentence with four highlighted words is\nprovided. These highlighted words may be either misspelled or used inappropriately. Select the\nincorrect word as the answer, and if all the highlighted words are correct in spelling and usage,\nchoose ‘All are correct’ as answer.",
+   "explanation": "The incorrect word in the sentence is (b) activities. The word \"activities\" is plural, but the verb \"was\"\nis singular. The word activities should be \"activity\" to match the singular verb “was”.\nCorrected sentence:\nThe children's favorite activity at the camp was hiking through the forest trails.\nMeanings of the highlighted words:\n1. Favorite\no English: Preferred or liked more than others.\no Hindi: िसंदीदा\n2. Activities\no English: Things that are done as work, hobbies, or for enjoyment.\no Hindi: गपतपिपिया ाँ\n3. Trails\no English: Paths, usually in natural surroundings like forests or mountains.\no Hindi: िगडंडी\n4. Hiking\no English: The activity of going for long walks, especially in the countryside.\no Hindi: िैदल यात्रा, लंबी सैर"
+  },
+  {
+   "id": "2024-q45",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "She felt an overwhelming sense of joe as she watched the sunset, its vibrant colors painting the sky.",
+   "options": {
+    "A": "watched",
+    "B": "vibrant",
+    "C": "overwhelming",
+    "D": "joe",
+    "E": "All are correct"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (44-45): In each of the following questions, a sentence with four highlighted words is\nprovided. These highlighted words may be either misspelled or used inappropriately. Select the\nincorrect word as the answer, and if all the highlighted words are correct in spelling and usage,\nchoose ‘All are correct’ as answer.",
+   "explanation": "The incorrect word in the sentence is (d) joe. The word should\nbe joy instead of \"joe.\"\nCorrected sentence:\nShe felt an overwhelming sense of joy as she watched the sunset, its\nvibrant colors painting the sky.\nMeanings of the highlighted words:\n1. Watched\no English: To observe something or someone carefully.\no Hindi: ध्यान से देखना\n2. Vibrant\no English: Full of energy and life; bright and striking in color.\no Hindi: ऊजाा से भरा हुआ; चमकीला\n3. Overwhelming\no English: Very intense or powerful, difficult to deal with due to its magnitude.\no Hindi: अत्यपिक प्रबल, पजसे संभालना मुपककल हो\n4. Joy (Corrected from 'Joe')\no English: A feeling of great happiness or pleasure.\no Hindi: खुशी, आनंद"
+  },
+  {
+   "id": "2024-q46",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following questions, a few sentences are given. Identify the sentences that are\ngrammatically and contextually correct.\n(I) The team has worked really hard and deserves all of the praise they are receiving.\n(II) She was excited to start her new job, but her nervousness was affecting her confidence.\n(III) Each of the students were required to submit their projects before the deadline.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (II) and (III)",
+    "C": "Only (III)",
+    "D": "Both (I) and (II)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "D",
+   "explanation": "The correct statements are (I) and (II).\n(I) is correct. \"The team\" is a collective noun, but it is treated as singular in this context, so \"deserves\" is\nthe correct verb form.\n(II) is correct. The sentence structure is sound, and both parts of the sentence are grammatically correct.\n(III) is incorrect. The subject \"Each of the students\" is singular, so it should be \"Each of the students was\nrequired...\""
+  },
+  {
+   "id": "2024-q47",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following questions, a few sentences are given. Identify the sentences that are\ngrammatically and contextually incorrect.\n(I) The manager, along with her team, were discussing the upcoming project in great detail.\n(II) If I would have known about the event earlier, I would have definitely attended it.\n(III) The city has experienced a significant drop in crime rates, largely due to new safety measures\nimplemented last year.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (II) and (III)",
+    "C": "Only (III)",
+    "D": "Both (I) and (II)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "D",
+   "explanation": "The incorrect sentences are (I) and (II).\n(I) is incorrect. The correct form is \"The manager, along with her team, was discussing...\" because the\nsubject \"manager\" is singular, and the phrase \"along with her team\" does not change that.\n(II) is incorrect. The correct form is \"If I had known about the event earlier...\" since \"would have\" cannot\nbe used in the \"if\" clause of a conditional sentence.\n(III) is correct. The sentence is grammatically and contextually accurate.\n(e) All (I), (II), and (III)"
+  },
+  {
+   "id": "2024-q48",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "⚠️ Some options for this question are printed as images in the source paper and could not be extracted.\n\nIn the following questions, a few sentences are given. Identify the sentences that are\ngrammatically and contextually correct.\n(I) If you would have studied harder, you could have passed the exam.\n(II) Despite the rain, the outdoor event went on as planned, attracting a large crowd.\n(III) The company's profits have been steadily increasing due to its new marketing strategy.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (II) and (III)",
+    "C": "Only (III)",
+    "D": "Both (I) and (II)"
+   },
+   "correctAnswer": "B",
+   "explanation": "(I) is incorrect. The correct form is \"If you had studied harder, you could have passed the exam.\" The past\nperfect \"had\" should be used instead of \"would have.\"\n(II) is correct. The sentence is grammatically accurate and contextually logical.\n(III) is correct. The subject-verb agreement is appropriate, and the sentence makes sense both\ngrammatically and contextually."
+  },
+  {
+   "id": "2024-q49",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following should be the FIRST sentence after rearrangement?",
+   "options": {
+    "A": "D",
+    "B": "A",
+    "C": "B",
+    "D": "E",
+    "E": "C"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (49-53): Rearrange the following sentences in the proper sequence to form a meaningful\nparagraph; then answer the questions given below them.\n(A) The government has therefore employed authorities to conduct fumigations, as the situation continues\nto escalate.\n(B) Despite efforts to contain the situation, the bed bugs have infested public transport, popular tourist\ndestinations, and even airports.\n(C) Paris, a global tourist destination, has recently faced a troubling resurgence of bed bugs across various\nneighborhoods and popular attractions in the city.\n(D) This outbreak has raised concerns not only among residents but also tourists, many of whom worry\nthat the pests could travel with them back to their countries.\n(E) Experts suggest that international travel and dense urban environments have facilitated the rapid\nspread of this infestation.\n(F) Furthermore, bed bugs have become a common sight in metros and airports, making control measures\neven more challenging.",
+   "explanation": "The correct sequence is C - D - E - B - F - A.\n• C introduces the central topic: the bed bug outbreak in Paris. It sets the stage by mentioning the\nresurgence of bed bugs in the city.\n• D follows logically by discussing the concerns raised by the outbreak, focusing on the worries of both\nresidents and tourists.\n• E explains why the outbreak is spreading so rapidly, providing a general explanation about international\ntravel and urban density contributing to the infestation.\n• B elaborates on the spread, specifying where bed bugs are appearing (public transport, tourist areas,\nairports), expanding on the idea introduced in E.\n• F adds more details about specific locations like metros and airports, which were already hinted at in\nB, making it a natural follow-up.\n• A concludes the paragraph by mentioning the government’s response, which is a logical conclusion after\noutlining the problem and its scope."
+  },
+  {
+   "id": "2024-q50",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following should be the SECOND sentence after rearrangement?",
+   "options": {
+    "A": "A",
+    "B": "F",
+    "C": "E",
+    "D": "D",
+    "E": "C"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (49-53): Rearrange the following sentences in the proper sequence to form a meaningful\nparagraph; then answer the questions given below them.\n(A) The government has therefore employed authorities to conduct fumigations, as the situation continues\nto escalate.\n(B) Despite efforts to contain the situation, the bed bugs have infested public transport, popular tourist\ndestinations, and even airports.\n(C) Paris, a global tourist destination, has recently faced a troubling resurgence of bed bugs across various\nneighborhoods and popular attractions in the city.\n(D) This outbreak has raised concerns not only among residents but also tourists, many of whom worry\nthat the pests could travel with them back to their countries.\n(E) Experts suggest that international travel and dense urban environments have facilitated the rapid\nspread of this infestation.\n(F) Furthermore, bed bugs have become a common sight in metros and airports, making control measures\neven more challenging.",
+   "explanation": "The correct sequence is C - D - E - B - F - A.\n• C introduces the central topic: the bed bug outbreak in Paris. It sets the stage by mentioning the\nresurgence of bed bugs in the city.\n• D follows logically by discussing the concerns raised by the outbreak, focusing on the worries of both\nresidents and tourists.\n• E explains why the outbreak is spreading so rapidly, providing a general explanation about international\ntravel and urban density contributing to the infestation.\n• B elaborates on the spread, specifying where bed bugs are appearing (public transport, tourist areas,\nairports), expanding on the idea introduced in E.\n• F adds more details about specific locations like metros and airports, which were already hinted at in\nB, making it a natural follow-up.\n• A concludes the paragraph by mentioning the government’s response, which is a logical conclusion after\noutlining the problem and its scope."
+  },
+  {
+   "id": "2024-q51",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following should be the THIRD sentence after rearrangement?",
+   "options": {
+    "A": "C",
+    "B": "E",
+    "C": "D",
+    "D": "A",
+    "E": "F"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (49-53): Rearrange the following sentences in the proper sequence to form a meaningful\nparagraph; then answer the questions given below them.\n(A) The government has therefore employed authorities to conduct fumigations, as the situation continues\nto escalate.\n(B) Despite efforts to contain the situation, the bed bugs have infested public transport, popular tourist\ndestinations, and even airports.\n(C) Paris, a global tourist destination, has recently faced a troubling resurgence of bed bugs across various\nneighborhoods and popular attractions in the city.\n(D) This outbreak has raised concerns not only among residents but also tourists, many of whom worry\nthat the pests could travel with them back to their countries.\n(E) Experts suggest that international travel and dense urban environments have facilitated the rapid\nspread of this infestation.\n(F) Furthermore, bed bugs have become a common sight in metros and airports, making control measures\neven more challenging.",
+   "explanation": "The correct sequence is C - D - E - B - F - A.\n• C introduces the central topic: the bed bug outbreak in Paris. It sets the stage by mentioning the\nresurgence of bed bugs in the city.\n• D follows logically by discussing the concerns raised by the outbreak, focusing on the worries of both\nresidents and tourists.\n• E explains why the outbreak is spreading so rapidly, providing a general explanation about international\ntravel and urban density contributing to the infestation.\n• B elaborates on the spread, specifying where bed bugs are appearing (public transport, tourist areas,\nairports), expanding on the idea introduced in E.\n• F adds more details about specific locations like metros and airports, which were already hinted at in\nB, making it a natural follow-up.\n• A concludes the paragraph by mentioning the government’s response, which is a logical conclusion after\noutlining the problem and its scope."
+  },
+  {
+   "id": "2024-q52",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following should be the FOURTH sentence after rearrangement?",
+   "options": {
+    "A": "B",
+    "B": "E",
+    "C": "D",
+    "D": "C",
+    "E": "A"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (49-53): Rearrange the following sentences in the proper sequence to form a meaningful\nparagraph; then answer the questions given below them.\n(A) The government has therefore employed authorities to conduct fumigations, as the situation continues\nto escalate.\n(B) Despite efforts to contain the situation, the bed bugs have infested public transport, popular tourist\ndestinations, and even airports.\n(C) Paris, a global tourist destination, has recently faced a troubling resurgence of bed bugs across various\nneighborhoods and popular attractions in the city.\n(D) This outbreak has raised concerns not only among residents but also tourists, many of whom worry\nthat the pests could travel with them back to their countries.\n(E) Experts suggest that international travel and dense urban environments have facilitated the rapid\nspread of this infestation.\n(F) Furthermore, bed bugs have become a common sight in metros and airports, making control measures\neven more challenging.",
+   "explanation": "The correct sequence is C - D - E - B - F - A.\n• C introduces the central topic: the bed bug outbreak in Paris. It sets the stage by mentioning the\nresurgence of bed bugs in the city.\n• D follows logically by discussing the concerns raised by the outbreak, focusing on the worries of both\nresidents and tourists.\n• E explains why the outbreak is spreading so rapidly, providing a general explanation about international\ntravel and urban density contributing to the infestation.\n• B elaborates on the spread, specifying where bed bugs are appearing (public transport, tourist areas,\nairports), expanding on the idea introduced in E.\n• F adds more details about specific locations like metros and airports, which were already hinted at in\nB, making it a natural follow-up.\n• A concludes the paragraph by mentioning the government’s response, which is a logical conclusion after\noutlining the problem and its scope."
+  },
+  {
+   "id": "2024-q53",
+   "section": "English Language",
+   "topic": "Para Jumbles",
+   "question": "Which of the following should be the LAST sentence after rearrangement?",
+   "options": {
+    "A": "C",
+    "B": "B",
+    "C": "A",
+    "D": "D",
+    "E": "F"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (49-53): Rearrange the following sentences in the proper sequence to form a meaningful\nparagraph; then answer the questions given below them.\n(A) The government has therefore employed authorities to conduct fumigations, as the situation continues\nto escalate.\n(B) Despite efforts to contain the situation, the bed bugs have infested public transport, popular tourist\ndestinations, and even airports.\n(C) Paris, a global tourist destination, has recently faced a troubling resurgence of bed bugs across various\nneighborhoods and popular attractions in the city.\n(D) This outbreak has raised concerns not only among residents but also tourists, many of whom worry\nthat the pests could travel with them back to their countries.\n(E) Experts suggest that international travel and dense urban environments have facilitated the rapid\nspread of this infestation.\n(F) Furthermore, bed bugs have become a common sight in metros and airports, making control measures\neven more challenging.",
+   "explanation": "The correct sequence is C - D - E - B - F - A.\n• C introduces the central topic: the bed bug outbreak in Paris. It sets the stage by mentioning the\nresurgence of bed bugs in the city.\n• D follows logically by discussing the concerns raised by the outbreak, focusing on the worries of both\nresidents and tourists.\n• E explains why the outbreak is spreading so rapidly, providing a general explanation about international\ntravel and urban density contributing to the infestation.\n• B elaborates on the spread, specifying where bed bugs are appearing (public transport, tourist areas,\nairports), expanding on the idea introduced in E.\n• F adds more details about specific locations like metros and airports, which were already hinted at in\nB, making it a natural follow-up.\n• A concludes the paragraph by mentioning the government’s response, which is a logical conclusion after\noutlining the problem and its scope."
+  },
+  {
+   "id": "2024-q54",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following questions, a few sentences are given. Identify the sentences that are\ngrammatically and contextually correct.\n(I) The children was playing in the garden while their parents watched.\n(II) By the time we arrived, the concert had already started.\n(III) Neither of the candidates were prepared for the final interview.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (II) and (III)",
+    "C": "Only (III)",
+    "D": "Both (I) and (II)",
+    "E": "Only (II)"
+   },
+   "correctAnswer": "E",
+   "explanation": "The correct sentence is only (II).\n(I) is incorrect. The correct form is \"The children were playing...\" since \"children\" is plural and requires\n\"were.\"\n(II) is correct. The past perfect tense \"had started\" is appropriately used to show that the concert began\nbefore the arrival.\n(III) is incorrect. The correct form is \"Neither of the candidates was prepared...\" because \"neither\" takes a\nsingular verb."
+  },
+  {
+   "id": "2024-q55",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following questions, a few sentences are given. Identify the sentences that are\ngrammatically and contextually incorrect.\n(I) The students who have completed the assignments on time will receive extra credit from their\ninstructor.\n(II) Despite of the heavy traffic, we managed to reach the airport on time for our flight.\n(III) She has been working on the project since six months, but there is still a lot left to do.",
+   "options": {
+    "A": "Only (I)",
+    "B": "Both (II) and (III)",
+    "C": "Only (III)",
+    "D": "Both (I) and (III)",
+    "E": "All (I), (II), and (III)"
+   },
+   "correctAnswer": "B",
+   "explanation": "The incorrect statements are (II) and (III).\n(I) is correct. The sentence is grammatically and contextually sound.\n(II) is incorrect. The correct phrase is \"Despite the heavy traffic,\" not \"Despite of.\"\n(III) is incorrect. The correct form is \"She has been working on the project for six months...\" because \"for\"\nis used to indicate a duration of time, not \"since.\""
+  },
+  {
+   "id": "2024-q56",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "When the crown on the head of the newest king, all of the people at the coronation went wild with\npriase.",
+   "options": {
+    "A": "priase",
+    "B": "newest",
+    "C": "crown",
+    "D": "coronation",
+    "E": "All are correct"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (56-57): In each of the following questions, a sentence with four highlighted words is\nprovided. These highlighted words may be either misspelled or used inappropriately. Select the\nincorrect word as the answer, and if all the highlighted words are correct in spelling and usage,\nchoose ‘All are correct’ as answer.",
+   "explanation": "The incorrect word in the sentence is (a) priase. The correct spelling should be \"praise\" instead of\n\"priase.\"\nCorrected sentence:\nWhen the crown was placed on the head of the newest king, all of the people at the coronation went wild\nwith praise.\nMeanings of the highlighted words:\n1. Praise\no English: Expression of approval or admiration.\no Hindi: प्रशंसा\n2. Newest\no English: Most recent; latest.\no Hindi: सबसे नया\n3. Crown\no English: A ceremonial headpiece worn by a monarch.\no Hindi: ताज\n4. Coronation\no English: The act or ceremony of crowning a monarch.\no Hindi: राज्यापभषेक"
+  },
+  {
+   "id": "2024-q57",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Because we did nothing but sit in the hotel room, our vaccation\nwas vapid and uninteresting.",
+   "options": {
+    "A": "vaccation",
+    "B": "vapid",
+    "C": "hotel",
+    "D": "uninteresting",
+    "E": "All are correct"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (56-57): In each of the following questions, a sentence with four highlighted words is\nprovided. These highlighted words may be either misspelled or used inappropriately. Select the\nincorrect word as the answer, and if all the highlighted words are correct in spelling and usage,\nchoose ‘All are correct’ as answer.",
+   "explanation": "The incorrect word in the sentence is (a) vaccation. The correct spelling should be \"vacation\" instead\nof \"vaccation.\"\nCorrected sentence:\nBecause we did nothing but sit in the hotel room, our vacation was vapid and uninteresting.\nMeanings of the highlighted words:\n1. Vacation\no English: A period of rest or travel when one is not working.\no Hindi: छुट्टी, अिकाश\n2. Vapid\no English: Lacking in liveliness, flavor, or interest.\no Hindi: नीरस, बेस्िाद\n3. Hotel\no English: A building where travelers can pay for lodging and meals.\no Hindi: होटल\n4. Uninteresting\no English: Not holding interest or attention; dull.\no Hindi: उबाऊ, अरुपचकर"
+  },
+  {
+   "id": "2024-q58",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "She decided to donate a portion of her earnings to the\nunderprivileged children.",
+   "options": {
+    "A": "atrocity",
+    "B": "clarity",
+    "C": "calamity",
+    "D": "acidity",
+    "E": "charity"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (58-62): In each of the following sentences, a word is\nmissing and replaced by a blank. Choose the best word from the\ngiven options that can fit into the sentence without altering the\nintended meaning.",
+   "explanation": "The correct answer is (e) charity.\nHere's a breakdown of the options and their meanings in both Hindi and English:\n(a) atrocity\n• Meaning in English: A cruel and violent act, often involving great suffering.\n• Meaning in Hindi: अत्याचार (atyachaar)\n• Why incorrect: This word refers to extreme cruelty or violence and doesn't fit the context of helping\nunderprivileged children.\n(b) clarity\n• Meaning in English: The quality of being clear and easy to understand.\n• Meaning in Hindi: स्िष्टता (spashtata)\n• Why incorrect: This refers to something being understandable or transparent, which does not\nmake sense in the context of donating money to help children.\n(c) calamity\n• Meaning in English: A great disaster or serious misfortune.\n• Meaning in Hindi: पििपि (vipatti)\n• Why incorrect: This word refers to a disaster, which is not relevant in the context of an organization\nhelping children.\n(d) acidity\n• Meaning in English: The level of acid in substances, or a sharp or bitter manner.\n• Meaning in Hindi: अम्लता (amlta)\n• Why incorrect: This word refers to a chemical property or sometimes a sharp tone in\ncommunication, and it doesn't make sense in the context of supporting children.\n(e) char"
+  },
+  {
+   "id": "2024-q59",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The art gallery hosted an exhibition featuring works from so\nin the world.",
+   "options": {
+    "A": "ignorant",
+    "B": "latent",
+    "C": "removable",
+    "D": "prestigious",
+    "E": "religious"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (58-62): In each of the following sentences, a word is\nmissing and replaced by a blank. Choose the best word from the\ngiven options that can fit into the sentence without altering the\nintended meaning.",
+   "explanation": "The correct answer is (d) prestigious.\nHere's a breakdown of the options and their meanings in both Hindi and English, and why they are correct\nor incorrect:\n(a) ignorant – This means lacking knowledge or awareness, which is inappropriate in this context.\nHindi meaning: अज्ञानी\n(b) latent – This means existing but not yet developed or visible. It doesn’t fit the context because the\nartists mentioned are already recognized and visible.\nHindi meaning: अप्रकट\n(c) removable – This means able to be removed, which doesn’t apply to artists or their status.\nHindi meaning: हटाने योग्य\n(d) prestigious – This means having a high status, respected or admired, which perfectly fits the context\nof renowned artists.\nHindi meaning: प्रपतपित\n(e) religious – This refers to someone with strong religious beliefs, which is unrelated to the context of art.\nHindi meaning: िार्माक"
+  },
+  {
+   "id": "2024-q60",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The book had a/an _____________ impact on her perspective,\nworld.",
+   "options": {
+    "A": "profound",
+    "B": "tripping",
+    "C": "encroach",
+    "D": "oversea",
+    "E": "accurately"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (58-62): In each of the following sentences, a word is\nmissing and replaced by a blank. Choose the best word from the\ngiven options that can fit into the sentence without altering the\nintended meaning.",
+   "explanation": "The correct answer is (a) profound.\nHere’s the explanation of the options in both Hindi and English, and why they are correct or incorrect:\n(a) profound\n• Meaning in English: Having deep insight or a strong effect; something that is very intense or\nmeaningful.\n• Meaning in Hindi: गहरा (gahara), अत्यपिक प्रभािशाली (atyadhik prabhavshali)\n• Why correct: This word fits the context perfectly, as it describes a deep and significant impact on\nher perspective, which aligns with the idea of changing how she viewed the world.\n(b) tripping\n• Meaning in English: Stumbling or falling over something.\n• Meaning in Hindi: ठोकर खाना (thokar khana)\n• Why incorrect: This refers to physical stumbling, which doesn't fit the context of describing the\nemotional or mental impact of a book.\n(c) encroach\n• Meaning in English: To gradually invade someone's space, rights, or time.\n• Meaning in Hindi: अपतक्रमण करना (atikraman karna)\n• Why incorrect: This word refers to intruding or violating someone's space, which does not fit the\ncontext of a book influencing someone's perspective.\n(d) oversea\n• Meaning in English: Relating to foreign countries, often across the sea.\n• Meaning in Hindi: पिदेशी (videshi), समु"
+  },
+  {
+   "id": "2024-q61",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "The sudden power outage threw the entire city into ____\nconfused crowds everywhere.",
+   "options": {
+    "A": "concur",
+    "B": "chaos",
+    "C": "growth",
+    "D": "peculiar",
+    "E": "nascent\ne local ______________ that supports\nome of the most _______________ artists\nchanging the way she viewed the\n______________, with traffic jams and"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (58-62): In each of the following sentences, a word is\nmissing and replaced by a blank. Choose the best word from the\ngiven options that can fit into the sentence without altering the\nintended meaning.",
+   "explanation": "The correct answer is (b) chaos.\nHere’s the explanation of the options in both Hindi and English, and why they are correct or incorrect:\n(a) concur\n• Meaning in English: To agree or have the same opinion.\n• Meaning in Hindi: सहमत होना (sahmat hona)\n• Why incorrect: This word refers to agreement or harmony, which doesn’t match the context of\ndescribing a state of confusion due to a power outage.\n(b) chaos\n• Meaning in English: Complete disorder and confusion.\n• Meaning in Hindi: अराजकता (arajakta), अव्यिस्था (avyavastha)\n• Why correct: This word fits perfectly as the sentence describes a city in confusion and disorder due\nto a power outage, leading to traffic jams and confused crowds.\n(c) Growth\n• Meaning in English: The process of increasing in size, number, or significance.\n• Meaning in Hindi: िृपि (Vriddhi)\n• Why incorrect: \"Growth\" refers to development or expansion, which does not fit the context of\nconfusion and disorder caused by a sudden power outage. The sentence describes chaos and\ndisruption, not improvement or development.\n(d) peculiar\n• Meaning in English: Strange or unusual.\n• Meaning in Hindi: अजीब (ajeeb), असामान्य (asamany)\n• Why incorrect: This word refers to somet"
+  },
+  {
+   "id": "2024-q62",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "Once the switch was flipped, the machine was ______________ and began operating smoothly.",
+   "options": {
+    "A": "weltered",
+    "B": "invoked",
+    "C": "activated",
+    "D": "captivated",
+    "E": "deactivated"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (58-62): In each of the following sentences, a word is\nmissing and replaced by a blank. Choose the best word from the\ngiven options that can fit into the sentence without altering the\nintended meaning.",
+   "explanation": "The correct answer is (c) activated.\nHere’s the explanation of the options in both Hindi and English, and why they are correct or incorrect:\n(a) weltered\n• Meaning in English: To move in a turbulent or uncontrolled manner.\n• Meaning in Hindi: उलझना (ulajhna), लड़खड़ाना (ladhakdana)\n• Why incorrect: This word refers to chaotic or uncontrolled movement, which doesn’t fit the context\nof the machine beginning to operate smoothly.\n(b) invoked\n• Meaning in English: To call upon or cite something (e.g., a rule, law, or authority) for support.\n• Meaning in Hindi: आह्िान करना (aahvan karna)\n• Why incorrect: This word refers to calling for something, often abstract, like support or authority,\nand doesn’t fit the context of starting a machine.\n(c) activated\n• Meaning in English: To cause a device or system to start functioning.\n• Meaning in Hindi: सक्रक्रय करना (sakriya karna)\n• Why correct: This word is perfect for the context, as it describes turning the machine on and it\nstarting to work smoothly after the switch was flipped.\n(d) captivated\n• Meaning in English: To hold someone’s attention or interest.\n• Meaning in Hindi: मोपहत करना (mohit karna)\n• Why incorrect: This word refers to captur"
+  },
+  {
+   "id": "2024-q63",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following question, a phrasal verb is given in bold, it is then followed by three sentences\nwhich has used the given phrasal verb. Choose the best set of alternatives from the five options given\nbelow which has correctly used the given phrasal verb without altering the meaning of the sentence.\nCome up\n(A) The issue of parking spaces came up during the meeting, and we spent an hour discussing it.\n(B) An interesting opportunity came up, so I decided to apply for the job.\n(C) The sun will come up in the west tomorrow, according to the weather report.",
+   "options": {
+    "A": "Both A & B",
+    "B": "Only C",
+    "C": "Both B & C",
+    "D": "Only A",
+    "E": "Both A & C"
+   },
+   "correctAnswer": "A",
+   "explanation": "The phrasal verb \"come up\" means to arise, be mentioned, or become available. It can also refer to\nevents or opportunities appearing. It does not refer to literal actions that are factually incorrect.\n• Sentence (A) correctly uses \"come up\" to refer to an issue being mentioned or arising during a meeting.\n• Sentence (B) also correctly uses \"come up\" to describe an opportunity becoming available.\n• Sentence (C) is incorrect because it states a factual impossibility — the sun does not come up in the\nwest.\nTherefore, the correct answer is (a) Both A & B."
+  },
+  {
+   "id": "2024-q64",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following question, a phrasal verb is given in bold, it is then followed by three sentences\nwhich has used the given phrasal verb. Choose the best set of alternatives from the five options given\nbelow which has incorrectly used the given phrasal verb without altering the meaning of the\nsentence.\nGet across\n(A) They got across the mountain by taking a shortcut through the forest.\n(B) The presenter used charts and examples to get across the complex data in a clear manner.\n(C) The speaker used visuals to get across his point effectively to the audience.",
+   "options": {
+    "A": "Both A & B",
+    "B": "Only C",
+    "C": "Both B & C",
+    "D": "Only A",
+    "E": "Both A & C"
+   },
+   "correctAnswer": "D",
+   "explanation": "The phrasal verb \"get across\" means to successfully communicate\nor convey an idea, message, or information. It does not refer to\nphysically crossing an obstacle like a mountain.\n• Sentence (A) is incorrect because it refers to physically crossing\na mountain, which is not the idiomatic use of \"get across.\"\n• Sentence (B) correctly uses \"get across\" to describe\ncommunicating complex data in a clear manner.\n• Sentence (C) also correctly uses \"get across\" to describe\nconveying a point effectively using visuals.\nTherefore, the correct answer is (d) Only A"
+  },
+  {
+   "id": "2024-q65",
+   "section": "English Language",
+   "topic": "English Language",
+   "question": "In the following question, a phrasal verb is given in bold, it is then followed by three sentences\nwhich has used the given phrasal verb. Choose the best set of alternatives from the five options given\nbelow which has correctly used the given phrasal verb without altering the meaning of the sentence.\nCheck out\n(A) Before you leave the hotel, don’t forget to check out at the reception desk.\n(B) I’m going to the library to check out some books for my research paper.\n(C) You should check out that new restaurant downtown; I’ve heard great things about it.",
+   "options": {
+    "A": "Only A",
+    "B": "Both A & C",
+    "C": "Both B & C",
+    "D": "All A, B, C",
+    "E": "Only B"
+   },
+   "correctAnswer": "D",
+   "explanation": "The phrasal verb \"check out\" has multiple meanings: it can mean\n(like a hotel), borrowing something (like a library book), or inve\ninteresting.\n• Sentence (A) correctly uses \"check out\" in the context of leaving a\n• Sentence (B) is also correct, as it refers to borrowing books from\n• Sentence (C) correctly uses \"check out\" to suggest investigating a\nTherefore, the correct answer is (d) All A, B, C.\nSol. (66-70):\nFor cities K\nBikes sold by X and Y = 328\nBikes sold by Y = 210\nBikes sold by X = 328-210=118\nSimilarly,\nCities Bikes sold by X Bikes sold by Y\nK 118 210\nL 240 320\nM 350 90\nN 425 195"
+  },
+  {
+   "id": "2024-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If total number of cars sold by Y in city K are two-fifth of the total number of bikes sold by Y in\ncity K, then find the difference between the total number of cars sold by X in city K and bikes sold\nby X in city M.",
+   "options": {
+    "A": "22",
+    "B": "16",
+    "C": "23",
+    "D": "15",
+    "E": "18"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (66-70): Read the following table carefully and answer the questions given below. The\ntable shows the total number of bikes sold by two (X and Y) different companies in four (K, L, M, and\nN) different cities and the total number of cars sold by these two companies in these cities. The table\nalso shows the total number of bikes sold by company Y in these cities.\nCities Bikes sold by (X and Y) Cars sold by (X and Y) Bikes sold by Y\nK 328 450 210\nL 560 980 320\nM 440 730 90\nN 620 350 195",
+   "explanation": "Total number of cars sold by Y in city K = ×210 = 84\n5\nTotal number of cars sold by X in city K = 450 – 84 = 366\nRequired difference = 366 - 350 = 16"
+  },
+  {
+   "id": "2024-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of cars sold by X in city N is 20% less than the total number of bikes sold by X in\ncity M. Find the ratio of the total number of cars sold by Y in city N to the total number of bikes sold\nby Y in city K.",
+   "options": {
+    "A": "3:1",
+    "B": "2:1",
+    "C": "2:3",
+    "D": "1:4",
+    "E": "1:3"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (66-70): Read the following table carefully and answer the questions given below. The\ntable shows the total number of bikes sold by two (X and Y) different companies in four (K, L, M, and\nN) different cities and the total number of cars sold by these two companies in these cities. The table\nalso shows the total number of bikes sold by company Y in these cities.\nCities Bikes sold by (X and Y) Cars sold by (X and Y) Bikes sold by Y\nK 328 450 210\nL 560 980 320\nM 440 730 90\nN 620 350 195",
+   "explanation": "Total number of cars sold by X in city N = ×350 = 280\n100\nTotal number of cars sold by Y in city N = 350 – 280 = 70\nRequired ratio = 70 : 210 = 1:3\nsettling your bill and leaving a place\nestigating or looking at something\na hotel.\na library.\nnew restaurant.\nCars sold by (X and Y)"
+  },
+  {
+   "id": "2024-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The ratio of the total number of cars sold by X to Y in city L is 3:4 respectively. Find the total\nnumber of cars sold by X in city L is how many more or less than the total number of bikes sold by Y\nin N.",
+   "options": {
+    "A": "225",
+    "B": "210",
+    "C": "195",
+    "D": "145",
+    "E": "125"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (66-70): Read the following table carefully and answer the questions given below. The\ntable shows the total number of bikes sold by two (X and Y) different companies in four (K, L, M, and\nN) different cities and the total number of cars sold by these two companies in these cities. The table\nalso shows the total number of bikes sold by company Y in these cities.\nCities Bikes sold by (X and Y) Cars sold by (X and Y) Bikes sold by Y\nK 328 450 210\nL 560 980 320\nM 440 730 90\nN 620 350 195",
+   "explanation": "Total number of cars sold by X in city L = 980× = 420\n7\nRequired difference = 420 – 195 = 225"
+  },
+  {
+   "id": "2024-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The total number of bikes sold by X in city M is what\npercentage more or less than the total number of cars sold by X\nand Y together in city N?",
+   "options": {
+    "A": "2%",
+    "B": "0%",
+    "C": "5%",
+    "D": "10%",
+    "E": "7.5%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (66-70): Read the following table carefully and answer the questions given below. The\ntable shows the total number of bikes sold by two (X and Y) different companies in four (K, L, M, and\nN) different cities and the total number of cars sold by these two companies in these cities. The table\nalso shows the total number of bikes sold by company Y in these cities.\nCities Bikes sold by (X and Y) Cars sold by (X and Y) Bikes sold by Y\nK 328 450 210\nL 560 980 320\nM 440 730 90\nN 620 350 195",
+   "explanation": "Required percentage = ×100 = 0%\n350"
+  },
+  {
+   "id": "2024-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of cars sold by Y in city M is 200\nin city L. The total number of cars sold by X in city M\nsold by X and Y together in city K?",
+   "options": {
+    "A": "64%",
+    "B": "58%",
+    "C": "42%",
+    "D": "79%",
+    "E": "82%"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (66-70): Read the following table carefully and answer the questions given below. The\ntable shows the total number of bikes sold by two (X and Y) different companies in four (K, L, M, and\nN) different cities and the total number of cars sold by these two companies in these cities. The table\nalso shows the total number of bikes sold by company Y in these cities.\nCities Bikes sold by (X and Y) Cars sold by (X and Y) Bikes sold by Y\nK 328 450 210\nL 560 980 320\nM 440 730 90\nN 620 350 195",
+   "explanation": "Total number of cars sold by Y in city M = 200 + 240 = 440\nTotal number of cars sold by X in city M = 730 – 440 = 290\n290\nRequired percentage = ×100= 64.44%≈ 64%\n450\nSol. (71-75):\nFor shop A\n1/3 of total items sold by A in 2021= 600\nTotal number of items sold in 2021 = 600×3 = 1800\n1/3 of total items sold by A in 2022= 700\nTotal number of items sold in 2022 = 700×3 = 2100\n120\nTotal number of items sold in 2023 = ×1800 = 2160\n100\nSimilarly,\nShops In 2021 In 2022 In 2023\nA 1800 2100 2160\nB 1260 1620 1512\nC 900 1080 1080\nD 1560 600 1872\nE 840 1440 1008"
+  },
+  {
+   "id": "2024-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of items sold by D in 2023 is what\nsold by A in 2022 (approx.)?",
+   "options": {
+    "A": "23%",
+    "B": "19%",
+    "C": "11%",
+    "D": "15%",
+    "E": "8%"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (71-75): Read the following line graph ca\nThe line graph shows 1/3rd of the total items sold by\n800\n700\n600\n500\n400\n300\n200\n100\n0\nA B C\n2021\nNote: (i). Total number of items sold by each shops in 20\n(ii). The total number of items sold by each shops in each\nof the total items sold.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required percentage = ×100 = 10.8 ≈ 11% (approx.)\n2100"
+  },
+  {
+   "id": "2024-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of the total number of items sold\nby C in 2023.",
+   "options": {
+    "A": "1:2",
+    "B": "2:3",
+    "C": "3:2",
+    "D": "3:4",
+    "E": "4:5\nmore than the total number of bikes sold by X\nis what percentage of the total number of cars\narefully and answer the questions given below.\nfive different shops in two different years.\nD E\n2022\n023 is 20% more than that in 2021.\nh year, which is given in the line graph, is one-third\npercentage less than the total number of items\nby B in 2022 to the total number of items sold"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (71-75): Read the following line graph ca\nThe line graph shows 1/3rd of the total items sold by\n800\n700\n600\n500\n400\n300\n200\n100\n0\nA B C\n2021\nNote: (i). Total number of items sold by each shops in 20\n(ii). The total number of items sold by each shops in each\nof the total items sold.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required ratio = 1620 : 1080 = 3:2"
+  },
+  {
+   "id": "2024-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the difference between the total number of items sold\nthe total number of items sold by A and B together in 2021.",
+   "options": {
+    "A": "180",
+    "B": "194",
+    "C": "150",
+    "D": "158",
+    "E": "100"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (71-75): Read the following line graph ca\nThe line graph shows 1/3rd of the total items sold by\n800\n700\n600\n500\n400\n300\n200\n100\n0\nA B C\n2021\nNote: (i). Total number of items sold by each shops in 20\n(ii). The total number of items sold by each shops in each\nof the total items sold.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required difference = (1800+1260)−(1872+1008)\n= 3060−2880= 180"
+  },
+  {
+   "id": "2024-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the sum of the total number of items sold by A, B and C i",
+   "options": {
+    "A": "4235",
+    "B": "4450",
+    "C": "4980",
+    "D": "4752",
+    "E": "4898"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (71-75): Read the following line graph ca\nThe line graph shows 1/3rd of the total items sold by\n800\n700\n600\n500\n400\n300\n200\n100\n0\nA B C\n2021\nNote: (i). Total number of items sold by each shops in 20\n(ii). The total number of items sold by each shops in each\nof the total items sold.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required sum = 2160 + 1512 + 1080 = 4752"
+  },
+  {
+   "id": "2024-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of items sold by B and D together in 2023 is how\nnumber of items sold by A in all three years together.",
+   "options": {
+    "A": "2676",
+    "B": "2194",
+    "C": "2150",
+    "D": "2058",
+    "E": "2100"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (71-75): Read the following line graph ca\nThe line graph shows 1/3rd of the total items sold by\n800\n700\n600\n500\n400\n300\n200\n100\n0\nA B C\n2021\nNote: (i). Total number of items sold by each shops in 20\n(ii). The total number of items sold by each shops in each\nof the total items sold.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Total number of items sold by A in all three years together = 1800\nRequired difference = 6060 – (1512+1872) = 2676\n+ 2100 + 2160 = 6060"
+  },
+  {
+   "id": "2024-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "188, 177, 199, 166, 210, 150, 221",
+   "options": {
+    "A": "188",
+    "B": "221",
+    "C": "150",
+    "D": "199",
+    "E": "210"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (76-80): In each of these questions a number series\nnumber is wrong. Find out the wrong number.",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2024-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "18225, 6075, 2025, 675, 220, 75, 25",
+   "options": {
+    "A": "25",
+    "B": "75",
+    "C": "220",
+    "D": "18225",
+    "E": "6075"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (76-80): In each of these questions a number series\nnumber is wrong. Find out the wrong number.",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2024-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "210, 228, 250, 274, 302, 332, 365",
+   "options": {
+    "A": "302",
+    "B": "332",
+    "C": "210",
+    "D": "250",
+    "E": "365\nby D and E together in 2023 and\nin 2023.\nw many more or less than the total\nis given. In each series only one"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (76-80): In each of these questions a number series\nnumber is wrong. Find out the wrong number.",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2024-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "304, 300, 316, 332, 364, 428, 556",
+   "options": {
+    "A": "300",
+    "B": "316",
+    "C": "304",
+    "D": "332",
+    "E": "428"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (76-80): In each of these questions a number series\nnumber is wrong. Find out the wrong number.",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2024-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "2194, 2175, 2152, 2123, 2092, 2054, 2014",
+   "options": {
+    "A": "2014",
+    "B": "2054",
+    "C": "2194",
+    "D": "2092",
+    "E": "2123"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (76-80): In each of these questions a number series\nnumber is wrong. Find out the wrong number.",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2024-q81",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "5.03% 𝑜𝑓 39.89+10.09% 𝑜𝑓 450 =?",
+   "options": {
+    "A": "44",
+    "B": "47",
+    "C": "39",
+    "D": "54",
+    "E": "59\n14"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (81-85): What approximate value will come in place\nquestions (You are not expected to calculate the exact value).",
+   "explanation": "5% 𝑜𝑓 40+10% 𝑜𝑓 450 =?\n2+45 =?\n47 =?"
+  },
+  {
+   "id": "2024-q82",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "√840.99+ 𝑜𝑓 361.09=?×4.88\n19",
+   "options": {
+    "A": "59",
+    "B": "53",
+    "C": "65",
+    "D": "50",
+    "E": "43"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (81-85): What approximate value will come in place\nquestions (You are not expected to calculate the exact value).",
+   "explanation": "√841+ 𝑜𝑓 361 =?×5\n19\n295 =?×5\n59 = ?"
+  },
+  {
+   "id": "2024-q83",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "12.213−108.02= 24.90% 𝑜𝑓 399+?",
+   "options": {
+    "A": "1090",
+    "B": "1120",
+    "C": "1240",
+    "D": "1520",
+    "E": "1130"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (81-85): What approximate value will come in place\nquestions (You are not expected to calculate the exact value).",
+   "explanation": "123 −108 = 25% 𝑜𝑓 400+?\n1620 = 100+?\n1520 =?"
+  },
+  {
+   "id": "2024-q84",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "32.08% 𝑜𝑓 599 ÷ 1 =?2−16\n1.99 4",
+   "options": {
+    "A": "29",
+    "B": "24",
+    "C": "17",
+    "D": "12",
+    "E": "20\nof question mark (?) in the following\n256.03 3.98"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (81-85): What approximate value will come in place\nquestions (You are not expected to calculate the exact value).",
+   "explanation": "32% 𝑜𝑓 600 ÷ 1 =?2−16\n2 4\n96×4 =?2−16\n400 = ?2\n20 = ?"
+  },
+  {
+   "id": "2024-q85",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "( ÷ ) =?÷12.01\n15.99 1.99",
+   "options": {
+    "A": "91",
+    "B": "96",
+    "C": "103",
+    "D": "87",
+    "E": "67"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (81-85): What approximate value will come in place\nquestions (You are not expected to calculate the exact value).",
+   "explanation": "( ÷ ) =?÷12\n16 2\n(16÷2) =?÷12\n96 = ?"
+  },
+  {
+   "id": "2024-q86",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A, B and C together can do a work in 4 days, while B alone can do the same work in 24 days. If\nefficiency of C is 300% more than that of B, then find the difference between number of days taken\nby A and C to complete the work alone?",
+   "options": {
+    "A": "18",
+    "B": "12",
+    "C": "11",
+    "D": "15",
+    "E": "20"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let the total work (LCM of 4 and 24) = 24 units\n24\nThe efficiency of A, B & C together = = 6 units/day\n4\n24\nThe efficiency of B = = 1 units/day\n24\nThe efficiency of C = 1×4 = 4 units/day\nThe efficiency of A = 6 -1- 4 = 1 units/day\n24\nTime taken by A to complete the work = = 24 days\n1\n24\nTime taken by C to complete the work = = 6 days\n4\nRequired difference = 24 – 6 = 18 days"
+  },
+  {
+   "id": "2024-q87",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of present age of P to age of Q four years ago is 2 : 1. Present age of R is equal to\naverage of present age of P and Q. 16 years ago, age of R was 10 years. Find the sum of present age\nof P, Q and R (in years)?",
+   "options": {
+    "A": "66 years",
+    "B": "78 years",
+    "C": "82 years",
+    "D": "99 years",
+    "E": "102 years"
+   },
+   "correctAnswer": "B",
+   "explanation": "Let the present age of P and Q be 2x and x+4 years respectively.\n2𝑥+𝑥+4 3𝑥+4\nThe present age of R = =\n2 2\nATQ,\n3𝑥+4\n= 16+10\n2\n3𝑥+4 = 52\n𝑥 = 16\nPresent age of P = 32 years\nPresent age of Q = 20 years\nRequired sum = 32 + 20 + 26 = 78 years"
+  },
+  {
+   "id": "2024-q88",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "An amount of Rs. 12200 is partly invested in scheme A at 10% p.a. on compound interest for\ntwo years and in scheme B at the same rate on simple interest for four years. If the interest received\nfrom both the schemes is equal, then find the amount invested in scheme A?",
+   "options": {
+    "A": "Rs.4350",
+    "B": "Rs.4340",
+    "C": "Rs.4200",
+    "D": "Rs.8000",
+    "E": "Rs.8500"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let the amount invested in scheme A = Rs. X\nSo, amount invest in scheme B = 12200 – X Rs.\n10×10\nEquivalent compound interest at 10% rate= 10 +10 + = 21%\n100\n21 (12200−𝑋)×4×10\n𝑋 × =\n100 100\n61X = 12200×4×10\nX = Rs.8000"
+  },
+  {
+   "id": "2024-q89",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A, B and C started a business with investment of Rs. 12,000,\nRs. 12,000 and Rs. 8,000 respectively. B invested only for ‘x’\nmonths, while C left the business ‘x’ month before a year. If A got\nRs 1800 out of annual profit of Rs 3200, then find the value of ‘x’?",
+   "options": {
+    "A": "2",
+    "B": "8",
+    "C": "6",
+    "D": "4",
+    "E": "5"
+   },
+   "correctAnswer": "D",
+   "explanation": "Ratio of profit =\nA : B : C\n1212 : 12x : 8(12−x)\n36 : 3x : 2(12−x)\nATQ,\n36 1800\n=\n60+𝑥 3200\n60 + x = 64\nx = 4"
+  },
+  {
+   "id": "2024-q90",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Train A crosses a 230 meters long platform in 29 seconds and train B crosses a 150 meters\nlong platform in 24 seconds. Train B having length of 450 meters crosses train A in 160 seconds,\nwhile running in the same direction. Find how much time will the train A take to cross a 50 meters\nlong bridge (Speed of train B > speed of train A)?",
+   "options": {
+    "A": "16 seconds",
+    "B": "22 seconds",
+    "C": "20 seconds",
+    "D": "17 seconds",
+    "E": "25 seconds"
+   },
+   "correctAnswer": "C",
+   "explanation": "Let length of train A = l meters.\nAnd let speed of train A = S m/s.\nATQ,\n450+150\nSpeed of train B = = 25 m/s\n24\n𝑙+230\nSpeed of train A = …(i)\n29\n450+𝑙\nNow, 25−𝑆 =\n160\n450+𝑙\n𝑆 = 25− …(ii)\n160\nOn solving (i) & (ii):\n𝑙+450 𝑙+230\n= 25−\n160 29\nl=350 meters.\n350+230\nSo, speed of train A = = 20 m/s.\n29\n350+50\nRequired time = = 20 seconds\n20"
+  },
+  {
+   "id": "2024-q91",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of speed of a boat in still water to the speed of boat in upstream 4 : 3. The boat covers\n560 km in 7 hours in downstream. Find the time taken by boat to cover 480 km distance in\nupstream?",
+   "options": {
+    "A": "8 hours",
+    "B": "9 hours",
+    "C": "7 hours",
+    "D": "5 hours",
+    "E": "10 hours"
+   },
+   "correctAnswer": "E",
+   "explanation": "Let the speed of boat in still water and speed of\nATQ,\n4\n𝑥 = (𝑥−𝑦)\n3\n𝑥 4 4𝑚\n= =\n𝑦 1 1𝑚\n560\n= 7\n(1𝑚+4𝑚)\n16 = 𝑚\n480\nRequired answer = = 10 ℎ𝑜𝑢𝑟𝑠\n(4−1)×16"
+  },
+  {
+   "id": "2024-q92",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A mark an article 60% above its cost price. When he allows 4d% discount on marked price he\nearns 28% profit. If he allows 6d% discount, then find the profit/ or loss %?",
+   "options": {
+    "A": "12%",
+    "B": "15%",
+    "C": "18%",
+    "D": "20%",
+    "E": "24%"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let cost price be Rs.100x\nMarked price = Rs.160x\nSelling price = Rs.128x\n160𝑥−128𝑥\nDiscount % = ×100\n160𝑥\n32𝑥\n×100 = 20%\n160𝑥\nstream be x and y respectively.\nATQ.\n4d=20\nd=5\n100−(6×5)\nNew selling price = 160𝑥× = 112𝑥\n100\n112𝑥−100𝑥\nProfit % = ×100 = 12%\n100𝑥"
+  },
+  {
+   "id": "2024-q93",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of milk and water in mixture A is 9: 5. The quantity of milk in mixture B is 20% more\nthat in mixture A and quantity of water in mixture A is 25% more than that in mixture B. If sum of\nquantity of water of both mixture is 54 liters, then find the total quantity of mixture in A?",
+   "options": {
+    "A": "72 liters",
+    "B": "64 liters",
+    "C": "84 liters",
+    "D": "75 liters",
+    "E": "80 liters"
+   },
+   "correctAnswer": "C",
+   "explanation": "Let quantity of milk and water in the mixture A\n120 54\nQuantity of milk in mixture B = 9𝑙× = 𝑙\n100 5\n4\nAnd quantity of water in mixture B = 5𝑙× = 4𝑙\n5\nATQ\n5l+4l=54\nl=6\nSo, required quantity =(9+5)l =14l =84 liters"
+  },
+  {
+   "id": "2024-q94",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The average weight of 24 boys and 6 girls in a class is 40 kg. If the weight of all the girls excluded\nthe average weight of the class is reduced by 4 kg, then find the average weight of all the six girls?",
+   "options": {
+    "A": "52 kg",
+    "B": "56 kg",
+    "C": "58 kg",
+    "D": "55 kg",
+    "E": "51 kg"
+   },
+   "correctAnswer": "B",
+   "explanation": "Total weight of the class = (24+6)×40 = 120\nTotal weight of 24 boys in the class = 24×(40−4)\n1200−864\nRequired average = = 56 𝑘𝑔\n6"
+  },
+  {
+   "id": "2024-q95",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of area of a square and area of a rectangle is 3:2 respectively. The side of square is\nequal to length of the rectangle. The perimeter of the rectangle is 40 meters, then find the breadth\nof the rectangle?",
+   "options": {
+    "A": "12 m",
+    "B": "8 m",
+    "C": "10 m",
+    "D": "15 m",
+    "E": "17 m"
+   },
+   "correctAnswer": "B",
+   "explanation": "Let length and breadth of the rectangle be ‘l’ m\nSo, side of the square = ‘l’ m\nATQ.\n𝑙 ×𝑙 3\n=\n𝑙×𝑏 2\n𝑙 3 3𝑥\n= =\n𝑏 2 2𝑥\n2(l+b)=40\n2(3x+2x)=40\nx=4\nBreadth of the rectangle = 2x = 8 meters\nSol. (96-100):\nGiven, total games win by B = 50\nLet games win by A and total games lose by B is 3x a\n4\nTotal games lose by A = 3𝑥× = 4𝑥\n3\nATQ,\n4𝑥+50\n= 105\n2\n4𝑥+50 = 210\n4𝑥 = 160\n𝑥 = 40\n6\nTotal games win by C = 80 × = 96\nbe 9l and 5l respectively.\n00 𝑘𝑔\n= 864 𝑘𝑔\nand ‘b’ m respectively.\nand 2x respectively\nSo, total games lose by C = 96 × = 120\n4\nWins Lose\nA 120 160\nB 50 80\nC 96 120"
+  },
+  {
+   "id": "2024-q96",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the ratio of the total games win by A and the total games lose by C.",
+   "options": {
+    "A": "2:1",
+    "B": "1:1",
+    "C": "1:3",
+    "D": "4:3",
+    "E": "5:2"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (96 - 100): Read the following data carefully and answer the questions given below. The\ndata shows the three different people (A, B & C) win or lose multiple games.\nTotal games win by B is 50 and the ratio of game win by A and games lose by B is 3:2 respectively. The ratio\nof total games loses by A to total games win by A is 4:3. The average of number of games lose by A and win\nby B is 105. Total games win by C is 20% more than total games loss of B and the ratio of total games win\nto lose by C is 4 : 5.",
+   "explanation": "Required ratio = 120 : 120 = 1:1"
+  },
+  {
+   "id": "2024-q97",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Total games lose by B is what percentage of the total games win by A?",
+   "options": {
+    "A": "66.67%",
+    "B": "32.5%",
+    "C": "8.33%",
+    "D": "62.5%",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (96 - 100): Read the following data carefully and answer the questions given below. The\ndata shows the three different people (A, B & C) win or lose multiple games.\nTotal games win by B is 50 and the ratio of game win by A and games lose by B is 3:2 respectively. The ratio\nof total games loses by A to total games win by A is 4:3. The average of number of games lose by A and win\nby B is 105. Total games win by C is 20% more than total games loss of B and the ratio of total games win\nto lose by C is 4 : 5.",
+   "explanation": "Required percentage = ×100 = 66.67%\n120"
+  },
+  {
+   "id": "2024-q98",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the sum of total games lose by B and A.",
+   "options": {
+    "A": "210",
+    "B": "220",
+    "C": "250",
+    "D": "320",
+    "E": "240"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (96 - 100): Read the following data carefully and answer the questions given below. The\ndata shows the three different people (A, B & C) win or lose multiple games.\nTotal games win by B is 50 and the ratio of game win by A and games lose by B is 3:2 respectively. The ratio\nof total games loses by A to total games win by A is 4:3. The average of number of games lose by A and win\nby B is 105. Total games win by C is 20% more than total games loss of B and the ratio of total games win\nto lose by C is 4 : 5.",
+   "explanation": "Required sum = 160 + 80 = 240"
+  },
+  {
+   "id": "2024-q99",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "If the total games lose by D are 25% more than that of A and the total games win by D are five\nmore than half of the total games win by C, then find the difference between the total games lose\nand total games win by D.",
+   "options": {
+    "A": "147",
+    "B": "149",
+    "C": "142",
+    "D": "139",
+    "E": "129"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (96 - 100): Read the following data carefully and answer the questions given below. The\ndata shows the three different people (A, B & C) win or lose multiple games.\nTotal games win by B is 50 and the ratio of game win by A and games lose by B is 3:2 respectively. The ratio\nof total games loses by A to total games win by A is 4:3. The average of number of games lose by A and win\nby B is 105. Total games win by C is 20% more than total games loss of B and the ratio of total games win\nto lose by C is 4 : 5.",
+   "explanation": "Total losses of D = ×160 = 200\n4\n96\nTotal wins of D = +5 = 53\n2\nRequired difference = 200 – 53 = 147"
+  },
+  {
+   "id": "2024-q100",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the average of total games win",
+   "options": {
+    "A": "weltered\n• Meaning in English: To move in a turbulent or uncontrolled manner.\n• Meaning in Hindi: उलझना (ulajhna), लड़खड़ाना (ladhakdana)\n• Why incorrect: This word refers to chaotic or uncontrolled movement, which doesn’t fit the context\nof the machine beginning to operate smoothly.",
+    "B": "invoked\n• Meaning in English: To call upon or cite something (e.g., a rule, law, or authority) for support.\n• Meaning in Hindi: आह्िान करना (aahvan karna)\n• Why incorrect: This word refers to calling for something, often abstract, like support or authority,\nand doesn’t fit the context of starting a machine.",
+    "C": "activated\n• Meaning in English: To cause a device or system to start functioning.\n• Meaning in Hindi: सक्रक्रय करना (sakriya karna)\n• Why correct: This word is perfect for the context, as it describes turning the machine on and it\nstarting to work smoothly after the switch was flipped.",
+    "D": "captivated\n• Meaning in English: To hold someone’s attention or interest.\n• Meaning in Hindi: मोपहत करना (mohit karna)\n• Why incorrect: This word refers to capturing attention or fascination, which doesn’t make sense\nwhen talking about a machine starting to work.",
+    "E": "deactivated\n• Meaning in English: To turn off or stop something from functioning.\n• Meaning in Hindi: पनपरक्रय करना (nishkriya karna)\n• Why incorrect: This word means to stop a machine or device from working, which is the opposite\nof what the sentence is describing.\nThus, \"activated\" is the best fit as it describes the machine starting and operating smoothly.\nS63. Ans.(a)\nSol. The phrasal verb \"come up\" means to arise, be mentioned, or become available. It can also refer to\nevents or opportunities appearing. It does not refer to literal actions that are factually incorrect.\n• Sentence (A) correctly uses \"come up\" to refer to an issue being mentioned or arising during a meeting.\n• Sentence (B) also correctly uses \"come up\" to describe an opportunity becoming available.\n• Sentence (C) is incorrect because it states a factual impossibility — the sun does not come up in the\nwest.\nTherefore, the correct answer is (a) Both A & B.\nS64. Ans.(d)\nSol. The phrasal verb \"get across\" means to successfully communicate\nor convey an idea, message, or information. It does not refer to\nphysically crossing an obstacle like a mountain.\n• Sentence (A) is incorrect because it refers to physically crossing\na mountain, which is not the idiomatic use of \"get across.\"\n• Sentence (B) correctly uses \"get across\" to describe\ncommunicating complex data in a clear manner.\n• Sentence (C) also correctly uses \"get across\" to describe\nconveying a point effectively using visuals.\nTherefore, the correct answer is (d) Only A\nS65. Ans.(d)\nSol. The phrasal verb \"check out\" has multiple meanings: it can mean\n(like a hotel), borrowing something (like a library book), or inve\ninteresting.\n• Sentence (A) correctly uses \"check out\" in the context of leaving a\n• Sentence (B) is also correct, as it refers to borrowing books from\n• Sentence (C) correctly uses \"check out\" to suggest investigating a\nTherefore, the correct answer is (d) All A, B, C.\nSol. (66-70):\nFor cities K\nBikes sold by X and Y = 328\nBikes sold by Y = 210\nBikes sold by X = 328-210=118\nSimilarly,\nCities Bikes sold by X Bikes sold by Y\nK 118 210\nL 240 320\nM 350 90\nN 425 195\nS66. Ans (b)\n2\nSol. Total number of cars sold by Y in city K = ×210 = 84\n5\nTotal number of cars sold by X in city K = 450 – 84 = 366\nRequired difference = 366 - 350 = 16\nS67. Ans (e)\n80\nSol. Total number of cars sold by X in city N = ×350 = 280\n100\nTotal number of cars sold by Y in city N = 350 – 280 = 70\nRequired ratio = 70 : 210 = 1:3\nsettling your bill and leaving a place\nestigating or looking at something\na hotel.\na library.\nnew restaurant.\nCars sold by (X and Y)\nS68. Ans (a)\n3\nSol. Total number of cars sold by X in city L = 980× = 420\n7\nRequired difference = 420 – 195 = 225\nS69. Ans (b)\n350−350\nSol. Required percentage = ×100 = 0%\n350\nS70. Ans (a)\nSol. Total number of cars sold by Y in city M = 200 + 240 = 440\nTotal number of cars sold by X in city M = 730 – 440 = 290\n290\nRequired percentage = ×100= 64.44%≈ 64%\n450\nSol. (71-75):\nFor shop A\n1/3 of total items sold by A in 2021= 600\nTotal number of items sold in 2021 = 600×3 = 1800\n1/3 of total items sold by A in 2022= 700\nTotal number of items sold in 2022 = 700×3 = 2100\n120\nTotal number of items sold in 2023 = ×1800 = 2160\n100\nSimilarly,\nShops In 2021 In 2022 In 2023\nA 1800 2100 2160\nB 1260 1620 1512\nC 900 1080 1080\nD 1560 600 1872\nE 840 1440 1008\nS71. Ans (c)\n2100−1872\nSol. Required percentage = ×100 = 10.8 ≈ 11% (approx.)\n2100\nS72. Ans (c)\nSol. Required ratio = 1620 : 1080 = 3:2\nS73. Ans (a)\nSol. Required difference = (1800+1260)−(1872+1008)\n= 3060−2880= 180\nS74. Ans (d)\nSol. Required sum = 2160 + 1512 + 1080 = 4752\nS75. Ans (a)\nSol. Total number of items sold by A in all three years together = 1800\nRequired difference = 6060 – (1512+1872) = 2676\n+ 2100 + 2160 = 6060\nS76. Ans (c)\nSol. The pattern of the series:\nS77. Ans (c)\nSol. The pattern of the series:\nS78. Ans (e)\nSol. The pattern of the series:\nS79. Ans (a)\nSol. The pattern of the series:\nS80. Ans (b)\nSol. The pattern of the series:\nS81. Ans (b)\nSol. 5% 𝑜𝑓 40+10% 𝑜𝑓 450 =?\n2+45 =?\n47 =?\nS82. Ans (a)\n14\nSol. √841+ 𝑜𝑓 361 =?×5\n19\n295 =?×5\n59 = ?\nS83. Ans (d)\nSol. 123 −108 = 25% 𝑜𝑓 400+?\n1620 = 100+?\n1520 =?\n\nS84. Ans (e)\nSol. 32% 𝑜𝑓 600 ÷ 1 =?2−16\n2 4\n96×4 =?2−16\n400 = ?2\n20 = ?\nS85. Ans (b)\n256 4\nSol. ( ÷ ) =?÷12\n16 2\n(16÷2) =?÷12\n96 = ?\nS86. Ans (a)\nSol. Let the total work (LCM of 4 and 24) = 24 units\n24\nThe efficiency of A, B & C together = = 6 units/day\n4\n24\nThe efficiency of B = = 1 units/day\n24\nThe efficiency of C = 1×4 = 4 units/day\nThe efficiency of A = 6 -1- 4 = 1 units/day\n24\nTime taken by A to complete the work = = 24 days\n1\n24\nTime taken by C to complete the work = = 6 days\n4\nRequired difference = 24 – 6 = 18 days\nS87. Ans (b)\nSol. Let the present age of P and Q be 2x and x+4 years respectively.\n2𝑥+𝑥+4 3𝑥+4\nThe present age of R = =\n2 2\nATQ,\n3𝑥+4\n= 16+10\n2\n3𝑥+4 = 52\n𝑥 = 16\nPresent age of P = 32 years\nPresent age of Q = 20 years\nRequired sum = 32 + 20 + 26 = 78 years\nS88. Ans. (d)\nSol. Let the amount invested in scheme A = Rs. X\nSo, amount invest in scheme B = 12200 – X Rs.\n10×10\nEquivalent compound interest at 10% rate= 10 +10 + = 21%\n100\n21 (12200−𝑋)×4×10\n𝑋 × =\n100 100\n61X = 12200×4×10\nX = Rs.8000\n\nS89. Ans.(d)\nSol. Ratio of profit =\nA : B : C\n1212 : 12x : 8(12−x)\n36 : 3x : 2(12−x)\nATQ,\n36 1800\n=\n60+𝑥 3200\n60 + x = 64\nx = 4\nS90. Ans. (c)\nSol. Let length of train A = l meters.\nAnd let speed of train A = S m/s.\nATQ,\n450+150\nSpeed of train B = = 25 m/s\n24\n𝑙+230\nSpeed of train A = …(i)\n29\n450+𝑙\nNow, 25−𝑆 =\n160\n450+𝑙\n𝑆 = 25− …(ii)\n160\nOn solving (i) & (ii):\n𝑙+450 𝑙+230\n= 25−\n160 29\nl=350 meters.\n350+230\nSo, speed of train A = = 20 m/s.\n29\n350+50\nRequired time = = 20 seconds\n20\nS91. Ans. (e)\nSol. Let the speed of boat in still water and speed of\nATQ,\n4\n𝑥 = (𝑥−𝑦)\n3\n𝑥 4 4𝑚\n= =\n𝑦 1 1𝑚\n560\n= 7\n(1𝑚+4𝑚)\n16 = 𝑚\n480\nRequired answer = = 10 ℎ𝑜𝑢𝑟𝑠\n(4−1)×16\nS92. Ans.(a)\nSol. Let cost price be Rs.100x\nMarked price = Rs.160x\nSelling price = Rs.128x\n160𝑥−128𝑥\nDiscount % = ×100\n160𝑥\n32𝑥\n×100 = 20%\n160𝑥\nstream be x and y respectively.\nATQ.\n4d=20\nd=5\n100−(6×5)\nNew selling price = 160𝑥× = 112𝑥\n100\n112𝑥−100𝑥\nProfit % = ×100 = 12%\n100𝑥\nS93. Ans. (c)\nSol. Let quantity of milk and water in the mixture A\n120 54\nQuantity of milk in mixture B = 9𝑙× = 𝑙\n100 5\n4\nAnd quantity of water in mixture B = 5𝑙× = 4𝑙\n5\nATQ\n5l+4l=54\nl=6\nSo, required quantity =(9+5)l =14l =84 liters\nS94. Ans (b)\nSol. Total weight of the class = (24+6)×40 = 120\nTotal weight of 24 boys in the class = 24×(40−4)\n1200−864\nRequired average = = 56 𝑘𝑔\n6\nS95. Ans (b)\nSol. Let length and breadth of the rectangle be ‘l’ m\nSo, side of the square = ‘l’ m\nATQ.\n𝑙 ×𝑙 3\n=\n𝑙×𝑏 2\n𝑙 3 3𝑥\n= =\n𝑏 2 2𝑥\n2(l+b)=40\n2(3x+2x)=40\nx=4\nBreadth of the rectangle = 2x = 8 meters\nSol. (96-100):\nGiven, total games win by B = 50\nLet games win by A and total games lose by B is 3x a\n4\nTotal games lose by A = 3𝑥× = 4𝑥\n3\nATQ,\n4𝑥+50\n= 105\n2\n4𝑥+50 = 210\n4𝑥 = 160\n𝑥 = 40\n6\nTotal games win by C = 80 × = 96\nbe 9l and 5l respectively.\n00 𝑘𝑔\n= 864 𝑘𝑔\nand ‘b’ m respectively.\nand 2x respectively\nSo, total games lose by C = 96 × = 120\n4\nWins Lose\nA 120 160\nB 50 80\nC 96 120\nS96. Ans (b)\nSol. Required ratio = 120 : 120 = 1:1\nS97. Ans (a)\n80\nSol. Required percentage = ×100 = 66.67%\n120\nS98. Ans (e)\nSol. Required sum = 160 + 80 = 240\nS99. Ans (a)\n5\nSol. Total losses of D = ×160 = 200\n4\n96\nTotal wins of D = +5 = 53\n2\nRequired difference = 200 – 53 = 147\nS100. Ans (d)\n120+50+120\nSol. Required average = = 96.67"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (96 - 100): Read the following data carefully and answer the questions given below. The\ndata shows the three different people (A, B & C) win or lose multiple games.\nTotal games win by B is 50 and the ratio of game win by A and games lose by B is 3:2 respectively. The ratio\nof total games loses by A to total games win by A is 4:3. The average of number of games lose by A and win\nby B is 105. Total games win by C is 20% more than total games loss of B and the ratio of total games win\nto lose by C is 4 : 5.",
+   "explanation": "Required average = = 96.67"
+  }
+ ]
+}

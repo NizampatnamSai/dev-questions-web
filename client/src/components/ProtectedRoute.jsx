@@ -18,6 +18,7 @@ export const GUEST_ALLOWED = [
   "/background-remover",
   "/devtools", // covers the Mock API Generator tab (?tool=mock-api) — public, no AI cost
   "/meetings", // the invite-list view needs login, but the join-by-code box is intentionally open to guests
+  "/ibps-po", // TEMP-PERF-DIAGNOSIS — remove
 ];
 
 // Exact match on the prefix, or the prefix followed by "/" or "?" — a plain
