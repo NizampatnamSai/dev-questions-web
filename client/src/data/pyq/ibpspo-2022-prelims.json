@@ -874,7 +874,35 @@
     "E": "60000"
    },
    "correctAnswer": "C",
-   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Person",
+     "2018 (₹'000)",
+     "2019 (₹'000)",
+     "Both years"
+    ],
+    "rows": [
+     [
+      "Tarun",
+      "24",
+      "30",
+      "54"
+     ],
+     [
+      "Apurv",
+      "50",
+      "60",
+      "110"
+     ],
+     [
+      "Mayank",
+      "36",
+      "40",
+      "76"
+     ]
+    ]
+   },
+   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n📊 Bar graph: tax paid (in '000) by three people across two years.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required sum = 60000 × +24000 = 66000\n10"
   },
   {
@@ -890,7 +918,35 @@
     "E": "29%"
    },
    "correctAnswer": "E",
-   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Person",
+     "2018 (₹'000)",
+     "2019 (₹'000)",
+     "Both years"
+    ],
+    "rows": [
+     [
+      "Tarun",
+      "24",
+      "30",
+      "54"
+     ],
+     [
+      "Apurv",
+      "50",
+      "60",
+      "110"
+     ],
+     [
+      "Mayank",
+      "36",
+      "40",
+      "76"
+     ]
+    ]
+   },
+   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n📊 Bar graph: tax paid (in '000) by three people across two years.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required percentage = ×100 =\n(40+36)\n28.94 ≈ 29%"
   },
   {
@@ -906,7 +962,35 @@
     "E": "30000 Rs."
    },
    "correctAnswer": "D",
-   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Person",
+     "2018 (₹'000)",
+     "2019 (₹'000)",
+     "Both years"
+    ],
+    "rows": [
+     [
+      "Tarun",
+      "24",
+      "30",
+      "54"
+     ],
+     [
+      "Apurv",
+      "50",
+      "60",
+      "110"
+     ],
+     [
+      "Mayank",
+      "36",
+      "40",
+      "76"
+     ]
+    ]
+   },
+   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n📊 Bar graph: tax paid (in '000) by three people across two years.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required difference = ((50 + 60) – (30 + 40))\n×1000= 40000 Rs."
   },
   {
@@ -922,7 +1006,35 @@
     "E": "5 : 8\n1"
    },
    "correctAnswer": "C",
-   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Person",
+     "2018 (₹'000)",
+     "2019 (₹'000)",
+     "Both years"
+    ],
+    "rows": [
+     [
+      "Tarun",
+      "24",
+      "30",
+      "54"
+     ],
+     [
+      "Apurv",
+      "50",
+      "60",
+      "110"
+     ],
+     [
+      "Mayank",
+      "36",
+      "40",
+      "76"
+     ]
+    ]
+   },
+   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n📊 Bar graph: tax paid (in '000) by three people across two years.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required ratio = (24 + 36) : 50 = 6 : 5"
   },
   {
@@ -938,7 +1050,35 @@
     "E": "10000 Rs."
    },
    "correctAnswer": "B",
-   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Person",
+     "2018 (₹'000)",
+     "2019 (₹'000)",
+     "Both years"
+    ],
+    "rows": [
+     [
+      "Tarun",
+      "24",
+      "30",
+      "54"
+     ],
+     [
+      "Apurv",
+      "50",
+      "60",
+      "110"
+     ],
+     [
+      "Mayank",
+      "36",
+      "40",
+      "76"
+     ]
+    ]
+   },
+   "passage": "Direction (56 – 60): The bar graph given below\nshows the amount (in’000) of tax paid by three\ndifferent people. Read the data carefully and\nanswer the questions.\nTarun Apurv Mayank\n2018 2019\n\n📊 Bar graph: tax paid (in '000) by three people across two years.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total income of Mayank in 2018 = 36000 ×\n4\n= 144000 𝑅𝑠.\n1\n125\nIncome of Mayank in 2020 = 144000 × =\n100\n180000 Rs.\n10\nTotal tax paid by Mayank in 2020 = 36000 × =\n9\n40000 𝑅𝑠.\nSaving of Mayank in 2018 = (144000 – 36000) ×\n5\n= 90000 Rs.\n6\nSaving of Mayank in 2020 = (180000 – 40000)\n3\n× = 105000 Rs.\n4\nRequired difference = 105000 – 90000 = 15000"
   },
   {

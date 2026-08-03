@@ -722,7 +722,59 @@
     "E": "30%"
    },
    "correctAnswer": "D",
-   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Club",
+     "% of total people",
+     "% of total males",
+     "People",
+     "Males",
+     "Females"
+    ],
+    "rows": [
+     [
+      "A",
+      "24%",
+      "20%",
+      "600",
+      "240",
+      "360"
+     ],
+     [
+      "B",
+      "16%",
+      "15%",
+      "400",
+      "180",
+      "220"
+     ],
+     [
+      "C",
+      "18%",
+      "35%",
+      "450",
+      "420",
+      "30"
+     ],
+     [
+      "D",
+      "30%",
+      "12%",
+      "750",
+      "144",
+      "606"
+     ],
+     [
+      "E",
+      "12%",
+      "18%",
+      "300",
+      "216",
+      "84"
+     ]
+    ]
+   },
+   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n📊 Pie (i) total people (male + female) = 2500.  Pie (ii) total males = 1200.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total females visited club B and C = (220 + 30) =\n250\n250\nRequired percentage = ×100 = 33.33%\n750"
   },
   {
@@ -738,7 +790,59 @@
     "E": "25 : 72"
    },
    "correctAnswer": "B",
-   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Club",
+     "% of total people",
+     "% of total males",
+     "People",
+     "Males",
+     "Females"
+    ],
+    "rows": [
+     [
+      "A",
+      "24%",
+      "20%",
+      "600",
+      "240",
+      "360"
+     ],
+     [
+      "B",
+      "16%",
+      "15%",
+      "400",
+      "180",
+      "220"
+     ],
+     [
+      "C",
+      "18%",
+      "35%",
+      "450",
+      "420",
+      "30"
+     ],
+     [
+      "D",
+      "30%",
+      "12%",
+      "750",
+      "144",
+      "606"
+     ],
+     [
+      "E",
+      "12%",
+      "18%",
+      "300",
+      "216",
+      "84"
+     ]
+    ]
+   },
+   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n📊 Pie (i) total people (male + female) = 2500.  Pie (ii) total males = 1200.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "125\nTotal females visited club F = 84 × = 105\n100\n11\nTotal people visited club F = 144 × = 198\n9\nSo, Total males visited club F = 198 – 105 = 93\n93\nRequired ratio = = 31: 72"
   },
   {
@@ -754,7 +858,59 @@
     "E": "178"
    },
    "correctAnswer": "C",
-   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Club",
+     "% of total people",
+     "% of total males",
+     "People",
+     "Males",
+     "Females"
+    ],
+    "rows": [
+     [
+      "A",
+      "24%",
+      "20%",
+      "600",
+      "240",
+      "360"
+     ],
+     [
+      "B",
+      "16%",
+      "15%",
+      "400",
+      "180",
+      "220"
+     ],
+     [
+      "C",
+      "18%",
+      "35%",
+      "450",
+      "420",
+      "30"
+     ],
+     [
+      "D",
+      "30%",
+      "12%",
+      "750",
+      "144",
+      "606"
+     ],
+     [
+      "E",
+      "12%",
+      "18%",
+      "300",
+      "216",
+      "84"
+     ]
+    ]
+   },
+   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n📊 Pie (i) total people (male + female) = 2500.  Pie (ii) total males = 1200.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total number of females visited club X = 126 ×3−\n(220+84) = 74\n45\nTotal males visited club X = 240 × = 108\n100\nRequired difference = (360 +30) − (108 + 74) =\n208"
   },
   {
@@ -770,7 +926,59 @@
     "E": "156000"
    },
    "correctAnswer": "C",
-   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Club",
+     "% of total people",
+     "% of total males",
+     "People",
+     "Males",
+     "Females"
+    ],
+    "rows": [
+     [
+      "A",
+      "24%",
+      "20%",
+      "600",
+      "240",
+      "360"
+     ],
+     [
+      "B",
+      "16%",
+      "15%",
+      "400",
+      "180",
+      "220"
+     ],
+     [
+      "C",
+      "18%",
+      "35%",
+      "450",
+      "420",
+      "30"
+     ],
+     [
+      "D",
+      "30%",
+      "12%",
+      "750",
+      "144",
+      "606"
+     ],
+     [
+      "E",
+      "12%",
+      "18%",
+      "300",
+      "216",
+      "84"
+     ]
+    ]
+   },
+   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n📊 Pie (i) total people (male + female) = 2500.  Pie (ii) total males = 1200.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total revenue for club A by total males = 240\n×150 = 36000 𝑅𝑠\nTotal revenue for club B by total males = 180\n×200 = 36000 Rs\nTotal revenue for club E by total males = 216\n×250 = 54000 Rs\nRequired revenue = 36000 + 36000 + 54000 =\n126000 Rs"
   },
   {
@@ -786,7 +994,59 @@
     "E": "19%"
    },
    "correctAnswer": "E",
-   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Club",
+     "% of total people",
+     "% of total males",
+     "People",
+     "Males",
+     "Females"
+    ],
+    "rows": [
+     [
+      "A",
+      "24%",
+      "20%",
+      "600",
+      "240",
+      "360"
+     ],
+     [
+      "B",
+      "16%",
+      "15%",
+      "400",
+      "180",
+      "220"
+     ],
+     [
+      "C",
+      "18%",
+      "35%",
+      "450",
+      "420",
+      "30"
+     ],
+     [
+      "D",
+      "30%",
+      "12%",
+      "750",
+      "144",
+      "606"
+     ],
+     [
+      "E",
+      "12%",
+      "18%",
+      "300",
+      "216",
+      "84"
+     ]
+    ]
+   },
+   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n📊 Pie (i) total people (male + female) = 2500.  Pie (ii) total males = 1200.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total Females visited clubs D and E = 606 + 84 =\n690\nTotal females visited clubs A and B = 360 + 220 =\n580\n690−580\nRequired parentage = ×100 = 18.96 =\n580\n19%"
   },
   {
@@ -802,7 +1062,59 @@
     "E": "210"
    },
    "correctAnswer": "C",
-   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Club",
+     "% of total people",
+     "% of total males",
+     "People",
+     "Males",
+     "Females"
+    ],
+    "rows": [
+     [
+      "A",
+      "24%",
+      "20%",
+      "600",
+      "240",
+      "360"
+     ],
+     [
+      "B",
+      "16%",
+      "15%",
+      "400",
+      "180",
+      "220"
+     ],
+     [
+      "C",
+      "18%",
+      "35%",
+      "450",
+      "420",
+      "30"
+     ],
+     [
+      "D",
+      "30%",
+      "12%",
+      "750",
+      "144",
+      "606"
+     ],
+     [
+      "E",
+      "12%",
+      "18%",
+      "300",
+      "216",
+      "84"
+     ]
+    ]
+   },
+   "passage": "Direction (46 – 51): The pie chart (i) given below\nshows percentage distribution of total people\n(male + female) visited five different clubs and pie\nchart (ii) shows percentage distribution of total\nmale visited in these five clubs. Read the data\ncarefully and answer the questions given below.\n(i) Total people (male +\nfemale) = 2500\nA\n12%\n24%\nB\nC\n30%\n16%\nD\n18%\nE\n(ii) Total male =1200\nA\n18% 20%\nB\n12% C\n15%\nD\n35% E\n\n📊 Pie (i) total people (male + female) = 2500.  Pie (ii) total males = 1200.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total males whose age below 25 years in club C =\n3\n(420 – 20) × = 150\n8\nTotal males whose age below 25 years in club B =\n2\n(220 – 40) × = 120\n3\nRequired sum = 150 + 120 = 270\nSol (52 – 57):\nATQ,\n15x – 2y + y = 50\n15x – y = 50 …(i)\n16x + 9y = 154 ..(ii)\nSolving (i) and (ii)\nx = 4 and y = 10\nCities Males in Males in Females\nPrivate Public (private +\ncompany company public)\nA 15x – y = 10 55\n2y=60–20 =\n40\nB 16x = 64 16 108\nC 9y = 90 24 74\nD 84 21 85"
   },
   {

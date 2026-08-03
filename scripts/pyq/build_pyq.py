@@ -2,6 +2,7 @@
 import json, re, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from parse_pyq import linear_text, split_qa, parse_questions, parse_solutions, clean
+from chart_data import CHARTS
 
 P = 'client/src/data/pyq-source/'
 # The index is imported statically and holds metadata only — enough to render
@@ -113,7 +114,7 @@ def build(pid, name, year, shift, qpdf, spdf):
     # Sitting the paper one question at a time, an unspread Directions block left
     # every question after the first in an RC or DI set with no passage on screen.
     qs = spread_directions(qs)
-    return emit(qs, ss, sec, year)
+    return emit(qs, ss, sec, year, pid)
 
 
 def spread_directions(qs):
@@ -134,7 +135,7 @@ def spread_directions(qs):
     return qs
 
 
-def build_split(year):
+def build_split(year, pid=None):
     """2016-2019 ship one PDF per subject, each with its own Q1..Qn numbering,
     so the subject is known from the FILE and no detection is needed. Questions
     are renumbered into a single 1-100 paper in official section order."""
@@ -149,10 +150,22 @@ def build_split(year):
         for orig in sorted(sub_q):
             seq += 1
             qs[seq], ss[seq], sec[seq] = sub_q[orig], sub_s.get(orig, {}), section
-    return emit(qs, ss, sec, str(year))
+    return emit(qs, ss, sec, str(year), pid)
 
 
-def emit(qs, ss, sec, year):
+def chart_for(pid, n):
+    """The recovered chart governing question n of this paper, if any.
+
+    Each entry declares `span` — how many consecutive questions the set covers —
+    so the match is exact rather than inferred from a guessed window.
+    """
+    for (cid, q0), entry in CHARTS.items():
+        if cid == pid and q0 <= n < q0 + entry["span"]:
+            return entry
+    return None
+
+
+def emit(qs, ss, sec, year, pid=None):
     out, flagged, unanswerable = [], 0, []
     for n in sorted(qs):
         q = qs.get(n)
@@ -161,7 +174,10 @@ def emit(qs, ss, sec, year):
         d = q['directions'] or ''
         blob = d + ' ' + q['stem']
         needs_chart = bool(re.search(CHART, d, re.I))
-        if needs_chart:
+        # A hand-recovered chart (chart_data.py, verified by verify_charts.py)
+        # replaces the warning with the real table, making the set solvable.
+        recovered = chart_for(pid, n)
+        if needs_chart and not recovered:
             flagged += 1
         # Some questions genuinely have no stem — "choose the correct sentence"
         # and cloze-blank sets ARE just their options, with the instruction in
@@ -197,7 +213,14 @@ def emit(qs, ss, sec, year):
             'options': {L: q['options'].get(L, '') for L in 'ABCDE' if L in q['options']},
             'correctAnswer': ss.get(n, {}).get('ans'),
         }
-        if d:
+        if recovered:
+            # The chart is gone, but its numbers are back — hand the set a real
+            # table and say where it came from, since it is a reconstruction.
+            item['table'] = {'columns': recovered['columns'], 'rows': recovered['rows']}
+            item['passage'] = (d + '\n\n📊 ' + recovered['note'] +
+                               '\n(The original chart is an image in the source paper; these values were '
+                               'recovered from its own worked solutions and verified against them.)')
+        elif d:
             item['passage'] = d + ('\n\n⚠️ This set is based on a chart printed as an image in the source paper; '
                                    'the chart data is not included here.' if needs_chart else '')
         sol = ss.get(n, {}).get('sol', '')
@@ -215,7 +238,7 @@ def main():
     doc = json.load(open(OUT))
     papers = []
     jobs = ([(p, lambda p=p: build(*p)) for p in PAPERS] +
-            [((pid, name, year, shift), lambda y=year: build_split(int(y)))
+            [((pid, name, year, shift), lambda y=year, i=pid: build_split(int(y), i))
              for pid, name, year, shift in SPLIT_PAPERS])
     for meta, run in jobs:
         pid, name, year, shift = meta[0], meta[1], meta[2], meta[3]

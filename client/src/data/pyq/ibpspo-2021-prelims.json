@@ -881,7 +881,53 @@
     "E": "12.5%"
    },
    "correctAnswer": "B",
-   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Zone",
+     "% of total",
+     "Total students",
+     "Science",
+     "Commerce"
+    ],
+    "rows": [
+     [
+      "Northern",
+      "25%",
+      "1000",
+      "400",
+      "600"
+     ],
+     [
+      "Western",
+      "30%",
+      "1200",
+      "750",
+      "450"
+     ],
+     [
+      "Eastern",
+      "10%",
+      "400",
+      "310",
+      "90"
+     ],
+     [
+      "Central",
+      "20%",
+      "800",
+      "600",
+      "200"
+     ],
+     [
+      "Southern",
+      "15%",
+      "600",
+      "430",
+      "170"
+     ]
+    ]
+   },
+   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n📊 Pie: % distribution of total students (Science + Commerce) = 4000.  Table: students in Science.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Commerce students in Northern zone = (4000× )−400\n100\n= 600\n15\nTotal students in Southern zone = (4000× )\n100\n= 600\n600−600\nRequired % = ×100\n600\n= 0"
   },
   {
@@ -897,7 +943,53 @@
     "E": "690"
    },
    "correctAnswer": "E",
-   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Zone",
+     "% of total",
+     "Total students",
+     "Science",
+     "Commerce"
+    ],
+    "rows": [
+     [
+      "Northern",
+      "25%",
+      "1000",
+      "400",
+      "600"
+     ],
+     [
+      "Western",
+      "30%",
+      "1200",
+      "750",
+      "450"
+     ],
+     [
+      "Eastern",
+      "10%",
+      "400",
+      "310",
+      "90"
+     ],
+     [
+      "Central",
+      "20%",
+      "800",
+      "600",
+      "200"
+     ],
+     [
+      "Southern",
+      "15%",
+      "600",
+      "430",
+      "170"
+     ]
+    ]
+   },
+   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n📊 Pie: % distribution of total students (Science + Commerce) = 4000.  Table: students in Science.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Commerce students in Western zone = (4000× )−750\n100\n= 450\nScience students in Northern zone, Eastern zone and Southern zone =\n= 1140\nRequired difference = 1140 – 450\n= 690"
   },
   {
@@ -913,7 +1005,53 @@
     "E": "Rs.63000"
    },
    "correctAnswer": "A",
-   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Zone",
+     "% of total",
+     "Total students",
+     "Science",
+     "Commerce"
+    ],
+    "rows": [
+     [
+      "Northern",
+      "25%",
+      "1000",
+      "400",
+      "600"
+     ],
+     [
+      "Western",
+      "30%",
+      "1200",
+      "750",
+      "450"
+     ],
+     [
+      "Eastern",
+      "10%",
+      "400",
+      "310",
+      "90"
+     ],
+     [
+      "Central",
+      "20%",
+      "800",
+      "600",
+      "200"
+     ],
+     [
+      "Southern",
+      "15%",
+      "600",
+      "430",
+      "170"
+     ]
+    ]
+   },
+   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n📊 Pie: % distribution of total students (Science + Commerce) = 4000.  Table: students in Science.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "4000×20\nCommerce students in Central zone = −600\n100\n= 200\nTotal monthly library fee = 600×80+200×60\n= 48000+12000\n= 𝑅𝑠.60000"
   },
   {
@@ -929,7 +1067,53 @@
     "E": "1690"
    },
    "correctAnswer": "A",
-   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Zone",
+     "% of total",
+     "Total students",
+     "Science",
+     "Commerce"
+    ],
+    "rows": [
+     [
+      "Northern",
+      "25%",
+      "1000",
+      "400",
+      "600"
+     ],
+     [
+      "Western",
+      "30%",
+      "1200",
+      "750",
+      "450"
+     ],
+     [
+      "Eastern",
+      "10%",
+      "400",
+      "310",
+      "90"
+     ],
+     [
+      "Central",
+      "20%",
+      "800",
+      "600",
+      "200"
+     ],
+     [
+      "Southern",
+      "15%",
+      "600",
+      "430",
+      "170"
+     ]
+    ]
+   },
+   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n📊 Pie: % distribution of total students (Science + Commerce) = 4000.  Table: students in Science.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Arts students in Western zone = (4000× )×\n100 5\n= 1680\n15\nCommerce students in Southern zone = (4000× )−430\n100\n= 170\nRequired difference = 1680 – 170\n= 1510"
   },
   {
@@ -945,7 +1129,53 @@
     "E": "25 : 3"
    },
    "correctAnswer": "E",
-   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Zone",
+     "% of total",
+     "Total students",
+     "Science",
+     "Commerce"
+    ],
+    "rows": [
+     [
+      "Northern",
+      "25%",
+      "1000",
+      "400",
+      "600"
+     ],
+     [
+      "Western",
+      "30%",
+      "1200",
+      "750",
+      "450"
+     ],
+     [
+      "Eastern",
+      "10%",
+      "400",
+      "310",
+      "90"
+     ],
+     [
+      "Central",
+      "20%",
+      "800",
+      "600",
+      "200"
+     ],
+     [
+      "Southern",
+      "15%",
+      "600",
+      "430",
+      "170"
+     ]
+    ]
+   },
+   "passage": "Directions (56-60): Study the charts given below carefully and answer the following questions.\nPie chart shows the percentage distribution of total students (Science +Commerce) in 12th class of five\ndifferent Zones and table shows the number of students in same class in science of same zones.\nTotal students (Science + Commerce) = 4000\nWestern Northern\nZone Zone\n30% 25%\nEaster\nCentral\nZone\nZone\n10%\n20%\nSouthern\nZone\n15%\nZone Students in Science\nNorthern Zone 400\nEastern Zone 310\nSouthern Zone 430\nCentral Zone 600\nWestern Zone 750\n\n📊 Pie: % distribution of total students (Science + Commerce) = 4000.  Table: students in Science.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Commerce students in Eastern Zone = (4000× )−310\n100\n= 90\nRequired ratio = 750 : 90\n= 25 : 3\n400 + 310 + 430\n1 APP for Banking & SSC Preparation\nSolutions (61-65):\nTotal number of bag sold by A, B, C → 1080\nLet total bag sold by shop B be 4x.\nShop A sold → 5x (paper + fabric) bag.\nShop B sold equal no. of paper and fabric bag =\nNo. of paper bag sold by shop B = 2x\nNo. of fabric bag sold by shop B = 2x.\n2𝑥\nNo. of fabric bag sold by A = = x\n2\nNumber of fabric bag sold by C = 0.5x\n50\nNumber of paper bag sold by C = 𝑥 × = 0.5𝑥\n100\nATQ.\n4𝑥 +𝑥+2𝑥 +2𝑥 +0.5𝑥+0.5𝑥 = 1080\n𝑥 = 108\nShop Paper Fabric Total\nA 432 108 540\nB 216 216 432\nC 54 54 108\nTotal 702 378 1080"
   },
   {

@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import mockTestData from "../data/ibpspo-mock-test.json";
 import pyqData from "../data/ibpspo-pyq.json";
-import { ENGLISH_RULES, QUANT_FORMULAS } from "../data/ibpspo-formulas";
+import { ENGLISH_RULES, QUANT_FORMULAS, REASONING_RULES } from "../data/ibpspo-formulas";
 import { loadPaperQuestions } from "../data/pyqLoader";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
@@ -885,6 +885,21 @@ export default function IbpsPoPrep() {
     });
   };
 
+  // An attempt lives entirely in component state until it is paused or
+  // submitted, so a stray back-gesture, tab close or refresh silently threw
+  // away a paper someone might be 40 minutes into. The browser's own guard is
+  // the only thing that can interrupt a navigation in time.
+  useEffect(() => {
+    if (!examStarted || examSubmitted) return undefined;
+    const warn = (e) => {
+      e.preventDefault();
+      e.returnValue = ""; // Chrome requires this; the text itself is not shown
+      return "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [examStarted, examSubmitted]);
+
   // Sectional countdown — 20 minutes per section, auto-advancing on expiry
   useEffect(() => {
     if (examStarted && !examSubmitted) {
@@ -1260,7 +1275,6 @@ export default function IbpsPoPrep() {
       (sum, q) => sum + (typeof q.marks === "number" ? q.marks : 1.0), 0
     );
     const passThreshold = marksAvailable * 0.55;
-    const cutoffPrediction = score >= passThreshold ? "Likely Qualified" : score >= passThreshold - 2 ? "Likely Borderline" : "Likely Not Qualified";
 
     // Section-wise breakdown — IBPS applies sectional cut-offs, so an overall
     // score alone hides the section that actually failed.
@@ -1284,9 +1298,24 @@ export default function IbpsPoPrep() {
       };
     }).filter((s) => s.total > 0);
 
+    // IBPS eliminates on sectional cut-offs FIRST. Judging on the total alone
+    // told someone with a strong overall score but a failed Quant section that
+    // they had "Likely Qualified" — the one verdict the real exam would not give.
+    const failedSections = sectionwise.filter(
+      (s) => SECTIONAL_CUTOFF_ESTIMATE[s.name] != null && s.score < SECTIONAL_CUTOFF_ESTIMATE[s.name],
+    );
+    const cutoffPrediction = failedSections.length
+      ? `Below cut-off in ${failedSections.map((s) => s.name.split(" ")[0]).join(", ")}`
+      : score >= passThreshold
+        ? "Likely Qualified"
+        : score >= passThreshold - 2
+          ? "Likely Borderline"
+          : "Likely Not Qualified";
+
     const resultsObj = {
       score,
       sectionwise,
+      failedSections: failedSections.map((s) => s.name),
       correct,
       wrong,
       skipped: examQuestions.length - totalAttempted,
@@ -1948,11 +1977,23 @@ export default function IbpsPoPrep() {
                     <button
                       onClick={() => {
                         const last = sectionIdx === examPlan.length - 1;
+                        // Say what is actually being left behind. "This cannot be
+                        // undone" does not tell you that 12 questions in the
+                        // section you are closing are still blank.
+                        const inSec = examQuestions.slice(sectionBounds.first, sectionBounds.last + 1);
+                        const blank = inSec.filter((q) => examAnswers[q.id] === undefined).length;
+                        const flagged = inSec.filter((q) => markedReview.has(q.id)).length;
+                        const tail = [
+                          blank ? `${blank} unanswered` : null,
+                          flagged ? `${flagged} still marked for review` : null,
+                        ].filter(Boolean).join(" and ");
                         confirm({
                           title: last ? "Submit the whole test now?" : `Move on to ${examSectionNames[sectionIdx + 1]}?`,
-                          message: last
-                            ? "This cannot be undone."
-                            : `You will not be able to return to ${examSection}.`,
+                          message:
+                            (tail ? `${examSection} has ${tail}. ` : "") +
+                            (last
+                              ? "This cannot be undone."
+                              : `You will not be able to return to ${examSection}.`),
                           confirmLabel: last ? "Submit" : "Next Section",
                           onConfirm: advanceSection,
                         });
@@ -2256,6 +2297,30 @@ export default function IbpsPoPrep() {
                         <span className="text-red-500">✗ {sec.wrong}</span>
                         <span>— {sec.skipped} skipped</span>
                       </div>
+                      {/* IBPS eliminates on SECTIONAL cut-offs — a strong total
+                          with one section below its cut-off still fails. The
+                          estimates existed only on the Pattern tab, where they
+                          could not be compared against an actual score. */}
+                      {(() => {
+                        const cut = SECTIONAL_CUTOFF_ESTIMATE[sec.name];
+                        if (cut == null) return null;
+                        const clear = sec.score >= cut;
+                        const gap = Math.abs(sec.score - cut).toFixed(2);
+                        return (
+                          <div
+                            className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-[10px] font-bold ${
+                              clear
+                                ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300"
+                                : "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300"
+                            }`}
+                          >
+                            <span>{clear ? "✓ Above sectional cut-off" : "✗ Below sectional cut-off"}</span>
+                            <span className="font-mono">
+                              {clear ? `+${gap}` : `−${gap}`} vs ~{cut.toFixed(2)}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
                   );
                 })}
@@ -2411,13 +2476,14 @@ export default function IbpsPoPrep() {
         <div className="space-y-6 max-w-5xl mx-auto">
           <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl">
             {[
-              { id: "english", label: `📘 English (${ENGLISH_RULES.reduce((n, g) => n + g.rows.length, 0)} rules)` },
-              { id: "quant", label: `🧮 Quant (${QUANT_FORMULAS.reduce((n, g) => n + g.items.length, 0)} formulas)` },
+              { id: "english", label: `📘 English (${ENGLISH_RULES.reduce((n, g) => n + g.rows.length, 0)})` },
+              { id: "quant", label: `🧮 Quant (${QUANT_FORMULAS.reduce((n, g) => n + g.items.length, 0)})` },
+              { id: "reasoning", label: `🧩 Reasoning (${REASONING_RULES.reduce((n, g) => n + g.items.length, 0)})` },
             ].map((t) => (
               <button
                 key={t.id}
                 onClick={() => setFormulaTab(t.id)}
-                className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${
+                className={`flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all whitespace-nowrap ${
                   formulaTab === t.id
                     ? "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-sm"
                     : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
@@ -2437,9 +2503,25 @@ export default function IbpsPoPrep() {
                 </p>
               </div>
               {ENGLISH_RULES.map((g) => (
-                <div key={g.group} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                  <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+                <div
+                  key={g.group}
+                  className={`glass-card rounded-3xl border overflow-hidden ${
+                    g.important
+                      ? "border-amber-400 dark:border-amber-500 ring-1 ring-amber-400/30"
+                      : "border-slate-200 dark:border-slate-800"
+                  }`}
+                >
+                  <div className={`px-5 py-3 border-b flex items-center gap-2 ${
+                    g.important
+                      ? "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                      : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
+                  }`}>
                     <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">{g.group}</h3>
+                    {g.important && (
+                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500 text-white uppercase tracking-wider">
+                        ★ Important
+                      </span>
+                    )}
                   </div>
                   {/* Four columns is too wide for a phone, so the table scrolls
                       inside its own box rather than the page scrolling sideways. */}
@@ -2470,19 +2552,43 @@ export default function IbpsPoPrep() {
             </div>
           )}
 
-          {formulaTab === "quant" && (
+          {/* Quant and Reasoning share an identical {group, items:[{name, formula,
+              note}]} shape, so one renderer covers both rather than a copy. */}
+          {(formulaTab === "quant" || formulaTab === "reasoning") && (
             <div className="space-y-6">
               <div className="text-center space-y-1">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Quantitative Aptitude</h2>
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+                  {formulaTab === "quant" ? "Quantitative Aptitude" : "Reasoning Ability"}
+                </h2>
                 <p className="text-sm text-slate-500">
-                  Every formula the {SECTION_PLAN[1].name} section can ask for, grouped by topic.
+                  {formulaTab === "quant"
+                    ? `Every formula the ${SECTION_PLAN[1].name} section can ask for, grouped by topic.`
+                    : "Reasoning has no formulas as such, but it has hard rules and fixed conventions that decide marks."}
                 </p>
               </div>
               <div className="grid md:grid-cols-2 gap-4 items-start">
-                {QUANT_FORMULAS.map((g) => (
-                  <div key={g.group} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                    <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">{g.group}</h3>
+                {(formulaTab === "quant" ? QUANT_FORMULAS : REASONING_RULES).map((g) => (
+                  <div
+                    key={g.group}
+                    className={`glass-card rounded-3xl border overflow-hidden ${
+                      g.important
+                        ? "border-amber-400 dark:border-amber-500 ring-1 ring-amber-400/30"
+                        : "border-slate-200 dark:border-slate-800"
+                    }`}
+                  >
+                    <div className={`px-5 py-3 border-b flex items-center justify-between gap-2 ${
+                      g.important
+                        ? "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
+                        : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
+                    }`}>
+                      <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        {g.group}
+                        {g.important && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500 text-white uppercase tracking-wider whitespace-nowrap">
+                            ★ Important
+                          </span>
+                        )}
+                      </h3>
                       <span className="text-[10px] text-slate-400 font-semibold">{g.items.length}</span>
                     </div>
                     <div className="divide-y divide-slate-100 dark:divide-slate-800/70">

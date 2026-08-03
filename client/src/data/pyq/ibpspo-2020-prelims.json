@@ -490,7 +490,47 @@
     "E": "96"
    },
    "correctAnswer": "B",
-   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Park",
+     "Boys + Girls",
+     "Girls",
+     "Boys"
+    ],
+    "rows": [
+     [
+      "A",
+      "64",
+      "30",
+      "34"
+     ],
+     [
+      "B",
+      "72",
+      "32",
+      "40"
+     ],
+     [
+      "C",
+      "76",
+      "48",
+      "28"
+     ],
+     [
+      "D",
+      "68",
+      "44",
+      "24"
+     ],
+     [
+      "E",
+      "54",
+      "36",
+      "18"
+     ]
+    ]
+   },
+   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n📊 Line graph: people (Boys + Girls) visiting five parks, and the girls among them.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required sum = (64 – 30) + (72 – 32) + (76 – 48)\n= 34 + 40 + 28 = 102"
   },
   {
@@ -506,7 +546,47 @@
     "E": "102"
    },
    "correctAnswer": "A",
-   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Park",
+     "Boys + Girls",
+     "Girls",
+     "Boys"
+    ],
+    "rows": [
+     [
+      "A",
+      "64",
+      "30",
+      "34"
+     ],
+     [
+      "B",
+      "72",
+      "32",
+      "40"
+     ],
+     [
+      "C",
+      "76",
+      "48",
+      "28"
+     ],
+     [
+      "D",
+      "68",
+      "44",
+      "24"
+     ],
+     [
+      "E",
+      "54",
+      "36",
+      "18"
+     ]
+    ]
+   },
+   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n📊 Line graph: people (Boys + Girls) visiting five parks, and the girls among them.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Total people visited in park F = ( )\nSo, number of boys visited in park F ="
   },
   {
@@ -522,7 +602,47 @@
     "E": "51%"
    },
    "correctAnswer": "C",
-   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Park",
+     "Boys + Girls",
+     "Girls",
+     "Boys"
+    ],
+    "rows": [
+     [
+      "A",
+      "64",
+      "30",
+      "34"
+     ],
+     [
+      "B",
+      "72",
+      "32",
+      "40"
+     ],
+     [
+      "C",
+      "76",
+      "48",
+      "28"
+     ],
+     [
+      "D",
+      "68",
+      "44",
+      "24"
+     ],
+     [
+      "E",
+      "54",
+      "36",
+      "18"
+     ]
+    ]
+   },
+   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n📊 Line graph: people (Boys + Girls) visiting five parks, and the girls among them.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required percentage ="
   },
   {
@@ -538,7 +658,47 @@
     "E": "1284 Rs."
    },
    "correctAnswer": "B",
-   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Park",
+     "Boys + Girls",
+     "Girls",
+     "Boys"
+    ],
+    "rows": [
+     [
+      "A",
+      "64",
+      "30",
+      "34"
+     ],
+     [
+      "B",
+      "72",
+      "32",
+      "40"
+     ],
+     [
+      "C",
+      "76",
+      "48",
+      "28"
+     ],
+     [
+      "D",
+      "68",
+      "44",
+      "24"
+     ],
+     [
+      "E",
+      "54",
+      "36",
+      "18"
+     ]
+    ]
+   },
+   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n📊 Line graph: people (Boys + Girls) visiting five parks, and the girls among them.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required revenue = 24\nthat ethane is used as a petrochemical feedstock,\nsystem. Hence, option (c) i.e. “recovered” becomes\nsuitable word for the given blank is “control. Hence,"
   },
   {
@@ -554,7 +714,47 @@
     "E": "66%\nC together?\n8 more than total number of people visited in park C\nF, th are girls, then find number of boys visited in\nspect to the total number of people (Boys + Girls)\n+ Girls) who visited the park, then find the total\nwhat percent more than total people (Boys + Girls)"
    },
    "correctAnswer": "D",
-   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "table": {
+    "columns": [
+     "Park",
+     "Boys + Girls",
+     "Girls",
+     "Boys"
+    ],
+    "rows": [
+     [
+      "A",
+      "64",
+      "30",
+      "34"
+     ],
+     [
+      "B",
+      "72",
+      "32",
+      "40"
+     ],
+     [
+      "C",
+      "76",
+      "48",
+      "28"
+     ],
+     [
+      "D",
+      "68",
+      "44",
+      "24"
+     ],
+     [
+      "E",
+      "54",
+      "36",
+      "18"
+     ]
+    ]
+   },
+   "passage": "Direction (31 – 35): The Line graph shows the number of people\nD & E) different parks and the number of girls visited out of tota\nRead the data carefully and answer the questions.\n80\ne 70\nl\np\no\ne60\np\nf\no50\nr\ne\nb40\nm\nu\nN30\n20\nA B C\nParks\n(Boys + Girls) (Girls)\nw\n(Boys + girls) visited five (A, B, C,\nal people visited these five parks.\nD E\no. 1 APP for Banking & SSC Preparation\n\n📊 Line graph: people (Boys + Girls) visiting five parks, and the girls among them.\n(The original chart is an image in the source paper; these values were recovered from its own worked solutions and verified against them.)",
    "explanation": "Required percentage =\n= 33%"
   },
   {
