@@ -1,4 +1,5 @@
 import random
+import re
 import httpx
 from datetime import datetime, timezone, timedelta, date
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
@@ -195,13 +196,18 @@ IBPS_TOPIC_POOL = {
         "Arithmetic: percentage, profit and loss, simple and compound interest",
         "Arithmetic: time and work, time-speed-distance, boats, pipes, mixtures",
     ],
+    # PO-level Reasoning is the hardest section of the paper: a puzzle carries
+    # TWO or THREE variables at once (person + floor + colour, not just seats),
+    # and a set is solved as one grid rather than question by question. Asking
+    # for "a linear seating arrangement" produced 5-person, one-variable sets
+    # that sit well below the real paper.
     "Reasoning Ability": [
-        "Linear seating arrangement",
-        "Circular seating arrangement facing the centre",
-        "Floor or box based puzzle",
-        "Syllogism including 'Only a few' and possibility conclusions",
-        "Inequalities, direct and coded",
-        "Blood relations, direction sense, order and ranking, coding-decoding",
+        "Linear seating: 8 persons in two parallel rows facing each other, plus a second variable",
+        "Circular or square seating: 8 persons, mixed facing (some inward, some outward), plus one attribute",
+        "Floor-and-flat puzzle: 7-8 persons across floors with a second variable such as colour or salary",
+        "Month/date scheduling puzzle: 8 persons across months and two dates each",
+        "Syllogism with 'Only a few', possibility conclusions and the either-or case",
+        "Coded inequalities, coded blood relations, and direction sense with a distance calculation",
     ],
 }
 
@@ -223,6 +229,141 @@ def _normalise_stem(text: str) -> str:
 def _option_signature(q: dict) -> str:
     opts = q.get("options") or {}
     return "|".join(sorted(str(v).strip().lower() for v in opts.values() if v))
+
+
+_EXPR_OK = re.compile(r"^[\d\s+\-*/×÷^().%]+$")
+# √ appears constantly in Approximation. It is rewritten to **0.5 before parsing
+# so the same AST walker handles it, rather than allowing function calls.
+_SQRT_CALL = re.compile(r"(?:√|sqrt)\s*\(([^()]*)\)", re.I)
+_SQRT_BARE = re.compile(r"(?:√|sqrt)\s*(\d+(?:\.\d+)?)", re.I)
+# Powers appear constantly in Approximation ("the value of (2.001)^4"), so the
+# evaluator must understand them — but an unbounded exponent from model output
+# is a denial-of-service waiting to happen, so bound both operands. 20 is an
+# ordinary compound-interest exponent, so a cap of 12 silently skipped real
+# questions; the base bound is what actually keeps the work small.
+_MAX_EXPONENT = 64
+_MAX_POW_BASE = 10 ** 6
+
+
+def _eval_arithmetic(expr: str):
+    """Value of a plain arithmetic expression, or None if it is not one.
+
+    Evaluated through the AST with only numbers and the four operators allowed —
+    never eval() on model output.
+    """
+    import ast as _ast
+    from decimal import Decimal as _D
+
+    e = (expr or "").replace("×", "*").replace("÷", "/").strip().rstrip("=?. ")
+    # Rewrite roots first — √(81.6) and √81.6 both become (81.6)**0.5 — so the
+    # character whitelist below never has to admit √ itself.
+    e = _SQRT_CALL.sub(r"((\1)**0.5)", e)
+    e = _SQRT_BARE.sub(r"((\1)**0.5)", e)
+    if not e or not _EXPR_OK.match(e) or not re.search(r"[+\-*/^]|\*\*", e):
+        return None
+    e = e.replace("^", "**")   # exam notation -> Python
+    try:
+        node = _ast.parse(e, mode="eval").body
+    except SyntaxError:
+        return None
+
+    def walk(n):
+        if isinstance(n, _ast.Constant) and isinstance(n.value, (int, float)):
+            return _D(str(n.value))
+        if isinstance(n, _ast.UnaryOp) and isinstance(n.op, (_ast.UAdd, _ast.USub)):
+            v = walk(n.operand)
+            return v if isinstance(n.op, _ast.UAdd) else -v
+        if isinstance(n, _ast.BinOp):
+            a, b = walk(n.left), walk(n.right)
+            if isinstance(n.op, _ast.Add):
+                return a + b
+            if isinstance(n.op, _ast.Sub):
+                return a - b
+            if isinstance(n.op, _ast.Mult):
+                return a * b
+            if isinstance(n.op, _ast.Div):
+                return a / b if b != 0 else None
+            if isinstance(n.op, _ast.Pow):
+                if not (0 <= b <= _MAX_EXPONENT) or abs(a) > _MAX_POW_BASE:
+                    raise ValueError("power out of range")
+                if b == _D("0.5"):                       # from a rewritten √
+                    return a.sqrt() if a >= 0 else None
+                if b != b.to_integral_value():
+                    raise ValueError("non-integer exponent")
+                return a ** int(b)
+        raise ValueError("unsupported")
+
+    try:
+        return walk(node)
+    except Exception:                                    # noqa: BLE001
+        return None
+
+
+def _arithmetic_answer_is_wrong(q: dict) -> bool:
+    """True when a stem states a plain sum whose real value contradicts the key.
+
+    "The value of 0.999 + 0.0009 is closest to" came back with the sum worked as
+    1.0009 (it is 0.9999) and the key pointing at 1.001, so a candidate choosing
+    the correct option was marked wrong. Whenever the stem contains an expression
+    we can evaluate ourselves and the options are numeric, the model's answer is
+    checkable rather than trusted.
+    """
+    from decimal import Decimal as _D, InvalidOperation as _Inv
+
+    # √ and "sqrt" must be inside the captured class or "value of √(81.6)"
+    # captures nothing and the question sails through unchecked.
+    m = re.search(r"(?:value of|simplify|solve|find)\s*[:\-]?\s*((?:√|sqrt|[\d\s+\-*/×÷^().])+)",
+                  q.get("question", ""), re.I)
+    if not m:
+        return False
+    val = _eval_arithmetic(m.group(1))
+    if val is None:
+        return False
+
+    nums = {}
+    for k, v in (q.get("options") or {}).items():
+        t = re.sub(r"[^\d.\-]", "", str(v))
+        try:
+            nums[k] = _D(t)
+        except (_Inv, ValueError):
+            return False                                  # non-numeric options: cannot judge
+    if len(nums) < 5:
+        return False
+    closest = min(nums, key=lambda k: abs(val - nums[k]))
+
+    # Even the nearest option can be nowhere near the answer — "(1.01)^20"
+    # (= 1.22) shipped with options clustered at 2.08-2.2, every one of them
+    # ~70% out. The key is then irrelevant: the option set belongs to a
+    # different question, so the whole item is unusable.
+    gap = abs(val - nums[closest])
+    scale = max(abs(val), _D("1"))
+    if gap / scale > _D("0.2"):
+        return True
+
+    return q.get("correctAnswer") != closest
+
+
+# The model sometimes works a question out, notices its answer is not among the
+# options, and says so in the explanation instead of fixing the question — e.g.
+# "However, this is not an option. We made a mistake in our calculation. The
+# correct difference is 1200, but we wrote 3600 as the correct answer." That
+# confession is a precise, cheap signal for a broken item, and unlike the
+# arithmetic checker it works on word problems too.
+_SELF_CONTRADICTION = re.compile(
+    r"not\s+(?:an\s+)?option"
+    r"|made\s+a\s+mistake"
+    r"|(?:we|i)\s+(?:wrongly|incorrectly|mistakenly)"
+    r"|but\s+we\s+wrote"
+    r"|none\s+of\s+the\s+(?:given\s+)?options?\s+match"
+    r"|option\s+is\s+(?:in)?correct.{0,20}however"
+    r"|there\s+(?:is|seems to be)\s+(?:an?\s+)?(?:error|mistake)"
+    r"|question\s+(?:is|seems|appears)\s+(?:to\s+be\s+)?(?:incorrect|wrong|flawed)",
+    re.I,
+)
+
+
+def _explanation_admits_error(q: dict) -> bool:
+    return bool(_SELF_CONTRADICTION.search(q.get("explanation") or ""))
 
 
 def _load_fallback_bank() -> list:
@@ -294,7 +435,27 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
         "always be the same letter across the set.\n"
         "5. Every question must be solvable purely from what you provide, and the explanation must "
         "actually derive the stated answer.\n"
-        "6. Return valid JSON and nothing else."
+        "6. SOLVE each question before you write its options. Work the arithmetic through, then "
+        "make the computed value one of the five options and point correctAnswer at it. A question "
+        "whose worked answer is not among its own options is worthless — reject and rewrite it.\n"
+        "7. State EVERY quantity the question needs. A rate with no principal, a ratio with no "
+        "total, a percentage with no base — these are unanswerable. Re-read your stem and confirm "
+        "each number the explanation uses actually appears in it.\n"
+        "8. All five options must be distinct, plausible and in the same unit and magnitude as the "
+        "answer. Never mix, say, 35% with a set of options clustered at 5-20%.\n"
+        "9. DIFFICULTY FLOOR — this is an SBI/IBPS PO paper, not a school test. Every question must "
+        "take a prepared candidate 45-90 seconds and at least THREE chained steps. Concretely:\n"
+        "   • Arithmetic: never a single formula. 'Find 20% of 400' or 'find the SI on 5000 at 8% for "
+        "5 years' are far below the bar. Instead: a marked price WITH a discount AND a markup; a ratio "
+        "some years ago PLUS a relation to a third person; successive percentage deductions where each "
+        "applies to what remains.\n"
+        "   • Reasoning: a puzzle must carry TWO or THREE variables at once (person + floor + colour), "
+        "with 7-8 entities, and the clues must require elimination rather than direct reading. A "
+        "5-person single-variable arrangement is too easy.\n"
+        "   • English: an RC question must need inference across sentences, not a phrase lookup.\n"
+        "   Mark 'difficulty' honestly as Moderate or Hard — if a question is genuinely Easy by PO "
+        "standards, do not produce it at all.\n"
+        "10. Return valid JSON and nothing else."
     )
 
     async def _chunk(section: str, topic_focus: str, n: int) -> list:
@@ -340,7 +501,27 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
             opts = q.get("options") or {}
             if q.get("correctAnswer") not in opts:
                 continue
-            if len([v for v in opts.values() if v]) < 4:
+            # Exactly five distinct, non-blank options. Accepting four let
+            # papers through with a missing choice, and duplicated options make
+            # more than one answer defensible.
+            vals = [str(v).strip() for v in opts.values() if str(v).strip()]
+            if len(vals) != 5 or len({v.lower() for v in vals}) != 5:
+                continue
+            # An unfinished stem — "find the profit%" with the principal never
+            # stated — is unanswerable. A stem carrying no digits at all in a
+            # numeric section is the cheap, reliable signal for that.
+            if section != "English Language" and not q.get("passage") and not q.get("table"):
+                if not re.search(r"\d", q.get("question", "")):
+                    continue
+            # Where the stem states an expression we can evaluate, check the key
+            # rather than trust it — this is the only class of question whose
+            # correctness is decidable server-side, and it is where the model
+            # most often slips.
+            if _arithmetic_answer_is_wrong(q):
+                continue
+            # Catches word problems the arithmetic checker cannot judge, whenever
+            # the model has already told us the item is broken.
+            if _explanation_admits_error(q):
                 continue
             sig = _option_signature(q)
             if stem in seen_stems or (sig and sig in seen_opts):
@@ -363,6 +544,22 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
     questions = []
     for section, n, per, neg in section_targets:
         got = by_section.get(section, [])[:n]
+
+        # Quantitative Aptitude is generated by the SERVER, not the model.
+        # Asking an LLM for arithmetic produced questions whose key contradicted
+        # their own working often enough to make the mock untrustworthy — real
+        # reports included "0.999 + 0.0009" keyed to 1.001, "(2.001)^4" keyed to
+        # 18, and three Simple Interest items whose correct answer was not among
+        # the options at all. Here the numbers are chosen and the answer computed
+        # in Python, so the key cannot be wrong. Model output is kept only to top
+        # up whatever the generators do not cover.
+        if section == "Quantitative Aptitude":
+            from utils.quant_generator import generate as _gen_quant
+            generated = _gen_quant(n)
+            keep = [q for q in got
+                    if _normalise_stem(q.get("question", "")) not in
+                    {_normalise_stem(g["question"]) for g in generated}]
+            got = (generated + keep)[:n]
         if len(got) < n:
             pool = [q for q in bank_by_section.get(section, [])
                     if _normalise_stem(q.get("question", "")) not in seen_stems]
@@ -370,6 +567,20 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
             for q in pool[: n - len(got)]:
                 seen_stems.add(_normalise_stem(q.get("question", "")))
                 got.append(q)
+
+        # Keep a SET together. Questions are generated one (section, topic) chunk
+        # at a time and topped up from the bank afterwards, so a Data
+        # Interpretation set could end up split — Q4 on the chart, Q5 an
+        # unrelated arithmetic sum, Q6 back on the chart. In the real paper a DI
+        # set is always consecutive, and the shared table only sits on its first
+        # question, so a split set is unanswerable as well as jarring.
+        # Sort by topic, and inside a topic put the passage/table-bearing
+        # question first. Python's sort is stable, so questions with neither key
+        # keep the order the model produced them in.
+        got.sort(key=lambda q: (
+            (q.get("topic") or "").strip().lower(),
+            0 if (q.get("passage") or q.get("table")) else 1,
+        ))
 
         for idx, q in enumerate(got, start=1):
             q["section"] = section

@@ -994,8 +994,29 @@ export default function IbpsPoPrep() {
 
   // Questions must be grouped by section in the official order, whatever order
   // they arrive in, because sectional timing walks the list front to back.
+  // Within a section, keep a SET together — a Data Interpretation or Reading
+  // Comprehension set must be consecutive, because its table/passage lives only
+  // on the first question. Tests saved before the server-side fix landed still
+  // carry interleaved sets, so this repairs them on load too. Stable sort, so
+  // anything without a topic keeps its original order.
+  const groupSets = (qs) => {
+    const order = new Map();
+    qs.forEach((q, i) => {
+      const key = (q.topic || "").trim().toLowerCase();
+      if (!order.has(key)) order.set(key, i); // first appearance wins
+    });
+    return [...qs].sort((a, b) => {
+      const ka = (a.topic || "").trim().toLowerCase();
+      const kb = (b.topic || "").trim().toLowerCase();
+      if (ka !== kb) return order.get(ka) - order.get(kb);
+      const pa = a.passage || a.table ? 0 : 1;
+      const pb = b.passage || b.table ? 0 : 1;
+      return pa - pb;
+    });
+  };
+
   const orderBySection = (questions) =>
-    SECTION_NAMES.flatMap((name) => questions.filter((q) => q.section === name)).concat(
+    SECTION_NAMES.flatMap((name) => groupSets(questions.filter((q) => q.section === name))).concat(
       questions.filter((q) => !SECTION_NAMES.includes(q.section))
     );
 

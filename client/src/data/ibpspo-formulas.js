@@ -300,6 +300,11 @@ export const QUANT_FORMULAS = [
       { name: "Half-yearly compounding", formula: "A = P(1 + R/200)²ᵀ", note: "Quarterly → R/400 and 4T" },
       { name: "CI − SI for 2 years", formula: "P(R/100)²" },
       { name: "CI − SI for 3 years", formula: "P(R/100)² × (300 + R)/100" },
+      {
+        name: "⚠️ CI − SI does NOT generalise to P(R/100)ⁿ",
+        formula: "n = 1 → 0 · n = 2 → P(R/100)² · n = 3 → P(R/100)²(300 + R)/100",
+        note: "Raising the power is the natural guess and it is wrong. At P = 10,000 and R = 10%, the true 3-year difference is 310 but P(R/100)³ gives 10 — and the gap widens with n, because the real difference GROWS while that expression shrinks. Only the 2-year case is a clean power. Learn the 2- and 3-year forms; beyond that, compute the amount and subtract.",
+      },
       { name: "Effective 2-year CI rate", formula: "2R + R²/100 %", note: "Turns a CI sum into a percentage sum" },
       { name: "Doubling under CI", formula: "Rate × Time ≈ 72 (rule of 72)" },
     ],
