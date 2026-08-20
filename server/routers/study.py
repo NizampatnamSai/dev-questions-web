@@ -366,6 +366,40 @@ def _explanation_admits_error(q: dict) -> bool:
     return bool(_SELF_CONTRADICTION.search(q.get("explanation") or ""))
 
 
+# "sqrt(9^2 + 3^2) = sqrt(90) = 9.49, which is approximately 7.05 km" — the
+# working is right, the stated answer is not. Catching this needs no
+# understanding of the question: whatever the explanation COMPUTES has to match
+# the option that was keyed.
+_COMPUTED = re.compile(r"=\s*(-?\d+(?:\.\d+)?)\s*(?:,|\.|\s|$)")
+
+
+def _explanation_contradicts_key(q: dict) -> bool:
+    expl = q.get("explanation") or ""
+    opts = q.get("options") or {}
+    key = q.get("correctAnswer")
+    if key not in opts:
+        return False
+    keyed = re.sub(r"[^\d.\-]", "", str(opts[key]))
+    if not re.fullmatch(r"-?\d+(\.\d+)?", keyed or ""):
+        return False                                  # non-numeric option: cannot judge
+    values = [v for v in _COMPUTED.findall(expl)]
+    if not values:
+        return False
+    from decimal import Decimal as _D, InvalidOperation as _Inv
+    try:
+        target = _D(keyed)
+        nums = [_D(v) for v in values]
+    except (_Inv, ValueError):
+        return False
+    # The keyed value must appear among the computed results, or be within 2% of
+    # the LAST one (a legitimate rounding step). Otherwise the explanation is
+    # arriving at one number and the key is claiming another.
+    if any(abs(n - target) <= abs(target) * _D("0.02") for n in nums):
+        return False
+    last = nums[-1]
+    return not (last == 0 and target == 0)
+
+
 def _load_fallback_bank() -> list:
     import json as _json
     import os as _os
@@ -522,6 +556,11 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
             # Catches word problems the arithmetic checker cannot judge, whenever
             # the model has already told us the item is broken.
             if _explanation_admits_error(q):
+                continue
+            # Working that lands on a different number than the key — the failure
+            # mode behind a Direction Sense item that computed sqrt(90) = 9.49
+            # and then keyed 7.05.
+            if _explanation_contradicts_key(q):
                 continue
             sig = _option_signature(q)
             if stem in seen_stems or (sig and sig in seen_opts):

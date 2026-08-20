@@ -270,18 +270,33 @@ const DIFF_STYLES = {
   Tricky: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
 };
 
-function ScoreRing({ score, size = 80 }) {
-  const r = (size / 2) - 8;
+// `max` matters: this was hardcoded to 15 (it began life as a study-topic
+// difficulty dial) and then reused for a mock score out of 100, so every result
+// drew a full green ring — 17.7 came out as 118% of the circle.
+// The label uses fill, not a Tailwind text-* class: those set CSS `color`, which
+// an SVG <text> ignores, so the number fell back to black on a dark background.
+function ScoreRing({ score, max = 100, size = 80, label }) {
+  const r = size / 2 - 8;
   const circ = 2 * Math.PI * r;
-  const color = score >= 8 ? "#22c55e" : score >= 6 ? "#3b82f6" : score >= 4 ? "#eab308" : "#ef4444";
+  const pct = Math.max(0, Math.min(1, max > 0 ? score / max : 0));
+  const color = pct >= 0.6 ? "#22c55e" : pct >= 0.45 ? "#3b82f6" : pct >= 0.3 ? "#eab308" : "#ef4444";
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#e2e8f0" strokeWidth="7" />
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth="7"
-        strokeDasharray={`${(score/15)*circ} ${circ}`} strokeLinecap="round"
-        transform={`rotate(-90 ${size/2} ${size/2})`} />
-      <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle"
-        className="font-bold text-slate-800 dark:text-slate-100" fontSize={size * 0.22}>{score.toFixed(1)}</text>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img"
+      aria-label={`Score ${score.toFixed(2)} out of ${max}`}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth="7"
+        className="stroke-slate-200 dark:stroke-slate-700" />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="7"
+        strokeDasharray={`${pct * circ} ${circ}`} strokeLinecap="round"
+        transform={`rotate(-90 ${size / 2} ${size / 2})`} />
+      <text x="50%" y={label ? "44%" : "50%"} dominantBaseline="middle" textAnchor="middle"
+        className="fill-slate-800 dark:fill-slate-100 font-bold"
+        fontSize={size * 0.24}>{Number.isInteger(score) ? score : score.toFixed(1)}</text>
+      {label && (
+        <text x="50%" y="64%" dominantBaseline="middle" textAnchor="middle"
+          className="fill-slate-400 dark:fill-slate-500 font-semibold" fontSize={size * 0.13}>
+          {label}
+        </text>
+      )}
     </svg>
   );
 }
@@ -1335,6 +1350,9 @@ export default function IbpsPoPrep() {
 
     const resultsObj = {
       score,
+      // Needed by the score ring and the percentage line — a 30-mark English
+      // drill must not be drawn against a denominator of 100.
+      marksAvailable: Math.round(marksAvailable * 100) / 100,
       sectionwise,
       failedSections: failedSections.map((s) => s.name),
       correct,
@@ -2234,6 +2252,31 @@ export default function IbpsPoPrep() {
           {/* Results Dashboard Post-Submission */}
           {examSubmitted && results && (
             <div className="space-y-6">
+              {/* The only way out used to be a button beneath all 35 solutions,
+                  so leaving the results meant scrolling the whole page. This bar
+                  sticks to the top of the results view. */}
+              <div className="sticky top-0 z-20 -mx-1 px-1 py-2 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm flex flex-wrap items-center justify-between gap-3">
+                <button
+                  onClick={() => { setReviewMode(false); setExamStarted(false); setExamSubmitted(false); }}
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-sm font-bold rounded-xl transition-colors"
+                >
+                  ← Back to Mock Tests
+                </button>
+                <div className="flex items-center gap-2">
+                  {paperTitle && (
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 truncate max-w-[46vw]">
+                      {paperTitle}
+                    </span>
+                  )}
+                  <button
+                    onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}
+                    className="px-3 py-2 border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-colors"
+                  >
+                    Jump to solutions ↓
+                  </button>
+                </div>
+              </div>
+
               {reviewMode && (
                 <div className="flex flex-wrap items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl">
                   <span className="text-xl">📖</span>
@@ -2253,8 +2296,19 @@ export default function IbpsPoPrep() {
                 <div className="text-center md:border-r border-slate-150 dark:border-slate-700 py-2 space-y-1">
                   <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Overall score</p>
                   <div className="flex items-center justify-center">
-                    <ScoreRing score={results.score} size={100} />
+                    {/* Scale to the marks actually available — a sectional drill
+                        is out of 30, not 100, so a fixed denominator would
+                        under-draw it badly. */}
+                    <ScoreRing
+                      score={results.score}
+                      max={results.marksAvailable || TOTAL_MARKS}
+                      size={110}
+                      label={`/ ${results.marksAvailable || TOTAL_MARKS}`}
+                    />
                   </div>
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                    {((results.score / (results.marksAvailable || TOTAL_MARKS)) * 100).toFixed(1)}% scored
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 col-span-2 md:border-r border-slate-150 dark:border-slate-700 px-2">

@@ -34,6 +34,18 @@ SPLIT_PAPERS = [
 ]
 SUBJECT_FILE = {'English Language': 'english', 'Quantitative Aptitude': 'quant', 'Reasoning Ability': 'reasoning'}
 
+# SBI PO, not IBPS — same 100/60-minute prelims shape and the same three
+# sections, but a different exam, so the names say so plainly rather than
+# letting anyone assume these are IBPS papers. This source also prints the
+# answer INLINE after each question ("Ans.(e)") instead of collecting solutions
+# at the back, which needs the inline parse path.
+INLINE_PAPERS = [
+    ('sbipo-2026-prelims-aug01', 'SBI PO Prelims 2026 — 1 Aug (Shift 1)', '2026',
+     'Memory-based · 1 Aug 2026', 'sbipo-2026-aug01-s1.pdf'),
+    ('sbipo-2026-prelims-aug02', 'SBI PO Prelims 2026 — 2 Aug (Shift 1)', '2026',
+     'Memory-based · 2 Aug 2026', 'sbipo-2026-aug02-s1.pdf'),
+]
+
 SECTIONS = [('English Language', 30), ('Quantitative Aptitude', 35), ('Reasoning Ability', 35)]
 
 CUES = {
@@ -133,6 +145,16 @@ def spread_directions(qs):
     for n in qs:
         qs[n]['directions'] = spread.get(n) or qs[n]['directions']
     return qs
+
+
+def build_inline(pid, qpdf):
+    """Papers whose answers sit inline after each question rather than at the back."""
+    from parse_pyq import parse_inline_answers, strip_inline_answers
+    raw = linear_text(P + qpdf)
+    answers = parse_inline_answers(raw)
+    qs = spread_directions(parse_questions(strip_inline_answers(raw)))
+    ss = {n: {'ans': a, 'sol': ''} for n, a in answers.items()}
+    return emit(qs, ss, assign_sections(qs), '2026', pid)
 
 
 def build_split(year, pid=None):
@@ -239,7 +261,9 @@ def main():
     papers = []
     jobs = ([(p, lambda p=p: build(*p)) for p in PAPERS] +
             [((pid, name, year, shift), lambda y=year, i=pid: build_split(int(y), i))
-             for pid, name, year, shift in SPLIT_PAPERS])
+             for pid, name, year, shift in SPLIT_PAPERS] +
+            [((pid, name, year, shift), lambda i=pid, f=qpdf: build_inline(i, f))
+             for pid, name, year, shift, qpdf in INLINE_PAPERS])
     for meta, run in jobs:
         pid, name, year, shift = meta[0], meta[1], meta[2], meta[3]
         qlist, flagged, unans = run()

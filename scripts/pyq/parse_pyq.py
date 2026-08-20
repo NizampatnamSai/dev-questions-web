@@ -94,10 +94,16 @@ def linear_text(path):
     out = []
     with pdfplumber.open(path) as pdf:
         for p in pdf.pages:
-            g, h = gutter(p), p.height
-            bands = [(0, p.width)] if g is None else [(0, g), (g, p.width)]
+            # Crop against the page's OWN bbox, not (0, 0, width, height). Some
+            # sources (the SBI PO papers) carry an offset media box — origin at
+            # x=8.36, y=-90.98 — and a (0,0)-based crop falls outside the page,
+            # which pdfplumber rejects outright.
+            px0, py0, px1, py1 = p.bbox
+            g = gutter(p)
+            gx = px0 + g if g is not None else None
+            bands = [(px0, px1)] if gx is None else [(px0, gx), (gx, px1)]
             for x0, x1 in bands:
-                out.append(strip_chrome(p.crop((x0, 0, x1, h)).extract_text() or ''))
+                out.append(strip_chrome(p.crop((x0, py0, x1, py1)).extract_text() or ''))
     return '\n'.join(out)
 
 
@@ -165,6 +171,33 @@ def parse_questions(region):
         if len(out[n]['options']) != 5 and set_opts:
             out[n]['options'] = dict(set_opts)
     return out
+
+
+# Some sources print the answer INLINE, immediately after each question's
+# options ("Ans.(e)"), instead of collecting solutions in a separate section at
+# the back. Left in place it also corrupts the last option, whose text runs to
+# the end of the segment and so swallows the answer line.
+INLINE_ANS = re.compile(r'(?m)^\s*Ans\.?\s*\(?\s*([a-e])\s*\)?\s*$')
+
+
+def parse_inline_answers(region):
+    """{n: 'A'..'E'} for papers whose answers sit inside each question block."""
+    marks = list(re.finditer(r'(?m)^\s*Q\s?(\d{1,3})\s*\.?\s*', region))
+    out = {}
+    for i, m in enumerate(marks):
+        n = int(m.group(1))
+        if n in out:
+            continue
+        body = region[m.end(): marks[i + 1].start() if i + 1 < len(marks) else len(region)]
+        a = INLINE_ANS.search(body)
+        if a:
+            out[n] = a.group(1).upper()
+    return out
+
+
+def strip_inline_answers(region):
+    """Remove the "Ans.(x)" lines so they cannot bleed into the last option."""
+    return INLINE_ANS.sub('', region)
 
 
 def parse_solutions(region):

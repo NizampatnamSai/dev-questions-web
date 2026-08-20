@@ -274,6 +274,52 @@
      "count": 25
     }
    ]
+  },
+  {
+   "id": "sbipo-2026-prelims-aug01",
+   "name": "SBI PO Prelims 2026 — 1 Aug (Shift 1)",
+   "year": "2026",
+   "shift": "Memory-based · 1 Aug 2026",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
+   "total": 100,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 30
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
+  },
+  {
+   "id": "sbipo-2026-prelims-aug02",
+   "name": "SBI PO Prelims 2026 — 2 Aug (Shift 1)",
+   "year": "2026",
+   "shift": "Memory-based · 2 Aug 2026",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 11 chart-based questions are marked — their charts are images in the source.",
+   "total": 99,
+   "sections": [
+    {
+     "name": "English Language",
+     "count": 29
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 35
+    },
+    {
+     "name": "Reasoning Ability",
+     "count": 35
+    }
+   ]
   }
  ]
 }

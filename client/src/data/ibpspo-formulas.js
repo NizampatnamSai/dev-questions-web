@@ -444,6 +444,42 @@ export const QUANT_FORMULAS = [
     ],
   },
   {
+    // Pure recall. Number Series, Approximation and Mensuration all assume these
+    // are instant — spending 20 seconds working out 17² is 20 seconds not spent
+    // on the question itself.
+    group: "Squares & Cubes — memorise these",
+    important: true,
+    items: [
+      { name: "Squares 2–12", formula: "2²=4 · 3²=9 · 4²=16 · 5²=25 · 6²=36 · 7²=49 · 8²=64 · 9²=81 · 10²=100 · 11²=121 · 12²=144" },
+      { name: "Squares 13–18", formula: "13²=169 · 14²=196 · 15²=225 · 16²=256 · 17²=289 · 18²=324" },
+      { name: "Squares 19–25", formula: "19²=361 · 20²=400 · 21²=441 · 22²=484 · 23²=529 · 24²=576 · 25²=625" },
+      { name: "Cubes 2–10", formula: "2³=8 · 3³=27 · 4³=64 · 5³=125 · 6³=216 · 7³=343 · 8³=512 · 9³=729 · 10³=1000" },
+      { name: "Cubes 11–15", formula: "11³=1331 · 12³=1728 · 13³=2197 · 14³=2744 · 15³=3375" },
+      { name: "Cubes 16–20", formula: "16³=4096 · 17³=4913 · 18³=5832 · 19³=6859 · 20³=8000" },
+      { name: "Cubes 21–25", formula: "21³=9261 · 22³=10648 · 23³=12167 · 24³=13824 · 25³=15625" },
+      {
+        name: "⭐ Squaring a number ending in 5",
+        formula: "n5² = n(n+1) followed by 25",
+        note: "35² → 3×4 = 12, then 25 → 1225. 85² → 8×9 = 72 → 7225. Works for any size.",
+      },
+      {
+        name: "Squares near a round number",
+        formula: "(a ± b)² = a² ± 2ab + b²",
+        note: "98² = 100² − 2(100)(2) + 4 = 10000 − 400 + 4 = 9604. Far quicker than long multiplication.",
+      },
+      {
+        name: "Last digit tells you what a square CANNOT be",
+        formula: "A perfect square never ends in 2, 3, 7 or 8",
+        note: "Instantly eliminates options in 'which of these is a perfect square' questions.",
+      },
+      {
+        name: "Cube roots by last digit",
+        formula: "Cube ends in 1→root ends 1 · 8→2 · 7→3 · 4→4 · 5→5 · 6→6 · 3→7 · 2→8 · 9→9 · 0→0",
+        note: "Only 2, 3, 7 and 8 swap places; the rest map to themselves. 19683 ends in 3, so its cube root ends in 7 → 27.",
+      },
+    ],
+  },
+  {
     // Tested directly, and also as the hidden step in Data Sufficiency ("Is n
     // divisible by 6?" → statement I gives 2, statement II gives 3, neither
     // alone is enough, both together are).

@@ -17,6 +17,7 @@ which makes them useful rather than merely wrong.
 Each generator returns the same shape the AI path produces, so the mock
 assembler treats both identically.
 """
+import collections
 import random
 import re
 from decimal import Decimal, ROUND_HALF_UP
@@ -47,13 +48,33 @@ def _pack(topic, question, answer, distractors, explanation, shortcut=None, diff
     # factor is still 0, so the old version could never find a new value and
     # span forever. A step derived from the answer's own magnitude always makes
     # progress, and the counter is a hard stop regardless.
-    numeric = re.fullmatch(r"-?\d+(\.\d+)?", str(answer).replace(",", "")) is not None
-    base = Decimal(str(answer).replace(",", "")) if numeric else None
-    step = (abs(base) / 10 if base else Decimal(0)) or Decimal(1)
+    # Treat "35.48%" and "₹1,250" as numeric and keep the unit when synthesising
+    # neighbours — the old test rejected anything with a suffix, so every
+    # percentage answer fell into the non-numeric path.
+    _m = re.fullmatch(r"(₹?)(-?\d+(?:\.\d+)?)(%?)", str(answer).replace(",", "").strip())
+    numeric = _m is not None
+    prefix, suffix = (_m.group(1), _m.group(3)) if numeric else ("", "")
+    base = Decimal(_m.group(2)) if numeric else None
+    step = (abs(base) / 10 if base else Decimal(0)) or Decimal(1)  # never 0
+    if not numeric and len(opts) < 4:
+        # A non-numeric answer cannot have plausible neighbours invented for it.
+        # The old fallback appended "(1)", which put "Quantity I > Quantity II"
+        # and "Quantity I > Quantity II (1)" in the same question. Callers must
+        # supply the full option set instead; "None of these" is the only
+        # legitimate filler.
+        for filler in ("None of these", "Cannot be determined"):
+            if filler not in seen and len(opts) < 4:
+                seen.add(filler)
+                opts.append(filler)
+        if len(opts) < 4:
+            raise ValueError(
+                f"{topic}: only {len(opts) + 1} distinct options for a non-numeric answer "
+                f"({answer!r}) — the generator must pass the complete choice set."
+            )
     i = 1
     while len(opts) < 4 and i < 50:
         for delta in (i, -i):
-            cand = _money(base + step * delta) if numeric else f"{answer} ({i})"
+            cand = f"{prefix}{_money(base + step * delta)}{suffix}"
             if str(cand) not in seen and len(opts) < 4:
                 seen.add(str(cand))
                 opts.append(str(cand))
@@ -538,8 +559,12 @@ def boats_quantity_comparison():
         f"Quantity I: time taken to cover {d1} km upstream.\n"
         f"Quantity II: time taken to cover {d2} km in still water.",
         ans,
+        # All five standard choices. Passing only four meant the one matching the
+        # answer was dropped, leaving three, and _pack synthesised a fifth by
+        # appending "(1)" — producing "Quantity I > Quantity II" alongside
+        # "Quantity I > Quantity II (1)" in the same question.
         ["Quantity I > Quantity II", "Quantity I < Quantity II", "Quantity I = Quantity II",
-         "Cannot be determined"],
+         "Cannot be determined", "None of these"],
         f"Let the boat be x km/hr, so the stream is {frac[0]}x/{frac[1]}. Downstream = {down / b}x, upstream = {up / b}x. "
         f"{d}/({down / b}x) + {d}/({up / b}x) = {_money(total_t)} → x = {b}. Stream = {_money(s)}, "
         f"downstream = {_money(down)}, upstream = {_money(up)}. "
@@ -654,6 +679,157 @@ def si_ci_combined():
     )
 
 
+def approximation_percentage_chain():
+    """A different SHAPE from the three-term sum — percentage of a percentage."""
+    p1 = random.choice([19.98, 24.97, 34.99, 44.96])
+    p2 = random.choice([39.97, 49.98, 59.99])
+    base = random.choice([1199, 1601, 2399, 3201])
+    sub = random.choice([149.03, 199.97, 249.98])
+    val = (Decimal(str(round(p1))) / 100) * (Decimal(str(round(p2))) / 100) * base + Decimal(str(round(sub)))
+    nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    step = max(15, nearest // 10)
+    return _pack(
+        "Approximation",
+        f"What approximate value should come in place of the question mark?\n"
+        f"{p1}% of {p2}% of {base} + {sub} = ?",
+        str(nearest),
+        [str(nearest + step), str(nearest - step), str(nearest + 2 * step), str(nearest - 2 * step)],
+        f"Round: {round(p1)}% of {round(p2)}% of {base} ≈ "
+        f"{_money(Decimal(str(round(p1))) / 100 * Decimal(str(round(p2))) / 100 * base)}, plus {round(sub)} "
+        f"gives about {nearest}.",
+        "Chain the two percentages into one multiplier before touching the base.",
+        "Hard",
+    )
+
+
+def approximation_fraction_mix():
+    """Fractions and a division — another distinct shape."""
+    a = random.choice([1439.97, 2159.02, 2879.98])
+    f1, f2 = random.choice([(3, 8), (5, 12), (7, 16), (5, 6)])
+    d = random.choice([11.98, 15.03, 23.97])
+    add = random.choice([289.96, 359.04, 419.98])
+    val = Decimal(str(round(a))) * f1 / f2 / Decimal(str(round(d))) + Decimal(str(round(add)))
+    nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    step = max(12, nearest // 10)
+    return _pack(
+        "Approximation",
+        f"What approximate value should come in place of the question mark?\n"
+        f"({a} × {f1}/{f2}) ÷ {d} + {add} = ?",
+        str(nearest),
+        [str(nearest + step), str(nearest - step), str(nearest + 2 * step), str(nearest - 2 * step)],
+        f"Round: {round(a)} × {f1}/{f2} ≈ {_money(Decimal(str(round(a))) * f1 / f2)}, ÷ {round(d)} ≈ "
+        f"{_money(Decimal(str(round(a))) * f1 / f2 / Decimal(str(round(d))))}, + {round(add)} ≈ {nearest}.",
+        "Do the fraction first — it usually cancels against the divisor.",
+        "Hard",
+    )
+
+
+def ages_present_future():
+    """A different age SHAPE: present ratio plus a future condition."""
+    r1, r2 = random.choice([(5, 3), (7, 4), (4, 3), (9, 5)])
+    k = random.choice([3, 4, 5, 6])
+    ahead = random.choice([4, 6, 8, 10])
+    a, b = r1 * k, r2 * k
+    return _pack(
+        "Problems on Ages",
+        f"The present ages of A and B are in the ratio {r1} : {r2}. After {ahead} years, the sum of their ages "
+        f"will be {a + b + 2 * ahead} years. Find the present age of A.",
+        _money(a),
+        [_money(b), _money(a + ahead), _money(b + ahead), _money(a - ahead)],
+        f"Let the ages be {r1}k and {r2}k. After {ahead} years their sum is {r1 + r2}k + {2 * ahead} = "
+        f"{a + b + 2 * ahead}, so {r1 + r2}k = {a + b} and k = {k}. A = {r1} × {k} = {a} years.",
+        "Adding t years to each of two people adds 2t to their sum, not t.",
+        "Moderate",
+    )
+
+
+def profit_two_articles():
+    """Different P&L shape: two articles, one gain one loss, net effect."""
+    cp = random.choice([1200, 1500, 1800, 2400])
+    pct = random.choice([10, 20, 25])
+    sp = Decimal(cp) * (100 + pct) / 100
+    cp2 = sp * 100 / (100 - pct)
+    net = (sp * 2) - (Decimal(cp) + cp2)
+    return _pack(
+        "Profit and Loss",
+        f"Two articles are each sold for ₹{_money(sp)}. On the first there is a gain of {pct}% and on the "
+        f"second a loss of {pct}%. Find the overall gain or loss (in ₹).",
+        _money(abs(net)),
+        [_money(abs(net) * 2), "0", _money(Decimal(cp) * pct / 100), _money(abs(net) / 2)],
+        f"CP of the first = {_money(sp)} × 100/{100 + pct} = ₹{cp}. CP of the second = {_money(sp)} × "
+        f"100/{100 - pct} = ₹{_money(cp2)}. Total CP = ₹{_money(Decimal(cp) + cp2)} against total SP "
+        f"₹{_money(sp * 2)}, a net LOSS of ₹{_money(abs(net))}.",
+        f"Equal % gain and loss on the same SP is always a net loss of x²/100 % — never zero.",
+        "Hard",
+    )
+
+
+# ── Number Series ─────────────────────────────────────────────────────────────
+# The series is BUILT from a rule, so the missing term and the planted wrong
+# term are both known exactly. The paper asks two forms of this and the section
+# carries ~5 of them, but there was no generator at all until now.
+
+def _series(rule, start, n=6):
+    """Apply a step rule repeatedly from a starting value."""
+    out = [Decimal(start)]
+    for i in range(n - 1):
+        out.append(rule(out[-1], i))
+    return out
+
+
+SERIES_RULES = [
+    # (label, step function, starting value, human-readable pattern)
+    ("difference grows by a constant", lambda v, i: v + 3 + 2 * i, 5, "+3, +5, +7, +9, +11"),
+    ("multiply then add", lambda v, i: v * 2 + 1, 4, "×2 + 1 each time"),
+    ("multiply then subtract", lambda v, i: v * 3 - 2, 3, "×3 − 2 each time"),
+    ("successive squares added", lambda v, i: v + (i + 2) ** 2, 6, "+2², +3², +4², +5², +6²"),
+    ("halving", lambda v, i: v / 2, 512, "÷2 each time"),
+    ("multiply by rising integers", lambda v, i: v * (i + 2), 3, "×2, ×3, ×4, ×5, ×6"),
+    ("difference of consecutive cubes", lambda v, i: v + (i + 2) ** 3, 4, "+2³, +3³, +4³, +5³"),
+    ("alternate add and multiply", lambda v, i: v * 2 if i % 2 == 0 else v + 6, 7, "×2, +6, ×2, +6, ×2"),
+]
+
+
+def number_series_missing():
+    label, rule, start, pattern = random.choice(SERIES_RULES)
+    vals = _series(rule, start)
+    hide = random.choice([len(vals) - 1, len(vals) - 1, len(vals) - 2])   # usually the last
+    answer = vals[hide]
+    shown = ["?" if i == hide else _money(v) for i, v in enumerate(vals)]
+    return _pack(
+        "Number Series",
+        f"What will come in place of the question mark (?) in the following series?\n\n"
+        f"{', '.join(shown)}",
+        _money(answer),
+        [_money(answer * 2), _money(answer + vals[1] - vals[0]), _money(answer - 4), _money(answer + 6)],
+        f"The pattern is {pattern} ({label}). The full series is "
+        f"{', '.join(_money(v) for v in vals)}, so the missing term is {_money(answer)}.",
+        "Take first differences before anything else; if they are not constant, take differences again.",
+        "Moderate",
+    )
+
+
+def number_series_wrong_term():
+    label, rule, start, pattern = random.choice(SERIES_RULES)
+    vals = _series(rule, start)
+    bad_at = random.randint(2, len(vals) - 1)
+    correct = vals[bad_at]
+    offset = random.choice([2, 3, 4, -2, -3])
+    planted = correct + offset
+    shown = [_money(planted) if i == bad_at else _money(v) for i, v in enumerate(vals)]
+    return _pack(
+        "Wrong Number Series",
+        f"Find the WRONG term in the following series.\n\n{', '.join(shown)}",
+        _money(planted),
+        [_money(vals[0]), _money(vals[1]), _money(vals[-1]),
+         _money(vals[bad_at - 1])],
+        f"The pattern is {pattern} ({label}). Following it, the term in that position should be "
+        f"{_money(correct)}, not {_money(planted)} — so {_money(planted)} is the wrong term.",
+        "Establish the rule from the first three terms, then test forward; the first break is the answer.",
+        "Moderate",
+    )
+
+
 # ══ Data Interpretation ═══════════════════════════════════════════════════════
 # A DI generator returns a LIST of questions sharing one data set. The table is
 # attached to EVERY question of the set, not just the first — sitting the paper
@@ -682,7 +858,9 @@ def di_pie_set():
             break
     names = ["P", "Q", "R", "S", "T"]
     vals = [total * p // 100 for p in pcts]
-    rows = [[n, f"{p}%", str(v)] for n, p, v in zip(names, pcts, vals)]
+    # Only the percentages are shown. Printing the student counts as well turned
+    # every question into a table lookup instead of a calculation.
+    rows = [[n, f"{p}%"] for n, p in zip(names, pcts)]
     note = (f"The pie chart below shows the percentage distribution of {total:,} students across five "
             f"schools P, Q, R, S and T. Study the data and answer the questions.")
 
@@ -695,7 +873,7 @@ def di_pie_set():
     pct_of = Decimal(vals[i]) / vals[j] * 100
 
     return _di_pack(
-        "Data Interpretation", note, ["School", "Share of total", "Students"], rows,
+        "Data Interpretation", note, ["School", "Share of total"], rows,
         [
             (f"What is the total number of students in schools {names[i]} and {names[j]} together?",
              _money(vals[i] + vals[j]),
@@ -737,11 +915,17 @@ def di_bar_set():
     years = [2021, 2022, 2023, 2024]
     a = [random.choice([120, 150, 180, 200, 240, 300]) for _ in years]
     b = [random.choice([100, 140, 160, 220, 260, 280]) for _ in years]
-    rows = [[str(y), str(x), str(z), str(x + z)] for y, x, z in zip(years, a, b)]
+    # No Total column — "what is the total sold in 2023" must require adding the
+    # two bars, not reading a third one.
+    rows = [[str(y), str(x), str(z)] for y, x, z in zip(years, a, b)]
     note = ("The bar graph below shows the number of units (in thousands) of Product A and Product B sold by a "
             "company over four years. Study the data and answer the questions.")
 
     i, j = random.sample(range(4), 2)
+    for _ in range(20):
+        if a[i] != a[j]:
+            break
+        i, j = random.sample(range(4), 2)
     from math import gcd
     g = gcd(a[i], b[i]) or 1
     tot_a, tot_b = sum(a), sum(b)
@@ -749,12 +933,15 @@ def di_bar_set():
     growth = Decimal(a[j] - a[i]) / a[i] * 100
 
     return _di_pack(
-        "Data Interpretation", note, ["Year", "Product A", "Product B", "Total"], rows,
+        "Data Interpretation", note, ["Year", "Product A", "Product B"], rows,
         [
-            (f"What is the total number of units (in thousands) sold in {years[i]}?",
-             _money(a[i] + b[i]),
-             [_money(abs(a[i] - b[i])), _money(a[i]), _money(b[i]), _money(a[i] + b[i] + 20)],
-             f"In {years[i]}, A = {a[i]} and B = {b[i]}. Total = {a[i] + b[i]} thousand units."),
+            (f"What is the total number of units (in thousands) of both products sold in {years[i]} and "
+             f"{years[j]} taken together?",
+             _money(a[i] + b[i] + a[j] + b[j]),
+             [_money(a[i] + b[i]), _money(a[j] + b[j]), _money(abs((a[i] + b[i]) - (a[j] + b[j]))),
+              _money(a[i] + a[j])],
+             f"{years[i]}: {a[i]} + {b[i]} = {a[i] + b[i]}. {years[j]}: {a[j]} + {b[j]} = {a[j] + b[j]}. "
+             f"Total = {a[i] + b[i] + a[j] + b[j]} thousand units."),
 
             (f"Find the ratio of Product A to Product B sold in {years[i]}.",
              f"{a[i]//g} : {b[i]//g}",
@@ -787,20 +974,29 @@ def di_line_set():
     months = ["January", "February", "March", "April", "May"]
     x = [random.choice([240, 300, 360, 420, 480, 540]) for _ in months]
     y = [random.choice([180, 220, 280, 320, 400, 460]) for _ in months]
-    rows = [[m, str(p), str(q), str(p + q)] for m, p, q in zip(months, x, y)]
+    rows = [[m, str(p), str(q)] for m, p, q in zip(months, x, y)]
     note = ("The line graph below shows the number of units produced by Unit I and Unit II of a factory over "
             "five months. Study the data and answer the questions.")
+    # Pick two months whose Unit I values DIFFER, or the percent-change question
+    # has answer 0% and every distractor collapses onto it.
     i, j = random.sample(range(5), 2)
+    for _ in range(20):
+        if x[i] != x[j]:
+            break
+        i, j = random.sample(range(5), 2)
     from math import gcd
     g = gcd(x[i], y[i]) or 1
     tot_x, tot_y = sum(x), sum(y)
     diff = Decimal(x[j] - x[i]) / x[i] * 100
     return _di_pack(
-        "Data Interpretation", note, ["Month", "Unit I", "Unit II", "Total"], rows,
+        "Data Interpretation", note, ["Month", "Unit I", "Unit II"], rows,
         [
-            (f"What is the total production of both units in {months[i]}?", _money(x[i] + y[i]),
-             [_money(abs(x[i] - y[i])), _money(x[i]), _money(y[i]), _money(x[i] + y[i] + 40)],
-             f"{months[i]}: Unit I = {x[i]}, Unit II = {y[i]}. Total = {x[i] + y[i]} units."),
+            (f"What is the combined production of both units in {months[i]} and {months[j]} together?",
+             _money(x[i] + y[i] + x[j] + y[j]),
+             [_money(x[i] + y[i]), _money(x[j] + y[j]), _money(abs((x[i] + y[i]) - (x[j] + y[j]))),
+              _money(x[i] + x[j])],
+             f"{months[i]}: {x[i]} + {y[i]} = {x[i] + y[i]}. {months[j]}: {x[j]} + {y[j]} = {x[j] + y[j]}. "
+             f"Combined = {x[i] + y[i] + x[j] + y[j]} units."),
             (f"Find the ratio of Unit I to Unit II production in {months[i]}.", f"{x[i]//g} : {y[i]//g}",
              [f"{y[i]//g} : {x[i]//g}", "1 : 1", f"{x[i]} : {y[i] + 20}", f"{x[i]//g + 1} : {y[i]//g}"],
              f"Ratio = {x[i]} : {y[i]} = {x[i]//g} : {y[i]//g}."),
@@ -826,21 +1022,25 @@ def di_table_set():
     total = [random.choice([240, 300, 360, 400, 480]) for _ in depts]
     male = [t * random.choice([40, 45, 50, 55, 60, 65]) // 100 for t in total]
     female = [t - m for t, m in zip(total, male)]
-    rows = [[d, str(t), str(m), str(f)] for d, t, m, f in zip(depts, total, male, female)]
-    note = ("The table below shows the number of employees in five departments of a company, along with the "
-            "split between male and female employees. Study the data and answer the questions.")
+    # Total and the male PERCENTAGE. Listing male and female counts outright left
+    # nothing to work out.
+    rows = [[d, str(t), f"{m * 100 // t}%"] for d, t, m in zip(depts, total, male)]
+    note = ("The table below shows the total number of employees in five departments of a company and the "
+            "percentage of them who are male. Study the data and answer the questions.")
     i, j = random.sample(range(5), 2)
     from math import gcd
     g = gcd(male[i], female[i]) or 1
     pct = Decimal(female[i]) / total[i] * 100
     return _di_pack(
-        "Data Interpretation", note, ["Department", "Total", "Male", "Female"], rows,
+        "Data Interpretation", note, ["Department", "Total employees", "Male %"], rows,
         [
-            (f"Female employees in {depts[i]} are what percent of the total employees in that department? "
-             f"(rounded to two decimals)", f"{_money(pct)}%",
-             [f"{_money(100 - pct)}%", f"{_money(pct * 2)}%", f"{_money(pct / 2)}%",
-              f"{_money(Decimal(female[i]) / total[j] * 100)}%"],
-             f"{depts[i]}: female = {female[i]}, total = {total[i]}. % = {female[i]}/{total[i]} × 100 = {_money(pct)}%."),
+            (f"How many female employees are there in {depts[i]} and {depts[j]} together?",
+             _money(female[i] + female[j]),
+             [_money(male[i] + male[j]), _money(female[i]), _money(female[j]),
+              _money(abs(female[i] - female[j]))],
+             f"{depts[i]}: {total[i]} total, {male[i] * 100 // total[i]}% male, so female = {female[i]}. "
+             f"{depts[j]}: {total[j]} total, {male[j] * 100 // total[j]}% male, so female = {female[j]}. "
+             f"Together = {female[i] + female[j]}."),
             (f"Find the ratio of male to female employees in {depts[i]}.", f"{male[i]//g} : {female[i]//g}",
              [f"{female[i]//g} : {male[i]//g}", "1 : 1", f"{male[i]} : {female[i] + 10}",
               f"{male[i]//g + 1} : {female[i]//g}"],
@@ -877,8 +1077,10 @@ def di_caselet_set():
     from math import gcd
     g = gcd(cricket, football) or 1
     return _di_pack(
-        "Data Interpretation", note, ["Sport", "Students"],
-        [["Cricket", str(cricket)], ["Football", str(football)], ["Tennis", str(tennis)]],
+        # A caselet has NO table by definition — the whole skill is pulling the
+        # numbers out of the prose. Listing Cricket/Football/Tennis counts here
+        # answered three of the five questions outright.
+        "Data Interpretation", note, [], [],
         [
             ("How many students play tennis?", _money(tennis),
              [_money(cricket), _money(football), _money(cricket + football), _money(tennis * 2)],
@@ -962,7 +1164,7 @@ def pipes_with_outlet_opened_late():
 
 
 GENERATORS = {
-    "Problems on Ages": [ages_ratio_relation],
+    "Problems on Ages": [ages_ratio_relation, ages_present_future],
     "Quadratic Equations": [quadratic_comparison],
     "Mixture and Alligation": [mixture_replacement, alligation_ratio, mixture_ratio_after_addition],
     "Time and Work": [work_leaves_midway],
@@ -971,9 +1173,30 @@ GENERATORS = {
     "Partnership": [partnership_delayed_join],
     "Compound Interest": [si_ci_combined],
     "Percentage": [successive_percentage_salary],
-    "Profit and Loss": [profit_markup_discount],
-    "Approximation": [approximation_multi_term],
+    "Profit and Loss": [profit_markup_discount, profit_two_articles],
+    "Approximation": [approximation_multi_term, approximation_percentage_chain, approximation_fraction_mix],
+    "Number Series": [number_series_missing, number_series_wrong_term],
 }
+
+# The blueprint the strategy panel promises, for a 35-question Quant section.
+# Picking a topic uniformly at random ignored these entirely: a real paper came
+# out with 5 Ages, 5 Quadratics and NO Number Series at all, against a panel
+# telling the candidate to expect 5 of them. Counts scale with section length.
+QUANT_BLUEPRINT = [
+    ("Data Interpretation", 10),   # 2-3 sets, filled by DI_SETS below
+    ("Approximation", 5),
+    ("Number Series", 5),
+    ("Quadratic Equations", 5),
+    # The remaining ~11 are arithmetic word problems, spread across these topics
+    # so no single one dominates the way Ages did.
+    ("__arithmetic__", 10),
+]
+
+ARITHMETIC_TOPICS = [
+    "Problems on Ages", "Mixture and Alligation", "Time and Work",
+    "Pipes and Cisterns", "Boats and Streams", "Partnership",
+    "Compound Interest", "Percentage", "Profit and Loss",
+]
 
 # Retired from the pool for being single-step: percentage_of, profit_percent,
 # simple_interest, average_basic, train_crosses_pole, speed_distance_time,
@@ -994,24 +1217,84 @@ def generate(n: int, topics=None) -> list:
     if not names:
         return []
 
-    # Every real Quant section opens with Data Interpretation, so a paper draws
-    # 2-3 DI sets at random from the five chart types before the standalone
-    # arithmetic. 10-15 of a 35-question section, matching the weight DI carries
-    # in the actual paper — and a different mix each time, so two mocks never
-    # open the same way.
-    out, seen, guard = [], set(), 0
-    if n >= 20 and (not topics or "Data Interpretation" in topics):
-        for build in random.sample(DI_SETS, random.choice([2, 2, 3])):
-            for q in build():
-                if len(out) < n and q["question"] not in seen:
-                    seen.add(q["question"])
-                    out.append(q)
+    out, seen = [], set()
 
-    while len(out) < n and guard < n * 40:
-        guard += 1
-        q = random.choice(GENERATORS[random.choice(names)])()
-        if q["question"] in seen:
-            continue
-        seen.add(q["question"])
-        out.append(q)
+    # How many questions any ONE template may contribute. Deduping on exact text
+    # let the same generator run twice with different numbers, which reads as a
+    # near-duplicate: "A man spends 15%... saves 21600" followed immediately by
+    # "A man spends 18%... saves 19440". Templates whose shape genuinely varies
+    # per draw (the equations in a quadratic set, the rule behind a series) are
+    # allowed more.
+    # A real paper genuinely does carry five quadratic sets in one format, and
+    # number series vary by their underlying rule — those may repeat. A word
+    # problem may not: four "A in 20 days, B in 36 days, A leaves after 5" in a
+    # row is the same question four times.
+    TEMPLATE_CAP = {
+        "quadratic_comparison": 5,
+        "number_series_missing": 3,
+        "number_series_wrong_term": 3,
+        "approximation_multi_term": 2,
+        "approximation_percentage_chain": 2,
+        "approximation_fraction_mix": 2,
+    }
+    DEFAULT_CAP = 1
+    used = collections.Counter()
+
+    def take(topic, want):
+        """Add up to `want` questions from one topic, skipping duplicates."""
+        pool = GENERATORS.get(topic)
+        if not pool or (topics and topic not in topics):
+            return
+        got, guard = 0, 0
+        while got < want and len(out) < n and guard < want * 60:
+            guard += 1
+            fn = random.choice(pool)
+            cap = TEMPLATE_CAP.get(fn.__name__, DEFAULT_CAP)
+            if used[fn.__name__] >= cap:
+                if all(used[f.__name__] >= TEMPLATE_CAP.get(f.__name__, DEFAULT_CAP) for f in pool):
+                    return                     # this topic is exhausted
+                continue
+            q = fn()
+            if q["question"] in seen:
+                continue
+            seen.add(q["question"])
+            used[fn.__name__] += 1
+            out.append(q)
+            got += 1
+
+    # Follow the blueprint the strategy panel shows the candidate, scaled to the
+    # requested length. Uniform random selection produced papers with 5 Ages,
+    # 5 Quadratics and zero Number Series while the panel promised 5 of them.
+    scale = n / 35.0
+    for topic, count in QUANT_BLUEPRINT:
+        want = max(1, round(count * scale)) if count else 0
+        if topic == "Data Interpretation":
+            # 2-3 sets of five, drawn from the five chart types.
+            if n >= 20:
+                for build in random.sample(DI_SETS, 2 if want <= 10 else 3):
+                    for q in build():
+                        if len(out) < n and q["question"] not in seen:
+                            seen.add(q["question"])
+                            out.append(q)
+        elif topic == "__arithmetic__":
+            # Spread across the arithmetic topics rather than letting one repeat.
+            order = [t for t in ARITHMETIC_TOPICS if not topics or t in topics]
+            random.shuffle(order)
+            per = max(1, want // max(1, len(order)))
+            for t in order:
+                take(t, per)
+            i = 0
+            while len(out) < n and i < len(order) * 4:      # top up round-robin
+                take(order[i % len(order)], 1)
+                i += 1
+        else:
+            take(topic, want)
+
+    # Anything still short (a topic exhausted its variations) is filled from the
+    # arithmetic pool so the section is never returned under-length.
+    i = 0
+    pool = [t for t in ARITHMETIC_TOPICS if not topics or t in topics] or names
+    while len(out) < n and i < n * 8:
+        take(pool[i % len(pool)], 1)
+        i += 1
     return out
