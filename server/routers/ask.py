@@ -3,14 +3,16 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from routers.auth import current_user
 from deps import require_ai_enabled
-from utils.ai import GROQ_API_KEY, GROQ_URL, GROQ_MODEL, GROQ_MODEL_FALLBACK
+from utils.ai import GROQ_API_KEY, GROQ_URL, GROQ_MODEL, GROQ_MODEL_FALLBACK, with_reasoning
 from db_mongo import sid, oid, now, col_image_gen_usage
 import httpx
 
 # Separate model from GROQ_MODEL — the main text model isn't vision-capable.
 # Configurable via env in case Groq's available vision models change again.
 import os
-GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct")
+# llama-4-scout was retired along with the llama-3.x text models; qwen3.6 is
+# the only image-capable model Groq now offers.
+GROQ_VISION_MODEL = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.6-27b")
 MAX_IMAGE_BYTES = 5 * 1024 * 1024  # 5MB, matches the other upload endpoints
 
 # Groq has no image-generation model (verified against the live model list —
@@ -50,9 +52,9 @@ async def _groq_ask(question: str, system_prompt: str = SYSTEM_PROMPT, max_token
         "max_tokens": max_tokens,
     }
     async with httpx.AsyncClient(timeout=30) as c:
-        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL}))
         if r.status_code == 429:
-            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+            r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL_FALLBACK}))
         r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"].strip()
 
@@ -107,9 +109,9 @@ async def humanize(body: HumanizeBody, _user=Depends(require_ai_enabled)):
         "max_tokens": 2048,
     }
     async with httpx.AsyncClient(timeout=30) as c:
-        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL}))
         if r.status_code == 429:
-            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+            r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL_FALLBACK}))
         r.raise_for_status()
     result = r.json()["choices"][0]["message"]["content"].strip()
     return {"result": result}

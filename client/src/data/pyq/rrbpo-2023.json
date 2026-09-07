@@ -1,0 +1,1186 @@
+{
+ "id": "rrbpo-2023",
+ "questions": [
+  {
+   "id": "2023-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who was born in the year 1998?\nर्र्ष व1998 में दकसका जन्म हुआ र्ा?",
+   "options": {
+    "A": "P",
+    "B": "Q",
+    "C": "R",
+    "D": "T",
+    "E": "U"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which year S was born?\nS का जन्म दकस र्र्षव म ेंहुआ र्ा?",
+   "options": {
+    "A": "2002",
+    "B": "1999",
+    "C": "2001",
+    "D": "1998",
+    "E": "2005"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2023-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statements is true?\nनिम्ननिनित कर्िों म ेंसे कौि-सा सत्य ह?ै",
+   "options": {
+    "A": "P was born in 1994./ P का जन्म 1994 म ेंहुआ र्ा",
+    "B": "V was born in 1996./ V का जन्म 1996 म ेंहुआ र्ा",
+    "C": "T is the oldest among all./ T सभी म ेंसबसे बडा ह ै",
+    "D": "U was born in 2002./ U का जन्म 2002 म ेंहुआ र्ा",
+    "E": "R is older than P./ R, P से बडा ह ै"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2023-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons were born between W and T?\nW और T के बीच दकति ेव्यनियों का जन्म हुआ?",
+   "options": {
+    "A": "1",
+    "B": "2",
+    "C": "3",
+    "D": "4",
+    "E": "Cannot be determined/ निधावररत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "C",
+   "explanation": "Solutions"
+  },
+  {
+   "id": "2023-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who is the oldest person among them?\nउिमें से सबस ेबडा व्यनि कौि ह?ै",
+   "options": {
+    "A": "P",
+    "B": "Q",
+    "C": "R",
+    "D": "S",
+    "E": "V"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2023-q6",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statements: All flowers are plants. Only a few plants are fruits. No fruits is vegetables.\nकर्ि: सभी िूि पौधे हैं। केर्ि कुछ पौधे िि हैं। कोई िि सब्जी िहीं है।\nConclusion I: Some flowers are fruits.\nनिष्कर्ष वI: कुछ िूि िि हैं।\nConclusion II: Some plants are not vegetables.\nनिष्कर्ष वII: कुछ पौधे सनब्जयां िहीं हैं।",
+   "options": {
+    "A": "If only conclusion I follows./ यदि केर्ि निष्कर्षव I अिुसरण करता है",
+    "B": "If only conclusion II follows./ यदि केर्ि निष्कर्षव II अिुसरण करता है",
+    "C": "If either conclusion I or II follows./ यदि या तो निष्कर्षव I या II अिुसरण करता ह ै",
+    "D": "If neither conclusion I nor II follows./ यदि ि तो निष्कर्षव I और ि ही II अिुसरण करता है",
+    "E": "If both conclusions I and II follow./ यदि निष्कर्षव I और II िोिों अिुसरण करते ह ैं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (6-8): In each of the questions below some statements are given followed by two conclusions. You have to\ntake the given statements to be true even if they seem to be at variance with commonly known facts. Read all the\nconclusions and then decide which of the given conclusions logically follows from the given statements disregarding\ncommonly known facts.\nिीचे दिए गए प्रत्यके प्रश्न में कुछ कर्ि और उसके बाि िो निष्कर्षव दिए गए ह।ैं आपको दिए गए कर्िों को सत्य माििा है, भिे ही र्े सामान्यतः ज्ञात तथ्यों से\nनभन्न प्रतीत होते हों। सभी निष्कर्षों को पदिए और दिर तय कीनजए दक दिए गए निष्कर्षों में से कौि-सा निष्कर्ष वसामान्य ज्ञात तथ्यों को िजरअिं ाज करते हुए\nदिए गए कर्िों का तार्कवक रूप से अिसु रण करता ह।ै"
+  },
+  {
+   "id": "2023-q7",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statements: All mammals are bird. All birds are eggs. No eggs are reptiles.\nकर्ि: सभी स्तिधारी पक्षी हैं। सभी पक्षी अंड ेहैं। कोई अंडा सरीसृप िहीं हैं।\nConclusion I: Some mammals are eggs.\nनिष्कर्ष वI: कुछ स्तिधारी अंड ेहैं।\nConclusion II: Some reptiles can be birds.\nनिष्कर्ष वII: कुछ सरीसृप पक्षी हो सकते ह।ैं",
+   "options": {
+    "A": "If only conclusion I follows./ यदि केर्ि निष्कर्षव I अिुसरण करता है",
+    "B": "If only conclusion II follows./ यदि केर्ि निष्कर्षव II अिुसरण करता है",
+    "C": "If either conclusion I or II follows./ यदि या तो निष्कर्षव I या II अिुसरण करता ह ै",
+    "D": "If neither conclusion I nor II follows./ यदि ि तो निष्कर्षव I और ि ही II अिुसरण करता है",
+    "E": "If both conclusions I and II follow./ यदि निष्कर्षव I और II िोिों अिुसरण करते ह ैं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (6-8): In each of the questions below some statements are given followed by two conclusions. You have to\ntake the given statements to be true even if they seem to be at variance with commonly known facts. Read all the\nconclusions and then decide which of the given conclusions logically follows from the given statements disregarding\ncommonly known facts.\nिीचे दिए गए प्रत्यके प्रश्न में कुछ कर्ि और उसके बाि िो निष्कर्षव दिए गए ह।ैं आपको दिए गए कर्िों को सत्य माििा है, भिे ही र्े सामान्यतः ज्ञात तथ्यों से\nनभन्न प्रतीत होते हों। सभी निष्कर्षों को पदिए और दिर तय कीनजए दक दिए गए निष्कर्षों में से कौि-सा निष्कर्ष वसामान्य ज्ञात तथ्यों को िजरअिं ाज करते हुए\nदिए गए कर्िों का तार्कवक रूप से अिसु रण करता ह।ै"
+  },
+  {
+   "id": "2023-q8",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statements: Only a few apples are oranges. All oranges are bananas. Only bananas are grapes.\nकर्ि: केर्ि कुछ सेब सतं रे हैं। सभी संतरे केिे हैं। केर्ि केिे अंगूर हैं।\nConclusion I: Some apples are bananas.\nनिष्कर्ष वI: कुछ सेब केिे हैं।\nConclusion II: Some grapes are not oranges.\nनिष्कर्ष वII: कुछ अगं ूर संतरे िहीं हैं।",
+   "options": {
+    "A": "If only conclusion I follows./ यदि केर्ि निष्कर्षव I अिुसरण करता है",
+    "B": "If only conclusion II follows./ यदि केर्ि निष्कर्षव II अिुसरण करता है",
+    "C": "If either conclusion I or II follows./ यदि या तो निष्कर्षव I या II अिुसरण करता ह ै",
+    "D": "If neither conclusion I nor II follows./ यदि ि तो निष्कर्षव I और ि ही II अिुसरण करता है",
+    "E": "If both conclusions I and II follow./ यदि निष्कर्षव I और II िोिों अिुसरण करते ह ैं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (6-8): In each of the questions below some statements are given followed by two conclusions. You have to\ntake the given statements to be true even if they seem to be at variance with commonly known facts. Read all the\nconclusions and then decide which of the given conclusions logically follows from the given statements disregarding\ncommonly known facts.\nिीचे दिए गए प्रत्यके प्रश्न में कुछ कर्ि और उसके बाि िो निष्कर्षव दिए गए ह।ैं आपको दिए गए कर्िों को सत्य माििा है, भिे ही र्े सामान्यतः ज्ञात तथ्यों से\nनभन्न प्रतीत होते हों। सभी निष्कर्षों को पदिए और दिर तय कीनजए दक दिए गए निष्कर्षों में से कौि-सा निष्कर्ष वसामान्य ज्ञात तथ्यों को िजरअिं ाज करते हुए\nदिए गए कर्िों का तार्कवक रूप से अिसु रण करता ह।ै"
+  },
+  {
+   "id": "2023-q9",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which box is placed exactly in the middle of the arrangement?\nकौि-सा बॉक्स व्यर्स्र्ा के ठीक मध्य म ेंरिा गया है?",
+   "options": {
+    "A": "A",
+    "B": "E",
+    "C": "C",
+    "D": "D",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (9-13): Study the following information carefully and answer the questions given below:\nNine boxes are arranged one above the other. More than four boxes are placed below the box G.\nThree boxes are placed between box G and box H. The numbers of boxes are placed above box H is same as the numbers of boxes\nplaced below box C. Box A is placed two places above the box E which is placed just above the box I. Box F and box H are not\nplaced adjacent to each other. Box B is placed above the box D but placed below box E.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए।\nिौ बॉक्स को एक के ऊपर एक व्यर्नस्र्त दकया गया है। बॉक्स G के िीचे चार से अनधक बॉक्स रिे गए हैं।\nबॉक्स G और बॉक्स H के बीच तीि बॉक्स रिे गए हैं। बॉक्स H के ऊपर रिे गए बॉक्स की संख्या, बॉक्स C के िीचे रिे गए बॉक्स की संख्या के समाि है। बॉक्स\nE, नजस ेबॉक्स I के ठीक ऊपर रिा गया है, बॉक्स A को उससे िो स्र्ाि ऊपर रिा गया है। बॉक्स F और बॉक्स H एक-िसू रे के आसन्न िहीं रिे गए हैं। बॉक्स\nB को बॉक्स D के ऊपर रिा गया है िेदकि बॉक्स E के िीचे रिा गया है।"
+  },
+  {
+   "id": "2023-q10",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many boxes are placed between boxes A and I?\nबॉक्स A और I के बीच दकति ेबॉक्स रिे गए ह?ैं",
+   "options": {
+    "A": "Two/ िो",
+    "B": "Three/ तीि",
+    "C": "One/ एक",
+    "D": "More than four/ चार से अनधक",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (9-13): Study the following information carefully and answer the questions given below:\nNine boxes are arranged one above the other. More than four boxes are placed below the box G.\nThree boxes are placed between box G and box H. The numbers of boxes are placed above box H is same as the numbers of boxes\nplaced below box C. Box A is placed two places above the box E which is placed just above the box I. Box F and box H are not\nplaced adjacent to each other. Box B is placed above the box D but placed below box E.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए।\nिौ बॉक्स को एक के ऊपर एक व्यर्नस्र्त दकया गया है। बॉक्स G के िीचे चार से अनधक बॉक्स रिे गए हैं।\nबॉक्स G और बॉक्स H के बीच तीि बॉक्स रिे गए हैं। बॉक्स H के ऊपर रिे गए बॉक्स की संख्या, बॉक्स C के िीचे रिे गए बॉक्स की संख्या के समाि है। बॉक्स\nE, नजस ेबॉक्स I के ठीक ऊपर रिा गया है, बॉक्स A को उससे िो स्र्ाि ऊपर रिा गया है। बॉक्स F और बॉक्स H एक-िसू रे के आसन्न िहीं रिे गए हैं। बॉक्स\nB को बॉक्स D के ऊपर रिा गया है िेदकि बॉक्स E के िीचे रिा गया है।"
+  },
+  {
+   "id": "2023-q11",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "If box F is placed immediately below box D, how many boxes are there between boxes F and G?\nयदि बॉक्स F को बॉक्स D के ठीक िीचे रिा गया है, तो बॉक्स F और G के बीच दकति ेबॉक्स हैं?",
+   "options": {
+    "A": "Two/ िो",
+    "B": "Three/ तीि",
+    "C": "One/ एक",
+    "D": "Four/ चार",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (9-13): Study the following information carefully and answer the questions given below:\nNine boxes are arranged one above the other. More than four boxes are placed below the box G.\nThree boxes are placed between box G and box H. The numbers of boxes are placed above box H is same as the numbers of boxes\nplaced below box C. Box A is placed two places above the box E which is placed just above the box I. Box F and box H are not\nplaced adjacent to each other. Box B is placed above the box D but placed below box E.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए।\nिौ बॉक्स को एक के ऊपर एक व्यर्नस्र्त दकया गया है। बॉक्स G के िीचे चार से अनधक बॉक्स रिे गए हैं।\nबॉक्स G और बॉक्स H के बीच तीि बॉक्स रिे गए हैं। बॉक्स H के ऊपर रिे गए बॉक्स की संख्या, बॉक्स C के िीचे रिे गए बॉक्स की संख्या के समाि है। बॉक्स\nE, नजस ेबॉक्स I के ठीक ऊपर रिा गया है, बॉक्स A को उससे िो स्र्ाि ऊपर रिा गया है। बॉक्स F और बॉक्स H एक-िसू रे के आसन्न िहीं रिे गए हैं। बॉक्स\nB को बॉक्स D के ऊपर रिा गया है िेदकि बॉक्स E के िीचे रिा गया है।"
+  },
+  {
+   "id": "2023-q12",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "The numbers of boxes are placed between box G and box H is same as the numbers of boxes are placed between\nbox ____ and box _____.\nबॉक्स G और बॉक्स H के बीच रि ेगए बॉक्स की सख्ं या उतिी ही है नजतिी बॉक्स ____ और बॉक्स _____ के बीच रि ेगए बॉक्स की सख्ं या ह।ै",
+   "options": {
+    "A": "C, H",
+    "B": "F, G",
+    "C": "G, A",
+    "D": "H, B",
+    "E": "I, C"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (9-13): Study the following information carefully and answer the questions given below:\nNine boxes are arranged one above the other. More than four boxes are placed below the box G.\nThree boxes are placed between box G and box H. The numbers of boxes are placed above box H is same as the numbers of boxes\nplaced below box C. Box A is placed two places above the box E which is placed just above the box I. Box F and box H are not\nplaced adjacent to each other. Box B is placed above the box D but placed below box E.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए।\nिौ बॉक्स को एक के ऊपर एक व्यर्नस्र्त दकया गया है। बॉक्स G के िीचे चार से अनधक बॉक्स रिे गए हैं।\nबॉक्स G और बॉक्स H के बीच तीि बॉक्स रिे गए हैं। बॉक्स H के ऊपर रिे गए बॉक्स की संख्या, बॉक्स C के िीचे रिे गए बॉक्स की संख्या के समाि है। बॉक्स\nE, नजस ेबॉक्स I के ठीक ऊपर रिा गया है, बॉक्स A को उससे िो स्र्ाि ऊपर रिा गया है। बॉक्स F और बॉक्स H एक-िसू रे के आसन्न िहीं रिे गए हैं। बॉक्स\nB को बॉक्स D के ऊपर रिा गया है िेदकि बॉक्स E के िीचे रिा गया है।"
+  },
+  {
+   "id": "2023-q13",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which of the following statement is true?\nनिम्ननिनित में से कौि-सा कर्ि सत्य है?\nI. Box F is placed above the box E\nबॉक्स F को बॉक्स E के ऊपर रिा गया ह ै\nII. More than two boxes are placed between box A and box I\nबॉक्स A और बॉक्स I के बीच िो से अनधक बॉक्स रिे गए ह ैं\nIII. No box is placed below the box H\nबॉक्स H के िीचे कोई बॉक्स िहीं रिा गया है",
+   "options": {
+    "A": "Both II and III/ II और III िोिों",
+    "B": "Only I/ केर्ि I",
+    "C": "Both I and II/ I और II िोिों",
+    "D": "Only II/ केर्ि II",
+    "E": "All I, II and III/ सभी I, II और III"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (9-13): Study the following information carefully and answer the questions given below:\nNine boxes are arranged one above the other. More than four boxes are placed below the box G.\nThree boxes are placed between box G and box H. The numbers of boxes are placed above box H is same as the numbers of boxes\nplaced below box C. Box A is placed two places above the box E which is placed just above the box I. Box F and box H are not\nplaced adjacent to each other. Box B is placed above the box D but placed below box E.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए।\nिौ बॉक्स को एक के ऊपर एक व्यर्नस्र्त दकया गया है। बॉक्स G के िीचे चार से अनधक बॉक्स रिे गए हैं।\nबॉक्स G और बॉक्स H के बीच तीि बॉक्स रिे गए हैं। बॉक्स H के ऊपर रिे गए बॉक्स की संख्या, बॉक्स C के िीचे रिे गए बॉक्स की संख्या के समाि है। बॉक्स\nE, नजस ेबॉक्स I के ठीक ऊपर रिा गया है, बॉक्स A को उससे िो स्र्ाि ऊपर रिा गया है। बॉक्स F और बॉक्स H एक-िसू रे के आसन्न िहीं रिे गए हैं। बॉक्स\nB को बॉक्स D के ऊपर रिा गया है िेदकि बॉक्स E के िीचे रिा गया है।"
+  },
+  {
+   "id": "2023-q14",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q14 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I follows. / यदि केर्ि निष्कर्षव I अिुसरण करता ह ै",
+    "B": "If only conclusion II follows. / यदि केर्ि निष्कर्षव II अिुसरण करता ह ै",
+    "C": "If either conclusion I or II follows./ यदि या तो निष्कर्ष वI या II अिुसरण करता ह ै",
+    "D": "If neither conclusion I nor II follows. / यदि ि तो निष्कर्ष वI और ि ही II अिुसरण करता ह ै",
+    "E": "If both conclusions I and II follow. / यदि िोिों निष्कर्षव I और II अिुसरण करते हैं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (14-16): In these questions, relationship between different elements is shown in the statements. These\nstatements are followed by two conclusions. Mark answer as\nइि प्रश्नों म,ें कर्िों म ेंनर्नभन्न तत्र्ों के बीच सबं धं िर्ायव ा गया ह।ै इि कर्िों के बाि िो निष्कर्ष वह।ैं उत्तर को निम्न रूप म ेंअदंकत कीनजए।"
+  },
+  {
+   "id": "2023-q15",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q15 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I follows. / यदि केर्ि निष्कर्षव I अिुसरण करता ह ै",
+    "B": "If only conclusion II follows. / यदि केर्ि निष्कर्षव II अिुसरण करता ह ै",
+    "C": "If either conclusion I or II follows./ यदि या तो निष्कर्ष वI या II अिुसरण करता ह ै",
+    "D": "If neither conclusion I nor II follows. / यदि ि तो निष्कर्ष वI और ि ही II अिुसरण करता ह ै",
+    "E": "If both conclusions I and II follow. / यदि िोिों निष्कर्षव I और II अिुसरण करते हैं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (14-16): In these questions, relationship between different elements is shown in the statements. These\nstatements are followed by two conclusions. Mark answer as\nइि प्रश्नों म,ें कर्िों म ेंनर्नभन्न तत्र्ों के बीच सबं धं िर्ायव ा गया ह।ै इि कर्िों के बाि िो निष्कर्ष वह।ैं उत्तर को निम्न रूप म ेंअदंकत कीनजए।"
+  },
+  {
+   "id": "2023-q16",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q16 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I follows. / यदि केर्ि निष्कर्षव I अिुसरण करता ह ै",
+    "B": "If only conclusion II follows. / यदि केर्ि निष्कर्षव II अिुसरण करता ह ै",
+    "C": "If either conclusion I or II follows./ यदि या तो निष्कर्ष वI या II अिुसरण करता ह ै",
+    "D": "If neither conclusion I nor II follows. / यदि ि तो निष्कर्ष वI और ि ही II अिुसरण करता ह ै",
+    "E": "If both conclusions I and II follow. / यदि िोिों निष्कर्षव I और II अिुसरण करते हैं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (14-16): In these questions, relationship between different elements is shown in the statements. These\nstatements are followed by two conclusions. Mark answer as\nइि प्रश्नों म,ें कर्िों म ेंनर्नभन्न तत्र्ों के बीच सबं धं िर्ायव ा गया ह।ै इि कर्िों के बाि िो निष्कर्ष वह।ैं उत्तर को निम्न रूप म ेंअदंकत कीनजए।"
+  },
+  {
+   "id": "2023-q17",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons are there between D and Q?\nD और Q के बीच दकति ेव्यनि ह?ैं",
+   "options": {
+    "A": "1",
+    "B": "2",
+    "C": "3",
+    "D": "4",
+    "E": "5"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (17-20): Study the following information carefully and answer the questions given below:\nCertain numbers of persons sit in a row and face north. A sits 3rd to the left of F. Three persons sit between F and R. R sits 2nd to\nthe left of C who sits just left of V. One person sits between U and V. U sits right of C. B sits 2nd to the left of N and 3rd to the right\nof U. Q sits 3rd to the left of D who sits just right to A. The numbers of persons sit between Q and R is one more than the numbers\nof persons sit to the right of N. No one sits left of Q.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nनिनित सख्ं या म ेंव्यनि एक पंनि में बैठे हैं और उत्तर की ओर मुि करते ह।ैं A, F के बायें से तीसरे स्र्ाि पर बैठा है। F और R के बीच तीि व्यनि बैठे ह।ैं\nC, जो V के ठीक बायीं ओर बैठा ह,ै R उसके बायें स ेिसू रे स्र्ाि पर बठै ा है। U और V के बीच एक व्यनि बैठा ह।ै U, C के िाए ँबैठा ह।ै B, N के बाएँ से िसू रे\nस्र्ाि पर और U के िाएँ स ेतीसरे स्र्ाि पर बैठा है। D, जो A के ठीक िायें बैठा ह,ै Q उसके बायें स ेतीसरे स्र्ाि पर बैठा है। Q और R के बीच बैठे व्यनियों\nकी संख्या, N के िाईं ओर बैठे व्यनियों की संख्या स ेएक अनधक है। Q के बाईं ओर कोई िहीं बैठा है।"
+  },
+  {
+   "id": "2023-q18",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statements is true?\nनिम्ननिनित कर्िों म ेंस ेकौि-सा सत्य ह?ै",
+   "options": {
+    "A": "B sits to the immediate right of N./ B N के ठीक िाय ेंबैठा है",
+    "B": "U sits at one of the ends of the row./ U पंनि के दकसी एक छोर पर बैठा ह ै",
+    "C": "A sits to the immediate left of F./ A, F के ठीक बाईं ओर बठै ा है",
+    "D": "V sits at one of the ends of the row./ V पंनि के दकसी एक छोर पर बैठा ह ै",
+    "E": "C sits second to the right of R./ C, R के िायें से िसू रे स्र्ाि पर बैठा है"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (17-20): Study the following information carefully and answer the questions given below:\nCertain numbers of persons sit in a row and face north. A sits 3rd to the left of F. Three persons sit between F and R. R sits 2nd to\nthe left of C who sits just left of V. One person sits between U and V. U sits right of C. B sits 2nd to the left of N and 3rd to the right\nof U. Q sits 3rd to the left of D who sits just right to A. The numbers of persons sit between Q and R is one more than the numbers\nof persons sit to the right of N. No one sits left of Q.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nनिनित सख्ं या म ेंव्यनि एक पंनि में बैठे हैं और उत्तर की ओर मुि करते ह।ैं A, F के बायें से तीसरे स्र्ाि पर बैठा है। F और R के बीच तीि व्यनि बैठे ह।ैं\nC, जो V के ठीक बायीं ओर बैठा ह,ै R उसके बायें स ेिसू रे स्र्ाि पर बठै ा है। U और V के बीच एक व्यनि बैठा ह।ै U, C के िाए ँबैठा ह।ै B, N के बाएँ से िसू रे\nस्र्ाि पर और U के िाएँ स ेतीसरे स्र्ाि पर बैठा है। D, जो A के ठीक िायें बैठा ह,ै Q उसके बायें स ेतीसरे स्र्ाि पर बैठा है। Q और R के बीच बैठे व्यनियों\nकी संख्या, N के िाईं ओर बैठे व्यनियों की संख्या स ेएक अनधक है। Q के बाईं ओर कोई िहीं बैठा है।"
+  },
+  {
+   "id": "2023-q19",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit in the row?\nपनंि म ेंदकति ेव्यनि बठै े ह?ैं",
+   "options": {
+    "A": "19",
+    "B": "21",
+    "C": "27",
+    "D": "17",
+    "E": "18"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (17-20): Study the following information carefully and answer the questions given below:\nCertain numbers of persons sit in a row and face north. A sits 3rd to the left of F. Three persons sit between F and R. R sits 2nd to\nthe left of C who sits just left of V. One person sits between U and V. U sits right of C. B sits 2nd to the left of N and 3rd to the right\nof U. Q sits 3rd to the left of D who sits just right to A. The numbers of persons sit between Q and R is one more than the numbers\nof persons sit to the right of N. No one sits left of Q.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nनिनित सख्ं या म ेंव्यनि एक पंनि में बैठे हैं और उत्तर की ओर मुि करते ह।ैं A, F के बायें से तीसरे स्र्ाि पर बैठा है। F और R के बीच तीि व्यनि बैठे ह।ैं\nC, जो V के ठीक बायीं ओर बैठा ह,ै R उसके बायें स ेिसू रे स्र्ाि पर बठै ा है। U और V के बीच एक व्यनि बैठा ह।ै U, C के िाए ँबैठा ह।ै B, N के बाएँ से िसू रे\nस्र्ाि पर और U के िाएँ स ेतीसरे स्र्ाि पर बैठा है। D, जो A के ठीक िायें बैठा ह,ै Q उसके बायें स ेतीसरे स्र्ाि पर बैठा है। Q और R के बीच बैठे व्यनियों\nकी संख्या, N के िाईं ओर बैठे व्यनियों की संख्या स ेएक अनधक है। Q के बाईं ओर कोई िहीं बैठा है।"
+  },
+  {
+   "id": "2023-q20",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between V and B?\nV और B के बीच दकति ेव्यनि बठै े ह?ैं",
+   "options": {
+    "A": "9",
+    "B": "2",
+    "C": "4",
+    "D": "7",
+    "E": "8"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (17-20): Study the following information carefully and answer the questions given below:\nCertain numbers of persons sit in a row and face north. A sits 3rd to the left of F. Three persons sit between F and R. R sits 2nd to\nthe left of C who sits just left of V. One person sits between U and V. U sits right of C. B sits 2nd to the left of N and 3rd to the right\nof U. Q sits 3rd to the left of D who sits just right to A. The numbers of persons sit between Q and R is one more than the numbers\nof persons sit to the right of N. No one sits left of Q.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nनिनित सख्ं या म ेंव्यनि एक पंनि में बैठे हैं और उत्तर की ओर मुि करते ह।ैं A, F के बायें से तीसरे स्र्ाि पर बैठा है। F और R के बीच तीि व्यनि बैठे ह।ैं\nC, जो V के ठीक बायीं ओर बैठा ह,ै R उसके बायें स ेिसू रे स्र्ाि पर बठै ा है। U और V के बीच एक व्यनि बैठा ह।ै U, C के िाए ँबैठा ह।ै B, N के बाएँ से िसू रे\nस्र्ाि पर और U के िाएँ स ेतीसरे स्र्ाि पर बैठा है। D, जो A के ठीक िायें बैठा ह,ै Q उसके बायें स ेतीसरे स्र्ाि पर बैठा है। Q और R के बीच बैठे व्यनियों\nकी संख्या, N के िाईं ओर बैठे व्यनियों की संख्या स ेएक अनधक है। Q के बाईं ओर कोई िहीं बैठा है।"
+  },
+  {
+   "id": "2023-q21",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In the number ‘479486553’, if odd digits are subtracted by 1 an\nbe the sum of the digits which are 2nd, 4th and 6th from the left end in\nसख्ं या '479486553' म,ें यदि नर्र्षम अकं ों म ेंस े1 घटाया जाए और सम अकं ों म ेंस े2\nस ेिसू रे, चौर् ेऔर छठे अकं ों का योग क्या होगा?",
+   "options": {
+    "A": "13",
+    "B": "14",
+    "C": "12",
+    "D": "16",
+    "E": "None of these/ इिमें स ेकोई िहीं"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2023-q22",
+   "section": "Reasoning Ability",
+   "topic": "Para Jumbles",
+   "question": "What is the code for the word “Towards”?\nर्ब्ि “Towards” के निए कूट क्या ह?ै",
+   "options": {
+    "A": "bf",
+    "B": "hu",
+    "C": "qt",
+    "D": "dm",
+    "E": "None of the above/ उपरोि म ेंसे कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (22-26): Study the following information carefully and an\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर\nIn a certain code:/ एक निनित कूट म:ें\n“Shuffle new word” is coded as “xf bf go”\n“Shuffle new word” को “xf bf go” के रूप म ेंकूटबद्ध दकया गया ह ै\n“New word towards corner” is coded as “xf bf hu hh”\n“New word towards corner” को “xf bf hu hh” के रूप म ेंकूटबद्ध दकया गया है\n“Towards chapter word table” is coded as “hu qt bf dm”\n“Towards chapter word table” को “hu qt bf dm” के रूप म ेंकूटबद्ध दकया गया ह ै\n“Table around towards” is coded as “dm ch hu”\n“Table around towards” को “dm ch hu” के रूप म ेंकूटबद्ध दकया गया ह ै\nnd even digits are subtracted by 2. Then, what will\nthe new number formed after rearrangement?\nघटाया जाए, तो पिु व्यर्व स्र्ा के बाि बिी िई सख्ं या म ेंबाए ंछोर\nnswer the questions given below:\nिीनजए।"
+  },
+  {
+   "id": "2023-q23",
+   "section": "Reasoning Ability",
+   "topic": "Para Jumbles",
+   "question": "What is the code for the word “chapter”?\n“chapter” र्ब्ि के निए कूट क्या ह?ै",
+   "options": {
+    "A": "bf",
+    "B": "hu",
+    "C": "qt",
+    "D": "dm",
+    "E": "None of the above/ उपरोि म ेंसे कोई िहीं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (22-26): Study the following information carefully and an\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर\nIn a certain code:/ एक निनित कूट म:ें\n“Shuffle new word” is coded as “xf bf go”\n“Shuffle new word” को “xf bf go” के रूप म ेंकूटबद्ध दकया गया ह ै\n“New word towards corner” is coded as “xf bf hu hh”\n“New word towards corner” को “xf bf hu hh” के रूप म ेंकूटबद्ध दकया गया है\n“Towards chapter word table” is coded as “hu qt bf dm”\n“Towards chapter word table” को “hu qt bf dm” के रूप म ेंकूटबद्ध दकया गया ह ै\n“Table around towards” is coded as “dm ch hu”\n“Table around towards” को “dm ch hu” के रूप म ेंकूटबद्ध दकया गया ह ै\nnd even digits are subtracted by 2. Then, what will\nthe new number formed after rearrangement?\nघटाया जाए, तो पिु व्यर्व स्र्ा के बाि बिी िई सख्ं या म ेंबाए ंछोर\nnswer the questions given below:\nिीनजए।"
+  },
+  {
+   "id": "2023-q24",
+   "section": "Reasoning Ability",
+   "topic": "Para Jumbles",
+   "question": "Which of the following word is coded as “ch”?\nनिम्ननिनित म ेंस ेदकस र्ब्ि को \"ch\" के रूप म ेंकूटबद्ध दकया गया ह?ै",
+   "options": {
+    "A": "New",
+    "B": "Word",
+    "C": "Towards",
+    "D": "Around",
+    "E": "None of the above/ उपरोि म ेंसे कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (22-26): Study the following information carefully and an\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर\nIn a certain code:/ एक निनित कूट म:ें\n“Shuffle new word” is coded as “xf bf go”\n“Shuffle new word” को “xf bf go” के रूप म ेंकूटबद्ध दकया गया ह ै\n“New word towards corner” is coded as “xf bf hu hh”\n“New word towards corner” को “xf bf hu hh” के रूप म ेंकूटबद्ध दकया गया है\n“Towards chapter word table” is coded as “hu qt bf dm”\n“Towards chapter word table” को “hu qt bf dm” के रूप म ेंकूटबद्ध दकया गया ह ै\n“Table around towards” is coded as “dm ch hu”\n“Table around towards” को “dm ch hu” के रूप म ेंकूटबद्ध दकया गया ह ै\nnd even digits are subtracted by 2. Then, what will\nthe new number formed after rearrangement?\nघटाया जाए, तो पिु व्यर्व स्र्ा के बाि बिी िई सख्ं या म ेंबाए ंछोर\nnswer the questions given below:\nिीनजए।"
+  },
+  {
+   "id": "2023-q25",
+   "section": "Reasoning Ability",
+   "topic": "Para Jumbles",
+   "question": "What is the code for the word “Table new corner”?\n“Table new corner” र्ब्ि के निए कूट क्या ह?ै",
+   "options": {
+    "A": "bf go hh",
+    "B": "hu hh dm",
+    "C": "qt ch hu",
+    "D": "dm hh xf",
+    "E": "None of the above/ उपरोि म ेंसे कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (22-26): Study the following information carefully and an\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर\nIn a certain code:/ एक निनित कूट म:ें\n“Shuffle new word” is coded as “xf bf go”\n“Shuffle new word” को “xf bf go” के रूप म ेंकूटबद्ध दकया गया ह ै\n“New word towards corner” is coded as “xf bf hu hh”\n“New word towards corner” को “xf bf hu hh” के रूप म ेंकूटबद्ध दकया गया है\n“Towards chapter word table” is coded as “hu qt bf dm”\n“Towards chapter word table” को “hu qt bf dm” के रूप म ेंकूटबद्ध दकया गया ह ै\n“Table around towards” is coded as “dm ch hu”\n“Table around towards” को “dm ch hu” के रूप म ेंकूटबद्ध दकया गया ह ै\nnd even digits are subtracted by 2. Then, what will\nthe new number formed after rearrangement?\nघटाया जाए, तो पिु व्यर्व स्र्ा के बाि बिी िई सख्ं या म ेंबाए ंछोर\nnswer the questions given below:\nिीनजए।"
+  },
+  {
+   "id": "2023-q26",
+   "section": "Reasoning Ability",
+   "topic": "Para Jumbles",
+   "question": "Which of the following word is coded as “xf”?\nनिम्ननिनित म ेंस ेदकस र्ब्ि को \"xf\" के रूप म ेंकूटबद्ध दकया गया ह?ै",
+   "options": {
+    "A": "New",
+    "B": "Word",
+    "C": "Towards",
+    "D": "Chapter",
+    "E": "None of the above/ उपरोि म ेंसे कोई िहीं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (22-26): Study the following information carefully and an\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर\nIn a certain code:/ एक निनित कूट म:ें\n“Shuffle new word” is coded as “xf bf go”\n“Shuffle new word” को “xf bf go” के रूप म ेंकूटबद्ध दकया गया ह ै\n“New word towards corner” is coded as “xf bf hu hh”\n“New word towards corner” को “xf bf hu hh” के रूप म ेंकूटबद्ध दकया गया है\n“Towards chapter word table” is coded as “hu qt bf dm”\n“Towards chapter word table” को “hu qt bf dm” के रूप म ेंकूटबद्ध दकया गया ह ै\n“Table around towards” is coded as “dm ch hu”\n“Table around towards” को “dm ch hu” के रूप म ेंकूटबद्ध दकया गया ह ै\nnd even digits are subtracted by 2. Then, what will\nthe new number formed after rearrangement?\nघटाया जाए, तो पिु व्यर्व स्र्ा के बाि बिी िई सख्ं या म ेंबाए ंछोर\nnswer the questions given below:\nिीनजए।"
+  },
+  {
+   "id": "2023-q27",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who lives on the 5th floor?\n5र्ीं मनंजि पर कौि रहता ह?ै",
+   "options": {
+    "A": "Q",
+    "B": "S",
+    "C": "The one who belongs to Italy/ र्ह व्यनि जो इटिी से सबं ंनधत ह ै",
+    "D": "R",
+    "E": "Both (a) and (c)/ (a) और (c) िोिों"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (27-31): Study the following information carefully and answer the questions given below:\nSeven persons from M-S live in seven storey building and belongs to different countries viz. Italy, Canada, Germany, China. Spain,\nIndia and Brazil but not necessarily in the same order. The bottom most floor is numbered as 1 and so on till the topmost floor\nis numbered as 7.\nS lives two floors above the one who belongs to Brazil and live on prime numbered floor. More than two floors gap between S\nand the one who belongs to Canada. N belong to Spain and lives three floors below the one who belongs to Canada. O lives just\nabove the one who belongs to Italy. The numbers of persons live below M as same as live above R who lives just below P. The\none who belongs to China lives just above the one who belongs to India.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nM से S तक सात व्यनि सात मंनजिा इमारत म ेंरहत ेह ैंऔर नर्नभन्न िेर्ों अर्ावत इटिी, किाडा, जमिव ी, चीि, स्पिे , भारत और ब्राजीि स ेहैं िेदकि जरूरी\nिहीं दक इसी क्रम म ेंहों। सबस ेनिचिी मंनजि को 1 स ेक्रमांदकत दकया गया ह ैऔर इसी प्रकार क्रमांदकत करत ेहुए सबस ेऊपरी मंनजि को 7 से क्रमांदकत\nदकया गया है।\nS, ब्राजीि से सबं ंनधत व्यनि से िो मंनजि ऊपर रहता है और अभाज्य संख्या र्ािी मंनजि पर रहता है। S और किाडा से संबंनधत व्यनि के बीच िो मंनजिों\nसे अनधक का अंतर है। N स्पेि स ेसंबंनधत ह ैऔर किाडा स ेसंबंनधत व्यनि स ेतीि मंनजि िीच ेरहता है। O इटिी स ेसबं ंनधत व्यनि के ठीक ऊपर रहता है।\nM के िीचे रहिे र्ािे व्यनियों की संख्या, P के ठीक िीचे रहिे र्ािे R के ऊपर रहिे र्ािे व्यनियों की संख्या के समाि ह।ै जो व्यनि चीि से है, र्ह भारत\nसे संबंनधत व्यनि के ठीक ऊपर रहता ह।ै"
+  },
+  {
+   "id": "2023-q28",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which country does O belong to?\nO दकस िर्े स ेसम्बनंधत ह?ै",
+   "options": {
+    "A": "India/ भारत",
+    "B": "None of these/ इिमें से कोई िहीं",
+    "C": "Brazil/ ब्राजीि",
+    "D": "China/ चीि",
+    "E": "Germany/ जमिव ी"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (27-31): Study the following information carefully and answer the questions given below:\nSeven persons from M-S live in seven storey building and belongs to different countries viz. Italy, Canada, Germany, China. Spain,\nIndia and Brazil but not necessarily in the same order. The bottom most floor is numbered as 1 and so on till the topmost floor\nis numbered as 7.\nS lives two floors above the one who belongs to Brazil and live on prime numbered floor. More than two floors gap between S\nand the one who belongs to Canada. N belong to Spain and lives three floors below the one who belongs to Canada. O lives just\nabove the one who belongs to Italy. The numbers of persons live below M as same as live above R who lives just below P. The\none who belongs to China lives just above the one who belongs to India.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nM से S तक सात व्यनि सात मंनजिा इमारत म ेंरहत ेह ैंऔर नर्नभन्न िेर्ों अर्ावत इटिी, किाडा, जमिव ी, चीि, स्पिे , भारत और ब्राजीि स ेहैं िेदकि जरूरी\nिहीं दक इसी क्रम म ेंहों। सबस ेनिचिी मंनजि को 1 स ेक्रमांदकत दकया गया ह ैऔर इसी प्रकार क्रमांदकत करत ेहुए सबस ेऊपरी मंनजि को 7 से क्रमांदकत\nदकया गया है।\nS, ब्राजीि से सबं ंनधत व्यनि से िो मंनजि ऊपर रहता है और अभाज्य संख्या र्ािी मंनजि पर रहता है। S और किाडा से संबंनधत व्यनि के बीच िो मंनजिों\nसे अनधक का अंतर है। N स्पेि स ेसंबंनधत ह ैऔर किाडा स ेसंबंनधत व्यनि स ेतीि मंनजि िीच ेरहता है। O इटिी स ेसबं ंनधत व्यनि के ठीक ऊपर रहता है।\nM के िीचे रहिे र्ािे व्यनियों की संख्या, P के ठीक िीचे रहिे र्ािे R के ऊपर रहिे र्ािे व्यनियों की संख्या के समाि ह।ै जो व्यनि चीि से है, र्ह भारत\nसे संबंनधत व्यनि के ठीक ऊपर रहता ह।ै"
+  },
+  {
+   "id": "2023-q29",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many floors are there between P and the person from Canada?\nP और किाडा के व्यनि के बीच दकतिी मनंजि ेंह?ैं",
+   "options": {
+    "A": "1",
+    "B": "2",
+    "C": "3",
+    "D": "4",
+    "E": "Cannot be determined/ निधावररत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (27-31): Study the following information carefully and answer the questions given below:\nSeven persons from M-S live in seven storey building and belongs to different countries viz. Italy, Canada, Germany, China. Spain,\nIndia and Brazil but not necessarily in the same order. The bottom most floor is numbered as 1 and so on till the topmost floor\nis numbered as 7.\nS lives two floors above the one who belongs to Brazil and live on prime numbered floor. More than two floors gap between S\nand the one who belongs to Canada. N belong to Spain and lives three floors below the one who belongs to Canada. O lives just\nabove the one who belongs to Italy. The numbers of persons live below M as same as live above R who lives just below P. The\none who belongs to China lives just above the one who belongs to India.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nM से S तक सात व्यनि सात मंनजिा इमारत म ेंरहत ेह ैंऔर नर्नभन्न िेर्ों अर्ावत इटिी, किाडा, जमिव ी, चीि, स्पिे , भारत और ब्राजीि स ेहैं िेदकि जरूरी\nिहीं दक इसी क्रम म ेंहों। सबस ेनिचिी मंनजि को 1 स ेक्रमांदकत दकया गया ह ैऔर इसी प्रकार क्रमांदकत करत ेहुए सबस ेऊपरी मंनजि को 7 से क्रमांदकत\nदकया गया है।\nS, ब्राजीि से सबं ंनधत व्यनि से िो मंनजि ऊपर रहता है और अभाज्य संख्या र्ािी मंनजि पर रहता है। S और किाडा से संबंनधत व्यनि के बीच िो मंनजिों\nसे अनधक का अंतर है। N स्पेि स ेसंबंनधत ह ैऔर किाडा स ेसंबंनधत व्यनि स ेतीि मंनजि िीच ेरहता है। O इटिी स ेसबं ंनधत व्यनि के ठीक ऊपर रहता है।\nM के िीचे रहिे र्ािे व्यनियों की संख्या, P के ठीक िीचे रहिे र्ािे R के ऊपर रहिे र्ािे व्यनियों की संख्या के समाि ह।ै जो व्यनि चीि से है, र्ह भारत\nसे संबंनधत व्यनि के ठीक ऊपर रहता ह।ै"
+  },
+  {
+   "id": "2023-q30",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which country does the person on the 3rd floor belong to?\nतीसरी मनंजि का व्यनि दकस िर्े का ह?ै",
+   "options": {
+    "A": "Germany/ जमिव ी",
+    "B": "Brazil/ ब्राजीि",
+    "C": "Italy/ इटिी",
+    "D": "China/ चीि",
+    "E": "Canada/ किाडा"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (27-31): Study the following information carefully and answer the questions given below:\nSeven persons from M-S live in seven storey building and belongs to different countries viz. Italy, Canada, Germany, China. Spain,\nIndia and Brazil but not necessarily in the same order. The bottom most floor is numbered as 1 and so on till the topmost floor\nis numbered as 7.\nS lives two floors above the one who belongs to Brazil and live on prime numbered floor. More than two floors gap between S\nand the one who belongs to Canada. N belong to Spain and lives three floors below the one who belongs to Canada. O lives just\nabove the one who belongs to Italy. The numbers of persons live below M as same as live above R who lives just below P. The\none who belongs to China lives just above the one who belongs to India.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nM से S तक सात व्यनि सात मंनजिा इमारत म ेंरहत ेह ैंऔर नर्नभन्न िेर्ों अर्ावत इटिी, किाडा, जमिव ी, चीि, स्पिे , भारत और ब्राजीि स ेहैं िेदकि जरूरी\nिहीं दक इसी क्रम म ेंहों। सबस ेनिचिी मंनजि को 1 स ेक्रमांदकत दकया गया ह ैऔर इसी प्रकार क्रमांदकत करत ेहुए सबस ेऊपरी मंनजि को 7 से क्रमांदकत\nदकया गया है।\nS, ब्राजीि से सबं ंनधत व्यनि से िो मंनजि ऊपर रहता है और अभाज्य संख्या र्ािी मंनजि पर रहता है। S और किाडा से संबंनधत व्यनि के बीच िो मंनजिों\nसे अनधक का अंतर है। N स्पेि स ेसंबंनधत ह ैऔर किाडा स ेसंबंनधत व्यनि स ेतीि मंनजि िीच ेरहता है। O इटिी स ेसबं ंनधत व्यनि के ठीक ऊपर रहता है।\nM के िीचे रहिे र्ािे व्यनियों की संख्या, P के ठीक िीचे रहिे र्ािे R के ऊपर रहिे र्ािे व्यनियों की संख्या के समाि ह।ै जो व्यनि चीि से है, र्ह भारत\nसे संबंनधत व्यनि के ठीक ऊपर रहता ह।ै"
+  },
+  {
+   "id": "2023-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If all the persons live in alphabetical order from top to bottom then how many persons remain at the same position\n(Excluding M)?\nयदि सभी व्यनि सबस ेऊपर स ेसबस ेिीच ेतक र्णािव क्रु म म ेंरहत ेह ैंतो दकति ेव्यनि एक ही स्र्ाि पर बि ेरहत ेह?ैं (M को छोडकर)",
+   "options": {
+    "A": "One/ एक",
+    "B": "None/ कोई िहीं",
+    "C": "Two/ िो",
+    "D": "Three/ तीि",
+    "E": "More than three/ तीि स ेअनधक"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (27-31): Study the following information carefully and answer the questions given below:\nSeven persons from M-S live in seven storey building and belongs to different countries viz. Italy, Canada, Germany, China. Spain,\nIndia and Brazil but not necessarily in the same order. The bottom most floor is numbered as 1 and so on till the topmost floor\nis numbered as 7.\nS lives two floors above the one who belongs to Brazil and live on prime numbered floor. More than two floors gap between S\nand the one who belongs to Canada. N belong to Spain and lives three floors below the one who belongs to Canada. O lives just\nabove the one who belongs to Italy. The numbers of persons live below M as same as live above R who lives just below P. The\none who belongs to China lives just above the one who belongs to India.\nनिम्ननिनित जािकारी का ध्यािपर्ू कव अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nM से S तक सात व्यनि सात मंनजिा इमारत म ेंरहत ेह ैंऔर नर्नभन्न िेर्ों अर्ावत इटिी, किाडा, जमिव ी, चीि, स्पिे , भारत और ब्राजीि स ेहैं िेदकि जरूरी\nिहीं दक इसी क्रम म ेंहों। सबस ेनिचिी मंनजि को 1 स ेक्रमांदकत दकया गया ह ैऔर इसी प्रकार क्रमांदकत करत ेहुए सबस ेऊपरी मंनजि को 7 से क्रमांदकत\nदकया गया है।\nS, ब्राजीि से सबं ंनधत व्यनि से िो मंनजि ऊपर रहता है और अभाज्य संख्या र्ािी मंनजि पर रहता है। S और किाडा से संबंनधत व्यनि के बीच िो मंनजिों\nसे अनधक का अंतर है। N स्पेि स ेसंबंनधत ह ैऔर किाडा स ेसंबंनधत व्यनि स ेतीि मंनजि िीच ेरहता है। O इटिी स ेसबं ंनधत व्यनि के ठीक ऊपर रहता है।\nM के िीचे रहिे र्ािे व्यनियों की संख्या, P के ठीक िीचे रहिे र्ािे R के ऊपर रहिे र्ािे व्यनियों की संख्या के समाि ह।ै जो व्यनि चीि से है, र्ह भारत\nसे संबंनधत व्यनि के ठीक ऊपर रहता ह।ै"
+  },
+  {
+   "id": "2023-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction is point T with respect to point to Q?\nबबिं ुQ के सापक्षे म ेंबबिं ुT दकस दिर्ा म ेंह?ै",
+   "options": {
+    "A": "North/ उत्तर",
+    "B": "South/ िनक्षण",
+    "C": "South-east/ िनक्षण-पूर् व",
+    "D": "South-west/ िनक्षण-पनिम",
+    "E": "North-east/ उत्तर-पर्ू व"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (32-34): Study the following information and answer the questions given below:\nW walks 8m towards west from point P to reach point Q. He takes a left turn from point Q and walks 10m to reach point R. He\ntakes a right turn from point R and walks 12m to reach point S. He takes another right turn from point S and walks 6m to reach\npoint T. He takes a left turn from point T and walks 8m to reach his home.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nबबंि ु Q तक पहुंचिे के निए W बबंि ु P से पनिम की ओर 8 मीटर चिता है। र्ह बबंि ु Q से बाईं ओर मुडता ह ै और बबंि ुR तक पहुचं ि े के निए 10 मीटर\nचिता है। र्ह बबंि ुR से िाईं ओर मुडता है और बबंि ुS तक पहुंचिे के निए 12 मीटर चिता ह।ै र्ह बबंि ुS से एक बार दिर िाएं मुडता है और बबंि ुT तक\nपहुंचिे के निए 6 मीटर चिता है। र्ह बबंि ुT स ेबाए ंमुडता है और अपि ेघर तक पहुंचिे के निए 8 मीटर चिता ह।ै"
+  },
+  {
+   "id": "2023-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the shortest distance between point S and W’s home?\nW के घर और बबिं ुS के बीच न्यिू तम िरू ी दकतिी ह?ै",
+   "options": {
+    "A": "22m/22 मीटर",
+    "B": "10m/10 मीटर",
+    "C": "12m/12मीटर",
+    "D": "26m/26 मीटर",
+    "E": "None of these/ इिमें स ेकोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (32-34): Study the following information and answer the questions given below:\nW walks 8m towards west from point P to reach point Q. He takes a left turn from point Q and walks 10m to reach point R. He\ntakes a right turn from point R and walks 12m to reach point S. He takes another right turn from point S and walks 6m to reach\npoint T. He takes a left turn from point T and walks 8m to reach his home.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nबबंि ु Q तक पहुंचिे के निए W बबंि ु P से पनिम की ओर 8 मीटर चिता है। र्ह बबंि ु Q से बाईं ओर मुडता ह ै और बबंि ुR तक पहुचं ि े के निए 10 मीटर\nचिता है। र्ह बबंि ुR से िाईं ओर मुडता है और बबंि ुS तक पहुंचिे के निए 12 मीटर चिता ह।ै र्ह बबंि ुS से एक बार दिर िाएं मुडता है और बबंि ुT तक\nपहुंचिे के निए 6 मीटर चिता है। र्ह बबंि ुT स ेबाए ंमुडता है और अपि ेघर तक पहुंचिे के निए 8 मीटर चिता ह।ै"
+  },
+  {
+   "id": "2023-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the total distance travelled by W?\nW द्वारा तय की गई कुि िरू ी दकतिी ह?ै",
+   "options": {
+    "A": "47m/47 मीटर",
+    "B": "40m/40 मीटर",
+    "C": "44m/44 मीटर",
+    "D": "41m/41 मीटर",
+    "E": "36m/36 मीटर"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (32-34): Study the following information and answer the questions given below:\nW walks 8m towards west from point P to reach point Q. He takes a left turn from point Q and walks 10m to reach point R. He\ntakes a right turn from point R and walks 12m to reach point S. He takes another right turn from point S and walks 6m to reach\npoint T. He takes a left turn from point T and walks 8m to reach his home.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nबबंि ु Q तक पहुंचिे के निए W बबंि ु P से पनिम की ओर 8 मीटर चिता है। र्ह बबंि ु Q से बाईं ओर मुडता ह ै और बबंि ुR तक पहुचं ि े के निए 10 मीटर\nचिता है। र्ह बबंि ुR से िाईं ओर मुडता है और बबंि ुS तक पहुंचिे के निए 12 मीटर चिता ह।ै र्ह बबंि ुS से एक बार दिर िाएं मुडता है और बबंि ुT तक\nपहुंचिे के निए 6 मीटर चिता है। र्ह बबंि ुT स ेबाए ंमुडता है और अपि ेघर तक पहुंचिे के निए 8 मीटर चिता ह।ै"
+  },
+  {
+   "id": "2023-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Find the odd one out?\nउसका चयि कीनजए जो नभन्न हो।",
+   "options": {
+    "A": "UPR",
+    "B": "RMO",
+    "C": "LGI",
+    "D": "GBE",
+    "E": "YTV"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q36",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Who sits 3rd to the left of F?\nF के बाएं स ेतीसरे स्र्ाि पर कौि बठै ा ह?ै",
+   "options": {
+    "A": "H",
+    "B": "L",
+    "C": "I",
+    "D": "G",
+    "E": "None of these / इिमें स ेकोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-40): Study the following information and answer the questions given below:\nEight persons sit around a circular table in which some of them face inside and some of them face outside.\nH sits 3rd to the right of K and both face the same direction. I sits opposite K but both face opposite direction. L sits 2nd to the\nright of I. F sits opposite D who sits 2nd to the left of E. Immediate neighbor of E face opposite direction as E faces. G sits 3rd to\nthe right of D and not an immediate neighbor of I and K. L and E face inside. G and F face the same direction.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nआठ व्यनि एक गोिाकार मजे के चारों ओर बैठे हैं, नजिम ेंसे कुछ का मुि अंिर की ओर है और कुछ का मिु बाहर की ओर ह।ै\nH, K के िाय ेंसे तीसरे स्र्ाि पर बैठा है और िोिों का मुि समाि दिर्ा म ेंहै। I, K के नर्परीत बैठा है िेदकि िोिों का मुि नर्परीत दिर्ा की ओर है। L, I\nके िाएँ िसू रे स्र्ाि पर बैठा है। D, जो E के बाएँ िसू रे स्र्ाि पर बैठा है, F उसके नर्परीत बैठा है। E के निकटतम पडोसी का मिु E के नर्परीत दिर्ा म ेंह।ै\nG, D के िाय ेंसे तीसरे स्र्ाि पर बैठा है तर्ा I और K का निकटतम पडोसी िहीं है। L और E का मिु अंिर की ओर ह।ै G और F का मिु समाि दिर्ा म ेंहै।"
+  },
+  {
+   "id": "2023-q37",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Who sits opposite the one who sits just right of G?\nG के ठीक िाएँ बठै े व्यनि के नर्परीत कौि बठै ा ह?ै",
+   "options": {
+    "A": "L",
+    "B": "I",
+    "C": "H",
+    "D": "None of these / इिमें से कोई िहीं",
+    "E": "F"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-40): Study the following information and answer the questions given below:\nEight persons sit around a circular table in which some of them face inside and some of them face outside.\nH sits 3rd to the right of K and both face the same direction. I sits opposite K but both face opposite direction. L sits 2nd to the\nright of I. F sits opposite D who sits 2nd to the left of E. Immediate neighbor of E face opposite direction as E faces. G sits 3rd to\nthe right of D and not an immediate neighbor of I and K. L and E face inside. G and F face the same direction.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nआठ व्यनि एक गोिाकार मजे के चारों ओर बैठे हैं, नजिम ेंसे कुछ का मुि अंिर की ओर है और कुछ का मिु बाहर की ओर ह।ै\nH, K के िाय ेंसे तीसरे स्र्ाि पर बैठा है और िोिों का मुि समाि दिर्ा म ेंहै। I, K के नर्परीत बैठा है िेदकि िोिों का मुि नर्परीत दिर्ा की ओर है। L, I\nके िाएँ िसू रे स्र्ाि पर बैठा है। D, जो E के बाएँ िसू रे स्र्ाि पर बैठा है, F उसके नर्परीत बैठा है। E के निकटतम पडोसी का मिु E के नर्परीत दिर्ा म ेंह।ै\nG, D के िाय ेंसे तीसरे स्र्ाि पर बैठा है तर्ा I और K का निकटतम पडोसी िहीं है। L और E का मिु अंिर की ओर ह।ै G और F का मिु समाि दिर्ा म ेंहै।"
+  },
+  {
+   "id": "2023-q38",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit between E and I when counted\nI के िाईं ओर स ेनगिती करि ेपर E और I के बीच दकति ेव्यनि बठै े ह?ैं",
+   "options": {
+    "A": "Four/ चार",
+    "B": "Three/ तीि",
+    "C": "One/ एक",
+    "D": "None/ कोई िहीं",
+    "E": "Two/ िो"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-40): Study the following information and answer the questions given below:\nEight persons sit around a circular table in which some of them face inside and some of them face outside.\nH sits 3rd to the right of K and both face the same direction. I sits opposite K but both face opposite direction. L sits 2nd to the\nright of I. F sits opposite D who sits 2nd to the left of E. Immediate neighbor of E face opposite direction as E faces. G sits 3rd to\nthe right of D and not an immediate neighbor of I and K. L and E face inside. G and F face the same direction.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nआठ व्यनि एक गोिाकार मजे के चारों ओर बैठे हैं, नजिम ेंसे कुछ का मुि अंिर की ओर है और कुछ का मिु बाहर की ओर ह।ै\nH, K के िाय ेंसे तीसरे स्र्ाि पर बैठा है और िोिों का मुि समाि दिर्ा म ेंहै। I, K के नर्परीत बैठा है िेदकि िोिों का मुि नर्परीत दिर्ा की ओर है। L, I\nके िाएँ िसू रे स्र्ाि पर बैठा है। D, जो E के बाएँ िसू रे स्र्ाि पर बैठा है, F उसके नर्परीत बैठा है। E के निकटतम पडोसी का मिु E के नर्परीत दिर्ा म ेंह।ै\nG, D के िाय ेंसे तीसरे स्र्ाि पर बैठा है तर्ा I और K का निकटतम पडोसी िहीं है। L और E का मिु अंिर की ओर ह।ै G और F का मिु समाि दिर्ा म ेंहै।"
+  },
+  {
+   "id": "2023-q39",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Which of the following is true?\nनिम्ननिनित म ेंस ेकौि-सा सही ह?ै",
+   "options": {
+    "A": "G sits 2nd to the left of I/ G, I के बायीं ओर िसू रे स्र्ाि पर बठै ा है",
+    "B": "H and F face the same direction/ H और F एक ही दिर्ा की ओर",
+    "C": "L and D are immediate neighbors / L और D निकटतम पडोसी हैं",
+    "D": "E and G face opposite direction to each other / E और G एक-ि",
+    "E": "All are true/ सभी सत्य ह ैं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (36-40): Study the following information and answer the questions given below:\nEight persons sit around a circular table in which some of them face inside and some of them face outside.\nH sits 3rd to the right of K and both face the same direction. I sits opposite K but both face opposite direction. L sits 2nd to the\nright of I. F sits opposite D who sits 2nd to the left of E. Immediate neighbor of E face opposite direction as E faces. G sits 3rd to\nthe right of D and not an immediate neighbor of I and K. L and E face inside. G and F face the same direction.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nआठ व्यनि एक गोिाकार मजे के चारों ओर बैठे हैं, नजिम ेंसे कुछ का मुि अंिर की ओर है और कुछ का मिु बाहर की ओर ह।ै\nH, K के िाय ेंसे तीसरे स्र्ाि पर बैठा है और िोिों का मुि समाि दिर्ा म ेंहै। I, K के नर्परीत बैठा है िेदकि िोिों का मुि नर्परीत दिर्ा की ओर है। L, I\nके िाएँ िसू रे स्र्ाि पर बैठा है। D, जो E के बाएँ िसू रे स्र्ाि पर बैठा है, F उसके नर्परीत बैठा है। E के निकटतम पडोसी का मिु E के नर्परीत दिर्ा म ेंह।ै\nG, D के िाय ेंसे तीसरे स्र्ाि पर बैठा है तर्ा I और K का निकटतम पडोसी िहीं है। L और E का मिु अंिर की ओर ह।ै G और F का मिु समाि दिर्ा म ेंहै।"
+  },
+  {
+   "id": "2023-q40",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Who are the immediate neighbors of E?\nE के निकटतम पडोसी कौि ह?ैं",
+   "options": {
+    "A": "K and F/ K और F",
+    "B": "L and D/ L और D",
+    "C": "G and K/ G और K",
+    "D": "I and H/ I और H",
+    "E": "D and G/ D और G"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-40): Study the following information and answer the questions given below:\nEight persons sit around a circular table in which some of them face inside and some of them face outside.\nH sits 3rd to the right of K and both face the same direction. I sits opposite K but both face opposite direction. L sits 2nd to the\nright of I. F sits opposite D who sits 2nd to the left of E. Immediate neighbor of E face opposite direction as E faces. G sits 3rd to\nthe right of D and not an immediate neighbor of I and K. L and E face inside. G and F face the same direction.\nनिम्ननिनित जािकारी का अध्ययि कीनजए और िीच ेदिए गए प्रश्नों के उत्तर िीनजए।\nआठ व्यनि एक गोिाकार मजे के चारों ओर बैठे हैं, नजिम ेंसे कुछ का मुि अंिर की ओर है और कुछ का मिु बाहर की ओर ह।ै\nH, K के िाय ेंसे तीसरे स्र्ाि पर बैठा है और िोिों का मुि समाि दिर्ा म ेंहै। I, K के नर्परीत बैठा है िेदकि िोिों का मुि नर्परीत दिर्ा की ओर है। L, I\nके िाएँ िसू रे स्र्ाि पर बैठा है। D, जो E के बाएँ िसू रे स्र्ाि पर बैठा है, F उसके नर्परीत बैठा है। E के निकटतम पडोसी का मिु E के नर्परीत दिर्ा म ेंह।ै\nG, D के िाय ेंसे तीसरे स्र्ाि पर बैठा है तर्ा I और K का निकटतम पडोसी िहीं है। L और E का मिु अंिर की ओर ह।ै G और F का मिु समाि दिर्ा म ेंहै।"
+  },
+  {
+   "id": "2023-q41",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A and B entered into a partnership business with inve\nC joined them with investment of Rs. 1800. At the end of\nbetween profit share of A and B.\nA और B ि ेक्रमर्ः 1300 रुपय ेऔर 500 रुपय ेके निर्र्े के सार् साझिे ारी\nC उिके सार् जडु गया। एक र्र्ष वके अतं म,ें C का िाभ 360 रुपय ेह।ै A और",
+   "options": {
+    "A": "480 Rs./ 480 रुपय े",
+    "B": "280 Rs./ 280 रुपय े",
+    "C": "400 Rs./ 400 रुपय े",
+    "D": "320 Rs./ 320 रुपय े",
+    "E": "180 Rs./ 180 रुपय े\nfrom the right of I?\nउन्मिु ह ैं\nिसू रे की नर्परीत दिर्ा की ओर उन्मिु ह ैं\nestment of Rs. 1300 & Rs. 500 respectively. After six months,\na year, the profit share of C is Rs. 360. Find the difference\nम ेंएक व्यर्साय र्रूु दकया। छह महीि ेके बाि, 1800 रुपय ेके निर्र्े के सार्\nB के िाभ के बीच अतं र ज्ञात कीनजए।"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q42",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Five years ago, the average age of A and B was 15 years. The ratio of present age of A and C is 6 : 5 respectively. If B\nis four years younger than C, then find the sum of present age of B and C (in years).\nपाचँ र्र्ष वपहि,े A और B की औसत आयु 15 र्र्षव र्ी। A और C की र्तमव ाि आयु का अिपु ात क्रमर्ः 6:5 ह।ै यदि B, C से चार र्र्षव छोटा है, तो B और C की\nर्तमव ाि आयु का योग (र्र्ष वमें) ज्ञात कीनजए।",
+   "options": {
+    "A": "34 years/34 र्र्ष व",
+    "B": "32 years/32 र्र्ष व",
+    "C": "36 years/36 र्र्ष व",
+    "D": "24 years/24 र्र्ष व",
+    "E": "40 years/40 र्र्षव"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2023-q43",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The average weight of eight people is X kg. Two new people joined them with total weight of 151 kg and average\n𝟑\nweight of all people increased by kg. If the weight of lightest people out of two people joined is X-5 kg, the find the\n𝟐\ndifference between weight these two people who joined later.\n𝟑\nआठ व्यनियों का औसत र्जि X दकिोग्राम ह।ै िो िए िोग उिके सार् जडु गए नजिका कुि र्जि 151 दकिोग्राम र्ा और सभी िोगों का औसत र्जि\n𝟐\nदकिोग्राम बि गया। यदि र्ानमि हुए िो िोगों म ेंस ेसबस ेहल्के िोगों का र्जि X-5 दकिोग्राम ह,ै तो बाि म ेंर्ानमि होि ेर्ाि ेिोिों िोगों के र्जि के\nबीच का अतं र ज्ञात कीनजए।",
+   "options": {
+    "A": "27 kg/27 दकिोग्राम",
+    "B": "21 kg/21 दकिोग्राम",
+    "C": "15 kg/15 दकिोग्राम",
+    "D": "25 kg/25 दकिोग्राम",
+    "E": "22 kg/22 दकिोग्राम"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q44",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A gets 40% marks in an exam and he received 40 less marks than passing marks. B gets 70% marks in same exam\nand received 20 more marks than passing marks. If C gets 65% marks in the same exam, then find the difference\nbetween marks received by A and C in the exam.\nA को एक परीक्षा म ें 40% अकं प्राप्त होत े ह ैंऔर उस े उत्तीण व अकं ों स े 40 अकं कम प्राप्त होत े ह।ैं B को उसी परीक्षा म ें70% अकं प्राप्त होत े ह ैंऔर उस े\nउत्तीण वअकं ों स े20 अकं अनधक प्राप्त होत ेह।ैं यदि C को समाि परीक्षा म ें65% अकं नमित ेह,ैं तो परीक्षा म ेंA और C द्वारा प्राप्त अकं ों के बीच अतं र ज्ञात\nकीनजए।",
+   "options": {
+    "A": "30",
+    "B": "60",
+    "C": "40",
+    "D": "25",
+    "E": "50"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2023-q45",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man invested Rs. P in scheme A on compound interest at rate of 10% p.a. for two years and he invested Rs.\n(P+500) in scheme B on simple interest at rate of 12% p.a. for same period of time. If the interest received by man from\nscheme A is Rs. 150 less than that of from scheme B, then find amount invested in scheme B.\nएक व्यनि ि ेयोजिा A म ेंिो र्र्षों के निए 10% र्ार्र्षकव िर स ेचक्रर्नृद्ध ब्याज पर P रुपय ेका निर्र्े दकया और उसि ेसमाि अर्नध के निए 12% र्ार्र्षकव\nिर स ेसाधारण ब्याज पर योजिा B म ें(P+500) रुपय ेका निर्र्े दकया। यदि व्यनि को योजिा A स ेप्राप्त ब्याज, योजिा B स ेप्राप्त ब्याज स े150 रुपय े\nकम ह,ै तो योजिा B म ेंनिर्र्े की गई रानर् ज्ञात कीनजए।",
+   "options": {
+    "A": "1250 Rs./ 1250 रुपय े",
+    "B": "1000 Rs./ 1000 रुपये",
+    "C": "1500 Rs. /1500 रुपय े",
+    "D": "2000 Rs./ 2000 रुपय े",
+    "E": "2500 Rs./ 2500 रुपये"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2023-q46",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "6400, 400, 50, 12.5, 6.25, 3",
+   "options": {
+    "A": "400",
+    "B": "12.5",
+    "C": "6.25",
+    "D": "3",
+    "E": "50"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (46-50): Find the wrong number in the given number series.\nिी गई सख्ं या श्िृं िा म ेंगित सख्ं या ज्ञात कीनजए।"
+  },
+  {
+   "id": "2023-q47",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "34, 32, 36, 30, 38, 48, 40",
+   "options": {
+    "A": "34",
+    "B": "32",
+    "C": "48",
+    "D": "36",
+    "E": "30"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (46-50): Find the wrong number in the given number series.\nिी गई सख्ं या श्िृं िा म ेंगित सख्ं या ज्ञात कीनजए।"
+  },
+  {
+   "id": "2023-q48",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "43, 47, 56, 72, 108, 133, 182",
+   "options": {
+    "A": "72",
+    "B": "56",
+    "C": "43",
+    "D": "47",
+    "E": "108"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (46-50): Find the wrong number in the given number series.\nिी गई सख्ं या श्िृं िा म ेंगित सख्ं या ज्ञात कीनजए।"
+  },
+  {
+   "id": "2023-q49",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "12, 28, 60, 108, 172, 256, 348",
+   "options": {
+    "A": "12",
+    "B": "28",
+    "C": "60",
+    "D": "256",
+    "E": "108"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (46-50): Find the wrong number in the given number series.\nिी गई सख्ं या श्िृं िा म ेंगित सख्ं या ज्ञात कीनजए।"
+  },
+  {
+   "id": "2023-q50",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "3, 7, 27, 112, 565, 3396, 23779",
+   "options": {
+    "A": "7",
+    "B": "3",
+    "C": "27",
+    "D": "565",
+    "E": "23779"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (46-50): Find the wrong number in the given number series.\nिी गई सख्ं या श्िृं िा म ेंगित सख्ं या ज्ञात कीनजए।"
+  },
+  {
+   "id": "2023-q51",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the average number of occupied rooms in hotel B, C and E together.\nहोटि B, C और E में नमिाकर भरे हुए कमरों की औसत सख्ं या ज्ञात कीनजए।",
+   "options": {
+    "A": "130",
+    "B": "120",
+    "C": "140",
+    "D": "150",
+    "E": "110"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (51-55): The table given below shows\nD and E). It also shows the number of vacant room\nquestions given below.\nिीचे िी गई तानिका पाचं अिग-अिग होटिों (A, B, C, D और\nभी िर्ातव ी ह।ै आकं डों का ध्यािपर्ू कव अध्ययि कीनजए और िीचे\nNote: Total number of rooms available in a hotel = Va\nिोट: एक होटि में उपिब्ध कमरों की कुि सख्ं या = िािी कमरे\n3, 12.5\nthe total number of rooms available in the five different hotels (A, B, C,\nms in these five hotels. Read the data carefully and answer the following\nE) में उपिब्ध कमरों की कुि सख्ं या िर्ातव ी ह।ै यह इि पाचं होटिों में िािी कमरों की सख्ं या\nदिए गए निम्ननिनित प्रश्नों के उत्तर िीनजए।\nVacant rooms + Occupied rooms\n+ भरे हुए कमरे"
+  },
+  {
+   "id": "2023-q52",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "In hotel F, total number of rooms available is 25% more than that of C and the number of rooms occupied is 40%\nmore than the rooms vacant in hotel E. Find the total number of rooms vacant in the hotel F.\nहोटि F में उपिब्ध कमरों की कुि सख्ं या, C म ेंउपिब्ध कमरों की कुि सख्ं या स े25% अनधक है और भरे हुए कमरों की सख्ं या, होटि E म ेंिािी कमरों की\nतिु िा म ें40% अनधक ह।ै होटि F म ेंिािी कमरों की कुि सख्ं या ज्ञात कीनजए।",
+   "options": {
+    "A": "184",
+    "B": "180",
+    "C": "176",
+    "D": "182",
+    "E": "178"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (51-55): The table given below shows\nD and E). It also shows the number of vacant room\nquestions given below.\nिीचे िी गई तानिका पाचं अिग-अिग होटिों (A, B, C, D और\nभी िर्ातव ी ह।ै आकं डों का ध्यािपर्ू कव अध्ययि कीनजए और िीचे\nNote: Total number of rooms available in a hotel = Va\nिोट: एक होटि में उपिब्ध कमरों की कुि सख्ं या = िािी कमरे\n3, 12.5\nthe total number of rooms available in the five different hotels (A, B, C,\nms in these five hotels. Read the data carefully and answer the following\nE) में उपिब्ध कमरों की कुि सख्ं या िर्ातव ी ह।ै यह इि पाचं होटिों में िािी कमरों की सख्ं या\nदिए गए निम्ननिनित प्रश्नों के उत्तर िीनजए।\nVacant rooms + Occupied rooms\n+ भरे हुए कमरे"
+  },
+  {
+   "id": "2023-q53",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The cost of a room in hotel A is Rs. X and the cost of a room in hotel C is Rs. Y. If the revenue generated from the\nhotel A is Rs. 55000 and the ratio of revenue generated from C to A is 10: 11, then find the sum of X and Y.\nहोटि A म ेंएक कमरे की कीमत X रुपय ेह ैऔर होटि C म ेंएक कमरे की कीमत Y रुपय ेह।ै यदि होटि A द्वारा अर्जतव आय 55000 रुपय ेह ैतर्ा C और\nA द्वारा अर्जतव आय का अिपु ात 10:11 है, तो X और Y का योग ज्ञात कीनजए।",
+   "options": {
+    "A": "2000",
+    "B": "4000",
+    "C": "5000",
+    "D": "3000",
+    "E": "1000"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (51-55): The table given below shows\nD and E). It also shows the number of vacant room\nquestions given below.\nिीचे िी गई तानिका पाचं अिग-अिग होटिों (A, B, C, D और\nभी िर्ातव ी ह।ै आकं डों का ध्यािपर्ू कव अध्ययि कीनजए और िीचे\nNote: Total number of rooms available in a hotel = Va\nिोट: एक होटि में उपिब्ध कमरों की कुि सख्ं या = िािी कमरे\n3, 12.5\nthe total number of rooms available in the five different hotels (A, B, C,\nms in these five hotels. Read the data carefully and answer the following\nE) में उपिब्ध कमरों की कुि सख्ं या िर्ातव ी ह।ै यह इि पाचं होटिों में िािी कमरों की सख्ं या\nदिए गए निम्ननिनित प्रश्नों के उत्तर िीनजए।\nVacant rooms + Occupied rooms\n+ भरे हुए कमरे"
+  },
+  {
+   "id": "2023-q54",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the number of rooms vacant in D is what percent of the total number of rooms in the hotel B.\nज्ञात कीनजए दक D म ेंिािी कमरों की सख्ं या, होटि B म ेंकमरों की कुि सख्ं या का दकतिा प्रनतर्त ह?ै",
+   "options": {
+    "A": "55%",
+    "B": "52%",
+    "C": "58%",
+    "D": "60%",
+    "E": "62%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (51-55): The table given below shows\nD and E). It also shows the number of vacant room\nquestions given below.\nिीचे िी गई तानिका पाचं अिग-अिग होटिों (A, B, C, D और\nभी िर्ातव ी ह।ै आकं डों का ध्यािपर्ू कव अध्ययि कीनजए और िीचे\nNote: Total number of rooms available in a hotel = Va\nिोट: एक होटि में उपिब्ध कमरों की कुि सख्ं या = िािी कमरे\n3, 12.5\nthe total number of rooms available in the five different hotels (A, B, C,\nms in these five hotels. Read the data carefully and answer the following\nE) में उपिब्ध कमरों की कुि सख्ं या िर्ातव ी ह।ै यह इि पाचं होटिों में िािी कमरों की सख्ं या\nदिए गए निम्ननिनित प्रश्नों के उत्तर िीनजए।\nVacant rooms + Occupied rooms\n+ भरे हुए कमरे"
+  },
+  {
+   "id": "2023-q55",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the number of rooms occupied in hotel A and D together are how many more/less than the number of rooms\noccupied in hotel E and B together.\nA और D में नमिाकर भरे हुए कमरों की सख्ं या, होटि E और B में नमिाकर भरे हुए कमरों की सख्ं या से दकतिी अनधक/कम है?",
+   "options": {
+    "A": "60",
+    "B": "80",
+    "C": "50",
+    "D": "20",
+    "E": "70"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (51-55): The table given below shows\nD and E). It also shows the number of vacant room\nquestions given below.\nिीचे िी गई तानिका पाचं अिग-अिग होटिों (A, B, C, D और\nभी िर्ातव ी ह।ै आकं डों का ध्यािपर्ू कव अध्ययि कीनजए और िीचे\nNote: Total number of rooms available in a hotel = Va\nिोट: एक होटि में उपिब्ध कमरों की कुि सख्ं या = िािी कमरे\n3, 12.5\nthe total number of rooms available in the five different hotels (A, B, C,\nms in these five hotels. Read the data carefully and answer the following\nE) में उपिब्ध कमरों की कुि सख्ं या िर्ातव ी ह।ै यह इि पाचं होटिों में िािी कमरों की सख्ं या\nदिए गए निम्ननिनित प्रश्नों के उत्तर िीनजए।\nVacant rooms + Occupied rooms\n+ भरे हुए कमरे"
+  },
+  {
+   "id": "2023-q56",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "⚠️ The expression for Q56 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "2",
+    "B": "4",
+    "C": "6",
+    "D": "8",
+    "E": "12"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (56-60): What approximate value should come in the place of question (?) mark in the following questions.\nनिम्ननिनित प्रश्नों में प्रश्ननचह्ि (?) के स्र्ाि पर दकतिा अिमु ानित माि आिा चानहए?"
+  },
+  {
+   "id": "2023-q57",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "⚠️ The expression for Q57 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "64",
+    "B": "100",
+    "C": "16",
+    "D": "36",
+    "E": "144"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (56-60): What approximate value should come in the place of question (?) mark in the following questions.\nनिम्ननिनित प्रश्नों में प्रश्ननचह्ि (?) के स्र्ाि पर दकतिा अिमु ानित माि आिा चानहए?"
+  },
+  {
+   "id": "2023-q58",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "⚠️ The expression for Q58 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "233",
+    "B": "247",
+    "C": "212",
+    "D": "202",
+    "E": "285"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (56-60): What approximate value should come in the place of question (?) mark in the following questions.\nनिम्ननिनित प्रश्नों में प्रश्ननचह्ि (?) के स्र्ाि पर दकतिा अिमु ानित माि आिा चानहए?"
+  },
+  {
+   "id": "2023-q59",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "⚠️ The expression for Q59 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "11",
+    "B": "9",
+    "C": "8",
+    "D": "10",
+    "E": "12"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (56-60): What approximate value should come in the place of question (?) mark in the following questions.\nनिम्ननिनित प्रश्नों में प्रश्ननचह्ि (?) के स्र्ाि पर दकतिा अिमु ानित माि आिा चानहए?"
+  },
+  {
+   "id": "2023-q60",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "⚠️ The expression for Q60 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "8",
+    "B": "12",
+    "C": "10",
+    "D": "9",
+    "E": "14"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (56-60): What approximate value should come in the place of question (?) mark in the following questions.\nनिम्ननिनित प्रश्नों में प्रश्ननचह्ि (?) के स्र्ाि पर दकतिा अिमु ानित माि आिा चानहए?"
+  },
+  {
+   "id": "2023-q61",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "In a mixture, the quantity of milk is x liters and water a\nin the mixture so that milk becomes 75% of resultant mixtu\nremaining quantity of mixture (in liters).\nएक नमश्ण म ेंिधू की मात्रा x िीटर और पािी की मात्रा 8 िीटर ह।ै नमश्ण म\nनमश्ण का 75% बि जाए। यदि पररणामी नमश्ण से 10 िीटर निकाि दिया",
+   "options": {
+    "A": "48",
+    "B": "42",
+    "C": "56",
+    "D": "46",
+    "E": "37\nare 8 liters. Five liters pure milk and six liters of water added\nure. If 10 liters of resultant mixture is removed, then find the\nेंपाचं िीटर र्द्धु िधू और छह िीटर पािी नमिाया जाता है तादक िधू पररणामी\nजाए, तो नमश्ण की र्र्षे मात्रा (िीटर म)ें ज्ञात कीनजए।"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q62",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "In a right-angled triangle hypotenuse is 8√10 cm and based is half of the height. If height and based of the triangle\nare equal to height & radius of a cylinder, then find\ncurved surface area of cylinder.\nएक समकोण नत्रभजु म ेंकण व8√10 समे ी ह ैऔर आधार ऊंचाई का आधा ह।ै यदि नत्रभजु की ऊँचाई और आधार एक बिे ि की ऊँचाई और नत्रज्या के बराबर\nह,ै तो बिे ि का र्क्र पष्ठृ ीय क्षत्रे िि ज्ञात कीनजए।",
+   "options": {
+    "A": "512π cm² /512π समे ी²",
+    "B": "256 π cm² /256 π समे ी²",
+    "C": "128 π cm² /128 π सेमी²",
+    "D": "556 π cm² /556 π सेमी²",
+    "E": "None of these /इिमें से कोई िहीं"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2023-q63",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of speed of P to speed of Q is 5:8, P covers D km distance in 3 hours and Q covers (D+40) km in 2.5 hours.\nIf P increases his speed by 25%, then find the time taken by P to cover (D+180) km distance. (in hours)\nP की चाि का Q की चाि स ेअिपु ात 5:8 ह,ै P, D दकमी की िरू ी 3 घटं े म ेंतय करता ह ैऔर Q (D+40) दकमी की िरू ी 2.5 घटं ेम ेंतय करता ह।ै यदि P\nअपिी चाि 25% बिा िते ा ह,ै तो P द्वारा (D+180) दकमी की िरू ी तय करि ेम ेंनिया गया समय ज्ञात कीनजए। (घटं ों म)ें",
+   "options": {
+    "A": "6",
+    "B": "5",
+    "C": "8",
+    "D": "7.5",
+    "E": "4.5"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2023-q64",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The sum of five consecutive multiples of four is 200. Find the smallest multiple.\nचार के पाचँ क्रमागत गणु जों का योग 200 ह।ै सबस ेछोटा गणु ज ज्ञात कीनजए।",
+   "options": {
+    "A": "28",
+    "B": "44",
+    "C": "36",
+    "D": "32",
+    "E": "40"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q65",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The speed of boat A in still water is 4 times the speed of stream and covers 24 km upstream in 8 hours. If the speed\nof boat B in still water is 2 kmph more than the speed of boat A in downstream, then find the time (in minutes) taken\nby boat B to cover the same distance in upstream.\nर्ातं पािी म ेंिार् A की चाि, धारा की चाि का 4 गिु ा ह ैऔर 8 घटं ेम ेंधारा के नर्परीत 24 दकमी की िरू ी तय करती ह।ै यदि र्ातं पािी म ेंिार् B की\nचाि, धारा के अिकु ूि िार् A की चाि स े2 दकमी प्रनत घटं ा अनधक ह,ै तो धारा के नर्परीत समाि िरू ी तय करि ेम ेंिार् B द्वारा निया गया समय (नमिटों\nम)ें ज्ञात कीनजए।",
+   "options": {
+    "A": "210",
+    "B": "180",
+    "C": "240",
+    "D": "300",
+    "E": "360"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2023-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total vegetarian people visited in F are 𝐭𝐡 of total non-vegetarian people visited A and total non-vegetarian\n𝟓\npeople visited in F are 50% more than total vegetarian people visited in B. Find total people visited in F are how much\nmore than total non-vegetarian people visited in D.\n𝟕\nF म ेंजाि ेर्ाि ेकुि र्ाकाहारी िोग, A म ेंजाि ेर्ाि ेकुि मासं ाहारी िोगों का ह ैंऔर F म ेंजाि ेर्ाि ेकुि मासं ाहारी िोगों की सख्ं या, B म ेंजाि ेर्ाि ेकुि\n𝟓\nर्ाकाहारी िोगों की तिु िा म ें50% अनधक ह।ै ज्ञात कीनजए दक F म ेंजाि ेर्ाि ेकुि िोग, D म ेंजाि ेर्ाि ेकुि मासं ाहारी िोगों की तिु िा म ेंदकति ेअनधक\nह?ैं",
+   "options": {
+    "A": "210",
+    "B": "240",
+    "C": "260",
+    "D": "200",
+    "E": "180"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (66-70): The bar graph given below shows total number of people\n(Vegetarian + non-Vegetarian) visited in five (A, B, C, D and E) different\nrestaurants daily. Read the bar graph carefully and answer the questions.\nिीच ेदिया गया िडं आििे प्रनतदिि पाचं नर्नभन्न रेस्टोरेंट (A, B, C, D और E) म ेंजाि ेर्ाि ेिोगों\n(र्ाकाहारी + मासं ाहारी) की कुि सख्ं या को िर्ातव ा ह।ै िडं आििे को ध्यािपर्ू कव पदिए और प्रश्नों\nके उत्तर िीनजए।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2023-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total non-vegetarian people visited in C and D together are what percent (approx.) more or less than total people\nvisited in B.\nC और D म ेंनमिाकर गए कुि मासं ाहारी िोग, B म ेंगए कुि िोगों की तिु िा म ेंदकति ेप्रनतर्त (िगभग) अनधक या कम ह?ैं",
+   "options": {
+    "A": "83%",
+    "B": "67%",
+    "C": "44%",
+    "D": "71%",
+    "E": "69%"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (66-70): The bar graph given below shows total number of people\n(Vegetarian + non-Vegetarian) visited in five (A, B, C, D and E) different\nrestaurants daily. Read the bar graph carefully and answer the questions.\nिीच ेदिया गया िडं आििे प्रनतदिि पाचं नर्नभन्न रेस्टोरेंट (A, B, C, D और E) म ेंजाि ेर्ाि ेिोगों\n(र्ाकाहारी + मासं ाहारी) की कुि सख्ं या को िर्ातव ा ह।ै िडं आििे को ध्यािपर्ू कव पदिए और प्रश्नों\nके उत्तर िीनजए।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2023-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If daily same number of vegetarian and non-vegetarian people visited in restaurant D, then find total number of\npeople visited in a week in restaurant D.\nयदि रेस्टोरेंट D म ेंप्रनतदिि समाि सख्ं या म ेंर्ाकाहारी और मासं ाहारी िोग जात ेह,ैं तो रेस्टोरेंट D म ेंएक सप्ताह म ेंजाि ेर्ाि ेिोगों की कुि सख्ं या ज्ञात\nकीनजए।",
+   "options": {
+    "A": "1290",
+    "B": "1330",
+    "C": "1310",
+    "D": "1320",
+    "E": "1270"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (66-70): The bar graph given below shows total number of people\n(Vegetarian + non-Vegetarian) visited in five (A, B, C, D and E) different\nrestaurants daily. Read the bar graph carefully and answer the questions.\nिीच ेदिया गया िडं आििे प्रनतदिि पाचं नर्नभन्न रेस्टोरेंट (A, B, C, D और E) म ेंजाि ेर्ाि ेिोगों\n(र्ाकाहारी + मासं ाहारी) की कुि सख्ं या को िर्ातव ा ह।ै िडं आििे को ध्यािपर्ू कव पदिए और प्रश्नों\nके उत्तर िीनजए।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2023-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of total people visited in E to that in A.\nE म ेंगए कुि िोगों का A म ेंगए कुि िोगों स ेअिपु ात ज्ञात कीनजए।",
+   "options": {
+    "A": "23 : 21",
+    "B": "25 : 27",
+    "C": "23 : 25",
+    "D": "23 : 27",
+    "E": "28 : 27"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (66-70): The bar graph given below shows total number of people\n(Vegetarian + non-Vegetarian) visited in five (A, B, C, D and E) different\nrestaurants daily. Read the bar graph carefully and answer the questions.\nिीच ेदिया गया िडं आििे प्रनतदिि पाचं नर्नभन्न रेस्टोरेंट (A, B, C, D और E) म ेंजाि ेर्ाि ेिोगों\n(र्ाकाहारी + मासं ाहारी) की कुि सख्ं या को िर्ातव ा ह।ै िडं आििे को ध्यािपर्ू कव पदिए और प्रश्नों\nके उत्तर िीनजए।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2023-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total vegetarian people visited in A are what percent more than average number of non-vegetarian people visited\nin B and D together.\nA म ेंगए कुि र्ाकाहारी िोग, B और D म ेंनमिाकर गए मासं ाहारी िोगों की औसत सख्ं या स ेदकति ेप्रनतर्त अनधक ह?ै",
+   "options": {
+    "A": "25%",
+    "B": "5%",
+    "C": "10%",
+    "D": "20%",
+    "E": "30"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (66-70): The bar graph given below shows total number of people\n(Vegetarian + non-Vegetarian) visited in five (A, B, C, D and E) different\nrestaurants daily. Read the bar graph carefully and answer the questions.\nिीच ेदिया गया िडं आििे प्रनतदिि पाचं नर्नभन्न रेस्टोरेंट (A, B, C, D और E) म ेंजाि ेर्ाि ेिोगों\n(र्ाकाहारी + मासं ाहारी) की कुि सख्ं या को िर्ातव ा ह।ै िडं आििे को ध्यािपर्ू कव पदिए और प्रश्नों\nके उत्तर िीनजए।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2023-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Average of present age A, B and C is 14 years, while four years ago, average age of B, C and D was 15 years. If the\nsum of present of A and D is 27 years, then find the age of D five years hence will be (in years).\nA, B और C की र्तमव ाि आय ुका औसत 14 र्र्ष वह,ै जबदक चार र्र्ष वपहि ेB, C और D की औसत आय ु15 र्र्ष वर्ी। यदि A और D की र्तमव ाि आय ुका योग\n27 र्र्ष वह,ै तो पाचँ र्र्ष वबाि D की आय ुज्ञात कीनजए। (र्र्ष वम)ें",
+   "options": {
+    "A": "21",
+    "B": "26",
+    "C": "17",
+    "D": "27",
+    "E": "29"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2023-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A seller has 230 kg of mangoes which he purchases at rate of Rs. 10 per kg. 20% of total mangoes were rotten in\npackaging and thrown away. If seller sold half of the remaining mangoes at the rate of Rs. 20 per kg, then at what price\n(per kg) should seller sell the remaining mangoes to gain a total profit of 15% on the total quantity seller had initially\n(in Rs. /kg)?\nएक नर्क्रेता के पास 230 दकिोग्राम आम ह ैंनजस ेर्ह 10 रुपय ेप्रनत दकिोग्राम की िर स ेिरीिता ह।ै कुि आमों म ेंस े20% आम पकै ेबजगं म ेंसड गए और\nउन्ह ेंिेंक दिया गया। यदि नर्क्रेता ि ेबच ेहुए आमों म ेंस ेआध ेको 20 रुपय ेप्रनत दकिोग्राम की िर स ेबचे ा हो, तो नर्क्रेता को र्र्षे आमों को दकस कीमत\n(प्रनत दकिोग्राम) पर बचे िा चानहए तादक नर्क्रेता को र्रूु म ेंकुि मात्रा पर 15% का कुि िाभ प्राप्त हो सके? (रुपय/ेदकिोग्राम म)ें",
+   "options": {
+    "A": "8.75",
+    "B": "8.25",
+    "C": "8.5",
+    "D": "9.25",
+    "E": "9.75\n𝟏𝟎𝟎"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2023-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "30 women working 9 hours in a day can pack 1000 parcels in 10 days. If the efficiency of woman is %more than\n𝟑\nthat of a man, then find how many men will pack 1500 parcel working 5 hours a day for 10 days.\n𝟏𝟎𝟎\n30 मनहिाएं एक दिि म ें9 घटं ेकाम करके 10 दििों म ें1000 पासिव पकै कर सकती ह।ैं यदि मनहिा की िक्षता, परुु र्ष की तिु िा म ें % अनधक ह,ै तो\n𝟑\nज्ञात कीनजए दक दकति ेपरुु र्ष 10 दििों तक प्रनतदिि 5 घटं ेकाम करके 1500 पासिव पकै करेंग?े",
+   "options": {
+    "A": "52",
+    "B": "42",
+    "C": "48",
+    "D": "108",
+    "E": "50"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2023-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find out the length of train X given that speed of train X is 20 m/sec.\nट्रेि X की िबं ाई ज्ञात कीनजए, जबदक ट्रिे X की चाि 20 मीटर/सके ंड ह।ै\nI. Train X crosses another train Y moving in opposite direction in 6 sec and the speed of train Y is 50% more than the speed of\ntrain X.\nट्रेि X नर्परीत दिर्ा म ेंचि रही िसू री ट्रेि Y को 6 सेकंड म ेंपार करती है और ट्रेि Y की चाि ट्रिे X की चाि से 50% अनधक है।\nII. Length of train Y is 50% less than length of train X.\nट्रेि Y की िबं ाई ट्रेि X की िंबाई से 50% कम है।",
+   "options": {
+    "A": "Both I and II together/ I और II िोिों एकसार्",
+    "B": "Only statement I/ केर्ि कर्ि I",
+    "C": "Only statement II/ केर्ि कर्ि II",
+    "D": "Both I and II together are not sufficient/ I और II िोिों एक सार् पयावप्त िहीं ह ैं",
+    "E": "Either I or II alone/ या तो अकेि ेI या अकेि ेII"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (74-75): Given below in each question there are two statements (I) and (II). You must determine; which\nstatement is enough to give the answer of question. Also, there are five alternatives given, you have to choose one\nalternative as your answer of the questions:\nिीच ेदिए गए प्रत्यके प्रश्न म ेंिो कर्ि (I) और (II) ह।ैं आपको निनित करिा है दक प्रश्न का उत्तर ििे ेके निए कौि-सा कर्ि पयाप्तव ह?ै इसके अिार्ा, पाचं\nनर्कल्प दिए गए ह,ैं आपको प्रश्नों के उत्तर के रूप म ेंएक नर्कल्प चिु िा ह।ै"
+  },
+  {
+   "id": "2023-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Side of square is 3.5 cm more than radius of circle. What will be area of square?\nर्ग वकी भजु ा र्त्तृ की नत्रज्या स े3.5 समे ी अनधक ह।ै र्ग वका क्षत्रे िि क्या होगा?\nI. Difference between circumference and diameter of circle is 45 cm.\nर्ृत्त की पररनध और व्यास के बीच का अंतर 45 समे ी है।\nII. Radius of circle is 50% more than breadth of rectangle whose length is 15 cm. Ratio of circumference of circle & perimeter of\nrectangle is 3 : 2.\nर्ृत्त की नत्रज्या, 15 समे ी िबं ाई र्ाि ेआयत की चौडाई से 50% अनधक है। र्ृत्त की पररनध और आयत की पररनध का अिपु ात 3:2 ह।ै",
+   "options": {
+    "A": "Only statement II is sufficient\nकेर्ि कर्ि II पयावप्त है",
+    "B": "Either statement I or Statement II alone is sufficient\nया तो कर्ि I या कर्ि II अकेिे पयाप्तव ह ै",
+    "C": "Statement I and II both together is sufficient\nकर्ि I और II िोिों एकसार् पयावप्त ह ैं",
+    "D": "Only statement I is sufficient\nकेर्ि कर्ि I पयावप्त ह ै",
+    "E": "Neither statement I nor statement II is sufficient\nि तो कर्ि I और ि ही कर्ि II पयाप्तव ह ै"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (74-75): Given below in each question there are two statements (I) and (II). You must determine; which\nstatement is enough to give the answer of question. Also, there are five alternatives given, you have to choose one\nalternative as your answer of the questions:\nिीच ेदिए गए प्रत्यके प्रश्न म ेंिो कर्ि (I) और (II) ह।ैं आपको निनित करिा है दक प्रश्न का उत्तर ििे ेके निए कौि-सा कर्ि पयाप्तव ह?ै इसके अिार्ा, पाचं\nनर्कल्प दिए गए ह,ैं आपको प्रश्नों के उत्तर के रूप म ेंएक नर्कल्प चिु िा ह।ै"
+  },
+  {
+   "id": "2023-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "⚠️ The expression for Q76 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "if x>y/ यदि x>y",
+    "B": "if x≥y/ यदि x≥y",
+    "C": "if x<y/ यदि x<y",
+    "D": "if x ≤y/ यदि x ≤y",
+    "E": "if x = y or no relation can be established between x and y.\nयदि x = y या x और y के बीच कोई संबंध स्र्ानपत िहीं दकया जा सकता है"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (76-80): Solve the given two equations and mark the correct option based on your answer.\nदिए गए िो समीकरणों को हि कीनजए और अपि ेउत्तर के आधार पर सही नर्कल्प को अंदकत कीनजए।"
+  },
+  {
+   "id": "2023-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "⚠️ The expression for Q77 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "if x>y/ यदि x>y",
+    "B": "if x≥y/ यदि x≥y",
+    "C": "if x<y/ यदि x<y",
+    "D": "if x ≤y/ यदि x ≤y",
+    "E": "if x = y or no relation can be established between x and y.\nयदि x = y या x और y के बीच कोई संबंध स्र्ानपत िहीं दकया जा सकता है"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (76-80): Solve the given two equations and mark the correct option based on your answer.\nदिए गए िो समीकरणों को हि कीनजए और अपि ेउत्तर के आधार पर सही नर्कल्प को अंदकत कीनजए।"
+  },
+  {
+   "id": "2023-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "⚠️ The expression for Q78 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "if x>y/ यदि x>y",
+    "B": "if x≥y/ यदि x≥y",
+    "C": "if x<y/ यदि x<y",
+    "D": "if x ≤y/ यदि x ≤y",
+    "E": "if x = y or no relation can be established between x and y.\nयदि x = y या x और y के बीच कोई संबंध स्र्ानपत िहीं दकया जा सकता है"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (76-80): Solve the given two equations and mark the correct option based on your answer.\nदिए गए िो समीकरणों को हि कीनजए और अपि ेउत्तर के आधार पर सही नर्कल्प को अंदकत कीनजए।"
+  },
+  {
+   "id": "2023-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "⚠️ The expression for Q79 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "if x>y/ यदि x>y",
+    "B": "if x≥y/ यदि x≥y",
+    "C": "if x<y/ यदि x<y",
+    "D": "if x ≤y/ यदि x ≤y",
+    "E": "if x = y or no relation can be established between x and y.\nयदि x = y या x और y के बीच कोई संबंध स्र्ानपत िहीं दकया जा सकता है"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (76-80): Solve the given two equations and mark the correct option based on your answer.\nदिए गए िो समीकरणों को हि कीनजए और अपि ेउत्तर के आधार पर सही नर्कल्प को अंदकत कीनजए।"
+  },
+  {
+   "id": "2023-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Quadratic Equations",
+   "question": "⚠️ The expression for Q80 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "if x>y/ यदि x>y",
+    "B": "if x≥y/ यदि x≥y",
+    "C": "if x<y/ यदि x<y",
+    "D": "if x ≤y/ यदि x ≤y",
+    "E": "if x = y or no relation can be established between x and y.\nयदि x = y या x और y के बीच कोई संबंध स्र्ानपत िहीं दकया जा सकता है\n\nS1. Ans.(d)\nSol.\nS2. Ans.(a)\nSol.\nS3. Ans.(e)\nSol.\nS4. Ans.(c)\nSol.\nSolutions\nS5. Ans.(c)\nSol.\nS6. Ans.(b)\nSol.\nS7. Ans.(a)\nSol.\nS8. Ans.(e)\nSol.\n\nS9. Ans.(b)\nSol.\nS10. Ans.(a)\nSol.\nS11. Ans.(e)\nSol.\nS12. Ans.(e)\nSol.\n\nS13. Ans.(b)\nSol.\nS14. Ans.(b)\nS15. Ans.(e)\nS16. Ans.(c)\nS17. Ans.(b)\nSol.\nS18. Ans.(e)\nSol.\nS19. Ans.(c)\nSol.\nS20. Ans.(c)\nSol.\nS21. Ans.(c)\nSol.\n\nS22. Ans.(b)\nSol.\nS23. Ans.(c)\nSol.\nS24. Ans.(d)\nSol.\nS25. Ans.(d)\nSol.\n\nS26. Ans.(a)\nSol.\nS27. Ans.(e)\nSol.\nS28. Ans.(e)\nSol.\nS29. Ans.(d)\nSol.\n\nS30. Ans.(d)\nSol.\nS31. Ans.(b)\nSol.\nS32. Ans.(d)\nSol.\nS33. Ans.(b)\nSol.\n\nS34. Ans.(c)\nSol.\nS35. Ans.(d)\nS36. Ans.(b)\nSol.\nS37. Ans.(c)\nSol.\nS38. Ans.(a)\nSol.\n\nS39. Ans.(e)\nSol.\nS40. Ans.(c)\nSol.\nS41. Ans.(d)\nSol.\nS42. Ans.(c)\nSol.\n\nS43. Ans.(d)\nSol.\nS44. Ans.(e)\nSol.\nS45. Ans.(c)\nSol.\nS46. Ans.(d)\nSol.\n\nS47. Ans.(c)\nSol.\nS48. Ans.(e)\nSol.\nS49. Ans.(d)\nSol.\nS50. Ans.(a)\nSol.\n\nS51. Ans.(a)\nSol.\nS52. Ans.(d)\nSol.\nS53. Ans.(e)\nSol.\n\nS54. Ans.(b)\nSol.\nS55. Ans.(c)\nSol.\nS56. Ans.(c)\nSol.\nS57. Ans.(c)\nSol.\nS58. Ans.(a)\nSol.\n\nS59. Ans.(d)\nSol.\nS60. Ans.(b)\nSol.\nS61. Ans.(d)\nSol.\nS62. Ans.(a)\nSol.\nS63. Ans.(a)\nSol.\n\nS64. Ans.(d)\nSol.\nS65. Ans.(c)\nSol.\nS66. Ans.(b)\nSol.\nS67. Ans.(c)\nSol.\nS68. Ans.(b)\nSol.\n\nS69. Ans.(d)\nSol.\nS70. Ans.(d)\nSol.\nS71. Ans.(b)\nSol.\nS72. Ans.(a)\nSol.\nS73. Ans.(d)\nSol.\n\nS74. Ans.(a)\nSol.\nS75. Ans.(b)\nSol.\nS76. Ans.(a)\nSol.\n\nS77. Ans.(e)\nSol.\nS78. Ans.(a)\nSol.\nS79. Ans.(c)\nSol.\nS80. Ans.(b)\nSol."
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (76-80): Solve the given two equations and mark the correct option based on your answer.\nदिए गए िो समीकरणों को हि कीनजए और अपि ेउत्तर के आधार पर सही नर्कल्प को अंदकत कीनजए।"
+  }
+ ]
+}

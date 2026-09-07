@@ -3,7 +3,6 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
-.env
 *.egg-info/
 
 # Firebase service account (never commit — use FIREBASE_CREDENTIALS_JSON env var on Render)
@@ -13,11 +12,18 @@ firebase-service-account.json
 node_modules/
 dist/
 
-# Env files
+# Env files — every variant, at any depth.
+# Listing them one by one meant each new file had to be remembered: a timestamped
+# backup (.env.bak.1787208446) was created and committed with a live JWT signing
+# key, Mongo connection strings and Groq/Cloudinary credentials in it before
+# anyone noticed. These patterns catch the whole family instead.
 .env
-.env.local
-.env.production
-
+.env.*
+*.env
+# ...but a checked-in TEMPLATE with placeholder values is useful, so allow those.
+!.env.example
+!.env.sample
+!.env.template
 
 # Local tracking (not committed)
 FEATURE_BUG_LOG.md

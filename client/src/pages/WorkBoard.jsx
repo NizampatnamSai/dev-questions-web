@@ -65,6 +65,8 @@ export default function WorkBoard() {
   // const [selectedDate, setSelectedDate] = useState(null);
   const [activeTab, setActiveTab] = useState("today"); // "today" | "history"
   const [datesLoaded, setDatesLoaded] = useState(false);
+  const [datesLoading, setDatesLoading] = useState(false);
+  const [datesError, setDatesError] = useState(false);
   const [selectedHistoryDate, setSelectedHistoryDate] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [wbConfig, setWbConfig] = useState({
@@ -113,10 +115,7 @@ export default function WorkBoard() {
 
   const openHistory = () => {
     setActiveTab("history");
-    if (!datesLoaded) {
-      loadAvailableDates();
-      setDatesLoaded(true);
-    }
+    if (!datesLoaded && !datesLoading) loadAvailableDates();
   };
 
   const openConfigEdit = () => {
@@ -141,12 +140,22 @@ export default function WorkBoard() {
   };
 
   const loadAvailableDates = async () => {
+    setDatesLoading(true);
+    setDatesError(false);
     try {
       const { data } = await api.get("/workboard/dates");
       const todayStr = new Date().toISOString().slice(0, 10);
       setAvailableDates((data || []).filter((item) => item.date !== todayStr));
+      // Only mark it loaded on SUCCESS. Setting the flag at call time meant a
+      // failed request was never retried — the tab stayed permanently empty.
+      setDatesLoaded(true);
     } catch {
-      // silently fail
+      // A swallowed error rendered "No posts history available yet", which is
+      // a different claim from "we could not fetch it" and sent people looking
+      // for history that was actually there.
+      setDatesError(true);
+    } finally {
+      setDatesLoading(false);
     }
   };
 
@@ -531,7 +540,40 @@ export default function WorkBoard() {
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             📜 Browse History
           </p>
-          {availableDates.length === 0 ? (
+          {/* Order matters: loading and error are checked BEFORE the empty
+              case. availableDates is [] while the request is in flight, so an
+              empty-first check flashed "No posts history available yet" on
+              every open, then replaced it with the list. */}
+          {datesLoading ? (
+            <div className="space-y-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 animate-pulse"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="h-3.5 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+                    <div className="flex items-center gap-2">
+                      <div className="h-3 w-8 rounded bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-3 w-8 rounded bg-slate-200 dark:bg-slate-700" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : datesError ? (
+            <div className="space-y-2">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Could not load history. Check your connection and try again.
+              </p>
+              <button
+                onClick={loadAvailableDates}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition"
+              >
+                Retry
+              </button>
+            </div>
+          ) : availableDates.length === 0 ? (
             <p className="text-sm text-slate-400">
               No posts history available yet
             </p>

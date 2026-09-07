@@ -50,6 +50,7 @@
    "name": "IBPS PO Prelims 2025 — Shift 1",
    "year": "2025",
    "shift": "Shift 1 · 23 Aug 2025",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
    "total": 100,
@@ -73,6 +74,7 @@
    "name": "IBPS PO Prelims 2025 — Shift 2",
    "year": "2025",
    "shift": "Shift 2 · 23 Aug 2025",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
    "total": 100,
@@ -96,6 +98,7 @@
    "name": "IBPS PO Prelims 2024",
    "year": "2024",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
    "total": 100,
@@ -119,6 +122,7 @@
    "name": "IBPS PO Prelims 2023",
    "year": "2023",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
    "total": 100,
@@ -142,6 +146,7 @@
    "name": "IBPS PO Prelims 2022",
    "year": "2022",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
    "total": 100,
@@ -165,6 +170,7 @@
    "name": "IBPS PO Prelims 2021",
    "year": "2021",
    "shift": "Based on 4 Dec 2021",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
    "total": 100,
@@ -188,6 +194,7 @@
    "name": "IBPS PO Prelims 2020",
    "year": "2020",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
    "total": 100,
@@ -211,6 +218,7 @@
    "name": "IBPS PO Prelims 2019",
    "year": "2019",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
    "total": 100,
@@ -234,6 +242,7 @@
    "name": "IBPS PO Prelims 2018",
    "year": "2018",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
    "total": 97,
@@ -257,6 +266,7 @@
    "name": "IBPS PO Prelims 2017",
    "year": "2017",
    "shift": "Memory-based reconstruction",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
    "total": 88,
@@ -280,6 +290,7 @@
    "name": "SBI PO Prelims 2026 — 1 Aug (Shift 1)",
    "year": "2026",
    "shift": "Memory-based · 1 Aug 2026",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
    "total": 100,
@@ -303,6 +314,7 @@
    "name": "SBI PO Prelims 2026 — 2 Aug (Shift 1)",
    "year": "2026",
    "shift": "Memory-based · 2 Aug 2026",
+   "exam": "ibps",
    "source": "memory-based",
    "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 11 chart-based questions are marked — their charts are images in the source.",
    "total": 99,
@@ -318,6 +330,162 @@
     {
      "name": "Reasoning Ability",
      "count": 35
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2025-nov23",
+   "name": "IBPS RRB PO Prelims 2025 — 23 Nov (Shift 1)",
+   "year": "2025",
+   "shift": "Memory-based · 23 Nov 2025",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2025-nov22",
+   "name": "IBPS RRB PO Prelims 2025 — 22 Nov (Shift 1)",
+   "year": "2025",
+   "shift": "Memory-based · 22 Nov 2025",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2024-aug04",
+   "name": "IBPS RRB PO Prelims 2024 — 4 Aug",
+   "year": "2024",
+   "shift": "Memory-based · 4 Aug 2024",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 11 chart-based questions are marked — their charts are images in the source.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2024-aug03",
+   "name": "IBPS RRB PO Prelims 2024 — 3 Aug (Shift 1)",
+   "year": "2024",
+   "shift": "Memory-based · 3 Aug 2024",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 6 chart-based questions are marked — their charts are images in the source.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2023",
+   "name": "IBPS RRB PO Prelims 2023",
+   "year": "2023",
+   "shift": "Memory-based reconstruction",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2022",
+   "name": "IBPS RRB PO Prelims 2022",
+   "year": "2022",
+   "shift": "Memory-based reconstruction",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2021",
+   "name": "IBPS RRB PO Prelims 2021",
+   "year": "2021",
+   "shift": "Memory-based reconstruction",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own. 5 chart-based questions are marked — their charts are images in the source.",
+   "total": 80,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 40
+    },
+    {
+     "name": "Quantitative Aptitude",
+     "count": 40
+    }
+   ]
+  },
+  {
+   "id": "rrbpo-2020",
+   "name": "IBPS RRB PO Prelims 2020",
+   "year": "2020",
+   "shift": "Memory-based · partial paper",
+   "exam": "rrb",
+   "source": "memory-based",
+   "note": "Compiled from careerpower.in's memory-based paper — IBPS never released the original. Answer keys and worked solutions are the source's own.",
+   "total": 39,
+   "sections": [
+    {
+     "name": "Reasoning Ability",
+     "count": 39
     }
    ]
   }

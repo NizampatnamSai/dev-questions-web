@@ -1,0 +1,2937 @@
+{
+  "cycle": "2026-27 recruitment cycle",
+  "updated": "2026-09-02",
+  "source": "server",
+  "groups": [
+    {
+      "id": "banking",
+      "sector": "Banking",
+      "body": "IBPS & SBI",
+      "full": "Public sector banks — officer and clerical",
+      "blurb": "IBPS runs one common exam for 11 nationalised banks; SBI is not an IBPS participant and recruits on its own.",
+      "footer": "Bank of Baroda · Bank of India · Bank of Maharashtra · Canara Bank · Central Bank of India · Indian Bank · Indian Overseas Bank · Punjab National Bank · Punjab & Sind Bank · UCO Bank · Union Bank of India",
+      "rows": [
+        {
+          "exam": "IBPS PO",
+          "code": "CRP PO/MT-XVI",
+          "post": "Probationary Officer / Management Trainee",
+          "cadre": "Officer (Scale I)",
+          "announced": 6715,
+          "revised": 7565,
+          "apply": {
+            "from": "2026-07-01",
+            "to": "2026-07-26"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-08-22",
+              "label": "22–23 Aug 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-10-04",
+              "label": "4 Oct 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Mains result"
+            }
+          ],
+          "pay": {
+            "basic": 48480,
+            "gross": "₹72,000–78,000",
+            "inHand": "₹65,000–72,000",
+            "level": "Bank Scale I",
+            "note": ""
+          },
+          "note": "Launched at 6,715 and revised to 7,565 once all 11 banks reported.",
+          "confirmed": true,
+          "patternId": "bank-po",
+          "categories": {
+            "ur": 2936,
+            "obc": 2015,
+            "sc": 1131,
+            "st": 562,
+            "ews": 721,
+            "basis": "published",
+            "note": "Published split sums to 7,365 — it was issued before the total was revised to 7,565 on 27 Aug 2026, so roughly 200 posts are not yet allocated in this table."
+          }
+        },
+        {
+          "exam": "IBPS Clerk",
+          "code": "CRP CSA-XVI",
+          "post": "Customer Service Associate",
+          "cadre": "Clerical",
+          "announced": 11403,
+          "apply": {
+            "from": "2026-08-01",
+            "to": "2026-08-28"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-10-10",
+              "label": "10–11 Oct 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-12-27",
+              "label": "27 Dec 2026"
+            }
+          ],
+          "pay": {
+            "basic": 24050,
+            "gross": "₹40,720",
+            "inHand": "₹37,734",
+            "level": "Bank Clerical",
+            "note": "Below the PO pay band — listed for completeness."
+          },
+          "note": "Largest single PSB intake of the cycle. No interview. Recruitment is state/UT-wise.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "bank-clerk",
+          "categories": {
+            "ur": 4619,
+            "obc": 3079,
+            "sc": 1710,
+            "st": 855,
+            "ews": 1140,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        },
+        {
+          "exam": "IBPS SO",
+          "code": "CRP SPL-XVI",
+          "post": "Specialist Officer (Scale I)",
+          "cadre": "Officer — specialist",
+          "announced": 745,
+          "revised": 1043,
+          "apply": {
+            "from": "2026-08-01",
+            "to": "2026-08-21"
+          },
+          "stages": [
+            {
+              "name": "Main exam",
+              "date": "2026-08-29",
+              "label": "29 Aug 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Mains result"
+            }
+          ],
+          "pay": {
+            "basic": 48480,
+            "gross": "₹72,000–78,000",
+            "inHand": "₹65,000–72,000",
+            "level": "Bank Scale I",
+            "note": ""
+          },
+          "note": "Six streams: IT, Agricultural Field Officer, Rajbhasha, Law, HR, Marketing. Needs the matching degree, so the applicant pool is far smaller than PO.",
+          "confirmed": true,
+          "patternId": "bank-so",
+          "categories": {
+            "ur": 423,
+            "obc": 282,
+            "sc": 156,
+            "st": 78,
+            "ews": 104,
+            "basis": "indicative",
+            "note": ""
+          }
+        },
+        {
+          "exam": "SBI PO",
+          "code": "CRPD/PO/2026-27/09",
+          "post": "Probationary Officer",
+          "cadre": "Officer (Scale I)",
+          "announced": 1500,
+          "apply": {
+            "from": "2026-06-18",
+            "to": "2026-07-08"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-08-01",
+              "label": "1–2 Aug 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-09-12",
+              "label": "12 Sep 2026"
+            },
+            {
+              "name": "Psychometric + Interview",
+              "date": null,
+              "label": "After Mains result"
+            }
+          ],
+          "pay": {
+            "basic": 48480,
+            "gross": "₹56,000–65,000",
+            "inHand": null,
+            "level": "Bank Scale I",
+            "note": "Basic plus 4 advance increments."
+          },
+          "note": "Hardest paper of the lot and the smallest officer intake — about one post for every five IBPS PO posts.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "sbi-po",
+          "categories": {
+            "ur": 608,
+            "obc": 405,
+            "sc": 225,
+            "st": 112,
+            "ews": 150,
+            "basis": "indicative",
+            "note": ""
+          }
+        },
+        {
+          "exam": "SBI Clerk",
+          "code": "Junior Associate",
+          "post": "Junior Associate (Customer Support & Sales)",
+          "cadre": "Clerical",
+          "announced": 7680,
+          "revised": 9766,
+          "apply": {
+            "from": "2026-08-11",
+            "to": "2026-08-31"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-09-20",
+              "label": "September 2026 (tentative)"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-11-15",
+              "label": "November 2026 (tentative)"
+            }
+          ],
+          "pay": {
+            "basic": 24050,
+            "gross": "₹40,720",
+            "inHand": "₹37,734",
+            "level": "Bank Clerical",
+            "note": "Below the PO pay band."
+          },
+          "note": "7,680 regular plus backlog, advertised total 9,766. State-wise, no interview, local-language test at the end.",
+          "confirmed": true,
+          "patternId": "bank-clerk",
+          "categories": {
+            "ur": 3955,
+            "obc": 2637,
+            "sc": 1465,
+            "st": 732,
+            "ews": 977,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        }
+      ]
+    },
+    {
+      "id": "rrb",
+      "sector": "Banking",
+      "body": "IBPS RRB",
+      "full": "Regional Rural Banks — CRP RRB XV",
+      "blurb": "A separate exam from IBPS PO. State-wise recruitment, and Prelims has no English section.",
+      "footer": "One RRB per state following the 'One State, One RRB' amalgamation of 1 May 2025.",
+      "rows": [
+        {
+          "exam": "IBPS RRB PO",
+          "code": "Officer Scale I",
+          "post": "Officer Scale I",
+          "cadre": "Officer (Scale I)",
+          "announced": 4256,
+          "apply": {
+            "from": "2026-09-01",
+            "to": "2026-09-21"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-11-21",
+              "label": "21–22 Nov 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-12-20",
+              "label": "20 Dec 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Mains result"
+            }
+          ],
+          "pay": {
+            "basic": 30000,
+            "gross": "₹56,000–62,000",
+            "inHand": null,
+            "level": "RRB Scale I",
+            "note": "Slightly below a nationalised-bank PO."
+          },
+          "note": "Prelims is qualifying only — merit is Mains and Interview at 80 : 20. Andhra Pradesh carries roughly 400 posts.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "rrb-po",
+          "categories": {
+            "ur": 1752,
+            "obc": 1139,
+            "sc": 627,
+            "st": 318,
+            "ews": 420,
+            "basis": "published",
+            "note": "UR, OBC, SC and ST are published; EWS (420) is the residual against the 4,256 total, not a separately quoted figure."
+          }
+        },
+        {
+          "exam": "IBPS RRB Clerk",
+          "code": "Office Assistant (Multipurpose)",
+          "post": "Office Assistant",
+          "cadre": "Clerical",
+          "announced": 8183,
+          "apply": {
+            "from": "2026-09-01",
+            "to": "2026-09-21"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-12-06",
+              "label": "6, 12 & 13 Dec 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2027-01-30",
+              "label": "30 Jan 2027"
+            }
+          ],
+          "pay": {
+            "basic": null,
+            "gross": "₹33,000–38,000",
+            "inHand": null,
+            "level": "RRB Clerical",
+            "note": "Below the PO pay band."
+          },
+          "note": "No interview. Local-language proficiency required for the state you apply to.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "rrb-clerk",
+          "categories": {
+            "ur": 3315,
+            "obc": 2209,
+            "sc": 1227,
+            "st": 614,
+            "ews": 818,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        },
+        {
+          "exam": "IBPS RRB Officer Scale II",
+          "code": "Scale II — General & Specialist",
+          "post": "Officer Scale II",
+          "cadre": "Officer (Scale II)",
+          "announced": 1047,
+          "apply": {
+            "from": "2026-09-01",
+            "to": "2026-09-21"
+          },
+          "stages": [
+            {
+              "name": "Single exam",
+              "date": "2026-11-21",
+              "label": "Single online exam, Nov 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After result"
+            }
+          ],
+          "pay": {
+            "basic": null,
+            "gross": "₹64,000–70,000",
+            "inHand": null,
+            "level": "MMGS-II",
+            "note": ""
+          },
+          "note": "Needs 2 years' experience. No prelims — one exam, then interview.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "rrb-scale23",
+          "categories": {
+            "ur": 423,
+            "obc": 283,
+            "sc": 157,
+            "st": 79,
+            "ews": 105,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        },
+        {
+          "exam": "IBPS RRB Officer Scale III",
+          "code": "Senior Manager",
+          "post": "Officer Scale III",
+          "cadre": "Officer (Scale III)",
+          "announced": 220,
+          "apply": {
+            "from": "2026-09-01",
+            "to": "2026-09-21"
+          },
+          "stages": [
+            {
+              "name": "Single exam",
+              "date": "2026-11-21",
+              "label": "Single online exam, Nov 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After result"
+            }
+          ],
+          "pay": {
+            "basic": null,
+            "gross": "₹78,000–85,000",
+            "inHand": null,
+            "level": "MMGS-III",
+            "note": ""
+          },
+          "note": "Needs 5 years' officer experience. Not an entry route — a lateral move for serving bankers.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "rrb-scale23",
+          "categories": {
+            "ur": 90,
+            "obc": 59,
+            "sc": 33,
+            "st": 16,
+            "ews": 22,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        }
+      ]
+    },
+    {
+      "id": "insurance",
+      "sector": "Insurance",
+      "body": "PSU Insurers",
+      "full": "Public sector insurance — Administrative Officer",
+      "blurb": "AO Scale I is the insurance equivalent of a bank PO, and pays slightly better. Far fewer posts, so cut-offs run high.",
+      "footer": "Oriental Insurance · New India Assurance · National Insurance · United India Insurance · LIC",
+      "rows": [
+        {
+          "exam": "OICL AO",
+          "code": "AO Scale I",
+          "post": "Administrative Officer (Scale I)",
+          "cadre": "Officer (Scale I)",
+          "announced": 300,
+          "apply": {
+            "from": "2025-11-25",
+            "to": "2025-12-15"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-01-10",
+              "label": "10 Jan 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-02-28",
+              "label": "28 Feb 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Mains result"
+            }
+          ],
+          "pay": {
+            "basic": 50925,
+            "gross": "₹85,000",
+            "inHand": null,
+            "level": "Insurance Scale I",
+            "note": ""
+          },
+          "note": "285 Generalist + 15 Hindi Officer. The best-paying Scale I entry in the sector.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "insurance-ao",
+          "categories": {
+            "ur": 122,
+            "obc": 81,
+            "sc": 45,
+            "st": 22,
+            "ews": 30,
+            "basis": "indicative",
+            "note": ""
+          }
+        },
+        {
+          "exam": "NIACL AO",
+          "code": "AO Scale I",
+          "post": "Administrative Officer (Scale I)",
+          "cadre": "Officer (Scale I)",
+          "announced": 350,
+          "confirmed": false,
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Mains",
+              "date": null,
+              "label": "To be announced"
+            }
+          ],
+          "pay": {
+            "basic": 50925,
+            "gross": "₹80,000–85,000",
+            "inHand": null,
+            "level": "Insurance Scale I",
+            "note": ""
+          },
+          "note": "EXPECTED figure — the 2026 notification is not out. Around 350 posts across Generalist and Specialist streams is the anticipated range, not a published number.",
+          "revised": null,
+          "apply": null,
+          "patternId": "insurance-ao",
+          "categories": {
+            "ur": 143,
+            "obc": 94,
+            "sc": 52,
+            "st": 26,
+            "ews": 35,
+            "basis": "indicative",
+            "note": ""
+          }
+        },
+        {
+          "exam": "LIC AAO",
+          "code": "Assistant Administrative Officer",
+          "post": "Assistant Administrative Officer (Generalist & Specialist)",
+          "cadre": "Officer (Scale I)",
+          "announced": null,
+          "revised": null,
+          "confirmed": false,
+          "apply": null,
+          "patternId": "insurance-ao",
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Mains",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Mains"
+            }
+          ],
+          "pay": {
+            "basic": null,
+            "gross": "₹75,000–80,000",
+            "inHand": null,
+            "level": "LIC Class I",
+            "note": "Among the best-paying Scale I entries, on par with the PSU insurers."
+          },
+          "note": "Notification was expected in the first quarter of 2026 and has not been published. No vacancy count is available — nothing here is a released figure.",
+          "categories": null
+        }
+      ]
+    },
+    {
+      "id": "regulator",
+      "sector": "Regulators",
+      "body": "RBI",
+      "full": "Reserve Bank of India",
+      "blurb": "The regulator, not a PSB. Included because the syllabus overlaps almost entirely with PO preparation.",
+      "footer": "Reserve Bank of India",
+      "rows": [
+        {
+          "exam": "RBI Grade B",
+          "code": "Officer Grade B (DR)",
+          "post": "Officer Grade B",
+          "cadre": "Officer",
+          "announced": 60,
+          "apply": {
+            "from": "2026-04-15",
+            "to": "2026-05-07"
+          },
+          "stages": [
+            {
+              "name": "Phase 1",
+              "date": "2026-06-13",
+              "label": "June 2026"
+            },
+            {
+              "name": "Phase 2",
+              "date": "2026-07-25",
+              "label": "25–26 Jul 2026"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Phase 2"
+            }
+          ],
+          "pay": {
+            "basic": 55200,
+            "gross": "₹1,16,000",
+            "inHand": null,
+            "level": "RBI Grade B",
+            "note": ""
+          },
+          "note": "The most competitive banking exam in the country. Phase 2 adds Economic & Social Issues and Finance & Management, which are in no PO syllabus.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "rbi-grade-b",
+          "categories": {
+            "ur": 25,
+            "obc": 16,
+            "sc": 9,
+            "st": 4,
+            "ews": 6,
+            "basis": "indicative",
+            "note": ""
+          }
+        },
+        {
+          "exam": "RBI Assistant",
+          "code": "Assistant",
+          "post": "Assistant",
+          "cadre": "Clerical",
+          "announced": 650,
+          "apply": {
+            "from": "2026-02-10",
+            "to": "2026-03-08"
+          },
+          "stages": [
+            {
+              "name": "Prelims",
+              "date": "2026-04-11",
+              "label": "11 Apr 2026"
+            },
+            {
+              "name": "Mains",
+              "date": "2026-06-07",
+              "label": "7 Jun 2026"
+            },
+            {
+              "name": "Language test",
+              "date": null,
+              "label": "After Mains"
+            }
+          ],
+          "pay": {
+            "basic": null,
+            "gross": "₹47,000–50,000",
+            "inHand": null,
+            "level": "RBI Clerical",
+            "note": "Best pay in the clerical cadre, but below the PO band."
+          },
+          "note": "Prelims + Mains + a local language test, no interview.",
+          "revised": null,
+          "confirmed": true,
+          "patternId": "rbi-assistant",
+          "categories": {
+            "ur": 262,
+            "obc": 176,
+            "sc": 98,
+            "st": 49,
+            "ews": 65,
+            "basis": "indicative",
+            "note": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "central",
+      "sector": "Central Government",
+      "body": "MHA / Intelligence Bureau",
+      "full": "Intelligence Bureau — Ministry of Home Affairs",
+      "blurb": "Graduate-entry executive post under the MHA. Pay Level 7 plus a 20% Special Security Allowance puts it above most bank PO roles.",
+      "footer": "Ministry of Home Affairs, Government of India",
+      "rows": [
+        {
+          "exam": "IB ACIO-II / Executive",
+          "code": "ACIO Grade II / Executive",
+          "post": "Assistant Central Intelligence Officer",
+          "cadre": "Group B Gazetted",
+          "announced": 3717,
+          "confirmed": false,
+          "stages": [
+            {
+              "name": "Tier 1",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Tier 2",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Interview",
+              "date": null,
+              "label": "After Tier 2"
+            }
+          ],
+          "pay": {
+            "basic": 44900,
+            "gross": null,
+            "inHand": "₹80,375–90,257",
+            "level": "Pay Level 7",
+            "note": "Includes a Special Security Allowance of 20% of basic."
+          },
+          "note": "3,717 is the 2025 cycle figure. The 2026 notification is expected around September–October 2026 with 3,000+ posts — an expectation, not a published number.",
+          "revised": null,
+          "apply": null,
+          "patternId": "ib-acio",
+          "categories": {
+            "ur": 1504,
+            "obc": 1004,
+            "sc": 558,
+            "st": 279,
+            "ews": 372,
+            "basis": "indicative",
+            "note": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "ssc",
+      "sector": "SSC",
+      "body": "Staff Selection Commission",
+      "full": "SSC — clerical and graduate entries",
+      "blurb": "SSC recruits for ministries and departments across the central government. Honest note: apart from the top CGL posts, most of these sit BELOW the ~₹60K band — they are included because they are the notifications people ask about most.",
+      "footer": "Staff Selection Commission · ssc.gov.in — the SSC Calendar 2026-27 carries the full schedule.",
+      "rows": [
+        {
+          "exam": "SSC CHSL (PA/SA)",
+          "code": "Combined Higher Secondary Level",
+          "post": "Postal Assistant / Sorting Assistant, LDC, JSA, DEO",
+          "cadre": "Clerical — Class 12 entry",
+          "announced": 3522,
+          "revised": null,
+          "confirmed": false,
+          "apply": null,
+          "patternId": "ssc-chsl",
+          "stages": [
+            {
+              "name": "Tier 1",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Tier 2",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Skill / Typing Test",
+              "date": null,
+              "label": "With Tier 2"
+            }
+          ],
+          "pay": {
+            "basic": 25500,
+            "gross": "₹36,000–40,000",
+            "inHand": "₹29,000–35,000",
+            "level": "Pay Level 4",
+            "note": "Pay Level 4 runs ₹25,500–81,100, but ₹81,100 is the END of the scale after years of service — not a starting figure. Well below the PO band."
+          },
+          "note": "Postal Assistant and Sorting Assistant are posts WITHIN SSC CHSL — there is no separate PA/SA exam. Class 12 pass, age 18–27. The 2026 notification is expected around September 2026; 3,522 is the last announced count.",
+          "categories": {
+            "ur": 1427,
+            "obc": 951,
+            "sc": 528,
+            "st": 264,
+            "ews": 352,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        },
+        {
+          "exam": "SSC CGL",
+          "code": "Combined Graduate Level",
+          "post": "Assistant Section Officer, Inspector, AAO, JSO and others",
+          "cadre": "Group B / Group C — graduate entry",
+          "announced": 12000,
+          "revised": null,
+          "confirmed": false,
+          "apply": null,
+          "patternId": "ssc-cgl",
+          "stages": [
+            {
+              "name": "Tier 1",
+              "date": null,
+              "label": "Aug–Sep window (tentative)"
+            },
+            {
+              "name": "Tier 2",
+              "date": null,
+              "label": "After Tier 1"
+            }
+          ],
+          "pay": {
+            "basic": 44900,
+            "gross": "₹65,000–80,000",
+            "inHand": "₹56,000–70,000",
+            "level": "Pay Level 4–8",
+            "note": "The band is wide. Only the senior posts — AAO, ASO in CSS, Income Tax and Excise Inspector at Level 7–8 — clear ₹60K; the Level 4 posts do not."
+          },
+          "note": "The largest graduate-level central government recruitment. 12,000+ posts reported; treat as indicative until the notification is out.",
+          "categories": {
+            "ur": 4860,
+            "obc": 3240,
+            "sc": 1800,
+            "st": 900,
+            "ews": 1200,
+            "basis": "indicative",
+            "note": "This exam is recruited state-wise and state reservation differs from the central matrix, so the split is rougher than usual."
+          }
+        }
+      ]
+    },
+    {
+      "id": "indiapost",
+      "sector": "India Post",
+      "body": "Department of Posts",
+      "full": "India Post — Gramin Dak Sevak",
+      "blurb": "The single largest recruitment in the country by post count, and the only one here with no examination at all — selection is purely on Class 10 marks.",
+      "footer": "Department of Posts, Ministry of Communications · indiapostgdsonline.gov.in",
+      "rows": [
+        {
+          "exam": "India Post GDS",
+          "code": "Gramin Dak Sevak",
+          "post": "Branch Postmaster / Assistant BPM / Dak Sevak",
+          "cadre": "Gramin Dak Sevak — Class 10 entry",
+          "announced": 23757,
+          "revised": null,
+          "confirmed": true,
+          "apply": {
+            "from": "2026-08-25",
+            "to": "2026-09-21"
+          },
+          "patternId": "gds",
+          "stages": [
+            {
+              "name": "Merit list",
+              "date": null,
+              "label": "No exam — Class 10 merit"
+            },
+            {
+              "name": "Document verification",
+              "date": null,
+              "label": "After merit list"
+            }
+          ],
+          "pay": {
+            "basic": null,
+            "gross": "₹10,000–14,500",
+            "inHand": null,
+            "level": "TRCA slab",
+            "note": "Time Related Continuity Allowance, not a regular pay scale. Far below every other entry here — listed because the volume makes it the most-asked-about notification."
+          },
+          "note": "No written exam and no interview: the merit list is built from your Class 10 percentage alone. Requires the local language studied to Class 10, a 60-day basic computer course and cycling knowledge.",
+          "categories": {
+            "ur": 9621,
+            "obc": 6414,
+            "sc": 3564,
+            "st": 1782,
+            "ews": 2376,
+            "basis": "indicative",
+            "note": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "engineering",
+      "sector": "Engineering",
+      "body": "Railways & SSC",
+      "full": "Junior Engineer — RRB and SSC",
+      "blurb": "Degree/diploma engineering entries at Pay Level 6. Honest note: these sit BELOW the ~₹60K band — in-hand lands around ₹45,000–56,000 depending on city.",
+      "footer": "Railway Recruitment Boards · Staff Selection Commission",
+      "rows": [
+        {
+          "exam": "RRB JE",
+          "code": "CEN 04/2026",
+          "post": "Junior Engineer",
+          "cadre": "Pay Level 6",
+          "announced": 3993,
+          "revised": 4029,
+          "apply": {
+            "from": "2026-08-13",
+            "to": "2026-09-13"
+          },
+          "stages": [
+            {
+              "name": "CBT 1",
+              "date": "2026-11-10",
+              "label": "Nov–Dec 2026 (tentative)"
+            },
+            {
+              "name": "CBT 2",
+              "date": null,
+              "label": "After CBT 1"
+            },
+            {
+              "name": "Document verification",
+              "date": null,
+              "label": "Final stage"
+            }
+          ],
+          "pay": {
+            "basic": 35400,
+            "gross": "₹52,000–56,000",
+            "inHand": "₹45,000–50,000",
+            "level": "Pay Level 6",
+            "note": ""
+          },
+          "note": "Revised from 3,993 to 4,029 on 19 Aug 2026.",
+          "confirmed": true,
+          "patternId": "je",
+          "categories": {
+            "ur": 1632,
+            "obc": 1088,
+            "sc": 604,
+            "st": 302,
+            "ews": 403,
+            "basis": "indicative",
+            "note": ""
+          }
+        },
+        {
+          "exam": "SSC JE",
+          "code": "Junior Engineer",
+          "post": "Junior Engineer (Civil / Electrical / Mechanical)",
+          "cadre": "Pay Level 6",
+          "announced": null,
+          "confirmed": false,
+          "stages": [
+            {
+              "name": "Paper 1",
+              "date": null,
+              "label": "To be announced"
+            },
+            {
+              "name": "Paper 2",
+              "date": null,
+              "label": "To be announced"
+            }
+          ],
+          "pay": {
+            "basic": 35400,
+            "gross": "₹52,000–56,000",
+            "inHand": "₹45,000–50,000",
+            "level": "Pay Level 6",
+            "note": ""
+          },
+          "note": "The 2026 notification has not been released. Vacancy count unknown.",
+          "revised": null,
+          "apply": null,
+          "patternId": "je",
+          "categories": null
+        }
+      ]
+    }
+  ],
+  "patterns": {
+    "bank-po": {
+      "summary": "Prelims → Mains (with Descriptive) → Interview",
+      "merit": "Prelims is only a gate. Final merit = Mains 80% + Interview 20%.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "60 min — 20 min per section",
+          "total": "100 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "English Language",
+              "q": 30,
+              "marks": 30,
+              "time": "20 min"
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            },
+            {
+              "name": "Reasoning Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            }
+          ],
+          "note": "Sectional timing — you cannot carry spare minutes into the next section."
+        },
+        {
+          "name": "Mains — Objective",
+          "mode": "Online CBT",
+          "duration": "180 min, sectional",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning & Computer Aptitude",
+              "q": 45,
+              "marks": 60,
+              "time": "60 min"
+            },
+            {
+              "name": "Data Analysis & Interpretation",
+              "q": 35,
+              "marks": 60,
+              "time": "45 min"
+            },
+            {
+              "name": "General / Economy / Banking Awareness",
+              "q": 40,
+              "marks": 40,
+              "time": "35 min"
+            },
+            {
+              "name": "English Language",
+              "q": 35,
+              "marks": 40,
+              "time": "40 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Mains — Descriptive",
+          "mode": "Typed online",
+          "duration": "30 min",
+          "total": "25 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Essay and Letter Writing",
+              "q": 2,
+              "marks": 25,
+              "time": "30 min"
+            }
+          ],
+          "note": "Objective 200 + Descriptive 25 = 225, which is what the Mains cut-off is out of."
+        },
+        {
+          "name": "Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": "Minimum 40% (35% for reserved categories) to stay in contention."
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude / Data Analysis",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability"
+          ]
+        },
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency",
+            "Machine Input-Output (Mains)",
+            "Statement & Assumption (Mains)"
+          ]
+        },
+        {
+          "section": "General / Economy / Banking Awareness (Mains)",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        },
+        {
+          "section": "Computer Aptitude (Mains)",
+          "topics": [
+            "Fundamentals and generations",
+            "Hardware, software, memory",
+            "MS Office",
+            "Internet and networking",
+            "Security — virus, firewall, phishing",
+            "Shortcuts and abbreviations"
+          ]
+        }
+      ]
+    },
+    "sbi-po": {
+      "summary": "Prelims → Mains (with Descriptive) → Psychometric + Group Exercise + Interview",
+      "merit": "Prelims is qualifying. Final merit = Mains 75% + Interview/GE 25%.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "60 min — 20 min per section",
+          "total": "100 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "English Language",
+              "q": 30,
+              "marks": 30,
+              "time": "20 min"
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            },
+            {
+              "name": "Reasoning Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Mains — Objective",
+          "mode": "Online CBT",
+          "duration": "180 min, sectional",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning & Computer Aptitude",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Data Analysis & Interpretation",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "General / Economy / Banking Awareness",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "English Language",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": "SBI revises the per-section question and mark split between cycles, so only the 200-mark objective total is stated here. Check the year's notification for the exact split."
+        },
+        {
+          "name": "Mains — Descriptive",
+          "mode": "Typed online",
+          "duration": "30 min",
+          "total": "30 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Essay and Letter",
+              "q": 2,
+              "marks": 30,
+              "time": "30 min"
+            }
+          ],
+          "note": "Objective 200 + Descriptive 30 = 250."
+        },
+        {
+          "name": "Psychometric, Group Exercise & Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "50 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": "SBI adds a psychometric test and a group exercise that IBPS PO does not have."
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms",
+            "Vocabulary-heavy RC — SBI leans harder here than IBPS"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude / Data Analysis",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability",
+            "Data Sufficiency",
+            "Quantity I vs Quantity II comparison"
+          ]
+        },
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency",
+            "Critical Reasoning and Course of Action",
+            "Machine Input-Output"
+          ]
+        },
+        {
+          "section": "General / Economy / Banking Awareness",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        }
+      ]
+    },
+    "bank-clerk": {
+      "summary": "Prelims → Mains. No interview.",
+      "merit": "Mains marks alone decide it. Recruitment is state/UT-wise.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "60 min — 20 min per section",
+          "total": "100 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "English Language",
+              "q": 30,
+              "marks": 30,
+              "time": "20 min"
+            },
+            {
+              "name": "Numerical Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            },
+            {
+              "name": "Reasoning Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Mains",
+          "mode": "Online CBT",
+          "duration": "160 min, sectional",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "General / Financial Awareness",
+              "q": 50,
+              "marks": 50,
+              "time": "35 min"
+            },
+            {
+              "name": "General English",
+              "q": 40,
+              "marks": 40,
+              "time": "35 min"
+            },
+            {
+              "name": "Reasoning Ability & Computer Aptitude",
+              "q": 50,
+              "marks": 60,
+              "time": "45 min"
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 50,
+              "marks": 50,
+              "time": "45 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Language Proficiency Test",
+          "mode": "In person",
+          "duration": "—",
+          "total": "Qualifying",
+          "negative": null,
+          "qualifying": true,
+          "sections": [],
+          "note": "You must prove proficiency in the official language of the state you applied for."
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        },
+        {
+          "section": "Numerical / Quantitative Aptitude",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability"
+          ]
+        },
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "General & Financial Awareness (Mains)",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        }
+      ]
+    },
+    "bank-so": {
+      "summary": "Prelims → Mains (Professional Knowledge) → Interview",
+      "merit": "Prelims is qualifying. Final merit = Mains 80% + Interview 20%.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "125 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "English Language",
+              "q": 50,
+              "marks": 25,
+              "time": "40 min"
+            },
+            {
+              "name": "Reasoning",
+              "q": 50,
+              "marks": 50,
+              "time": "40 min"
+            },
+            {
+              "name": "General Awareness with special reference to Banking",
+              "q": 50,
+              "marks": 50,
+              "time": "40 min"
+            }
+          ],
+          "note": "For Law and Rajbhasha Officer the third section is General Awareness; for the others it is Quantitative Aptitude."
+        },
+        {
+          "name": "Mains — Professional Knowledge",
+          "mode": "Online CBT",
+          "duration": "45 min",
+          "total": "60 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Professional Knowledge",
+              "q": 60,
+              "marks": 60,
+              "time": "45 min"
+            }
+          ],
+          "note": "Entirely your own discipline — IT, Agriculture, Law, HR, Marketing or Rajbhasha."
+        },
+        {
+          "name": "Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "Professional Knowledge — varies by post",
+          "topics": [
+            "IT Officer: DBMS, networking, OS, software engineering, data structures",
+            "Agricultural Field Officer: crop production, horticulture, soil, agri finance, government schemes",
+            "Law Officer: banking regulations, NI Act, SARFAESI, contract and company law",
+            "HR/Personnel: industrial relations, labour law, training, compensation",
+            "Marketing: 4Ps, segmentation, digital marketing, consumer behaviour",
+            "Rajbhasha: Hindi grammar, translation, official language policy"
+          ]
+        },
+        {
+          "section": "Reasoning",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        },
+        {
+          "section": "General Awareness",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        }
+      ]
+    },
+    "rrb-po": {
+      "summary": "Prelims → Mains → Interview. No English in Prelims.",
+      "merit": "Prelims is qualifying only. Final merit = Mains 80 : Interview 20.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "45 min — unequal sectional windows",
+          "total": "80 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "Reasoning Ability",
+              "q": 40,
+              "marks": 40,
+              "time": "25 min"
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 40,
+              "marks": 40,
+              "time": "20 min"
+            }
+          ],
+          "note": "Note the UNEQUAL windows: 25 minutes for Reasoning but only 20 for the same 40 Quant questions."
+        },
+        {
+          "name": "Mains",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning",
+              "q": 40,
+              "marks": 50,
+              "time": "30 min"
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 40,
+              "marks": 50,
+              "time": "30 min"
+            },
+            {
+              "name": "General Awareness",
+              "q": 40,
+              "marks": 40,
+              "time": "15 min"
+            },
+            {
+              "name": "English OR Hindi Language",
+              "q": 40,
+              "marks": 40,
+              "time": "30 min"
+            },
+            {
+              "name": "Computer Knowledge",
+              "q": 40,
+              "marks": 20,
+              "time": "15 min"
+            }
+          ],
+          "note": "You choose English or Hindi at the exam. General Awareness is 40 questions in 15 minutes — pure recall."
+        },
+        {
+          "name": "Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "Quantitative / Numerical Ability",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability"
+          ]
+        },
+        {
+          "section": "General Awareness (Mains)",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK",
+            "Agriculture and rural banking — weighted for RRB"
+          ]
+        },
+        {
+          "section": "English or Hindi (Mains)",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        },
+        {
+          "section": "Computer Knowledge (Mains)",
+          "topics": [
+            "Fundamentals and generations",
+            "Hardware, software, memory",
+            "MS Office",
+            "Internet, networking, protocols",
+            "Security basics",
+            "Shortcuts and abbreviations"
+          ]
+        }
+      ]
+    },
+    "rrb-clerk": {
+      "summary": "Prelims → Mains. No interview.",
+      "merit": "Mains alone decides it. Local-language proficiency is required.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "45 min",
+          "total": "80 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "Reasoning Ability",
+              "q": 40,
+              "marks": 40,
+              "time": "composite"
+            },
+            {
+              "name": "Numerical Ability",
+              "q": 40,
+              "marks": 40,
+              "time": "composite"
+            }
+          ],
+          "note": "Composite timing, unlike Officer Scale I which has separate section windows."
+        },
+        {
+          "name": "Mains",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "Numerical Ability",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "General Awareness",
+              "q": 40,
+              "marks": 40,
+              "time": null
+            },
+            {
+              "name": "English OR Hindi Language",
+              "q": 40,
+              "marks": 40,
+              "time": null
+            },
+            {
+              "name": "Computer Knowledge",
+              "q": 40,
+              "marks": 20,
+              "time": null
+            }
+          ],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "Numerical Ability",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability"
+          ]
+        },
+        {
+          "section": "General Awareness (Mains)",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        },
+        {
+          "section": "English or Hindi (Mains)",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        }
+      ]
+    },
+    "rrb-scale23": {
+      "summary": "Single online exam → Interview. No prelims.",
+      "merit": "Exam 80 : Interview 20. Requires prior banking experience.",
+      "stages": [
+        {
+          "name": "Single Online Exam",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "Quantitative Aptitude & DI",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "Financial Awareness",
+              "q": 40,
+              "marks": 40,
+              "time": null
+            },
+            {
+              "name": "English OR Hindi Language",
+              "q": 40,
+              "marks": 40,
+              "time": null
+            },
+            {
+              "name": "Computer Knowledge",
+              "q": 40,
+              "marks": 20,
+              "time": null
+            }
+          ],
+          "note": "Scale II Specialist posts replace some sections with a Professional Knowledge paper."
+        },
+        {
+          "name": "Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "Reasoning",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude & DI",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability"
+          ]
+        },
+        {
+          "section": "Financial Awareness",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        },
+        {
+          "section": "Professional Knowledge (Specialist posts only)",
+          "topics": [
+            "IT, CA, Law, Treasury, Marketing or Agriculture — your own discipline"
+          ]
+        }
+      ]
+    },
+    "insurance-ao": {
+      "summary": "Prelims → Mains (Objective + Descriptive) → Interview",
+      "merit": "Prelims is qualifying. Final merit = Mains + Interview.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "60 min",
+          "total": "100 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "English Language",
+              "q": 30,
+              "marks": 30,
+              "time": "20 min"
+            },
+            {
+              "name": "Reasoning Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Mains — Objective",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "English Language",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "General Awareness incl. Insurance & Financial",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "Quantitative Aptitude / Professional Knowledge",
+              "q": 40,
+              "marks": 50,
+              "time": null
+            }
+          ],
+          "note": "Specialist streams sit a Professional Knowledge paper in place of the generalist section."
+        },
+        {
+          "name": "Mains — Descriptive",
+          "mode": "Typed online",
+          "duration": "30 min",
+          "total": "30 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Essay, Precis and Letter",
+              "q": 3,
+              "marks": 30,
+              "time": "30 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "—",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "General & Insurance Awareness",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK",
+            "IRDAI, insurance products and terminology",
+            "Types of policies — life, general, health, motor",
+            "Reinsurance, underwriting, claim settlement basics"
+          ]
+        }
+      ]
+    },
+    "rbi-grade-b": {
+      "summary": "Phase 1 → Phase 2 (three papers) → Interview",
+      "merit": "Phase 1 is qualifying. Final merit = Phase 2 + Interview (75 marks).",
+      "stages": [
+        {
+          "name": "Phase 1",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "General Awareness",
+              "q": 80,
+              "marks": 80,
+              "time": null
+            },
+            {
+              "name": "Reasoning",
+              "q": 60,
+              "marks": 60,
+              "time": null
+            },
+            {
+              "name": "English Language",
+              "q": 30,
+              "marks": 30,
+              "time": null
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 30,
+              "marks": 30,
+              "time": null
+            }
+          ],
+          "note": "General Awareness carries 80 of the 200 marks — the heaviest GA weighting in any banking exam."
+        },
+        {
+          "name": "Phase 2 — Paper I",
+          "mode": "Online",
+          "duration": "30 min objective + 90 min descriptive",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Economic and Social Issues",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Phase 2 — Paper II",
+          "mode": "Online",
+          "duration": "30 min objective + 90 min descriptive",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "English — Writing Skills",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Phase 2 — Paper III",
+          "mode": "Online",
+          "duration": "30 min objective + 90 min descriptive",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Finance and Management",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "75 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "Economic & Social Issues",
+          "topics": [
+            "Growth and development, poverty, inequality",
+            "Indian economy since 1991 — liberalisation, privatisation",
+            "Globalisation, WTO, international institutions",
+            "Social structure, education, health, urbanisation",
+            "Demographics and social justice"
+          ]
+        },
+        {
+          "section": "Finance & Management",
+          "topics": [
+            "Financial system, regulators, markets",
+            "Risk management, derivatives, Basel norms",
+            "Corporate governance and financial inclusion",
+            "Management — motivation, leadership, communication",
+            "Corporate social responsibility, ethics"
+          ]
+        },
+        {
+          "section": "English Writing Skills",
+          "topics": [
+            "Essay",
+            "Precis writing",
+            "Reading comprehension with analysis"
+          ]
+        },
+        {
+          "section": "Phase 1 General Awareness",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK",
+            "Economic and financial current affairs — heavily weighted"
+          ]
+        }
+      ]
+    },
+    "rbi-assistant": {
+      "summary": "Prelims → Mains → Language Proficiency Test. No interview.",
+      "merit": "Mains marks decide it; the language test is qualifying.",
+      "stages": [
+        {
+          "name": "Prelims",
+          "mode": "Online CBT",
+          "duration": "60 min — 20 min per section",
+          "total": "100 marks",
+          "negative": "−0.25",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "English Language",
+              "q": 30,
+              "marks": 30,
+              "time": "20 min"
+            },
+            {
+              "name": "Numerical Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            },
+            {
+              "name": "Reasoning Ability",
+              "q": 35,
+              "marks": 35,
+              "time": "20 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Mains",
+          "mode": "Online CBT",
+          "duration": "135 min",
+          "total": "200 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Reasoning",
+              "q": 40,
+              "marks": 40,
+              "time": "30 min"
+            },
+            {
+              "name": "English Language",
+              "q": 40,
+              "marks": 40,
+              "time": "30 min"
+            },
+            {
+              "name": "Numerical Ability",
+              "q": 40,
+              "marks": 40,
+              "time": "30 min"
+            },
+            {
+              "name": "General Awareness",
+              "q": 40,
+              "marks": 40,
+              "time": "25 min"
+            },
+            {
+              "name": "Computer Knowledge",
+              "q": 40,
+              "marks": 40,
+              "time": "20 min"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Language Proficiency Test",
+          "mode": "In person",
+          "duration": "—",
+          "total": "Qualifying",
+          "negative": null,
+          "qualifying": true,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Cloze Test",
+            "Para Jumbles and sentence rearrangement",
+            "Error Detection and Sentence Improvement",
+            "Fillers — single and double",
+            "Phrase Replacement and Word Usage",
+            "Synonyms, Antonyms, Idioms"
+          ]
+        },
+        {
+          "section": "Numerical Ability",
+          "topics": [
+            "Data Interpretation — table, bar, pie, line, caselet",
+            "Simplification and Approximation",
+            "Number Series — missing and wrong term",
+            "Quadratic Equations",
+            "Percentage, Ratio, Average, Ages",
+            "Profit & Loss, SI & CI, Partnership",
+            "Time & Work, Pipes, Speed-Distance, Boats",
+            "Mixture & Alligation, Mensuration, P&C, Probability"
+          ]
+        },
+        {
+          "section": "Reasoning Ability",
+          "topics": [
+            "Puzzles and Seating Arrangement",
+            "Syllogism and Inequalities",
+            "Coding-Decoding",
+            "Blood Relations, Direction Sense, Order & Ranking",
+            "Alphanumeric Series",
+            "Data Sufficiency"
+          ]
+        },
+        {
+          "section": "General Awareness",
+          "topics": [
+            "Banking Awareness — RBI, monetary policy, bank types",
+            "Current Affairs, last 6 months",
+            "Government schemes and financial inclusion",
+            "Budget and Economic Survey",
+            "Static GK"
+          ]
+        },
+        {
+          "section": "Computer Knowledge",
+          "topics": [
+            "Fundamentals, hardware, software",
+            "MS Office",
+            "Internet and networking",
+            "Security basics"
+          ]
+        }
+      ]
+    },
+    "ib-acio": {
+      "summary": "Tier 1 (objective) → Tier 2 (descriptive) → Tier 3 (interview)",
+      "merit": "You must score at least 33% in Tier 2 to reach the interview.",
+      "stages": [
+        {
+          "name": "Tier 1",
+          "mode": "Online CBT",
+          "duration": "60 min",
+          "total": "100 marks",
+          "negative": "−0.25",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "General Awareness",
+              "q": 20,
+              "marks": 20,
+              "time": null
+            },
+            {
+              "name": "General Studies",
+              "q": 20,
+              "marks": 20,
+              "time": null
+            },
+            {
+              "name": "Reasoning",
+              "q": 20,
+              "marks": 20,
+              "time": null
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 20,
+              "marks": 20,
+              "time": null
+            },
+            {
+              "name": "English Language",
+              "q": 20,
+              "marks": 20,
+              "time": null
+            }
+          ],
+          "note": "Five equally weighted sections of 20 questions each — unusually flat for a central-government paper."
+        },
+        {
+          "name": "Tier 2",
+          "mode": "Descriptive, offline",
+          "duration": "60 min",
+          "total": "50 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Essay",
+              "q": 1,
+              "marks": 20,
+              "time": null
+            },
+            {
+              "name": "English Comprehension & Precis",
+              "q": 1,
+              "marks": 10,
+              "time": null
+            },
+            {
+              "name": "Long answer questions",
+              "q": 2,
+              "marks": 20,
+              "time": null
+            }
+          ],
+          "note": "A minimum of 33% here is mandatory to be called for the interview."
+        },
+        {
+          "name": "Tier 3 — Interview",
+          "mode": "In person",
+          "duration": "—",
+          "total": "100 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "General Awareness & General Studies",
+          "topics": [
+            "Indian history, geography, polity, economy",
+            "Current affairs — national and international",
+            "Science and technology",
+            "Security and intelligence-related current affairs",
+            "Sports, awards, books, important days"
+          ]
+        },
+        {
+          "section": "Reasoning",
+          "topics": [
+            "Analogies, Classification, Series",
+            "Coding-Decoding, Matrix",
+            "Blood Relations, Direction",
+            "Venn Diagrams, Syllogism",
+            "Non-verbal — figures, mirror images",
+            "Word building, Ranking"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude",
+          "topics": [
+            "Number System, Simplification",
+            "Percentage, Ratio, Average",
+            "Profit & Loss, Discount",
+            "Time & Work, Speed-Distance",
+            "SI & CI, Mensuration",
+            "Algebra, Geometry, Trigonometry",
+            "Data Interpretation"
+          ]
+        },
+        {
+          "section": "English Language",
+          "topics": [
+            "Reading Comprehension",
+            "Fill in the blanks, Spelling",
+            "Error spotting, Sentence improvement",
+            "Synonyms, Antonyms, Idioms & Phrases",
+            "One word substitution",
+            "Active/Passive, Direct/Indirect"
+          ]
+        },
+        {
+          "section": "Tier 2 Descriptive",
+          "topics": [
+            "Essay on a current or policy topic",
+            "Precis writing",
+            "Comprehension-based long answers"
+          ]
+        }
+      ]
+    },
+    "ssc-chsl": {
+      "summary": "Tier 1 → Tier 2 (with Skill/Typing Test) → Document Verification",
+      "merit": "Tier 1 is qualifying for Tier 2. Final merit comes from Tier 2.",
+      "stages": [
+        {
+          "name": "Tier 1",
+          "mode": "Online CBT",
+          "duration": "60 min",
+          "total": "200 marks",
+          "negative": "−0.50",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "General Intelligence",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "General Awareness",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "English Language",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            }
+          ],
+          "note": "Note the heavier penalty: −0.5 per wrong answer, double the banking exams."
+        },
+        {
+          "name": "Tier 2",
+          "mode": "Online CBT",
+          "duration": "Approx. 2h 15m across modules",
+          "total": "≈360 marks",
+          "negative": "−1.00",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Session I — Mathematical Abilities + Reasoning & General Intelligence",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Session I — English Language & Comprehension + General Awareness",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Session I — Computer Knowledge Test",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Session II — Skill Test / Typing Test",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": "Marking is +3 / −1. The Computer Knowledge module is qualifying; the Typing Test is qualifying for PA/SA and LDC, while DEO sits a Data Entry Skill Test."
+        },
+        {
+          "name": "Document Verification",
+          "mode": "In person",
+          "duration": "—",
+          "total": "Qualifying",
+          "negative": null,
+          "qualifying": true,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "General Intelligence",
+          "topics": [
+            "Analogies, Classification, Series",
+            "Coding-Decoding, Matrix",
+            "Blood Relations, Direction",
+            "Venn Diagrams, Syllogism",
+            "Non-verbal — figures, mirror images",
+            "Word building, Ranking"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude / Mathematical Abilities",
+          "topics": [
+            "Number System, Simplification",
+            "Percentage, Ratio, Average",
+            "Profit & Loss, Discount",
+            "Time & Work, Speed-Distance",
+            "SI & CI, Mensuration",
+            "Algebra, Geometry, Trigonometry",
+            "Data Interpretation"
+          ]
+        },
+        {
+          "section": "English Language & Comprehension",
+          "topics": [
+            "Reading Comprehension",
+            "Fill in the blanks, Spelling",
+            "Error spotting, Sentence improvement",
+            "Synonyms, Antonyms, Idioms & Phrases",
+            "One word substitution",
+            "Active/Passive, Direct/Indirect"
+          ]
+        },
+        {
+          "section": "General Awareness",
+          "topics": [
+            "History, Geography, Polity, Economy",
+            "General Science",
+            "Current Affairs",
+            "Static GK — books, awards, sports",
+            "Everyday science and environment"
+          ]
+        },
+        {
+          "section": "Computer Knowledge (Tier 2)",
+          "topics": [
+            "Computer fundamentals and organisation",
+            "MS Office — Word, Excel, PowerPoint",
+            "Internet, email, networking",
+            "Cyber security basics"
+          ]
+        },
+        {
+          "section": "Typing / Skill Test",
+          "topics": [
+            "PA/SA and LDC: typing at 35 wpm English or 30 wpm Hindi",
+            "DEO: data entry at 8,000 key depressions per hour"
+          ]
+        }
+      ]
+    },
+    "ssc-cgl": {
+      "summary": "Tier 1 → Tier 2 → Document Verification (some posts add a physical or skill test)",
+      "merit": "Tier 1 is qualifying. Final merit comes from Tier 2.",
+      "stages": [
+        {
+          "name": "Tier 1",
+          "mode": "Online CBT",
+          "duration": "60 min",
+          "total": "200 marks",
+          "negative": "−0.50",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "General Intelligence & Reasoning",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "General Awareness",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "Quantitative Aptitude",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            },
+            {
+              "name": "English Comprehension",
+              "q": 25,
+              "marks": 50,
+              "time": null
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Tier 2 — Paper I",
+          "mode": "Online CBT",
+          "duration": "2h 15m across three sessions",
+          "total": "≈390 marks",
+          "negative": "−1.00",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Session I — Mathematical Abilities + Reasoning & General Intelligence",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Session I — English Language & Comprehension + General Awareness",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Session I — Computer Knowledge (qualifying)",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Session II — Data Entry Speed Test (qualifying)",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": ""
+        },
+        {
+          "name": "Tier 2 — Paper II / III",
+          "mode": "Online CBT",
+          "duration": "2 hours",
+          "total": "200 marks",
+          "negative": "−1.00",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Statistics — for JSO posts only",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "General Studies (Finance & Economics) — for AAO only",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": "Only candidates applying for Junior Statistical Officer or Assistant Audit/Accounts Officer sit these."
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "General Intelligence & Reasoning",
+          "topics": [
+            "Analogies, Classification, Series",
+            "Coding-Decoding, Matrix",
+            "Blood Relations, Direction",
+            "Venn Diagrams, Syllogism",
+            "Non-verbal — figures, mirror images",
+            "Word building, Ranking"
+          ]
+        },
+        {
+          "section": "Quantitative Aptitude",
+          "topics": [
+            "Number System, Simplification",
+            "Percentage, Ratio, Average",
+            "Profit & Loss, Discount",
+            "Time & Work, Speed-Distance",
+            "SI & CI, Mensuration",
+            "Algebra, Geometry, Trigonometry",
+            "Data Interpretation",
+            "Advanced Algebra, Geometry and Trigonometry in Tier 2"
+          ]
+        },
+        {
+          "section": "English Comprehension",
+          "topics": [
+            "Reading Comprehension",
+            "Fill in the blanks, Spelling",
+            "Error spotting, Sentence improvement",
+            "Synonyms, Antonyms, Idioms & Phrases",
+            "One word substitution",
+            "Active/Passive, Direct/Indirect"
+          ]
+        },
+        {
+          "section": "General Awareness",
+          "topics": [
+            "History, Geography, Polity, Economy",
+            "General Science",
+            "Current Affairs",
+            "Static GK — books, awards, sports",
+            "Everyday science and environment"
+          ]
+        },
+        {
+          "section": "Statistics (JSO only)",
+          "topics": [
+            "Collection and presentation of data",
+            "Measures of central tendency and dispersion",
+            "Correlation and regression",
+            "Probability distributions, sampling",
+            "Index numbers, time series"
+          ]
+        },
+        {
+          "section": "Finance & Economics (AAO only)",
+          "topics": [
+            "Fundamental accounting principles",
+            "Basic concepts of economics",
+            "Finance Commission, government budgeting"
+          ]
+        }
+      ]
+    },
+    "je": {
+      "summary": "Two computer-based tests → Document Verification → Medical",
+      "merit": "CBT 2 decides the merit; CBT 1 is a screening stage.",
+      "stages": [
+        {
+          "name": "CBT 1 / Paper 1",
+          "mode": "Online CBT",
+          "duration": "90 min",
+          "total": "100–200 marks",
+          "negative": "−1/3",
+          "qualifying": true,
+          "sections": [
+            {
+              "name": "General Intelligence & Reasoning",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "General Awareness",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "General Science",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Mathematics",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": "RRB JE CBT 1 is 100 questions in 90 minutes; SSC JE Paper 1 is 200 marks. Screening only."
+        },
+        {
+          "name": "CBT 2 / Paper 2",
+          "mode": "Online CBT",
+          "duration": "120 min",
+          "total": "150–300 marks",
+          "negative": "−1/3",
+          "qualifying": false,
+          "sections": [
+            {
+              "name": "Technical Ability — your engineering discipline",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "General Awareness",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Physics & Chemistry",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Basics of Computers and Applications",
+              "q": null,
+              "marks": null,
+              "time": null
+            },
+            {
+              "name": "Basics of Environment and Pollution Control",
+              "q": null,
+              "marks": null,
+              "time": null
+            }
+          ],
+          "note": "The Technical Ability section carries the most weight and is discipline-specific."
+        },
+        {
+          "name": "Document Verification & Medical",
+          "mode": "In person",
+          "duration": "—",
+          "total": "Qualifying",
+          "negative": null,
+          "qualifying": true,
+          "sections": [],
+          "note": ""
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "Technical Ability — Civil",
+          "topics": [
+            "Building materials, construction, estimating",
+            "Surveying, soil mechanics",
+            "Hydraulics, irrigation",
+            "Structural analysis, RCC and steel design",
+            "Transportation and environmental engineering"
+          ]
+        },
+        {
+          "section": "Technical Ability — Electrical",
+          "topics": [
+            "Basic electrical concepts, circuits",
+            "AC fundamentals, measurement",
+            "Electrical machines, transmission and distribution",
+            "Utilisation, estimation and costing",
+            "Basic electronics"
+          ]
+        },
+        {
+          "section": "Technical Ability — Mechanical",
+          "topics": [
+            "Thermodynamics, IC engines",
+            "Fluid mechanics and machinery",
+            "Strength of materials, theory of machines",
+            "Production engineering, manufacturing",
+            "Refrigeration and air conditioning"
+          ]
+        },
+        {
+          "section": "General Awareness & Science",
+          "topics": [
+            "History, Geography, Polity, Economy",
+            "General Science",
+            "Current Affairs",
+            "Static GK — books, awards, sports",
+            "Everyday science and environment"
+          ]
+        },
+        {
+          "section": "Mathematics & Reasoning",
+          "topics": [
+            "Number System, Simplification",
+            "Percentage, Ratio, Average",
+            "Profit & Loss, Discount",
+            "Time & Work, Speed-Distance",
+            "SI & CI, Mensuration",
+            "Algebra, Geometry, Trigonometry",
+            "Data Interpretation",
+            "Analogies, Classification, Series",
+            "Coding-Decoding, Matrix",
+            "Blood Relations, Direction"
+          ]
+        }
+      ]
+    },
+    "gds": {
+      "summary": "No examination. Selection is on Class 10 marks alone.",
+      "merit": "A merit list built from the Class 10 percentage, to four decimal places. There is no exam, no interview.",
+      "stages": [
+        {
+          "name": "Merit list",
+          "mode": "No exam",
+          "duration": "—",
+          "total": "Class 10 marks",
+          "negative": null,
+          "qualifying": false,
+          "sections": [],
+          "note": "Ranked purely on the Secondary School percentage. Ties are broken by date of birth (older first), then by other tie-break rules."
+        },
+        {
+          "name": "Document Verification",
+          "mode": "In person",
+          "duration": "—",
+          "total": "Qualifying",
+          "negative": null,
+          "qualifying": true,
+          "sections": [],
+          "note": "You must also show local-language study at Class 10 level and basic computer knowledge."
+        }
+      ],
+      "syllabus": [
+        {
+          "section": "No syllabus",
+          "topics": [
+            "There is no written exam — nothing to prepare academically.",
+            "Requirements are Class 10 pass, the local language studied to Class 10, a 60-day basic computer course, and cycling knowledge."
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1231 @@
+{
+ "id": "rrbpo-2022",
+ "questions": [
+  {
+   "id": "2022-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who sits 4th left of L?\nL के बायें से चौथे स्थाि पर कौि बैठा है?",
+   "options": {
+    "A": "P",
+    "B": "S",
+    "C": "O",
+    "D": "M",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2022-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following persons face outside?\nनिम्ननिनित में से कौि-सा व्यनि बाहर की ओर उन्मुि ह?ै",
+   "options": {
+    "A": "M, O",
+    "B": "N, L",
+    "C": "R, L",
+    "D": "O, P",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2022-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the flowing are immediate neighbour of R?\nनिम्ननिनित में से कौि R का निकटतम पडोसी है?",
+   "options": {
+    "A": "P",
+    "B": "M",
+    "C": "S",
+    "D": "Q",
+    "E": "O"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2022-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement is true?\nनिम्ननिनित में से कौि सा कथि सत्य है?\nI. P and Q sit diagonally opposite to each other\nP और Q एक िसू रे के नर्कर्वत: नर्परीत बैठे हैं।\nII. S does not face outside\nS बाहर की ओर उन्मुि िहीं है।\nIII. N and R are immediate neighbours\nN और R निकटतम पडोसी हैं।",
+   "options": {
+    "A": "Both I and II are true / I और II िोिों सत्य हैं।",
+    "B": "Only III is true / केर्ि III सत्य है।",
+    "C": "Both II and III are true / II और III िोिों सत्य हैं।",
+    "D": "Both I and III are true / I और III िोिों सत्य हैं।",
+    "E": "None is true / कोई भी सत्य िहीं है।"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2022-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the position of S with respect to M?\nM के सन्िभव में S का स्थाि क्या है?",
+   "options": {
+    "A": "2nd to the right / िाएं से िसू रा",
+    "B": "Immediate left / ठीक बाए ं",
+    "C": "2nd to the left / बाएं से िसू रा",
+    "D": "3rd to the right / िाएं से तीसरा",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "C",
+   "explanation": "utions (6-9):"
+  },
+  {
+   "id": "2022-q6",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who is the grandson of Q?\nQ का ग्रैंडसि कौि है?",
+   "options": {
+    "A": "M",
+    "B": "T",
+    "C": "L",
+    "D": "D",
+    "E": "None of these / इिमें से कोई िहीं\nand answer the questions given below:\nए प्रश्नों के उत्तर िीनजए:\nof T who is unmarried. D is the cousin of M\ndaughter of K. Q is the mother of B. A is the\nthe son in law of R.\nअनर्र्ानहत है। D, M का कनजि है, M जो R की ग्रैंड\nA, K का जीर्िसाथी है। T, L की आंट है, और उसका"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (6-9): Study the following information carefully\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए\nR has 2 children of different gender. A is the brother-in-law\nwho is granddaughter of R. B is the aunt of L who is the only\nspouse of K. T is the aunt of L and have only one sibling. C is\nR के अिग-अिग जेंडर की 2 संताि हैं। A, T का ब्रिर-इि-िॉ है, T जो अ\nडॉटर है । B, L की आंट है, L जो K की इकिौती बेटी है। Q, B की मााँ है। A\nकेर्ि एक सहोिर है। C, R का सि-इि-िॉ है।"
+  },
+  {
+   "id": "2022-q7",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many females are in the family?\nपररर्ार में दकतिी मनहिाएं हैं?",
+   "options": {
+    "A": "Four / चार",
+    "B": "More than five / पांच से अनिक",
+    "C": "Five / पांच",
+    "D": "Three / तीि",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (6-9): Study the following information carefully\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए\nR has 2 children of different gender. A is the brother-in-law\nwho is granddaughter of R. B is the aunt of L who is the only\nspouse of K. T is the aunt of L and have only one sibling. C is\nR के अिग-अिग जेंडर की 2 संताि हैं। A, T का ब्रिर-इि-िॉ है, T जो अ\nडॉटर है । B, L की आंट है, L जो K की इकिौती बेटी है। Q, B की मााँ है। A\nकेर्ि एक सहोिर है। C, R का सि-इि-िॉ है।"
+  },
+  {
+   "id": "2022-q8",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who is the brother-in-law of A?\nA का ब्रिर-इि-िॉ कौि है?",
+   "options": {
+    "A": "D",
+    "B": "L",
+    "C": "M",
+    "D": "C",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (6-9): Study the following information carefully\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए\nR has 2 children of different gender. A is the brother-in-law\nwho is granddaughter of R. B is the aunt of L who is the only\nspouse of K. T is the aunt of L and have only one sibling. C is\nR के अिग-अिग जेंडर की 2 संताि हैं। A, T का ब्रिर-इि-िॉ है, T जो अ\nडॉटर है । B, L की आंट है, L जो K की इकिौती बेटी है। Q, B की मााँ है। A\nकेर्ि एक सहोिर है। C, R का सि-इि-िॉ है।"
+  },
+  {
+   "id": "2022-q9",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who is the mother-in-law of K?\nK की मिर-इि-िॉ कौि है?",
+   "options": {
+    "A": "Q",
+    "B": "B",
+    "C": "M",
+    "D": "T",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (6-9): Study the following information carefully\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए\nR has 2 children of different gender. A is the brother-in-law\nwho is granddaughter of R. B is the aunt of L who is the only\nspouse of K. T is the aunt of L and have only one sibling. C is\nR के अिग-अिग जेंडर की 2 संताि हैं। A, T का ब्रिर-इि-िॉ है, T जो अ\nडॉटर है । B, L की आंट है, L जो K की इकिौती बेटी है। Q, B की मााँ है। A\nकेर्ि एक सहोिर है। C, R का सि-इि-िॉ है।"
+  },
+  {
+   "id": "2022-q10",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many pairs of letters are there in the word ‘REFRIGERATOR’, each of which have as many\nletters between them in the word as they have in English alphabetical series (both forward and\nbackward direction)?\nशब्ि ‘REFRIGERATOR’ में अक्षरों के ऐसे दकतिे युग्म हैं, नजिमें से प्रत्येक के बीच उतिे ही अक्षर हैं नजतिे दक अंग्रेजी\nर्र्वमािा श्िरं िा (आगे और पीछे िोिों दिशाओं) में हैं?",
+   "options": {
+    "A": "One / एक",
+    "B": "Three / तीि",
+    "C": "None / कोई िहीं",
+    "D": "Two / िो",
+    "E": "More than four / चार से अनिक"
+   },
+   "correctAnswer": "E",
+   "explanation": "Solutions (11-15):"
+  },
+  {
+   "id": "2022-q11",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "What is the possible minimum number of persons sit in\nपंनि में बैठे व्यनियों की संभानर्त न्यूितम संख्या दकतिी हो सकती है?",
+   "options": {
+    "A": "17",
+    "B": "18",
+    "C": "14",
+    "D": "13",
+    "E": "12"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (11-15): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nA certain number of persons sit in a linear row facing north. R sits 4th from one of the extreme ends. S\nsits 3rd to the left of R. One person sits between D and S. D sits 3rd to the left of T. Two persons sit between\nT and U who sits just left of B. More than one person sits between R and B. X sits 2nd to the left of L and\nis an immediate neighbour of B.\nव्यनियों की एक निनित संख्या उत्तर की ओर उन्मुि होकर एक रैनिक पंनि में बैठी है। R दकसी एक अंनतम छोर से चौथे\nस्थाि पर बैठा है। S, R के बायें से तीसरे स्थाि पर बैठा है। D और S के मध्य एक व्यनि बैठा है। D, T के बायें से तीसरे स्थाि\nपर बैठा है। T और U के मध्य िो व्यनि बैठे हैं, U जो B के ठीक बायें बठै ा है। R और B के मध्य एक से अनिक व्यनि बैठे हैं। X,\nL के बायें से िसू रे स्थाि पर बैठा है और र्ह B का निकटतम पडोसी है।"
+  },
+  {
+   "id": "2022-q12",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit between R and X?\nR और X के मध्य दकतिे व्यनि बैठे हैं?",
+   "options": {
+    "A": "Six / छह",
+    "B": "Four / चार",
+    "C": "More than seven / सात से अनिक",
+    "D": "Three / तीि",
+    "E": "One / एक"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (11-15): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nA certain number of persons sit in a linear row facing north. R sits 4th from one of the extreme ends. S\nsits 3rd to the left of R. One person sits between D and S. D sits 3rd to the left of T. Two persons sit between\nT and U who sits just left of B. More than one person sits between R and B. X sits 2nd to the left of L and\nis an immediate neighbour of B.\nव्यनियों की एक निनित संख्या उत्तर की ओर उन्मुि होकर एक रैनिक पंनि में बैठी है। R दकसी एक अंनतम छोर से चौथे\nस्थाि पर बैठा है। S, R के बायें से तीसरे स्थाि पर बैठा है। D और S के मध्य एक व्यनि बैठा है। D, T के बायें से तीसरे स्थाि\nपर बैठा है। T और U के मध्य िो व्यनि बैठे हैं, U जो B के ठीक बायें बठै ा है। R और B के मध्य एक से अनिक व्यनि बैठे हैं। X,\nL के बायें से िसू रे स्थाि पर बैठा है और र्ह B का निकटतम पडोसी है।"
+  },
+  {
+   "id": "2022-q13",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "What is the position of D with respect to B?\nB के सन्िभव में D का स्थाि क्या है?",
+   "options": {
+    "A": "7th to the right / िाएं से सातर्ा ं",
+    "B": "2nd to the right / िाएं से िसू रा",
+    "C": "Immediate left / ठीक बाए ं",
+    "D": "3rd to the left / बाएं से तीसरा",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (11-15): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nA certain number of persons sit in a linear row facing north. R sits 4th from one of the extreme ends. S\nsits 3rd to the left of R. One person sits between D and S. D sits 3rd to the left of T. Two persons sit between\nT and U who sits just left of B. More than one person sits between R and B. X sits 2nd to the left of L and\nis an immediate neighbour of B.\nव्यनियों की एक निनित संख्या उत्तर की ओर उन्मुि होकर एक रैनिक पंनि में बैठी है। R दकसी एक अंनतम छोर से चौथे\nस्थाि पर बैठा है। S, R के बायें से तीसरे स्थाि पर बैठा है। D और S के मध्य एक व्यनि बैठा है। D, T के बायें से तीसरे स्थाि\nपर बैठा है। T और U के मध्य िो व्यनि बैठे हैं, U जो B के ठीक बायें बठै ा है। R और B के मध्य एक से अनिक व्यनि बैठे हैं। X,\nL के बायें से िसू रे स्थाि पर बैठा है और र्ह B का निकटतम पडोसी है।"
+  },
+  {
+   "id": "2022-q14",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "The number of persons sit between S and T is same as\n_____ (in case of minimum number of persons).\nS और T के मध्य बैठे व्यनियों की संख्या उतिी ही है, नजतिी ________ के\nन्यूितम संख्या के मामिे में)।",
+   "options": {
+    "A": "X",
+    "B": "B",
+    "C": "U",
+    "D": "R",
+    "E": "L"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (11-15): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nA certain number of persons sit in a linear row facing north. R sits 4th from one of the extreme ends. S\nsits 3rd to the left of R. One person sits between D and S. D sits 3rd to the left of T. Two persons sit between\nT and U who sits just left of B. More than one person sits between R and B. X sits 2nd to the left of L and\nis an immediate neighbour of B.\nव्यनियों की एक निनित संख्या उत्तर की ओर उन्मुि होकर एक रैनिक पंनि में बैठी है। R दकसी एक अंनतम छोर से चौथे\nस्थाि पर बैठा है। S, R के बायें से तीसरे स्थाि पर बैठा है। D और S के मध्य एक व्यनि बैठा है। D, T के बायें से तीसरे स्थाि\nपर बैठा है। T और U के मध्य िो व्यनि बैठे हैं, U जो B के ठीक बायें बठै ा है। R और B के मध्य एक से अनिक व्यनि बैठे हैं। X,\nL के बायें से िसू रे स्थाि पर बैठा है और र्ह B का निकटतम पडोसी है।"
+  },
+  {
+   "id": "2022-q15",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Who among the following sits near to D?\nनिम्ननिनित में से कौि D के निकट बैठा है?",
+   "options": {
+    "A": "U",
+    "B": "B",
+    "C": "R",
+    "D": "X",
+    "E": "S\nthe row?\nthe number of persons sit to the right of\nिाईं ओर बैठे व्यनियों की संख्या है।(व्यनियों की"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (11-15): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nA certain number of persons sit in a linear row facing north. R sits 4th from one of the extreme ends. S\nsits 3rd to the left of R. One person sits between D and S. D sits 3rd to the left of T. Two persons sit between\nT and U who sits just left of B. More than one person sits between R and B. X sits 2nd to the left of L and\nis an immediate neighbour of B.\nव्यनियों की एक निनित संख्या उत्तर की ओर उन्मुि होकर एक रैनिक पंनि में बैठी है। R दकसी एक अंनतम छोर से चौथे\nस्थाि पर बैठा है। S, R के बायें से तीसरे स्थाि पर बैठा है। D और S के मध्य एक व्यनि बैठा है। D, T के बायें से तीसरे स्थाि\nपर बैठा है। T और U के मध्य िो व्यनि बैठे हैं, U जो B के ठीक बायें बठै ा है। R और B के मध्य एक से अनिक व्यनि बैठे हैं। X,\nL के बायें से िसू रे स्थाि पर बैठा है और र्ह B का निकटतम पडोसी है।",
+   "explanation": "ution\nSolution (16-20):"
+  },
+  {
+   "id": "2022-q16",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nSome Rocks are Marble.\nNo Marble is Concrete.\nकथि:\nकुछ रॉक, माबवि हैं।\nकोई माबवि, कंक्रीट िहीं है।\nConclusions: / निष्कष:व\nI. Some Rock are concrete. / कुछ रॉक, कंक्रीट हैं।\nII. No Rock is concrete. / कोई रॉक, कंक्रीट िहीं है।",
+   "options": {
+    "A": "If only conclusion I follows.\nयदि केर्ि निष्कषव I अिुसरर् करता है।",
+    "B": "If only conclusion II follows.\nयदि केर्ि निष्कषव II अिुसरर् करता है।",
+    "C": "If either conclusion I or II follows.\nयदि या तो निष्कषव I या II अिुसरर् करता है।",
+    "D": "If neither conclusion I nor II follows.\nयदि ि तो निष्कषव I और ि ही II अिुसरर् करता है।",
+    "E": "If both conclusions I and II follow.\nयदि निष्कषव I और II िोिों अिुसरर् करते हैं।"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (16-20): In each of the questions below are given some statements followed by some\nconclusions. You have to take the given statements to be true even if they seem to be at variance with\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions\nlogically follows from the given statements disregarding commonly known facts.\nिीचे दिए गए प्रत्येक प्रश्न म ें कुछ कथि और उसके बाि कुछ निष्कषव दिए गए ह।ैं आपको दिए गए कथिों को सत्य माििा है,\nभिे ही र्े सर्वज्ञात तथ्यों से नभन्न प्रतीत होते हों। सभी निष्कषों को पढें और दिर तय कीनजए दक दिए गए निष्कषों में से कौि\nसा निष्कषव सामान्य रूप से ज्ञात तथ्यों की परर्ाह दकए नबिा दिए गए कथिों का तार्कवक रूप से अिुसरर् करता है।"
+  },
+  {
+   "id": "2022-q17",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nSome City are not Town.\nAll Town are Metro.\nकथि:\nकुछ नसटी, टाउि िहीं हैं।\nसभी टाउि, मेट्रो हैं।\nConclusions: / निष्कष:व\nI. Some City are Metro. / कुछ नसटी, मेट्रो हैं।\nII. All City being Metro is a possibility. / सभी नसटी के मेट्रो होिे की संभार्िा है।",
+   "options": {
+    "A": "If only conclusion I follows.\nयदि केर्ि निष्कषव I अिुसरर् करता है।",
+    "B": "If only conclusion II follows.\nयदि केर्ि निष्कषव II अिुसरर् करता है।",
+    "C": "If either conclusion I or II follows.\nयदि या तो निष्कषव I या II अिुसरर् करता है।",
+    "D": "If neither conclusion I nor II follows.\nयदि ि तो निष्कषव I और ि ही II अिुसरर् करता है।",
+    "E": "If both conclusions I and II follow.\nयदि निष्कषव I और II िोिों अिुसरर् करते हैं।"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (16-20): In each of the questions below are given some statements followed by some\nconclusions. You have to take the given statements to be true even if they seem to be at variance with\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions\nlogically follows from the given statements disregarding commonly known facts.\nिीचे दिए गए प्रत्येक प्रश्न म ें कुछ कथि और उसके बाि कुछ निष्कषव दिए गए ह।ैं आपको दिए गए कथिों को सत्य माििा है,\nभिे ही र्े सर्वज्ञात तथ्यों से नभन्न प्रतीत होते हों। सभी निष्कषों को पढें और दिर तय कीनजए दक दिए गए निष्कषों में से कौि\nसा निष्कषव सामान्य रूप से ज्ञात तथ्यों की परर्ाह दकए नबिा दिए गए कथिों का तार्कवक रूप से अिुसरर् करता है।"
+  },
+  {
+   "id": "2022-q18",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nOnly a few Fish are Turtle.\nAll Turtle are Rabbit.\nकथि:\nकेर्ि कुछ दिश, टटवि हैं।\nसभी टटवि, रैनबट हैं।\nConclusions: निष्कष:व\nI. Some Fish are not turtle. / कुछ दिश, टटवि िहीं हैं।\nII. No Turtle is Fish. / कोई टटवि, दिश िहीं है।",
+   "options": {
+    "A": "If only conclusion I follows.\nयदि केर्ि निष्कषव I अिुसरर् करता है।",
+    "B": "If only conclusion II follows.\nयदि केर्ि निष्कषव II अिुसरर् करता है।",
+    "C": "If either conclusion I or II follows.\nयदि या तो निष्कषव I या II अिुसरर् करता है।",
+    "D": "If neither conclusion I nor II follows.\nयदि ि तो निष्कषव I और ि ही II अिुसरर् करता है।",
+    "E": "If both conclusions I and II follow.\nयदि निष्कषव I और II िोिों अिुसरर् करते हैं।"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (16-20): In each of the questions below are given some statements followed by some\nconclusions. You have to take the given statements to be true even if they seem to be at variance with\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions\nlogically follows from the given statements disregarding commonly known facts.\nिीचे दिए गए प्रत्येक प्रश्न म ें कुछ कथि और उसके बाि कुछ निष्कषव दिए गए ह।ैं आपको दिए गए कथिों को सत्य माििा है,\nभिे ही र्े सर्वज्ञात तथ्यों से नभन्न प्रतीत होते हों। सभी निष्कषों को पढें और दिर तय कीनजए दक दिए गए निष्कषों में से कौि\nसा निष्कषव सामान्य रूप से ज्ञात तथ्यों की परर्ाह दकए नबिा दिए गए कथिों का तार्कवक रूप से अिुसरर् करता है।"
+  },
+  {
+   "id": "2022-q19",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nSome clouds are water.\nSome waters are Star.\nकथि:\nकुछ क्िाउड, र्ाटर हैं।\nकुछ र्ाटर, स्टार हैं।\nConclusions: / निष्कष:व\nI. Some cloud can never be star. / कुछ क्िाउड, कभी स्टार\nII. All Could being water is a possibility. सभी क्िाउड, के",
+   "options": {
+    "A": "If only conclusion I follows.\nयदि केर्ि निष्कषव I अिुसरर् करता है।",
+    "B": "If only conclusion II follows.\nयदि केर्ि निष्कषव II अिुसरर् करता है।",
+    "C": "If either conclusion I or II follows.\nयदि या तो निष्कषव I या II अिुसरर् करता है।",
+    "D": "If neither conclusion I nor II follows.\nयदि ि तो निष्कषव I और ि ही II अिुसरर् करता है।",
+    "E": "If both conclusions I and II follow.\nयदि निष्कषव I और II िोिों अिुसरर् करते हैं।\nिहीं हो सकते।\nर्ाटर होिे की संभार्िा है।"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (16-20): In each of the questions below are given some statements followed by some\nconclusions. You have to take the given statements to be true even if they seem to be at variance with\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions\nlogically follows from the given statements disregarding commonly known facts.\nिीचे दिए गए प्रत्येक प्रश्न म ें कुछ कथि और उसके बाि कुछ निष्कषव दिए गए ह।ैं आपको दिए गए कथिों को सत्य माििा है,\nभिे ही र्े सर्वज्ञात तथ्यों से नभन्न प्रतीत होते हों। सभी निष्कषों को पढें और दिर तय कीनजए दक दिए गए निष्कषों में से कौि\nसा निष्कषव सामान्य रूप से ज्ञात तथ्यों की परर्ाह दकए नबिा दिए गए कथिों का तार्कवक रूप से अिुसरर् करता है।"
+  },
+  {
+   "id": "2022-q20",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nSome earbuds are phone.\nAll phone are charger.\nकथि: कुछ ईयरबड, िोि हैं।\nसभी िोि, चाजवर हैं।\nConclusions: / निष्कष:व\nI. All earbuds can be charger. / सभी ईयरबड्स, चाजवर हो सकते हैं।\nII. Some Phone are not charger. / कुछ िोि, चाजवर िहीं हैं।",
+   "options": {
+    "A": "If only conclusion I follows.\nयदि केर्ि निष्कषव I अिुसरर् करता है।",
+    "B": "If only conclusion II follows.\nयदि केर्ि निष्कषव II अिुसरर् करता है।",
+    "C": "If either conclusion I or II follows.\nयदि या तो निष्कषव I या II अिुसरर् करता है।",
+    "D": "If neither conclusion I nor II follows.\nयदि ि तो निष्कषव I और ि ही II अिुसरर् करता है।",
+    "E": "If both conclusions I and II follow.\nयदि निष्कषव I और II िोिों अिुसरर् करते हैं।"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (16-20): In each of the questions below are given some statements followed by some\nconclusions. You have to take the given statements to be true even if they seem to be at variance with\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions\nlogically follows from the given statements disregarding commonly known facts.\nिीचे दिए गए प्रत्येक प्रश्न म ें कुछ कथि और उसके बाि कुछ निष्कषव दिए गए ह।ैं आपको दिए गए कथिों को सत्य माििा है,\nभिे ही र्े सर्वज्ञात तथ्यों से नभन्न प्रतीत होते हों। सभी निष्कषों को पढें और दिर तय कीनजए दक दिए गए निष्कषों में से कौि\nसा निष्कषव सामान्य रूप से ज्ञात तथ्यों की परर्ाह दकए नबिा दिए गए कथिों का तार्कवक रूप से अिुसरर् करता है।"
+  },
+  {
+   "id": "2022-q21",
+   "section": "Reasoning Ability",
+   "topic": "Para Jumbles",
+   "question": "If in the given number “3852364718” 1 is added to the odd digits and 1 is subtracted from the\neven digits then what will be the sum of the digits which are 3rd from the right end and 5th from the left\nend in the number thus formed after rearrangement?\nयदि िी गई संख्या “3852364718” के नर्षम अंकों में 1 जोडा जाता है और सम अंकों में से 1 घटाया जाता है,तो पुिव्यवर्स्था\nके बाि निर्मवत संख्या में िाय ें छोर से तीसरे और बाएाँ छोर से पांचर्ें अंक का योग दकतिा होगा?",
+   "options": {
+    "A": "15",
+    "B": "13",
+    "C": "16",
+    "D": "12",
+    "E": "11"
+   },
+   "correctAnswer": "D",
+   "explanation": "Number-3852364718\nAfter rearrangement- 4761453827\nSum= 8+4=12\nSolution (22-25):"
+  },
+  {
+   "id": "2022-q22",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q22 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I is true.\nयदि केर्ि निष्कषव I सत्य है।",
+    "B": "If only conclusion II is true.\nयदि केर्ि निष्कषव II सत्य है।",
+    "C": "If either conclusion I or II is true.\nयदि या तो निष्कषव I या II सत्य है।",
+    "D": "If neither conclusion I nor II is true.\nयदि ि तो निष्कषव I और ि ही II सत्य है।",
+    "E": "If both conclusions I and II are true.\nयदि निष्कषव I और II िोिों सत्य हैं।"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (22-25): In these questions, relationship between different elements is shown in the\nstatements. The statements are followed by two conclusions. Give answer.\nइि प्रश्नों में, कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िशावया गया है। कथिों के बाि िो निष्कषव दिए गए हैं। उत्तर िीनजए।"
+  },
+  {
+   "id": "2022-q23",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q23 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I is true.\nयदि केर्ि निष्कषव I सत्य है।",
+    "B": "If only conclusion II is true.\nयदि केर्ि निष्कषव II सत्य है।",
+    "C": "If either conclusion I or II is true.\nयदि या तो निष्कषव I या II सत्य है।",
+    "D": "If neither conclusion I nor II is true.\nयदि ि तो निष्कषव I और ि ही II सत्य है।",
+    "E": "If both conclusions I and II are true.\nयदि निष्कषव I और II िोिों सत्य हैं।"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (22-25): In these questions, relationship between different elements is shown in the\nstatements. The statements are followed by two conclusions. Give answer.\nइि प्रश्नों में, कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िशावया गया है। कथिों के बाि िो निष्कषव दिए गए हैं। उत्तर िीनजए।"
+  },
+  {
+   "id": "2022-q24",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q24 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I is true.\nयदि केर्ि निष्कषव I सत्य है।",
+    "B": "If only conclusion II is true.\nयदि केर्ि निष्कषव II सत्य है।",
+    "C": "If either conclusion I or II is true.\nयदि या तो निष्कषव I या II सत्य है।",
+    "D": "If neither conclusion I nor II is true.\nयदि ि तो निष्कषव I और ि ही II सत्य है।",
+    "E": "If both conclusions I and II are true.\nयदि निष्कषव I और II िोिों सत्य हैं।"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (22-25): In these questions, relationship between different elements is shown in the\nstatements. The statements are followed by two conclusions. Give answer.\nइि प्रश्नों में, कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िशावया गया है। कथिों के बाि िो निष्कषव दिए गए हैं। उत्तर िीनजए।"
+  },
+  {
+   "id": "2022-q25",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "⚠️ The expression for Q25 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If only conclusion I is true.\nयदि केर्ि निष्कषव I सत्य है।",
+    "B": "If only conclusion II is true.\nयदि केर्ि निष्कषव II सत्य है।",
+    "C": "If either conclusion I or II is true.\nयदि या तो निष्कषव I या II सत्य है।",
+    "D": "If neither conclusion I nor II is true.\nयदि ि तो निष्कषव I और ि ही II सत्य है।",
+    "E": "If both conclusions I and II are true.\nयदि निष्कषव I और II िोिों सत्य हैं।"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (22-25): In these questions, relationship between different elements is shown in the\nstatements. The statements are followed by two conclusions. Give answer.\nइि प्रश्नों में, कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िशावया गया है। कथिों के बाि िो निष्कषव दिए गए हैं। उत्तर िीनजए।",
+   "explanation": "ution (26-30):\nMonth Date Persons\nSeptember 15 D\n22 R\nOctober 15 A\n22 Q\nNovember 15 B\n22 S\nDecember 15 C\n22 P"
+  },
+  {
+   "id": "2022-q26",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Who among the following was born on 15th September?\nनिम्ननिनित में से दकसका जन्म 15 नसतंबर को हुआ?",
+   "options": {
+    "A": "A",
+    "B": "R",
+    "C": "D",
+    "D": "C",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (26-30): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nEight persons were born on two dates- 15th and 22nd of four different months i.e. September, October,\nNovember and December in the same year.\nTwo persons were born between S and A. S was born on an even date in the month having even number\nof days. The number of persons born before A is one less than the number of persons born after B. Q\nborn just before B and two persons after R. C born after D and before P.\nआठ व्यनियों का जन्म एक ही र्षव के चार अिग-अिग महीिों अथावत् नसतंबर, अक्टूबर, िर्ंबर और दिसंबर की िो नतनथयों-\n15 और 22 को हुआ था।\nS और A के मध्य िो व्यनियों का जन्म हुआ था। S का जन्म सम दििों की संख्या र्ािे महीिे में एक सम नतनथ को हुआ था। A\nसे पहिे जन्मे व्यनियों की संख्या, B के बाि जन्म े व्यनियों की संख्या से एक कम ह।ै Q का जन्म B के ठीक पहिे और R के िो\nबाि जन्में िो व्यनियों के बाि हुआ है। C का जन्म D के बाि और P से पहिे हुआ है।"
+  },
+  {
+   "id": "2022-q27",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many persons were born between R and P?\nR और P के मध्य दकतिे व्यनियों का जन्म हुआ था?",
+   "options": {
+    "A": "Six / छह",
+    "B": "Five / पांच",
+    "C": "Four / चार",
+    "D": "Three / तीि",
+    "E": "None / कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (26-30): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nEight persons were born on two dates- 15th and 22nd of four different months i.e. September, October,\nNovember and December in the same year.\nTwo persons were born between S and A. S was born on an even date in the month having even number\nof days. The number of persons born before A is one less than the number of persons born after B. Q\nborn just before B and two persons after R. C born after D and before P.\nआठ व्यनियों का जन्म एक ही र्षव के चार अिग-अिग महीिों अथावत् नसतंबर, अक्टूबर, िर्ंबर और दिसंबर की िो नतनथयों-\n15 और 22 को हुआ था।\nS और A के मध्य िो व्यनियों का जन्म हुआ था। S का जन्म सम दििों की संख्या र्ािे महीिे में एक सम नतनथ को हुआ था। A\nसे पहिे जन्मे व्यनियों की संख्या, B के बाि जन्म े व्यनियों की संख्या से एक कम ह।ै Q का जन्म B के ठीक पहिे और R के िो\nबाि जन्में िो व्यनियों के बाि हुआ है। C का जन्म D के बाि और P से पहिे हुआ है।"
+  },
+  {
+   "id": "2022-q28",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Four among the following five pairs are alike in\namong the following does not belong to the group?\nनिम्ननिनित पांच युग्मों में से चार एक निनित तरीके से समाि हैं\nउस समूह से संबंनित िहीं है?",
+   "options": {
+    "A": "S",
+    "B": "R",
+    "C": "B",
+    "D": "D",
+    "E": "Q"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (26-30): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nEight persons were born on two dates- 15th and 22nd of four different months i.e. September, October,\nNovember and December in the same year.\nTwo persons were born between S and A. S was born on an even date in the month having even number\nof days. The number of persons born before A is one less than the number of persons born after B. Q\nborn just before B and two persons after R. C born after D and before P.\nआठ व्यनियों का जन्म एक ही र्षव के चार अिग-अिग महीिों अथावत् नसतंबर, अक्टूबर, िर्ंबर और दिसंबर की िो नतनथयों-\n15 और 22 को हुआ था।\nS और A के मध्य िो व्यनियों का जन्म हुआ था। S का जन्म सम दििों की संख्या र्ािे महीिे में एक सम नतनथ को हुआ था। A\nसे पहिे जन्मे व्यनियों की संख्या, B के बाि जन्म े व्यनियों की संख्या से एक कम ह।ै Q का जन्म B के ठीक पहिे और R के िो\nबाि जन्में िो व्यनियों के बाि हुआ है। C का जन्म D के बाि और P से पहिे हुआ है।"
+  },
+  {
+   "id": "2022-q29",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which among the following statement is not true?\nनिम्ननिनित में से कौि सा कथि सत्य िहीं है?",
+   "options": {
+    "A": "R was born just before A\nR का जन्म A से ठीक पहिे हुआ था।",
+    "B": "C was born in December month\nC का जन्म दिसंबर महीिे में हुआ था।",
+    "C": "A was born before P\nA का जन्म P से पहिे हुआ था।",
+    "D": "Q and B born in the same month\nQ और B का जन्म एक ही महीिे में हुआ।",
+    "E": "All are true\nसभी सत्य हैं।"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (26-30): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nEight persons were born on two dates- 15th and 22nd of four different months i.e. September, October,\nNovember and December in the same year.\nTwo persons were born between S and A. S was born on an even date in the month having even number\nof days. The number of persons born before A is one less than the number of persons born after B. Q\nborn just before B and two persons after R. C born after D and before P.\nआठ व्यनियों का जन्म एक ही र्षव के चार अिग-अिग महीिों अथावत् नसतंबर, अक्टूबर, िर्ंबर और दिसंबर की िो नतनथयों-\n15 और 22 को हुआ था।\nS और A के मध्य िो व्यनियों का जन्म हुआ था। S का जन्म सम दििों की संख्या र्ािे महीिे में एक सम नतनथ को हुआ था। A\nसे पहिे जन्मे व्यनियों की संख्या, B के बाि जन्म े व्यनियों की संख्या से एक कम ह।ै Q का जन्म B के ठीक पहिे और R के िो\nबाि जन्में िो व्यनियों के बाि हुआ है। C का जन्म D के बाि और P से पहिे हुआ है।"
+  },
+  {
+   "id": "2022-q30",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "The number of persons born before Q is same as th\nQ से पहिे जन्मे व्यनियों की संख्या ________ के बाि जन्म े व्यनियों",
+   "options": {
+    "A": "B",
+    "B": "S",
+    "C": "C",
+    "D": "P",
+    "E": "None of these / इिमें से कोई िहीं\na certain manner and related to a group, who\nऔर एक समूह से संबंनित हैं, निम्ननिनित में से कौि-सा\nhe number of persons born after____.\nकी संख्या के समाि है।"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (26-30): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nEight persons were born on two dates- 15th and 22nd of four different months i.e. September, October,\nNovember and December in the same year.\nTwo persons were born between S and A. S was born on an even date in the month having even number\nof days. The number of persons born before A is one less than the number of persons born after B. Q\nborn just before B and two persons after R. C born after D and before P.\nआठ व्यनियों का जन्म एक ही र्षव के चार अिग-अिग महीिों अथावत् नसतंबर, अक्टूबर, िर्ंबर और दिसंबर की िो नतनथयों-\n15 और 22 को हुआ था।\nS और A के मध्य िो व्यनियों का जन्म हुआ था। S का जन्म सम दििों की संख्या र्ािे महीिे में एक सम नतनथ को हुआ था। A\nसे पहिे जन्मे व्यनियों की संख्या, B के बाि जन्म े व्यनियों की संख्या से एक कम ह।ै Q का जन्म B के ठीक पहिे और R के िो\nबाि जन्में िो व्यनियों के बाि हुआ है। C का जन्म D के बाि और P से पहिे हुआ है।",
+   "explanation": "ution (31-34):"
+  },
+  {
+   "id": "2022-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction is point E with respect to point A?\nबबंि ु A के सन्िभव में बबिं ु E दकस दिशा में है?",
+   "options": {
+    "A": "South / िनक्षर्",
+    "B": "North / उत्तर",
+    "C": "North west / उत्तर पनिम",
+    "D": "South east / िनक्षर् पूर् व",
+    "E": "East / पूर् व"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (31-34): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nPont A is 6m to the north of point H which is 8m to the east of point B. Point B is 5m to the north of point\nF. Point E is 9m to the north of point D and 8m to the east of point F. Point G is 5m to the north of point\nJ. Point D is 4m to the east of point G.\nबबंि ु A, बबंि ु H के 6 मीटर उत्तर म ें है, बबंि ु H जो बबिं ु B के 8 मीटर पर्ू व में है। बबिं ु B, बबंि ु F के 5 मीटर उत्तर म ें है। बबिं ु E,\nबबंि ु D के 9मी उत्तर में और बबंि ु F के 8मी पूर्व में है। बबंि ु G, बबंि ु J के 5मी उत्तर में है। बबिं ु D, बबंि ुG के 4मी पूर् व म ें है।"
+  },
+  {
+   "id": "2022-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the shortest distance between point D and point J?\nबबंि ु D और बबंि ु J के मध्य न्यूितम िरू ी दकतिी है?",
+   "options": {
+    "A": "√33m / √33 मीटर",
+    "B": "√41m / √41 मीटर",
+    "C": "41m / 41 मीटर",
+    "D": "35m / 35 मीटर",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (31-34): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nPont A is 6m to the north of point H which is 8m to the east of point B. Point B is 5m to the north of point\nF. Point E is 9m to the north of point D and 8m to the east of point F. Point G is 5m to the north of point\nJ. Point D is 4m to the east of point G.\nबबंि ु A, बबंि ु H के 6 मीटर उत्तर म ें है, बबंि ु H जो बबिं ु B के 8 मीटर पर्ू व में है। बबिं ु B, बबंि ु F के 5 मीटर उत्तर म ें है। बबिं ु E,\nबबंि ु D के 9मी उत्तर में और बबंि ु F के 8मी पूर्व में है। बबंि ु G, बबंि ु J के 5मी उत्तर में है। बबिं ु D, बबंि ुG के 4मी पूर् व म ें है।"
+  },
+  {
+   "id": "2022-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the total distance from point E to point J?\nबबंि ु E से बबिं ु J तक कुि िरू ी दकतिी है?",
+   "options": {
+    "A": "23m / 23 मीटर",
+    "B": "20m / 20 मीटर",
+    "C": "18m / 18 मीटर",
+    "D": "25m / 25 मीटर",
+    "E": "19m / 19 मीटर"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-34): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nPont A is 6m to the north of point H which is 8m to the east of point B. Point B is 5m to the north of point\nF. Point E is 9m to the north of point D and 8m to the east of point F. Point G is 5m to the north of point\nJ. Point D is 4m to the east of point G.\nबबंि ु A, बबंि ु H के 6 मीटर उत्तर म ें है, बबंि ु H जो बबिं ु B के 8 मीटर पर्ू व में है। बबिं ु B, बबंि ु F के 5 मीटर उत्तर म ें है। बबिं ु E,\nबबंि ु D के 9मी उत्तर में और बबंि ु F के 8मी पूर्व में है। बबंि ु G, बबंि ु J के 5मी उत्तर में है। बबिं ु D, बबंि ुG के 4मी पूर् व म ें है।"
+  },
+  {
+   "id": "2022-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four among the following five pairs are alike in a certain manner and related to a group, which\namong the following does not belong to the group?\nनिम्ननिनित पांच युग्मों में से चार एक निनित तरीके से समाि हैं और एक समूह से संबंनित हैं, निम्ननिनित में से कौि-सा\nउस समूह से संबंनित िहीं है?",
+   "options": {
+    "A": "A-F",
+    "B": "E-G",
+    "C": "D-J",
+    "D": "B-D",
+    "E": "E-J"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (31-34): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nPont A is 6m to the north of point H which is 8m to the east of point B. Point B is 5m to the north of point\nF. Point E is 9m to the north of point D and 8m to the east of point F. Point G is 5m to the north of point\nJ. Point D is 4m to the east of point G.\nबबंि ु A, बबंि ु H के 6 मीटर उत्तर म ें है, बबंि ु H जो बबिं ु B के 8 मीटर पर्ू व में है। बबिं ु B, बबंि ु F के 5 मीटर उत्तर म ें है। बबिं ु E,\nबबंि ु D के 9मी उत्तर में और बबंि ु F के 8मी पूर्व में है। बबंि ु G, बबंि ु J के 5मी उत्तर में है। बबिं ु D, बबंि ुG के 4मी पूर् व म ें है।",
+   "explanation": "ution (35-39):"
+  },
+  {
+   "id": "2022-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following likes pink?\nनिम्ननिनित में से दकसे गुिाबी रंग पसंि है?",
+   "options": {
+    "A": "C",
+    "B": "D",
+    "C": "B",
+    "D": "A",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (35-39): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nSeven persons from A to G sit in a row such that all of them face north. Each of them likes different\ncolour – Black, Blue, Red, Pink, Green, Golden and White. All the information is not necessarily in the\nsame order.\nTwo persons sit between E and the one who likes red. A is the only neighbour of the one who likes red.\nD sits second to the left of E. The one who likes golden sits adjacent to D and sits second to the right of\nC. More than three persons sit between C and F. B sits second to the left of the one who likes White.\nThree persons sit between G and the one who likes blue. The one who likes black sits left to the one who\nlikes green and right to the one who likes pink.\nA से G तक सात व्यनि एक पंनि में इस प्रकार बैठते हैं दक र्े सभी उत्तर की ओर उन्मुि हैं। उिमें से प्रत्येक को अिग-अिग\nरंग पसंि हैं - कािा, िीिा, िाि, गुिाबी, हरा, गोल्डि और सिेि। जरूरी िहीं दक सभी जािकारी इसी क्रम में हों।\nE और िाि रंग पसंि करिे र्ािे व्यनि के मध्य िो व्यनि बैठे हैं। A, िाि रंग पसंि करिे र्ािे का एकमात्र पडोसी है। D, E के\nबायें से िसू रे स्थाि पर बैठा है। र्ह व्यनि नजसे गोल्डि रंग पसंि है र्ह D के आसन्न और C के िायें से िसू रे स्थाि पर बैठा है।\nC और F के मध्य तीि से अनिक व्यनि बैठे हैं। B, सिेि रंग पसंि करिे र्ािे के बायें से िसू रे स्थाि पर बैठा है। G और िीिा\nरंग पसंि करिे र्ािे के मध्य तीि व्यनि बठै े हैं। र्ह व्यनि नजसे कािा रंग पसंि है र्ह हरे रंग को पसंि करिे र्ािे के बायें\nऔर गुिाबी रंग पसंि करिे र्ािे के िायें बैठा ह।ै"
+  },
+  {
+   "id": "2022-q36",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following combination is correct?\nनिम्ननिनित में से कौि सा संयोजि सही है?",
+   "options": {
+    "A": "C- Black / C – कािा",
+    "B": "A- White / A – सिेि",
+    "C": "E- Blue / E - िीिा",
+    "D": "A- Green / A – हरा",
+    "E": "None is correct / कोई भी सही िहीं है।"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (35-39): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nSeven persons from A to G sit in a row such that all of them face north. Each of them likes different\ncolour – Black, Blue, Red, Pink, Green, Golden and White. All the information is not necessarily in the\nsame order.\nTwo persons sit between E and the one who likes red. A is the only neighbour of the one who likes red.\nD sits second to the left of E. The one who likes golden sits adjacent to D and sits second to the right of\nC. More than three persons sit between C and F. B sits second to the left of the one who likes White.\nThree persons sit between G and the one who likes blue. The one who likes black sits left to the one who\nlikes green and right to the one who likes pink.\nA से G तक सात व्यनि एक पंनि में इस प्रकार बैठते हैं दक र्े सभी उत्तर की ओर उन्मुि हैं। उिमें से प्रत्येक को अिग-अिग\nरंग पसंि हैं - कािा, िीिा, िाि, गुिाबी, हरा, गोल्डि और सिेि। जरूरी िहीं दक सभी जािकारी इसी क्रम में हों।\nE और िाि रंग पसंि करिे र्ािे व्यनि के मध्य िो व्यनि बैठे हैं। A, िाि रंग पसंि करिे र्ािे का एकमात्र पडोसी है। D, E के\nबायें से िसू रे स्थाि पर बैठा है। र्ह व्यनि नजसे गोल्डि रंग पसंि है र्ह D के आसन्न और C के िायें से िसू रे स्थाि पर बैठा है।\nC और F के मध्य तीि से अनिक व्यनि बैठे हैं। B, सिेि रंग पसंि करिे र्ािे के बायें से िसू रे स्थाि पर बैठा है। G और िीिा\nरंग पसंि करिे र्ािे के मध्य तीि व्यनि बठै े हैं। र्ह व्यनि नजसे कािा रंग पसंि है र्ह हरे रंग को पसंि करिे र्ािे के बायें\nऔर गुिाबी रंग पसंि करिे र्ािे के िायें बैठा ह।ै"
+  },
+  {
+   "id": "2022-q37",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between F and B?\nF और B के मध्य दकतिे व्यनि बैठे हैं?",
+   "options": {
+    "A": "One / एक",
+    "B": "Two / िो",
+    "C": "None / कोई िहीं",
+    "D": "Three / तीि",
+    "E": "More than three / तीि से अनिक"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (35-39): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nSeven persons from A to G sit in a row such that all of them face north. Each of them likes different\ncolour – Black, Blue, Red, Pink, Green, Golden and White. All the information is not necessarily in the\nsame order.\nTwo persons sit between E and the one who likes red. A is the only neighbour of the one who likes red.\nD sits second to the left of E. The one who likes golden sits adjacent to D and sits second to the right of\nC. More than three persons sit between C and F. B sits second to the left of the one who likes White.\nThree persons sit between G and the one who likes blue. The one who likes black sits left to the one who\nlikes green and right to the one who likes pink.\nA से G तक सात व्यनि एक पंनि में इस प्रकार बैठते हैं दक र्े सभी उत्तर की ओर उन्मुि हैं। उिमें से प्रत्येक को अिग-अिग\nरंग पसंि हैं - कािा, िीिा, िाि, गुिाबी, हरा, गोल्डि और सिेि। जरूरी िहीं दक सभी जािकारी इसी क्रम में हों।\nE और िाि रंग पसंि करिे र्ािे व्यनि के मध्य िो व्यनि बैठे हैं। A, िाि रंग पसंि करिे र्ािे का एकमात्र पडोसी है। D, E के\nबायें से िसू रे स्थाि पर बैठा है। र्ह व्यनि नजसे गोल्डि रंग पसंि है र्ह D के आसन्न और C के िायें से िसू रे स्थाि पर बैठा है।\nC और F के मध्य तीि से अनिक व्यनि बैठे हैं। B, सिेि रंग पसंि करिे र्ािे के बायें से िसू रे स्थाि पर बैठा है। G और िीिा\nरंग पसंि करिे र्ािे के मध्य तीि व्यनि बठै े हैं। र्ह व्यनि नजसे कािा रंग पसंि है र्ह हरे रंग को पसंि करिे र्ािे के बायें\nऔर गुिाबी रंग पसंि करिे र्ािे के िायें बैठा ह।ै"
+  },
+  {
+   "id": "2022-q38",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "F likes which among the following colours?\nF को निम्ननिनित में से कौि सा रंग पसंि है?",
+   "options": {
+    "A": "White / सफेि",
+    "B": "Blue / िीिा",
+    "C": "Red / िाि",
+    "D": "Either red or blue / या तो िाि या िीिा",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (35-39): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nSeven persons from A to G sit in a row such that all of them face north. Each of them likes different\ncolour – Black, Blue, Red, Pink, Green, Golden and White. All the information is not necessarily in the\nsame order.\nTwo persons sit between E and the one who likes red. A is the only neighbour of the one who likes red.\nD sits second to the left of E. The one who likes golden sits adjacent to D and sits second to the right of\nC. More than three persons sit between C and F. B sits second to the left of the one who likes White.\nThree persons sit between G and the one who likes blue. The one who likes black sits left to the one who\nlikes green and right to the one who likes pink.\nA से G तक सात व्यनि एक पंनि में इस प्रकार बैठते हैं दक र्े सभी उत्तर की ओर उन्मुि हैं। उिमें से प्रत्येक को अिग-अिग\nरंग पसंि हैं - कािा, िीिा, िाि, गुिाबी, हरा, गोल्डि और सिेि। जरूरी िहीं दक सभी जािकारी इसी क्रम में हों।\nE और िाि रंग पसंि करिे र्ािे व्यनि के मध्य िो व्यनि बैठे हैं। A, िाि रंग पसंि करिे र्ािे का एकमात्र पडोसी है। D, E के\nबायें से िसू रे स्थाि पर बैठा है। र्ह व्यनि नजसे गोल्डि रंग पसंि है र्ह D के आसन्न और C के िायें से िसू रे स्थाि पर बैठा है।\nC और F के मध्य तीि से अनिक व्यनि बैठे हैं। B, सिेि रंग पसंि करिे र्ािे के बायें से िसू रे स्थाि पर बैठा है। G और िीिा\nरंग पसंि करिे र्ािे के मध्य तीि व्यनि बठै े हैं। र्ह व्यनि नजसे कािा रंग पसंि है र्ह हरे रंग को पसंि करिे र्ािे के बायें\nऔर गुिाबी रंग पसंि करिे र्ािे के िायें बैठा ह।ै"
+  },
+  {
+   "id": "2022-q39",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following statement(s) is/are true?\nनिम्ननिनित में से कौि सा/से कथि सत्य है/हैं?",
+   "options": {
+    "A": "C sits adjacent to D\nC, D के आसन्न बैठा है।",
+    "B": "E likes Black colour\nE कािा रंग पसंि करता है।",
+    "C": "One person sits between C and B\nएक व्यनि C और B के मध्य बैठा ह।ै",
+    "D": "F sits at the extreme end\nF अंनतम छोर पर बैठा है।",
+    "E": "All are true / सभी सत्य हैं।"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (35-39): Study the following information carefully and answer the questions given below:\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीचे दिए गए प्रश्नों के उत्तर िीनजए:\nSeven persons from A to G sit in a row such that all of them face north. Each of them likes different\ncolour – Black, Blue, Red, Pink, Green, Golden and White. All the information is not necessarily in the\nsame order.\nTwo persons sit between E and the one who likes red. A is the only neighbour of the one who likes red.\nD sits second to the left of E. The one who likes golden sits adjacent to D and sits second to the right of\nC. More than three persons sit between C and F. B sits second to the left of the one who likes White.\nThree persons sit between G and the one who likes blue. The one who likes black sits left to the one who\nlikes green and right to the one who likes pink.\nA से G तक सात व्यनि एक पंनि में इस प्रकार बैठते हैं दक र्े सभी उत्तर की ओर उन्मुि हैं। उिमें से प्रत्येक को अिग-अिग\nरंग पसंि हैं - कािा, िीिा, िाि, गुिाबी, हरा, गोल्डि और सिेि। जरूरी िहीं दक सभी जािकारी इसी क्रम में हों।\nE और िाि रंग पसंि करिे र्ािे व्यनि के मध्य िो व्यनि बैठे हैं। A, िाि रंग पसंि करिे र्ािे का एकमात्र पडोसी है। D, E के\nबायें से िसू रे स्थाि पर बैठा है। र्ह व्यनि नजसे गोल्डि रंग पसंि है र्ह D के आसन्न और C के िायें से िसू रे स्थाि पर बैठा है।\nC और F के मध्य तीि से अनिक व्यनि बैठे हैं। B, सिेि रंग पसंि करिे र्ािे के बायें से िसू रे स्थाि पर बैठा है। G और िीिा\nरंग पसंि करिे र्ािे के मध्य तीि व्यनि बठै े हैं। र्ह व्यनि नजसे कािा रंग पसंि है र्ह हरे रंग को पसंि करिे र्ािे के बायें\nऔर गुिाबी रंग पसंि करिे र्ािे के िायें बैठा ह।ै"
+  },
+  {
+   "id": "2022-q40",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If we form a four-letter meaningful word by using the second, third, fifth and ninth letter\nfrom the left end of the word ‘MICROPHONE’, then which of the following will be the fourth letter of the\nmeaningful word thus formed. If more than one word is formed mark Z as your answer. If no meaningful\nword is formed, mark X as your answer?\nयदि हम शब्ि ‘MICROPHONE’ के बाएं छोर से िसू रे, तीसरे, पांचर्ें और िौर्ें अक्षर का उपयोग करके चार अक्षरों का अथवपूर् व\nशब्ि बिाते हैं, तो निम्न में से कौि सा अथवपूर्व शब्ि का चौथा अक्षर होगा। यदि एक से अनिक शब्ि बिते हैं तो Z को अपिा\nउत्तर िें। यदि कोई साथवक शब्ि िहीं बिता है, तो X को अपिा उत्तर िें?",
+   "options": {
+    "A": "O",
+    "B": "I",
+    "C": "C",
+    "D": "X",
+    "E": "Z"
+   },
+   "correctAnswer": "E",
+   "explanation": "“ICON, COIN”"
+  },
+  {
+   "id": "2022-q41",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "118, 151, 217, 316, 445, 613, 811",
+   "options": {
+    "A": "613",
+    "B": "445",
+    "C": "151",
+    "D": "811",
+    "E": "316"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (41-45): Find the wrong number in following number series.\nनिम्ननिनित संख्या श्ंििा में गित संख्या ज्ञात कीनजए।",
+   "explanation": "Wrong number = 445\nPatter of series –\n118 + (33 ×1) = 151\n151 + (33 ×2) = 217\n217 + (33 ×3) = 316\n316 + (33 ×4) = 448\n448 + (33 ×5) = 613\n613 + (33 ×6) = 811"
+  },
+  {
+   "id": "2022-q42",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "18, 21, 23, 28, 35, 46, 59",
+   "options": {
+    "A": "18",
+    "B": "23",
+    "C": "21",
+    "D": "35",
+    "E": "46"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-45): Find the wrong number in following number series.\nनिम्ननिनित संख्या श्ंििा में गित संख्या ज्ञात कीनजए।",
+   "explanation": "Wrong number = 21\nPatter of series –\nAddition of consecutive prime numbers\n18 + 2 = 20\n20 + 3 = 23\n23 + 5 = 28\n28 + 7 = 35\n35 + 11 = 46\n46 + 13 = 59"
+  },
+  {
+   "id": "2022-q43",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "2, 3, 8, 27, 112, 560, 3396",
+   "options": {
+    "A": "3396",
+    "B": "3",
+    "C": "560",
+    "D": "27",
+    "E": "112"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-45): Find the wrong number in following number series.\nनिम्ननिनित संख्या श्ंििा में गित संख्या ज्ञात कीनजए।",
+   "explanation": "Wrong number = 560\nPatter of series –\n2 ×1+1 = 3\n3 ×2+2 = 8\n8 ×3+3= 27\n27 ×4+4 = 112\n112 ×5+5 = 565\n565 ×6+6 = 3396"
+  },
+  {
+   "id": "2022-q44",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "8, 72, 121, 157, 182, 196, 207",
+   "options": {
+    "A": "182",
+    "B": "72",
+    "C": "121",
+    "D": "196",
+    "E": "207"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (41-45): Find the wrong number in following number series.\nनिम्ननिनित संख्या श्ंििा में गित संख्या ज्ञात कीनजए।",
+   "explanation": "Wrong number = 196\nPatter of series –\n8 + 82= 72\n72 + 72= 121\n121 + 62= 157\n157 + 52 = 182\n182 + 42 = 198\n198 + 32 = 207"
+  },
+  {
+   "id": "2022-q45",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "451, 502, 550, 604, 655, 706, 757",
+   "options": {
+    "A": "604",
+    "B": "451",
+    "C": "550",
+    "D": "655",
+    "E": "706"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-45): Find the wrong number in following number series.\nनिम्ननिनित संख्या श्ंििा में गित संख्या ज्ञात कीनजए।",
+   "explanation": "Wrong number = 550\nPatter of series –\n451 + 51 = 502\n502 + 51 = 553\n553 + 51 = 604\n604 + 51 = 655\n655 + 51 = 706\n706 + 51 = 757"
+  },
+  {
+   "id": "2022-q46",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "64.98% of 479.99 - ? +175.01 =350.01",
+   "options": {
+    "A": "125",
+    "B": "129",
+    "C": "137",
+    "D": "147",
+    "E": "153\n(15.92)2"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (46-50): What approximate value sho\nquestions?\nनिम्ननिनित प्रश्नों में प्रश्ननचन्ह (?) के स्थाि पर िगभग क्या",
+   "explanation": "65%×480−?+175 = 350\n?= 137"
+  },
+  {
+   "id": "2022-q47",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "(4.01)? ×2 =\n4\n√16.01",
+   "options": {
+    "A": "2",
+    "B": "3",
+    "C": "4",
+    "D": "1",
+    "E": "None of these\nould come in place of question mark (?) in following\nमाि आिा चानहए?"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (46-50): What approximate value sho\nquestions?\nनिम्ननिनित प्रश्नों में प्रश्ननचन्ह (?) के स्थाि पर िगभग क्या",
+   "explanation": "4? ×2 =\n4\n√16\n256\n4? ×2 =\n2\n4? = 64\n4? = (4)3\n? = 3"
+  },
+  {
+   "id": "2022-q48",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "3.99 ×(? +119.94) = (7.99)3",
+   "options": {
+    "A": "6",
+    "B": "12",
+    "C": "8",
+    "D": "4",
+    "E": "16\n144.01"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (46-50): What approximate value sho\nquestions?\nनिम्ननिनित प्रश्नों में प्रश्ननचन्ह (?) के स्थाि पर िगभग क्या",
+   "explanation": "4 ×(? +120) = (8)3\n4 × ?= 512− 480\n32\n? =\n4\n? = 8"
+  },
+  {
+   "id": "2022-q49",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "+ 40.01 % of 249.99 = 108.09\n?",
+   "options": {
+    "A": "12",
+    "B": "8",
+    "C": "15",
+    "D": "18",
+    "E": "24"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (46-50): What approximate value sho\nquestions?\nनिम्ननिनित प्रश्नों में प्रश्ननचन्ह (?) के स्थाि पर िगभग क्या",
+   "explanation": "+ ×250 = 108\n? 100\n144\n+ 100 = 108\n?\n144\n= 8\n?\n? = 18"
+  },
+  {
+   "id": "2022-q50",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "? % of 1050.03 + 363.99 = (27.97)2",
+   "options": {
+    "A": "60",
+    "B": "35",
+    "C": "50",
+    "D": "40",
+    "E": "30"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (46-50): What approximate value sho\nquestions?\nनिम्ननिनित प्रश्नों में प्रश्ननचन्ह (?) के स्थाि पर िगभग क्या",
+   "explanation": "×1050+364 = (28)2\n100\n?\n×1050 = 784− 364\n100\n?\n×1050 = 420\n100\n420×100\n? =\n1050\n? = 40"
+  },
+  {
+   "id": "2022-q51",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. 𝑥2 +7𝑥−98 = 0\nII. 𝑦2 −𝑦−42 = 0",
+   "options": {
+    "A": "If/यदि x>y",
+    "B": "If/यदि x≥y",
+    "C": "If/यदि x<y",
+    "D": "If/यदि x≤y",
+    "E": "If/यदि x = y or no relation can be established\nदकया जा सकता है।"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (51-55): In each of these questions,\nboth the equations and give answer\nइिमें से प्रत्येक प्रश्न में िो समीकरर् (I) और (II) दिए गए ह",
+   "explanation": "I. 𝑥2 +7𝑥−98 = 0\n𝑥2 +14𝑥−7𝑥−98 = 0\n𝑥(𝑥+14)−7(𝑥+14) = 0\n(𝑥+14)(𝑥−7) = 0\n𝑥 = −14,7\nII. 𝑦2 −𝑦−42 = 0\n𝑦2 −7𝑦+6𝑦−42 = 0\n𝑦(𝑦−7)+6(𝑦−7) = 0\n(𝑦+6)(𝑦−7) = 0\n𝑦 = −6,7\nSo, no relation can be established between x and y."
+  },
+  {
+   "id": "2022-q52",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. 12𝑥2 −7𝑥+1 = 0\nII. 20𝑦2 −9𝑦+1 = 0",
+   "options": {
+    "A": "If/यदि x>y",
+    "B": "If/यदि x≥y",
+    "C": "If/यदि x<y",
+    "D": "If/यदि x≤y",
+    "E": "If/यदि x = y or no relation can be established\nदकया जा सकता है।\ntwo equation (I) and (II) are given. You have to solve\nहैं। आपको िोिों समीकरर्ों को हि करिा है और उत्तर िेिा है\nbetween x and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nbetween x and y/या x और y के बीच कोई संबंि स्थानपत िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (51-55): In each of these questions,\nboth the equations and give answer\nइिमें से प्रत्येक प्रश्न में िो समीकरर् (I) और (II) दिए गए ह",
+   "explanation": "I. 12𝑥2−7𝑥 +1 = 0\n12𝑥2 −4𝑥−3𝑥+1 = 0\n4𝑥(3𝑥−1)−1(3𝑥−1) = 0\n(3𝑥−1) (4𝑥−1) = 0\n1 1\n𝑥 = ,\n3 4\nII. 20𝑦2 −9𝑦+1 = 0\n20𝑦2−5𝑦−4𝑦+1 = 0\n5𝑦(4𝑦−1)−1(4𝑦−1) = 0\n(4𝑦−1) (5𝑦−1) = 0\n1 1\n𝑦 = ,\n4 5\nSo, 𝑥 ≥ 𝑦"
+  },
+  {
+   "id": "2022-q53",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x2 + 13x – 114 = 0 II. y3 = 216",
+   "options": {
+    "A": "If/यदि x>y",
+    "B": "If/यदि x≥y",
+    "C": "If/यदि x<y",
+    "D": "If/यदि x≤y",
+    "E": "If/यदि x = y or no relation can be established between\nदकया जा सकता है।"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (51-55): In each of these questions,\nboth the equations and give answer\nइिमें से प्रत्येक प्रश्न में िो समीकरर् (I) और (II) दिए गए ह",
+   "explanation": "I. x2 + 13x – 114 = 0\nx2 + 19x – 6x - 114 =0\nx(x + 19) – 6(x + 19) = 0\n(x + 19) (x – 6) = 0\nx = - 19, 6\nII. y3 = 216\ny3 = 63\ny = 6\nSo, 𝑥 ≤ 𝑦"
+  },
+  {
+   "id": "2022-q54",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x² – 6x + 8 = 0 II. y² + 2y – 8 = 0",
+   "options": {
+    "A": "If/यदि x>y",
+    "B": "If/यदि x≥y",
+    "C": "If/यदि x<y",
+    "D": "If/यदि x≤y",
+    "E": "If/यदि x = y or no relation can be established between\nदकया जा सकता है।"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (51-55): In each of these questions,\nboth the equations and give answer\nइिमें से प्रत्येक प्रश्न में िो समीकरर् (I) और (II) दिए गए ह",
+   "explanation": "I. x² – 6x + 8 = 0\nx² – 4x – 2x + 8 = 0\nx (x – 4) – 2(x – 4) = 0\n(x – 4) (x – 2) = 0\nx = 2, 4\nII. y² + 2y – 8 = 0\ny² + 4y – 2y – 8 = 0\ny (y + 4) – 2(y + 4) = 0\n(y + 4) (y – 2) = 0\ny = –4, 2\nSo, 𝑥 ≥ 𝑦"
+  },
+  {
+   "id": "2022-q55",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. 𝑥2 −11𝑥+30 = 0 II. 𝑦2 −13𝑦+42 = 0",
+   "options": {
+    "A": "If/यदि x>y",
+    "B": "If/यदि x≥y",
+    "C": "If/यदि x<y",
+    "D": "If/यदि x≤y",
+    "E": "If/यदि x = y or no relation can be established between\nदकया जा सकता है।"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (51-55): In each of these questions,\nboth the equations and give answer\nइिमें से प्रत्येक प्रश्न में िो समीकरर् (I) और (II) दिए गए ह",
+   "explanation": "I. 𝑥2 −5𝑥−6𝑥+30 = 0\n𝑥(𝑥−5)−6(𝑥−5) = 0\n(𝑥−5)(𝑥−6) = 0\n𝑥 = 5,6\nII. 𝑦2 −6𝑦−7𝑦+42 = 0\n𝑦(𝑦−6)−7(𝑦−6) = 0\n(𝑦−6)(𝑦−7) = 0\n𝑦 = 6,7\nSo, 𝑦 ≥ 𝑥"
+  },
+  {
+   "id": "2022-q56",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If 80% total demand of company A and 20% of total demand of company B did not deliver at the\nlast moment, then find the difference between the items (in tons) did not deliver at the las time?\nयदि कंपिी A की कुि मागं का 80% और कंपिी B की कुि मांग का 20% अंनतम समय पर नर्तररत ि हुआ हो, तो अंनतम\nसमय पर नर्तररत िहीं की गई र्स्तुओं (टि में) के बीच का अंतर ज्ञात कीनजए।",
+   "options": {
+    "A": "1100",
+    "B": "900",
+    "C": "700",
+    "D": "800",
+    "E": "1000"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (56-60): The line graph given below shows th\nof four different (A, B, C & D) manufacturing companies in\nquestions.\nिीचे दिया गया रेिा आिेि 2019 म ें चार अिग-अिग निमावता कंपनि\n(टि में) को िशावता है। डेटा को ध्यािपूर्वक पढें और प्रश्नों के उत्तर िें।\n4500\n4000\n3500\n3000\n2500\n2000\n1500\n1000\n500\n0\nA B\nProduction (in ton)\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nhe production and demand (in tons) of items\n2019. Read the data carefully and answer the\nियों (A, B, C और D) की र्स्तुओं के उत्पािि और मांग\nC D\nDemand (in ton)\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required difference = 2000 × −3500×\n100 100\n= 1600 − 700 = 900"
+  },
+  {
+   "id": "2022-q57",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If non-demanded items of company C were handed to company D and it added these items them\nin its demanded items, then find the new demanded items (in tons) of company D?\nयदि कंपिी C की मांग रनहत र्स्तुएाँ, कंपिी D को सौंप िी गईं हों और उसिे इि र्स्तुओं को अपिी मााँग की जािे र्ािी र्स्तुओं\nमें जोड दिया हो, तो कंपिी D की िई मााँग की जािे र्ािी र्स्तुएाँ (टि में) ज्ञात कीनजए।",
+   "options": {
+    "A": "5500",
+    "B": "5000",
+    "C": "6000",
+    "D": "4500",
+    "E": "3500"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (56-60): The line graph given below shows th\nof four different (A, B, C & D) manufacturing companies in\nquestions.\nिीचे दिया गया रेिा आिेि 2019 म ें चार अिग-अिग निमावता कंपनि\n(टि में) को िशावता है। डेटा को ध्यािपूर्वक पढें और प्रश्नों के उत्तर िें।\n4500\n4000\n3500\n3000\n2500\n2000\n1500\n1000\n500\n0\nA B\nProduction (in ton)\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nhe production and demand (in tons) of items\n2019. Read the data carefully and answer the\nियों (A, B, C और D) की र्स्तुओं के उत्पािि और मांग\nC D\nDemand (in ton)\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required new demanded items (in tons) of company D = (3000"
+  },
+  {
+   "id": "2022-q58",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If production of items of company C increased by 30% in 2020 than previous year, then find the\ndifference between production of items of company C in 2020 and that in 2019.\nयदि नपछिे र्षव की तुििा में, कंपिी C की र्स्तुओं के उत्पािि में 2020 में 30% की र्रनि हुई हो, तो कंपिी C के 2020 म ें\nहुए र्स्तुओं के उत्पािि और 2019 में हुए उत्पािि के बीच का अंतर ज्ञात कीनजए।",
+   "options": {
+    "A": "750 ton/ टि",
+    "B": "1000 ton/ टि",
+    "C": "850 ton/ टि",
+    "D": "900 ton/ टि",
+    "E": "800 ton/ टि"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (56-60): The line graph given below shows th\nof four different (A, B, C & D) manufacturing companies in\nquestions.\nिीचे दिया गया रेिा आिेि 2019 म ें चार अिग-अिग निमावता कंपनि\n(टि में) को िशावता है। डेटा को ध्यािपूर्वक पढें और प्रश्नों के उत्तर िें।\n4500\n4000\n3500\n3000\n2500\n2000\n1500\n1000\n500\n0\nA B\nProduction (in ton)\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nhe production and demand (in tons) of items\n2019. Read the data carefully and answer the\nियों (A, B, C और D) की र्स्तुओं के उत्पािि और मांग\nC D\nDemand (in ton)\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Production of items of company C = 3000× = 3900 𝑡𝑜𝑛\n100\nSo, required difference = 3900−3000= 900 𝑡𝑜𝑛"
+  },
+  {
+   "id": "2022-q59",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "What is the ratio of sum of demand of items of company C and company D to production of items\nof company B?\nकंपिी C और कंपिी D की र्स्तुओं की मांग के योग और कंपिी B की र्स्तुओं के उत्पािि का अिुपात क्या है?",
+   "options": {
+    "A": "37: 41",
+    "B": "31: 23",
+    "C": "13: 8",
+    "D": "9: 4",
+    "E": "13: 9"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (56-60): The line graph given below shows th\nof four different (A, B, C & D) manufacturing companies in\nquestions.\nिीचे दिया गया रेिा आिेि 2019 म ें चार अिग-अिग निमावता कंपनि\n(टि में) को िशावता है। डेटा को ध्यािपूर्वक पढें और प्रश्नों के उत्तर िें।\n4500\n4000\n3500\n3000\n2500\n2000\n1500\n1000\n500\n0\nA B\nProduction (in ton)\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nhe production and demand (in tons) of items\n2019. Read the data carefully and answer the\nियों (A, B, C और D) की र्स्तुओं के उत्पािि और मांग\nC D\nDemand (in ton)\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required ratio =\n4000\n6500\n= = 13:8\n4000\n−2500)+4000= 4500"
+  },
+  {
+   "id": "2022-q60",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Sum of production of company A and C is what percentage more/less than demand of items of\ncompany D?\nकंपिी A और C की र्स्तुओं के उत्पािि का योग, कंपिी D की र्स्तुओं की मांग से दकतिे प्रनतशत अनिक/कम है?",
+   "options": {
+    "A": "12.5%",
+    "B": "37.5%",
+    "C": "22.5%",
+    "D": "40%",
+    "E": "20%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (56-60): The line graph given below shows th\nof four different (A, B, C & D) manufacturing companies in\nquestions.\nिीचे दिया गया रेिा आिेि 2019 म ें चार अिग-अिग निमावता कंपनि\n(टि में) को िशावता है। डेटा को ध्यािपूर्वक पढें और प्रश्नों के उत्तर िें।\n4500\n4000\n3500\n3000\n2500\n2000\n1500\n1000\n500\n0\nA B\nProduction (in ton)\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nx and y/या x और y के बीच कोई संबंि स्थानपत िहीं\nhe production and demand (in tons) of items\n2019. Read the data carefully and answer the\nियों (A, B, C और D) की र्स्तुओं के उत्पािि और मांग\nC D\nDemand (in ton)\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required percentage = ×100\n4000\n1500\n= = 37.5%\n40\nSolutions (61-63):\n2\nTotal male in IT hub = 800 × = 320\n5\nTotal female in IT hub = 800 − 320 = 480\n400\nTotal male in Food hub = = 200\n2\nTotal female in Food hub = 400 −200 = 200"
+  },
+  {
+   "id": "2022-q61",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of male to female in Medical hub is 7 : 5, then find total number of female in Medical hub?\nमेनडकि हब में पुरुषों और मनहिाओं का अिुपात 7:5 है, तो मेनडकि हब में मनहिाओं की कुि संख्या ज्ञात कीनजये।",
+   "options": {
+    "A": "720",
+    "B": "500",
+    "C": "700",
+    "D": "400",
+    "E": "800"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (61-63): There are three different hubs (IT, Food and Medical). Total number of employees\nin IT hub are 800 and the ratio of male to female in IT hub is 2 : 3. In Medical hub total number of\nemployees are 1200. In Food hub total employees are 400 and the number of male and female employee\nworking in food hub are equal.\nतीि अिग-अिग हब (आईटी, फूड और मेनडकि) हैं। आईटी हब में कमवचाररयों की कुि संख्या 800 है और आईटी हब में पुरुषों\nऔर मनहिाओं का अिुपात 2:3 है। मेनडकि हब में कमवचाररयों की कुि संख्या 1200 है। फूड हब में कुि कमवचारी 400 हैं\nतथा फूड हब में काम करिे र्ािे पुरुषों और मनहिा कमवचाररयों की संख्या समाि है।",
+   "explanation": "Total number of females in Medical hub = 1200 × = 500\n12"
+  },
+  {
+   "id": "2022-q62",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Total male in IT hub are what percent more or less than total female in Food hub?\nआईटी हब में कुि पुरुष, फूड हब में कुि मनहिाओं से दकतिे प्रनतशत अनिक या कम हैं?",
+   "options": {
+    "A": "50%",
+    "B": "30%",
+    "C": "20%",
+    "D": "40%",
+    "E": "60%"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (61-63): There are three different hubs (IT, Food and Medical). Total number of employees\nin IT hub are 800 and the ratio of male to female in IT hub is 2 : 3. In Medical hub total number of\nemployees are 1200. In Food hub total employees are 400 and the number of male and female employee\nworking in food hub are equal.\nतीि अिग-अिग हब (आईटी, फूड और मेनडकि) हैं। आईटी हब में कमवचाररयों की कुि संख्या 800 है और आईटी हब में पुरुषों\nऔर मनहिाओं का अिुपात 2:3 है। मेनडकि हब में कमवचाररयों की कुि संख्या 1200 है। फूड हब में कुि कमवचारी 400 हैं\nतथा फूड हब में काम करिे र्ािे पुरुषों और मनहिा कमवचाररयों की संख्या समाि है।",
+   "explanation": "Required percentage = ×100 = 60%\n200"
+  },
+  {
+   "id": "2022-q63",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "If total males in Medical hub is 50% more than total female in IT hub, then find the ratio of total\nmale in IT hub to total female in Medical hub?\nयदि मेनडकि हब में कुि पुरुष, आईटी हब में कुि मनहिाओं से 50% अनिक है, तो आईटी हब में कुि पुरुषों और मेनडकि हब\nमें कुि मनहिाओं का अिुपात ज्ञात कीनजये।",
+   "options": {
+    "A": "3 : 5",
+    "B": "3 : 2",
+    "C": "1 : 3",
+    "D": "2 : 3",
+    "E": "2 : 7"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (61-63): There are three different hubs (IT, Food and Medical). Total number of employees\nin IT hub are 800 and the ratio of male to female in IT hub is 2 : 3. In Medical hub total number of\nemployees are 1200. In Food hub total employees are 400 and the number of male and female employee\nworking in food hub are equal.\nतीि अिग-अिग हब (आईटी, फूड और मेनडकि) हैं। आईटी हब में कमवचाररयों की कुि संख्या 800 है और आईटी हब में पुरुषों\nऔर मनहिाओं का अिुपात 2:3 है। मेनडकि हब में कमवचाररयों की कुि संख्या 1200 है। फूड हब में कुि कमवचारी 400 हैं\nतथा फूड हब में काम करिे र्ािे पुरुषों और मनहिा कमवचाररयों की संख्या समाि है।",
+   "explanation": "Total males in Medical hub = 480 × = 720\n100\nRequired ratio = 320 : (1200 −720)= 2 ∶ 3"
+  },
+  {
+   "id": "2022-q64",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "B alone can do a work in 15 days, while A, B & C together can do the same work in 5 days. If A\nalone takes 8 days less than C to complete the same work, then in how many days C can complete 3/4\nth of same work?\nB अकेिे एक काम को 15 दििों में कर सकता है, जबदक A, B और C नमिकर उसी काम को 5 दििों म ें कर सकते हैं। यदि A\nअकेिे उसी कायव को पूरा करिे में C से 8 दिि कम िेता है, तो C उसी कायव का 3/4 भाग दकतिे दििों में पूरा कर सकता है?",
+   "options": {
+    "A": "15 days/दिि",
+    "B": "20 days/दिि",
+    "C": "24 days/दिि",
+    "D": "18 days /दिि",
+    "E": "16 days/दिि"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let C alone takes ‘d’ days to complete the work alone\nSo, A takes (d – 8) days to complete the work alone\nATQ –\n1 1 1 1\n+ + =\n(𝑑−8) 15 𝑑 5\n2 1 1\n= +\n15 𝑑 (𝑑−8)\nd2−23𝑑+60 = 0\nd = 20 & d = 3\nhere vale of d can’t be 3\n3\nSo, Required days = 20 × = 15 𝑑𝑎𝑦𝑠\n4"
+  },
+  {
+   "id": "2022-q65",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man invested Rs.12500 at 10% p.a. for two years on compound interest in a scheme. If total\ninterest received from the first scheme he invested into second scheme at 20% p.a. for two years on\nsimple interest, then find the total interest received by man from second scheme?\nएक व्यनि िे एक योजिा में चक्रर्रनि ब्याज पर िो र्षव के निए 10% प्रनत र्षव की िर से 12500 रुपये का निर्ेश दकया। यदि\nपहिी योजिा से प्राप्त कुि ब्याज उसिे सािारर् ब्याज पर िो र्षव के निए 20% प्रनत र्षव की िर से िसू री योजिा में निर्ेश\nदकया, तो िसू री योजिा से व्यनि को प्राप्त कुि ब्याज ज्ञात कीनजये?",
+   "options": {
+    "A": "Rs./रु. 3675",
+    "B": "Rs./रु. 950",
+    "C": "Rs./रु. 1020",
+    "D": "Rs./रु. 1050",
+    "E": "Rs./रु. 1080"
+   },
+   "correctAnswer": "D",
+   "explanation": "Equivalent interest rate at 10% p.a. for two years on compound\n21\nTotal interest received form first scheme = 12500 × = 2625 𝑅𝑠.\n100\n20×2\nRequired interest = 2625 × = 𝑅𝑠.1050\n10 ×10\ninterest = 10 + 10 + = 21%"
+  },
+  {
+   "id": "2022-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A invested Rs.1600 and B invested Rs.2000 in a business. A invested for ‘t’ months and B invested\nfor (t + 3) months and A received Rs.400 out of total profit of Rs.1400, then find for how many months\nB invested?\nA िे 1600 रुपये का निर्ेश दकया और B िे एक व्यर्साय में 2000 रुपय ेका निर्ेश दकया। A िे 't' महीिे के निए निर्ेश दकया\nऔर B िे (t + 3) महीिे के निए निर्ेश दकया और A िे 1400 रुपये के कुि िाभ में से 400 रुपये प्राप्त दकए, तो B िे दकतिे\nमहीिों के निए निर्ेश दकया?",
+   "options": {
+    "A": "10 months/महीि े",
+    "B": "5 months/ महीिे",
+    "C": "8 months/ महीिे",
+    "D": "9 months/ महीिे",
+    "E": "6 months/ महीि े"
+   },
+   "correctAnswer": "E",
+   "explanation": "ATQ –\n1600 ×𝑡 400\n=\n2000 ×(𝑡+3) 1400−400\nt = 3\nSo, B invested for (3 + 3) = 6 months\nSolutions (67-71): In college A,\n20\nStudents in Masters = 1000× = 200\n100\nStudents in Bachelors = 1000−200 = 800\nSimilarly,\nCollege Total students Number of Masters students Numbe\nA 1000 200\nB 1250 375\nC 1500 225\nD 850 119\nE 1400 525"
+  },
+  {
+   "id": "2022-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the difference between total bachelor students in A and D together to total bachelor students\nin B and E together?\nA और D में एकसाथ कुि स्नातक छात्रों और B और E में एकसाथ कुि स्नातक छात्रों का अंतर ज्ञात कीनजए?",
+   "options": {
+    "A": "118",
+    "B": "219",
+    "C": "231",
+    "D": "178",
+    "E": "197"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (67-71): The following table shows the total number of students in five different colleges\nand percentage of Masters students in college.\nनिम्न सारर्ी पांच अिग-अिग महानर्द्याियों में छात्रों की कुि संख्या और महानर्द्यािय में परास्नातक छात्रों के प्रनतशत को\nिशावती है।\nNote: Total students in any college = Students in Masters + Students in Bachelors\nिोट: दकसी भी महानर्द्यािय में कुि छात्र = परास्नातक में छात्र + स्नातक में छात्र",
+   "explanation": "Required difference = (875+875)−(800+731)\n= 1750−1531 = 219"
+  },
+  {
+   "id": "2022-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "⚠️ Some options for this question are printed as images in the source paper and could not be extracted.\n\nIf the ratio of number of males to female bachelor students in college C is 7: 8, then find the number\nof female bachelor students of college C is what percentage of total students of college C?\nयदि महानर्द्यािय C में पुरुष स्नातक छात्रों और मनहिा स्नातक छात्रों की संख्या का अिुपात 7:8 ह,ै तो महानर्द्यािय C की\nमनहिा स्नातक छात्रों की संख्या महानर्द्यािय C के कुि छात्रों का दकतिा प्रनतशत है?",
+   "options": {
+    "A": "(b)",
+    "C": "(d)",
+    "E": ""
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (67-71): The following table shows the total number of students in five different colleges\nand percentage of Masters students in college.\nनिम्न सारर्ी पांच अिग-अिग महानर्द्याियों में छात्रों की कुि संख्या और महानर्द्यािय में परास्नातक छात्रों के प्रनतशत को\nिशावती है।\nNote: Total students in any college = Students in Masters + Students in Bachelors\nिोट: दकसी भी महानर्द्यािय में कुि छात्र = परास्नातक में छात्र + स्नातक में छात्र",
+   "explanation": "Number of female bachelor students in college C = 1275× =\n15\n680 1\nRequired percentage = ×100 = 45 %\n1500 3"
+  },
+  {
+   "id": "2022-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the average number of bachelor students in college A, B and E?\nमहानर्द्यािय A, B और E में स्नातक छात्रों की औसत संख्या ज्ञात कीनजए?",
+   "options": {
+    "A": "850",
+    "B": "860",
+    "C": "840",
+    "D": "890",
+    "E": "865\n6"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (67-71): The following table shows the total number of students in five different colleges\nand percentage of Masters students in college.\nनिम्न सारर्ी पांच अिग-अिग महानर्द्याियों में छात्रों की कुि संख्या और महानर्द्यािय में परास्नातक छात्रों के प्रनतशत को\nिशावती है।\nNote: Total students in any college = Students in Masters + Students in Bachelors\nिोट: दकसी भी महानर्द्यािय में कुि छात्र = परास्नातक में छात्र + स्नातक में छात्र",
+   "explanation": "Required average = = = 850\n3 3"
+  },
+  {
+   "id": "2022-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If 42 % of Masters students of college D got scholarship, then find the number of Masters students\n7\nof college D who didn’t got scholarship?\n6\nयदि महानर्द्यािय D के 42 % परास्नातक छात्रों को छात्रर्रनत्त नमिती है, तो महानर्द्यािय D के परास्नातक छात्रों की संख्या\n7\nज्ञात कीनजए नजन्हें छात्रर्रनत्त िहीं नमिी है?",
+   "options": {
+    "A": "63",
+    "B": "71",
+    "C": "56",
+    "D": "78",
+    "E": "68"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (67-71): The following table shows the total number of students in five different colleges\nand percentage of Masters students in college.\nनिम्न सारर्ी पांच अिग-अिग महानर्द्याियों में छात्रों की कुि संख्या और महानर्द्यािय में परास्नातक छात्रों के प्रनतशत को\nिशावती है।\nNote: Total students in any college = Students in Masters + Students in Bachelors\nिोट: दकसी भी महानर्द्यािय में कुि छात्र = परास्नातक में छात्र + स्नातक में छात्र",
+   "explanation": "Number of students who didn’t got scholarship = ×119 = 68\n7"
+  },
+  {
+   "id": "2022-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Number of Masters students in college B and C together is what percentage more/less than that\nin college A?\nमहानर्द्यािय B और C में एकसाथ स्नातकोत्तर छात्रों की संख्या महानर्द्यािय A से दकतिे प्रनतशत अनिक/कम है?",
+   "options": {
+    "A": "100%",
+    "B": "200%",
+    "C": "150%",
+    "D": "50%",
+    "E": "75%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (67-71): The following table shows the total number of students in five different colleges\nand percentage of Masters students in college.\nनिम्न सारर्ी पांच अिग-अिग महानर्द्याियों में छात्रों की कुि संख्या और महानर्द्यािय में परास्नातक छात्रों के प्रनतशत को\nिशावती है।\nNote: Total students in any college = Students in Masters + Students in Bachelors\nिोट: दकसी भी महानर्द्यािय में कुि छात्र = परास्नातक में छात्र + स्नातक में छात्र",
+   "explanation": "Required percentage = ×100 = 200%\n200"
+  },
+  {
+   "id": "2022-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A train can cross a 100 meters long platform in 12 seconds. If train crosses a bridge, which is\ndouble of its length in 21 seconds, then find the speed (in m/s) of the train?\nएक रेिगाडी 100 मीटर िंब े प्िेटिॉमव को 12 सेकंड म ें पार कर सकती है। यदि रेिगाडी 21 सेकंड में एक पुि को पार करती\nह,ै जो इसकी िंबाई से िोगुिा है, तो रेिगाडी की गनत (मी/सेकेंड में) ज्ञात कीनजए?",
+   "options": {
+    "A": "12",
+    "B": "15",
+    "C": "18",
+    "D": "20",
+    "E": "24"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let the length of train = x\nand, the speed of train = s\nATQ,\nx+100\n= s ----- (i)\n12\n3x\nAnd, s = ---- (ii)\ner of Bachelors students\n800\n875\n1275\nFrom (i) & (ii)\nx+100 x\n=\n12 7\n7x + 700 =12x\n5x = 700\nx = 140\n3×140\nSpeed of train = = 20m⁄s\n21"
+  },
+  {
+   "id": "2022-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A shopkeeper marked up the price of an article by 40% above cost price and he allows 25%\ndiscount on marked price. If shopkeeper earns Rs. 420 as profit, then find his profit (in Rs.) when he\nallows discount of 20% instead of 25%?\nएक िकु ाििार एक र्स्तु का मूल्य क्रय मूल्य से 40% अनिक अंदकत करता है और र्ह अंदकत मूल्य पर 25% की छूट िेता है।\nयदि िकु ाििार िाभ के रूप म ें 420 रुपये कमाता है, तो उसका िाभ (रु में) ज्ञात कीनजए जब र्ह 25% के बजाय 20% की\nछूट िेता है?",
+   "options": {
+    "A": "Rs/रु 1204",
+    "B": "Rs/रु 1240",
+    "C": "Rs/रु 1180",
+    "D": "Rs/रु 1008",
+    "E": "Rs/रु 1080"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let the cost price of article be Rs 100x\n140\nMark up price of article = 100𝑥× = 𝑅𝑠 140𝑥\n100\n75\nSelling price of article = 140𝑥× = 𝑅𝑠 105x\n100\nATQ,\n∴ (105𝑥−100𝑥) = 420\nx= 84\n∴ cost price = Rs 8400\nMark up price = 84 × 140 = Rs 11760\n∴ selling price after 20% discount\n80\n= 11760 × = 9408\n100\n∴ Profit after 20% discount = 9408 – 8400 = Rs 1008"
+  },
+  {
+   "id": "2022-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "In an election only two candidates participate and candidate ‘P’ got 50% less votes than ‘Q’. If Q\ngot 200 votes less, then there would have been a tie. Find the total number of total votes polled?\nएक चुिार् में केर्ि िो उम्मीिर्ार भाग िेते हैं और उम्मीिर्ार 'P' को 'Q' से 50% कम मत नमिते हैं। यदि Q को 200 मत\nकम नमिते, तो बराबरी हो जाती। डािे गए कुि मतों की संख्या ज्ञात कीनजए?",
+   "options": {
+    "A": "800",
+    "B": "2000",
+    "C": "1600",
+    "D": "1200",
+    "E": "1400"
+   },
+   "correctAnswer": "D",
+   "explanation": "Q got = 100x votes\nSo, P got = 50x votes\nTotal votes = 150x votes\nFor tie, Q’s votes = P’s votes = 75x\n100x – 75x = 200\nx = 8\nTotal votes polled = 8 × 150 = 1200"
+  },
+  {
+   "id": "2022-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of P’s age four years hence to Q’s age two years ago is 4 : 5 and the average of their age\nthree years ago was 23 years. Find the present age of P?\nचार र्षव बाि P की आयु और िो र्षव पूर्व Q की आयु का अिुपात 4:5 है और तीि र्षव पूर्व उिकी आयु का औसत 23 र्षव था।\nP की र्तवमाि आयु ज्ञात कीनजए?",
+   "options": {
+    "A": "25 years/र्षव",
+    "B": "29 years/र्षव",
+    "C": "23 years/र्षव",
+    "D": "33 years/र्ष व",
+    "E": "20 years/र्षव"
+   },
+   "correctAnswer": "E",
+   "explanation": "Let present age of P and Q be ‘x’ and ‘y’ years respectively.\nATQ,\nx + y = 23 ×2+3×2\nx + y = 52 …(i)\nand,\nx+4 4\n=\ny–2 5\n5x + 20 = 4y – 8\n5x – 4y = – 28…(ii)\nFrom (i) and (ii)\nx = 20 years."
+  },
+  {
+   "id": "2022-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The sum of area of a circle and area of a rectangle is equal to 2136 sq. cm. If the diameter of the\ncircle is 42 cm & the breath of the rectangle is 30 cm, then find the difference between the circumference\nof the circle and the perimeter of the rectangle?\nएक र्रत्त के क्षेत्रिि और एक आयत के क्षेत्रिि का योग 2136 र्गव सेमी के बराबर होता है। यदि र्रत्त का व्यास 42 सेमी है\nऔर आयत की चौडाई 30 सेमी है, तो र्रत्त की पररनि और आयत के पररमाप के बीच का अंतर ज्ञात कीनजए?",
+   "options": {
+    "A": "42 cm/सेमी",
+    "B": "22 cm/सेमी",
+    "C": "30 cm/सेमी",
+    "D": "11 cm/सेमी",
+    "E": "18 cm/सेमी"
+   },
+   "correctAnswer": "B",
+   "explanation": "𝜋r² + lb = 2136 (where r- radius of circle, l- length of\n22\n× 21 × 21 + l × 30 = 2136\n7\n750\nl = = 25cm\n30\nSo, circumference of circle = 2𝜋r\n22\n= 2 × × 21\n7\n= 132 cm\nPerimeter of rectangle = 2 ×(l + b)\n= 2 (25 + 30)\n= 110 cm\n∴ Required difference = 132 – 110 = 22 cm"
+  },
+  {
+   "id": "2022-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Average of marks scored by Deepak in English, Hindi and Math is 70 and average marks scored by\nDeepak in English and Math are 73. If marks of Deepak in Science are 25% more than his marks in Hindi,\nthen find average marks scored by Deepak in these four subjects?\nिीपक द्वारा अंग्रेजी, बहंिी और गनर्त में प्राप्त अंकों का औसत 70 है और िीपक द्वारा अंग्रेजी और गनर्त में प्राप्त अंकों का औसत\n73 है। यदि नर्ज्ञाि में िीपक के अंक बहंिी में उसके अंकों से 25% अनिक हैं, तो इि चार नर्षयों म ें िीपक द्वारा प्राप्त औसत\nअंक ज्ञात कीनजए?",
+   "options": {
+    "A": "76.5",
+    "B": "72.5",
+    "C": "71.5",
+    "D": "75.5",
+    "E": "78.5"
+   },
+   "correctAnswer": "B",
+   "explanation": "Marks of Deepak in Hindi = (70×3)−(73×2) = 64\n125\nMarks of Deepak in Science = 64× = 80\n100\n64+80+73×2\nRequired average = = 72.5\n4"
+  },
+  {
+   "id": "2022-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A vessel contains 80 liters mixture of water and milk in the ratio 5 : 3 respectively. If 20 liters\nmixture from the vessel is completely replaced with milk, then find ratio of milk to water in the final\nmixture in the vessel?\nएक बतवि में 80 िीटर पािी और ििू का नमश्र् क्रमशः 5:3 के अिुपात में है। यदि बतवि से 20 िीटर नमश्र् को पूरी तरह से\nििू से बिि दिया जाता है, तो बतवि में अंनतम नमश्र् में ििू और पािी का अिुपात ज्ञात कीनजये?",
+   "options": {
+    "A": "17:15",
+    "B": "5:4",
+    "C": "3:2",
+    "D": "11:7",
+    "E": "None of the above."
+   },
+   "correctAnswer": "A",
+   "explanation": "ATQ,\n3\nQuantity of milk in the final mixture in the vessel = (80× )\n8\n= 42.5 liters\nQuantity of water in the final mixture in the vessel = (80×\n= 37.5 liters\n42.5\nRequired ratio = = 17:15\n37.5"
+  },
+  {
+   "id": "2022-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The speed of car A and car B is x km/hr. & (x + 20) km/ hr. respectively. If car A moves from P to\nQ and car B moves from Q to P, then they meet in 5 hours. Car A takes 2 hr 15min more than car B to\ncover distance between P and Q. Find the distance between P and Q?\nकार A और कार B की गनत क्रमशः x दकमी/घंटा और (x + 20) दकमी/घंटा है। यदि कार A, P से Q की ओर चिती है और कार\nB, Q से P की ओर चिती है, तो र्े 5 घंटे में नमिती हैं। कार A, P और Q के बीच की िरू ी तय करिे में कार B से 2 घंटा 15\nनमिट अनिक िेती है। P और Q के बीच की िरू ी ज्ञात कीनजए?",
+   "options": {
+    "A": "800km/दकमी",
+    "B": "720 km/दकमी",
+    "C": "900 km/दकमी",
+    "D": "1080 km/दकमी",
+    "E": "1260 km/दकमी"
+   },
+   "correctAnswer": "C",
+   "explanation": "Let the distance between P & Q be ‘d’ km.\nATQ,\nd= 5 (x +x +20)\n⟹ d = 10x+100 --------(i)\nand,\n𝑑 𝑑 9\n− = ------------ (ii)\n𝑥 (𝑥+20) 4\nFrom (i) & (ii)\n9x² - 620x- 8000 = 0\n−100\n⟹ x = 80 or\n9\nRequired distance = 10 × 80 + 100 = 900km\nrectangle & b- breadth of rectangle)\n3\n)−(20× )+20\n8\n5 5\n)−(20× )\n8 8"
+  },
+  {
+   "id": "2022-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Speed of a motor boat in still water is\nin 3 hours, then find the time taken by the m\nनस्थर जि में एक मोटर बोट की गनत 18 दकमी/घंटा\nतो मोटर बोट द्वारा िारा के नर्परीत समाि िरू ी तय",
+   "options": {
+    "A": "18 hours/घंट े",
+    "B": "15 hours/घंट े",
+    "C": "16 hours/घंट े",
+    "D": "17 hours/घंट े",
+    "E": "19 hours/घंट े\n18 kmph. If the motor boat travels 90 km along the stream\nmotor boat to cover the same distance against the stream?\nहै। यदि मोटर बोट 3 घंटे में िारा के साथ 90 दकमी की यात्रा करती है,\nकरिे में दकतिा समय िगता है?\nSolutions (1-5):\nS1. Ans.(b)\nS2. Ans.(c)\nS3. Ans.(a)\nS4. Ans.(d)\nS5. Ans.(c)\nSolutions (6-9):\nS6. Ans.(d)\nS7. Ans.(b)\nS8. Ans.(d)\nS9. Ans.(a)\nS10. Ans.(e)\nSol.\nSolutions (11-15):\nS11. Ans.(d)\nS12. Ans.(a)\nS13. Ans.(e)\nS14. Ans.(c)\nS15. Ans.(c)\nSolution\nSolution (16-20):\nS16. Ans.(c)\nSol.\nS17. Ans.(b)\nSol.\nS18. Ans.(a)\nSol.\nS19. Ans.(b)\nSol.\nS20. Ans.(a)\nSol.\n\nS21. Ans.(d)\nSol. Number-3852364718\nAfter rearrangement- 4761453827\nSum= 8+4=12\nSolution (22-25):\nS22. Ans.(c)\nS23. Ans.(d)\nS24. Ans.(d)\nS25. Ans.(a)\nSolution (26-30):\nMonth Date Persons\nSeptember 15 D\n22 R\nOctober 15 A\n22 Q\nNovember 15 B\n22 S\nDecember 15 C\n22 P\nS26. Ans.(c)\nS27. Ans.(b)\nS28. Ans.(e)\nS29. Ans.(d)\nS30. Ans.(a)\nSolution (31-34):\n\nS31. Ans.(a)\nS32. Ans.(b)\nS33. Ans.(c)\nS34. Ans.(d)\nSolution (35-39):\nS35. Ans.(b)\nS36. Ans.(d)\nS37. Ans.(d)\nS38. Ans.(c)\nS39. Ans.(e)\nS40. Ans.(e)\nSol. “ICON, COIN”\nS41. Ans.(b)\nSol. Wrong number = 445\nPatter of series –\n118 + (33 ×1) = 151\n151 + (33 ×2) = 217\n217 + (33 ×3) = 316\n316 + (33 ×4) = 448\n448 + (33 ×5) = 613\n613 + (33 ×6) = 811\nS42. Ans.(c)\nSol. Wrong number = 21\nPatter of series –\nAddition of consecutive prime numbers\n18 + 2 = 20\n20 + 3 = 23\n23 + 5 = 28\n28 + 7 = 35\n35 + 11 = 46\n46 + 13 = 59\nS43. Ans.(c)\nSol. Wrong number = 560\nPatter of series –\n2 ×1+1 = 3\n3 ×2+2 = 8\n8 ×3+3= 27\n27 ×4+4 = 112\n112 ×5+5 = 565\n565 ×6+6 = 3396\n\nS44. Ans.(d)\nSol. Wrong number = 196\nPatter of series –\n8 + 82= 72\n72 + 72= 121\n121 + 62= 157\n157 + 52 = 182\n182 + 42 = 198\n198 + 32 = 207\nS45. Ans.(c)\nSol. Wrong number = 550\nPatter of series –\n451 + 51 = 502\n502 + 51 = 553\n553 + 51 = 604\n604 + 51 = 655\n655 + 51 = 706\n706 + 51 = 757\nS46. Ans.(c)\nSol. 65%×480−?+175 = 350\n?= 137\nS47.Ans.(b)\n162\nSol. 4? ×2 =\n4\n√16\n256\n4? ×2 =\n2\n4? = 64\n4? = (4)3\n? = 3\nS48. Ans.(c)\nSol. 4 ×(? +120) = (8)3\n4 × ?= 512− 480\n32\n? =\n4\n? = 8\nS49. Ans.(d)\n144 40\nSol. + ×250 = 108\n? 100\n144\n+ 100 = 108\n?\n144\n= 8\n?\n? = 18\n\nS50. Ans.(d)\n?\nSol. ×1050+364 = (28)2\n100\n?\n×1050 = 784− 364\n100\n?\n×1050 = 420\n100\n420×100\n? =\n1050\n? = 40\nS51. Ans.(e)\nSol.\nI. 𝑥2 +7𝑥−98 = 0\n𝑥2 +14𝑥−7𝑥−98 = 0\n𝑥(𝑥+14)−7(𝑥+14) = 0\n(𝑥+14)(𝑥−7) = 0\n𝑥 = −14,7\nII. 𝑦2 −𝑦−42 = 0\n𝑦2 −7𝑦+6𝑦−42 = 0\n𝑦(𝑦−7)+6(𝑦−7) = 0\n(𝑦+6)(𝑦−7) = 0\n𝑦 = −6,7\nSo, no relation can be established between x and y.\nS52. Ans.(b)\nSol.\nI. 12𝑥2−7𝑥 +1 = 0\n12𝑥2 −4𝑥−3𝑥+1 = 0\n4𝑥(3𝑥−1)−1(3𝑥−1) = 0\n(3𝑥−1) (4𝑥−1) = 0\n1 1\n𝑥 = ,\n3 4\nII. 20𝑦2 −9𝑦+1 = 0\n20𝑦2−5𝑦−4𝑦+1 = 0\n5𝑦(4𝑦−1)−1(4𝑦−1) = 0\n(4𝑦−1) (5𝑦−1) = 0\n1 1\n𝑦 = ,\n4 5\nSo, 𝑥 ≥ 𝑦\nS53. Ans.(d)\nSol.\nI. x2 + 13x – 114 = 0\nx2 + 19x – 6x - 114 =0\nx(x + 19) – 6(x + 19) = 0\n(x + 19) (x – 6) = 0\nx = - 19, 6\nII. y3 = 216\ny3 = 63\ny = 6\nSo, 𝑥 ≤ 𝑦\n\nS54. Ans.(b)\nSol.\nI. x² – 6x + 8 = 0\nx² – 4x – 2x + 8 = 0\nx (x – 4) – 2(x – 4) = 0\n(x – 4) (x – 2) = 0\nx = 2, 4\nII. y² + 2y – 8 = 0\ny² + 4y – 2y – 8 = 0\ny (y + 4) – 2(y + 4) = 0\n(y + 4) (y – 2) = 0\ny = –4, 2\nSo, 𝑥 ≥ 𝑦\nS55. Ans.(d)\nSol.\nI. 𝑥2 −5𝑥−6𝑥+30 = 0\n𝑥(𝑥−5)−6(𝑥−5) = 0\n(𝑥−5)(𝑥−6) = 0\n𝑥 = 5,6\nII. 𝑦2 −6𝑦−7𝑦+42 = 0\n𝑦(𝑦−6)−7(𝑦−6) = 0\n(𝑦−6)(𝑦−7) = 0\n𝑦 = 6,7\nSo, 𝑦 ≥ 𝑥\nS56. Ans.(b)\n80 20\nSol. Required difference = 2000 × −3500×\n100 100\n= 1600 − 700 = 900\nS57. Ans.(d)\nSol. Required new demanded items (in tons) of company D = (3000\nS58. Ans.(d)\n130\nSol. Production of items of company C = 3000× = 3900 𝑡𝑜𝑛\n100\nSo, required difference = 3900−3000= 900 𝑡𝑜𝑛\nS59. Ans.(c)\n2500+4000\nSol. Required ratio =\n4000\n6500\n= = 13:8\n4000\n−2500)+4000= 4500\nS60. Ans.(b)\n(2500+3000)−4000\nSol. Required percentage = ×100\n4000\n1500\n= = 37.5%\n40\nSolutions (61-63):\n2\nTotal male in IT hub = 800 × = 320\n5\nTotal female in IT hub = 800 − 320 = 480\n400\nTotal male in Food hub = = 200\n2\nTotal female in Food hub = 400 −200 = 200\nS61. Ans.(b)\n5\nSol. Total number of females in Medical hub = 1200 × = 500\n12\nS62. Ans.(e)\n320−200\nSol. Required percentage = ×100 = 60%\n200\nS63. Ans.(d)\n150\nSol. Total males in Medical hub = 480 × = 720\n100\nRequired ratio = 320 : (1200 −720)= 2 ∶ 3\nS64. Ans.(a)\nSol. Let C alone takes ‘d’ days to complete the work alone\nSo, A takes (d – 8) days to complete the work alone\nATQ –\n1 1 1 1\n+ + =\n(𝑑−8) 15 𝑑 5\n2 1 1\n= +\n15 𝑑 (𝑑−8)\nd2−23𝑑+60 = 0\nd = 20 & d = 3\nhere vale of d can’t be 3\n3\nSo, Required days = 20 × = 15 𝑑𝑎𝑦𝑠\n4\nS65. Ans.(d)\nSol. Equivalent interest rate at 10% p.a. for two years on compound\n21\nTotal interest received form first scheme = 12500 × = 2625 𝑅𝑠.\n100\n20×2\nRequired interest = 2625 × = 𝑅𝑠.1050\n10 ×10\ninterest = 10 + 10 + = 21%\nS66. Ans.(e)\nSol. ATQ –\n1600 ×𝑡 400\n=\n2000 ×(𝑡+3) 1400−400\nt = 3\nSo, B invested for (3 + 3) = 6 months\nSolutions (67-71): In college A,\n20\nStudents in Masters = 1000× = 200\n100\nStudents in Bachelors = 1000−200 = 800\nSimilarly,\nCollege Total students Number of Masters students Numbe\nA 1000 200\nB 1250 375\nC 1500 225\nD 850 119\nE 1400 525\nS67. Ans.(b)\nSol. Required difference = (875+875)−(800+731)\n= 1750−1531 = 219\nS68. Ans.(c)\n8\nSol. Number of female bachelor students in college C = 1275× =\n15\n680 1\nRequired percentage = ×100 = 45 %\n1500 3\nS69. Ans.(a)\n800+875+875 2550\nSol. Required average = = = 850\n3 3\nS70. Ans.(e)\n4\nSol. Number of students who didn’t got scholarship = ×119 = 68\n7\nS71. Ans.(b)\n(375+225)−200\nSol. Required percentage = ×100 = 200%\n200\nS72. Ans.(d)\nSol. Let the length of train = x\nand, the speed of train = s\nATQ,\nx+100\n= s ----- (i)\n12\n3x\nAnd, s = ---- (ii)\ner of Bachelors students\n800\n875\n1275\nFrom (i) & (ii)\nx+100 x\n=\n12 7\n7x + 700 =12x\n5x = 700\nx = 140\n3×140\nSpeed of train = = 20m⁄s\n21\nS73. Ans.(d)\nSol. Let the cost price of article be Rs 100x\n140\nMark up price of article = 100𝑥× = 𝑅𝑠 140𝑥\n100\n75\nSelling price of article = 140𝑥× = 𝑅𝑠 105x\n100\nATQ,\n∴ (105𝑥−100𝑥) = 420\nx= 84\n∴ cost price = Rs 8400\nMark up price = 84 × 140 = Rs 11760\n∴ selling price after 20% discount\n80\n= 11760 × = 9408\n100\n∴ Profit after 20% discount = 9408 – 8400 = Rs 1008\nS74. Ans.(d)\nSol. Q got = 100x votes\nSo, P got = 50x votes\nTotal votes = 150x votes\nFor tie, Q’s votes = P’s votes = 75x\n100x – 75x = 200\nx = 8\nTotal votes polled = 8 × 150 = 1200\nS75. Ans.(e)\nSol. Let present age of P and Q be ‘x’ and ‘y’ years respectively.\nATQ,\nx + y = 23 ×2+3×2\nx + y = 52 …(i)\nand,\nx+4 4\n=\ny–2 5\n5x + 20 = 4y – 8\n5x – 4y = – 28…(ii)\nFrom (i) and (ii)\nx = 20 years.\n\nS76. Ans.(b)\nSol. 𝜋r² + lb = 2136 (where r- radius of circle, l- length of\n22\n× 21 × 21 + l × 30 = 2136\n7\n750\nl = = 25cm\n30\nSo, circumference of circle = 2𝜋r\n22\n= 2 × × 21\n7\n= 132 cm\nPerimeter of rectangle = 2 ×(l + b)\n= 2 (25 + 30)\n= 110 cm\n∴ Required difference = 132 – 110 = 22 cm\nS77. Ans.(b)\nSol. Marks of Deepak in Hindi = (70×3)−(73×2) = 64\n125\nMarks of Deepak in Science = 64× = 80\n100\n64+80+73×2\nRequired average = = 72.5\n4\nS78. Ans.(a)\nSol. ATQ,\n3\nQuantity of milk in the final mixture in the vessel = (80× )\n8\n= 42.5 liters\nQuantity of water in the final mixture in the vessel = (80×\n= 37.5 liters\n42.5\nRequired ratio = = 17:15\n37.5\nS79. Ans.(c)\nSol. Let the distance between P & Q be ‘d’ km.\nATQ,\nd= 5 (x +x +20)\n⟹ d = 10x+100 --------(i)\nand,\n𝑑 𝑑 9\n− = ------------ (ii)\n𝑥 (𝑥+20) 4\nFrom (i) & (ii)\n9x² - 620x- 8000 = 0\n−100\n⟹ x = 80 or\n9\nRequired distance = 10 × 80 + 100 = 900km\nrectangle & b- breadth of rectangle)\n3\n)−(20× )+20\n8\n5 5\n)−(20× )\n8 8\nS80. Ans.(b)\nSol. The speed of motor boat in still water = x =18 km/hr\nLet the speed of current is y km/hr\nATQ\n90\n= 3\n18+𝑦\ny = 12km/h\ntime taken by it to cover the same distance against the stream\n90 90\n= =\n18−12 6\n= 15 hours"
+   },
+   "correctAnswer": "B",
+   "explanation": "The speed of motor boat in still water = x =18 km/hr\nLet the speed of current is y km/hr\nATQ\n90\n= 3\n18+𝑦\ny = 12km/h\ntime taken by it to cover the same distance against the stream\n90 90\n= =\n18−12 6\n= 15 hours"
+  }
+ ]
+}

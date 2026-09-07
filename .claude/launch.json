@@ -4,14 +4,14 @@
     {
       "name": "devquiz-api",
       "runtimeExecutable": "/bin/sh",
-      "runtimeArgs": ["-c", "cd /Users/apple/Desktop/devquiz/server && exec ./venv/bin/python run.py"],
+      "runtimeArgs": ["-c", "exec python3 /Users/apple/Desktop/devquiz/server/run.py"],
       "port": 8000
     },
     {
       "name": "devquiz",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "client"],
-      "port": 5173
+      "runtimeArgs": ["run", "dev", "--prefix", "client", "--", "--port", "5174", "--strictPort"],
+      "port": 5174
     }
   ]
 }

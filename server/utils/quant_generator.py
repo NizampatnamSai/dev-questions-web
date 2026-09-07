@@ -18,9 +18,79 @@ Each generator returns the same shape the AI path produces, so the mock
 assembler treats both identically.
 """
 import collections
+import contextvars
 import random
 import re
 from decimal import Decimal, ROUND_HALF_UP
+
+# ── Difficulty tier ───────────────────────────────────────────────────────────
+# IBPS/SBI PO and IBPS RRB PO are not the same paper. RRB Prelims sits a clear
+# step below PO — smaller numbers, shorter chains — but it is still a multi-step
+# exam, so "easier" must not slide back into the one-step drills this generator
+# was built to eliminate. A ContextVar rather than a global: FastAPI serves
+# requests concurrently on one thread, and a plain global would let an RRB mock
+# halfway through generation flip a PO mock's tier under it.
+LEVEL = contextvars.ContextVar("quant_level", default="po")
+
+# Equations already used in the paper being built, so five quadratic sets are
+# five distinct problems. Reset at the top of generate().
+_SEEN_EQ = contextvars.ContextVar("quant_seen_eq", default=frozenset())
+
+
+def _po() -> bool:
+    """True for IBPS/SBI PO calibration, False for the gentler RRB tier."""
+    return LEVEL.get() != "rrb"
+
+
+def _pick(po_choices, rrb_choices):
+    """Draw from whichever pool the current tier calls for."""
+    return random.choice(po_choices if _po() else rrb_choices)
+
+
+def _spread(nearest, lo=8, hi=16):
+    """Four asymmetric neighbours around `nearest`.
+
+    Evenly spaced options are a gift: every approximation this generator wrote
+    used a single fixed step, so the five choices formed an arithmetic
+    progression and the true answer was always the middle one. A candidate who
+    spots that answers the whole block without arithmetic. Real papers space
+    options irregularly, and the answer sits anywhere in the order.
+    """
+    base = abs(int(nearest)) or 100
+    unit = max(4, base * random.randint(lo, hi) // 100)
+    offs, seen = [], {0}
+    while len(offs) < 4:
+        k = random.choice([-3, -2, -1, 1, 2, 3])
+        jitter = random.randint(-unit // 3, unit // 3) if unit >= 6 else 0
+        d = k * unit + jitter
+        if d and all(abs(d - o) > unit // 2 for o in offs) and d not in seen:
+            seen.add(d)
+            offs.append(d)
+    return [str(int(nearest) + d) for d in offs]
+
+
+def _ratio_options(p, q, *extra):
+    """Four wrong ratios for a `p : q` answer, guaranteed distinct from it.
+
+    The old lists hardcoded the reversal plus a literal "1 : 1". When the true
+    ratio happened to BE 1 : 1 (or symmetric), both collided with the answer and
+    _pack fell back to "None of these" — which in a ratio question is a visible
+    tell that something went wrong. These are generated from p and q, so a
+    collision is impossible.
+    """
+    from math import gcd
+    g = gcd(int(p), int(q)) or 1
+    p, q = int(p) // g, int(q) // g
+    ans = f"{p} : {q}"
+    out = []
+    for cand in [f"{q} : {p}", *extra, f"{p + 1} : {q}", f"{p} : {q + 1}",
+                 f"{p + 2} : {q + 1}", f"{p * 2} : {q * 3}", f"{p + 3} : {q + 2}",
+                 f"{p * 3} : {q * 2}", f"{p + 1} : {q + 2}"]:
+        if cand != ans and cand not in out:
+            out.append(cand)
+        if len(out) == 4:
+            break
+    return out
 
 
 def _money(x) -> str:
@@ -575,18 +645,67 @@ def boats_quantity_comparison():
 
 
 def quadratic_comparison():
-    """Compare the root ranges of two quadratics — sign traps included."""
-    def make():
-        r1, r2 = random.choice([(-2, -3), (-1, -5), (2, 3), (1, 4), (-2, 5), (3, -4)])
-        a = random.choice([1, 2, 3])
-        return a, -a * (r1 + r2), a * r1 * r2, sorted([r1, r2])
-    ax, bx, cx, xs = make()
-    ay, by, cy, ys = make()
-    # Two identical equations is a wasted question — the comparison is vacuous.
-    for _ in range(20):
-        if (ay, by, cy) != (ax, bx, cx):
-            break
-        ay, by, cy, ys = make()
+    """Compare the root ranges of two quadratics — sign traps included.
+
+    The roots used to come from a hardcoded list of six single-digit pairs, so
+    x² + 5x + 6 = 0 could appear three times in one section (twice outright and
+    once as 3x² + 15x + 18). Worse, single-digit roots are readable straight off
+    the equation; a PO paper prints x² − 23x + 132 = 0 precisely so the
+    candidate has to factor a two-digit constant. Roots are now drawn from a
+    range wide enough that a repeat inside one paper is a coincidence rather
+    than a certainty, and previously-used pairs are rejected outright.
+    """
+    span = 16 if _po() else 9          # RRB stays in single-digit territory
+
+    # Drawing both equations independently made "no relation" the answer 65% of
+    # the time — a candidate who blind-guesses E outscores one who solves. The
+    # target relation is chosen FIRST, at roughly the frequency a real paper
+    # uses, and the roots are then built to produce it. x ≥ y and x ≤ y need the
+    # ranges to touch at exactly one shared root, which random draws almost
+    # never manage.
+    target = random.choices(
+        ["x > y", "x < y", "x ≥ y", "x ≤ y", "x = y or no relation can be established"],
+        weights=[23, 23, 12, 12, 30],
+    )[0]
+
+    def picks(k):
+        """k distinct non-zero integers in [-span, span], ascending."""
+        return sorted(random.sample([v for v in range(-span, span + 1) if v], k))
+
+    def build():
+        if target == "x > y":
+            p, q, r, s = picks(4)
+            return [r, s], [p, q]
+        if target == "x < y":
+            p, q, r, s = picks(4)
+            return [p, q], [r, s]
+        if target == "x ≥ y":
+            p, q, r = picks(3)
+            return [q, r], [p, q]          # min(x) == max(y) == q
+        if target == "x ≤ y":
+            p, q, r = picks(3)
+            return [p, q], [q, r]          # max(x) == min(y) == q
+        p, q, r, s = picks(4)
+        return [p, r], [q, s]              # interleaved, so the ranges overlap
+
+    seen = _SEEN_EQ.get()
+    ax = ay = None
+    for _ in range(60):
+        xs, ys = build()
+        lead = (lambda: random.choice([1, 1, 1, 2, 3])) if _po() else (lambda: 1)
+        ax, ay = lead(), lead()
+        bx, cx = -ax * sum(xs), ax * xs[0] * xs[1]
+        by, cy = -ay * sum(ys), ay * ys[0] * ys[1]
+        # A two-digit constant is what forces real factorisation rather than
+        # reading the roots straight off the page.
+        if _po() and max(abs(cx), abs(cy)) < 20:
+            continue
+        if (ax, bx, cx) == (ay, by, cy):
+            continue
+        if (ax, bx, cx) in seen or (ay, by, cy) in seen:
+            continue
+        seen.update({(ax, bx, cx), (ay, by, cy)})
+        break
     if min(xs) > max(ys):
         ans = "x > y"
     elif max(xs) < min(ys):
@@ -597,11 +716,21 @@ def quadratic_comparison():
         ans = "x ≤ y"
     else:
         ans = "x = y or no relation can be established"
-    sgn = lambda v: f"+ {v}" if v >= 0 else f"− {abs(v)}"
     lead = lambda a: "" if a == 1 else a          # "y²", never "1y²"
+
+    def eq(a, b, c, v):
+        # Roots that are negatives of each other give b = 0; printing "+ 0x"
+        # advertises the answer, so the term is dropped instead.
+        s = f"{lead(a)}{v}²"
+        if b:
+            s += f" {'+' if b > 0 else '−'} {abs(b) if abs(b) != 1 else ''}{v}"
+        if c:
+            s += f" {'+' if c > 0 else '−'} {abs(c)}"
+        return s + " = 0"
+
     return _pack(
         "Quadratic Equations",
-        f"I. {lead(ax)}x² {sgn(bx)}x {sgn(cx)} = 0\nII. {lead(ay)}y² {sgn(by)}y {sgn(cy)} = 0",
+        f"I. {eq(ax, bx, cx, 'x')}\nII. {eq(ay, by, cy, 'y')}",
         ans,
         ["x > y", "x < y", "x ≥ y", "x ≤ y", "x = y or no relation can be established"],
         f"Roots of I: x = {xs[0]}, {xs[1]}. Roots of II: y = {ys[0]}, {ys[1]}. "
@@ -627,8 +756,7 @@ def mixture_ratio_after_addition():
         f"{water} litres. If {add} litres of pure water is added to the vessel, what will be the ratio of milk "
         f"to water?",
         f"{milk // g} : {(water + add) // g}",
-        [f"{(water + add) // g} : {milk // g}", f"{milk} : {water}", f"{milk // 2} : {water}",
-         f"{milk // g + 1} : {(water + add) // g}"],
+        _ratio_options(milk, water + add, f"{milk} : {water}"),
         f"Milk = {total} − {water} = {milk} L and stays unchanged. Water = {water} + {add} = {water + add} L. "
         f"Ratio = {milk} : {water + add} = {milk // g} : {(water + add) // g}.",
         "Only the water changes — the milk is untouched, so do not recompute it.",
@@ -644,17 +772,17 @@ def approximation_multi_term():
     sq = random.choice([256, 361, 441, 576, 625])
     val = Decimal(str(round(p))) * base / 100 + Decimal(str(round(a))) * Decimal(str(round(b))) + Decimal(sq).sqrt()
     nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
-    step = max(20, nearest // 12)
     return _pack(
         "Approximation",
         f"What approximate value should come in place of the question mark?\n"
         f"{p}% of {base} + {a} × {b} + √{sq} = ?",
         str(nearest),
-        [str(nearest + step), str(nearest - step), str(nearest + 2 * step), str(nearest - 2 * step)],
+        _spread(nearest),
         f"Round each part: {round(p)}% of {base} ≈ {_money(Decimal(str(round(p))) * base / 100)}, "
         f"{round(a)} × {round(b)} = {round(a) * round(b)}, √{sq} = {int(Decimal(sq).sqrt())}. "
         f"Total ≈ {nearest}.",
-        "Round every term FIRST — the options are spaced far enough apart that it never changes the answer.",
+        "Round every term FIRST, then check which option it lands nearest — the gaps are uneven, so "
+        "estimate to within a few percent rather than eyeballing the middle choice.",
         "Hard",
     )
 
@@ -687,13 +815,12 @@ def approximation_percentage_chain():
     sub = random.choice([149.03, 199.97, 249.98])
     val = (Decimal(str(round(p1))) / 100) * (Decimal(str(round(p2))) / 100) * base + Decimal(str(round(sub)))
     nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
-    step = max(15, nearest // 10)
     return _pack(
         "Approximation",
         f"What approximate value should come in place of the question mark?\n"
         f"{p1}% of {p2}% of {base} + {sub} = ?",
         str(nearest),
-        [str(nearest + step), str(nearest - step), str(nearest + 2 * step), str(nearest - 2 * step)],
+        _spread(nearest),
         f"Round: {round(p1)}% of {round(p2)}% of {base} ≈ "
         f"{_money(Decimal(str(round(p1))) / 100 * Decimal(str(round(p2))) / 100 * base)}, plus {round(sub)} "
         f"gives about {nearest}.",
@@ -710,17 +837,70 @@ def approximation_fraction_mix():
     add = random.choice([289.96, 359.04, 419.98])
     val = Decimal(str(round(a))) * f1 / f2 / Decimal(str(round(d))) + Decimal(str(round(add)))
     nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
-    step = max(12, nearest // 10)
     return _pack(
         "Approximation",
         f"What approximate value should come in place of the question mark?\n"
         f"({a} × {f1}/{f2}) ÷ {d} + {add} = ?",
         str(nearest),
-        [str(nearest + step), str(nearest - step), str(nearest + 2 * step), str(nearest - 2 * step)],
+        _spread(nearest),
         f"Round: {round(a)} × {f1}/{f2} ≈ {_money(Decimal(str(round(a))) * f1 / f2)}, ÷ {round(d)} ≈ "
         f"{_money(Decimal(str(round(a))) * f1 / f2 / Decimal(str(round(d))))}, + {round(add)} ≈ {nearest}.",
         "Do the fraction first — it usually cancels against the divisor.",
-        "Hard",
+        "Hard" if _po() else "Moderate",
+    )
+
+
+# Three templates covered every Approximation question the generator has ever
+# produced, so the block was three shapes repeated with new digits. These two
+# add the root-and-square and difference-of-squares forms the real paper uses.
+def approximation_root_square():
+    """Square roots and a squared term — the shape candidates skip first."""
+    sq = random.choice([1156, 1444, 2025, 2916, 3364])
+    m = random.choice([13.97, 15.02, 17.98, 24.03])
+    p = random.choice([24.97, 34.98, 45.02])
+    base = random.choice([799, 1201, 1599, 2399])
+    root = Decimal(sq).sqrt().quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    val = root * Decimal(str(round(m))) + Decimal(str(round(p))) * base / 100
+    nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    return _pack(
+        "Approximation",
+        f"What approximate value should come in place of the question mark?\n"
+        f"√{sq} × {m} + {p}% of {base} = ?",
+        str(nearest),
+        _spread(nearest),
+        f"√{sq} = {root}, so {root} × {round(m)} = {root * round(m)}. "
+        f"{round(p)}% of {base} ≈ {_money(Decimal(str(round(p))) * base / 100)}. Total ≈ {nearest}.",
+        "Recognise the perfect square first — every root in this format is exact.",
+        "Hard" if _po() else "Moderate",
+    )
+
+
+def approximation_square_difference():
+    """(a)² − (b)² — worth far less work as (a+b)(a−b)."""
+    a = random.choice([23, 27, 32, 38, 44])
+    b = a - random.choice([4, 6, 8, 11])
+    add = random.choice([1199, 1601, 2401, 3199])
+    p = random.choice([19.97, 25.03, 37.98])
+    val = Decimal(a * a - b * b) + Decimal(str(round(p))) * add / 100
+    nearest = int(val.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+
+    # Decorate each integer with noise that still rounds BACK to it. Writing
+    # "(21.98)²" for b = 21 was wrong: 21.98 rounds to 22, so the printed
+    # question and the computed answer were a whole term apart. A ".98" tail
+    # therefore has to hang off v − 1.
+    def near(v):
+        return random.choice([f"{v}.03", f"{v}.02", f"{v - 1}.98", f"{v - 1}.97"])
+
+    return _pack(
+        "Approximation",
+        f"What approximate value should come in place of the question mark?\n"
+        f"({near(a)})² − ({near(b)})² + {p}% of {add} = ?",
+        str(nearest),
+        _spread(nearest),
+        f"a² − b² = (a + b)(a − b) = ({a} + {b})({a} − {b}) = {a + b} × {a - b} = {a * a - b * b}. "
+        f"{round(p)}% of {add} ≈ {_money(Decimal(str(round(p))) * add / 100)}. Total ≈ {nearest}.",
+        "Never square them separately — (a + b)(a − b) turns two multiplications into one.",
+        "Hard" if _po() else "Moderate",
     )
 
 
@@ -777,8 +957,10 @@ def _series(rule, start, n=6):
     return out
 
 
-SERIES_RULES = [
-    # (label, step function, starting value, human-readable pattern)
+# Two tiers. Every rule below is single-operation and constant — ×2 + 1 applied
+# five times, or +3, +5, +7 — which a candidate reads off the first differences
+# in seconds. That is RRB/Clerk standard, so it is what the RRB tier keeps.
+RRB_SERIES_RULES = [
     ("difference grows by a constant", lambda v, i: v + 3 + 2 * i, 5, "+3, +5, +7, +9, +11"),
     ("multiply then add", lambda v, i: v * 2 + 1, 4, "×2 + 1 each time"),
     ("multiply then subtract", lambda v, i: v * 3 - 2, 3, "×3 − 2 each time"),
@@ -789,9 +971,67 @@ SERIES_RULES = [
     ("alternate add and multiply", lambda v, i: v * 2 if i % 2 == 0 else v + 6, 7, "×2, +6, ×2, +6, ×2"),
 ]
 
+# What a PO paper actually sets: the MULTIPLIER itself moves, usually in halves,
+# and often with a matching additive term. These cannot be solved from first
+# differences — the candidate has to test successive ratios, which is the whole
+# point of the format.
+PO_SERIES_RULES = [
+    ("multiplier rises by 0.5", lambda v, i: v * (Decimal(1) + Decimal(i + 1) / 2), 8,
+     "×1.5, ×2, ×2.5, ×3, ×3.5"),
+    ("multiplier rises by 0.5 from a half", lambda v, i: v * (Decimal(1) + Decimal(i) / 2), 16,
+     "×1, ×1.5, ×2, ×2.5, ×3"),
+    ("multiply and add by the same rising number", lambda v, i: v * (i + 1) + (i + 1), 3,
+     "×1 + 1, ×2 + 2, ×3 + 3, ×4 + 4, ×5 + 5"),
+    ("multiplier and addend both rise", lambda v, i: v * (i + 2) + (i + 3), 4,
+     "×2 + 3, ×3 + 4, ×4 + 5, ×5 + 6"),
+    ("shrink then grow", lambda v, i: v * (Decimal(1) + Decimal(i - 1) / 2), 96,
+     "×0.5, ×1, ×1.5, ×2, ×2.5"),
+    ("difference doubles and shifts", lambda v, i: v + 4 * 2 ** i + i, 7, "+4, +9, +18, +35, +68"),
+    ("add rising cubes, subtract the index", lambda v, i: v + (i + 2) ** 3 - (i + 1), 5,
+     "+2³−1, +3³−2, +4³−3, +5³−4"),
+    ("treble and subtract a rising square", lambda v, i: v * 3 - (i + 2) ** 2, 5,
+     "×3 − 2², ×3 − 3², ×3 − 4², ×3 − 5²"),
+    ("multiply by rising primes", lambda v, i: v * [2, 3, 5, 7, 11][i] - 1, 4,
+     "×2 − 1, ×3 − 1, ×5 − 1, ×7 − 1"),
+    ("alternately halve and treble", lambda v, i: v * 3 if i % 2 == 0 else v / 2, 24,
+     "×3, ÷2, ×3, ÷2, ×3"),
+]
+
+
+def _series_rules():
+    return PO_SERIES_RULES if _po() else RRB_SERIES_RULES
+
+
+def _series_distractors(rule, vals, hide, answer):
+    """Wrong options that mirror the mistakes the pattern itself invites.
+
+    The old set was `answer × 2`, `answer − 4`, `answer + 6` — arithmetic on the
+    key rather than on the series, which meant the true value was often the only
+    one the pattern could plausibly produce. These come from carrying the
+    PREVIOUS step's rule forward, or the next one back: the actual way a
+    candidate misses a moving multiplier.
+    """
+    prev = vals[hide - 1]
+    cands = []
+    for j in (hide - 2, hide, hide + 1):          # rule applied at the wrong index
+        try:
+            v = rule(prev, max(0, j))
+            if v != answer and v > 0:
+                cands.append(_money(v))
+        except Exception:
+            pass
+    span = max(Decimal(2), abs(answer) / 12)
+    for k in (1, -1, 2, -2):
+        cands.append(_money((answer + span * k).quantize(Decimal("0.01"))))
+    out = []
+    for c in cands:
+        if c != _money(answer) and c not in out:
+            out.append(c)
+    return out[:4]
+
 
 def number_series_missing():
-    label, rule, start, pattern = random.choice(SERIES_RULES)
+    label, rule, start, pattern = random.choice(_series_rules())
     vals = _series(rule, start)
     hide = random.choice([len(vals) - 1, len(vals) - 1, len(vals) - 2])   # usually the last
     answer = vals[hide]
@@ -801,20 +1041,25 @@ def number_series_missing():
         f"What will come in place of the question mark (?) in the following series?\n\n"
         f"{', '.join(shown)}",
         _money(answer),
-        [_money(answer * 2), _money(answer + vals[1] - vals[0]), _money(answer - 4), _money(answer + 6)],
+        _series_distractors(rule, vals, hide, answer),
         f"The pattern is {pattern} ({label}). The full series is "
         f"{', '.join(_money(v) for v in vals)}, so the missing term is {_money(answer)}.",
-        "Take first differences before anything else; if they are not constant, take differences again.",
-        "Moderate",
+        "First differences first; if they are not constant, take successive RATIOS — a PO series "
+        "usually moves its multiplier rather than its difference.",
+        "Hard" if _po() else "Moderate",
     )
 
 
 def number_series_wrong_term():
-    label, rule, start, pattern = random.choice(SERIES_RULES)
+    label, rule, start, pattern = random.choice(_series_rules())
     vals = _series(rule, start)
     bad_at = random.randint(2, len(vals) - 1)
     correct = vals[bad_at]
-    offset = random.choice([2, 3, 4, -2, -3])
+    # A fixed ±3 is unfindable once the terms reach four digits — 7611 against a
+    # correct 7614 reads as a rounding artefact, not a planted error. Scale the
+    # nudge to the term so it is always visible but never obvious.
+    offset = (abs(correct) / 15).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    offset = max(Decimal(2), offset) * random.choice([1, -1])
     planted = correct + offset
     shown = [_money(planted) if i == bad_at else _money(v) for i, v in enumerate(vals)]
     return _pack(
@@ -835,10 +1080,25 @@ def number_series_wrong_term():
 # attached to EVERY question of the set, not just the first — sitting the paper
 # one question at a time, a candidate on Q3 must still be able to see the data.
 
-def _di_pack(topic, table_note, columns, rows, items):
-    """Wrap a DI set so every question carries the same chart data."""
+def _di_pack(topic, table_note, columns, rows, items, hard=()):
+    """Wrap a DI set so every question carries the same chart data.
+
+    Two problems with the original: every question was a single step (add two
+    figures, divide two figures, average five), and the five questions of a
+    given chart type were the SAME five every time — only the numbers moved, so
+    400 generated DI questions contained just 120 distinct stems. A real PO set
+    asks for a percentage of a derived total, a projection, or a comparison of
+    two averages, and no two sets ask the same five things.
+
+    `items` now holds the plain lookups and `hard` the multi-step ones; a PO set
+    is mostly `hard`, an RRB set mostly `items`, and both draw at random from
+    pools larger than the five they need.
+    """
+    n_hard = min(len(hard), 4 if _po() else 2)
+    picked = random.sample(list(hard), n_hard) + random.sample(list(items), min(len(items), 5 - n_hard))
+    random.shuffle(picked)
     out = []
-    for q_text, answer, distractors, expl in items:
+    for q_text, answer, distractors, expl in picked[:5]:
         q = _pack(topic, q_text, answer, distractors, expl, None, "Hard")
         q["passage"] = table_note
         q["table"] = {"columns": columns, "rows": rows}
@@ -891,7 +1151,7 @@ def di_pie_set():
 
             (f"Find the ratio of the number of students in school {names[k]} to that in school {names[l]}.",
              f"{vals[k]//g} : {vals[l]//g}",
-             [f"{vals[l]//g} : {vals[k]//g}", f"{pcts[k]} : {pcts[l]}", "1 : 2", f"{vals[k]//g + 1} : {vals[l]//g}"],
+             _ratio_options(vals[k], vals[l], f"{pcts[k]} : {pcts[l]}"),
              f"Ratio = {vals[k]} : {vals[l]} = {vals[k]//g} : {vals[l]//g} (dividing by {g})."),
 
             (f"What is the average number of students in schools {names[three[0]]}, {names[three[1]]} and "
@@ -907,7 +1167,78 @@ def di_pie_set():
              [_money(vals[i] + vals[j]), _money(vals[i]), _money(vals[j]), _money(abs(vals[i] - vals[j]) * 2)],
              f"Difference = |{vals[i]} − {vals[j]}| = {abs(vals[i] - vals[j])} students."),
         ],
+        hard=_pie_hard(names, pcts, vals, total),
     )
+
+
+def _pie_hard(names, pcts, vals, total):
+    """Multi-step questions on the pie data — three or more chained operations."""
+    a, b, c = random.sample(range(5), 3)
+    d, e = [x for x in range(5) if x not in (a, b, c)]
+    pair_sum = vals[a] + vals[b]
+    rest = total - pair_sum
+    pct_pair = Decimal(pair_sum) / rest * 100
+    avg_all = Decimal(total) / 5
+    vs_avg = (Decimal(vals[c]) - avg_all) / avg_all * 100
+    up, down = random.choice([(20, 15), (25, 10), (15, 25), (30, 20)])
+    new_a = Decimal(vals[a]) * (100 + up) / 100
+    new_b = Decimal(vals[b]) * (100 - down) / 100
+    order = sorted(range(5), key=lambda k: vals[k])
+    top2 = vals[order[-1]] + vals[order[-2]]
+    bot2 = vals[order[0]] + vals[order[1]]
+    frac_n, frac_d = random.choice([(3, 8), (5, 12), (7, 16), (2, 5)])
+    girls = Decimal(vals[d]) * frac_n / frac_d
+    boys = Decimal(vals[d]) - girls
+    avg3 = Decimal(vals[a] + vals[b] + vals[c]) / 3
+    avg2 = Decimal(vals[d] + vals[e]) / 2
+
+    return [
+        (f"The number of students in schools {names[a]} and {names[b]} together is what percent of the number "
+         f"of students in the remaining three schools? (rounded to two decimals)",
+         f"{_money(pct_pair)}%",
+         [f"{_money(Decimal(rest) / pair_sum * 100)}%", f"{_money(Decimal(pair_sum) / total * 100)}%",
+          f"{pcts[a] + pcts[b]}%", f"{_money(pct_pair / 2)}%"],
+         f"{names[a]} + {names[b]} = {vals[a]} + {vals[b]} = {pair_sum}. The other three = {total} − "
+         f"{pair_sum} = {rest}. Required % = {pair_sum}/{rest} × 100 = {_money(pct_pair)}%."),
+
+        (f"The number of students in school {names[c]} is what percent more or less than the average number of "
+         f"students per school? (rounded to two decimals)",
+         f"{_money(abs(vs_avg))}%",
+         [f"{_money(abs(vs_avg) * 2)}%", f"{_money(Decimal(vals[c]) / avg_all * 100)}%",
+          f"{abs(pcts[c] - 20)}%", f"{_money(abs(Decimal(vals[c]) - avg_all))}%"],
+         f"Average per school = {total}/5 = {_money(avg_all)}. {names[c]} = {vals[c]}. Difference = "
+         f"{_money(abs(Decimal(vals[c]) - avg_all))}, so the change = "
+         f"{_money(abs(Decimal(vals[c]) - avg_all))}/{_money(avg_all)} × 100 = {_money(abs(vs_avg))}%."),
+
+        (f"Next year the strength of school {names[a]} increases by {up}% while that of school {names[b]} "
+         f"decreases by {down}%. What will be the total strength of these two schools next year?",
+         _money(new_a + new_b),
+         [_money(pair_sum), _money(new_a), _money(new_b), _money(new_a + new_b + 100)],
+         f"{names[a]}: {vals[a]} × {100 + up}/100 = {_money(new_a)}. {names[b]}: {vals[b]} × {100 - down}/100 = "
+         f"{_money(new_b)}. Total = {_money(new_a + new_b)}."),
+
+        ("Find the difference between the combined strength of the two largest schools and that of the two "
+         "smallest schools.",
+         _money(top2 - bot2),
+         [_money(top2), _money(bot2), _money(top2 + bot2), _money((top2 - bot2) * 2)],
+         f"Largest two: {names[order[-1]]} ({vals[order[-1]]}) + {names[order[-2]]} ({vals[order[-2]]}) = {top2}. "
+         f"Smallest two: {names[order[0]]} ({vals[order[0]]}) + {names[order[1]]} ({vals[order[1]]}) = {bot2}. "
+         f"Difference = {top2 - bot2}."),
+
+        (f"If {frac_n}/{frac_d} of the students in school {names[d]} are girls, how many boys study in "
+         f"school {names[d]}?",
+         _money(boys),
+         [_money(girls), _money(vals[d]), _money(boys / 2), _money(abs(boys - girls))],
+         f"{names[d]} = {pcts[d]}% of {total} = {vals[d]}. Girls = {frac_n}/{frac_d} × {vals[d]} = "
+         f"{_money(girls)}. Boys = {vals[d]} − {_money(girls)} = {_money(boys)}."),
+
+        (f"By how much does the average strength of schools {names[a]}, {names[b]} and {names[c]} exceed or "
+         f"fall short of the average strength of schools {names[d]} and {names[e]}?",
+         _money(abs(avg3 - avg2)),
+         [_money(avg3), _money(avg2), _money(avg3 + avg2), _money(abs(avg3 - avg2) * 2)],
+         f"Average of the first three = ({vals[a]} + {vals[b]} + {vals[c]})/3 = {_money(avg3)}. Average of the "
+         f"other two = ({vals[d]} + {vals[e]})/2 = {_money(avg2)}. Difference = {_money(abs(avg3 - avg2))}."),
+    ]
 
 
 def di_bar_set():
@@ -945,7 +1276,7 @@ def di_bar_set():
 
             (f"Find the ratio of Product A to Product B sold in {years[i]}.",
              f"{a[i]//g} : {b[i]//g}",
-             [f"{b[i]//g} : {a[i]//g}", f"{a[i]} : {b[i]+10}", "1 : 1", f"{a[i]//g + 1} : {b[i]//g}"],
+             _ratio_options(a[i], b[i]),
              f"Ratio = {a[i]} : {b[i]} = {a[i]//g} : {b[i]//g}."),
 
             (f"The sales of Product A in {years[j]} showed what percent change over {years[i]}? "
@@ -966,7 +1297,77 @@ def di_bar_set():
              [_money(tot_a + tot_b), _money(tot_a), _money(tot_b), _money(abs(tot_a - tot_b) * 2)],
              f"Total A = {tot_a}, Total B = {tot_b}. Difference = {abs(tot_a - tot_b)} thousand units."),
         ],
+        hard=_bar_hard(years, a, b, i, j),
     )
+
+
+def _bar_hard(years, a, b, i, j):
+    """Multi-step questions on the two-product bar data."""
+    tot_a, tot_b = sum(a), sum(b)
+    grand = tot_a + tot_b
+    yr_tot = [x + y for x, y in zip(a, b)]
+    share = Decimal(yr_tot[i]) / grand * 100
+    avg_gap = Decimal(tot_a) / 4 - Decimal(tot_b) / 4
+    hi_a, lo_b = a.index(max(a)), b.index(min(b))
+    gap = Decimal(max(a) - min(b)) / min(b) * 100
+    up, down = random.choice([(20, 12), (25, 15), (15, 20), (30, 10)])
+    proj = Decimal(a[j]) * (100 + up) / 100 + Decimal(b[j]) * (100 - down) / 100
+    pa, pb = random.choice([(12, 18), (15, 22), (20, 14), (25, 16)])
+    profit = Decimal(a[i] * pa + b[i] * pb)
+    best = max(range(4), key=lambda k: yr_tot[k])
+    worst = min(range(4), key=lambda k: yr_tot[k])
+    swing = Decimal(yr_tot[best] - yr_tot[worst]) / yr_tot[worst] * 100
+
+    return [
+        (f"The total sale of both products in {years[i]} is what percent of the total sale of both products "
+         f"over all four years? (rounded to two decimals)",
+         f"{_money(share)}%",
+         [f"{_money(Decimal(grand) / yr_tot[i] * 100)}%", f"{_money(Decimal(a[i]) / grand * 100)}%",
+          f"{_money(share * 2)}%", f"{_money(Decimal(yr_tot[i]) / tot_a * 100)}%"],
+         f"{years[i]} total = {a[i]} + {b[i]} = {yr_tot[i]}. Four-year total = {tot_a} + {tot_b} = {grand}. "
+         f"Required % = {yr_tot[i]}/{grand} × 100 = {_money(share)}%."),
+
+        ("By how many thousand units does the average annual sale of Product A differ from the average annual "
+         "sale of Product B?",
+         _money(abs(avg_gap)),
+         [_money(abs(tot_a - tot_b)), _money(Decimal(tot_a) / 4), _money(Decimal(tot_b) / 4),
+          _money(abs(avg_gap) * 2)],
+         f"Average A = {tot_a}/4 = {_money(Decimal(tot_a) / 4)}. Average B = {tot_b}/4 = "
+         f"{_money(Decimal(tot_b) / 4)}. Difference = {_money(abs(avg_gap))} thousand units."),
+
+        ("The highest sale recorded by Product A in any year is what percent more than the lowest sale "
+         "recorded by Product B in any year? (rounded to two decimals)",
+         f"{_money(gap)}%",
+         [f"{_money(Decimal(max(a) - min(b)) / max(a) * 100)}%", f"{_money(Decimal(max(a)) / min(b) * 100)}%",
+          f"{_money(gap / 2)}%", f"{_money(Decimal(max(b) - min(a)) / min(a) * 100)}%"],
+         f"Highest A = {max(a)} (in {years[hi_a]}), lowest B = {min(b)} (in {years[lo_b]}). "
+         f"({max(a)} − {min(b)})/{min(b)} × 100 = {_money(gap)}%."),
+
+        (f"In {years[j] + 1} the sale of Product A rises by {up}% over {years[j]} while the sale of Product B "
+         f"falls by {down}%. What will the two products sell together in {years[j] + 1} (in thousands)?",
+         _money(proj),
+         [_money(yr_tot[j]), _money(Decimal(a[j]) * (100 + up) / 100), _money(Decimal(b[j]) * (100 - down) / 100),
+          _money(proj * 2)],
+         f"A: {a[j]} × {100 + up}/100 = {_money(Decimal(a[j]) * (100 + up) / 100)}. B: {b[j]} × {100 - down}/100 "
+         f"= {_money(Decimal(b[j]) * (100 - down) / 100)}. Total = {_money(proj)} thousand units."),
+
+        (f"The company earns a profit of ₹{pa} on each unit of Product A and ₹{pb} on each unit of Product B. "
+         f"What was its total profit in {years[i]} (in thousand ₹)?",
+         _money(profit),
+         [_money(Decimal(a[i] * pb + b[i] * pa)), _money(Decimal(yr_tot[i] * pa)),
+          _money(Decimal(a[i] * pa)), _money(Decimal(b[i] * pb))],
+         f"Profit on A = {a[i]} × {pa} = {a[i] * pa}. Profit on B = {b[i]} × {pb} = {b[i] * pb}. "
+         f"Total = {_money(profit)} thousand rupees."),
+
+        ("The combined sale in the best year exceeds the combined sale in the weakest year by what percent? "
+         "(rounded to two decimals)",
+         f"{_money(swing)}%",
+         [f"{_money(Decimal(yr_tot[best] - yr_tot[worst]) / yr_tot[best] * 100)}%",
+          f"{_money(Decimal(yr_tot[best]) / yr_tot[worst] * 100)}%", f"{_money(swing / 2)}%",
+          _money(yr_tot[best] - yr_tot[worst]) + "%"],
+         f"Best: {years[best]} = {yr_tot[best]}. Weakest: {years[worst]} = {yr_tot[worst]}. "
+         f"({yr_tot[best]} − {yr_tot[worst]})/{yr_tot[worst]} × 100 = {_money(swing)}%."),
+    ]
 
 
 def di_line_set():
@@ -998,7 +1399,7 @@ def di_line_set():
              f"{months[i]}: {x[i]} + {y[i]} = {x[i] + y[i]}. {months[j]}: {x[j]} + {y[j]} = {x[j] + y[j]}. "
              f"Combined = {x[i] + y[i] + x[j] + y[j]} units."),
             (f"Find the ratio of Unit I to Unit II production in {months[i]}.", f"{x[i]//g} : {y[i]//g}",
-             [f"{y[i]//g} : {x[i]//g}", "1 : 1", f"{x[i]} : {y[i] + 20}", f"{x[i]//g + 1} : {y[i]//g}"],
+             _ratio_options(x[i], y[i]),
              f"Ratio = {x[i]} : {y[i]} = {x[i]//g} : {y[i]//g}."),
             (f"Unit I production in {months[j]} changed by what percent compared with {months[i]}? "
              f"(rounded to two decimals)", f"{_money(diff)}%",
@@ -1013,7 +1414,68 @@ def di_line_set():
              [_money(tot_x + tot_y), _money(tot_x), _money(tot_y), _money(abs(tot_x - tot_y) * 2)],
              f"Unit I total = {tot_x}, Unit II total = {tot_y}. Difference = {abs(tot_x - tot_y)}."),
         ],
+        hard=_line_hard(months, x, y, i, j),
     )
+
+
+def _line_hard(months, x, y, i, j):
+    """Multi-step questions on the two-unit line data."""
+    tot_x, tot_y = sum(x), sum(y)
+    grand = tot_x + tot_y
+    mo_tot = [p + q for p, q in zip(x, y)]
+    k = random.choice([m for m in range(5) if m not in (i, j)])
+    combo = x[i] + y[j]
+    share = Decimal(combo) / mo_tot[k] * 100
+    avg_gap = Decimal(tot_x) / 5 - Decimal(tot_y) / 5
+    d1, d2 = random.choice([(15, 10), (20, 12), (25, 8), (12, 18)])
+    good = Decimal(x[i]) * (100 - d1) / 100 + Decimal(y[i]) * (100 - d2) / 100
+    best = max(range(5), key=lambda m: mo_tot[m])
+    worst = min(range(5), key=lambda m: mo_tot[m])
+    swing = Decimal(mo_tot[best] - mo_tot[worst]) / mo_tot[worst] * 100
+    share_x = Decimal(tot_x) / grand * 100
+
+    return [
+        (f"The production of Unit I in {months[i]} together with that of Unit II in {months[j]} is what percent "
+         f"of the total production of both units in {months[k]}? (rounded to two decimals)",
+         f"{_money(share)}%",
+         [f"{_money(Decimal(mo_tot[k]) / combo * 100)}%", f"{_money(Decimal(x[i]) / mo_tot[k] * 100)}%",
+          f"{_money(share / 2)}%", f"{_money(Decimal(combo) / grand * 100)}%"],
+         f"Unit I in {months[i]} = {x[i]}, Unit II in {months[j]} = {y[j]}, together = {combo}. "
+         f"{months[k]} total = {x[k]} + {y[k]} = {mo_tot[k]}. Required % = {combo}/{mo_tot[k]} × 100 = "
+         f"{_money(share)}%."),
+
+        ("By how many units does the average monthly production of Unit I differ from that of Unit II?",
+         _money(abs(avg_gap)),
+         [_money(abs(tot_x - tot_y)), _money(Decimal(tot_x) / 5), _money(Decimal(tot_y) / 5),
+          _money(abs(avg_gap) * 2)],
+         f"Average Unit I = {tot_x}/5 = {_money(Decimal(tot_x) / 5)}. Average Unit II = {tot_y}/5 = "
+         f"{_money(Decimal(tot_y) / 5)}. Difference = {_money(abs(avg_gap))} units."),
+
+        (f"In {months[i]}, {d1}% of Unit I's output and {d2}% of Unit II's output were found defective. How "
+         f"many units produced that month were NOT defective?",
+         _money(good),
+         [_money(mo_tot[i]), _money(Decimal(mo_tot[i]) * (100 - d1) / 100),
+          _money(Decimal(mo_tot[i]) - good), _money(good / 2)],
+         f"Unit I good = {x[i]} × {100 - d1}/100 = {_money(Decimal(x[i]) * (100 - d1) / 100)}. Unit II good = "
+         f"{y[i]} × {100 - d2}/100 = {_money(Decimal(y[i]) * (100 - d2) / 100)}. Total = {_money(good)} units."),
+
+        ("The combined output of the two units in their strongest month exceeds that in their weakest month by "
+         "what percent? (rounded to two decimals)",
+         f"{_money(swing)}%",
+         [f"{_money(Decimal(mo_tot[best] - mo_tot[worst]) / mo_tot[best] * 100)}%",
+          f"{_money(Decimal(mo_tot[best]) / mo_tot[worst] * 100)}%", f"{_money(swing / 2)}%",
+          _money(mo_tot[best] - mo_tot[worst]) + "%"],
+         f"Strongest: {months[best]} = {mo_tot[best]}. Weakest: {months[worst]} = {mo_tot[worst]}. "
+         f"({mo_tot[best]} − {mo_tot[worst]})/{mo_tot[worst]} × 100 = {_money(swing)}%."),
+
+        ("Over the five months, Unit I's production is what percent of the total production of both units "
+         "taken together? (rounded to two decimals)",
+         f"{_money(share_x)}%",
+         [f"{_money(Decimal(tot_y) / grand * 100)}%", f"{_money(Decimal(tot_x) / tot_y * 100)}%",
+          f"{_money(share_x / 2)}%", f"{_money(100 - share_x)}%"],
+         f"Unit I total = {tot_x}. Both units = {tot_x} + {tot_y} = {grand}. "
+         f"Required % = {tot_x}/{grand} × 100 = {_money(share_x)}%."),
+    ]
 
 
 def di_table_set():
@@ -1042,8 +1504,7 @@ def di_table_set():
              f"{depts[j]}: {total[j]} total, {male[j] * 100 // total[j]}% male, so female = {female[j]}. "
              f"Together = {female[i] + female[j]}."),
             (f"Find the ratio of male to female employees in {depts[i]}.", f"{male[i]//g} : {female[i]//g}",
-             [f"{female[i]//g} : {male[i]//g}", "1 : 1", f"{male[i]} : {female[i] + 10}",
-              f"{male[i]//g + 1} : {female[i]//g}"],
+             _ratio_options(male[i], female[i]),
              f"Ratio = {male[i]} : {female[i]} = {male[i]//g} : {female[i]//g}."),
             (f"What is the total number of male employees in {depts[i]} and {depts[j]} together?",
              _money(male[i] + male[j]),
@@ -1058,21 +1519,110 @@ def di_table_set():
              [_money(total[i] + total[j]), _money(total[i]), _money(total[j]), _money(abs(total[i] - total[j]) * 2)],
              f"Difference = |{total[i]} − {total[j]}| = {abs(total[i] - total[j])}."),
         ],
+        hard=_table_hard(depts, total, male, female, i, j),
     )
+
+
+def _table_hard(depts, total, male, female, i, j):
+    """Multi-step questions on the department table.
+
+    Every one of these needs the male/female split RECOVERED from the percentage
+    first — the table prints only totals and a male %, so there is no figure to
+    read off directly.
+    """
+    tm, tf = sum(male), sum(female)
+    grand = sum(total)
+    cross = Decimal(female[i]) / male[j] * 100
+    left, joined = random.choice([(20, 10), (25, 15), (15, 20), (30, 12)])
+    nm = Decimal(male[i]) * (100 - left) / 100
+    nf = Decimal(female[i]) * (100 + joined) / 100
+    from math import gcd
+    ni, nj = int(nm * 100), int(nf * 100)
+    g2 = gcd(ni, nj) or 1
+    avg_f = Decimal(tf) / 5
+    k = max(range(5), key=lambda t: female[t])
+    share_f = Decimal(female[i] + female[j]) / grand * 100
+
+    return [
+        (f"The number of female employees in {depts[i]} is what percent of the number of male employees in "
+         f"{depts[j]}? (rounded to two decimals)",
+         f"{_money(cross)}%",
+         [f"{_money(Decimal(male[j]) / female[i] * 100)}%", f"{_money(Decimal(female[i]) / total[j] * 100)}%",
+          f"{_money(Decimal(male[i]) / female[j] * 100)}%", f"{_money(cross / 2)}%"],
+         f"{depts[i]}: {total[i]} total at {male[i] * 100 // total[i]}% male gives {female[i]} females. "
+         f"{depts[j]}: {total[j]} total at {male[j] * 100 // total[j]}% male gives {male[j]} males. "
+         f"Required % = {female[i]}/{male[j]} × 100 = {_money(cross)}%."),
+
+        (f"In {depts[i]}, {left}% of the male employees resign and the number of female employees rises by "
+         f"{joined}%. What is the new ratio of male to female employees in {depts[i]}?",
+         f"{ni // g2} : {nj // g2}",
+         _ratio_options(ni, nj, f"{male[i]} : {female[i]}"),
+         f"Males = {male[i]} × {100 - left}/100 = {_money(nm)}. Females = {female[i]} × {100 + joined}/100 = "
+         f"{_money(nf)}. Ratio = {_money(nm)} : {_money(nf)} = {ni // g2} : {nj // g2}."),
+
+        ("Taking all five departments together, by how many does the number of male employees differ from the "
+         "number of female employees?",
+         _money(abs(tm - tf)),
+         [_money(tm), _money(tf), _money(grand), _money(abs(tm - tf) * 2)],
+         f"Total males = {tm}, total females = {tf} (out of {grand} employees). "
+         f"Difference = {abs(tm - tf)}."),
+
+        ("What is the average number of female employees per department?",
+         _money(avg_f),
+         [_money(Decimal(tm) / 5), _money(Decimal(grand) / 5), _money(tf), _money(avg_f * 2)],
+         f"Females by department: {', '.join(str(f) for f in female)}. Total = {tf}. "
+         f"Average = {tf}/5 = {_money(avg_f)}."),
+
+        ("Which department employs the largest number of women, and how many?",
+         f"{depts[k]} — {female[k]}",
+         # The male count of the same department is only a distractor when the
+         # split is uneven — a 50/50 department would make it the answer again.
+         [f"{depts[k]} — {male[k]}" if male[k] != female[k] else f"{depts[(k + 4) % 5]} — {female[(k + 4) % 5]}",
+          f"{depts[(k + 1) % 5]} — {female[(k + 1) % 5]}",
+          f"{depts[(k + 2) % 5]} — {female[(k + 2) % 5]}", f"{depts[(k + 3) % 5]} — {female[(k + 3) % 5]}"],
+         f"Recovering each split from the male %: {', '.join(f'{d} {f}' for d, f in zip(depts, female))}. "
+         f"The largest is {depts[k]} with {female[k]} women."),
+
+        (f"The female employees of {depts[i]} and {depts[j]} together form what percent of the company's total "
+         f"workforce? (rounded to two decimals)",
+         f"{_money(share_f)}%",
+         [f"{_money(Decimal(male[i] + male[j]) / grand * 100)}%",
+          f"{_money(Decimal(female[i] + female[j]) / (total[i] + total[j]) * 100)}%",
+          f"{_money(share_f * 2)}%", f"{_money(Decimal(female[i]) / grand * 100)}%"],
+         f"Females in {depts[i]} = {female[i]}, in {depts[j]} = {female[j]}, together = "
+         f"{female[i] + female[j]}. Workforce = {grand}. "
+         f"Required % = {female[i] + female[j]}/{grand} × 100 = {_money(share_f)}%."),
+    ]
 
 
 def di_caselet_set():
     """Caselet: the data is in prose, with nothing tabulated."""
-    total = random.choice([1200, 1500, 1800, 2400])
-    p_cricket = random.choice([30, 35, 40, 45])
-    p_football = random.choice([20, 25, 30])
-    cricket = total * p_cricket // 100
-    football = total * p_football // 100
-    tennis = total - cricket - football
-    boys_c = cricket * random.choice([50, 60, 70]) // 100
+    # Every count here must come out whole, and the percentage PRINTED in the
+    # passage has to be the one the numbers were built from. It was not: with
+    # 525 cricketers and a 70% split, integer division stored 367 boys but
+    # printed "69%", and a candidate working from the passage got 362 — the key
+    # disagreed with the only data on screen. Sizes are now constrained so every
+    # division is exact.
+    for _ in range(60):
+        total = random.choice([1200, 1500, 1800, 2400])
+        p_cricket = random.choice([30, 35, 40, 45])
+        p_football = random.choice([20, 25, 30])
+        cricket = total * p_cricket // 100
+        football = total * p_football // 100
+        tennis = total - cricket - football
+        # tennis % 20 too, so "20% of the tennis players switch" is a whole
+        # number of people rather than 138.6 of them.
+        if cricket % 20 == 0 and football % 20 == 0 and tennis > 0 and tennis % 20 == 0:
+            break
+    else:                                   # pragma: no cover — belt and braces
+        total, p_cricket, p_football = 2400, 40, 25
+        cricket, football = 960, 600
+        tennis = total - cricket - football
+    boys_pct = random.choice([50, 60, 70])
+    boys_c = cricket * boys_pct // 100
     girls_c = cricket - boys_c
     note = (f"In a school of {total:,} students, {p_cricket}% play cricket and {p_football}% play football, "
-            f"while the rest play tennis. Among the cricket players, {boys_c * 100 // cricket}% are boys. "
+            f"while the rest play tennis. Among the cricket players, {boys_pct}% are boys. "
             f"Answer the questions using this information.")
     from math import gcd
     g = gcd(cricket, football) or 1
@@ -1086,8 +1636,7 @@ def di_caselet_set():
              [_money(cricket), _money(football), _money(cricket + football), _money(tennis * 2)],
              f"Cricket = {cricket}, Football = {football}. Tennis = {total} − {cricket} − {football} = {tennis}."),
             ("Find the ratio of cricket players to football players.", f"{cricket//g} : {football//g}",
-             [f"{football//g} : {cricket//g}", f"{p_cricket} : {p_football}", "1 : 1",
-              f"{cricket//g + 1} : {football//g}"],
+             _ratio_options(cricket, football, f"{p_cricket} : {p_football}"),
              f"Ratio = {cricket} : {football} = {cricket//g} : {football//g}."),
             ("How many girls play cricket?", _money(girls_c),
              [_money(boys_c), _money(cricket), _money(girls_c * 2), _money(abs(boys_c - girls_c))],
@@ -1101,7 +1650,72 @@ def di_caselet_set():
              [_money(total), _money(Decimal(total) / 2), _money(cricket), _money(Decimal(total) / 4)],
              f"Total = {total} across 3 sports. Average = {total}/3 = {_money(Decimal(total) / 3)}."),
         ],
+        hard=_caselet_hard(total, cricket, football, tennis, boys_c, girls_c),
     )
+
+
+def _caselet_hard(total, cricket, football, tennis, boys_c, girls_c):
+    """Multi-step questions on the caselet — every figure comes out of the prose."""
+    # Only fractions that divide the football count exactly — "337.5 boys" is
+    # not an answer a paper can print.
+    fb_n, fb_d = random.choice([(n, d) for n, d in [(3, 5), (5, 8), (7, 12), (2, 3), (3, 4)]
+                                if football % d == 0] or [(1, 2)])
+    boys_f = Decimal(football) * fb_n / fb_d
+    girls_f = Decimal(football) - boys_f
+    shift = random.choice([15, 20, 25])
+    moved = Decimal(tennis) * shift / 100
+    new_fb = Decimal(football) + moved
+    rise = moved / football * 100
+    pct_girls = Decimal(girls_c) / total * 100
+    from math import gcd
+    bi, fi = int(boys_c), int(football + tennis)
+    g = gcd(bi, fi) or 1
+    all_girls = girls_c + girls_f
+
+    return [
+        (f"Among the football players, {fb_n}/{fb_d} are boys. By how much does the number of boys playing "
+         f"cricket exceed the number of boys playing football?",
+         _money(Decimal(boys_c) - boys_f),
+         [_money(boys_f), _money(boys_c), _money(Decimal(boys_c) + boys_f), _money(girls_c - girls_f)],
+         f"Boys playing football = {fb_n}/{fb_d} × {football} = {_money(boys_f)}. Boys playing cricket = "
+         f"{boys_c}. Difference = {boys_c} − {_money(boys_f)} = {_money(Decimal(boys_c) - boys_f)}."),
+
+        ("The girls who play cricket form what percent of the total number of students in the school? "
+         "(rounded to two decimals)",
+         f"{_money(pct_girls)}%",
+         [f"{_money(Decimal(boys_c) / total * 100)}%", f"{_money(Decimal(girls_c) / cricket * 100)}%",
+          f"{_money(pct_girls * 2)}%", f"{_money(Decimal(girls_c) / football * 100)}%"],
+         f"Girls playing cricket = {girls_c}. Total students = {total}. "
+         f"Required % = {girls_c}/{total} × 100 = {_money(pct_girls)}%."),
+
+        (f"If {shift}% of the tennis players switch to football, how many students will then play football?",
+         _money(new_fb),
+         [_money(moved), _money(football), _money(Decimal(tennis) - moved), _money(new_fb + moved)],
+         f"Tennis players = {tennis}, of whom {shift}% = {_money(moved)} switch. "
+         f"Football becomes {football} + {_money(moved)} = {_money(new_fb)}."),
+
+        ("Find the ratio of the number of boys playing cricket to the total number of students playing "
+         "football and tennis together.",
+         f"{bi // g} : {fi // g}",
+         _ratio_options(bi, fi),
+         f"Boys playing cricket = {boys_c}. Football + tennis = {football} + {tennis} = {football + tennis}. "
+         f"Ratio = {boys_c} : {football + tennis} = {bi // g} : {fi // g}."),
+
+        (f"If {fb_n}/{fb_d} of the football players are boys, how many girls play cricket and football taken "
+         f"together?",
+         _money(all_girls),
+         [_money(girls_f), _money(girls_c), _money(Decimal(boys_c) + boys_f), _money(all_girls * 2)],
+         f"Girls in cricket = {cricket} − {boys_c} = {girls_c}. Girls in football = {football} − "
+         f"{_money(boys_f)} = {_money(girls_f)}. Together = {_money(all_girls)}."),
+
+        (f"After {shift}% of the tennis players switch to football, the number of football players increases "
+         f"by what percent? (rounded to two decimals)",
+         f"{_money(rise)}%",
+         [f"{shift}%", f"{_money(moved / new_fb * 100)}%", f"{_money(rise * 2)}%",
+          f"{_money(Decimal(tennis) / football * 100)}%"],
+         f"Students moving = {shift}% of {tennis} = {_money(moved)}. Increase = {_money(moved)}/{football} × 100 "
+         f"= {_money(rise)}%."),
+    ]
 
 
 # Five chart types; a paper draws 2-3 of them at random so no two mocks open the
@@ -1174,7 +1788,8 @@ GENERATORS = {
     "Compound Interest": [si_ci_combined],
     "Percentage": [successive_percentage_salary],
     "Profit and Loss": [profit_markup_discount, profit_two_articles],
-    "Approximation": [approximation_multi_term, approximation_percentage_chain, approximation_fraction_mix],
+    "Approximation": [approximation_multi_term, approximation_percentage_chain, approximation_fraction_mix,
+                      approximation_root_square, approximation_square_difference],
     "Number Series": [number_series_missing, number_series_wrong_term],
 }
 
@@ -1203,12 +1818,20 @@ ARITHMETIC_TOPICS = [
 # boats_and_streams, partnership_profit.
 
 
-def generate(n: int, topics=None) -> list:
+def generate(n: int, topics=None, level: str = "po") -> list:
     """n deterministic Quant questions, spread across the topic pool.
 
     Duplicates are avoided by stem, so a paper never repeats a question even
     when the same generator is drawn twice.
+
+    `level` is "po" for IBPS/SBI PO calibration or "rrb" for IBPS RRB PO, which
+    sits a genuine step below it: single-digit quadratic roots, constant-step
+    series, and DI sets weighted towards direct reads rather than derived
+    quantities. Both tiers keep the multi-step arithmetic word problems — RRB
+    Prelims asks those too, and they were the one block already at standard.
     """
+    LEVEL.set("rrb" if str(level).lower() == "rrb" else "po")
+    _SEEN_EQ.set(set())
     # Pick a TOPIC first, then a generator within it. Choosing uniformly from a
     # flat list of functions let topics that happen to have three generators
     # take three times the share — a 35-question section came out with 9
@@ -1233,9 +1856,11 @@ def generate(n: int, topics=None) -> list:
         "quadratic_comparison": 5,
         "number_series_missing": 3,
         "number_series_wrong_term": 3,
-        "approximation_multi_term": 2,
-        "approximation_percentage_chain": 2,
-        "approximation_fraction_mix": 2,
+        "approximation_multi_term": 1,
+        "approximation_percentage_chain": 1,
+        "approximation_fraction_mix": 1,
+        "approximation_root_square": 1,
+        "approximation_square_difference": 1,
     }
     DEFAULT_CAP = 1
     used = collections.Counter()

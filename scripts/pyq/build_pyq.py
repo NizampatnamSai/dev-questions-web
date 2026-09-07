@@ -46,7 +46,24 @@ INLINE_PAPERS = [
      'Memory-based · 2 Aug 2026', 'sbipo-2026-aug02-s1.pdf'),
 ]
 
+RRB_PAPERS = [
+    ('rrbpo-2025-nov23', 'IBPS RRB PO Prelims 2025 — 23 Nov (Shift 1)', '2025', 'Memory-based · 23 Nov 2025', 'rrbpo-2025-nov23-s1.pdf'),
+    ('rrbpo-2025-nov22', 'IBPS RRB PO Prelims 2025 — 22 Nov (Shift 1)', '2025', 'Memory-based · 22 Nov 2025', 'rrbpo-2025-nov22-s1.pdf'),
+    ('rrbpo-2024-aug04', 'IBPS RRB PO Prelims 2024 — 4 Aug',            '2024', 'Memory-based · 4 Aug 2024',  'rrbpo-2024-aug04.pdf'),
+    ('rrbpo-2024-aug03', 'IBPS RRB PO Prelims 2024 — 3 Aug (Shift 1)',  '2024', 'Memory-based · 3 Aug 2024',  'rrbpo-2024-aug03-s1.pdf'),
+    ('rrbpo-2023',       'IBPS RRB PO Prelims 2023',                    '2023', 'Memory-based reconstruction', 'rrbpo-2023.pdf'),
+    ('rrbpo-2022',       'IBPS RRB PO Prelims 2022',                    '2022', 'Memory-based reconstruction', 'rrbpo-2022.pdf'),
+    ('rrbpo-2021',       'IBPS RRB PO Prelims 2021',                    '2021', 'Memory-based reconstruction', 'rrbpo-2021.pdf'),
+    ('rrbpo-2020',       'IBPS RRB PO Prelims 2020',                    '2020', 'Memory-based · partial paper', 'rrbpo-2020.pdf'),
+]
+# 2017-2019 are scans with no text layer — 0 questions parse, they would need OCR.
+
 SECTIONS = [('English Language', 30), ('Quantitative Aptitude', 35), ('Reasoning Ability', 35)]
+
+# IBPS RRB PO Officer Scale I prelims is a DIFFERENT shape: two sections of 40,
+# no English at all. Assigning it with the IBPS 30/35/35 blueprint would invent
+# an English block that does not exist in the paper.
+RRB_SECTIONS = [('Reasoning Ability', 40), ('Quantitative Aptitude', 40)]
 
 CUES = {
     'English Language': r'passage|sentence|grammatic|synonym|antonym|idiom|phrase|paragraph|blank|error|vocabul|rearrange|comprehension|contextual|no correction|meaningful word|bold',
@@ -80,11 +97,12 @@ TOPIC_RULES = [
 CHART = r'pie chart|bar graph|line graph|bar chart|radar|given below shows the percentage'
 
 
-def assign_sections(qs):
+def assign_sections(qs, sections=None):
     """IBPS prelims is 30/35/35 in contiguous blocks, but the block ORDER varies
     by paper. Score every permutation against per-section vocabulary and keep
     the best-fitting one rather than assuming English comes first."""
     from itertools import permutations
+    sections = sections or SECTIONS
     text = {n: (qs[n]['directions'] or '') + ' ' + qs[n]['stem'] + ' ' + ' '.join(qs[n]['options'].values())
             for n in qs}
     # One VOTE per question for its own best-matching section. Summing raw cue
@@ -96,7 +114,7 @@ def assign_sections(qs):
         top = max(hits.values())
         vote[n] = max(hits, key=hits.get) if top else None
     best = None
-    for perm in permutations(SECTIONS):
+    for perm in permutations(sections):
         assign, i = {}, 1
         for name, cnt in perm:
             for n in range(i, i + cnt):
@@ -155,6 +173,14 @@ def build_inline(pid, qpdf):
     qs = spread_directions(parse_questions(strip_inline_answers(raw)))
     ss = {n: {'ans': a, 'sol': ''} for n, a in answers.items()}
     return emit(qs, ss, assign_sections(qs), '2026', pid)
+
+
+def build_rrb(pid, qpdf, year):
+    """IBPS RRB PO prelims — two sections of 40, no English."""
+    qtext = linear_text(P + qpdf)
+    qs = spread_directions(parse_questions(qtext))
+    ss = parse_solutions(split_qa(qtext)[1])
+    return emit(qs, ss, assign_sections(qs, RRB_SECTIONS), year, pid)
 
 
 def build_split(year, pid=None):
@@ -263,7 +289,9 @@ def main():
             [((pid, name, year, shift), lambda y=year, i=pid: build_split(int(y), i))
              for pid, name, year, shift in SPLIT_PAPERS] +
             [((pid, name, year, shift), lambda i=pid, f=qpdf: build_inline(i, f))
-             for pid, name, year, shift, qpdf in INLINE_PAPERS])
+             for pid, name, year, shift, qpdf in INLINE_PAPERS] +
+            [((pid, name, year, shift), lambda i=pid, f=qpdf, y=year: build_rrb(i, f, y))
+             for pid, name, year, shift, qpdf in RRB_PAPERS])
     for meta, run in jobs:
         pid, name, year, shift = meta[0], meta[1], meta[2], meta[3]
         qlist, flagged, unans = run()
@@ -271,8 +299,12 @@ def main():
         counts = {}
         for q in qlist:
             counts[q['section']] = counts.get(q['section'], 0) + 1
+        # Which exam this paper belongs to. RRB PO runs a different profile —
+        # two sections of 40, unequal 25/20 windows, flat 1 mark — so the exam
+        # engine must not assume the IBPS shape.
         papers.append({
             'id': pid, 'name': name, 'year': year, 'shift': shift,
+            'exam': 'rrb' if pid.startswith('rrbpo') else 'ibps',
             'source': 'memory-based',
             'note': ("Compiled from careerpower.in's memory-based paper — IBPS never released the original. "
                      "Answer keys and worked solutions are the source's own."

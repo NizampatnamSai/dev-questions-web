@@ -2,7 +2,7 @@ import json
 import httpx
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from utils.ai import GROQ_API_KEY, GROQ_URL, GROQ_MODEL, GROQ_MODEL_FALLBACK
+from utils.ai import GROQ_API_KEY, GROQ_URL, GROQ_MODEL, GROQ_MODEL_FALLBACK, with_reasoning
 from utils.project_knowledge import build_system_prompt, PROJECT_SUMMARY, ROUTES, BEHIND_THE_SCENES, PYTHON_ARCHITECTURE
 from deps import optional_user
 
@@ -29,9 +29,9 @@ async def _groq_chat(message: str) -> dict:
         "max_tokens": 500,
     }
     async with httpx.AsyncClient(timeout=30) as c:
-        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL}))
         if r.status_code == 429:
-            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+            r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL_FALLBACK}))
         r.raise_for_status()
     raw = r.json()["choices"][0]["message"]["content"].strip()
     if "```" in raw:

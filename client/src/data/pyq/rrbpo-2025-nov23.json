@@ -1,0 +1,1236 @@
+{
+ "id": "rrbpo-2025-nov23",
+ "questions": [
+  {
+   "id": "2025-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the position of M with respect to S?",
+   "options": {
+    "A": "Second to the left",
+    "B": "Immediate right",
+    "C": "Third to the left",
+    "D": "Fourth to the right",
+    "E": "Immediate left"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2025-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following pair of persons sit adjacent to S?",
+   "options": {
+    "A": "N and M",
+    "B": "O and R",
+    "C": "P and Q",
+    "D": "N and P",
+    "E": "Q and L"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2025-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way as per the given arrangement and thus\nform a group. Find the one that doesn’t belong to that group?",
+   "options": {
+    "A": "OP",
+    "B": "QS",
+    "C": "LN",
+    "D": "MS",
+    "E": "PL"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2025-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following person sits third to the left of R?",
+   "options": {
+    "A": "S",
+    "B": "The one who sits immediate left of M",
+    "C": "L",
+    "D": "The one who sits second to the right of Q",
+    "E": "None of these"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2025-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If all the persons are made to sit in the\nthen how many persons remain unchanged",
+   "options": {
+    "A": "One",
+    "B": "Two",
+    "C": "Three",
+    "D": "More than three",
+    "E": "None"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2025-q6",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: Only a few Sumo is Dancing\nAll Dancing is Surfing\nAll Sumo is Game\nConclusion: I. No Sumo is Surfing\nII. Some Surfing is Game",
+   "options": {
+    "A": "If only II follows",
+    "B": "If only I follows",
+    "C": "If neither I nor II follows",
+    "D": "If either I or II follows",
+    "E": "If both I and II follow"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (6-9): In the question below, some\nYou have to take the given statements to\ncommonly known facts. Read all the conclus\nlogically follows from the given statements d"
+  },
+  {
+   "id": "2025-q7",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: Only a few Run is Drive\nAll Drive is Lift\nAll Lift is Climb\nConclusion: I. All Drive is Climb\nII. Some Lift being Run is a possibility",
+   "options": {
+    "A": "If only II follows",
+    "B": "If only I follows",
+    "C": "If neither I nor II follows",
+    "D": "If either I or II follows",
+    "E": "If both I and II follow"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (6-9): In the question below, some\nYou have to take the given statements to\ncommonly known facts. Read all the conclus\nlogically follows from the given statements d"
+  },
+  {
+   "id": "2025-q8",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: Only a few Wolf is Waste\nSome Waste is Skill\nAll Skill is Price\nConclusion: I. Some Price is Wolf\nII. No Wolf is Skill",
+   "options": {
+    "A": "If only II follows",
+    "B": "If only I follows",
+    "C": "If neither I nor II follows",
+    "D": "If either I or II follows",
+    "E": "If both I and II follow\nalphabetical order in a clockwise direction from L,\nin their position (Including L)?\ne statements are given followed by some conclusions.\nbe true even if they seem to be at variance from\nsions and then decide which of the given conclusions\ndisregarding commonly known facts."
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (6-9): In the question below, some\nYou have to take the given statements to\ncommonly known facts. Read all the conclus\nlogically follows from the given statements d"
+  },
+  {
+   "id": "2025-q9",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: Only a few Ram is Yashi\nNo Yashi is Narendra\nSome Narendra is Kavita\nConclusion: I. All Ram can be Narendra\nII. No Yashi is Kavita",
+   "options": {
+    "A": "If only II follows",
+    "B": "If only I follows",
+    "C": "If neither I nor II follows",
+    "D": "If either I or II follows",
+    "E": "If both I and II follow"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (6-9): In the question below, some\nYou have to take the given statements to\ncommonly known facts. Read all the conclus\nlogically follows from the given statements d"
+  },
+  {
+   "id": "2025-q10",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons are designated between T and V?",
+   "options": {
+    "A": "Two",
+    "B": "Four",
+    "C": "Three",
+    "D": "More than four",
+    "E": "None of these"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (10-13): Study the following information carefully and answer the below questions.\nNine persons viz. R, S, T, U, V, W, X, Y and Z are working in a company at different designations (but not\nnecessarily in the same order) such as CMD, CEO, COO, CFO, MD, Senior Manager (SM), Assistant\nmanager (AM), Clerk and Peon.\nNote: The designations are given in decreasing order such that CMD is the senior-most\ndesignation and Peon is the junior-most designation.\nU is senior to CFO but not designated as CEO. Only two persons are designated between U and Z. The\nnumber of persons junior to Z is same as the number of persons senior to S. V is immediately senior to\nY who is neither CEO nor COO. Y is senior to R. Only four persons are designated between V and W. T is\nsenior to W.",
+   "explanation": "Designations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R"
+  },
+  {
+   "id": "2025-q11",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If all the persons are designated in alphabetical order from senior-most to junior-most\ndesignation, then what will be the designation of X?",
+   "options": {
+    "A": "MD",
+    "B": "AM",
+    "C": "COO",
+    "D": "CFO",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (10-13): Study the following information carefully and answer the below questions.\nNine persons viz. R, S, T, U, V, W, X, Y and Z are working in a company at different designations (but not\nnecessarily in the same order) such as CMD, CEO, COO, CFO, MD, Senior Manager (SM), Assistant\nmanager (AM), Clerk and Peon.\nNote: The designations are given in decreasing order such that CMD is the senior-most\ndesignation and Peon is the junior-most designation.\nU is senior to CFO but not designated as CEO. Only two persons are designated between U and Z. The\nnumber of persons junior to Z is same as the number of persons senior to S. V is immediately senior to\nY who is neither CEO nor COO. Y is senior to R. Only four persons are designated between V and W. T is\nsenior to W.",
+   "explanation": "Designations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R"
+  },
+  {
+   "id": "2025-q12",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following person is two persons senior to Z?",
+   "options": {
+    "A": "The one who is CEO",
+    "B": "X",
+    "C": "Y",
+    "D": "The one who is CFO",
+    "E": "V"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (10-13): Study the following information carefully and answer the below questions.\nNine persons viz. R, S, T, U, V, W, X, Y and Z are working in a company at different designations (but not\nnecessarily in the same order) such as CMD, CEO, COO, CFO, MD, Senior Manager (SM), Assistant\nmanager (AM), Clerk and Peon.\nNote: The designations are given in decreasing order such that CMD is the senior-most\ndesignation and Peon is the junior-most designation.\nU is senior to CFO but not designated as CEO. Only two persons are designated between U and Z. The\nnumber of persons junior to Z is same as the number of persons senior to S. V is immediately senior to\nY who is neither CEO nor COO. Y is senior to R. Only four persons are designated between V and W. T is\nsenior to W.",
+   "explanation": "Designations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R"
+  },
+  {
+   "id": "2025-q13",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statements is/are no",
+   "options": {
+    "A": "Z is senior to Y",
+    "B": "Two persons are designated between W and X",
+    "C": "U is the COO of the company",
+    "D": "V is three persons junior to X",
+    "E": "All are true"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (10-13): Study the following information carefully and answer the below questions.\nNine persons viz. R, S, T, U, V, W, X, Y and Z are working in a company at different designations (but not\nnecessarily in the same order) such as CMD, CEO, COO, CFO, MD, Senior Manager (SM), Assistant\nmanager (AM), Clerk and Peon.\nNote: The designations are given in decreasing order such that CMD is the senior-most\ndesignation and Peon is the junior-most designation.\nU is senior to CFO but not designated as CEO. Only two persons are designated between U and Z. The\nnumber of persons junior to Z is same as the number of persons senior to S. V is immediately senior to\nY who is neither CEO nor COO. Y is senior to R. Only four persons are designated between V and W. T is\nsenior to W.",
+   "explanation": "Designations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R"
+  },
+  {
+   "id": "2025-q14",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If in the number “386945275” all digits are\ndifference between the 3rd digit from left end and",
+   "options": {
+    "A": "2",
+    "B": "1",
+    "C": "5",
+    "D": "4",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "explanation": "Given number: 386945275\nAfter applying the given condition: 987655432\nRequired sum = 7-2 = 5"
+  },
+  {
+   "id": "2025-q15",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: A > G > C < T < E= F > O\nConclusion: I. E>O\nII. G< T",
+   "options": {
+    "A": "Only I is true",
+    "B": "Only II is true",
+    "C": "Both I and II are true",
+    "D": "Either I or II is true",
+    "E": "Neither I nor II is true"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (15-18): In the given question, the rela\nin the statements followed by some conclusions.",
+   "explanation": "I. E>O - True\nII. G< T – False"
+  },
+  {
+   "id": "2025-q16",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: H > K = U < R < E > W\nConclusion: I. H > R\nII. W < U",
+   "options": {
+    "A": "Only I is true",
+    "B": "Only II is true",
+    "C": "Both I and II are true",
+    "D": "Either I or II is true",
+    "E": "Neither I nor II is true"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (15-18): In the given question, the rela\nin the statements followed by some conclusions.",
+   "explanation": "I. H > R - False\nII. W < U - False"
+  },
+  {
+   "id": "2025-q17",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: Y > J = D > I > S > Q\nConclusion: I. J > Q\nII. I > Y",
+   "options": {
+    "A": "Only I is true",
+    "B": "Only II is true",
+    "C": "Both I and II are true",
+    "D": "Either I or II is true",
+    "E": "Neither I nor II is true\not true with respect to the final arrangement?\narranged in descending order then what is the\nd 1st digit from the right end?\nationship between different elements is shown\nFind the conclusion which is definitely true."
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (15-18): In the given question, the rela\nin the statements followed by some conclusions.",
+   "explanation": "I. J > Q - True\nII. I > Y - False"
+  },
+  {
+   "id": "2025-q18",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: B < S > I > K > Y < E\nConclusion: I. K > B\nII. I > Y",
+   "options": {
+    "A": "Only I is true",
+    "B": "Only II is true",
+    "C": "Both I and II are true",
+    "D": "Either I or II is true",
+    "E": "Neither I nor II is true"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (15-18): In the given question, the rela\nin the statements followed by some conclusions.",
+   "explanation": "I. K > B - False\nII. I > Y - True"
+  },
+  {
+   "id": "2025-q19",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit in the row?",
+   "options": {
+    "A": "10",
+    "B": "11",
+    "C": "7",
+    "D": "8",
+    "E": "9"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (19-21): Study the following information carefully\nbelow:\nA certain number of persons sit in a row such that all of them face n\nof the ends. Three persons sit between S and V. R sits exactly betw\nbetween R and V is same as between V and Q. Q sits to the right of\npersons sit between U and N. The number of persons sit to the left\npersons sit to the right of J. R sits adjacent to J."
+  },
+  {
+   "id": "2025-q20",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four among the following five pairs are alike in a certain\nwhich among the following does not belong to the group?",
+   "options": {
+    "A": "S-R",
+    "B": "R-Q",
+    "C": "U-J",
+    "D": "R-V",
+    "E": "V-Q"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (19-21): Study the following information carefully\nbelow:\nA certain number of persons sit in a row such that all of them face n\nof the ends. Three persons sit between S and V. R sits exactly betw\nbetween R and V is same as between V and Q. Q sits to the right of\npersons sit between U and N. The number of persons sit to the left\npersons sit to the right of J. R sits adjacent to J."
+  },
+  {
+   "id": "2025-q21",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement is/are true?\nI. More than three persons sit to the right of U\nII. S sits to the left of Q\nIII. Odd number of persons sit between V and N",
+   "options": {
+    "A": "Both I and II are true",
+    "B": "Only III is true",
+    "C": "Both II and III are true",
+    "D": "Both I and III are true",
+    "E": "All are true\nand answer the questions given\nnorth direction. S sits third from one\nween S and V. As many persons sit\nV. Q sits fifth to the right of U. Two\nof S is one less than the number of\nn manner and related to a group,"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (19-21): Study the following information carefully\nbelow:\nA certain number of persons sit in a row such that all of them face n\nof the ends. Three persons sit between S and V. R sits exactly betw\nbetween R and V is same as between V and Q. Q sits to the right of\npersons sit between U and N. The number of persons sit to the left\npersons sit to the right of J. R sits adjacent to J."
+  },
+  {
+   "id": "2025-q22",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many such pair of letters are there in the word ‘SEASONING’, each of which have as many\nletters between them as they have in English alphabet (both in forward and backward direction)?",
+   "options": {
+    "A": "One",
+    "B": "Four",
+    "C": "Two",
+    "D": "Five",
+    "E": "Three"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2025-q23",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many floors gap is between M and O?",
+   "options": {
+    "A": "Two",
+    "B": "Three",
+    "C": "One",
+    "D": "Four",
+    "E": "Five"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons- M, N, O, P, Q, R and S live on the seven-floor building such that the bottommost floor is\nnumbered as 1, floor just above it is numbered as 2 and so on till the topmost floor is numbered as 7.\nS lives two floors below Q on a prime numbered floor. Two persons live between S and N. The number\nof persons lives above N is same as the number of persons lives below O. M lives immediately above R.\nP doesn’t live on the adjacent floor of N.",
+   "explanation": "Floors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P"
+  },
+  {
+   "id": "2025-q24",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following statement(s) is/are true?\nI. M lives on the topmost floor\nII. O lives above P\nIII. Q lives on the adjacent floor of R",
+   "options": {
+    "A": "Both I and II",
+    "B": "Only II",
+    "C": "Both II and III",
+    "D": "Only III",
+    "E": "All I, II and III"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons- M, N, O, P, Q, R and S live on the seven-floor building such that the bottommost floor is\nnumbered as 1, floor just above it is numbered as 2 and so on till the topmost floor is numbered as 7.\nS lives two floors below Q on a prime numbered floor. Two persons live between S and N. The number\nof persons lives above N is same as the number of persons lives below O. M lives immediately above R.\nP doesn’t live on the adjacent floor of N.",
+   "explanation": "Floors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P"
+  },
+  {
+   "id": "2025-q25",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following lives on the 6th floor?",
+   "options": {
+    "A": "S",
+    "B": "P",
+    "C": "R",
+    "D": "None of these",
+    "E": "O"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons- M, N, O, P, Q, R and S live on the seven-floor building such that the bottommost floor is\nnumbered as 1, floor just above it is numbered as 2 and so on till the topmost floor is numbered as 7.\nS lives two floors below Q on a prime numbered floor. Two persons live between S and N. The number\nof persons lives above N is same as the number of persons lives below O. M lives immediately above R.\nP doesn’t live on the adjacent floor of N.",
+   "explanation": "Floors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P"
+  },
+  {
+   "id": "2025-q26",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If all the persons live in alphabetical order from bottom to top, then the position of how\nmany persons remains unchanged?",
+   "options": {
+    "A": "None",
+    "B": "One",
+    "C": "Three",
+    "D": "More than three",
+    "E": "Two"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons- M, N, O, P, Q, R and S live on the seven-floor building such that the bottommost floor is\nnumbered as 1, floor just above it is numbered as 2 and so on till the topmost floor is numbered as 7.\nS lives two floors below Q on a prime numbered floor. Two persons live between S and N. The number\nof persons lives above N is same as the number of persons lives below O. M lives immediately above R.\nP doesn’t live on the adjacent floor of N.",
+   "explanation": "Floors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P"
+  },
+  {
+   "id": "2025-q27",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "The number of persons live between M and N is same as the number of persons live between\n___ and ____.",
+   "options": {
+    "A": "P, Q",
+    "B": "R, S",
+    "C": "P, R",
+    "D": "Q, S",
+    "E": "None of these"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (23-27): Study the following information carefully and answer the questions given\nbelow:\nSeven persons- M, N, O, P, Q, R and S live on the seven-floor building such that the bottommost floor is\nnumbered as 1, floor just above it is numbered as 2 and so on till the topmost floor is numbered as 7.\nS lives two floors below Q on a prime numbered floor. Two persons live between S and N. The number\nof persons lives above N is same as the number of persons lives below O. M lives immediately above R.\nP doesn’t live on the adjacent floor of N.",
+   "explanation": "Floors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P"
+  },
+  {
+   "id": "2025-q28",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the shortest distance between book P and book S?",
+   "options": {
+    "A": "2√3m",
+    "B": "90m",
+    "C": "3√10m",
+    "D": "√34m",
+    "E": "113m"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (28-30): Study the following information carefully and answer the questions given\nbelow:\nSeven books are kept at different distances at different directions with respect to each other. Book M is\n7m to the north of book T which is 4m to the east of book O. Book N is 8m to the south of book O and\n10m to the west of book P. Book Q is 3m to the west of book R and 10m to the north of book P. Book S is\n15m to the south of book R."
+  },
+  {
+   "id": "2025-q29",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction is book M with respect to book R?",
+   "options": {
+    "A": "North-west",
+    "B": "South-east",
+    "C": "South",
+    "D": "North-east",
+    "E": "West"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (28-30): Study the following information carefully and answer the questions given\nbelow:\nSeven books are kept at different distances at different directions with respect to each other. Book M is\n7m to the north of book T which is 4m to the east of book O. Book N is 8m to the south of book O and\n10m to the west of book P. Book Q is 3m to the west of book R and 10m to the north of book P. Book S is\n15m to the south of book R."
+  },
+  {
+   "id": "2025-q30",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way and thus form a group. Which among the\nfollowing does not belong to the group?",
+   "options": {
+    "A": "N-T",
+    "B": "O-M",
+    "C": "P-R",
+    "D": "S-P",
+    "E": "T-Q"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (28-30): Study the following information carefully and answer the questions given\nbelow:\nSeven books are kept at different distances at different directions with respect to each other. Book M is\n7m to the north of book T which is 4m to the east of book O. Book N is 8m to the south of book O and\n10m to the west of book P. Book Q is 3m to the west of book R and 10m to the north of book P. Book S is\n15m to the south of book R."
+  },
+  {
+   "id": "2025-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons buys product before H?",
+   "options": {
+    "A": "Three",
+    "B": "Four",
+    "C": "Five",
+    "D": "Two",
+    "E": "Six"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nNine persons buys product one after another. Only two persons buy product after D. One person buys\nproduct between D and C. F buys product three persons before C. Number of persons buy products\nbefore C is one less than the number of persons buy products after H. Two persons buy product between\nH and A. J buys product immediately before E. B buys product before G.",
+   "explanation": "Products\nA\nF\nB\nH\nC\nG\nD\nJ\nE"
+  },
+  {
+   "id": "2025-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following buy the product four persons after A?",
+   "options": {
+    "A": "G",
+    "B": "H",
+    "C": "C",
+    "D": "J",
+    "E": "D"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nNine persons buys product one after another. Only two persons buy product after D. One person buys\nproduct between D and C. F buys product three persons before C. Number of persons buy products\nbefore C is one less than the number of persons buy products after H. Two persons buy product between\nH and A. J buys product immediately before E. B buys product before G.",
+   "explanation": "Products\nA\nF\nB\nH\nC\nG\nD\nJ\nE"
+  },
+  {
+   "id": "2025-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following statement is/are true?",
+   "options": {
+    "A": "More than three persons buy the product after J",
+    "B": "No one buys the product between H and A",
+    "C": "E buys the product before C",
+    "D": "A buys the products before F",
+    "E": "None is true"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nNine persons buys product one after another. Only two persons buy product after D. One person buys\nproduct between D and C. F buys product three persons before C. Number of persons buy products\nbefore C is one less than the number of persons buy products after H. Two persons buy product between\nH and A. J buys product immediately before E. B buys product before G.",
+   "explanation": "Products\nA\nF\nB\nH\nC\nG\nD\nJ\nE"
+  },
+  {
+   "id": "2025-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If all the persons buy product in alphabetical order from top to bottom, then the position of\nhow many persons remains unchanged?",
+   "options": {
+    "A": "One",
+    "B": "None",
+    "C": "Two",
+    "D": "Three",
+    "E": "More than three"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nNine persons buys product one after another. Only two persons buy product after D. One person buys\nproduct between D and C. F buys product three persons before C. Number of persons buy products\nbefore C is one less than the number of persons buy products after H. Two persons buy product between\nH and A. J buys product immediately before E. B buys product before G.",
+   "explanation": "Products\nA\nF\nB\nH\nC\nG\nD\nJ\nE"
+  },
+  {
+   "id": "2025-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If A is related to H in a certain way, similarly F is related to C then find who among the\nfollowing is related to D?",
+   "options": {
+    "A": "J",
+    "B": "E",
+    "C": "H",
+    "D": "C",
+    "E": "B"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given\nbelow:\nNine persons buys product one after another. Only two persons buy product after D. One person buys\nproduct between D and C. F buys product three persons before C. Number of persons buy products\nbefore C is one less than the number of persons buy products after H. Two persons buy product between\nH and A. J buys product immediately before E. B buys product before G.",
+   "explanation": "Products\nA\nF\nB\nH\nC\nG\nD\nJ\nE"
+  },
+  {
+   "id": "2025-q36",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How A is related to V?",
+   "options": {
+    "A": "Grandmother",
+    "B": "Niece",
+    "C": "Sister",
+    "D": "Mother",
+    "E": "Sister-in-law"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-38): Study the following information carefully and answer the questions given\nbelow:\nT is son-in-law of A who is the sister-in-law of W. W is unmarried. V is niece of S who is unmarried child\nof M. M is sibling of W. A has only two children. J is parent of V. Number of male members are more than\nthe female members."
+  },
+  {
+   "id": "2025-q37",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the ratio of male to female members in the family?",
+   "options": {
+    "A": "5:2",
+    "B": "4:3",
+    "C": "2:5",
+    "D": "1:1",
+    "E": "2:1"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-38): Study the following information carefully and answer the questions given\nbelow:\nT is son-in-law of A who is the sister-in-law of W. W is unmarried. V is niece of S who is unmarried child\nof M. M is sibling of W. A has only two children. J is parent of V. Number of male members are more than\nthe female members."
+  },
+  {
+   "id": "2025-q38",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If G is married to S, then how is G related to A?",
+   "options": {
+    "A": "Daughter-in-law",
+    "B": "Mother",
+    "C": "Father",
+    "D": "Son-in-law",
+    "E": "Brother"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (36-38): Study the following information carefully and answer the questions given\nbelow:\nT is son-in-law of A who is the sister-in-law of W. W is unmarried. V is niece of S who is unmarried child\nof M. M is sibling of W. A has only two children. J is parent of V. Number of male members are more than\nthe female members."
+  },
+  {
+   "id": "2025-q39",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If we form a four-letter meaningful word by using the third, fifth, seventh and eighth letter from\nthe left end of the word ‘GRASSWOOD’, then which of the following will be the fourth letter of the\nmeaningful word thus formed. If more than one meaningful word is formed mark Z as your answer. If\nno meaningful word is formed, mark X as your answer?",
+   "options": {
+    "A": "S",
+    "B": "A",
+    "C": "O",
+    "D": "X",
+    "E": "Z"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2025-q40",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Find the odd one out?",
+   "options": {
+    "A": "RUQ",
+    "B": "DGC",
+    "C": "ORP",
+    "D": "WZV",
+    "E": "CFB"
+   },
+   "correctAnswer": "C",
+   "explanation": "3rd letter is just preceded by 1st letter and 2nd"
+  },
+  {
+   "id": "2025-q41",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "18, 22, 49, 65, 190, ?",
+   "options": {
+    "A": "232",
+    "B": "226",
+    "C": "230",
+    "D": "218",
+    "E": "214"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (41-46): What will come in the place",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2025-q42",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "?, 219, 246, 283, 331, 391",
+   "options": {
+    "A": "201",
+    "B": "210",
+    "C": "205",
+    "D": "224",
+    "E": "219"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (41-46): What will come in the place",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2025-q43",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "4.25, 17, 68, 272, ?, 4352",
+   "options": {
+    "A": "1332",
+    "B": "1520",
+    "C": "1144",
+    "D": "1020",
+    "E": "1088"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (41-46): What will come in the place",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2025-q44",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "37, ?, 148, 296, 592, 1184",
+   "options": {
+    "A": "74",
+    "B": "77",
+    "C": "78",
+    "D": "71",
+    "E": "80"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (41-46): What will come in the place",
+   "explanation": "The pattern of the series:\nletter is 3rd succeeded by 1st letter."
+  },
+  {
+   "id": "2025-q45",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "?, 9, 27, 13.5, 40.5, 20.25",
+   "options": {
+    "A": "14",
+    "B": "13",
+    "C": "18",
+    "D": "17",
+    "E": "19"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-46): What will come in the place",
+   "explanation": "The pattern of the series:"
+  },
+  {
+   "id": "2025-q46",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "113, 116, 111, 118, ?, 120",
+   "options": {
+    "A": "111",
+    "B": "110",
+    "C": "109",
+    "D": "104",
+    "E": "103\nof question (?) mark in following number series:"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-46): What will come in the place",
+   "explanation": "The pattern of the series:\nSolutions (47-52):\nTotal items manufactured = 330\nTotal items sold = 100 +150 = 250\nUnsold items = 330 – 250 = 80\nSimilarly,\nTotal items Number\nNumber of\nShops manufactured (shirt+ trousers\nshirts sold\ntrouser) sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75"
+  },
+  {
+   "id": "2025-q47",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the average number of unsold items in shop A and in shop C.",
+   "options": {
+    "A": "80",
+    "B": "81",
+    "C": "90",
+    "D": "91",
+    "E": "100"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (47-52): The table given below shows the total number of shirts and trousers\nmanufactured, number of trousers sold and number of shirts sold by four shops.\nTotal items manufactured (shirt+ Number of shirts Number of trousers\nShops\ntrouser) sold sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nNote – Number of items manufactured = items sold + items unsold\nTotal items = total number of shirts and trousers."
+  },
+  {
+   "id": "2025-q48",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the 62% of the items manufactured by C are shirts, then find the unsold trousers in C is\nwhat percentage of total unsold items in shop D.",
+   "options": {
+    "A": "40",
+    "B": "31",
+    "C": "50",
+    "D": "51",
+    "E": "10"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (47-52): The table given below shows the total number of shirts and trousers\nmanufactured, number of trousers sold and number of shirts sold by four shops.\nTotal items manufactured (shirt+ Number of shirts Number of trousers\nShops\ntrouser) sold sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nNote – Number of items manufactured = items sold + items unsold\nTotal items = total number of shirts and trousers.",
+   "explanation": "Total shirts manufactured = 62% of 450 = 279\nTotal unsold shirts = 279 – 250 = 29\nTotal unsold trousers =80 – 29 = 51"
+  },
+  {
+   "id": "2025-q49",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of shirts sold by A and C together to twice the total unsold items in D.",
+   "options": {
+    "A": "8:7",
+    "B": "8:11",
+    "C": "9:8",
+    "D": "9:1",
+    "E": "7:4"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (47-52): The table given below shows the total number of shirts and trousers\nmanufactured, number of trousers sold and number of shirts sold by four shops.\nTotal items manufactured (shirt+ Number of shirts Number of trousers\nShops\ntrouser) sold sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nNote – Number of items manufactured = items sold + items unsold\nTotal items = total number of shirts and trousers.",
+   "explanation": "Required ratio = 100+250: 2×100=350:200=7:4"
+  },
+  {
+   "id": "2025-q50",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the difference between total sold items and total unsold items in all the shops.",
+   "options": {
+    "A": "925",
+    "B": "981",
+    "C": "890",
+    "D": "991",
+    "E": "910"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (47-52): The table given below shows the total number of shirts and trousers\nmanufactured, number of trousers sold and number of shirts sold by four shops.\nTotal items manufactured (shirt+ Number of shirts Number of trousers\nShops\ntrouser) sold sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nNote – Number of items manufactured = items sold + items unsold\nTotal items = total number of shirts and trousers.",
+   "explanation": "Required difference =1225 – 300 = 925\nof Total items Total items\nsold (shirt+ unsold (shirt+\ntrouser) trouser)\n250 80\n205 40\n370 80\n400 100"
+  },
+  {
+   "id": "2025-q51",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the cost of each shirt is Rs 24 and the cost of each trousers is 25% more than the shirts.\nFind the revenue generated by A from selling all the items.",
+   "options": {
+    "A": "6900",
+    "B": "9681",
+    "C": "6690",
+    "D": "9000",
+    "E": "6000"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (47-52): The table given below shows the total number of shirts and trousers\nmanufactured, number of trousers sold and number of shirts sold by four shops.\nTotal items manufactured (shirt+ Number of shirts Number of trousers\nShops\ntrouser) sold sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nNote – Number of items manufactured = items sold + items unsold\nTotal items = total number of shirts and trousers.",
+   "explanation": "Cost of shirts = 24\nCost of trousers = 30\nRequired answer = 24×100+150×30= 6900"
+  },
+  {
+   "id": "2025-q52",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the ratio of defective and non defective items manufactured by B is 1:4 and 20% of the\nitems sold are defectives, find the difference between unsold defective items and sold non-\ndefective items.",
+   "options": {
+    "A": "156",
+    "B": "181",
+    "C": "190",
+    "D": "191",
+    "E": "100"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (47-52): The table given below shows the total number of shirts and trousers\nmanufactured, number of trousers sold and number of shirts sold by four shops.\nTotal items manufactured (shirt+ Number of shirts Number of trousers\nShops\ntrouser) sold sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nNote – Number of items manufactured = items sold + items unsold\nTotal items = total number of shirts and trousers.",
+   "explanation": "Let defective and non defective items manufactured\n5x = 245\n49 = x\nDefective items manufactured= 1x= 49\nNon defective items manufactured = 4x=196\nDefective items sold = 20% of 205 = 41\nNon defective items sold =205 – 41 = 164\nDefective items unsold = 49 – 41 = 8\nNon defective items unsold =196 – 164 =32\nRequired answer =164 - 8 = 156"
+  },
+  {
+   "id": "2025-q53",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If out of the total item B sold in march and April together, 50% are red, 25 are black, and\nthe rest are green in colour, then find the number of green items B sold by in march and April\ntogether.",
+   "options": {
+    "A": "237",
+    "B": "365",
+    "C": "245",
+    "D": "240",
+    "E": "260"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (53-58): Read the following line graph carefully and answer the questions given\nbelow. The graph shows the number of items A and items B sold in four months.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "=530-265-25=240"
+  },
+  {
+   "id": "2025-q54",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the difference between the total number of item A sold in April and may together and\nthe number of items B sold in March.",
+   "options": {
+    "A": "80",
+    "B": "95",
+    "C": "90",
+    "D": "94",
+    "E": "35"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (53-58): Read the following line graph carefully and answer the questions given\nbelow. The graph shows the number of items A and items B sold in four months.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required difference = 250 + 160 – 330 = 80"
+  },
+  {
+   "id": "2025-q55",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of item B sold in May is what percent more or less than that of in April?",
+   "options": {
+    "A": "10%",
+    "B": "75%",
+    "C": "60%",
+    "D": "30%",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (53-58): Read the following line graph carefully and answer the questions given\nbelow. The graph shows the number of items A and items B sold in four months.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2025-q56",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If the number of item A sold in July are 40% more than that of in May and out of which 3/4th\nare of defective items A. If in July sold defective item A in Rs.5, then find the total revenue\ncollected in July selling all defective item A?",
+   "options": {
+    "A": "Rs 420",
+    "B": "Rs 360",
+    "C": "Rs 850",
+    "D": "Rs 800",
+    "E": "Rs 840"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (53-58): Read the following line graph carefully and answer the questions given\nbelow. The graph shows the number of items A and items B sold in four months.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Item A sold in July = 140% of 160 = 224\nDefective item A = 3/4 of 224 = 168\nRequired answer = 5×168=Rs 840"
+  },
+  {
+   "id": "2025-q57",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of the total number of item A and B together sold in March to the total number\nof items A and B together sold in May.",
+   "options": {
+    "A": "4: 5",
+    "B": "3: 5",
+    "C": "5: 4",
+    "D": "5: 3",
+    "E": "None of these"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (53-58): Read the following line graph carefully and answer the questions given\nbelow. The graph shows the number of items A and items B sold in four months.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required ratio = 320+330 : 160+180\n= 650 : 340 = 65:34"
+  },
+  {
+   "id": "2025-q58",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the total items A and B sold in the month of June is what percentage of items A sold in\nthe month of April.",
+   "options": {
+    "A": "164%",
+    "B": "175%",
+    "C": "160%",
+    "D": "130%",
+    "E": "154%"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (53-58): Read the following line graph carefully and answer the questions given\nbelow. The graph shows the number of items A and items B sold in four months.\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "by B be 1x and 4x respectively."
+  },
+  {
+   "id": "2025-q59",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The speed of a boat in still water is 20 km/hr and the ratio of downstream to upstream\nspeed of the boat is 5 : 3 respectively. Find the time taken by the boat to cover 240 km\ndownstream (in hours).",
+   "options": {
+    "A": "9.4",
+    "B": "9.2",
+    "C": "9.6",
+    "D": "9.8",
+    "E": "10.2"
+   },
+   "correctAnswer": "C",
+   "explanation": "Information Given in the Question:\nSpeed in still water = 20 km/hr\nRatio of downstream to upstream speed = 5 : 3\nDistance downstream = 240 km\nConcept/Formula Used in the Question:\nLet downstream speed = 5x and upstream speed = 3x\nSpeed in still water = (Downstream + Upstream) / 2\nTime = Distance / Speed\nDetailed Explanation:\nLet downstream speed = 5x and upstream speed = 3x\nThen, speed in still water = (5x + 3x)/2 = 8x/2 = 4x\nGiven 4x = 20 → x = 5\nSo downstream speed = 5x = 5 × 5 = 25 km/hr\nTime taken to cover 240 km downstream = Distance /"
+  },
+  {
+   "id": "2025-q60",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A vessel contains milk and water in the ratio 5 : 3, respectively. If 16 liters of the mixture\nare taken out and 4 liters of water are added, the ratio of milk to water becomes 3 : 2. Find the\ninitial quantity of milk (in liters).",
+   "options": {
+    "A": "70",
+    "B": "48",
+    "C": "42",
+    "D": "75",
+    "E": "80"
+   },
+   "correctAnswer": "A",
+   "explanation": "Information Given in the Question:\nInitial milk : water = 5 : 3\n16 liters of mixture is removed\n4 liters of water is added afterward\nNew milk : water ratio = 3 : 2\nDetailed Explanation:\nATQ,\nx=112\nInitial quantity of milk = (5/8) × 112 = 70 liters\nSpeed = 240 / 25 = 9.6 hours"
+  },
+  {
+   "id": "2025-q61",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A and B together can complete a work in 20 days, and A alone can complete the same work\nin 30 days. If 40% of the work is completed by B in (Y + 5) days, then find the value of Y.",
+   "options": {
+    "A": "23",
+    "B": "19",
+    "C": "25",
+    "D": "20",
+    "E": "17"
+   },
+   "correctAnswer": "B",
+   "explanation": "Information Given in the Question:\nA + B can do the work in 20 days\nA alone can do it in 30 days\nB does 40% of the work in (Y + 5) days\nWe need to find the value of Y\nDetailed Explanation:\nLet the total work (LCM of 20 and 30) = 60 units\nEfficiency of A and B together = 60/20 = 3 units/day\nEfficiency of A = 60/30 = 2 units/day\nEfficiency of B = 3 - 2 = 1 units/day\nATQ,\n24 = Y +5\n19 = Y"
+  },
+  {
+   "id": "2025-q62",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of the cost price to the selling price of an article is 4 : 5. The marked price of the\narticle is Rs 8000, and it is sold after allowing a 20% discount. Find the profit (in Rs).",
+   "options": {
+    "A": "1800",
+    "B": "1540",
+    "C": "1340",
+    "D": "1280",
+    "E": "1420"
+   },
+   "correctAnswer": "D",
+   "explanation": "Information Given in the Question:\nCP : SP = 4 : 5\nMarked Price (MP) = ₹8000\nDiscount = 20%\nConcept/Formula Used in the Question:\nSP = MP × (1 – Discount%)\nProfit = SP – CP\nDetailed Explanation:\nSelling Price after 20% discount:\nSP=8000×(1– 0.20)=8000×0.8=Rs 6400\nLet CP : SP = 4 : 5\n⇒ CP = 4x, SP = 5x\nSP = Rs 6400\n⇒ 5x = 6400\n⇒ x = 1280\nSo, CP = 4x = 4 × 1280 = Rs 5120\nProfit = SP – CP = 6400 – 5120 = Rs1280"
+  },
+  {
+   "id": "2025-q63",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A started a business with an investment of Rs 6000. After a few months, B joined the\npartnership with an investment of Rs 9000. At the end of the year, the total profit was Rs 4800,\nout of which B’s share was Rs 1600. Find the time period (in months) for which B invested his\nmoney in the business.",
+   "options": {
+    "A": "8",
+    "B": "3",
+    "C": "6",
+    "D": "5",
+    "E": "4"
+   },
+   "correctAnswer": "E",
+   "explanation": "Information Given in the Question:\nA’s investment = Rs 6000 for 12 months\nB’s investment = 9000 for x months\nB’s share in profit = Rs 1600 out of Rs 4800\nConcept/Formula Used in the Question:\nProfit sharing ratio = Investment × Time\n\nDetailed Explanation:\nLet the time period (in months) for which B investe\nProfit sharing ratio A to B = 6000×12 :9000×X\nATQ,\n12 = 3X\n4 = X"
+  },
+  {
+   "id": "2025-q64",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Train X is 60% longer than Train Y. The speed of Train X is 90 km/h. Train X crosses a pole\nin 16 seconds. If both trains are running in the opposite direction and cross each other in 13\nseconds, find the time taken by Train Y to cross a platform 500 meters long.",
+   "options": {
+    "A": "29",
+    "B": "12",
+    "C": "23",
+    "D": "30",
+    "E": "33"
+   },
+   "correctAnswer": "D",
+   "explanation": "Information Given in the Question:\nTrain X is 60% longer than Train Y.\nSpeed of Train X = 90 km/h.\nTrain X crosses a pole in 16 seconds.\nTime taken for Train X and Train Y to cross each other\nRequired: Time taken by Train Y to cross a platform of\nConcept/Formula Used in the Question:\nSpeed (in m/s) = (Speed in km/h) × (5/18)\nLength = Speed × Time\nWhen two trains cross each other in opposite direction\nRelative Speed = Sum of their speeds\nTime to cross platform = (Length of Train Y + Platform\nDetailed Explanation:\nConvert speed of Train X to m/s:\nLength of Train X =25×16=400 meters\nLet length of Train Y = L meters\nGiven Train X is 60% longer:\nLet speed of Train Y = S m/s\nTrains cross each other in 13 seconds:\nRelative speed=25+S\nLength of train X + Length of train Y = (400+250)=650\n650=(25+S)×13\nS=25 m/s\nTime for Train Y to cross 500-meter platform:\n\"Total distance=250+500=750 meters\ned his money in the business be X\n(opposite direction) = 13 seconds.\n500 meters.\nns:\nLength) / Speed of Train Y\nmeters"
+  },
+  {
+   "id": "2025-q65",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The ratio of P to Q is 3 : 4, and R is 6 more than Q. If the sum of P, Q, and R is 83, find the\nvalue of Q. (P, Q, and R positive integers)",
+   "options": {
+    "A": "28",
+    "B": "24",
+    "C": "21",
+    "D": "34",
+    "E": "40"
+   },
+   "correctAnswer": "A",
+   "explanation": "Information Given in the Question:\nRatio of P : Q = 3 : 4\nR = Q + 6\nP + Q + R = 83\nP, Q, R are positive integers.\nConcept/Formula Used in the Question:\nRatio values imply: P = 3x, Q = 4x for some x\nR = Q + 6 = 4x + 6\nTotal sum: P + Q + R = 83\nDetailed Explanation:\nLet:\nP = 3x\nQ = 4x\nR = 4x + 6\nATQ,\n3x+4x+(4x+6)=83\n11x+6=83\n11x=77\nx=7\nQ = 4x = 4 × 7 = 28"
+  },
+  {
+   "id": "2025-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The perimeter of a rectangle is 74 cm, and the length of the rectangle is 4 cm more than\ntwice the breadth. Find the area of the rectangle (in cm²).",
+   "options": {
+    "A": "304",
+    "B": "286",
+    "C": "294",
+    "D": "226",
+    "E": "258"
+   },
+   "correctAnswer": "B",
+   "explanation": "Information Given in the Question:\nPerimeter of the rectangle = 74 cm\nLength = 2 × Breadth + 4 cm\nNeed to find: Area of the rectangle\nConcept/Formula Used in the Question:\nPerimeter of rectangle = 2 × (Length + Breadth)\nArea of rectangle = Length × Breadth\nDetailed Explanation:\nLet breadth = x cm\nThen, length = 2x + 4 cm\nPerimeter = 2 × (length + breadth) = 74\n2×((2x+4)+x)=74\n2×(3x+4)=74\n6x+8=74\n6x=66\nx=11\nSo:\nBreadth = 11 cm\nLength = 2 × 11 + 4 = 26 cm\nArea = 26 × 11 = 286 cm²"
+  },
+  {
+   "id": "2025-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "35% of A is equal to 70% of B. If the average of A and B is 10 more than B, and the average\nof A, B, and C is 60, then find the average of A and C.",
+   "options": {
+    "A": "100",
+    "B": "90",
+    "C": "80",
+    "D": "70",
+    "E": "50"
+   },
+   "correctAnswer": "C",
+   "explanation": "Information Given in the Question:\n35% of A = 70% of B\nAverage of A and B = B + 10\nAverage of A, B, and C = 60\nRequired: Average of A and C\nConcept/Formula Used in the Question:\nPercentages: 0.35A=0.70B\nAverage of two numbers: (A+B)/2\nAverage of three numbers: (A+B+C)/3\nDetailed Explanation:\nFrom 0.35A=0.70B, divide both sides by 0.35:\nA=2B\nAverage of A and B is B + 10:\nNow, A = 2B = 40\nUse the average of A, B, C to find C:\n60+C=180\nC=120\nRequired: Average of A and C = (40 + 120)/2 = 80"
+  },
+  {
+   "id": "2025-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A set M consists of five consecutive multiples of 6, while another set N consists of four\nconsecutive multiples of 8. If the average of N is 4 less than the average of M, and the average of\nthe smallest and largest numbers of M is 66, then find the sum of the numbers in set N.",
+   "options": {
+    "A": "296",
+    "B": "303",
+    "C": "248",
+    "D": "240",
+    "E": "216"
+   },
+   "correctAnswer": "C",
+   "explanation": "Information Given in the Question:\nSet M: 5 consecutive multiples of 6\nSet N: 4 consecutive multiples of 8\nAverage of N is 4 less than average of M\nAverage of smallest and largest of M = 66\nRequired: Sum of all numbers in set N\nConcept/Formula Used in the Question:\nFor consecutive numbers, average = middle term\nAverage of smallest and largest = (First + Last)/2\nAverage × Number of terms = Total sum\n\nDetailed Explanation:\nLet the 5 consecutive multiples of 6 in M be:\n6x,6x+6,6x+12,6x+18,6x+24\nSo, smallest = 6x\nLargest = 6x + 24\nAverage of smallest and largest =\n6x+12=66\n6x=54\nx=9\nSo, the numbers in set M are:\n54, 60, 66, 72, 78\nAverage of M = middle term = 66\nAverage of N = 66 - 4 = 62\nLet the 4 consecutive multiples of 8 be:\n8y,8y+8,8y+16,8y+24\nAverage = 8y + 12\n8y+12=62\n8y=50\ny=6.25\nSo, numbers in N are:\n8×6.25=50, then 58, 66, 74\nSum of N = 50+58+66+74=248"
+  },
+  {
+   "id": "2025-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Riya scores 180 in English and 160 in Science. Meena scores 190 in English. If the average\nscore of Meena is 10 more than the average score of Riya in both subjects, then find the average\nmarks obtained by Riya and Meena in Science.",
+   "options": {
+    "A": "140",
+    "B": "145",
+    "C": "150",
+    "D": "165",
+    "E": "180"
+   },
+   "correctAnswer": "D",
+   "explanation": "Information Given in the Question:\nRiya's English score = 180\nRiya's Science score = 160\nMeena's English score = 190\nMeena’s average score = Riya’s average + 10\nNeed to find the average of their Science scores\nConcept/Formula Used in the Question:\nAverage = (Sum of scores) / Number of subjects\nUse given averages to find Meena’s Science score\nAverage of two numbers = (Sum of both) / 2\nDetailed Explanation:\nRiya's Average =\nMeena’s average = Riya’s average + 10 = 170 + 10 =\nLet Meena’s Science marks = x\nThen, Meena's average\n\nSo, Meena's Science = 170\nRiya's Science = 160"
+  },
+  {
+   "id": "2025-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Monthly saving of Ravi is 50% of his monthly expense. If his monthly expense increases by\n50% and his monthly income increases by 20%, then his monthly saving decreases by Rs. 6000.\nFind the initial monthly income of Ravi.",
+   "options": {
+    "A": "44000",
+    "B": "45000",
+    "C": "42000",
+    "D": "48000",
+    "E": "47000"
+   },
+   "correctAnswer": "B",
+   "explanation": "Information Given in the Question:\nRavi’s saving = 50% of his expense → Saving = 0.5 × Expense\nIncome = Expense + Saving = 1.5 × Expense\nAfter changes:\nExpense increases by 50% → New Expense = 1.5 × Expense\nIncome increases by 20% → New Income = 1.2 × Income\nNew Saving = New Income - New Expense\nNew Saving is Rs 6000 less than original saving\nNeed to find original income\nDetailed Explanation:\nLet monthly expense be Rs x\nSaving = 0.5x, Income = x + 0.5x = 1.5x\nNew Expense = 1.5x\nNew Income = 1.2 × 1.5x = 1.8x\nNew Saving = 1.8x - 1.5x = 0.3x\nDifference in savings = 0.5x - 0.3x = 0.2x = Rs 6000\n⇒ x = Rs 30,000\nSo, original income = 1.5x = 1.5 × 30,000 = Rs 45,000\nSolutions (71-73):\nFor A\nLet the laptops sold in august and September is 7x and 13 x.\nLaptops sold in October = 13x – 7x = 6x\nFor B\nLet the laptops sold in October = 2m\nLet the laptops sold in august = m\nATQ,\n36 + 13x = 88\n52 = 13x\n4 = x\n2m =12+7x\n2m = 40\nCompanies August September October\nA 28 52 24\nB 20 36 40\nTotal 48 88 64"
+  },
+  {
+   "id": "2025-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the total laptops sold by A in all the given months.",
+   "options": {
+    "A": "104",
+    "B": "105",
+    "C": "106",
+    "D": "109",
+    "E": "110"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (71-73): Read the instruction and answer the following questions.\nThere are two company A and B selling laptops in three different months (august, September and\nOctober).\nFor A - The ratio of laptops sold in august and September is 7:13. The difference between laptops sold\nin august and September is equal to number of laptops sold in October.\nFor B – the number of laptops sold in October is double than august. 36 laptops sold in September.\nLaptops sold in October by B is 12 more than laptops sold by A in August\nNote – total laptops sold in September from both the shops = 88",
+   "explanation": "Required answer = 28+52+24 = 104"
+  },
+  {
+   "id": "2025-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the ratio of laptops sold in August by A to total laptops sold in October by A and B.",
+   "options": {
+    "A": "10:11",
+    "B": "16:11",
+    "C": "16:7",
+    "D": "7:16",
+    "E": "11:16"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (71-73): Read the instruction and answer the following questions.\nThere are two company A and B selling laptops in three different months (august, September and\nOctober).\nFor A - The ratio of laptops sold in august and September is 7:13. The difference between laptops sold\nin august and September is equal to number of laptops sold in October.\nFor B – the number of laptops sold in October is double than august. 36 laptops sold in September.\nLaptops sold in October by B is 12 more than laptops sold by A in August\nNote – total laptops sold in September from both the shops = 88",
+   "explanation": "Required answer = 28:64 = 7: 16"
+  },
+  {
+   "id": "2025-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Find the average of laptops sold by A in October and B in September.",
+   "options": {
+    "A": "30",
+    "B": "50",
+    "C": "60",
+    "D": "80",
+    "E": "100"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (71-73): Read the instruction and answer the following questions.\nThere are two company A and B selling laptops in three different months (august, September and\nOctober).\nFor A - The ratio of laptops sold in august and September is 7:13. The difference between laptops sold\nin august and September is equal to number of laptops sold in October.\nFor B – the number of laptops sold in October is double than august. 36 laptops sold in September.\nLaptops sold in October by B is 12 more than laptops sold by A in August\nNote – total laptops sold in September from both the shops = 88"
+  },
+  {
+   "id": "2025-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man invested Rs P in simple interest at 10% p.a. for 3 years and received interest of Rs\n960. If he had invested Rs (P + 400) at compound interest at the same rate for two years, then\nfind the amount he received after two years (in Rs).",
+   "options": {
+    "A": "4424",
+    "B": "4536",
+    "C": "4356",
+    "D": "4562",
+    "E": "4882"
+   },
+   "correctAnswer": "C",
+   "explanation": "Information Given in the Question:\nSimple Interest (SI) = ₹960\nRate of Interest (R) = 10% p.a.\nTime for SI = 3 years\nCompound Interest scenario: Principal = P + 400\nTime = 2 years\nRate = 10% p.a.\nConcept/Formula Used in the Question:\nSimple Interest (SI) = (P × R × T) / 100\nCompound Amount (A) = P × (1 + R/100)T\nDetailed Explanation:\nUse SI formula to find the original Principal (P):\nNow, new principal for compound interest = P + 400\nUse compound amount formula:"
+  },
+  {
+   "id": "2025-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q75 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "190",
+    "B": "170",
+    "C": "120",
+    "D": "240",
+    "E": "200"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (75-80): What approximate value\nfollowing questions? (You are not expected to c",
+   "explanation": "?=630-460\n?=170\n= 3200 + 400 = Rs 3600"
+  },
+  {
+   "id": "2025-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q76 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "4",
+    "B": "16",
+    "C": "30",
+    "D": "8",
+    "E": "24"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (75-80): What approximate value\nfollowing questions? (You are not expected to c"
+  },
+  {
+   "id": "2025-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q77 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "25",
+    "B": "15",
+    "C": "20",
+    "D": "5",
+    "E": "10"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (75-80): What approximate value\nfollowing questions? (You are not expected to c"
+  },
+  {
+   "id": "2025-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q78 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "42",
+    "B": "36",
+    "C": "24",
+    "D": "26",
+    "E": "16"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (75-80): What approximate value\nfollowing questions? (You are not expected to c"
+  },
+  {
+   "id": "2025-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q79 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "40",
+    "B": "70",
+    "C": "90",
+    "D": "60",
+    "E": "20\nwill come in place of question mark (?) in the\ncalculate the exact value)"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (75-80): What approximate value\nfollowing questions? (You are not expected to c",
+   "explanation": "?=40"
+  },
+  {
+   "id": "2025-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q80 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "440",
+    "B": "585",
+    "C": "695",
+    "D": "605",
+    "E": "820\nSolutions\nS1. Ans.(d)\nSol.\nS2. Ans.(c)\nSol.\nS3. Ans.(e)\nSol.\n\nS4. Ans.(c)\nSol.\nS5. Ans.(b)\nSol.\nS6. Ans.(a)\nSol.\nS7. Ans.(b)\nSol.\n\nS8. Ans.(c)\nSol.\nS9. Ans.(c)\nSol.\nS10. Ans.(d)\nSol.\nDesignations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R\nS11. Ans.(b)\nSol.\nDesignations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R\n\nS12. Ans.(d)\nSol.\nDesignations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R\nS13. Ans.(d)\nSol.\nDesignations Persons\nCMD T\nCEO W\nCOO U\nCFO S\nMD X\nSenior Manager (SM) Z\nAssistant Manager (AM) V\nClerk Y\nPeon R\nS14. Ans.(b)\nSol. Given number: 386945275\nAfter applying the given condition: 987655432\nRequired sum = 7-2 = 5\nS15. Ans.(a)\nSol. I. E>O - True\nII. G< T – False\nS16. Ans.(e)\nSol. I. H > R - False\nII. W < U - False\nS17. Ans.(a)\nSol. I. J > Q - True\nII. I > Y - False\n\nS18. Ans.(b)\nSol. I. K > B - False\nII. I > Y - True\nS19. Ans.(e)\nSol.\nS20. Ans.(b)\nSol.\nS21. Ans.(e)\nSol.\nS22. Ans.(d)\nSol.\nS23. Ans.(b)\nSol.\nFloors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P\n\nS24. Ans.(a)\nSol.\nFloors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P\nS25. Ans.(c)\nSol.\nFloors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P\nS26. Ans.(e)\nSol.\nFloors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P\nS27. Ans.(d)\nSol.\nFloors Persons\n7 M\n6 R\n5 N\n4 Q\n3 O\n2 S\n1 P\n\nS28. Ans.(d)\nSol.\nS29. Ans.(a)\nSol.\nS30. Ans.(d)\nSol.\n\nS31. Ans.(a)\nSol.\nProducts\nA\nF\nB\nH\nC\nG\nD\nJ\nE\nS32. Ans.(c)\nSol.\nProducts\nA\nF\nB\nH\nC\nG\nD\nJ\nE\nS33. Ans.(d)\nSol.\nProducts\nA\nF\nB\nH\nC\nG\nD\nJ\nE\n\nS34. Ans.(a)\nSol.\nProducts\nA\nF\nB\nH\nC\nG\nD\nJ\nE\nS35. Ans.(c)\nSol.\nProducts\nA\nF\nB\nH\nC\nG\nD\nJ\nE\nS36. Ans.(a)\nSol.\nS37. Ans.(b)\nSol.\n\nS38. Ans.(a)\nSol.\nS39. Ans.(d)\nS40. Ans.(c)\nSol. 3rd letter is just preceded by 1st letter and 2nd\nS41. Ans.(b)\nSol. The pattern of the series:\nS42. Ans.(a)\nSol. The pattern of the series:\nS43. Ans.(e)\nSol. The pattern of the series:\nS44. Ans.(a)\nSol. The pattern of the series:\nletter is 3rd succeeded by 1st letter.\nS45. Ans.(c)\nSol. The pattern of the series:\nS46. Ans.(c)\nSol. The pattern of the series:\nSolutions (47-52):\nTotal items manufactured = 330\nTotal items sold = 100 +150 = 250\nUnsold items = 330 – 250 = 80\nSimilarly,\nTotal items Number\nNumber of\nShops manufactured (shirt+ trousers\nshirts sold\ntrouser) sold\nA 330 100 150\nB 245 45 160\nC 450 250 120\nD 500 325 75\nS47. Ans.(a)\nSol.\nS48. Ans.(d)\nSol. Total shirts manufactured = 62% of 450 = 279\nTotal unsold shirts = 279 – 250 = 29\nTotal unsold trousers =80 – 29 = 51\nS49. Ans.(e)\nSol. Required ratio = 100+250: 2×100=350:200=7:4\nS50. Ans.(a)\nSol. Required difference =1225 – 300 = 925\nof Total items Total items\nsold (shirt+ unsold (shirt+\ntrouser) trouser)\n250 80\n205 40\n370 80\n400 100\nS51. Ans.(a)\nSol. Cost of shirts = 24\nCost of trousers = 30\nRequired answer = 24×100+150×30= 6900\nS52. Ans.(a)\nSol. Let defective and non defective items manufactured\n5x = 245\n49 = x\nDefective items manufactured= 1x= 49\nNon defective items manufactured = 4x=196\nDefective items sold = 20% of 205 = 41\nNon defective items sold =205 – 41 = 164\nDefective items unsold = 49 – 41 = 8\nNon defective items unsold =196 – 164 =32\nRequired answer =164 - 8 = 156\nS53. Ans.(d)\nSol.\n=530-265-25=240\nS54. Ans.(a)\nSol. Required difference = 250 + 160 – 330 = 80\nS55. Ans.(a)\nSol.\nS56. Ans.(e)\nSol. Item A sold in July = 140% of 160 = 224\nDefective item A = 3/4 of 224 = 168\nRequired answer = 5×168=Rs 840\nS57. Ans.(e)\nSol. Required ratio = 320+330 : 160+180\n= 650 : 340 = 65:34\nS58. Ans.(a)\nSol.\nby B be 1x and 4x respectively.\nS59. Ans.(c)\nSol. Information Given in the Question:\nSpeed in still water = 20 km/hr\nRatio of downstream to upstream speed = 5 : 3\nDistance downstream = 240 km\nConcept/Formula Used in the Question:\nLet downstream speed = 5x and upstream speed = 3x\nSpeed in still water = (Downstream + Upstream) / 2\nTime = Distance / Speed\nDetailed Explanation:\nLet downstream speed = 5x and upstream speed = 3x\nThen, speed in still water = (5x + 3x)/2 = 8x/2 = 4x\nGiven 4x = 20 → x = 5\nSo downstream speed = 5x = 5 × 5 = 25 km/hr\nTime taken to cover 240 km downstream = Distance /\nS60. Ans.(a)\nSol. Information Given in the Question:\nInitial milk : water = 5 : 3\n16 liters of mixture is removed\n4 liters of water is added afterward\nNew milk : water ratio = 3 : 2\nDetailed Explanation:\nATQ,\nx=112\nInitial quantity of milk = (5/8) × 112 = 70 liters\nSpeed = 240 / 25 = 9.6 hours\nS61. Ans.(b)\nSol. Information Given in the Question:\nA + B can do the work in 20 days\nA alone can do it in 30 days\nB does 40% of the work in (Y + 5) days\nWe need to find the value of Y\nDetailed Explanation:\nLet the total work (LCM of 20 and 30) = 60 units\nEfficiency of A and B together = 60/20 = 3 units/day\nEfficiency of A = 60/30 = 2 units/day\nEfficiency of B = 3 - 2 = 1 units/day\nATQ,\n24 = Y +5\n19 = Y\nS62. Ans.(d)\nSol. Information Given in the Question:\nCP : SP = 4 : 5\nMarked Price (MP) = ₹8000\nDiscount = 20%\nConcept/Formula Used in the Question:\nSP = MP × (1 – Discount%)\nProfit = SP – CP\nDetailed Explanation:\nSelling Price after 20% discount:\nSP=8000×(1– 0.20)=8000×0.8=Rs 6400\nLet CP : SP = 4 : 5\n⇒ CP = 4x, SP = 5x\nSP = Rs 6400\n⇒ 5x = 6400\n⇒ x = 1280\nSo, CP = 4x = 4 × 1280 = Rs 5120\nProfit = SP – CP = 6400 – 5120 = Rs1280\nS63. Ans.(e)\nSol. Information Given in the Question:\nA’s investment = Rs 6000 for 12 months\nB’s investment = 9000 for x months\nB’s share in profit = Rs 1600 out of Rs 4800\nConcept/Formula Used in the Question:\nProfit sharing ratio = Investment × Time\n\nDetailed Explanation:\nLet the time period (in months) for which B investe\nProfit sharing ratio A to B = 6000×12 :9000×X\nATQ,\n12 = 3X\n4 = X\nS64. Ans.(d)\nSol. Information Given in the Question:\nTrain X is 60% longer than Train Y.\nSpeed of Train X = 90 km/h.\nTrain X crosses a pole in 16 seconds.\nTime taken for Train X and Train Y to cross each other\nRequired: Time taken by Train Y to cross a platform of\nConcept/Formula Used in the Question:\nSpeed (in m/s) = (Speed in km/h) × (5/18)\nLength = Speed × Time\nWhen two trains cross each other in opposite direction\nRelative Speed = Sum of their speeds\nTime to cross platform = (Length of Train Y + Platform\nDetailed Explanation:\nConvert speed of Train X to m/s:\nLength of Train X =25×16=400 meters\nLet length of Train Y = L meters\nGiven Train X is 60% longer:\nLet speed of Train Y = S m/s\nTrains cross each other in 13 seconds:\nRelative speed=25+S\nLength of train X + Length of train Y = (400+250)=650\n650=(25+S)×13\nS=25 m/s\nTime for Train Y to cross 500-meter platform:\n\"Total distance=250+500=750 meters\ned his money in the business be X\n(opposite direction) = 13 seconds.\n500 meters.\nns:\nLength) / Speed of Train Y\nmeters\nS65. Ans.(a)\nSol. Information Given in the Question:\nRatio of P : Q = 3 : 4\nR = Q + 6\nP + Q + R = 83\nP, Q, R are positive integers.\nConcept/Formula Used in the Question:\nRatio values imply: P = 3x, Q = 4x for some x\nR = Q + 6 = 4x + 6\nTotal sum: P + Q + R = 83\nDetailed Explanation:\nLet:\nP = 3x\nQ = 4x\nR = 4x + 6\nATQ,\n3x+4x+(4x+6)=83\n11x+6=83\n11x=77\nx=7\nQ = 4x = 4 × 7 = 28\nS66. Ans.(b)\nSol. Information Given in the Question:\nPerimeter of the rectangle = 74 cm\nLength = 2 × Breadth + 4 cm\nNeed to find: Area of the rectangle\nConcept/Formula Used in the Question:\nPerimeter of rectangle = 2 × (Length + Breadth)\nArea of rectangle = Length × Breadth\nDetailed Explanation:\nLet breadth = x cm\nThen, length = 2x + 4 cm\nPerimeter = 2 × (length + breadth) = 74\n2×((2x+4)+x)=74\n2×(3x+4)=74\n6x+8=74\n6x=66\nx=11\nSo:\nBreadth = 11 cm\nLength = 2 × 11 + 4 = 26 cm\nArea = 26 × 11 = 286 cm²\n\nS67. Ans.(c)\nSol. Information Given in the Question:\n35% of A = 70% of B\nAverage of A and B = B + 10\nAverage of A, B, and C = 60\nRequired: Average of A and C\nConcept/Formula Used in the Question:\nPercentages: 0.35A=0.70B\nAverage of two numbers: (A+B)/2\nAverage of three numbers: (A+B+C)/3\nDetailed Explanation:\nFrom 0.35A=0.70B, divide both sides by 0.35:\nA=2B\nAverage of A and B is B + 10:\nNow, A = 2B = 40\nUse the average of A, B, C to find C:\n60+C=180\nC=120\nRequired: Average of A and C = (40 + 120)/2 = 80\nS68. Ans.(c)\nSol. Information Given in the Question:\nSet M: 5 consecutive multiples of 6\nSet N: 4 consecutive multiples of 8\nAverage of N is 4 less than average of M\nAverage of smallest and largest of M = 66\nRequired: Sum of all numbers in set N\nConcept/Formula Used in the Question:\nFor consecutive numbers, average = middle term\nAverage of smallest and largest = (First + Last)/2\nAverage × Number of terms = Total sum\n\nDetailed Explanation:\nLet the 5 consecutive multiples of 6 in M be:\n6x,6x+6,6x+12,6x+18,6x+24\nSo, smallest = 6x\nLargest = 6x + 24\nAverage of smallest and largest =\n6x+12=66\n6x=54\nx=9\nSo, the numbers in set M are:\n54, 60, 66, 72, 78\nAverage of M = middle term = 66\nAverage of N = 66 - 4 = 62\nLet the 4 consecutive multiples of 8 be:\n8y,8y+8,8y+16,8y+24\nAverage = 8y + 12\n8y+12=62\n8y=50\ny=6.25\nSo, numbers in N are:\n8×6.25=50, then 58, 66, 74\nSum of N = 50+58+66+74=248\nS69. Ans.(d)\nSol. Information Given in the Question:\nRiya's English score = 180\nRiya's Science score = 160\nMeena's English score = 190\nMeena’s average score = Riya’s average + 10\nNeed to find the average of their Science scores\nConcept/Formula Used in the Question:\nAverage = (Sum of scores) / Number of subjects\nUse given averages to find Meena’s Science score\nAverage of two numbers = (Sum of both) / 2\nDetailed Explanation:\nRiya's Average =\nMeena’s average = Riya’s average + 10 = 170 + 10 =\nLet Meena’s Science marks = x\nThen, Meena's average\n\nSo, Meena's Science = 170\nRiya's Science = 160\nS70. Ans.(b)\nSol. Information Given in the Question:\nRavi’s saving = 50% of his expense → Saving = 0.5 × Expense\nIncome = Expense + Saving = 1.5 × Expense\nAfter changes:\nExpense increases by 50% → New Expense = 1.5 × Expense\nIncome increases by 20% → New Income = 1.2 × Income\nNew Saving = New Income - New Expense\nNew Saving is Rs 6000 less than original saving\nNeed to find original income\nDetailed Explanation:\nLet monthly expense be Rs x\nSaving = 0.5x, Income = x + 0.5x = 1.5x\nNew Expense = 1.5x\nNew Income = 1.2 × 1.5x = 1.8x\nNew Saving = 1.8x - 1.5x = 0.3x\nDifference in savings = 0.5x - 0.3x = 0.2x = Rs 6000\n⇒ x = Rs 30,000\nSo, original income = 1.5x = 1.5 × 30,000 = Rs 45,000\nSolutions (71-73):\nFor A\nLet the laptops sold in august and September is 7x and 13 x.\nLaptops sold in October = 13x – 7x = 6x\nFor B\nLet the laptops sold in October = 2m\nLet the laptops sold in august = m\nATQ,\n36 + 13x = 88\n52 = 13x\n4 = x\n2m =12+7x\n2m = 40\nCompanies August September October\nA 28 52 24\nB 20 36 40\nTotal 48 88 64\nS71. Ans.(a)\nSol. Required answer = 28+52+24 = 104\n\nS72. Ans.(d)\nSol. Required answer = 28:64 = 7: 16\nS73. Ans.(a)\nSol.\nS74. Ans.(c)\nSol. Information Given in the Question:\nSimple Interest (SI) = ₹960\nRate of Interest (R) = 10% p.a.\nTime for SI = 3 years\nCompound Interest scenario: Principal = P + 400\nTime = 2 years\nRate = 10% p.a.\nConcept/Formula Used in the Question:\nSimple Interest (SI) = (P × R × T) / 100\nCompound Amount (A) = P × (1 + R/100)T\nDetailed Explanation:\nUse SI formula to find the original Principal (P):\nNow, new principal for compound interest = P + 400\nUse compound amount formula:\nS75. Ans.(b)\nSol.\n?=630-460\n?=170\n= 3200 + 400 = Rs 3600\nS76. Ans.(a)\nSol.\nS77. Ans.(d)\nSol.\nS78. Ans.(b)\nSol.\nS79. Ans.(a)\nSol.\n?=40\nS80. Ans.(b)\nSol."
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (75-80): What approximate value\nfollowing questions? (You are not expected to c"
+  }
+ ]
+}

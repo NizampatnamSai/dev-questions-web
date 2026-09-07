@@ -6,8 +6,26 @@ OLLAMA_URL  = os.getenv("OLLAMA_URL",  "http://localhost:11434/api/generate")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3")
 GROQ_API_KEY        = os.getenv("GROQ_API_KEY", "")
 GROQ_URL            = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL          = os.getenv("GROQ_MODEL",          "llama-3.3-70b-versatile")
-GROQ_MODEL_FALLBACK = os.getenv("GROQ_MODEL_FALLBACK", "llama-3.1-8b-instant")
+# Groq retired the llama-3.x models in Aug 2026 — every call 404'd with
+# "model does not exist". These defaults must stay in step with the Render
+# env vars; they are the fallback when GROQ_MODEL is unset.
+GROQ_MODEL          = os.getenv("GROQ_MODEL",          "openai/gpt-oss-120b")
+GROQ_MODEL_FALLBACK = os.getenv("GROQ_MODEL_FALLBACK", "openai/gpt-oss-20b")
+
+# The gpt-oss models are REASONING models: they spend tokens on an internal
+# "reasoning" field before writing "content". At the budgets this app uses
+# (150-500 in places) that silently returns an empty string — a 200 response
+# with nothing to parse, which looks like a parsing bug rather than a starved
+# request. "low" cuts reasoning from ~186 chars to ~54 and leaves the budget
+# for the answer. Harmless on models that do not support the parameter.
+GROQ_REASONING_EFFORT = os.getenv("GROQ_REASONING_EFFORT", "low")
+
+
+def with_reasoning(payload: dict) -> dict:
+    """Attach the reasoning-effort hint without overwriting an explicit one."""
+    if GROQ_REASONING_EFFORT and "reasoning_effort" not in payload:
+        return {**payload, "reasoning_effort": GROQ_REASONING_EFFORT}
+    return payload
 
 _fallback: dict = {}
 
@@ -140,9 +158,9 @@ async def _groq_call(payload: dict) -> httpx.Response:
         raise ValueError("GROQ_API_KEY not set")
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
     async with httpx.AsyncClient(timeout=30) as c:
-        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL}))
         if _is_rate_limited(r):
-            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+            r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL_FALLBACK}))
         r.raise_for_status()
         return r
 

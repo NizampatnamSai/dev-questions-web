@@ -1,0 +1,1230 @@
+{
+ "id": "rrbpo-2021",
+ "questions": [
+  {
+   "id": "2021-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between K and D, when counted from left of K?\nK के बाएं से नगििे पर, K और D के मध्य दकतिे व्यनि बैठे ह?ैं",
+   "options": {
+    "A": "Four\nचार",
+    "B": "Three\nतीि",
+    "C": "Two\nिो",
+    "D": "One\nएक",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2021-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following sits third to the right of H?\nनिम्ननिनित में से कौि H के िाएं से तीसरे स्थाि पर बैठा है?",
+   "options": {
+    "A": "B",
+    "B": "C",
+    "C": "E",
+    "D": "K",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2021-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement is not true about B?\nनिम्ननिनित में से कौि सा कथि B के बारे में सत्य िहीं ह?ै",
+   "options": {
+    "A": "B sits second to the left of A\nB A के बाएं से िसू रे स्थाि पर बैठा ह ै",
+    "B": "B is an immediate neighbor of F\nB F का निकटतम पडोसी ह ै",
+    "C": "The one who sits third to the right of B is an immediate neighbor of D\nB के िाएं से तीसरे स्थाि पर बैठा व्यनि D का निकटतम पडोसी ह ै",
+    "D": "B is an immediate neighbor of the one who sits third to the left of E\nB उस व्यनि का निकटतम पडोसी ह ै जो E के बाएं से तीसरे स्थाि पर बैठा ह ै",
+    "E": "All are true\nसभी सत्य ह ै"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2021-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five pairs are alike in a certain way so form a group, which of the following does\nnot belong to that group?\nनिम्ननिनित पांच युग्म में से चार एक निनित तरीके से समाि ह ैं इसनिए एक समूह बिाते हैं, निम्ननिनित में से कौि उस समूह\nसे संबंनित िहीं ह?ै",
+   "options": {
+    "A": "L, C",
+    "B": "B, A",
+    "C": "D, E",
+    "D": "H, L",
+    "E": "F, G"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2021-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following persons sit second to the left of C?\nनिम्ननिनित में से कौि-सा व्यनि C के बाएं से िसू रे स्थाि पर बैठा है?",
+   "options": {
+    "A": "E",
+    "B": "L",
+    "C": "G",
+    "D": "B",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2021-q6",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "Statements/कथि: X<W<O =S ≥T<U>R≥V\nConclusions/निष्कर्व:\nI. S>V\nII. S=V",
+   "options": {
+    "A": "केर्ि निष्कर्व I सत्य ह ै",
+    "B": "केर्ि निष्कर्व II सत्य ह ै",
+    "C": "या तो निष्कर्व I या II सत्य ह ै",
+    "D": "निष्कर्व I और II िोिों सत्य ह ैं",
+    "E": "ि तो निष्कर्व I और ि ही II सत्य ह ै"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (6-9): In this question, relationship between different elements is shown in the statements.\nThe statements are followed by conclusions. Study the conclusions based on the given statement and\nselect the appropriate answer.\nइस प्रश्न में कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िर्ावया गया ह।ै कथिों के बाि निष्कर्व निकािे गये ह।ैं दिए गए कथि के\nआिार पर निष्कर्ों का अध्ययि कीनजए और उनचत उत्तर का चयि कीनजए।",
+   "explanation": "I. S>V (false) II. S=V (false)"
+  },
+  {
+   "id": "2021-q7",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "Statements/कथि: A=E<F<G>L=M>H<B <K\nConclusions/निष्कर्व:\nI. M>E\nII. A≥K",
+   "options": {
+    "A": "केर्ि निष्कर्व I सत्य ह ै",
+    "B": "केर्ि निष्कर्व II सत्य ह ै",
+    "C": "या तो निष्कर्व I या II सत्य ह ै",
+    "D": "निष्कर्व I और II िोिों सत्य ह ैं",
+    "E": "ि तो निष्कर्व I और ि ही II सत्य ह ै"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (6-9): In this question, relationship between different elements is shown in the statements.\nThe statements are followed by conclusions. Study the conclusions based on the given statement and\nselect the appropriate answer.\nइस प्रश्न में कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िर्ावया गया ह।ै कथिों के बाि निष्कर्व निकािे गये ह।ैं दिए गए कथि के\nआिार पर निष्कर्ों का अध्ययि कीनजए और उनचत उत्तर का चयि कीनजए।",
+   "explanation": "I. M>E (false) II. A≥K (false)"
+  },
+  {
+   "id": "2021-q8",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "Statements/कथि: B<A=C<D<E >K=M>F\nConclusions/निष्कर्व:\nI. B<E\nII. A>M",
+   "options": {
+    "A": "केर्ि निष्कर्व I सत्य ह ै",
+    "B": "केर्ि निष्कर्व II सत्य ह ै",
+    "C": "या तो निष्कर्व I या II सत्य ह ै",
+    "D": "निष्कर्व I और II िोिों सत्य ह ैं",
+    "E": "ि तो निष्कर्व I और ि ही II सत्य ह ै"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (6-9): In this question, relationship between different elements is shown in the statements.\nThe statements are followed by conclusions. Study the conclusions based on the given statement and\nselect the appropriate answer.\nइस प्रश्न में कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िर्ावया गया ह।ै कथिों के बाि निष्कर्व निकािे गये ह।ैं दिए गए कथि के\nआिार पर निष्कर्ों का अध्ययि कीनजए और उनचत उत्तर का चयि कीनजए।",
+   "explanation": "I. B<E (true) II. A>M (false)"
+  },
+  {
+   "id": "2021-q9",
+   "section": "Reasoning Ability",
+   "topic": "Inequalities",
+   "question": "Statements/कथि: H≤G=B<E≤K>F≥M>N=O\nConclusions/निष्कर्व:\nI. H<E\nII. O<K",
+   "options": {
+    "A": "केर्ि निष्कर्व I सत्य ह ै",
+    "B": "केर्ि निष्कर्व II सत्य ह ै",
+    "C": "या तो निष्कर्व I या II सत्य ह ै",
+    "D": "निष्कर्व I और II िोिों सत्य ह ैं",
+    "E": "ि तो निष्कर्व I और ि ही II सत्य ह ै"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (6-9): In this question, relationship between different elements is shown in the statements.\nThe statements are followed by conclusions. Study the conclusions based on the given statement and\nselect the appropriate answer.\nइस प्रश्न में कथिों में नर्नभन्न तत्र्ों के बीच संबंि को िर्ावया गया ह।ै कथिों के बाि निष्कर्व निकािे गये ह।ैं दिए गए कथि के\nआिार पर निष्कर्ों का अध्ययि कीनजए और उनचत उत्तर का चयि कीनजए।",
+   "explanation": "I. H<E (true) II. O<K (true)"
+  },
+  {
+   "id": "2021-q10",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If in the word ‘SNITCHED’ vowels are replaced its previous letter and consonant are replaced with\nits next letter according to English alphabetical series, then how many letters are appeared twice in the\nnew arrangement?\nयदि र्ब्ि 'SNITCHED' में, अंग्रेजी र्र्वमािा श्ृंििा के अिुसार इसके स्र्रों को इसके नपछिे अक्षर स े बिि दिया जाता ह ै और\nव्यंजि को इसके अगिे अक्षर से बिि दिया जाता ह,ै तो िई व्यर्स्था में दकतिे अक्षर िो बार आयेंगे?",
+   "options": {
+    "A": "One\nएक",
+    "B": "Two\nिो",
+    "C": "Three\nतीि",
+    "D": "None\nकोई िहीं",
+    "E": "More than three\nतीि से अनिक"
+   },
+   "correctAnswer": "A",
+   "explanation": "Given word- SNITCHED\nSol. After applied given condition- TOHUDIDE\nSolutions (11-13):"
+  },
+  {
+   "id": "2021-q11",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons are lighter than R?\nदकतिे व्यनि R से हल्के ह?ैं",
+   "options": {
+    "A": "Three\nतीि",
+    "B": "Four\nचार",
+    "C": "Two\nिो",
+    "D": "None\nकोई िहीं",
+    "E": "One\nएक"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (11-13): Study the following information carefully and answer the questions given below.\nSix persons P, Q, R, S, T and U are of different weights. The 4th heaviest person weight is 64kg. Q is lighter\nthan only T. Two persons in between R and U, whose weight is 51kg. S is not heavier than P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए।\nछह व्यनि P, Q, R, S, T और U अिग-अिग भार के ह।ैं चौथ े सबस े भारी व्यनि का भार 64 दकग्रा ह।ै Q, केर्ि T से केर्ि\nहल्का ह।ै R और U के मध्य िो व्यनि ह,ै नजसका भार 51 दकग्रा ह।ै S, P से भारी िहीं ह।ै"
+  },
+  {
+   "id": "2021-q12",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If Q is 10kg heavier than P then, what is the difference between Q’s and U’s weight?\nयदि Q, P से 10 दकग्रा भारी ह,ै तो Q और U के भार में दकतिा अंतर ह?ै",
+   "options": {
+    "A": "32kg\n32 दकग्रा",
+    "B": "21kg\n21 दकग्रा",
+    "C": "23kg\n23 दकग्रा",
+    "D": "22kg\n22 दकग्रा",
+    "E": "31kg\n31 दकग्रा"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (11-13): Study the following information carefully and answer the questions given below.\nSix persons P, Q, R, S, T and U are of different weights. The 4th heaviest person weight is 64kg. Q is lighter\nthan only T. Two persons in between R and U, whose weight is 51kg. S is not heavier than P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए।\nछह व्यनि P, Q, R, S, T और U अिग-अिग भार के ह।ैं चौथ े सबस े भारी व्यनि का भार 64 दकग्रा ह।ै Q, केर्ि T से केर्ि\nहल्का ह।ै R और U के मध्य िो व्यनि ह,ै नजसका भार 51 दकग्रा ह।ै S, P से भारी िहीं ह।ै"
+  },
+  {
+   "id": "2021-q13",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following person is just heavier than the one who is 2nd lightest?\nनिम्ननिनित में से कौि िसू रे सबसे हल्के व्यनि से ठीक भारी है?",
+   "options": {
+    "A": "S",
+    "B": "P",
+    "C": "R",
+    "D": "T",
+    "E": "Q"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (11-13): Study the following information carefully and answer the questions given below.\nSix persons P, Q, R, S, T and U are of different weights. The 4th heaviest person weight is 64kg. Q is lighter\nthan only T. Two persons in between R and U, whose weight is 51kg. S is not heavier than P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए।\nछह व्यनि P, Q, R, S, T और U अिग-अिग भार के ह।ैं चौथ े सबस े भारी व्यनि का भार 64 दकग्रा ह।ै Q, केर्ि T से केर्ि\nहल्का ह।ै R और U के मध्य िो व्यनि ह,ै नजसका भार 51 दकग्रा ह।ै S, P से भारी िहीं ह।ै"
+  },
+  {
+   "id": "2021-q14",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Find the odd one out?\nनर्र्म का चयि कीनजए।",
+   "options": {
+    "A": "AZ",
+    "B": "DW",
+    "C": "GT",
+    "D": "MN",
+    "E": "JP"
+   },
+   "correctAnswer": "E",
+   "explanation": "Except JP all the first letters are reversed to second\nSolutions (15-18):\nPersons Department\nP Marketing\nV Marketing\nQ Marketing\nT Marketing\nW Finance\nR Finance\nX Finance\nU HR\nS HR\nletter."
+  },
+  {
+   "id": "2021-q15",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following is selected in the same departm\nas X?\nनिम्ननिनित में से दकसका X के समाि नर्भाग में चयि होता है?",
+   "options": {
+    "A": "P",
+    "B": "Q",
+    "C": "V",
+    "D": "R",
+    "E": "U"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (15-18): Study the following information carefully and answer the questions given below:\nNine persons are selected in three different department of a company i.e Marketing, HR and Finance. At\nleast two but not more than four persons are selected in the same department.\nU selects only with S, but not in marketing department. V and Q are selecting in the same department but\nnot with R. T selects in the marketing department. W and X select in the same department. R neither\nselects in marketing not HR. P does not select in the same department as W. X selects neither in HR\ndepartment nor with P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए:\nएक कंपिी के तीि अिग-अिग नर्भागों अथावत माकेटटंग, एचआर और फाइिसें में िौ व्यनियों का चयि दकया जा रहा ह।ैं एक\nही नर्भाग में कम से कम िो िेदकि चार स े अनिक व्यनियों चयि िहीं दकया जा रहा ह।ैं\nU केर्ि S के साथ चयनित होता ह,ै िदे कि माकेटटंग नर्भाग म ें िहीं। V और Q का एक ही नर्भाग म ें चयि दकया जाता ह ैंिदे कि\nR के साथ िहीं। T का चयि माकेटटंग नर्भाग म ें होता ह।ै W और X का एक ही नर्भाग म ें चयि होता ह।ैं R का ि तो माकेटटंग म ें\nचयि होता ह ै ि ही एचआर में। P का चयि, W के समाि नर्भाग म ें िहीं होता ह।ै X का ि तो एचआर नर्भाग म ेंऔर ि ही P के\nसाथ चयि होता ह।ै"
+  },
+  {
+   "id": "2021-q16",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "⚠️ Some options for this question are printed as images in the source paper and could not be extracted.\n\nWhich of the following statement is true about P?\nनिम्ननिनित में से कौि सा कथि P के बारे में सत्य ह?ै",
+   "options": {
+    "A": "P selects with R\nP का चयि R के साथ होता ह ै",
+    "C": "P Selects in Marketing\nP का चयि माकेटटंग में होता ह ै",
+    "D": "P selects with U\nP का चयि U के साथ होता ह ै",
+    "E": "Both (b) and (c)\nिोिों (b) और (d)"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (15-18): Study the following information carefully and answer the questions given below:\nNine persons are selected in three different department of a company i.e Marketing, HR and Finance. At\nleast two but not more than four persons are selected in the same department.\nU selects only with S, but not in marketing department. V and Q are selecting in the same department but\nnot with R. T selects in the marketing department. W and X select in the same department. R neither\nselects in marketing not HR. P does not select in the same department as W. X selects neither in HR\ndepartment nor with P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए:\nएक कंपिी के तीि अिग-अिग नर्भागों अथावत माकेटटंग, एचआर और फाइिसें में िौ व्यनियों का चयि दकया जा रहा ह।ैं एक\nही नर्भाग में कम से कम िो िेदकि चार स े अनिक व्यनियों चयि िहीं दकया जा रहा ह।ैं\nU केर्ि S के साथ चयनित होता ह,ै िदे कि माकेटटंग नर्भाग म ें िहीं। V और Q का एक ही नर्भाग म ें चयि दकया जाता ह ैंिदे कि\nR के साथ िहीं। T का चयि माकेटटंग नर्भाग म ें होता ह।ै W और X का एक ही नर्भाग म ें चयि होता ह।ैं R का ि तो माकेटटंग म ें\nचयि होता ह ै ि ही एचआर में। P का चयि, W के समाि नर्भाग म ें िहीं होता ह।ै X का ि तो एचआर नर्भाग म ेंऔर ि ही P के\nसाथ चयि होता ह।ै"
+  },
+  {
+   "id": "2021-q17",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five pairs are alike in a certain way\ndoes not belong to that group?\nनिम्ननिनित पांच युग्म में से चार एक निनित तरीके से समाि ह ैं इसनिए एक\nसे संबंनित िहीं ह?ै",
+   "options": {
+    "A": "P-X",
+    "B": "Q-T",
+    "C": "R-S",
+    "D": "U-V",
+    "E": "W-T"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (15-18): Study the following information carefully and answer the questions given below:\nNine persons are selected in three different department of a company i.e Marketing, HR and Finance. At\nleast two but not more than four persons are selected in the same department.\nU selects only with S, but not in marketing department. V and Q are selecting in the same department but\nnot with R. T selects in the marketing department. W and X select in the same department. R neither\nselects in marketing not HR. P does not select in the same department as W. X selects neither in HR\ndepartment nor with P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए:\nएक कंपिी के तीि अिग-अिग नर्भागों अथावत माकेटटंग, एचआर और फाइिसें में िौ व्यनियों का चयि दकया जा रहा ह।ैं एक\nही नर्भाग में कम से कम िो िेदकि चार स े अनिक व्यनियों चयि िहीं दकया जा रहा ह।ैं\nU केर्ि S के साथ चयनित होता ह,ै िदे कि माकेटटंग नर्भाग म ें िहीं। V और Q का एक ही नर्भाग म ें चयि दकया जाता ह ैंिदे कि\nR के साथ िहीं। T का चयि माकेटटंग नर्भाग म ें होता ह।ै W और X का एक ही नर्भाग म ें चयि होता ह।ैं R का ि तो माकेटटंग म ें\nचयि होता ह ै ि ही एचआर में। P का चयि, W के समाि नर्भाग म ें िहीं होता ह।ै X का ि तो एचआर नर्भाग म ेंऔर ि ही P के\nसाथ चयि होता ह।ै"
+  },
+  {
+   "id": "2021-q18",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons are selected in marketing department?\nमाकेटटंग नर्भाग में दकतिे व्यनियों का चयि दकया जाता हैं?",
+   "options": {
+    "A": "Two\nिो",
+    "B": "Four\nचार",
+    "C": "Three\nतीि",
+    "D": "Cannot be determined\nनििावररत िहीं दकया जा सकता",
+    "E": "Same number of persons selected in finance department\nफाइिेंस नर्भाग में चयनित व्यनियों के समाि संख्या\n6 Adda24\nment\nso form a group, which of the following\nसमूह बिाते हैं, निम्ननिनित में से कौि उस समूह\n47 | No. 1 APP for Banking & SSC Preparation"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (15-18): Study the following information carefully and answer the questions given below:\nNine persons are selected in three different department of a company i.e Marketing, HR and Finance. At\nleast two but not more than four persons are selected in the same department.\nU selects only with S, but not in marketing department. V and Q are selecting in the same department but\nnot with R. T selects in the marketing department. W and X select in the same department. R neither\nselects in marketing not HR. P does not select in the same department as W. X selects neither in HR\ndepartment nor with P.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजए और िीच े दिए गए प्रश्नों के उत्तर िीनजए:\nएक कंपिी के तीि अिग-अिग नर्भागों अथावत माकेटटंग, एचआर और फाइिसें में िौ व्यनियों का चयि दकया जा रहा ह।ैं एक\nही नर्भाग में कम से कम िो िेदकि चार स े अनिक व्यनियों चयि िहीं दकया जा रहा ह।ैं\nU केर्ि S के साथ चयनित होता ह,ै िदे कि माकेटटंग नर्भाग म ें िहीं। V और Q का एक ही नर्भाग म ें चयि दकया जाता ह ैंिदे कि\nR के साथ िहीं। T का चयि माकेटटंग नर्भाग म ें होता ह।ै W और X का एक ही नर्भाग म ें चयि होता ह।ैं R का ि तो माकेटटंग म ें\nचयि होता ह ै ि ही एचआर में। P का चयि, W के समाि नर्भाग म ें िहीं होता ह।ै X का ि तो एचआर नर्भाग म ेंऔर ि ही P के\nसाथ चयि होता ह।ै"
+  },
+  {
+   "id": "2021-q19",
+   "section": "Reasoning Ability",
+   "topic": "Number Series",
+   "question": "⚠️ Some options for this question are printed as images in the source paper and could not be extracted.\n\nHow many pairs of digits are there in the number ‘96825173’, each of which have as many digits\nbetween them (both forward and backward directions) in the number as they have between them in the\nnumber series?\nसंख्या '96825173' में अंकों के ऐसे दकतिे युग्म हैं, नजिमें प्रत्येक के मध्य संख्या में (आगे और पीछे िोिों दिर्ाओं में) उतिे ही\nअंक ह ैं नजतिे संख्या श्ृंििा में उिके मध्य होते ह?ैं",
+   "options": {
+    "A": "One\nएक",
+    "B": "Two\nिो",
+    "C": "Three\nतीि",
+    "D": "Four\nचार\n(f) None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "explanation": "Solutions (20-24):\nMonth Dates Persons\nJanuary 11 P\n16 M\nFebruary 11 R\n16 O\nMarch 11 T\n16 N\nApril 11 V\n16 Q\nMay 11 U\n16 S"
+  },
+  {
+   "id": "2021-q20",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons go for exam after V?\nV के बाि दकतिे व्यनि परीक्षा िेिे जाते ह?ैं",
+   "options": {
+    "A": "One\nएक",
+    "B": "Three\nतीि",
+    "C": "Six\nछह",
+    "D": "Five\nछह",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (20-24): Study the following information carefully and answer the questions given below.\nTen persons M, N, O, P, Q, R, S, T, U and V go to the exam on different dates 11 and 16 of five different\nmonths January to May but not necessarily in the same order.\nO goes to the exam on 16th February. More than four persons go to the exam between O and S. The\nnumber of persons go for the exam before S is the same as the persons go for the exam after P. V goes just\nbefore Q in the same month, which has an even number of days. No one goes between P and M. T goes\njust before N. U goes after R.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nिस व्यनि- M, N, O, P, Q, R, S, T, U और V पांच अिग-अिग महीिे जिर्री से मई की अिग-अिग नतनथ- 11 और 16 को\nपरीक्षा िेिे जाते ह ैंिेदकि जरूरी िहीं दक समाि क्रम में हों।\nO, 16 फरर्री को परीक्षा के निए जाता ह।ै O और S के बीच चार से अनिक व्यनि परीक्षा िेते ह।ैं S से पहिे परीक्षा िेिे जािे र्ाि े\nव्यनियों की संख्या, P के बाि परीक्षा िेिे जािे र्ाि े व्यनियों की संख्या के समाि ह।ै V समाि महीिे में Q से ठीक पहिे जाता ह,ै\nनजसमें सम संख्या में दिि ह।ै P और M के बीच कोई िहीं जाता ह।ै T, N के ठीक पहिे जाता ह।ै U, R के बाि जाता ह।ै"
+  },
+  {
+   "id": "2021-q21",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons go between R and U?\nR और U के मध्य दकतिे व्यनि जाते ह?ैं",
+   "options": {
+    "A": "None\nकोई िहीं",
+    "B": "Four\nचार",
+    "C": "More than four\nचार से अनिक",
+    "D": "Two\nिो",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (20-24): Study the following information carefully and answer the questions given below.\nTen persons M, N, O, P, Q, R, S, T, U and V go to the exam on different dates 11 and 16 of five different\nmonths January to May but not necessarily in the same order.\nO goes to the exam on 16th February. More than four persons go to the exam between O and S. The\nnumber of persons go for the exam before S is the same as the persons go for the exam after P. V goes just\nbefore Q in the same month, which has an even number of days. No one goes between P and M. T goes\njust before N. U goes after R.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nिस व्यनि- M, N, O, P, Q, R, S, T, U और V पांच अिग-अिग महीिे जिर्री से मई की अिग-अिग नतनथ- 11 और 16 को\nपरीक्षा िेिे जाते ह ैंिेदकि जरूरी िहीं दक समाि क्रम में हों।\nO, 16 फरर्री को परीक्षा के निए जाता ह।ै O और S के बीच चार से अनिक व्यनि परीक्षा िेते ह।ैं S से पहिे परीक्षा िेिे जािे र्ाि े\nव्यनियों की संख्या, P के बाि परीक्षा िेिे जािे र्ाि े व्यनियों की संख्या के समाि ह।ै V समाि महीिे में Q से ठीक पहिे जाता ह,ै\nनजसमें सम संख्या में दिि ह।ै P और M के बीच कोई िहीं जाता ह।ै T, N के ठीक पहिे जाता ह।ै U, R के बाि जाता ह।ै"
+  },
+  {
+   "id": "2021-q22",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement is true?\nनिम्ननिनित में से कौि सा कथि सत्य ह?ै\nI. Only two persons go between M and T\nM और T के बीच केर्ि िो व्यनि जाते ह ैं\nII. No one goes before S\nS से पहिे कोई िहीं जाता ह ै\nIII. T goes on numbered date\nT नर्र्म संख्या की नतनथ पर जाता ह ै",
+   "options": {
+    "A": "Both I and III\nI और III िोिों",
+    "B": "Only III\nकेर्ि III",
+    "C": "Both II and III\nII और III िोिों",
+    "D": "Only II\nकेर्ि II",
+    "E": "All I, II and III\nI, II और III सभी"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (20-24): Study the following information carefully and answer the questions given below.\nTen persons M, N, O, P, Q, R, S, T, U and V go to the exam on different dates 11 and 16 of five different\nmonths January to May but not necessarily in the same order.\nO goes to the exam on 16th February. More than four persons go to the exam between O and S. The\nnumber of persons go for the exam before S is the same as the persons go for the exam after P. V goes just\nbefore Q in the same month, which has an even number of days. No one goes between P and M. T goes\njust before N. U goes after R.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nिस व्यनि- M, N, O, P, Q, R, S, T, U और V पांच अिग-अिग महीिे जिर्री से मई की अिग-अिग नतनथ- 11 और 16 को\nपरीक्षा िेिे जाते ह ैंिेदकि जरूरी िहीं दक समाि क्रम में हों।\nO, 16 फरर्री को परीक्षा के निए जाता ह।ै O और S के बीच चार से अनिक व्यनि परीक्षा िेते ह।ैं S से पहिे परीक्षा िेिे जािे र्ाि े\nव्यनियों की संख्या, P के बाि परीक्षा िेिे जािे र्ाि े व्यनियों की संख्या के समाि ह।ै V समाि महीिे में Q से ठीक पहिे जाता ह,ै\nनजसमें सम संख्या में दिि ह।ै P और M के बीच कोई िहीं जाता ह।ै T, N के ठीक पहिे जाता ह।ै U, R के बाि जाता ह।ै"
+  },
+  {
+   "id": "2021-q23",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "On which date N goes for exam?\nN दकस नतनथ को परीक्षा िेिे जाता ह?ै",
+   "options": {
+    "A": "16th January\n16 जिर्री",
+    "B": "11th April\n11 अप्रैि",
+    "C": "11th May\n11 मई",
+    "D": "16th March\n16 माचव",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (20-24): Study the following information carefully and answer the questions given below.\nTen persons M, N, O, P, Q, R, S, T, U and V go to the exam on different dates 11 and 16 of five different\nmonths January to May but not necessarily in the same order.\nO goes to the exam on 16th February. More than four persons go to the exam between O and S. The\nnumber of persons go for the exam before S is the same as the persons go for the exam after P. V goes just\nbefore Q in the same month, which has an even number of days. No one goes between P and M. T goes\njust before N. U goes after R.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nिस व्यनि- M, N, O, P, Q, R, S, T, U और V पांच अिग-अिग महीिे जिर्री से मई की अिग-अिग नतनथ- 11 और 16 को\nपरीक्षा िेिे जाते ह ैंिेदकि जरूरी िहीं दक समाि क्रम में हों।\nO, 16 फरर्री को परीक्षा के निए जाता ह।ै O और S के बीच चार से अनिक व्यनि परीक्षा िेते ह।ैं S से पहिे परीक्षा िेिे जािे र्ाि े\nव्यनियों की संख्या, P के बाि परीक्षा िेिे जािे र्ाि े व्यनियों की संख्या के समाि ह।ै V समाि महीिे में Q से ठीक पहिे जाता ह,ै\nनजसमें सम संख्या में दिि ह।ै P और M के बीच कोई िहीं जाता ह।ै T, N के ठीक पहिे जाता ह।ै U, R के बाि जाता ह।ै"
+  },
+  {
+   "id": "2021-q24",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way and so form a group. Find the one who does not\nbelong to that group?\nनिम्ननिनित पांच में से चार एक निनित तरीके से समाि ह ैंऔर इसनिए एक समूह बिाते ह।ैं र्ह चुनिए जो उस समूह से संबंनित\nिहीं ह?ै",
+   "options": {
+    "A": "M",
+    "B": "N",
+    "C": "S",
+    "D": "O",
+    "E": "V"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (20-24): Study the following information carefully and answer the questions given below.\nTen persons M, N, O, P, Q, R, S, T, U and V go to the exam on different dates 11 and 16 of five different\nmonths January to May but not necessarily in the same order.\nO goes to the exam on 16th February. More than four persons go to the exam between O and S. The\nnumber of persons go for the exam before S is the same as the persons go for the exam after P. V goes just\nbefore Q in the same month, which has an even number of days. No one goes between P and M. T goes\njust before N. U goes after R.\nनिम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nिस व्यनि- M, N, O, P, Q, R, S, T, U और V पांच अिग-अिग महीिे जिर्री से मई की अिग-अिग नतनथ- 11 और 16 को\nपरीक्षा िेिे जाते ह ैंिेदकि जरूरी िहीं दक समाि क्रम में हों।\nO, 16 फरर्री को परीक्षा के निए जाता ह।ै O और S के बीच चार से अनिक व्यनि परीक्षा िेते ह।ैं S से पहिे परीक्षा िेिे जािे र्ाि े\nव्यनियों की संख्या, P के बाि परीक्षा िेिे जािे र्ाि े व्यनियों की संख्या के समाि ह।ै V समाि महीिे में Q से ठीक पहिे जाता ह,ै\nनजसमें सम संख्या में दिि ह।ै P और M के बीच कोई िहीं जाता ह।ै T, N के ठीक पहिे जाता ह।ै U, R के बाि जाता ह।ै"
+  },
+  {
+   "id": "2021-q25",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If we form a meaningful word by the second, fourth, seventh and ninth letter of the word\n‘WORKBENCH”, then which of the following will be the third letter of the word thus formed. If more than\none word is formed mark Y as your answer. If no meaningful word is formed, mark X as your answer?\nयदि हम र्ब्ि 'WORKBENCH' के िसू रे, चौथ,े सातर्ें और िौर्ें अक्षर स े एक अथवपूर्व र्ब्ि बिाते ह,ैं तो इस प्रकार बिे र्ब्ि का\nतीसरा अक्षर निम्ननिनित म ें से कौि सा होगा। यदि एक से अनिक र्ब्ि बिते ह ैं तो अपिा उत्तर Y के रूप में िीनजये। यदि कोई\nसाथवक र्ब्ि िहीं बिता ह,ै तो अपिा उत्तर X के रूप में िीनजये।",
+   "options": {
+    "A": "O",
+    "B": "X",
+    "C": "N",
+    "D": "Y",
+    "E": "K"
+   },
+   "correctAnswer": "C",
+   "explanation": "‘HONK’"
+  },
+  {
+   "id": "2021-q26",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statements:\nAll Litchi are Mango\nOnly a few Mango are Orange\nOnly a few Orange are Papaya\nConclusion:\nI: All Papaya being Mango is a possibility\nII: Some orange is Litchi\nकथि:\nसभी िीची आम ह ैं\nकेर्ि कुछ आम संतरें ह ैं\nकेर्ि कुछ संतरें पपीते ह ैं\nनिष्कर्व:\nI: सभी पपीते के आम होिे की संभार्िा ह ै\nII: कुछ संतरें िीची ह ै",
+   "options": {
+    "A": "यदि केर्ि निष्कर्व I अिुसरर् करता ह।ै",
+    "B": "यदि केर्ि निष्कर्व II अिुसरर् करता ह।ै",
+    "C": "यदि या तो निष्कर्व I या II अिुसरर् करता ह।ै",
+    "D": "यदि ि तो निष्कर्व I और ि ही II अिुसरर् करता ह।ै",
+    "E": "यदि निष्कर्व I और II िोिों अिुसरर् करते ह।ैं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (26-30): In each of the questions below are given some statements followed by some\nConclusions. You have to take the given statements to be true even, if they seem to be at variance from\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions logically\nfollows from the given statements disregarding commonly known facts."
+  },
+  {
+   "id": "2021-q27",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statements:\nOnly a few Cat are Rat\nNo Rat are Horse\nAll Horse are Dog\nConclusion:\nI: Some Cat is Dog\nII: No Dog is Cat\nकथि:\nकेर्ि कुछ नबल्िी चूह ेह ैं\nकोई चूहा घोडा िहीं ह ै\nसभी घोड ेकुत्ते ह ैं\nनिष्कर्व:\nI: कुछ नबल्िी कुत्तें ह ै\nII: कोई कुता नबल्िी िहीं ह ै",
+   "options": {
+    "A": "यदि केर्ि निष्कर्व I अिुसरर् करता ह।ै",
+    "B": "यदि केर्ि निष्कर्व II अिुसरर् करता ह।ै",
+    "C": "यदि या तो निष्कर्व I या II अिुसरर् करता ह।ै",
+    "D": "यदि ि तो निष्कर्व I और ि ही II अिुसरर् करता ह।ै",
+    "E": "यदि निष्कर्व I और II िोिों अिुसरर् करते ह।ैं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (26-30): In each of the questions below are given some statements followed by some\nConclusions. You have to take the given statements to be true even, if they seem to be at variance from\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions logically\nfollows from the given statements disregarding commonly known facts."
+  },
+  {
+   "id": "2021-q28",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nAll Dream are Night\nNo Night is Star\nNo Dream is Sweet\nConclusions:\nI. Some Star is Dream\nII. Some Sweet is Night is a possibility\nकथि:\nसभी स्र्प्न रात ह ैं\nकोई रात नसतारे िहीं ह ै\nकोई स्र्प्न मिुर िहीं ह ै\nनिष्कर्व:\nI. कुछ नसतारे स्र्प्न ह ैं\nII. कुछ मिुर के रात होिे की सम्भार्िा ह ै",
+   "options": {
+    "A": "यदि केर्ि निष्कर्व I अिुसरर् करता ह।ै",
+    "B": "यदि केर्ि निष्कर्व II अिुसरर् करता ह।ै",
+    "C": "यदि या तो निष्कर्व I या II अिुसरर् करता ह।ै",
+    "D": "यदि ि तो निष्कर्व I और ि ही II अिुसरर् करता ह।ै",
+    "E": "यदि निष्कर्व I और II िोिों अिुसरर् करते ह।ैं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (26-30): In each of the questions below are given some statements followed by some\nConclusions. You have to take the given statements to be true even, if they seem to be at variance from\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions logically\nfollows from the given statements disregarding commonly known facts."
+  },
+  {
+   "id": "2021-q29",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nOnly a few Table are Chair\nAll Chair are Book\nOnly a few Book are Pen\nConclusions:\nI. All Table being Chair is a possibility\nII. All Book being Pen is a possibility\nकथि:\nकेर्ि कुछ मेज कुसी ह ैं\nसभी कुर्सवयां पुस्तकें ह ैं\nकेर्ि कुछ पुस्तकें किम ह ैं\nनिष्कर्व:\nI. सभी मेज के कुसी होिे की संभार्िा ह ै\nII. सभी पुस्तकों के किम होिे की संभार्िा ह ै",
+   "options": {
+    "A": "यदि केर्ि निष्कर्व I अिुसरर् करता ह।ै",
+    "B": "यदि केर्ि निष्कर्व II अिुसरर् करता ह।ै",
+    "C": "यदि या तो निष्कर्व I या II अिुसरर् करता ह।ै",
+    "D": "यदि ि तो निष्कर्व I और ि ही II अिुसरर् करता ह।ै",
+    "E": "यदि निष्कर्व I और II िोिों अिुसरर् करते ह।ैं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (26-30): In each of the questions below are given some statements followed by some\nConclusions. You have to take the given statements to be true even, if they seem to be at variance from\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions logically\nfollows from the given statements disregarding commonly known facts."
+  },
+  {
+   "id": "2021-q30",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nNo Blue are Black\nNo Black is Brown\nAll Brown are Violet\nConclusions:\nI: All Blue being Violet is a possibility\nII: Some Blue is not Brown\nकथि:\nकोई ब्िू ब्िैक िहीं ह ै\nकोई ब्िैक ब्राउि िहीं ह ै\nसभी ब्राउि र्ायिेट ह ैं\nनिष्कर्व:\nI: सभी ब्िू के र्ायिेट होिे की संभार्िा ह ै\nII: कुछ ब्िू ब्राउि िहीं ह ै",
+   "options": {
+    "A": "यदि केर्ि निष्कर्व I अिुसरर् करता ह।ै",
+    "B": "यदि केर्ि निष्कर्व II अिुसरर् करता ह।ै",
+    "C": "यदि या तो निष्कर्व I या II अिुसरर् करता ह।ै",
+    "D": "यदि ि तो निष्कर्व I और ि ही II अिुसरर् करता ह।ै",
+    "E": "यदि निष्कर्व I और II िोिों अिुसरर् करते ह।ैं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (26-30): In each of the questions below are given some statements followed by some\nConclusions. You have to take the given statements to be true even, if they seem to be at variance from\ncommonly known facts. Read all the conclusions and then decide which of the given conclusions logically\nfollows from the given statements disregarding commonly known facts.",
+   "explanation": "Solutions (31-35):\nDays Persons Fruits\nMonday C Apple\nTuesday E Papaya\nWednesday B Litchi\nThursday G Guava\nFriday D Grapes\nSaturday A Banana\nSunday F Apricot"
+  },
+  {
+   "id": "2021-q31",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who takes ___ on Friday?\n________ र्ुक्रर्ार को _______ िाता ह।ै",
+   "options": {
+    "A": "D, Grapes\nD, अंगूर",
+    "B": "F, Banana\nF, केिा",
+    "C": "E, Apple\nE, सेब",
+    "D": "G, Litchi\nG, िीची",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given below.\nSeven persons A, B, C, D, E, F and G take different fruits Apple, Apricot, Banana, Grapes, Guava, Litchi and\nPapaya (but not necessary in the same order) on different days of the same week starting from Monday.\nB takes fruit on Wednesday. Two persons take fruit between B and A, who takes banana. The number of\npersons take fruit after A is same as the number of persons take fruit before E, who takes Papaya. G takes\nfruit just before D, who takes Grapes. C takes fruit two days before the one who takes Litchi. Both F and G\nare not taken Apple. F does not take Guava.\nDirections (31-35): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nसात व्यनि- A, B, C, D, E, F और G सोमर्ार स े र्ुरू होकर एक ही सप्ताह के अिग-अिग दििों में सेब, िुबािी, केिा, अंगूर,\nअमरूि, िीची और पपीता (िेदकि जरूरी िहीं दक समाि क्रम में हो) अिग-अिग फि िाते ह।ैं\nB बुिर्ार को फि िाता ह।ै B और A, जो केिा िाता ह,ै के मध्य िो व्यनि फि िाते ह।ैं A के बाि फि िािे र्ािे व्यनियों की\nसंख्या, E से पहि े फि िािे र्ाि े व्यनियों की संख्या के समाि ह,ै जो पपीता िाता ह।ै G, D, जो अंगूर िाता ह,ै के ठीक पहिे फि\nिाता ह।ै C िीची िािे र्ाि ेसे िो दिि पहिे िाता िेता ह।ै F और G िोिों सेब िहीं िाते ह।ैं F अमरूि िहीं िाता ह।ै"
+  },
+  {
+   "id": "2021-q32",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following takes Apricot?\nनिम्ननिनित में से कौि िुबािी िेता ह?ै",
+   "options": {
+    "A": "C",
+    "B": "B",
+    "C": "G",
+    "D": "Either (a) or (c)\nया तो (a) या (c)",
+    "E": "F"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given below.\nSeven persons A, B, C, D, E, F and G take different fruits Apple, Apricot, Banana, Grapes, Guava, Litchi and\nPapaya (but not necessary in the same order) on different days of the same week starting from Monday.\nB takes fruit on Wednesday. Two persons take fruit between B and A, who takes banana. The number of\npersons take fruit after A is same as the number of persons take fruit before E, who takes Papaya. G takes\nfruit just before D, who takes Grapes. C takes fruit two days before the one who takes Litchi. Both F and G\nare not taken Apple. F does not take Guava.\nDirections (31-35): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nसात व्यनि- A, B, C, D, E, F और G सोमर्ार स े र्ुरू होकर एक ही सप्ताह के अिग-अिग दििों में सेब, िुबािी, केिा, अंगूर,\nअमरूि, िीची और पपीता (िेदकि जरूरी िहीं दक समाि क्रम में हो) अिग-अिग फि िाते ह।ैं\nB बुिर्ार को फि िाता ह।ै B और A, जो केिा िाता ह,ै के मध्य िो व्यनि फि िाते ह।ैं A के बाि फि िािे र्ािे व्यनियों की\nसंख्या, E से पहि े फि िािे र्ाि े व्यनियों की संख्या के समाि ह,ै जो पपीता िाता ह।ै G, D, जो अंगूर िाता ह,ै के ठीक पहिे फि\nिाता ह।ै C िीची िािे र्ाि ेसे िो दिि पहिे िाता िेता ह।ै F और G िोिों सेब िहीं िाते ह।ैं F अमरूि िहीं िाता ह।ै"
+  },
+  {
+   "id": "2021-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following information is not correct?\nनिम्ननिनित में से कौि सी जािकारी सही िहीं ह?ै",
+   "options": {
+    "A": "A - Saturday\nA- र्निर्ार",
+    "B": "B - Litchi\nB- िीची",
+    "C": "F- Friday\nF- र्ुक्रर्ार",
+    "D": "C- Monday\nC- सोमर्ार",
+    "E": "D- Grapes\nD- अंगूर"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given below.\nSeven persons A, B, C, D, E, F and G take different fruits Apple, Apricot, Banana, Grapes, Guava, Litchi and\nPapaya (but not necessary in the same order) on different days of the same week starting from Monday.\nB takes fruit on Wednesday. Two persons take fruit between B and A, who takes banana. The number of\npersons take fruit after A is same as the number of persons take fruit before E, who takes Papaya. G takes\nfruit just before D, who takes Grapes. C takes fruit two days before the one who takes Litchi. Both F and G\nare not taken Apple. F does not take Guava.\nDirections (31-35): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nसात व्यनि- A, B, C, D, E, F और G सोमर्ार स े र्ुरू होकर एक ही सप्ताह के अिग-अिग दििों में सेब, िुबािी, केिा, अंगूर,\nअमरूि, िीची और पपीता (िेदकि जरूरी िहीं दक समाि क्रम में हो) अिग-अिग फि िाते ह।ैं\nB बुिर्ार को फि िाता ह।ै B और A, जो केिा िाता ह,ै के मध्य िो व्यनि फि िाते ह।ैं A के बाि फि िािे र्ािे व्यनियों की\nसंख्या, E से पहि े फि िािे र्ाि े व्यनियों की संख्या के समाि ह,ै जो पपीता िाता ह।ै G, D, जो अंगूर िाता ह,ै के ठीक पहिे फि\nिाता ह।ै C िीची िािे र्ाि ेसे िो दिि पहिे िाता िेता ह।ै F और G िोिों सेब िहीं िाते ह।ैं F अमरूि िहीं िाता ह।ै"
+  },
+  {
+   "id": "2021-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many days gap between A and the one who takes\nA और िीची िािे र्ाि ेव्यनियों के बीच दकतिे दििों का अंतर ह?ै",
+   "options": {
+    "A": "Two\nिो",
+    "B": "Four\nचार",
+    "C": "More than four\nचार से अनिक",
+    "D": "One\nएक",
+    "E": "None of these\nइिमें से कोई िहीं\n12 Ad\nLitchi?\ndda247 | No. 1 APP for Banking & SSC Preparation"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given below.\nSeven persons A, B, C, D, E, F and G take different fruits Apple, Apricot, Banana, Grapes, Guava, Litchi and\nPapaya (but not necessary in the same order) on different days of the same week starting from Monday.\nB takes fruit on Wednesday. Two persons take fruit between B and A, who takes banana. The number of\npersons take fruit after A is same as the number of persons take fruit before E, who takes Papaya. G takes\nfruit just before D, who takes Grapes. C takes fruit two days before the one who takes Litchi. Both F and G\nare not taken Apple. F does not take Guava.\nDirections (31-35): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nसात व्यनि- A, B, C, D, E, F और G सोमर्ार स े र्ुरू होकर एक ही सप्ताह के अिग-अिग दििों में सेब, िुबािी, केिा, अंगूर,\nअमरूि, िीची और पपीता (िेदकि जरूरी िहीं दक समाि क्रम में हो) अिग-अिग फि िाते ह।ैं\nB बुिर्ार को फि िाता ह।ै B और A, जो केिा िाता ह,ै के मध्य िो व्यनि फि िाते ह।ैं A के बाि फि िािे र्ािे व्यनियों की\nसंख्या, E से पहि े फि िािे र्ाि े व्यनियों की संख्या के समाि ह,ै जो पपीता िाता ह।ै G, D, जो अंगूर िाता ह,ै के ठीक पहिे फि\nिाता ह।ै C िीची िािे र्ाि ेसे िो दिि पहिे िाता िेता ह।ै F और G िोिों सेब िहीं िाते ह।ैं F अमरूि िहीं िाता ह।ै"
+  },
+  {
+   "id": "2021-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "B और A के बीच फि िािे र्ािे व्यनियों की संख्या ___ और F के बीच फि",
+   "options": {
+    "A": "A",
+    "B": "C",
+    "C": "E",
+    "D": "G",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (31-35): Study the following information carefully and answer the questions given below.\nSeven persons A, B, C, D, E, F and G take different fruits Apple, Apricot, Banana, Grapes, Guava, Litchi and\nPapaya (but not necessary in the same order) on different days of the same week starting from Monday.\nB takes fruit on Wednesday. Two persons take fruit between B and A, who takes banana. The number of\npersons take fruit after A is same as the number of persons take fruit before E, who takes Papaya. G takes\nfruit just before D, who takes Grapes. C takes fruit two days before the one who takes Litchi. Both F and G\nare not taken Apple. F does not take Guava.\nDirections (31-35): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये और िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nसात व्यनि- A, B, C, D, E, F और G सोमर्ार स े र्ुरू होकर एक ही सप्ताह के अिग-अिग दििों में सेब, िुबािी, केिा, अंगूर,\nअमरूि, िीची और पपीता (िेदकि जरूरी िहीं दक समाि क्रम में हो) अिग-अिग फि िाते ह।ैं\nB बुिर्ार को फि िाता ह।ै B और A, जो केिा िाता ह,ै के मध्य िो व्यनि फि िाते ह।ैं A के बाि फि िािे र्ािे व्यनियों की\nसंख्या, E से पहि े फि िािे र्ाि े व्यनियों की संख्या के समाि ह,ै जो पपीता िाता ह।ै G, D, जो अंगूर िाता ह,ै के ठीक पहिे फि\nिाता ह।ै C िीची िािे र्ाि ेसे िो दिि पहिे िाता िेता ह।ै F और G िोिों सेब िहीं िाते ह।ैं F अमरूि िहीं िाता ह।ै",
+   "explanation": "utions (36-40):\nWord Code\nExam Wr\nIs Pq\nMandatory Mr\nFor Ty\nAll Cg\nEasy/here Ks/yr\nGood Gt"
+  },
+  {
+   "id": "2021-q36",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code for “good exam” in the given code language?\nिी गई कूट भार्ा म ें“good exam” के निए कूट क्या ह?ै",
+   "options": {
+    "A": "pq wr",
+    "B": "cg gt",
+    "C": "mr wr",
+    "D": "gt wr",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-40): Study the following information carefully and\nIn a certain code language:\n“exam is mandatory for all” is coded as “pq wr ty mr cg”\n“easy exam is here” is coded as “yr wr pq ks”\n“good for mandatory exam” is coded as “gt ty mr wr”\n“good exam for all” is coded as “gt wr ty cg”\nDirections (36-40): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये\nएक निनित कूट भार्ा में:\n“exam is mandatory for all” को “pq wr ty mr cg” के रूप में कूटबद्ध दकया\n“easy exam is here” को “yr wr pq ks” के रूप में कूटबद्ध दकया जाता ह ै\n“good for mandatory exam” को “gt ty mr wr” के रूप में कूटबद्ध दकया जात\n“good exam for all” को “gt wr ty cg” के रूप में कूटबद्ध दकया जाता ह ै"
+  },
+  {
+   "id": "2021-q37",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "The code “cg” is coded for which of the following word?\nकूट “cg” को निम्ननिनित में से दकस र्ब्ि के निए कूटबद्ध दकया गया ह?ै",
+   "options": {
+    "A": "Mandatory",
+    "B": "here",
+    "C": "all",
+    "D": "exam",
+    "E": "None of these\nइिमें से कोई िहीं\nिािे र्ाि ेव्यनियों की संख्या के समाि ह?ै\nd answer the questions given below.\nऔर िीचे दिए गए प्रश्नों के उत्तर िीनजये।\nजाता ह ै\nता ह ै\n?\n7 | No. 1 APP for Banking & SSC Preparation"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (36-40): Study the following information carefully and\nIn a certain code language:\n“exam is mandatory for all” is coded as “pq wr ty mr cg”\n“easy exam is here” is coded as “yr wr pq ks”\n“good for mandatory exam” is coded as “gt ty mr wr”\n“good exam for all” is coded as “gt wr ty cg”\nDirections (36-40): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये\nएक निनित कूट भार्ा में:\n“exam is mandatory for all” को “pq wr ty mr cg” के रूप में कूटबद्ध दकया\n“easy exam is here” को “yr wr pq ks” के रूप में कूटबद्ध दकया जाता ह ै\n“good for mandatory exam” को “gt ty mr wr” के रूप में कूटबद्ध दकया जात\n“good exam for all” को “gt wr ty cg” के रूप में कूटबद्ध दकया जाता ह ै"
+  },
+  {
+   "id": "2021-q38",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code for “here” in the given code language?\nिी गई कूट भार्ा म ें“here” के निए क्या कूट ह?ै",
+   "options": {
+    "A": "ks",
+    "B": "cg",
+    "C": "yr",
+    "D": "gt",
+    "E": "Either (a) or (c)\nया तो (a) या (c)"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (36-40): Study the following information carefully and\nIn a certain code language:\n“exam is mandatory for all” is coded as “pq wr ty mr cg”\n“easy exam is here” is coded as “yr wr pq ks”\n“good for mandatory exam” is coded as “gt ty mr wr”\n“good exam for all” is coded as “gt wr ty cg”\nDirections (36-40): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये\nएक निनित कूट भार्ा में:\n“exam is mandatory for all” को “pq wr ty mr cg” के रूप में कूटबद्ध दकया\n“easy exam is here” को “yr wr pq ks” के रूप में कूटबद्ध दकया जाता ह ै\n“good for mandatory exam” को “gt ty mr wr” के रूप में कूटबद्ध दकया जात\n“good exam for all” को “gt wr ty cg” के रूप में कूटबद्ध दकया जाता ह ै"
+  },
+  {
+   "id": "2021-q39",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "If “tuff exam easy” is coded as “wr ks ft” then what is the\nयदि “tuff exam easy” को “wr ks ft” के रूप में कूटबद्ध दकया जाता ह,ै तो",
+   "options": {
+    "A": "sq pq ks",
+    "B": "yr wr cg",
+    "C": "ks gt pq",
+    "D": "yr pq sw",
+    "E": "None of these\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-40): Study the following information carefully and\nIn a certain code language:\n“exam is mandatory for all” is coded as “pq wr ty mr cg”\n“easy exam is here” is coded as “yr wr pq ks”\n“good for mandatory exam” is coded as “gt ty mr wr”\n“good exam for all” is coded as “gt wr ty cg”\nDirections (36-40): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये\nएक निनित कूट भार्ा में:\n“exam is mandatory for all” को “pq wr ty mr cg” के रूप में कूटबद्ध दकया\n“easy exam is here” को “yr wr pq ks” के रूप में कूटबद्ध दकया जाता ह ै\n“good for mandatory exam” को “gt ty mr wr” के रूप में कूटबद्ध दकया जात\n“good exam for all” को “gt wr ty cg” के रूप में कूटबद्ध दकया जाता ह ै"
+  },
+  {
+   "id": "2021-q40",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "The code “ks gt” is code for?\nकूट “ks gt” दकसके निए कूट ह?ै",
+   "options": {
+    "A": "for easy",
+    "B": "here for",
+    "C": "good here",
+    "D": "easy good",
+    "E": "Can’t be determined\nनििावररत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (36-40): Study the following information carefully and\nIn a certain code language:\n“exam is mandatory for all” is coded as “pq wr ty mr cg”\n“easy exam is here” is coded as “yr wr pq ks”\n“good for mandatory exam” is coded as “gt ty mr wr”\n“good exam for all” is coded as “gt wr ty cg”\nDirections (36-40): निम्ननिनित जािकारी का ध्यािपूर्वक अध्ययि कीनजये\nएक निनित कूट भार्ा में:\n“exam is mandatory for all” को “pq wr ty mr cg” के रूप में कूटबद्ध दकया\n“easy exam is here” को “yr wr pq ks” के रूप में कूटबद्ध दकया जाता ह ै\n“good for mandatory exam” को “gt ty mr wr” के रूप में कूटबद्ध दकया जात\n“good exam for all” को “gt wr ty cg” के रूप में कूटबद्ध दकया जाता ह ै"
+  },
+  {
+   "id": "2021-q41",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "1005, 1000, 985, 960, 925, ?",
+   "options": {
+    "A": "895",
+    "B": "890",
+    "C": "880",
+    "D": "870",
+    "E": "875"
+   },
+   "correctAnswer": "C",
+   "passage": "Direction (41–46): What will come in the place of question (?\nनिम्ननिनित संख्या श्ृंििा में प्रश्ननचह्ि (?) के स्थाि पर क्या आएगा?",
+   "explanation": "Pattern of series –\n1005 – (5 ×1) = 1000\n1000 − (5 ×3) = 985\n985 − (5 ×5) = 960\n960 − (5 ×7) = 925\n925− (5 ×9) = 880"
+  },
+  {
+   "id": "2021-q42",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "8, 10, 23, 73, ?, 1491",
+   "options": {
+    "A": "307",
+    "B": "302",
+    "C": "293",
+    "D": "295",
+    "E": "297\n14 Adda\ncode for “merit is here”?\n“merit is here” का कूट क्या होगा?\n?) mark in following number series.\na247 | No. 1 APP for Banking & SSC Preparation"
+   },
+   "correctAnswer": "E",
+   "passage": "Direction (41–46): What will come in the place of question (?\nनिम्ननिनित संख्या श्ृंििा में प्रश्ननचह्ि (?) के स्थाि पर क्या आएगा?",
+   "explanation": "Pattern of series –\n8 ×1+2 = 10\n10 ×2+3 = 23\n23 ×3+4 = 73\n73 ×4+5 = 𝟐𝟗𝟕\n297 ×5+6 = 1491"
+  },
+  {
+   "id": "2021-q43",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "4, 8, 35, 51, 176, ?",
+   "options": {
+    "A": "212",
+    "B": "222",
+    "C": "202",
+    "D": "204",
+    "E": "206"
+   },
+   "correctAnswer": "A",
+   "passage": "Direction (41–46): What will come in the place of question (?\nनिम्ननिनित संख्या श्ृंििा में प्रश्ननचह्ि (?) के स्थाि पर क्या आएगा?",
+   "explanation": "Pattern of series –\n4 + 22 = 8\n8 + 33 = 35\n35 + 42 = 51\n51 + 53 = 176\n176 + 62 = 212"
+  },
+  {
+   "id": "2021-q44",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "500, ?, 250, 750, 187.5, 937.5",
+   "options": {
+    "A": "1000",
+    "B": "500",
+    "C": "250",
+    "D": "125",
+    "E": "1500"
+   },
+   "correctAnswer": "B",
+   "passage": "Direction (41–46): What will come in the place of question (?\nनिम्ननिनित संख्या श्ृंििा में प्रश्ननचह्ि (?) के स्थाि पर क्या आएगा?",
+   "explanation": "Pattern of series –\n500 ×1 = 𝟓𝟎𝟎\n500 ÷2 = 250\n250 ×3 = 750\n750 ÷4 = 187.5\n187.5 ×5 = 937.5"
+  },
+  {
+   "id": "2021-q45",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "44, 46, 50, 58, 74, ?",
+   "options": {
+    "A": "96",
+    "B": "116",
+    "C": "108",
+    "D": "106",
+    "E": "104"
+   },
+   "correctAnswer": "D",
+   "passage": "Direction (41–46): What will come in the place of question (?\nनिम्ननिनित संख्या श्ृंििा में प्रश्ननचह्ि (?) के स्थाि पर क्या आएगा?",
+   "explanation": "Pattern of series –\n44 + 2 = 46\n46 + 4 = 50\n50 + 8 = 58\n58 + 16 = 74\n74 + 32 = 106"
+  },
+  {
+   "id": "2021-q46",
+   "section": "Quantitative Aptitude",
+   "topic": "Number Series",
+   "question": "88, 99, 92, 97, 94, ?",
+   "options": {
+    "A": "98",
+    "B": "92",
+    "C": "96",
+    "D": "102",
+    "E": "100"
+   },
+   "correctAnswer": "C",
+   "passage": "Direction (41–46): What will come in the place of question (?\nनिम्ननिनित संख्या श्ृंििा में प्रश्ननचह्ि (?) के स्थाि पर क्या आएगा?",
+   "explanation": "Pattern of series –\nAddition and subtraction of consecutive prime numbers\n88 + 11 = 99\n99 – 7 = 92\n92 + 5 = 97\n97 – 3 = 94\n94 + 2 = 96"
+  },
+  {
+   "id": "2021-q47",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of pages typed by B & E together on Monday is what percent more than total number\nof pages typed by C on Tuesday?\nसोमर्ार को B और E द्वारा नमिकर टाइप दकए गए पृष्ठों की कुि संख्या, मंगिर्ार को C द्वारा टाइप दकए गए पृष्ठों की कुि\nसंख्या से दकति े प्रनतर्त अनिक ह?ै",
+   "options": {
+    "A": "64%",
+    "B": "80%",
+    "C": "90%",
+    "D": "96%",
+    "E": "60%"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (47–51): Bar graph given below shows number of\ndifferent people on two (Monday & Tuesday) different days. Re\nquestions.\nिीचे दिया गया बार ग्राफ पांच (A, B, C, D और E) अिग-अिग व्यनतयों द्वार\nमें टाइप दकये गए पृष्ठों की संख्या को िर्ावता ह।ै आकडों का ध्यािपूर्वक अध्ययि\n80\n70\n60\n50\n40\n30\n20\n10\n0\nA B C\nMonday Tuesday\npages typing by five (A, B, C, D & E)\nead the data carefully and answer the\nरा िो अिग-अिग दििों (सोमर्ार और मगं िर्ार)\nकीनजए और प्रश्नों के उत्तर िीनजये।\nD E\n7 | No. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Total number of pages typed by B & E together on Monday\n90−50\nRequired percentage = ×100 = 80%\n50"
+  },
+  {
+   "id": "2021-q48",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the approximate difference between the average number of pages typed by A, C & D on\nMonday and total number pages typed by A & E together on Tuesday?\nसोमर्ार को A, C और D द्वारा टाइप दकए गए पष्ठृ ों की औसत सख्ं या तथा मगं िर्ार को A और E द्वारा टाइप दकए गए कुि पष्ठृ ों\nकी संख्या के बीच अंतर (िगभग) ज्ञात कीनजए।",
+   "options": {
+    "A": "65",
+    "B": "72",
+    "C": "68",
+    "D": "62",
+    "E": "56"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (47–51): Bar graph given below shows number of\ndifferent people on two (Monday & Tuesday) different days. Re\nquestions.\nिीचे दिया गया बार ग्राफ पांच (A, B, C, D और E) अिग-अिग व्यनतयों द्वार\nमें टाइप दकये गए पृष्ठों की संख्या को िर्ावता ह।ै आकडों का ध्यािपूर्वक अध्ययि\n80\n70\n60\n50\n40\n30\n20\n10\n0\nA B C\nMonday Tuesday\npages typing by five (A, B, C, D & E)\nead the data carefully and answer the\nरा िो अिग-अिग दििों (सोमर्ार और मगं िर्ार)\nकीनजए और प्रश्नों के उत्तर िीनजये।\nD E\n7 | No. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Average number of pages typed by A, C & D on Monday =\nTotal number pages typed by A & E together on Tuesday = 64 +\nRequired difference = 124 – 59 = 65"
+  },
+  {
+   "id": "2021-q49",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of total pages typed by C on both given days to total pages typed by D & E together on\nTuesday?\nिोिों दिए गए दििों म ें C द्वारा टाइप दकए गए कुि पृष्ठों का मंगिर्ार को D और E द्वारा टाइप दकए गए कुि पष्ठृ ों से अिुपात\nज्ञात कीनजए।",
+   "options": {
+    "A": "56 : 55",
+    "B": "55 : 54",
+    "C": "55 : 58",
+    "D": "55 : 56",
+    "E": "55 : 62"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (47–51): Bar graph given below shows number of\ndifferent people on two (Monday & Tuesday) different days. Re\nquestions.\nिीचे दिया गया बार ग्राफ पांच (A, B, C, D और E) अिग-अिग व्यनतयों द्वार\nमें टाइप दकये गए पृष्ठों की संख्या को िर्ावता ह।ै आकडों का ध्यािपूर्वक अध्ययि\n80\n70\n60\n50\n40\n30\n20\n10\n0\nA B C\nMonday Tuesday\npages typing by five (A, B, C, D & E)\nead the data carefully and answer the\nरा िो अिग-अिग दििों (सोमर्ार और मगं िर्ार)\nकीनजए और प्रश्नों के उत्तर िीनजये।\nD E\n7 | No. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Total pager typed by C on both given days = 60 + 50 = 110\nTotal number pages typed by A & E together on Tuesday = 52 +\nRequired ratio = 110 : 112 = 55 : 56"
+  },
+  {
+   "id": "2021-q50",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If total pages typed by B on Wednesday is 37.5% more than that of Monday and total pages typed by\nE on Wednesday is 6 more than that of by B on Wednesday, then find total number of pages typed by E on\nMonday, Tuesday & Wednesday together?\nयदि बुिर्ार को B द्वारा टाइप दकए गए कुि पृष्ठ, सोमर्ार को B द्वारा टाइप दकए गए कुि पृष्ठ की तुििा में 37.5% अनिक ह ैं\nतथा बुिर्ार को E द्वारा टाइप दकए गए कुि पृष्ठ, बुिर्ार को B द्वारा टाइप दकए गए पृष्ठों की कुि संख्या से 6 अनिक ह,ैं तो\nसोमर्ार, मंगिर्ार और बुिर्ार को एकसाथ E द्वारा टाइप दकए गए पृष्ठों की कुि संख्या ज्ञात कीनजए।",
+   "options": {
+    "A": "174",
+    "B": "172",
+    "C": "176",
+    "D": "178",
+    "E": "170"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (47–51): Bar graph given below shows number of\ndifferent people on two (Monday & Tuesday) different days. Re\nquestions.\nिीचे दिया गया बार ग्राफ पांच (A, B, C, D और E) अिग-अिग व्यनतयों द्वार\nमें टाइप दकये गए पृष्ठों की संख्या को िर्ावता ह।ै आकडों का ध्यािपूर्वक अध्ययि\n80\n70\n60\n50\n40\n30\n20\n10\n0\nA B C\nMonday Tuesday\npages typing by five (A, B, C, D & E)\nead the data carefully and answer the\nरा िो अिग-अिग दििों (सोमर्ार और मगं िर्ार)\nकीनजए और प्रश्नों के उत्तर िीनजये।\nD E\n7 | No. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Total pages typed by total pages typed by E on Wednesday\nRequired sum = (42 + 60 + 72) = 174\n29 Adda2\n= 48 + 42 = 90\n2+60+44\n= 59 (approx.)\n3\n60 = 124\n60 = 112\n11\n= 48 × +6 = 72\n8\n247 | No. 1 APP for Banking & SSC Preparation"
+  },
+  {
+   "id": "2021-q51",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total pages typed by B, D & E together on Tuesday is how much more or less than total pages typed\nby A & C together on Monday?\nमंगिर्ार को B, D और E द्वारा नमिकर टाइप दकए गए कुि पष्ठृ , सोमर्ार को A और C द्वारा नमिाकर टाइप दकए गए कुि पष्ठृ ों\nसे दकतिे अनिक या कम ह?ैं",
+   "options": {
+    "A": "32",
+    "B": "44",
+    "C": "34",
+    "D": "36",
+    "E": "38"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (47–51): Bar graph given below shows number of\ndifferent people on two (Monday & Tuesday) different days. Re\nquestions.\nिीचे दिया गया बार ग्राफ पांच (A, B, C, D और E) अिग-अिग व्यनतयों द्वार\nमें टाइप दकये गए पृष्ठों की संख्या को िर्ावता ह।ै आकडों का ध्यािपूर्वक अध्ययि\n80\n70\n60\n50\n40\n30\n20\n10\n0\nA B C\nMonday Tuesday\npages typing by five (A, B, C, D & E)\nead the data carefully and answer the\nरा िो अिग-अिग दििों (सोमर्ार और मगं िर्ार)\nकीनजए और प्रश्नों के उत्तर िीनजये।\nD E\n7 | No. 1 APP for Banking & SSC Preparation\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Total pages typed by B, D & E together on Tuesday = (54 + 52\nTotal pages typed by A & C together on Monday = 72 + 60 = 132\nRequired difference = 166 – 132 = 34"
+  },
+  {
+   "id": "2021-q52",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If total females speak French from B is 72, then find difference between total males\nand females speak German from the same college?\nयदि B से फ्रेंच बोििे र्ािी मनहिाओं की कुि संख्या 72 ह,ै तो समाि कॉिेज से जमिव बोििे र्ािे पुरुर्ों और मनहिाओं की कुि\nसंख्या के बीच अंतर ज्ञात कीनजए?",
+   "options": {
+    "A": "24",
+    "B": "36",
+    "C": "32",
+    "D": "16",
+    "E": "40"
+   },
+   "correctAnswer": "A",
+   "passage": "Direction (52–56): Table given below shows total number of students (males and females) in three\ndifferent colleges and number of students (males and females) speak French out of total students in each\ncollege. Read the data carefully and answer the questions.\nNote – Student in each college speak only either French or German.\nCollege Total males Total females Students speak French\nA 120 80 112\nB 160 120 160\nC 192 168 224\nDirection (52 – 56): िीचे िी गई तानिका तीि अिग-अिग कॉिेजों में नर्द्यार्थयव ों (पुरुर्ों और मनहिाओं) की कुि संख्या\nऔर प्रत्येक कॉिेज में कुि नर्द्यार्थवयों में से फ्रेंच बोििे र्ािे नर्द्यार्थवयों (पुरुर्ों और मनहिाओं) की संख्या को िर्ावती ह।ै आंकडों\nको ध्यािपूर्वक पदिए और दिए गए प्रश्नों के उत्तर िीनजये।\nिोट- प्रत्येक कॉिेज के नर्द्याथी केर्ि फ्रेंच या जमवि बोिते ह।ैं\nकॉिजे कुि परुु र् कुि मनहिायें फ्रेंच बोिि ेर्ािे नर्द्याथी\nA 120 80 112\nB 160 120 160\nC 192 168 224",
+   "explanation": "Total students speak German from B = (160 + 120) – 160 = 12\nTotal females speak German from B = 120 – 72 = 48\nTotal males speak German from B = 120 - 48 = 72\nRequired difference = 72 – 48 = 24"
+  },
+  {
+   "id": "2021-q53",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If 62.5% of total students speak French from C are males, then find the difference between total\nfemales speak French from C and total students speak German from A?\nयदि C से फ्रेंच बोििे र्ाि ेकुि नर्द्यार्थवयों में से 62.5% पुरुर् ह,ैं तो C स ेफ्रेंच बोििे र्ािी कुि मनहिाओं और A से जमवि बोिि े\nर्ाि ेकुि नर्द्यार्थवयों के बीच अंतर ज्ञात कीनजए?",
+   "options": {
+    "A": "2",
+    "B": "4",
+    "C": "6",
+    "D": "8",
+    "E": "12"
+   },
+   "correctAnswer": "B",
+   "passage": "Direction (52–56): Table given below shows total number of students (males and females) in three\ndifferent colleges and number of students (males and females) speak French out of total students in each\ncollege. Read the data carefully and answer the questions.\nNote – Student in each college speak only either French or German.\nCollege Total males Total females Students speak French\nA 120 80 112\nB 160 120 160\nC 192 168 224\nDirection (52 – 56): िीचे िी गई तानिका तीि अिग-अिग कॉिेजों में नर्द्यार्थयव ों (पुरुर्ों और मनहिाओं) की कुि संख्या\nऔर प्रत्येक कॉिेज में कुि नर्द्यार्थवयों में से फ्रेंच बोििे र्ािे नर्द्यार्थवयों (पुरुर्ों और मनहिाओं) की संख्या को िर्ावती ह।ै आंकडों\nको ध्यािपूर्वक पदिए और दिए गए प्रश्नों के उत्तर िीनजये।\nिोट- प्रत्येक कॉिेज के नर्द्याथी केर्ि फ्रेंच या जमवि बोिते ह।ैं\nकॉिजे कुि परुु र् कुि मनहिायें फ्रेंच बोिि ेर्ािे नर्द्याथी\nA 120 80 112\nB 160 120 160\nC 192 168 224",
+   "explanation": "Total females speak French from C = 224 × = 84\n8\nTotal students speak German from A = (120 + 80) – 112 = 88\nRequired difference = 88 – 84 = 4"
+  },
+  {
+   "id": "2021-q54",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "If 70% of total females from B speak French and 32 of total\nstudents speak French from A are females, then find total males\nspeak German from B are what percent less than total males speak\nFrench from A?\nयदि B की कुि मनहिाओं में से 70% फ्रेंच बोिती ह ैंऔर A स े फ्रेंच बोििे र्ाि े कुि\nनर्द्यार्थवयों में स े 32 मनहिाएं ह,ैं तो ज्ञात कीनजए दक B से जमवि बोििे र्ाि े कुि\nपुरुर् A से फ्रेंच बोििे र्ाि ेकुि पुरुर्ों स ेदकतिे प्रनतर्त कम ह?ैं",
+   "options": {
+    "A": "0.5%",
+    "B": "5%",
+    "C": "2%",
+    "D": "1%",
+    "E": "0.25%"
+   },
+   "correctAnswer": "A",
+   "passage": "Direction (52–56): Table given below shows total number of students (males and females) in three\ndifferent colleges and number of students (males and females) speak French out of total students in each\ncollege. Read the data carefully and answer the questions.\nNote – Student in each college speak only either French or German.\nCollege Total males Total females Students speak French\nA 120 80 112\nB 160 120 160\nC 192 168 224\nDirection (52 – 56): िीचे िी गई तानिका तीि अिग-अिग कॉिेजों में नर्द्यार्थयव ों (पुरुर्ों और मनहिाओं) की कुि संख्या\nऔर प्रत्येक कॉिेज में कुि नर्द्यार्थवयों में से फ्रेंच बोििे र्ािे नर्द्यार्थवयों (पुरुर्ों और मनहिाओं) की संख्या को िर्ावती ह।ै आंकडों\nको ध्यािपूर्वक पदिए और दिए गए प्रश्नों के उत्तर िीनजये।\nिोट- प्रत्येक कॉिेज के नर्द्याथी केर्ि फ्रेंच या जमवि बोिते ह।ैं\nकॉिजे कुि परुु र् कुि मनहिायें फ्रेंच बोिि ेर्ािे नर्द्याथी\nA 120 80 112\nB 160 120 160\nC 192 168 224",
+   "explanation": "Total males speak French from A = 112 – 32 = 80\n70\nTotal males speak German from B = 160 – 120 × = 76\n100\n80−76\nRequired percentage = ×100 = 0.5%\n80"
+  },
+  {
+   "id": "2021-q55",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find ratio of total students speaks German from all the three colleges together to total males in A &\nB together?\nसभी तीि कॉिेजों से नमिाकर जमवि बोििे र्ाि ेकुि नर्द्यार्थवयों का A और B में नमिाकर कुि पुरुर्ों से अिुपात ज्ञात कीनजए?",
+   "options": {
+    "A": "41 : 35",
+    "B": "35 : 43",
+    "C": "43 : 37",
+    "D": "43 : 35",
+    "E": "43 : 33"
+   },
+   "correctAnswer": "D",
+   "passage": "Direction (52–56): Table given below shows total number of students (males and females) in three\ndifferent colleges and number of students (males and females) speak French out of total students in each\ncollege. Read the data carefully and answer the questions.\nNote – Student in each college speak only either French or German.\nCollege Total males Total females Students speak French\nA 120 80 112\nB 160 120 160\nC 192 168 224\nDirection (52 – 56): िीचे िी गई तानिका तीि अिग-अिग कॉिेजों में नर्द्यार्थयव ों (पुरुर्ों और मनहिाओं) की कुि संख्या\nऔर प्रत्येक कॉिेज में कुि नर्द्यार्थवयों में से फ्रेंच बोििे र्ािे नर्द्यार्थवयों (पुरुर्ों और मनहिाओं) की संख्या को िर्ावती ह।ै आंकडों\nको ध्यािपूर्वक पदिए और दिए गए प्रश्नों के उत्तर िीनजये।\nिोट- प्रत्येक कॉिेज के नर्द्याथी केर्ि फ्रेंच या जमवि बोिते ह।ैं\nकॉिजे कुि परुु र् कुि मनहिायें फ्रेंच बोिि ेर्ािे नर्द्याथी\nA 120 80 112\nB 160 120 160\nC 192 168 224",
+   "explanation": "Total students speak German from all the three colleges toget\n= (120 + 80 – 112) + (160 + 120 – 160) + (192 + 168 – 224)\n= 88 + 120 + 136\n= 344\nTotal males in A & B together = 120 + 160 = 280\nRequired ratio = 344 : 280\n= 43 : 35"
+  },
+  {
+   "id": "2021-q56",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The ratio of female speaks German to French from C is 4 : 3 and total females speaks German from\ncollege M are 24 less than total males speak French from C. If ratio of total males to females speaks\nGerman from college M is 4 : 5 and there are total 480 student in college M, then find total number of\nstudents speak French from M (Student in college M speak only either French or German)?\nC स े जमवि बोििे र्ािी मनहिाओं का फ्रेंच बोििे र्ािी मनहिाओं स े अिुपात 4:3 ह ै और कॉिेज M से जमवि बोििे र्ािी कुि\nमनहिायें कॉिेज C से फ्रेंच बोििे र्ािे पुरुर्ों की कुि संख्या स े24 कम ह।ै यदि कॉिेज M से जमवि बोििे र्ाि ेपुरुर्ों का मनहिाओं\nसे अिुपात 4:5 ह ै और कॉिजे M में कुि 480 नर्द्याथी ह,ैं तो M स े फ्रेंच बोििे र्ाि े नर्द्यार्थवयों की कुि संख्या ज्ञात कीनजए\n(कॉिेज M के नर्द्याथी केर्ि फ्रेंच या जमवि बोिते ह)ैं ?",
+   "options": {
+    "A": "168",
+    "B": "192",
+    "C": "212",
+    "D": "172",
+    "E": "182\n3"
+   },
+   "correctAnswer": "B",
+   "passage": "Direction (52–56): Table given below shows total number of students (males and females) in three\ndifferent colleges and number of students (males and females) speak French out of total students in each\ncollege. Read the data carefully and answer the questions.\nNote – Student in each college speak only either French or German.\nCollege Total males Total females Students speak French\nA 120 80 112\nB 160 120 160\nC 192 168 224\nDirection (52 – 56): िीचे िी गई तानिका तीि अिग-अिग कॉिेजों में नर्द्यार्थयव ों (पुरुर्ों और मनहिाओं) की कुि संख्या\nऔर प्रत्येक कॉिेज में कुि नर्द्यार्थवयों में से फ्रेंच बोििे र्ािे नर्द्यार्थवयों (पुरुर्ों और मनहिाओं) की संख्या को िर्ावती ह।ै आंकडों\nको ध्यािपूर्वक पदिए और दिए गए प्रश्नों के उत्तर िीनजये।\nिोट- प्रत्येक कॉिेज के नर्द्याथी केर्ि फ्रेंच या जमवि बोिते ह।ैं\nकॉिजे कुि परुु र् कुि मनहिायें फ्रेंच बोिि ेर्ािे नर्द्याथी\nA 120 80 112\nB 160 120 160\nC 192 168 224",
+   "explanation": "Total females speak German from college M = (224 - 168 ×\n7\n5\nTotal students speak German from M = 128 + 128 × = 288\n4\nSo, total number of students speak French from M = 480 – 288 = 1"
+  },
+  {
+   "id": "2021-q57",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Circumference of a circle is 88 cm and radius of the cylinder is of the diameter of the circle. If\n4\nheight of cylinder is 12 cm, then find the volume (in cm 3 ) of the cylinder?\n3\nएक र्ृत्त की पररनि 88 सेमी ह ैऔर बेिि की निज्या, र्ृत्त के व्यास का ह।ै यदि बेिि की ऊँचाई 12 सेमी ह,ै तो बेिि का आयति\n4\n(सेमी3 में) ज्ञात कीनजए।",
+   "options": {
+    "A": "16638",
+    "B": "16632",
+    "C": "16648",
+    "D": "16378",
+    "E": "16366"
+   },
+   "correctAnswer": "B",
+   "explanation": "Given, 2𝜋𝑟 = 88\nr = 14 cm\nATQ –\n3\nRadius of cylinder = 14 ×2× = 21 𝑐𝑚\n4\n22\nRequired volume = ×21×21×12 = 16632 cm3\n+ 60) = 166\n20\nther\n) – 24 = 128\n192\n7 | No. 1 APP for Banking & SSC Preparation"
+  },
+  {
+   "id": "2021-q58",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A & B invested Rs. 4200 and Rs. 4000 respectively in a business and after six months B withdrew\nRs. 500 from his initial investment. If after one year the profit share of B is Rs. 3000, then find the total\nprofit?\nA और B िे एक व्यर्साय में क्रमर्ः 4200 रुपये और 4000 रुपये का निर्ेर् दकया और छह महीिे के बाि B िे अपिे प्रारंनभक\nनिर्ेर् से 500 रुपय े र्ापस िे निए। यदि एक र्र्व के पिात् अर्जवत होिे र्ाि े िाभ में B का नहस्सा 3000 रुपये ह,ै तो कुि िाभ\nज्ञात कीनजए?",
+   "options": {
+    "A": "Rs. 6360\n6360 रुपय े",
+    "B": "Rs. 6160\n6160 रुपय े",
+    "C": "Rs. 6560\n6560 रुपय े",
+    "D": "Rs. 5960\n5960 रुपय े",
+    "E": "Rs. 6320\n6320 रुपय े"
+   },
+   "correctAnswer": "A",
+   "explanation": "Profit ratio of A to B = (42 ×12) ∶ (40×6+35×6)\n= 28 : 25\nGiven, 25 = 3000\n(28+25)\nSo, total profit = ×3000 = 6360 𝑅𝑠.\n25"
+  },
+  {
+   "id": "2021-q59",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ Some options for this question are printed as images in the source paper and could not be extracted.\n\nSix years hence the ratio of age of A to B will be 5 : 6 and present age of A is 24 years. Find how\nmany years will take by B to getting age of 39 years?\nछह र्र्व बाि A और B की आयु का अिुपात 5:6 होगा और A की र्तवमाि आयु 24 र्र्व ह।ै ज्ञात कीनजए दक B को 39 र्र्व की आयु\nप्राप्त करिे में दकतिे र्र्व का समय िगेगा?",
+   "options": {
+    "A": "3 years\n3 र्र्व",
+    "B": "6 years\n6 र्र्व\n(C) 10 years\n10 र्र्व",
+    "D": "9 years\n9 र्र्व",
+    "E": "12 years\n12 र्र्व"
+   },
+   "correctAnswer": "D",
+   "explanation": "Age of A six years hence = 24 + 6 = 30 years\n6\nSo, age of B six years hence = 30 × = 36 𝑦𝑒𝑎𝑟𝑠\n5\nPresent age of B = 36 – 6 = 30 years\nRequired years = 39 – 30 = 9 years"
+  },
+  {
+   "id": "2021-q60",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Pipe A and pipe B together can fill the tank in 24 minutes, while pipe A, pipe B and pipe C together\ncan fill the tank in 30 minutes and Pipe B and Pipe C together can fill the tank in 60 minutes. In how many\nminutes pipe A alone can fill the same tank completely.\nपाइप A और पाइप B नमिकर टैंक को 24 नमिट में भर सकते ह,ैं जबदक पाइप A, पाइप B और पाइप C नमिकर टैंक को 30 नमिट\nमें भर सकते ह ैंऔर पाइप B और पाइप C नमिकर टैंक को 60 नमिट में भर सकते ह।ैं पाइप A अकेिे उसी टैंक को दकतिे नमिट म ें\nपूर्वतः भर सकता ह?ै",
+   "options": {
+    "A": "40",
+    "B": "120",
+    "C": "80",
+    "D": "60",
+    "E": "100"
+   },
+   "correctAnswer": "D",
+   "explanation": "A+B =\n24\n1\nA+B+C =\n30\n1 1 4 –5 –1\n⇒ C = – = =\n30 24 120 120\nPipe ‘C’ is an outlet pipe which can empty the tank in 120\n1\nB+C =\n60\n1 1 2+1 1\nB = + = =\n60 120 120 40\n1\nA+B =\n24\n1 1 5–3 2 1\nA = – = = =\n24 40 120 120 60\nPipe ‘A’ alone can fill the tank completely in 60 minutes."
+  },
+  {
+   "id": "2021-q61",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "B is 20% less efficient than A, who completes a work in 72 days. C alone can complete the same\nwork in 60 days. If all three started working alternatively starting with A and followed by B and C\nrespectively, then find in how many days the work will be completed?\nB, A से 20% कम कायवकुर्ि ह,ै जो एक कायव को 72 दििों में समाप्त करता ह।ै C अकेिे उसी कायव को 60 दििों में समाप्त कर\nसकता ह।ै यदि तीिों क्रमर्ः A से र्ुरू करते हुए एकांतर रूप से कायव करिा आरम्भ करते ह ैंऔर उसके बाि क्रमर्ः B और C कायव\nकरिा र्ुरू करते ह,ैं तो ज्ञात कीनजए दक कायव दकतिे दििों में समाप्त हो जाएगा?",
+   "options": {
+    "A": "20 days\n20 दिि",
+    "B": "30 days\n30 दिि",
+    "C": "36 days\n36 दिि",
+    "D": "72 days\n72 दिि",
+    "E": "64 days\n64 दिि"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let the efficiency of A = 5x units/day\n80\nSo, the efficiency of B = 5x × = 4𝑥 𝑢𝑛𝑖𝑡𝑠/𝑑𝑎𝑦\n100\nTotal work = 72 ×5𝑥 = 360𝑥 𝑢𝑛𝑖𝑡𝑠\n360𝑥\nThe efficiency of C = = 6𝑥 𝑢𝑛𝑖𝑡𝑠/𝑑𝑎𝑦\n60\nTotal work completed by all three alternatively starting w\nthree days = 5x + 4x + 6x = 15x\n360𝑥\nRequired days = ×3 = 72 𝑑𝑎𝑦𝑠\n15𝑥"
+  },
+  {
+   "id": "2021-q62",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Train A crosses a man running in opposite direction in 16 seconds. Speed of man is 18 km/hr. and\nspeed of train A is 72 km/hr. Find length of train A (in meters)?\nट्रेि A नर्परीत दिर्ा में िौड रह ेएक व्यनि को 16 सेकंड में पार करती ह।ै व्यनि की गनत 18 दकमी/घंटा ह ैऔर ट्रेि A की गनत 72\nदकमी/घंटा ह।ै ट्रेि A की िंबाई (मीटर में) ज्ञात कीनजए?",
+   "options": {
+    "A": "280",
+    "B": "360",
+    "C": "480",
+    "D": "600",
+    "E": "400"
+   },
+   "correctAnswer": "E",
+   "explanation": "Let length of train – A be x meters.\nATQ,\n𝑥 5\n= (72+18)×\n16 18\n𝑥 = 400\nminutes.\nwith A and followed by Band C respectively, in"
+  },
+  {
+   "id": "2021-q63",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man sold a table at 33% profit after allowing a discount of 5% on it. Had he sold the table at\nmarked price, then he would have earned Rs.420 more profit. Find cost price of table (in Rs.)?\nएक व्यनि िे एक मेज 5% की छूट िेिे के पिात् 33% िाभ पर बेची। यदि र्ह मेज को अंदकत मूल्य पर बेचता, तो उसे 420 रुपये\nअनिक िाभ होता। मेज का क्रय मूल्य ज्ञात कीनजये (रुपये में)?",
+   "options": {
+    "A": "6000",
+    "B": "7200",
+    "C": "6600",
+    "D": "7800",
+    "E": "8400"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let cost price of table be Rs.100x.\n133\nSo, selling price of table = 100𝑥 × = Rs.133x\n100\n100\nAnd, marked price of table = 133𝑥 × = Rs.140x\n95\nATQ,\n140𝑥 −133𝑥 = 420\n𝑥 = 60 Rs.\nCost price of table = Rs.100x = Rs.6,000"
+  },
+  {
+   "id": "2021-q64",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Deepak invested some amount on SI out of Rs.47000 and rest amount on C.I. for two years. If S.I. is\noffering 12% p.a. and C. I. is offering 15% p.a. compounding annually and C.I. is Rs.532.5 more than S.I.,\nthen find amount invested by Deepak on C.I?\nिीपक िे 47000 रुपये में से, िो र्र्ों के निए कुछ रानर् सािारर् ब्याज पर और र्ेर् रानर् चक्रर्ृनद्ध ब्याज पर निर्ेर् की। यदि\nर्ार्र्वक संयोनजत करि े पर सािारर् ब्याज की िर 12% प्रनत र्र्व और चक्रर्ृनद्ध ब्याज की िर 15% प्रनत र्र्व ह ै और चक्रर्ृनद्ध\nब्याज, सािारर् ब्याज स े 532.5 रुपये अनिक ह,ै तो िीपक द्वारा चक्रर्ृनद्ध ब्याज पर निर्ेर् की गयी ििरानर् ज्ञात कीनजये।",
+   "options": {
+    "A": "Rs.23000",
+    "B": "Rs.22000",
+    "C": "Rs.21000",
+    "D": "Rs.25000",
+    "E": "Rs.24000"
+   },
+   "correctAnswer": "C",
+   "explanation": "Let amount invested by Deepak at C.I. be ‘Rs.x’.\nSo, amount invested by Deepak at S.I. = Rs (47000 – x)\nNow,\nEquivalent rate of interest of 15% C.I. for 2 years = 15 + 15 +\nATQ,\n𝑥 × 32.25 (47000 – 𝑥 )× 2 × 12\n– = 532.5\n100 100\n32.25x + 24x = 1181250\nx = 21000 Rs."
+  },
+  {
+   "id": "2021-q65",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A vessel contains mixture in which 25% is water and rest is milk. If 40 liters more water added in\nvessel, then quantity of water becomes 40% of mixture. Find the quantity of milk in the vessel?\nएक बतवि में 25% पािी ह ै और र्ेर् ििू ह।ै यदि बतवि में 40 िीटर अनिक पािी नमिा दिया जाए, तो पािी की मािा नमश्र्\nकी 40% हो जाएगी। बतवि में ििू की मािा ज्ञात कीनजए।",
+   "options": {
+    "A": "100 l",
+    "B": "140 l",
+    "C": "160 l",
+    "D": "120 l",
+    "E": "80 l"
+   },
+   "correctAnswer": "D",
+   "explanation": "Let total mixture in vessel be Q liters.\nInitial quantity of water in vessel = 0.25Q\nAnd, quantity of milk in vessel = 0.75Q\nATQ –\n0.25𝑄+40 40\n=\n0.75𝑄 60\n15Q + 2400 = 30Q\n15Q = 2400\nQ = 160 l\n75\nQuantity of milk in vessel = 160 × = 120 𝑙\n100"
+  },
+  {
+   "id": "2021-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A bag contains 8 red balls, 5 green balls and 7 black balls. If two balls are drawn from the bag\nrandomly, then find the probability of getting exactly one red ball.\nएक बैग में 8 िाि गेंिें, 5 हरी गेंिें और 7 कािी गेंिें ह।ैं यदि बैग में से िो गेंिें यािनृ छछक रूप से निकािी जाती ह,ैं तो ठीक एक\nिाि गेंि प्राप्त होिे की प्रानयकता ज्ञात कीनजए।\n14",
+   "options": {
+    "A": "57\n28",
+    "B": "95\n4",
+    "C": "19\n48",
+    "D": "95",
+    "E": "None of the above.\nइिमें से कोई िहीं"
+   },
+   "correctAnswer": "D",
+   "explanation": "Possible cases = (1 red ball & 1 green ball) or (1 red ball\n8×5 8×7\nRequired probability = +\n20𝐶2 20𝐶2\n4 28\n= +\n19 95\n48\n=\n95\n32 Add\n15 × 15\n= 32 .25%\n100\n& 1 black ball)\nda247 | No. 1 APP for Banking & SSC Preparation"
+  },
+  {
+   "id": "2021-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "40% of ‘x’ is equal to 30% of ‘y’. If average of x & y is 30 more than x, then find 75% of the ‘y’?\n'x' का 40%, 'y' के 30% के बराबर ह।ै यदि x और y का औसत, x स े 30 अनिक ह,ै तो 'y' का 75% ज्ञात कीनजए।",
+   "options": {
+    "A": "180",
+    "B": "150",
+    "C": "240",
+    "D": "210",
+    "E": "360"
+   },
+   "correctAnswer": "A",
+   "explanation": "ATQ, 40× = 30×\n100 100\n4x=3y………………..(i)\n𝑥+𝑦\nAnd = 𝑥+30\n2\n𝑦−𝑥 = 60……….(𝑖𝑖)\nFrom (i) and (ii)\ny=240\n75% of second number=180"
+  },
+  {
+   "id": "2021-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The difference between CI earned in two years and SI received in 3 years on the sum of Rs. 2000 is\nRs. 205. Find the rate of simple interest for the 3rd year if the rate of interest for the first two years is 15%\non both CI and SI? (S.I. of 3 year is more than C.I. of 2 year)\n2000 रु. रुपये की ििरानर् पर 2 र्र्व में प्राप्त चक्रर्ृनद्ध ब्याज और 3 र्र्व में प्राप्त सािारर् ब्याज का\nअंतर 205 ह।ै यदि चक्रर्ृनद्ध ब्याज और सािारर् ब्याज िोिों पर पहिे िो र्र्ों के निए ब्याज िर 15% ह,ै तो\nतीसरे र्र् व के निए सािारर् ब्याज की िर ज्ञात कीनजए। (3 र्र्व का सािारर् ब्याज, 2 र्र्व के चक्रर्ृनद्ध ब्याज\nसे अनिक ह)ै",
+   "options": {
+    "A": "12.5%",
+    "B": "10%",
+    "C": "15%",
+    "D": "5%\n1",
+    "E": "11 %\n9"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let the rate of simple interest for the 3rd year be x% per\n2000 × 15 × 2 2000 × 𝑥 × 1\nTotal SI = +\n100 100\n= Rs. (600 + 20x)\n𝑅 𝑅\n𝐶𝐼 𝑓𝑜𝑟 2 𝑦𝑒𝑎𝑟𝑠 = 𝑃(1+ )(1+ )−𝑃\n100 100\n15 15\n= 2000(1+ )(1+ )−2000\n100 100\n= Rs 645\nATQ,\n⇒ 600+20x-645=205\n⇒ 20x = 250 ⇒ x = 12.5%"
+  },
+  {
+   "id": "2021-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A boat can cover certain distance in upstream in 16 minutes and the same distance in still water in\n12 minutes. Find the time taken by boat to cover same distance in downstream.\nएक िार् एक निनित िरू ी को िारा के प्रनतकूि 16 नमिट और समाि िरू ी को र्ांत जि में 12 नमिट\nतय कर सकता ह।ै िारा के अिुकूि समाि िरू ी तय करिे के निए िार् द्वारा निया गया समय ज्ञात कीनजए।",
+   "options": {
+    "A": "8 minutes\n8 नमिट",
+    "B": "9.6 minutes\n9.6 नमिट",
+    "C": "10 minutes\n10 नमिट",
+    "D": "8.8 minutes\n8.8 नमिट",
+    "E": "9.4 minutes\n9.4 नमिट"
+   },
+   "correctAnswer": "B",
+   "explanation": "Let speed of boat in still water= x km/min\nSpeed of stream = y km/min\nAnd distance = D km\nATQ,\n(𝑥−𝑦)16 = 12𝑥\n𝑥 = 4𝑦\nLet Required time be ‘T’ min\nATQ,\n12𝑥 = 𝑇(𝑥+𝑦)\n48𝑦\nT = = 9.6 minutes\n5𝑦\nSolutions (70-74):\nStudents appeared in exactly two exams = 150−20 = 130\n40\nStudents appeared in CRE exam = ×1000 = 400\n100\nStudents appeared in only CRE & GMAT = Students appeared\nStudents appeared in only GMAT & CAT = 150−(20+50+\nStudents appeared in CRE = 280+50+50+20 = 400\nStudents appeared in CAT = 200+50+30+20 = 300\nStudents appeared in only GMAT = 1000−(50+280+50+\nEmployees using GMAT = 370+50+20+30 = 470\n33 Add\nannum.\n[400−(280+20)]\nd in only CRE & CAT = = 50\n2\n50) = 30\n+20+30+200) = 370\nda247 | No. 1 APP for Banking & SSC Preparation"
+  },
+  {
+   "id": "2021-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "How many students appeared in only GMAT & CAT together?\nकेर्ि GMAT और CAT में एकसाथ दकति े छाि उपनस्थत हुए।",
+   "options": {
+    "A": "20",
+    "B": "30",
+    "C": "50",
+    "D": "40",
+    "E": "10"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (70-74): study the given information carefully and answer the questions.\nTotal 1000 students appeared in three (GMAT, CRE & CAT) different exams. Some students appeared in\nsingle exam, while some appeared more than it. 20 students appeared in all three exams. 150 students\nappeared in more than one exam. 200 students appeared in only CAT, while 280 students appeared in\nonly CRE. 40% of total students appeared in CRE.\nNumber of students appeared for both GMAT & CRE but not CAT is equal to number of students appeared\nfor both CAT and CRE but not for GMAT.\nिी गई जािकारी का ध्यािपूर्वक अध्ययि कीनजए और प्रश्नों के उत्तर िीनजए।\nकुि 1000 छाि तीि (GMAT, CRE और CAT) नर्नभन्न परीक्षाओं में उपनस्थत होते ह।ै कुछ छाि एकि परीक्षा में उपनस्थत\nहुए, जबदक कुछ इससे अनिक में उपनस्थत होते ह।ै तीिों परीक्षाओं में 20 छाि र्ानमि होते ह।ै एक से अनिक परीक्षाओं में 150\nछाि उपनस्थत होते ह।ै केर्ि CAT में 200 छाि उपनस्थत होते ह,ै जबदक 280 छाि केर्ि CRE म ें उपनस्थत होत े ह।ै कुि छािों\nका 40% CRE में उपनस्थत होता ह।ै\nGMAT और CRE िोिों िेदकि CAT के निए िहीं उपनस्थत होि े र्ाि े छािों की सख्ं या, CAT और CRE िोिों िदे कि GMAT के\nनिए िहीं उपनस्थत होि े र्ािे छािों की संख्या के बराबर ह।ै",
+   "explanation": "Students appeared in only GMAT & CAT = 30"
+  },
+  {
+   "id": "2021-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Total students appeared in only GMAT exam are what percent of students appeared in only CAT\nexam?\nकेर्ि GMAT परीक्षा में उपनस्थत होिे र्ािे कुि छाि, केर्ि CAT परीक्षा में उपनस्थत होिे र्ािे छािों का दकतिा प्रनतर्त है?",
+   "options": {
+    "A": "140%",
+    "B": "150%",
+    "C": "175%",
+    "D": "165%",
+    "E": "None of these / इिमें से कोई िहीं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (70-74): study the given information carefully and answer the questions.\nTotal 1000 students appeared in three (GMAT, CRE & CAT) different exams. Some students appeared in\nsingle exam, while some appeared more than it. 20 students appeared in all three exams. 150 students\nappeared in more than one exam. 200 students appeared in only CAT, while 280 students appeared in\nonly CRE. 40% of total students appeared in CRE.\nNumber of students appeared for both GMAT & CRE but not CAT is equal to number of students appeared\nfor both CAT and CRE but not for GMAT.\nिी गई जािकारी का ध्यािपूर्वक अध्ययि कीनजए और प्रश्नों के उत्तर िीनजए।\nकुि 1000 छाि तीि (GMAT, CRE और CAT) नर्नभन्न परीक्षाओं में उपनस्थत होते ह।ै कुछ छाि एकि परीक्षा में उपनस्थत\nहुए, जबदक कुछ इससे अनिक में उपनस्थत होते ह।ै तीिों परीक्षाओं में 20 छाि र्ानमि होते ह।ै एक से अनिक परीक्षाओं में 150\nछाि उपनस्थत होते ह।ै केर्ि CAT में 200 छाि उपनस्थत होते ह,ै जबदक 280 छाि केर्ि CRE म ें उपनस्थत होत े ह।ै कुि छािों\nका 40% CRE में उपनस्थत होता ह।ै\nGMAT और CRE िोिों िेदकि CAT के निए िहीं उपनस्थत होि े र्ाि े छािों की सख्ं या, CAT और CRE िोिों िदे कि GMAT के\nनिए िहीं उपनस्थत होि े र्ािे छािों की संख्या के बराबर ह।ै",
+   "explanation": "Required percentage = ×100 = 185%\n200"
+  },
+  {
+   "id": "2021-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "What is the ratio of students appeared in both GMAT & CAT exams together to students appeared in\nall three exams?\nGMAT और CAT िोिों परीक्षाओं में एकसाथ उपनस्थत होि े र्ािे छािों का तीिों परीक्षाओं में उपनस्थत होि े र्ािे छािों से\nअिुपात दकतिा ह?ै",
+   "options": {
+    "A": "3:2",
+    "B": "2:3",
+    "C": "3:5",
+    "D": "5:3",
+    "E": "5:2"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (70-74): study the given information carefully and answer the questions.\nTotal 1000 students appeared in three (GMAT, CRE & CAT) different exams. Some students appeared in\nsingle exam, while some appeared more than it. 20 students appeared in all three exams. 150 students\nappeared in more than one exam. 200 students appeared in only CAT, while 280 students appeared in\nonly CRE. 40% of total students appeared in CRE.\nNumber of students appeared for both GMAT & CRE but not CAT is equal to number of students appeared\nfor both CAT and CRE but not for GMAT.\nिी गई जािकारी का ध्यािपूर्वक अध्ययि कीनजए और प्रश्नों के उत्तर िीनजए।\nकुि 1000 छाि तीि (GMAT, CRE और CAT) नर्नभन्न परीक्षाओं में उपनस्थत होते ह।ै कुछ छाि एकि परीक्षा में उपनस्थत\nहुए, जबदक कुछ इससे अनिक में उपनस्थत होते ह।ै तीिों परीक्षाओं में 20 छाि र्ानमि होते ह।ै एक से अनिक परीक्षाओं में 150\nछाि उपनस्थत होते ह।ै केर्ि CAT में 200 छाि उपनस्थत होते ह,ै जबदक 280 छाि केर्ि CRE म ें उपनस्थत होत े ह।ै कुि छािों\nका 40% CRE में उपनस्थत होता ह।ै\nGMAT और CRE िोिों िेदकि CAT के निए िहीं उपनस्थत होि े र्ाि े छािों की सख्ं या, CAT और CRE िोिों िदे कि GMAT के\nनिए िहीं उपनस्थत होि े र्ािे छािों की संख्या के बराबर ह।ै",
+   "explanation": "Required ratio = 30:20 = 3:2"
+  },
+  {
+   "id": "2021-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Students appeared in GMAT exam are what percent more than students appeared in CAT exam?\nGMAT परीक्षा में उपनस्थत होिे र्ािे छाि, CAT परीक्षा में उपनस्थत होि े र्ािे छािों से दकतिे प्रनतर्त अनिक हैं?",
+   "options": {
+    "A": "40%",
+    "B": "85%",
+    "C": "33.33%",
+    "D": "12.5%",
+    "E": "56.67%"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (70-74): study the given information carefully and answer the questions.\nTotal 1000 students appeared in three (GMAT, CRE & CAT) different exams. Some students appeared in\nsingle exam, while some appeared more than it. 20 students appeared in all three exams. 150 students\nappeared in more than one exam. 200 students appeared in only CAT, while 280 students appeared in\nonly CRE. 40% of total students appeared in CRE.\nNumber of students appeared for both GMAT & CRE but not CAT is equal to number of students appeared\nfor both CAT and CRE but not for GMAT.\nिी गई जािकारी का ध्यािपूर्वक अध्ययि कीनजए और प्रश्नों के उत्तर िीनजए।\nकुि 1000 छाि तीि (GMAT, CRE और CAT) नर्नभन्न परीक्षाओं में उपनस्थत होते ह।ै कुछ छाि एकि परीक्षा में उपनस्थत\nहुए, जबदक कुछ इससे अनिक में उपनस्थत होते ह।ै तीिों परीक्षाओं में 20 छाि र्ानमि होते ह।ै एक से अनिक परीक्षाओं में 150\nछाि उपनस्थत होते ह।ै केर्ि CAT में 200 छाि उपनस्थत होते ह,ै जबदक 280 छाि केर्ि CRE म ें उपनस्थत होत े ह।ै कुि छािों\nका 40% CRE में उपनस्थत होता ह।ै\nGMAT और CRE िोिों िेदकि CAT के निए िहीं उपनस्थत होि े र्ाि े छािों की सख्ं या, CAT और CRE िोिों िदे कि GMAT के\nनिए िहीं उपनस्थत होि े र्ािे छािों की संख्या के बराबर ह।ै",
+   "explanation": "Required percentage = ×100 = 56.67%\n300"
+  },
+  {
+   "id": "2021-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "How many students appeared in only one exam?\nदकतिे छाि केर्ि एक परीक्षा में उपनस्थत होत े है?",
+   "options": {
+    "A": "860",
+    "B": "870",
+    "C": "850",
+    "D": "830",
+    "E": "84"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (70-74): study the given information carefully and answer the questions.\nTotal 1000 students appeared in three (GMAT, CRE & CAT) different exams. Some students appeared in\nsingle exam, while some appeared more than it. 20 students appeared in all three exams. 150 students\nappeared in more than one exam. 200 students appeared in only CAT, while 280 students appeared in\nonly CRE. 40% of total students appeared in CRE.\nNumber of students appeared for both GMAT & CRE but not CAT is equal to number of students appeared\nfor both CAT and CRE but not for GMAT.\nिी गई जािकारी का ध्यािपूर्वक अध्ययि कीनजए और प्रश्नों के उत्तर िीनजए।\nकुि 1000 छाि तीि (GMAT, CRE और CAT) नर्नभन्न परीक्षाओं में उपनस्थत होते ह।ै कुछ छाि एकि परीक्षा में उपनस्थत\nहुए, जबदक कुछ इससे अनिक में उपनस्थत होते ह।ै तीिों परीक्षाओं में 20 छाि र्ानमि होते ह।ै एक से अनिक परीक्षाओं में 150\nछाि उपनस्थत होते ह।ै केर्ि CAT में 200 छाि उपनस्थत होते ह,ै जबदक 280 छाि केर्ि CRE म ें उपनस्थत होत े ह।ै कुि छािों\nका 40% CRE में उपनस्थत होता ह।ै\nGMAT और CRE िोिों िेदकि CAT के निए िहीं उपनस्थत होि े र्ाि े छािों की सख्ं या, CAT और CRE िोिों िदे कि GMAT के\nनिए िहीं उपनस्थत होि े र्ािे छािों की संख्या के बराबर ह।ै",
+   "explanation": "Students appeared in only one exam = 370+280+200"
+  },
+  {
+   "id": "2021-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x² + 4x – 12 = 0\nII. 2y² + 7y + 6 = 0",
+   "options": {
+    "A": "यदि x > y",
+    "B": "यदि x < y",
+    "C": "यदि x ≥ y",
+    "D": "यदि x ≤ y",
+    "E": "यदि x = y या x और y के बीच संबंि स्थानपत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (75-80): In the following questions there are two\nequations and give answer:",
+   "explanation": "I. x² + 4x – 12 = 0\nx² + 6x – 2x – 12 = 0\nx = –6, 2\nII. 2y² + 7y + 6 = 0\n2y² + 4y + 3y + 6 = 0\n2y (y + 2) + 3 (y + 2) = 0\n–3\ny = –2,\n2\n∴ No relation"
+  },
+  {
+   "id": "2021-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x² + 12x + 35 = 0\nII. y² + 9y + 20 = 0",
+   "options": {
+    "A": "यदि x > y",
+    "B": "यदि x < y",
+    "C": "यदि x ≥ y",
+    "D": "यदि x ≤ y",
+    "E": "यदि x = y या x और y के बीच संबंि स्थानपत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (75-80): In the following questions there are two\nequations and give answer:",
+   "explanation": "I. x² + 12x + 35 = 0\nx² + 7x + 5x + 35 = 0\n(x + 7) (x + 5) = 0\n∴ 𝑥 = −5 𝑜𝑟−7\nII. y² + 9y + 20 = 0\ny² + 5y + 4y + 20 = 0\n(y + 5) (y + 4) = 0\n𝑦 = −5,−4\n⇒ 𝑥 ≤ 𝑦"
+  },
+  {
+   "id": "2021-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x² - 15x + 54 =0\nII. y² - 23y +132 = 0",
+   "options": {
+    "A": "यदि x > y",
+    "B": "यदि x < y",
+    "C": "यदि x ≥ y",
+    "D": "यदि x ≤ y",
+    "E": "यदि x = y या x और y के बीच संबंि स्थानपत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (75-80): In the following questions there are two\nequations and give answer:",
+   "explanation": "I. x² - 15x + 54 = 0\nx² - 9x – 6x + 54 = 0\n(x - 9) (x - 6) = 0\n∴ x = 9 or 6\nII. y² - 23y + 132 = 0\ny² - 11y - 12y + 132 = 0\n(y - 11) (y – 12) = 0\n𝑦 = 11 𝑜𝑟 12\n∴ 𝑥 < 𝑦\n34 Add\n= 850\nda247 | No. 1 APP for Banking & SSC Preparation"
+  },
+  {
+   "id": "2021-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x2 – 13x + 42 = 0\nII. y2 − 15𝑦 + 56 = 0",
+   "options": {
+    "A": "यदि x > y",
+    "B": "यदि x < y",
+    "C": "यदि x ≥ y",
+    "D": "यदि x ≤ y",
+    "E": "यदि x = y या x और y के बीच संबंि स्थानपत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (75-80): In the following questions there are two\nequations and give answer:",
+   "explanation": "I. x2 – 7x – 6x + 42 = 0\nx(x – 7) – 6(x – 7) = 0\n(x – 6) (x – 7) = 0\nx = 6, 7\nII. y2 – 8𝑦−7𝑦+56 = 0\ny(y −8)−7(𝑦−8) = 0\n(y – 8) (y −7) = 0\ny = 8, 7\nSo, x ≤y"
+  },
+  {
+   "id": "2021-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. x = 3 √512\nII. y2 = 64",
+   "options": {
+    "A": "यदि x > y",
+    "B": "यदि x < y",
+    "C": "यदि x ≥ y",
+    "D": "यदि x ≤ y",
+    "E": "यदि x = y या x और y के बीच संबंि स्थानपत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (75-80): In the following questions there are two\nequations and give answer:",
+   "explanation": "I. x = + 8\nII. y = ±8\nSo, x ≥ y"
+  },
+  {
+   "id": "2021-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "I. 2𝑥2 +7𝑥 +3 = 0\nII. 2𝑦2 +12𝑦+18 = 0\nSolutions\nSolutions (1-5):\n24 Adda\nequations given. You have to solve both the\nहि करिा ह ै और उत्तर िेिा ह:ै\na247 | No. 1 APP for Banking & SSC Preparation\nS1. Ans.",
+   "options": {
+    "A": "यदि x > y",
+    "B": "यदि x < y",
+    "C": "यदि x ≥ y",
+    "D": "यदि x ≤ y",
+    "E": "यदि x = y या x और y के बीच संबंि स्थानपत िहीं दकया जा सकता"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (75-80): In the following questions there are two\nequations and give answer:",
+   "explanation": "I. 2𝑥2 +7𝑥 +3 = 0\n⇒ 𝑥(2𝑥+1)+3(2𝑥 +1) = 0\n⇒ (𝑥+3)(2𝑥+1) = 0\n1\n⇒ 𝑥 = −3,−\n2\nII. 2𝑦2 +12𝑦+18 = 0\n𝑦2 +6𝑦+9 = 0\n⇒ (𝑦+3)(𝑦+3) = 0\n⇒ 𝑦 = −3\n∴ x ≥ y"
+  }
+ ]
+}

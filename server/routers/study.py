@@ -166,11 +166,19 @@ class GenerateMockReq(BaseModel):
     # a full 60-minute sitting is not something you can fit into a lunch break.
     # None (the default) keeps the full three-section pattern.
     section: str | None = None
+    # Which exam's shape to build. "rrb" is IBPS RRB PO Officer Scale I:
+    # two sections of 40 with NO English, flat 1 mark, 25 + 20 minutes.
+    exam: str = "ibps"
 
 
 # Official IBPS PO Prelims 2026 pattern: 100 questions / 100 marks / 60 minutes,
 # with 20 minutes of sectional timing each.
 #   name -> (questions, section marks, marks per question, negative per question)
+RRB_SECTION_PLAN = [
+    ("Reasoning Ability",     40, 40, 1.0, -0.25),
+    ("Quantitative Aptitude", 40, 40, 1.0, -0.25),
+]
+
 IBPS_SECTION_PLAN = [
     ("English Language",      30, 30, 1.0,  -0.25),
     ("Quantitative Aptitude", 35, 30, 0.86, -0.215),
@@ -208,6 +216,28 @@ IBPS_TOPIC_POOL = {
         "Month/date scheduling puzzle: 8 persons across months and two dates each",
         "Syllogism with 'Only a few', possibility conclusions and the either-or case",
         "Coded inequalities, coded blood relations, and direction sense with a distance calculation",
+    ],
+}
+
+# RRB Officer Scale I Prelims: two sections only, and a gentler Reasoning brief.
+# Reusing the IBPS pool asked for three-variable, 8-person puzzles that RRB does
+# not set — the mock was harder than the exam it was preparing people for.
+RRB_TOPIC_POOL = {
+    "Reasoning Ability": [
+        "Linear seating: 8 persons in a single row, all facing the same direction",
+        "Circular seating: 8 persons facing the centre, with one additional attribute",
+        "Floor puzzle: 7-8 persons across floors, one variable only",
+        "Month or day scheduling puzzle: 7-8 persons, one event each",
+        "Syllogism, including 'Only a few' and the either-or case",
+        "Inequalities, blood relations, direction sense, order and ranking, alphanumeric series",
+    ],
+    "Quantitative Aptitude": [
+        "Simplification and Approximation",
+        "Number Series, both missing term and wrong term",
+        "Quadratic Equation comparison of x and y",
+        "Table, bar or pie chart Data Interpretation with a shared data set",
+        "Arithmetic: percentage, average, ratio, profit and loss, simple and compound interest",
+        "Arithmetic: time and work, time-speed-distance, boats, pipes, mixtures",
     ],
 }
 
@@ -428,24 +458,37 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
     # rather than scaling it down — an English drill is 30 questions in 20
     # minutes, exactly as it is inside the full paper, so the pacing a candidate
     # practises is the pacing they will sit.
-    plan = IBPS_SECTION_PLAN
+    # RRB PO is a different paper, not a resized IBPS one: two sections of 40
+    # and no English at all. Scaling the IBPS plan down would still emit an
+    # English block RRB never sets.
+    full_plan = RRB_SECTION_PLAN if req.exam == "rrb" else IBPS_SECTION_PLAN
+    full_total = sum(x[1] for x in full_plan)
+
+    plan = full_plan
     if req.section:
-        plan = [s for s in IBPS_SECTION_PLAN if s[0] == req.section]
+        plan = [x for x in full_plan if x[0] == req.section]
         if not plan:
-            raise HTTPException(400, f"Unknown section '{req.section}'")
+            raise HTTPException(400, f"Unknown section '{req.section}' for exam '{req.exam}'")
 
     section_targets = []
     if req.section:
         name, qcount, _sm, per, neg = plan[0]
-        section_targets.append((name, min(total, qcount) if req.count != 100 else qcount, per, neg))
+        section_targets.append((name, min(total, qcount) if req.count != full_total else qcount, per, neg))
     else:
-        scale = total / 100.0
+        scale = total / float(full_total)
         for name, qcount, _sm, per, neg in plan:
             n = max(1, round(qcount * scale))
             section_targets.append((name, n, per, neg))
 
+    # RRB Officer Scale I is a different, easier paper than IBPS/SBI PO. Telling
+    # the model "IBPS PO, SBI PO standard" while the candidate sits an RRB mock
+    # produced puzzles harder than anything RRB has ever set.
+    is_rrb = req.exam == "rrb"
+    exam_name = "IBPS RRB PO (Officer Scale I)" if is_rrb else "IBPS PO"
+
     system = (
-        "You are an expert IBPS PO paper setter. Output ONLY a raw JSON array — no prose, no markdown fences.\n"
+        f"You are an expert {exam_name} paper setter. "
+        "Output ONLY a raw JSON array — no prose, no markdown fences.\n"
         "Each element must match this schema exactly:\n"
         "{\n"
         '  "topic": "string",\n'
@@ -477,26 +520,38 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
         "each number the explanation uses actually appears in it.\n"
         "8. All five options must be distinct, plausible and in the same unit and magnitude as the "
         "answer. Never mix, say, 35% with a set of options clustered at 5-20%.\n"
-        "9. DIFFICULTY FLOOR — this is an SBI/IBPS PO paper, not a school test. Every question must "
-        "take a prepared candidate 45-90 seconds and at least THREE chained steps. Concretely:\n"
-        "   • Arithmetic: never a single formula. 'Find 20% of 400' or 'find the SI on 5000 at 8% for "
-        "5 years' are far below the bar. Instead: a marked price WITH a discount AND a markup; a ratio "
-        "some years ago PLUS a relation to a third person; successive percentage deductions where each "
-        "applies to what remains.\n"
-        "   • Reasoning: a puzzle must carry TWO or THREE variables at once (person + floor + colour), "
-        "with 7-8 entities, and the clues must require elimination rather than direct reading. A "
-        "5-person single-variable arrangement is too easy.\n"
-        "   • English: an RC question must need inference across sentences, not a phrase lookup.\n"
-        "   Mark 'difficulty' honestly as Moderate or Hard — if a question is genuinely Easy by PO "
-        "standards, do not produce it at all.\n"
+        + (
+            "9. DIFFICULTY BAND — this is IBPS RRB Officer Scale I, which sits a clear step BELOW "
+            "SBI/IBPS PO. Every question must still take TWO or THREE steps and 40-70 seconds — never "
+            "a one-line lookup — but do not reach for PO-grade traps.\n"
+            "   • Reasoning: puzzles carry 7-8 entities with ONE main variable plus at most one "
+            "attribute (person + floor, or person + month). Three-variable PO puzzles are above this "
+            "paper. Standalone items — inequality, syllogism, blood relation, direction — should be "
+            "solvable in under a minute.\n"
+            "   • Arithmetic: two or three chained steps, not four or five.\n"
+            "   Mark 'difficulty' honestly as Easy or Moderate, with Hard only occasionally.\n"
+            if is_rrb else
+            "9. DIFFICULTY FLOOR — this is an SBI/IBPS PO paper, not a school test. Every question must "
+            "take a prepared candidate 45-90 seconds and at least THREE chained steps. Concretely:\n"
+            "   • Arithmetic: never a single formula. 'Find 20% of 400' or 'find the SI on 5000 at 8% for "
+            "5 years' are far below the bar. Instead: a marked price WITH a discount AND a markup; a ratio "
+            "some years ago PLUS a relation to a third person; successive percentage deductions where each "
+            "applies to what remains.\n"
+            "   • Reasoning: a puzzle must carry TWO or THREE variables at once (person + floor + colour), "
+            "with 7-8 entities, and the clues must require elimination rather than direct reading. A "
+            "5-person single-variable arrangement is too easy.\n"
+            "   • English: an RC question must need inference across sentences, not a phrase lookup.\n"
+            "   Mark 'difficulty' honestly as Moderate or Hard — if a question is genuinely Easy by PO "
+            "standards, do not produce it at all.\n"
+        ) +
         "10. Return valid JSON and nothing else."
     )
 
     async def _chunk(section: str, topic_focus: str, n: int) -> list:
         user = (
-            f"Generate exactly {n} IBPS PO Prelims questions for the section '{section}'.\n"
+            f"Generate exactly {n} {exam_name} Prelims questions for the section '{section}'.\n"
             f"Focus area for this batch: {topic_focus}.\n"
-            "Match genuine IBPS PO Prelims difficulty and phrasing. "
+            f"Match genuine {exam_name} Prelims difficulty and phrasing. "
             "Verify each answer before returning it."
         )
         try:
@@ -512,7 +567,7 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
     # Build the batch list: split each section across its topic pool.
     jobs = []
     for section, n, _per, _neg in section_targets:
-        pool = IBPS_TOPIC_POOL[section]
+        pool = (RRB_TOPIC_POOL if is_rrb else IBPS_TOPIC_POOL).get(section) or IBPS_TOPIC_POOL[section]
         # ~6 questions per call keeps output quality high and stays inside the token budget
         batches = max(1, min(len(pool), (n + 5) // 6))
         base, extra = divmod(n, batches)
@@ -594,7 +649,10 @@ async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enable
         # up whatever the generators do not cover.
         if section == "Quantitative Aptitude":
             from utils.quant_generator import generate as _gen_quant
-            generated = _gen_quant(n)
+            # RRB Prelims is a genuinely easier paper than IBPS/SBI PO, so the
+            # generator is told which one it is building rather than producing
+            # PO-grade questions under an RRB banner.
+            generated = _gen_quant(n, level=req.exam)
             keep = [q for q in got
                     if _normalise_stem(q.get("question", "")) not in
                     {_normalise_stem(g["question"]) for g in generated}]

@@ -2,6 +2,7 @@
 against the same sandbox used to grade users (utils/js_sandbox.py) before ever
 being served — so "passed/failed" is always trustworthy."""
 import os
+from utils.ai import with_reasoning
 import json
 import random
 import time
@@ -12,8 +13,11 @@ from utils.deduplication import check_question_duplicate
 
 GROQ_API_KEY        = os.getenv("GROQ_API_KEY", "")
 GROQ_URL            = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL          = os.getenv("GROQ_MODEL",          "llama-3.3-70b-versatile")
-GROQ_MODEL_FALLBACK = os.getenv("GROQ_MODEL_FALLBACK", "llama-3.1-8b-instant")
+# Groq retired the llama-3.x models in Aug 2026 — every call 404'd with
+# "model does not exist". These defaults must stay in step with the Render
+# env vars; they are the fallback when GROQ_MODEL is unset.
+GROQ_MODEL          = os.getenv("GROQ_MODEL",          "openai/gpt-oss-120b")
+GROQ_MODEL_FALLBACK = os.getenv("GROQ_MODEL_FALLBACK", "openai/gpt-oss-20b")
 
 MAX_GENERATION_ATTEMPTS = 3
 
@@ -42,9 +46,9 @@ async def _groq_call(payload: dict) -> dict:
         raise ValueError("GROQ_API_KEY not set")
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
     async with httpx.AsyncClient(timeout=30) as c:
-        r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL})
+        r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL}))
         if r.status_code == 429:
-            r = await c.post(GROQ_URL, headers=headers, json={**payload, "model": GROQ_MODEL_FALLBACK})
+            r = await c.post(GROQ_URL, headers=headers, json=with_reasoning({**payload, "model": GROQ_MODEL_FALLBACK}))
         r.raise_for_status()
         return r.json()
 

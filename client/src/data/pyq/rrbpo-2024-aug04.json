@@ -1,0 +1,1215 @@
+{
+ "id": "rrbpo-2024-aug04",
+ "questions": [
+  {
+   "id": "2024-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the position of M with respect to G?\nG के सापेक्ष में M का स्थान क्या है?",
+   "options": {
+    "A": "Immediate left / ठीक ब एं",
+    "B": "Second to the left/ बाईं ओर दूसर",
+    "C": "Fourth to the left/ बाईं ओर चौथ",
+    "D": "Second to the right / दाईं ओर दूसर",
+    "E": "Immediate right / ठीक दाएं"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2024-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "The number of persons sit between D and F is same as the number of persons sit between __\nand __.\nD और F के बीच बैठे व्यक्तियो ोंकी सोंख्या, __ और __ के बीच बैठे व्यक्तियो ोंकी सोंख्या के बराबर है।",
+   "options": {
+    "A": "B, P",
+    "B": "Q, H",
+    "C": "B, G",
+    "D": "M, H",
+    "E": "P, F"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2024-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit in the row?\nपोंक्ति में ककतने व्यक्ति बैठे हैं?",
+   "options": {
+    "A": "19",
+    "B": "17",
+    "C": "13",
+    "D": "None of these/ इनमें से कोई नही ं",
+    "E": "14"
+   },
+   "correctAnswer": "E",
+   "explanation": "ds and train B crosses a 150m long\ntrain A in 160 seconds, while running\ntake to cross a 50m long bridge?\nन B 150 मीटर िोंबे प्लेटफॉमव को 24 सेकों ड\nहुए टरेन A को 160 सेकों ड में पार करती है।"
+  },
+  {
+   "id": "2024-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following sits exactly between F and H?\nकनम्नकिक्तित में से कौन F और H के ठीक मध्य बैठा है?",
+   "options": {
+    "A": "Q",
+    "B": "B",
+    "C": "G",
+    "D": "M",
+    "E": "P"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2024-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following is true about B?\nI. Five persons sit to the right of B\nII. No one sits between B and M\nIII. P sits seventh to the left of B\nकनम्नकिक्तित में से कौन-सा कथन B के बारे में सत्य है?\nI. B के द ईं ओर पााँच व्यक्ति बैठे हैं\nII. B और M के बीच कोई नही ंबैठा है\nIII. P, B के ब ईं ओर स तवें स्थ न पर बैठ है",
+   "options": {
+    "A": "Only I/ के वल I",
+    "B": "Only II/ के वल II",
+    "C": "Only III/ के वल III",
+    "D": "Only I and II/ के वल I और II",
+    "E": "Only I and III/ के वल I और III"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2024-q6",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If 2 is subtracted from each even digit and 1 is subtracted from each odd digit in the number\n“463278293”, then which of the following digits will appear more than twice in the new number\nthus formed?\nयढ़द संख्या “463278293” में से प्रत्येक सम अंक में से 2 घटाया िाए तथा प्रत्येक ढ़िषम अंक में से 1 घटाया\nिाए, तो ढ़िम्नढ़िखित में से कौि-सा अंक इस प्रकार बिी िई संख्या में दो बार से अढ़िक आएगा?",
+   "options": {
+    "A": "Only 6/ के वल 6",
+    "B": "Only 6 and 2/ के वल 6 और 2",
+    "C": "Only 2/ के वल 2",
+    "D": "6, 8 and 2/6, 8 और 2",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "C",
+   "explanation": "463278293 = 242066082"
+  },
+  {
+   "id": "2024-q7",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In the word ‘RESIDUAL’, how many pairs of the letters have the same number of letters\nbetween them (both forward and backward direction) in the word as in the alphabet?\nशब्द ‘RESIDUAL’ में अक्षरो ंके ऐसे ढ़कतिे युग्म हैं ढ़ििके बीच शब्द में अक्षरो ंकी संख्या (आगे और पीछे दोिो ं\nढ़दशाओ ंमें) उतिी ही है ढ़ितिी उिके बीच अंग्रेज़ी िर्णमािा में होती है?",
+   "options": {
+    "A": "Four/ च र",
+    "B": "Two/ दो",
+    "C": "One/ एक",
+    "D": "Three/ तीन",
+    "E": "None/ कोई नही ं"
+   },
+   "correctAnswer": "E",
+   "explanation": "“None”"
+  },
+  {
+   "id": "2024-q8",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following person was born on 22nd January?\nढ़िम्नढ़िखित में से कौि-सा व्यखि 22 िििरी को पैदा हुआ था?",
+   "options": {
+    "A": "The one who was born immediately before M./वह व्यक्ति जो M से ठीक पहले पैद हुआ थ",
+    "B": "The one who was born three persons before Q./ वह व्यक्ति जो Q से तीन व्यक्ति पहले पैद हुआ थ",
+    "C": "Q",
+    "D": "R",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (8-12): Study the following information carefully and answer the questions given\nbelow:\nEight persons - M, N, O, P, Q, R, S and T were born on the 15th and 22nd of the months January, April, July\nand September of the same year, but not necessarily in the same order. No two persons were born on\nthe same date of the same month.\nR was born on even number date in the month having odd number of days. Four persons were born\nbetween R and N. N was born before S. Q was born three persons before S. M and S was not born in the\nmonth of July. As many persons were born before M as after Q. Only one person was born between M\nand T. O was born before P but after T.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति - M, N, O, P, Q, R, S और T एक ही वर्ष के जिवरी, अप्रैल, जुलाई और नसतंबर महीि ं की 15 और 22\nतारीख क पैदा हुए थे, लेनकि जरूरी िही ं नक इसी क्रम में पैदा हुए ह ।ं क ई भी द व्यक्ति एक ही महीिे की समाि\nतारीख क पैदा िही ंहुए थे।\nR का जन्म उस महीिे में सम संख्या वाली तारीख क हुआ था नजसमें नदि ं की संख्या नवर्म है। R और N के बीच चार\nव्यक्ति पैदा हुए थे। N का जन्म S से पहल े हुआ था। Q का जन्म S से तीि व्यक्ति पहल े हुआ था। M और S का जन्म जुलाई\nके महीिे में िही ंहुआ था। M से पहले नजतिे व्यक्ति पैदा हुए थे, उतिे ही व्यक्ति Q के बाद पैदा हुए थे। M और T के बीच\nके वल एक व्यक्ति का जन्म हुआ था। O का जन्म P से पहले लेनकि T के बाद हुआ था।",
+   "explanation": "Final Arrangement is here:\n“The one who was born three persons before Q”"
+  },
+  {
+   "id": "2024-q9",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons were born between T and P?\nT और P के मध्य ककतने व्यक्ति पैदा हुए?",
+   "options": {
+    "A": "Five/ प ाँच",
+    "B": "One/एक",
+    "C": "Two/ दो",
+    "D": "Three/ तीन",
+    "E": "Four/ च र"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (8-12): Study the following information carefully and answer the questions given\nbelow:\nEight persons - M, N, O, P, Q, R, S and T were born on the 15th and 22nd of the months January, April, July\nand September of the same year, but not necessarily in the same order. No two persons were born on\nthe same date of the same month.\nR was born on even number date in the month having odd number of days. Four persons were born\nbetween R and N. N was born before S. Q was born three persons before S. M and S was not born in the\nmonth of July. As many persons were born before M as after Q. Only one person was born between M\nand T. O was born before P but after T.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति - M, N, O, P, Q, R, S और T एक ही वर्ष के जिवरी, अप्रैल, जुलाई और नसतंबर महीि ं की 15 और 22\nतारीख क पैदा हुए थे, लेनकि जरूरी िही ं नक इसी क्रम में पैदा हुए ह ।ं क ई भी द व्यक्ति एक ही महीिे की समाि\nतारीख क पैदा िही ंहुए थे।\nR का जन्म उस महीिे में सम संख्या वाली तारीख क हुआ था नजसमें नदि ं की संख्या नवर्म है। R और N के बीच चार\nव्यक्ति पैदा हुए थे। N का जन्म S से पहल े हुआ था। Q का जन्म S से तीि व्यक्ति पहल े हुआ था। M और S का जन्म जुलाई\nके महीिे में िही ंहुआ था। M से पहले नजतिे व्यक्ति पैदा हुए थे, उतिे ही व्यक्ति Q के बाद पैदा हुए थे। M और T के बीच\nके वल एक व्यक्ति का जन्म हुआ था। O का जन्म P से पहले लेनकि T के बाद हुआ था।",
+   "explanation": "Final Arrangement is here:\n“Four”"
+  },
+  {
+   "id": "2024-q10",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five pairs are alike in a certain way and hence form a group. Who\namong the following pairs does not belong to that group?\nकनम्नकिक्तित पााँच युग्ो ोंमें से चार एक कनकित रूप से एक जैसे हैं और इसकिए एक समूह बनाते हैं।\nकनम्नकिक्तित युग्ो ोंमें से कौन-सा युग्म उस समूह से सोंबोंकधत नही ोंहै?",
+   "options": {
+    "A": "T, O",
+    "B": "Q, S",
+    "C": "N, M",
+    "D": "S, P",
+    "E": "Q, T"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (8-12): Study the following information carefully and answer the questions given\nbelow:\nEight persons - M, N, O, P, Q, R, S and T were born on the 15th and 22nd of the months January, April, July\nand September of the same year, but not necessarily in the same order. No two persons were born on\nthe same date of the same month.\nR was born on even number date in the month having odd number of days. Four persons were born\nbetween R and N. N was born before S. Q was born three persons before S. M and S was not born in the\nmonth of July. As many persons were born before M as after Q. Only one person was born between M\nand T. O was born before P but after T.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति - M, N, O, P, Q, R, S और T एक ही वर्ष के जिवरी, अप्रैल, जुलाई और नसतंबर महीि ं की 15 और 22\nतारीख क पैदा हुए थे, लेनकि जरूरी िही ं नक इसी क्रम में पैदा हुए ह ।ं क ई भी द व्यक्ति एक ही महीिे की समाि\nतारीख क पैदा िही ंहुए थे।\nR का जन्म उस महीिे में सम संख्या वाली तारीख क हुआ था नजसमें नदि ं की संख्या नवर्म है। R और N के बीच चार\nव्यक्ति पैदा हुए थे। N का जन्म S से पहल े हुआ था। Q का जन्म S से तीि व्यक्ति पहल े हुआ था। M और S का जन्म जुलाई\nके महीिे में िही ंहुआ था। M से पहले नजतिे व्यक्ति पैदा हुए थे, उतिे ही व्यक्ति Q के बाद पैदा हुए थे। M और T के बीच\nके वल एक व्यक्ति का जन्म हुआ था। O का जन्म P से पहले लेनकि T के बाद हुआ था।",
+   "explanation": "Final Arrangement is here:\n“S, P”"
+  },
+  {
+   "id": "2024-q11",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following was three persons after O?\nकनम्नकिक्तित में से कौन O से तीन व्यक्ति बाद था?",
+   "options": {
+    "A": "T",
+    "B": "P",
+    "C": "R",
+    "D": "S",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (8-12): Study the following information carefully and answer the questions given\nbelow:\nEight persons - M, N, O, P, Q, R, S and T were born on the 15th and 22nd of the months January, April, July\nand September of the same year, but not necessarily in the same order. No two persons were born on\nthe same date of the same month.\nR was born on even number date in the month having odd number of days. Four persons were born\nbetween R and N. N was born before S. Q was born three persons before S. M and S was not born in the\nmonth of July. As many persons were born before M as after Q. Only one person was born between M\nand T. O was born before P but after T.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति - M, N, O, P, Q, R, S और T एक ही वर्ष के जिवरी, अप्रैल, जुलाई और नसतंबर महीि ं की 15 और 22\nतारीख क पैदा हुए थे, लेनकि जरूरी िही ं नक इसी क्रम में पैदा हुए ह ।ं क ई भी द व्यक्ति एक ही महीिे की समाि\nतारीख क पैदा िही ंहुए थे।\nR का जन्म उस महीिे में सम संख्या वाली तारीख क हुआ था नजसमें नदि ं की संख्या नवर्म है। R और N के बीच चार\nव्यक्ति पैदा हुए थे। N का जन्म S से पहल े हुआ था। Q का जन्म S से तीि व्यक्ति पहल े हुआ था। M और S का जन्म जुलाई\nके महीिे में िही ंहुआ था। M से पहले नजतिे व्यक्ति पैदा हुए थे, उतिे ही व्यक्ति Q के बाद पैदा हुए थे। M और T के बीच\nके वल एक व्यक्ति का जन्म हुआ था। O का जन्म P से पहले लेनकि T के बाद हुआ था।",
+   "explanation": "Final Arrangement is here:\n“R”"
+  },
+  {
+   "id": "2024-q12",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statements is/are true?\nकनम्नकिक्तित में से कौन-सा/से कथन सत्य है/हैं?",
+   "options": {
+    "A": "N was born after Q./ N क जन्म Q के ब द हुआ थ",
+    "B": "T was born on 15th July. / T क जन्म 15 जुल ई को हुआ थ",
+    "C": "M was born in the month of April./ M क जन्म अप्रैल महीने में हुआ थ",
+    "D": "Five persons were born between R and S/ R और S के बीच प ाँच व्यक्ति पैद हुए",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (8-12): Study the following information carefully and answer the questions given\nbelow:\nEight persons - M, N, O, P, Q, R, S and T were born on the 15th and 22nd of the months January, April, July\nand September of the same year, but not necessarily in the same order. No two persons were born on\nthe same date of the same month.\nR was born on even number date in the month having odd number of days. Four persons were born\nbetween R and N. N was born before S. Q was born three persons before S. M and S was not born in the\nmonth of July. As many persons were born before M as after Q. Only one person was born between M\nand T. O was born before P but after T.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति - M, N, O, P, Q, R, S और T एक ही वर्ष के जिवरी, अप्रैल, जुलाई और नसतंबर महीि ं की 15 और 22\nतारीख क पैदा हुए थे, लेनकि जरूरी िही ं नक इसी क्रम में पैदा हुए ह ।ं क ई भी द व्यक्ति एक ही महीिे की समाि\nतारीख क पैदा िही ंहुए थे।\nR का जन्म उस महीिे में सम संख्या वाली तारीख क हुआ था नजसमें नदि ं की संख्या नवर्म है। R और N के बीच चार\nव्यक्ति पैदा हुए थे। N का जन्म S से पहल े हुआ था। Q का जन्म S से तीि व्यक्ति पहल े हुआ था। M और S का जन्म जुलाई\nके महीिे में िही ंहुआ था। M से पहले नजतिे व्यक्ति पैदा हुए थे, उतिे ही व्यक्ति Q के बाद पैदा हुए थे। M और T के बीच\nके वल एक व्यक्ति का जन्म हुआ था। O का जन्म P से पहले लेनकि T के बाद हुआ था।",
+   "explanation": "Final Arrangement is here:\n“M was born in the month of April”"
+  },
+  {
+   "id": "2024-q13",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction is Point G with respect to Point A?\nकबोंदु A के सापेक्ष में कबोंदु G ककस कदशा में है?",
+   "options": {
+    "A": "South/ दनिण",
+    "B": "East/पूवष",
+    "C": "West/ पनिम",
+    "D": "South-West/ दनिण-पनिम",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (13-15): Study the following information carefully and answer the questions given\nbelow:\nNivedita started walking from Point A in the north direction for 8m and reached Point B. From Point B\nshe turned left and walked for 7m and reached Point C. From Point C she turned right and walked for\n5m and reached Point D. From Point D she turned left and walked for 10m and reached Point E. From\nPoint E she turned left and walked for 13m and reached Point F. From Point F she turned left and walked\nfor 8m and reached Point G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nननवेनदत ने नबंदु A से उत्तर नदश में 8 मीटर चलन शुरू नकय और नबंदु B पर पहुाँची। नबंदु B से वह ब एं मुडी और 7 मीटर\nचली तथा नबंदु C पर पहुाँची। नबंदु C से वह द एं मुडी और 5 मीटर चली तथा नबंदु D पर पहुाँची। नबंदु D से वह ब एं मुडी और\n10 मीटर चली तथा नबंदु E पर पहुाँची। नबंदु E से वह ब एं मुडी और 13 मीटर चली और नबंदु F पर पहुाँची। नबंदु F से वह ब एं\nमुडी और 8 मीटर चली और नबंदु G पर पहुाँची।",
+   "explanation": "Final Arrangement is here:\n\n“West”"
+  },
+  {
+   "id": "2024-q14",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the total distance travelled from Point G to Point C?\nकबोंदु G से कबोंदु C तक तय की गई कु ि दूरी ककतनी है?",
+   "options": {
+    "A": "28m/28 मीटर",
+    "B": "30m/30 मीटर",
+    "C": "32m/32 मीटर",
+    "D": "36m/36 मीटर",
+    "E": "34m/34 मीटर"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (13-15): Study the following information carefully and answer the questions given\nbelow:\nNivedita started walking from Point A in the north direction for 8m and reached Point B. From Point B\nshe turned left and walked for 7m and reached Point C. From Point C she turned right and walked for\n5m and reached Point D. From Point D she turned left and walked for 10m and reached Point E. From\nPoint E she turned left and walked for 13m and reached Point F. From Point F she turned left and walked\nfor 8m and reached Point G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nननवेनदत ने नबंदु A से उत्तर नदश में 8 मीटर चलन शुरू नकय और नबंदु B पर पहुाँची। नबंदु B से वह ब एं मुडी और 7 मीटर\nचली तथा नबंदु C पर पहुाँची। नबंदु C से वह द एं मुडी और 5 मीटर चली तथा नबंदु D पर पहुाँची। नबंदु D से वह ब एं मुडी और\n10 मीटर चली तथा नबंदु E पर पहुाँची। नबंदु E से वह ब एं मुडी और 13 मीटर चली और नबंदु F पर पहुाँची। नबंदु F से वह ब एं\nमुडी और 8 मीटर चली और नबंदु G पर पहुाँची।",
+   "explanation": "Final Arrangement is here:\n“36m”"
+  },
+  {
+   "id": "2024-q15",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If Point M is 6m to the east of Point A then what is the shortest distance travelled between\nPoint B and Point M?\nयढ़द ढ़बंदु M, ढ़बंदु A के पूिण में 6 मीटर की दूरी पर है तो ढ़बंदु B और ढ़बंदु M के बीच तय की गई न्यूितम दूरी\nढ़कतिी है?",
+   "options": {
+    "A": "12m/12 मीटर",
+    "B": "10m/10 मीटर",
+    "C": "14m/14 मीटर",
+    "D": "16m/16 मीटर",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (13-15): Study the following information carefully and answer the questions given\nbelow:\nNivedita started walking from Point A in the north direction for 8m and reached Point B. From Point B\nshe turned left and walked for 7m and reached Point C. From Point C she turned right and walked for\n5m and reached Point D. From Point D she turned left and walked for 10m and reached Point E. From\nPoint E she turned left and walked for 13m and reached Point F. From Point F she turned left and walked\nfor 8m and reached Point G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nननवेनदत ने नबंदु A से उत्तर नदश में 8 मीटर चलन शुरू नकय और नबंदु B पर पहुाँची। नबंदु B से वह ब एं मुडी और 7 मीटर\nचली तथा नबंदु C पर पहुाँची। नबंदु C से वह द एं मुडी और 5 मीटर चली तथा नबंदु D पर पहुाँची। नबंदु D से वह ब एं मुडी और\n10 मीटर चली तथा नबंदु E पर पहुाँची। नबंदु E से वह ब एं मुडी और 13 मीटर चली और नबंदु F पर पहुाँची। नबंदु F से वह ब एं\nमुडी और 8 मीटर चली और नबंदु G पर पहुाँची।",
+   "explanation": "Final Arrangement is here:\n“10m”"
+  },
+  {
+   "id": "2024-q16",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Four of the following five are similar in a certain pattern and related to a group, which does\nnot belong to the group?\nढ़िम्नढ़िखित पााँच में से चार एक ढ़िढ़ित पैटिण में समाि हैं और एक समूह से संबंढ़ित हैं| ढ़िम्न में से कौि उस\nसमूह से संबंढ़ित िही ंहै?",
+   "options": {
+    "A": "F-B",
+    "B": "D-G",
+    "C": "H-I",
+    "D": "A-H",
+    "E": "E-C"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (16-20): Read the given information carefully and answer the questions based on it:\nNine boxes A, B, C, D, E, F, G, H and I are placed one above the other in a stack (but not necessarily in the\nsame order as given). The boxes are numbered as 1 to 9 from bottom to top.\nFive boxes are placed between box B and box G. Box E is placed just below box G. Three boxes are placed\nbetween box E and box H. Box I is placed just below box H but above box D which is a prime numbered\nbox. Box C is placed above box A but does not place on topmost position.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nनौ बॉक्स A, B, C, D, E, F, G, H और I एक स्टैक में (लेनकन जरूरी नही ंनक इसी क्रम में हो ंजैस नक नदय गय है) एक के\nऊपर एक रखे गए हैं। बॉक्स को सबसे नीचे से सबसे ऊपर तक 1 से 9 तक क्रम ंनकत नकय गय है।\nबॉक्स B और बॉक्स G के बीच प ाँच बॉक्स रखे गए हैं। बॉक्स E को बॉक्स G के ठीक नीचे रख गय है। बॉक्स E और बॉक्स\nH के बीच तीन बॉक्स रखे गए हैं। बॉक्स I को बॉक्स H के ठीक नीचे लेनकन बॉक्स D के ऊपर रख गय है तथा बॉक्स D\nएक अभ ज्य संख्य व ल बॉक्स है। बॉक्स C को बॉक्स A के ऊपर रख गय है लेनकन यह सबसे ऊपर नही ंरख गय है।"
+  },
+  {
+   "id": "2024-q17",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many boxes are placed between box D and box F?\nबॉक्स D और बॉक्स F के बीच ककतने बॉक्स रिे गए हैं?",
+   "options": {
+    "A": "Two/ दो",
+    "B": "Three/ तीन",
+    "C": "Four/ च र",
+    "D": "Five/ प ाँच",
+    "E": "Six/ छह"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (16-20): Read the given information carefully and answer the questions based on it:\nNine boxes A, B, C, D, E, F, G, H and I are placed one above the other in a stack (but not necessarily in the\nsame order as given). The boxes are numbered as 1 to 9 from bottom to top.\nFive boxes are placed between box B and box G. Box E is placed just below box G. Three boxes are placed\nbetween box E and box H. Box I is placed just below box H but above box D which is a prime numbered\nbox. Box C is placed above box A but does not place on topmost position.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nनौ बॉक्स A, B, C, D, E, F, G, H और I एक स्टैक में (लेनकन जरूरी नही ंनक इसी क्रम में हो ंजैस नक नदय गय है) एक के\nऊपर एक रखे गए हैं। बॉक्स को सबसे नीचे से सबसे ऊपर तक 1 से 9 तक क्रम ंनकत नकय गय है।\nबॉक्स B और बॉक्स G के बीच प ाँच बॉक्स रखे गए हैं। बॉक्स E को बॉक्स G के ठीक नीचे रख गय है। बॉक्स E और बॉक्स\nH के बीच तीन बॉक्स रखे गए हैं। बॉक्स I को बॉक्स H के ठीक नीचे लेनकन बॉक्स D के ऊपर रख गय है तथा बॉक्स D\nएक अभ ज्य संख्य व ल बॉक्स है। बॉक्स C को बॉक्स A के ऊपर रख गय है लेनकन यह सबसे ऊपर नही ंरख गय है।"
+  },
+  {
+   "id": "2024-q18",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which box is placed exactly between box A and box G?\nबॉक्स A और बॉक्स G के ठीक बीच में कौन-सा बॉक्स रिा गया है?",
+   "options": {
+    "A": "Box H/ बॉक्स H",
+    "B": "Box I/ बॉक्स I",
+    "C": "Box D/ बॉक्स D",
+    "D": "Box C/ बॉक्स C",
+    "E": "Box E/ बॉक्स E"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (16-20): Read the given information carefully and answer the questions based on it:\nNine boxes A, B, C, D, E, F, G, H and I are placed one above the other in a stack (but not necessarily in the\nsame order as given). The boxes are numbered as 1 to 9 from bottom to top.\nFive boxes are placed between box B and box G. Box E is placed just below box G. Three boxes are placed\nbetween box E and box H. Box I is placed just below box H but above box D which is a prime numbered\nbox. Box C is placed above box A but does not place on topmost position.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nनौ बॉक्स A, B, C, D, E, F, G, H और I एक स्टैक में (लेनकन जरूरी नही ंनक इसी क्रम में हो ंजैस नक नदय गय है) एक के\nऊपर एक रखे गए हैं। बॉक्स को सबसे नीचे से सबसे ऊपर तक 1 से 9 तक क्रम ंनकत नकय गय है।\nबॉक्स B और बॉक्स G के बीच प ाँच बॉक्स रखे गए हैं। बॉक्स E को बॉक्स G के ठीक नीचे रख गय है। बॉक्स E और बॉक्स\nH के बीच तीन बॉक्स रखे गए हैं। बॉक्स I को बॉक्स H के ठीक नीचे लेनकन बॉक्स D के ऊपर रख गय है तथा बॉक्स D\nएक अभ ज्य संख्य व ल बॉक्स है। बॉक्स C को बॉक्स A के ऊपर रख गय है लेनकन यह सबसे ऊपर नही ंरख गय है।"
+  },
+  {
+   "id": "2024-q19",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which of the following is correct?\nकनम्नकिक्तित में से कौन-सा सही है?",
+   "options": {
+    "A": "Box F and box H are adjacent to each other/ बॉक्स F और बॉक्स H एक-दूसरे के आसन्न हैं",
+    "B": "Box E is placed at bottommost position/ बॉक्स E सबसे नीचे व ले स्थ न पर रख गय है",
+    "C": "All are correct/ सभी सही हैं",
+    "D": "Four boxes are placed below box I/ बॉक्स I के नीचे च र बॉक्स रखे गए हैं",
+    "E": "Box C is placed at even number position/ बॉक्स C को सम संख्य व ले स्थ न पर रख गय है"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (16-20): Read the given information carefully and answer the questions based on it:\nNine boxes A, B, C, D, E, F, G, H and I are placed one above the other in a stack (but not necessarily in the\nsame order as given). The boxes are numbered as 1 to 9 from bottom to top.\nFive boxes are placed between box B and box G. Box E is placed just below box G. Three boxes are placed\nbetween box E and box H. Box I is placed just below box H but above box D which is a prime numbered\nbox. Box C is placed above box A but does not place on topmost position.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nनौ बॉक्स A, B, C, D, E, F, G, H और I एक स्टैक में (लेनकन जरूरी नही ंनक इसी क्रम में हो ंजैस नक नदय गय है) एक के\nऊपर एक रखे गए हैं। बॉक्स को सबसे नीचे से सबसे ऊपर तक 1 से 9 तक क्रम ंनकत नकय गय है।\nबॉक्स B और बॉक्स G के बीच प ाँच बॉक्स रखे गए हैं। बॉक्स E को बॉक्स G के ठीक नीचे रख गय है। बॉक्स E और बॉक्स\nH के बीच तीन बॉक्स रखे गए हैं। बॉक्स I को बॉक्स H के ठीक नीचे लेनकन बॉक्स D के ऊपर रख गय है तथा बॉक्स D\nएक अभ ज्य संख्य व ल बॉक्स है। बॉक्स C को बॉक्स A के ऊपर रख गय है लेनकन यह सबसे ऊपर नही ंरख गय है।"
+  },
+  {
+   "id": "2024-q20",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "Which box is placed immediately below box I?\nबॉक्स I के ठीक नीचे कौन-सा बॉक्स रिा गया है?",
+   "options": {
+    "A": "Box D/ बॉक्स D",
+    "B": "Box G/ बॉक्स G",
+    "C": "Box H/ बॉक्स H",
+    "D": "Box F/ बॉक्स F",
+    "E": "Box C/ बॉक्स C"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (16-20): Read the given information carefully and answer the questions based on it:\nNine boxes A, B, C, D, E, F, G, H and I are placed one above the other in a stack (but not necessarily in the\nsame order as given). The boxes are numbered as 1 to 9 from bottom to top.\nFive boxes are placed between box B and box G. Box E is placed just below box G. Three boxes are placed\nbetween box E and box H. Box I is placed just below box H but above box D which is a prime numbered\nbox. Box C is placed above box A but does not place on topmost position.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nनौ बॉक्स A, B, C, D, E, F, G, H और I एक स्टैक में (लेनकन जरूरी नही ंनक इसी क्रम में हो ंजैस नक नदय गय है) एक के\nऊपर एक रखे गए हैं। बॉक्स को सबसे नीचे से सबसे ऊपर तक 1 से 9 तक क्रम ंनकत नकय गय है।\nबॉक्स B और बॉक्स G के बीच प ाँच बॉक्स रखे गए हैं। बॉक्स E को बॉक्स G के ठीक नीचे रख गय है। बॉक्स E और बॉक्स\nH के बीच तीन बॉक्स रखे गए हैं। बॉक्स I को बॉक्स H के ठीक नीचे लेनकन बॉक्स D के ऊपर रख गय है तथा बॉक्स D\nएक अभ ज्य संख्य व ल बॉक्स है। बॉक्स C को बॉक्स A के ऊपर रख गय है लेनकन यह सबसे ऊपर नही ंरख गय है।"
+  },
+  {
+   "id": "2024-q21",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nAll sky are water.\nSome water is not blue.\nOnly a few blue is rain.\nConclusions:\nI. Some blue is not rain.\nII. All sky can be rain.\nकथन :\nसभी स्काई, वाटर हैं ।\nकु छ वाटर, ब्लू नही ंहै।\nके वल कु छ ब्लू, रेि हैं।\nकनष्कर्व :\nI. कु छ ब्लू, रेि नही ंहै।\nII. सभी स्काई, रेि हो सकते हैं।",
+   "options": {
+    "A": "If only I follows/ यनद के वल I अनुसरण करत है",
+    "B": "If only II follows/ यनद के वल II अनुसरण करत है",
+    "C": "If either I or II follows/ यनद य तो I य II अनुसरण करत है",
+    "D": "If neither I nor II follows/ यनद न तो I न ही II अनुसरण करत",
+    "E": "If both I and II follow/ यनद I और II दोनो ंअनुसरण करते हैं"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (21-23): In the questions below, some statements are followed by some conclusions.\nYou have to assume everything in the statement to be true even if they seem to be at variance\nwith commonly known facts. Read all the statements and decide which conclusion will logically\nfollow from the given statements disregarding commonly known facts.\nनीचे कदए गए प्रश्ो ोंमें कु छ कथनो ोंके बाद कु छ कनष्कर्व कदए गए हैं। आपको कथन में दी गई सभी बातो ोंको सत्य\nमानना है, भिे ही र्े सर्वज्ञात तथ्ो ोंसे कभन्न प्रतीत होते हो।ों सभी कथनो ोंको पढ़िए और तय कीढ़िए कक कौन-सा\nकनष्कर्व सर्वज्ञात तथ्ो ोंको नज़रअोंदाज़ करते हुए कदए गए कथनो ोंसे ताककव क रूप से अनुसरण करेगा।"
+  },
+  {
+   "id": "2024-q22",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nAll chair are black.\nOnly a few black are leather.\nOnly leather is brown.\nConclusions:\nI. Some brown being chair is a possibility.\nII. No black is brown.\nकथन :\nसभी चेयर, ब्लैक हैं ।\nके वल कु छ ब्लैक, लैदर हैं।\nके वल लैदर, ब्राउि है।\nकनष्कर्व :\nI. कु छ ब्राउि के चेयर होिे की सम्भ वन है।\nII. कोई ब्लैक, ब्राउि नही ंहै।",
+   "options": {
+    "A": "If only I follows/ यनद के वल I अनुसरण करत है",
+    "B": "If only II follows/ यनद के वल II अनुसरण करत है",
+    "C": "If either I or II follows/ यनद य तो I य II अनुसरण करत है",
+    "D": "If neither I nor II follows/ यनद न तो I न ही II अनुसरण करत",
+    "E": "If both I and II follow/ यनद I और II दोनो ंअनुसरण करते हैं\nहै\nहै"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (21-23): In the questions below, some statements are followed by some conclusions.\nYou have to assume everything in the statement to be true even if they seem to be at variance\nwith commonly known facts. Read all the statements and decide which conclusion will logically\nfollow from the given statements disregarding commonly known facts.\nनीचे कदए गए प्रश्ो ोंमें कु छ कथनो ोंके बाद कु छ कनष्कर्व कदए गए हैं। आपको कथन में दी गई सभी बातो ोंको सत्य\nमानना है, भिे ही र्े सर्वज्ञात तथ्ो ोंसे कभन्न प्रतीत होते हो।ों सभी कथनो ोंको पढ़िए और तय कीढ़िए कक कौन-सा\nकनष्कर्व सर्वज्ञात तथ्ो ोंको नज़रअोंदाज़ करते हुए कदए गए कथनो ोंसे ताककव क रूप से अनुसरण करेगा।"
+  },
+  {
+   "id": "2024-q23",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements:\nNo tower is wave.\nAll wave is green.\nOnly a few green is plant.\nConclusions:\nI. No wave is plant.\nII. Some plant is not tower.\nकथन :\nकोई ट वर, वेव नही ंहै।\nसभी वेव, ग्रीि हैं।\nके वल कु छ ग्रीि, प्ांट हैं।\nकनष्कर्व :\nI. कोई वेव, प्ांट नही ंहै।\nII. कु छ प्ांट, ट वर नही ंहैं।",
+   "options": {
+    "A": "If only I follows/ यनद के वल I अनुसरण करत है",
+    "B": "If only II follows/ यनद के वल II अनुसरण करत है",
+    "C": "If either I or II follows/ यनद य तो I य II अनुसरण करत है",
+    "D": "If neither I nor II follows/ यनद न तो I न ही II अनुसरण करत है",
+    "E": "If both I and II follow/ यनद I और II दोनो ंअनुसरण करते हैं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (21-23): In the questions below, some statements are followed by some conclusions.\nYou have to assume everything in the statement to be true even if they seem to be at variance\nwith commonly known facts. Read all the statements and decide which conclusion will logically\nfollow from the given statements disregarding commonly known facts.\nनीचे कदए गए प्रश्ो ोंमें कु छ कथनो ोंके बाद कु छ कनष्कर्व कदए गए हैं। आपको कथन में दी गई सभी बातो ोंको सत्य\nमानना है, भिे ही र्े सर्वज्ञात तथ्ो ोंसे कभन्न प्रतीत होते हो।ों सभी कथनो ोंको पढ़िए और तय कीढ़िए कक कौन-सा\nकनष्कर्व सर्वज्ञात तथ्ो ोंको नज़रअोंदाज़ करते हुए कदए गए कथनो ोंसे ताककव क रूप से अनुसरण करेगा।"
+  },
+  {
+   "id": "2024-q24",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit between H and G when counted to the right of G?\nG के दाई ोंओर से कगनने पर H और G के बीच ककतने व्यक्ति बैठे हैं?",
+   "options": {
+    "A": "None / कोई नही ं",
+    "B": "One/एक",
+    "C": "Three/ तीन",
+    "D": "Four/ च र",
+    "E": "Two/ दो"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (24-28): Read the given information carefully and answer the questions based on it:\nEight persons A, B, C, D, E, F, G and H sit around a circular table but not necessarily in the same order as\ngiven. Four persons face inside and four face outside.\nE sits second to the right of A who faces inside. Two persons sit between E and F who faces opposite\ndirection as A. Three persons sit between G and C who doesn’t sit adjacent to A. Immediate neighbors\nof G face same direction. H sits third to the right of D who faces same direction as A. B faces same\ndirection as E but does not sit adjacent to F.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति A, B, C, D, E, F, G और H एक वृत्ताक र मेज के च रो ंओर बैठे हैं, लेनकन जरूरी नही ंनक वे इसी क्रम में बैठे\nहो ंजैस नक नदय गय है। च र व्यक्ति अंदर की ओर तथा च र ब हर की ओर उन्मुख हैं।\nE, A के दाईं ओर दूसरे स्थाि पर बैठा है तथा A अंदर की ओर उन्मुख है। E और F के बीच द व्यक्ति बैठे हैं तथा F, A\nकी नवपरीत नदशा की ओर उन्मुख है। G और C के बीच तीि व्यक्ति बैठे हैं तथा C, A के आसन्न िही ं बैठा है। G के\nनिकटतम पड सी समाि नदशा की ओर उन्मुख हैं। H, D के दाईं ओर तीसरे स्थाि पर बैठा है तथा D, A की समाि नदशा\nकी ओर उन्मुख है। B, E की समाि नदशा की ओर उन्मुख है लेनकि F के आसन्न िही ंबैठा है।"
+  },
+  {
+   "id": "2024-q25",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "What is the position of E with respect to C?\nC के सापेक्ष में E का स्थान क्या है?",
+   "options": {
+    "A": "Fourth to the left/ ब ईं ओर चौथ",
+    "B": "Immediate left/ ठीक ब एं",
+    "C": "Fifth to the right / दाईं ओर प ाँचवां",
+    "D": "Third to the right / दाईं ओर तीसर",
+    "E": "Immediate right / ठीक दाएं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (24-28): Read the given information carefully and answer the questions based on it:\nEight persons A, B, C, D, E, F, G and H sit around a circular table but not necessarily in the same order as\ngiven. Four persons face inside and four face outside.\nE sits second to the right of A who faces inside. Two persons sit between E and F who faces opposite\ndirection as A. Three persons sit between G and C who doesn’t sit adjacent to A. Immediate neighbors\nof G face same direction. H sits third to the right of D who faces same direction as A. B faces same\ndirection as E but does not sit adjacent to F.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति A, B, C, D, E, F, G और H एक वृत्ताक र मेज के च रो ंओर बैठे हैं, लेनकन जरूरी नही ंनक वे इसी क्रम में बैठे\nहो ंजैस नक नदय गय है। च र व्यक्ति अंदर की ओर तथा च र ब हर की ओर उन्मुख हैं।\nE, A के दाईं ओर दूसरे स्थाि पर बैठा है तथा A अंदर की ओर उन्मुख है। E और F के बीच द व्यक्ति बैठे हैं तथा F, A\nकी नवपरीत नदशा की ओर उन्मुख है। G और C के बीच तीि व्यक्ति बैठे हैं तथा C, A के आसन्न िही ं बैठा है। G के\nनिकटतम पड सी समाि नदशा की ओर उन्मुख हैं। H, D के दाईं ओर तीसरे स्थाि पर बैठा है तथा D, A की समाि नदशा\nकी ओर उन्मुख है। B, E की समाि नदशा की ओर उन्मुख है लेनकि F के आसन्न िही ंबैठा है।"
+  },
+  {
+   "id": "2024-q26",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Which of the following is true about F?\nI. F faces outside.\nII. Three persons sit between F and D.\nIII. B sits immediate right of F.\nF के बारे में कनम्नकिक्तित में से कौन सा सत्य है?\nI. F क मुख ब हर की ओर है।\nII. F और D के बीच तीन व्यक्ति बैठे हैं।\nIII. B, F के ठीक द यें बैठ है।",
+   "options": {
+    "A": "Only I and III/ के वल I और III",
+    "B": "Only II/ के वल II",
+    "C": "Only I and II/ के वल I और II",
+    "D": "Only III/ के वल III",
+    "E": "Only II and III/ के वल II और III"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (24-28): Read the given information carefully and answer the questions based on it:\nEight persons A, B, C, D, E, F, G and H sit around a circular table but not necessarily in the same order as\ngiven. Four persons face inside and four face outside.\nE sits second to the right of A who faces inside. Two persons sit between E and F who faces opposite\ndirection as A. Three persons sit between G and C who doesn’t sit adjacent to A. Immediate neighbors\nof G face same direction. H sits third to the right of D who faces same direction as A. B faces same\ndirection as E but does not sit adjacent to F.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति A, B, C, D, E, F, G और H एक वृत्ताक र मेज के च रो ंओर बैठे हैं, लेनकन जरूरी नही ंनक वे इसी क्रम में बैठे\nहो ंजैस नक नदय गय है। च र व्यक्ति अंदर की ओर तथा च र ब हर की ओर उन्मुख हैं।\nE, A के दाईं ओर दूसरे स्थाि पर बैठा है तथा A अंदर की ओर उन्मुख है। E और F के बीच द व्यक्ति बैठे हैं तथा F, A\nकी नवपरीत नदशा की ओर उन्मुख है। G और C के बीच तीि व्यक्ति बैठे हैं तथा C, A के आसन्न िही ं बैठा है। G के\nनिकटतम पड सी समाि नदशा की ओर उन्मुख हैं। H, D के दाईं ओर तीसरे स्थाि पर बैठा है तथा D, A की समाि नदशा\nकी ओर उन्मुख है। B, E की समाि नदशा की ओर उन्मुख है लेनकि F के आसन्न िही ंबैठा है।"
+  },
+  {
+   "id": "2024-q27",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Who among the following sits immediate left\nकनम्नकिक्तित में से कौन G के ठीक बाएों बैठा है?",
+   "options": {
+    "A": "F",
+    "B": "B",
+    "C": "A",
+    "D": "D",
+    "E": "E"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (24-28): Read the given information carefully and answer the questions based on it:\nEight persons A, B, C, D, E, F, G and H sit around a circular table but not necessarily in the same order as\ngiven. Four persons face inside and four face outside.\nE sits second to the right of A who faces inside. Two persons sit between E and F who faces opposite\ndirection as A. Three persons sit between G and C who doesn’t sit adjacent to A. Immediate neighbors\nof G face same direction. H sits third to the right of D who faces same direction as A. B faces same\ndirection as E but does not sit adjacent to F.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति A, B, C, D, E, F, G और H एक वृत्ताक र मेज के च रो ंओर बैठे हैं, लेनकन जरूरी नही ंनक वे इसी क्रम में बैठे\nहो ंजैस नक नदय गय है। च र व्यक्ति अंदर की ओर तथा च र ब हर की ओर उन्मुख हैं।\nE, A के दाईं ओर दूसरे स्थाि पर बैठा है तथा A अंदर की ओर उन्मुख है। E और F के बीच द व्यक्ति बैठे हैं तथा F, A\nकी नवपरीत नदशा की ओर उन्मुख है। G और C के बीच तीि व्यक्ति बैठे हैं तथा C, A के आसन्न िही ं बैठा है। G के\nनिकटतम पड सी समाि नदशा की ओर उन्मुख हैं। H, D के दाईं ओर तीसरे स्थाि पर बैठा है तथा D, A की समाि नदशा\nकी ओर उन्मुख है। B, E की समाि नदशा की ओर उन्मुख है लेनकि F के आसन्न िही ंबैठा है।"
+  },
+  {
+   "id": "2024-q28",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Four of the following five are similar in a certa\nfollowing is not related to the group?\nढ़िम्नढ़िखित पााँच में से चार एक ढ़िढ़ित तरीके से समाि हैं\nउस समूह से संबंढ़ित िही ंहै?\nof G?\nain way and related to a group, who among the\nऔर एक समूह से संबंढ़ित हैं| ढ़िम्नढ़िखित में से कौि",
+   "options": {
+    "A": "C",
+    "B": "H",
+    "C": "F",
+    "D": "G",
+    "E": "B"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (24-28): Read the given information carefully and answer the questions based on it:\nEight persons A, B, C, D, E, F, G and H sit around a circular table but not necessarily in the same order as\ngiven. Four persons face inside and four face outside.\nE sits second to the right of A who faces inside. Two persons sit between E and F who faces opposite\ndirection as A. Three persons sit between G and C who doesn’t sit adjacent to A. Immediate neighbors\nof G face same direction. H sits third to the right of D who faces same direction as A. B faces same\ndirection as E but does not sit adjacent to F.\nदी गई जानकारी को ध्यानपूर्वक पढ़िए और उस पर आधाररत प्रश्ो ोंके उत्तर दीढ़िए|\nआठ व्यक्ति A, B, C, D, E, F, G और H एक वृत्ताक र मेज के च रो ंओर बैठे हैं, लेनकन जरूरी नही ंनक वे इसी क्रम में बैठे\nहो ंजैस नक नदय गय है। च र व्यक्ति अंदर की ओर तथा च र ब हर की ओर उन्मुख हैं।\nE, A के दाईं ओर दूसरे स्थाि पर बैठा है तथा A अंदर की ओर उन्मुख है। E और F के बीच द व्यक्ति बैठे हैं तथा F, A\nकी नवपरीत नदशा की ओर उन्मुख है। G और C के बीच तीि व्यक्ति बैठे हैं तथा C, A के आसन्न िही ं बैठा है। G के\nनिकटतम पड सी समाि नदशा की ओर उन्मुख हैं। H, D के दाईं ओर तीसरे स्थाि पर बैठा है तथा D, A की समाि नदशा\nकी ओर उन्मुख है। B, E की समाि नदशा की ओर उन्मुख है लेनकि F के आसन्न िही ंबैठा है।"
+  },
+  {
+   "id": "2024-q29",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If we form a four-letter meaningful word by using the third, sixth, eighth, and tenth letters\nfrom the left end of the word ‘FREELOADING’, then which of the following will be the third letter\nof the meaningful word thus formed. If more than one such word is formed mark X as your\nanswer. If no meaningful word is formed, mark Z as your answer?\nयढ़द हम ‘FREELOADING’ शब्द के बाएाँ छोर से तीसरे, छठे, आठिें और दसिें अक्षरो ं का उपयोग करके चार\nअक्षरो ं का साथणक शब्द बिाते हैं, तो ढ़िम्नढ़िखित में से कौि-सा अक्षर इस प्रकार बिे साथणक शब्द का तीसरा\nअक्षर होगा? यढ़द ऐसे एक से अढ़िक शब्द बिते हैं, तो X को अपिे उत्तर के रूप में अंढ़कत कीढ़िए। यढ़द कोई\nसाथणक शब्द िही ंबिता है, तो Z को अपिे उत्तर के रूप में अंढ़कत कीढ़िए|",
+   "options": {
+    "A": "E",
+    "B": "N",
+    "C": "D",
+    "D": "X",
+    "E": "Z"
+   },
+   "correctAnswer": "D",
+   "explanation": "DONE, NODE"
+  },
+  {
+   "id": "2024-q30",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: H > I = J ≥ K < N, L ≤ N = M < P ≤ Q\nConclusions:\nI. P > K\nII. L ≤ Q\nकथि: H > I = J ≥ K < N, L ≤ N = M < P ≤ Q\nढ़िष्कषण:\nI. P > K\nII. L ≤ Q",
+   "options": {
+    "A": "If only conclusion I is true/ यनद के वल ननष्कर्ष I सत्य है",
+    "B": "If only conclusion II is true/ यनद के वल ननष्कर्ष II सत्य है",
+    "C": "If either conclusion I or II is true/ यनद य तो ननष्कर्ष I य II सत्य है",
+    "D": "If both conclusions I and II are true/ यनद ननष्कर्ष I और II दोनो ंसत्य हैं",
+    "E": "If neither conclusion I nor II is true/ यनद न तो ननष्कर्ष I न ही II सत्य है"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (30-32): In each of the questions, relationships between some elements are shown in\nthe statements. These statements are followed by conclusions numbered I and II. Read the\nstatements and give the answer.\nप्रत्येक प्रश् में, कथनो ोंमें कु छ तत्ो ोंके बीच सोंबोंध दशावए गए हैं। इन कथनो ोंके बाद कनष्कर्व I और II कदए गए हैं।\nकथनो ोंको पढ़िए और उत्तर दीढ़िए।",
+   "explanation": "I. P > K (True)\nII. L ≤ Q (False)"
+  },
+  {
+   "id": "2024-q31",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: M ≥ N > O > P ≥ R, Q ≤ O = L > S\nConclusions:\nI. S < M\nII. L > R\nकथि: M ≥ N > O > P ≥ R, Q ≤ O = L > S\nढ़िष्कषण:\nI. S < M\nII. L > R",
+   "options": {
+    "A": "If only conclusion I is true/ यनद के वल ननष्कर्ष I सत्य है",
+    "B": "If only conclusion II is true/ यनद के वल ननष्कर्ष II सत्य है",
+    "C": "If either conclusion I or II is true/ यनद य तो ननष्कर्ष I य II सत्य है",
+    "D": "If both conclusions I and II are true/ यनद ननष्कर्ष I और II दोनो ंसत्य हैं",
+    "E": "If neither conclusion I nor II is true/ यनद न तो ननष्कर्ष I न ही II सत्य है"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (30-32): In each of the questions, relationships between some elements are shown in\nthe statements. These statements are followed by conclusions numbered I and II. Read the\nstatements and give the answer.\nप्रत्येक प्रश् में, कथनो ोंमें कु छ तत्ो ोंके बीच सोंबोंध दशावए गए हैं। इन कथनो ोंके बाद कनष्कर्व I और II कदए गए हैं।\nकथनो ोंको पढ़िए और उत्तर दीढ़िए।",
+   "explanation": "I. S < M (True)\nII. L > R (True)"
+  },
+  {
+   "id": "2024-q32",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: D ≤ E > F > G = H < I, H ≥ K < Z = U\nConclusions:\nI. F > Z\nII. D < I\nकथि: D ≤ E > F > G = H < I, H ≥ K < Z = U\nढ़िष्कषण:\nI. F > Z\nII. D < I",
+   "options": {
+    "A": "If only conclusion I is true/ यनद के वल ननष्कर्ष I सत्य है",
+    "B": "If only conclusion II is true/ यनद के वल ननष्कर्ष II सत्य है",
+    "C": "If either conclusion I or II is true/ यनद य तो ननष्कर्ष I य II सत्य है",
+    "D": "If both conclusions I and II are true/ यनद ननष्कर्ष I और II दोनो ंसत्य हैं",
+    "E": "If neither conclusion I nor II is true/ यनद न तो ननष्कर्ष I न ही II सत्य है"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (30-32): In each of the questions, relationships between some elements are shown in\nthe statements. These statements are followed by conclusions numbered I and II. Read the\nstatements and give the answer.\nप्रत्येक प्रश् में, कथनो ोंमें कु छ तत्ो ोंके बीच सोंबोंध दशावए गए हैं। इन कथनो ोंके बाद कनष्कर्व I और II कदए गए हैं।\nकथनो ोंको पढ़िए और उत्तर दीढ़िए।",
+   "explanation": "I. F > Z (False)\nII. D < I (False)"
+  },
+  {
+   "id": "2024-q33",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following persons likes Pink Colour?\nकनम्नकिक्तित में से कौन गुिाबी रोंग पसोंद करता है?",
+   "options": {
+    "A": "The who sits second to the left of C/ वह व्यक्ति ज C के बायी ंओर दूसरे स्थाि पर बैठा है",
+    "B": "C",
+    "C": "H",
+    "D": "The one who sit second to the right of E/ वह व्यक्ति जो E के दाईं ओर दूसरे स्थ न पर बैठ है",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (33-37): Study the following information carefully and answer the questions given\nbelow:\nSeven persons - B, C, D, E, F, G and H sit in a linear row and face north. Each one of them likes different\ncolour- Pink, Green, Red, Yellow, White, Blue and Grey.\nF sits third to the right of the one who likes Yellow colour. Three persons sit between the one who likes\nYellow colour and the one who likes White colour. Only one person sits between the one who likes white\ncolour and D. G sits fourth to the left of D and likes Red colour. The one who likes Grey colour is the\nimmediate neighbour of G. F doesn’t like Grey colour. Three persons sit between the one who likes Grey\ncolour and H. The one who sits second to the left of H likes Green Colour. Two persons sit between the\none who likes Green colour and B. H doesn’t like Blue colour. C is not an immediate neighbour of G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nस त व्यक्ति - B, C, D, E, F, G और H एक रेखीय पंक्ति में उत्तर की ओर मुख करके बैठे हैं। उनमें से प्रत्येक को अलग-\nअलग रंग जैसे- गुल बी, हर , ल ल, पील , सफे द, नील और स्लेटी पसंद हैं।\nF, पील रंग पसंद करने व ले व्यक्ति के द ईं ओर तीसरे स्थ न पर बैठ है। पील रंग पसंद करने व ले और सफे द रंग पसंद\nकरने व ले व्यक्ति के बीच तीन व्यक्ति बैठे हैं। सफे द रंग पसंद करने व ले और D के बीच के वल एक व्यक्ति बैठ है। G, D\nके ब ई ंओर चौथे स्थ न पर बैठ है और उसे ल ल रंग पसंद है। स्लेटी रंग पसंद करने व ल व्यक्ति G क ननकटतम पडोसी\nहै। F को स्लेटी रंग पसंद नही ंहै। स्लेटी रंग पसंद करने व ले व्यक्ति और H के बीच तीन व्यक्ति बैठे हैं। H के ब ईं ओर दूसरे\nस्थ न पर बैठने व ले व्यक्ति को हर रंग पसंद है। हर रंग पसंद करने व ले व्यक्ति और B के बीच दो व्यक्ति बैठे हैं। H को\nनील रंग पसंद नही ंहै। C, G क ननकटतम पडोसी नही ंहै।",
+   "explanation": "Final Arrangement is here:\n“H”"
+  },
+  {
+   "id": "2024-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many persons sit between E and the one who likes Blue?\nE और िह व्यखि ढ़िसे नीिा रोंग पसोंद है, के बीच ककतने व्यक्ति बैठे हैं?",
+   "options": {
+    "A": "None/ कोई नही ं",
+    "B": "Two/ दो",
+    "C": "Three/ तीन",
+    "D": "More than three/ तीन से अनिक",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (33-37): Study the following information carefully and answer the questions given\nbelow:\nSeven persons - B, C, D, E, F, G and H sit in a linear row and face north. Each one of them likes different\ncolour- Pink, Green, Red, Yellow, White, Blue and Grey.\nF sits third to the right of the one who likes Yellow colour. Three persons sit between the one who likes\nYellow colour and the one who likes White colour. Only one person sits between the one who likes white\ncolour and D. G sits fourth to the left of D and likes Red colour. The one who likes Grey colour is the\nimmediate neighbour of G. F doesn’t like Grey colour. Three persons sit between the one who likes Grey\ncolour and H. The one who sits second to the left of H likes Green Colour. Two persons sit between the\none who likes Green colour and B. H doesn’t like Blue colour. C is not an immediate neighbour of G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nस त व्यक्ति - B, C, D, E, F, G और H एक रेखीय पंक्ति में उत्तर की ओर मुख करके बैठे हैं। उनमें से प्रत्येक को अलग-\nअलग रंग जैसे- गुल बी, हर , ल ल, पील , सफे द, नील और स्लेटी पसंद हैं।\nF, पील रंग पसंद करने व ले व्यक्ति के द ईं ओर तीसरे स्थ न पर बैठ है। पील रंग पसंद करने व ले और सफे द रंग पसंद\nकरने व ले व्यक्ति के बीच तीन व्यक्ति बैठे हैं। सफे द रंग पसंद करने व ले और D के बीच के वल एक व्यक्ति बैठ है। G, D\nके ब ई ंओर चौथे स्थ न पर बैठ है और उसे ल ल रंग पसंद है। स्लेटी रंग पसंद करने व ल व्यक्ति G क ननकटतम पडोसी\nहै। F को स्लेटी रंग पसंद नही ंहै। स्लेटी रंग पसंद करने व ले व्यक्ति और H के बीच तीन व्यक्ति बैठे हैं। H के ब ईं ओर दूसरे\nस्थ न पर बैठने व ले व्यक्ति को हर रंग पसंद है। हर रंग पसंद करने व ले व्यक्ति और B के बीच दो व्यक्ति बैठे हैं। H को\nनील रंग पसंद नही ंहै। C, G क ननकटतम पडोसी नही ंहै।",
+   "explanation": "Final Arrangement is here:\n“More than three”"
+  },
+  {
+   "id": "2024-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following pairs of persons sit at the ends of the row?\nकनम्नकिक्तित में से व्यक्तियो ोंका कौन-सा युग् पोंक्ति के अोंत में बैठा है?",
+   "options": {
+    "A": "G and D/ G और D",
+    "B": "The one who like white colour and G./ वह व्यक्ति नजसे सफे द रंग पसंद है और G",
+    "C": "H and the one who likes blue colour./ H और वह व्यक्ति नजसे नील रंग पसंद है",
+    "D": "B and G/ B और G",
+    "E": "B and the one who like Blue colour/ B और वह व्यक्ति नजसे नील रंग पसंद है"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (33-37): Study the following information carefully and answer the questions given\nbelow:\nSeven persons - B, C, D, E, F, G and H sit in a linear row and face north. Each one of them likes different\ncolour- Pink, Green, Red, Yellow, White, Blue and Grey.\nF sits third to the right of the one who likes Yellow colour. Three persons sit between the one who likes\nYellow colour and the one who likes White colour. Only one person sits between the one who likes white\ncolour and D. G sits fourth to the left of D and likes Red colour. The one who likes Grey colour is the\nimmediate neighbour of G. F doesn’t like Grey colour. Three persons sit between the one who likes Grey\ncolour and H. The one who sits second to the left of H likes Green Colour. Two persons sit between the\none who likes Green colour and B. H doesn’t like Blue colour. C is not an immediate neighbour of G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nस त व्यक्ति - B, C, D, E, F, G और H एक रेखीय पंक्ति में उत्तर की ओर मुख करके बैठे हैं। उनमें से प्रत्येक को अलग-\nअलग रंग जैसे- गुल बी, हर , ल ल, पील , सफे द, नील और स्लेटी पसंद हैं।\nF, पील रंग पसंद करने व ले व्यक्ति के द ईं ओर तीसरे स्थ न पर बैठ है। पील रंग पसंद करने व ले और सफे द रंग पसंद\nकरने व ले व्यक्ति के बीच तीन व्यक्ति बैठे हैं। सफे द रंग पसंद करने व ले और D के बीच के वल एक व्यक्ति बैठ है। G, D\nके ब ई ंओर चौथे स्थ न पर बैठ है और उसे ल ल रंग पसंद है। स्लेटी रंग पसंद करने व ल व्यक्ति G क ननकटतम पडोसी\nहै। F को स्लेटी रंग पसंद नही ंहै। स्लेटी रंग पसंद करने व ले व्यक्ति और H के बीच तीन व्यक्ति बैठे हैं। H के ब ईं ओर दूसरे\nस्थ न पर बैठने व ले व्यक्ति को हर रंग पसंद है। हर रंग पसंद करने व ले व्यक्ति और B के बीच दो व्यक्ति बैठे हैं। H को\nनील रंग पसंद नही ंहै। C, G क ननकटतम पडोसी नही ंहै।",
+   "explanation": "Final Arrangement is here:\n“B and the one who like Blue colour”"
+  },
+  {
+   "id": "2024-q36",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which among the following colour does C likes?\nकनम्नकिक्तित में से C को कौन-सा रोंग पसोंद है?",
+   "options": {
+    "A": "Pink/ गुल बी",
+    "B": "Grey/ स्लेटी",
+    "C": "Blue/ नील",
+    "D": "White/ सफे द",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (33-37): Study the following information carefully and answer the questions given\nbelow:\nSeven persons - B, C, D, E, F, G and H sit in a linear row and face north. Each one of them likes different\ncolour- Pink, Green, Red, Yellow, White, Blue and Grey.\nF sits third to the right of the one who likes Yellow colour. Three persons sit between the one who likes\nYellow colour and the one who likes White colour. Only one person sits between the one who likes white\ncolour and D. G sits fourth to the left of D and likes Red colour. The one who likes Grey colour is the\nimmediate neighbour of G. F doesn’t like Grey colour. Three persons sit between the one who likes Grey\ncolour and H. The one who sits second to the left of H likes Green Colour. Two persons sit between the\none who likes Green colour and B. H doesn’t like Blue colour. C is not an immediate neighbour of G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nस त व्यक्ति - B, C, D, E, F, G और H एक रेखीय पंक्ति में उत्तर की ओर मुख करके बैठे हैं। उनमें से प्रत्येक को अलग-\nअलग रंग जैसे- गुल बी, हर , ल ल, पील , सफे द, नील और स्लेटी पसंद हैं।\nF, पील रंग पसंद करने व ले व्यक्ति के द ईं ओर तीसरे स्थ न पर बैठ है। पील रंग पसंद करने व ले और सफे द रंग पसंद\nकरने व ले व्यक्ति के बीच तीन व्यक्ति बैठे हैं। सफे द रंग पसंद करने व ले और D के बीच के वल एक व्यक्ति बैठ है। G, D\nके ब ई ंओर चौथे स्थ न पर बैठ है और उसे ल ल रंग पसंद है। स्लेटी रंग पसंद करने व ल व्यक्ति G क ननकटतम पडोसी\nहै। F को स्लेटी रंग पसंद नही ंहै। स्लेटी रंग पसंद करने व ले व्यक्ति और H के बीच तीन व्यक्ति बैठे हैं। H के ब ईं ओर दूसरे\nस्थ न पर बैठने व ले व्यक्ति को हर रंग पसंद है। हर रंग पसंद करने व ले व्यक्ति और B के बीच दो व्यक्ति बैठे हैं। H को\nनील रंग पसंद नही ंहै। C, G क ननकटतम पडोसी नही ंहै।",
+   "explanation": "Final Arrangement is here:\n“White”"
+  },
+  {
+   "id": "2024-q37",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the position of the one who likes Green colour with respect to D?\nD के सापेक्ष में हरा रोंग पसोंद करने र्ािे व्यक्ति का स्थान क्या है?",
+   "options": {
+    "A": "Second to the right/ दाईं ओर दूसर",
+    "B": "Third to the right/ द ईं ओर तीसर",
+    "C": "Third to the left/ ब ईं ओर तीसर",
+    "D": "Second to the left/ बाईं ओर दूसर",
+    "E": "Immediate right/ ठीक दाएं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (33-37): Study the following information carefully and answer the questions given\nbelow:\nSeven persons - B, C, D, E, F, G and H sit in a linear row and face north. Each one of them likes different\ncolour- Pink, Green, Red, Yellow, White, Blue and Grey.\nF sits third to the right of the one who likes Yellow colour. Three persons sit between the one who likes\nYellow colour and the one who likes White colour. Only one person sits between the one who likes white\ncolour and D. G sits fourth to the left of D and likes Red colour. The one who likes Grey colour is the\nimmediate neighbour of G. F doesn’t like Grey colour. Three persons sit between the one who likes Grey\ncolour and H. The one who sits second to the left of H likes Green Colour. Two persons sit between the\none who likes Green colour and B. H doesn’t like Blue colour. C is not an immediate neighbour of G.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nस त व्यक्ति - B, C, D, E, F, G और H एक रेखीय पंक्ति में उत्तर की ओर मुख करके बैठे हैं। उनमें से प्रत्येक को अलग-\nअलग रंग जैसे- गुल बी, हर , ल ल, पील , सफे द, नील और स्लेटी पसंद हैं।\nF, पील रंग पसंद करने व ले व्यक्ति के द ईं ओर तीसरे स्थ न पर बैठ है। पील रंग पसंद करने व ले और सफे द रंग पसंद\nकरने व ले व्यक्ति के बीच तीन व्यक्ति बैठे हैं। सफे द रंग पसंद करने व ले और D के बीच के वल एक व्यक्ति बैठ है। G, D\nके ब ई ंओर चौथे स्थ न पर बैठ है और उसे ल ल रंग पसंद है। स्लेटी रंग पसंद करने व ल व्यक्ति G क ननकटतम पडोसी\nहै। F को स्लेटी रंग पसंद नही ंहै। स्लेटी रंग पसंद करने व ले व्यक्ति और H के बीच तीन व्यक्ति बैठे हैं। H के ब ईं ओर दूसरे\nस्थ न पर बैठने व ले व्यक्ति को हर रंग पसंद है। हर रंग पसंद करने व ले व्यक्ति और B के बीच दो व्यक्ति बैठे हैं। H को\nनील रंग पसंद नही ंहै। C, G क ननकटतम पडोसी नही ंहै।",
+   "explanation": "Final Arrangement is here:\n“Third to the left”"
+  },
+  {
+   "id": "2024-q38",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How many female members are there in the family?\nपररर्ार में ककतनी मकहिा सदस्य हैं?",
+   "options": {
+    "A": "Three/ तीन",
+    "B": "Two / दो",
+    "C": "Four/ च र",
+    "D": "Five/ पााँच",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (38-40): Study the following information carefully and answer the questions given\nbelow:\nThere are eight members in a family: S, T, U, V, W, X, Y and Z. The family has three generations in the\nfamily. There is no single parent in the family. U is the brother of W who is the father of V. Z is the paternal\ngrandfather of V. S is the mother-in-law of Y. T is the only son of Y. X is the sister of Z.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nएक पररव र में आठ सदस्य- S, T, U, V, W, X, Y और Z हैं| पररव र में तीन पीऩिय ाँ हैं। पररव र में कोई एकल अनभभ वक\nनही ंहै। U, W क भ ई है तथा W, V क नपत है। Z, V क द द है। S, Y की स स है। T, Y क इकलौत पुत्र है। X, Z की बहन\nहै।",
+   "explanation": "Final Arrangement is here:\n\n“Four”"
+  },
+  {
+   "id": "2024-q39",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "Who among the following is the niece of U?\nकनम्नकिक्तित में से कौन U की भतीजी/भांिी है?",
+   "options": {
+    "A": "None of these/ इनमें से कोई नही ं",
+    "B": "T",
+    "C": "S",
+    "D": "X",
+    "E": "V"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (38-40): Study the following information carefully and answer the questions given\nbelow:\nThere are eight members in a family: S, T, U, V, W, X, Y and Z. The family has three generations in the\nfamily. There is no single parent in the family. U is the brother of W who is the father of V. Z is the paternal\ngrandfather of V. S is the mother-in-law of Y. T is the only son of Y. X is the sister of Z.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nएक पररव र में आठ सदस्य- S, T, U, V, W, X, Y और Z हैं| पररव र में तीन पीऩिय ाँ हैं। पररव र में कोई एकल अनभभ वक\nनही ंहै। U, W क भ ई है तथा W, V क नपत है। Z, V क द द है। S, Y की स स है। T, Y क इकलौत पुत्र है। X, Z की बहन\nहै।",
+   "explanation": "Final Arrangement is here:\n“V”"
+  },
+  {
+   "id": "2024-q40",
+   "section": "Reasoning Ability",
+   "topic": "Blood Relation",
+   "question": "How is S related to T?\nS, T से ककस प्रकार सम्बोंकधत है?",
+   "options": {
+    "A": "Mother/ म त",
+    "B": "Grandmother/ द दी या िािी",
+    "C": "Daughter/ पुत्री",
+    "D": "Aunt/ आंट",
+    "E": "None of these/ इनमें से कोई नही ं"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (38-40): Study the following information carefully and answer the questions given\nbelow:\nThere are eight members in a family: S, T, U, V, W, X, Y and Z. The family has three generations in the\nfamily. There is no single parent in the family. U is the brother of W who is the father of V. Z is the paternal\ngrandfather of V. S is the mother-in-law of Y. T is the only son of Y. X is the sister of Z.\nकनम्नकिक्तित जानकारी का ध्यानपूर्वक अध्ययन कीढ़िए और नीचे कदए गए प्रश्ो ोंके उत्तर दीढ़िए|\nएक पररव र में आठ सदस्य- S, T, U, V, W, X, Y और Z हैं| पररव र में तीन पीऩिय ाँ हैं। पररव र में कोई एकल अनभभ वक\nनही ंहै। U, W क भ ई है तथा W, V क नपत है। Z, V क द द है। S, Y की स स है। T, Y क इकलौत पुत्र है। X, Z की बहन\nहै।",
+   "explanation": "Final Arrangement is here:\n“Grandmother”"
+  },
+  {
+   "id": "2024-q41",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The ratio of males to females in 2021 in village D is 9:4 and the total males in 2022 in the\nvillage D is one-third of the males in 2021 in the same village. Find the difference between the\ntotal females in 2021 and 2022 in village D.\nगााँि D में 2021 में पुरुषो ं और मढ़हिाओ ं का अिुपात क्रमशः 9 : 4 है और गााँि D में 2022 में कु ि पुरुषो ं की\nसंख्या गााँि D में 2021 में पुरुषो ंकी संख्या का एक ढ़तहाई है। गााँि D में 2021 और 2022 में कु ि मढ़हिाओ ंके\nबीच अंतर ज्ञात कीढ़िए।",
+   "options": {
+    "A": "105",
+    "B": "120",
+    "C": "110",
+    "D": "100",
+    "E": "145"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (41-46): Read the following pie charts carefully and answer the questions given\nbelow. The pie chart (I) shows the percentage distribution of the total population (males and\nfemales) in 2021 and 2022 together in five different villages. The pie chart (II) shows the\npercentage distribution of the total population (males and females) in 2022 in these villages.\nRead the following pie charts carefully and answer the questions given below. The pie chart (I)\nshows the percentage distribution of the total population (males and females) in 2021 and 2022\ntogether in five different villages. The pie chart (II) shows the percentage distribution of the total\npopulation (males and females) in 2022 in these villages.\nढ़िम्नढ़िखित िृत्त आिेि का ध्यािपूिणक अध्ययि करें और िीचे ढ़दए गए प्रश्ो ंके उत्तर दें। िृत्त आिेि (I) 2021\nऔर 2022 में पााँच अिग-अिग गांिो ंमें कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है। िृत्त\nआिेि (II) इि गांिो ंमें 2022 में कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q42",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio between the total population in village B in 2022 to the total population in\nvillage C in 2021.\n2022 में गााँर् B की कु ि जनसोंख्या का 2021 में गााँर् C की कु ि जनसोंख्या से अनुपात ज्ञात कीकजए।",
+   "options": {
+    "A": "10:19",
+    "B": "19:10",
+    "C": "11:10",
+    "D": "19:11",
+    "E": "12:19"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (41-46): Read the following pie charts carefully and answer the questions given\nbelow. The pie chart (I) shows the percentage distribution of the total population (males and\nfemales) in 2021 and 2022 together in five different villages. The pie chart (II) shows the\npercentage distribution of the total population (males and females) in 2022 in these villages.\nRead the following pie charts carefully and answer the questions given below. The pie chart (I)\nshows the percentage distribution of the total population (males and females) in 2021 and 2022\ntogether in five different villages. The pie chart (II) shows the percentage distribution of the total\npopulation (males and females) in 2022 in these villages.\nढ़िम्नढ़िखित िृत्त आिेि का ध्यािपूिणक अध्ययि करें और िीचे ढ़दए गए प्रश्ो ंके उत्तर दें। िृत्त आिेि (I) 2021\nऔर 2022 में पााँच अिग-अिग गांिो ंमें कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है। िृत्त\nआिेि (II) इि गांिो ंमें 2022 में कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required ratio = 500 : 950 = 10:19"
+  },
+  {
+   "id": "2024-q43",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "60% of the total population in village E is illiterate, and the rest will be literate in 2022. If\nthe ratio between the literate population in 2022 and 2021 in village E is 5:2, respectively, then\nthe total illiterate population in 2021 is what percentage of the total literate population in 2022\nin village E?\nगााँि E की कु ि ििसंख्या का 60% ढ़िरक्षर है, और शेष 2022 में साक्षर हो िाएाँगे। यढ़द गााँि E में 2022 और\n2021 में साक्षर ििसंख्या के बीच का अिुपात क्रमशः 5 : 2 है, तो 2021 में कु ि ढ़िरक्षर ििसंख्या गााँि E में\n2022 में कु ि साक्षर ििसंख्या का ढ़कतिा प्रढ़तशत है?",
+   "options": {
+    "A": "41.5%",
+    "B": "45.5%",
+    "C": "40.5%",
+    "D": "44%",
+    "E": "47.5%"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (41-46): Read the following pie charts carefully and answer the questions given\nbelow. The pie chart (I) shows the percentage distribution of the total population (males and\nfemales) in 2021 and 2022 together in five different villages. The pie chart (II) shows the\npercentage distribution of the total population (males and females) in 2022 in these villages.\nRead the following pie charts carefully and answer the questions given below. The pie chart (I)\nshows the percentage distribution of the total population (males and females) in 2021 and 2022\ntogether in five different villages. The pie chart (II) shows the percentage distribution of the total\npopulation (males and females) in 2022 in these villages.\nढ़िम्नढ़िखित िृत्त आिेि का ध्यािपूिणक अध्ययि करें और िीचे ढ़दए गए प्रश्ो ंके उत्तर दें। िृत्त आिेि (I) 2021\nऔर 2022 में पााँच अिग-अिग गांिो ंमें कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है। िृत्त\nआिेि (II) इि गांिो ंमें 2022 में कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q44",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total males in village A in 2022 are 60% more than that in 2021, and the total females in\nthe village in 2022 are 200 less than that of males. The total females in village A in 2021 is what\npercentage more or less than the total population in villages B in 2022 and 2021 together\n(approx.).\n2022 में गााँर् A में कु ि पुरुर्, 2021 की तुिना में 60% अकधक हैं, और 2022 में गााँर् में कु ि मकहिाएाँ, पुरुर्ो ोंकी\nतुिना में 200 कम हैं। 2021 में गााँर् A में कु ि मकहिाएाँ, 2022 और 2021 में एक साथ गााँर् B की कु ि जनसोंख्या\nसे ककतने प्रकतशत अकधक या कम हैं? (िगभग)।",
+   "options": {
+    "A": "22%",
+    "B": "32%",
+    "C": "28%",
+    "D": "25%",
+    "E": "17%"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-46): Read the following pie charts carefully and answer the questions given\nbelow. The pie chart (I) shows the percentage distribution of the total population (males and\nfemales) in 2021 and 2022 together in five different villages. The pie chart (II) shows the\npercentage distribution of the total population (males and females) in 2022 in these villages.\nRead the following pie charts carefully and answer the questions given below. The pie chart (I)\nshows the percentage distribution of the total population (males and females) in 2021 and 2022\ntogether in five different villages. The pie chart (II) shows the percentage distribution of the total\npopulation (males and females) in 2022 in these villages.\nढ़िम्नढ़िखित िृत्त आिेि का ध्यािपूिणक अध्ययि करें और िीचे ढ़दए गए प्रश्ो ंके उत्तर दें। िृत्त आिेि (I) 2021\nऔर 2022 में पााँच अिग-अिग गांिो ंमें कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है। िृत्त\nआिेि (II) इि गांिो ंमें 2022 में कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q45",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total population in village F in 2022 is 37.5% less than that in C. If the total population in\nvillage F in 2021 and 2022 together is five more than half of the total population in village A in\n2021, then find the average population in village F and village B in 2021.\n2022 में गााँि F की कु ि ििसंख्या C की कु ि ििसंख्या की तुििा में 37.5% कम है। यढ़द 2021 और 2022 में\nगााँि F की कु ि ििसंख्या, 2021 में गााँि A की कु ि ििसंख्या के आिे से पााँच अढ़िक है, तो 2021 में गााँि F\nऔर गााँि B की औसत ििसंख्या ज्ञात कीढ़िए।",
+   "options": {
+    "A": "365",
+    "B": "345",
+    "C": "355",
+    "D": "370",
+    "E": "390"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (41-46): Read the following pie charts carefully and answer the questions given\nbelow. The pie chart (I) shows the percentage distribution of the total population (males and\nfemales) in 2021 and 2022 together in five different villages. The pie chart (II) shows the\npercentage distribution of the total population (males and females) in 2022 in these villages.\nRead the following pie charts carefully and answer the questions given below. The pie chart (I)\nshows the percentage distribution of the total population (males and females) in 2021 and 2022\ntogether in five different villages. The pie chart (II) shows the percentage distribution of the total\npopulation (males and females) in 2022 in these villages.\nढ़िम्नढ़िखित िृत्त आिेि का ध्यािपूिणक अध्ययि करें और िीचे ढ़दए गए प्रश्ो ंके उत्तर दें। िृत्त आिेि (I) 2021\nऔर 2022 में पााँच अिग-अिग गांिो ंमें कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है। िृत्त\nआिेि (II) इि गांिो ंमें 2022 में कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q46",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total population in village E in 2022 is how many more or less than the average population\nin village E and B in 2021.\n2022 में गााँर् E की कु ि जनसोंख्या, 2021 में गााँर् E और B की औसत जनसोंख्या से ककतनी अकधक या कम है?",
+   "options": {
+    "A": "12",
+    "B": "15",
+    "C": "4",
+    "D": "5",
+    "E": "10"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (41-46): Read the following pie charts carefully and answer the questions given\nbelow. The pie chart (I) shows the percentage distribution of the total population (males and\nfemales) in 2021 and 2022 together in five different villages. The pie chart (II) shows the\npercentage distribution of the total population (males and females) in 2022 in these villages.\nRead the following pie charts carefully and answer the questions given below. The pie chart (I)\nshows the percentage distribution of the total population (males and females) in 2021 and 2022\ntogether in five different villages. The pie chart (II) shows the percentage distribution of the total\npopulation (males and females) in 2022 in these villages.\nढ़िम्नढ़िखित िृत्त आिेि का ध्यािपूिणक अध्ययि करें और िीचे ढ़दए गए प्रश्ो ंके उत्तर दें। िृत्त आिेि (I) 2021\nऔर 2022 में पााँच अिग-अिग गांिो ंमें कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है। िृत्त\nआिेि (II) इि गांिो ंमें 2022 में कु ि ििसंख्या (पुरुष और मढ़हिा) का प्रढ़तशत ढ़ितरर् दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q47",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Ram and Shyam together can complete a work in 12 days. If Shyam takes 32 days more than\nRam to complete the work, then in how many days can Ram complete the whole work.?\nराम और श्याम कमिकर ढ़कसी कायण को 12 कदनो ोंमें पूरा कर सकते हैं। यकद श्याम को कायण पूरा करने में राम से\n32 कदन अकधक िगते हैं, तो राम कु ि कायण को ककतने कदनो ोंमें पूरा कर सकता है?",
+   "options": {
+    "A": "48",
+    "B": "16",
+    "C": "18",
+    "D": "24",
+    "E": "30"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2024-q48",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man spends 20% of his monthly salary on house rent\nand 25% of the remaining salary on his food. From his\nremaining monthly salary, he spends on travelling and saves\nin the ratio of 5:4, respectively. The difference between the\namount he saved and the amount he spends on house rent is\nRs 3000. Find the monthly salary of the man (in Rs).\nएक आदमी अपनी माकसक र्ेतन का 20% घर के ककराए पर िचव करता है और बचे हुए र्ेतन का 25% िाने पर\nिचव करता है। बचे हुए माकसक र्ेतन में से, र्ह यात्रा और बचत पर क्रमशः 5:4 के अनुपात में िचव करता है। कजतनी\nराकश र्ह बचत करता है और कजतनी राकश र्ह घर के ककराए पर िचव करता है, उनके बीच का अोंतर 3000 रुपये\nहै। आदमी की माकसक र्ेतन (रुपयो ोंमें) ज्ञात करें।",
+   "options": {
+    "A": "45000",
+    "B": "55000",
+    "C": "50000",
+    "D": "40000",
+    "E": "60000"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2024-q49",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Rs X is distributed between J, K, L, and M. The amount received by J is 25% more than that\nof L and the amount received by K is 40% less than that of J. If the amount received by M is Rs\n500 less than that of L and the difference between the amount received by J and M is Rs 1000,\nthen find X.\nX रुपये को J, K, L और M के बीच ढ़ितररत ढ़कए िाते हैं। J को प्राप्त राढ़श, L के प्राप्त राढ़श से 25% अढ़िक ह ै\nऔर K को प्राप्त राढ़श J के प्राप्त राढ़श से 40% कम है। यढ़द M को प्राप्त राढ़श L के प्राप्त राढ़श से 500 रुपये कम\nहै और J और M को प्राप्त राढ़श के बीच का अंतर 1000 रुपये है, तो X ज्ञात कीढ़िए।",
+   "options": {
+    "A": "4500",
+    "B": "8400",
+    "C": "6600",
+    "D": "5500",
+    "E": "7500"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2024-q50",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The time taken by a boat to cover 120 km upstream in 15 hours and the boat can cover X\nkm downstream in 12 hours. If the speed of the boat in still water and the speed of the current\nare in the ratio of 5:1, respectively, then find X.\nएक नार् द्वारा धारा के प्रकतकू ि 120 ककमी की दूरी तय करने में 15 घोंटे का समय िगता है तथा नार् धारा के\nअनुकू ि X ककमी की दूरी 12 घोंटे म ें तय कर सकती है। यकद शांत जि में नार् की गकत तथा धारा की गकत का\nअनुपात क्रमशः 5 : 1 है, तो X का मान ज्ञात कीकजए।",
+   "options": {
+    "A": "144",
+    "B": "288",
+    "C": "72",
+    "D": "90",
+    "E": "108"
+   },
+   "correctAnswer": "A",
+   "explanation": "Let the speed of the boat in still water and the\nspeed of the current be 5a and a km/hr respectively."
+  },
+  {
+   "id": "2024-q51",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Total number of males in city A and C together is what percentage more or less than the\ntotal number of females in B and D together?\nशहर A और C म ें पुरुषो ंकी कु ि संख्या, शहर B और D में एक साथ मढ़हिाओ ंकी कु ि संख्या से ढ़कतिे प्रढ़तशत\nअढ़िक या कम है?",
+   "options": {
+    "A": "16.67%",
+    "B": "32.5%",
+    "C": "8.33%",
+    "D": "5.25%",
+    "E": "33.33%"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (51-55): Read the following bar graph carefully and answer the questions given\nbelow. The bar graph shows total number of males and females together in four different cities\nand the number of males in these cities.\nढ़िम्नढ़िखित दंड आिेि का ध्यािपूिणक अध्ययि करें और िीचे\nअिग शहरो ंमें पुरुषो ंऔर मढ़हिाओ ंकी कु ि संख्या और इि\nढ़दए गए प्रश्ो ंके उत्तर दें। दंड आिेि चार अिग-\nशहरो ंमें पुरुषो ंकी संख्या दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q52",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The total number of females in city X is 75% more than that in D. If the total number of\nmales and females in city X is thrice that of B, then find the difference between the total number\nof males in cities A and X.\nशहर X में मढ़हिाओ ंकी कु ि संख्या शहर D की तुििा में 75% अढ़िक है। यढ़द शहर X में पुरुषो ंऔर मढ़हिाओ ं\nकी कु ि संख्या B की तीि गुिी है, तो शहर A और X में पुरुषो ंकी कु ि संख्या के बीच अंतर ज्ञात कीढ़िए।",
+   "options": {
+    "A": "50",
+    "B": "60",
+    "C": "35",
+    "D": "40",
+    "E": "55"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (51-55): Read the following bar graph carefully and answer the questions given\nbelow. The bar graph shows total number of males and females together in four different cities\nand the number of males in these cities.\nढ़िम्नढ़िखित दंड आिेि का ध्यािपूिणक अध्ययि करें और िीचे\nअिग शहरो ंमें पुरुषो ंऔर मढ़हिाओ ंकी कु ि संख्या और इि\nढ़दए गए प्रश्ो ंके उत्तर दें। दंड आिेि चार अिग-\nशहरो ंमें पुरुषो ंकी संख्या दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q53",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "In city B, 3/4th of the total number of males owned car and total number of females who did\nnot own car is twice that of males. Find the number males and females together who owned cars\nare how many more or less than those who did not owned car.\nशहर B में, कु ि पुरुषो ं की संख्या का 3/4िां ढ़हस्सा के पास कार है और ढ़िि मढ़हिाओ ं के पास कार िही ंह ै\nउिकी कु ि संख्या पुरुषो ंकी संख्या से दोगुिी है। कार रििे िािे पुरुषो ंऔर मढ़हिाओ ं की कु ि संख्या, उि\nिोगो ंसे ढ़कतिी अढ़िक या कम है ढ़ििके पास कार िही ंहै?",
+   "options": {
+    "A": "14",
+    "B": "12",
+    "C": "16",
+    "D": "18",
+    "E": "8"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (51-55): Read the following bar graph carefully and answer the questions given\nbelow. The bar graph shows total number of males and females together in four different cities\nand the number of males in these cities.\nढ़िम्नढ़िखित दंड आिेि का ध्यािपूिणक अध्ययि करें और िीचे\nअिग शहरो ंमें पुरुषो ंऔर मढ़हिाओ ंकी कु ि संख्या और इि\nढ़दए गए प्रश्ो ंके उत्तर दें। दंड आिेि चार अिग-\nशहरो ंमें पुरुषो ंकी संख्या दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q54",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "The average number of females in cities A, C and E is 25, If the total number of males in city\nE and city B is in the ratio of 3:4 respectively, then find the total number of males and females\ntogether in city E.\nशहर A, C और E म ेंमकहिाओ ोंकी औसत सोंख्या 25 है। यकद शहर E और शहर B में पुरुर्ो ोंकी कु ि सोंख्या क्रमशः\n3 : 4 के अनुपात में है, तो शहर E में पुरुर्ो ोंऔर मकहिाओ ोंकी कु ि सोंख्या ज्ञात कीकजए।",
+   "options": {
+    "A": "53",
+    "B": "48",
+    "C": "58",
+    "D": "56",
+    "E": "49"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (51-55): Read the following bar graph carefully and answer the questions given\nbelow. The bar graph shows total number of males and females together in four different cities\nand the number of males in these cities.\nढ़िम्नढ़िखित दंड आिेि का ध्यािपूिणक अध्ययि करें और िीचे\nअिग शहरो ंमें पुरुषो ंऔर मढ़हिाओ ंकी कु ि संख्या और इि\nढ़दए गए प्रश्ो ंके उत्तर दें। दंड आिेि चार अिग-\nशहरो ंमें पुरुषो ंकी संख्या दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here."
+  },
+  {
+   "id": "2024-q55",
+   "section": "Quantitative Aptitude",
+   "topic": "Data Interpretation",
+   "question": "Find the ratio of the total females in city A and B together to total males and females\ntogether in city C.\nशहर A और B में एक साथ कु ि मकहिाओ ों की सोंख्या का शहर C में कु ि पुरुर्ो ोंऔर मकहिाओ ों की सोंख्या से\nअनुपात ज्ञात कीकजए।",
+   "options": {
+    "A": "23:21",
+    "B": "20:29",
+    "C": "21:25",
+    "D": "22:29",
+    "E": "23:28"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (51-55): Read the following bar graph carefully and answer the questions given\nbelow. The bar graph shows total number of males and females together in four different cities\nand the number of males in these cities.\nढ़िम्नढ़िखित दंड आिेि का ध्यािपूिणक अध्ययि करें और िीचे\nअिग शहरो ंमें पुरुषो ंऔर मढ़हिाओ ंकी कु ि संख्या और इि\nढ़दए गए प्रश्ो ंके उत्तर दें। दंड आिेि चार अिग-\nशहरो ंमें पुरुषो ंकी संख्या दशाणता है।\n\n⚠️ This set is based on a chart printed as an image in the source paper; the chart data is not included here.",
+   "explanation": "Required ratio = (22+24) :56\n= 46 : 56\n= 23 : 28"
+  },
+  {
+   "id": "2024-q56",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The age of A five years hence is equal to the age of B ten years ago. If the ratio of the ages of\nA to B after four years is 8:13, then find the sum of the present ages of A and B (in years).\nपााँच र्र्व बाद A की आयु, दस र्र्व पहिे B की आयु के बराबर है। यकद चार र्र्व बाद A और B की आयु का अनुपात\n8 : 13 है, तो A और B की र्तवमान आयु का योग (र्र्ों में) ज्ञात कीकजए।",
+   "options": {
+    "A": "35 years / 35 वर्ष",
+    "B": "50 years / 50 वर्ष",
+    "C": "55 years / 55 वर्ष",
+    "D": "20 years / 20 वर्ष",
+    "E": "40 years / 40 वर्ष"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2024-q57",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A mixture contains milk and water in the ratio of 8:1, respectively. If 27 liters of mixture are\nremoved and 5 liters of water are added to the mixture, then the quantity of milk in the resultant\nmixture becomes 16 liters. Find the initial quantity of water.\nएक कमश्रण में दूध और पानी का अनुपात क्रमशः 8 : 1 है। यकद कमश्रण से 27 िीटर कनकाि कदया जाए और कमश्रण\nमें 5 िीटर पानी कमिा कदया जाए, तो पररणामी कमश्रण में दूध की मात्रा 16 िीटर हो जाती है। पानी की प्रारोंकभक\nमात्रा ज्ञात कीकजए।",
+   "options": {
+    "A": "12 liters / 12 लीटर",
+    "B": "4 liters / 4 लीटर",
+    "C": "5 liters / 5 लीटर",
+    "D": "9 liters / 9 लीटर",
+    "E": "14 liters / 14 लीटर"
+   },
+   "correctAnswer": "C",
+   "explanation": "Let the quantity of milk and water in the initial\nATQ,\nmixture be 8a and a liters respectively"
+  },
+  {
+   "id": "2024-q58",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A and B started a business with investments of Rs 1800 and Rs (x-1800) respectively. After\nnine months A, left and the profit share of B is Rs 1600 out of the total profit of Rs 3400. Find x.\nA और B ने क्रमश: 1800 रुपये और (x-1800) रुपये के कनर्ेश के साथ एक व्यर्साय शुरू ककया। नौ महीने बाद\nA ने व्यर्साय छोड़ कदया और 3400 रुपये के कु ि िाभ में से B का िाभ कहस्सा 1600 रुपये है। x ज्ञात करें।",
+   "options": {
+    "A": "3200",
+    "B": "3000",
+    "C": "1800",
+    "D": "1200",
+    "E": "2400"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2024-q59",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The average weight of 48 students in a group\nthen the average weight decreased by 6 kg, then\nin the group.\nएक समूह में 48 छात्रो ोंका औसत र्जन 63 ककिोग्राम है।\nर्जन 6 ककिोग्राम कम हो िाता है, तो समूह में 10 नए छ",
+   "options": {
+    "A": "29.6",
+    "B": "21.5",
+    "C": "23.2",
+    "D": "24.5",
+    "E": "28.2"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2024-q60",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "38, 35, 70, 280, 1680, 13440, 134400",
+   "options": {
+    "A": "38",
+    "B": "35",
+    "C": "70",
+    "D": "280",
+    "E": "1680"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (60-64): In each of these questions a\nnumber is wrong. Find out the wrong number.\nइनमें से प्रत्येक प्रश् में एक सोंख्या श्ररोंििा दी गई है। प्रत्येक\nकीकजए।",
+   "explanation": "Wrong number = 38\nThe pattern of the series:"
+  },
+  {
+   "id": "2024-q61",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "21, 28, 48, 75, 111, 156, 210",
+   "options": {
+    "A": "48",
+    "B": "21",
+    "C": "28",
+    "D": "111",
+    "E": "210"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (60-64): In each of these questions a\nnumber is wrong. Find out the wrong number.\nइनमें से प्रत्येक प्रश् में एक सोंख्या श्ररोंििा दी गई है। प्रत्येक\nकीकजए।",
+   "explanation": "Wrong number = 28\nThe pattern of the series:"
+  },
+  {
+   "id": "2024-q62",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "109, 123, 146, 185, 249, 349, 488",
+   "options": {
+    "A": "349",
+    "B": "185",
+    "C": "488",
+    "D": "109",
+    "E": "123"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (60-64): In each of these questions a\nnumber is wrong. Find out the wrong number.\nइनमें से प्रत्येक प्रश् में एक सोंख्या श्ररोंििा दी गई है। प्रत्येक\nकीकजए।",
+   "explanation": "Wrong number = 488\nThe pattern of the series:"
+  },
+  {
+   "id": "2024-q63",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "1708, 1196, 853, 637, 512, 448, 444",
+   "options": {
+    "A": "444",
+    "B": "1708",
+    "C": "853",
+    "D": "637",
+    "E": "512\np is 63 kg. If 10 more students joined the group,\nfind the average weight of the 10 new students\nयकद 10 और छात्र समूह में शाकमि हो िाते हैं, तो औसत\nछात्रो ोंका औसत र्जन ज्ञात कीकजए।\nnumber series is given. In each series only one\nक श्ररोंििा में के र्ि एक सोंख्या गित है। गित सोंख्या ज्ञात"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (60-64): In each of these questions a\nnumber is wrong. Find out the wrong number.\nइनमें से प्रत्येक प्रश् में एक सोंख्या श्ररोंििा दी गई है। प्रत्येक\nकीकजए।",
+   "explanation": "Wrong number = 444\nThe pattern of the series:"
+  },
+  {
+   "id": "2024-q64",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "175, 150, 177, 150, 179, 148, 181",
+   "options": {
+    "A": "181",
+    "B": "150",
+    "C": "177",
+    "D": "179",
+    "E": "148"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (60-64): In each of these questions a\nnumber is wrong. Find out the wrong number.\nइनमें से प्रत्येक प्रश् में एक सोंख्या श्ररोंििा दी गई है। प्रत्येक\nकीकजए।",
+   "explanation": "Wrong number = 150\nThe pattern of the series:"
+  },
+  {
+   "id": "2024-q65",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ The expression for Q65 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If x>y / यनद x>y",
+    "B": "If x≥y / यनद x≥y",
+    "C": "If x<y / यनद x<y",
+    "D": "If x≤y / यनद x≤y",
+    "E": "If x = y or no relation can be established between\nस्थानपत िही ंनकया जा सकता है"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (65-69): In each of these questions, two\nsolve both the equations and give answer\nइनमें स ेप्रत्येक प्रश् में दो समीकरण (I) और (II) कदए गए हैं।\nदेना है।"
+  },
+  {
+   "id": "2024-q66",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ The expression for Q66 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If x>y / यनद x>y",
+    "B": "If x≥y / यनद x≥y",
+    "C": "If x<y / यनद x<y",
+    "D": "If x≤y / यनद x≤y",
+    "E": "If x = y or no relation can be established between\nस्थानपत िही ंनकया जा सकता है"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (65-69): In each of these questions, two\nsolve both the equations and give answer\nइनमें स ेप्रत्येक प्रश् में दो समीकरण (I) और (II) कदए गए हैं।\nदेना है।"
+  },
+  {
+   "id": "2024-q67",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ The expression for Q67 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If x>y / यनद x>y",
+    "B": "If x≥y / यनद x≥y",
+    "C": "If x<y / यनद x<y",
+    "D": "If x≤y / यनद x≤y",
+    "E": "If x = y or no relation can be established between\nस्थानपत िही ंनकया जा सकता है\no equation (I) and (II) are given. You have to\nआपको दोनो ोंसमीकरणो ोंको हि करना है और उत्तर\nx and y / यनद x = y या x और y के बीच क ई संबंध\nx and y / यनद x = y या x और y के बीच क ई संबंध\nx and y / यनद x = y या x और y के बीच क ई संबंध"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (65-69): In each of these questions, two\nsolve both the equations and give answer\nइनमें स ेप्रत्येक प्रश् में दो समीकरण (I) और (II) कदए गए हैं।\nदेना है।"
+  },
+  {
+   "id": "2024-q68",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ The expression for Q68 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If x>y / यनद x>y",
+    "B": "If x≥y / यनद x≥y",
+    "C": "If x<y / यनद x<y",
+    "D": "If x≤y / यनद x≤y",
+    "E": "If x = y or no relation can be established between\nस्थानपत िही ंनकया जा सकता है"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (65-69): In each of these questions, two\nsolve both the equations and give answer\nइनमें स ेप्रत्येक प्रश् में दो समीकरण (I) और (II) कदए गए हैं।\nदेना है।"
+  },
+  {
+   "id": "2024-q69",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "⚠️ The expression for Q69 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "If x>y / यनद x>y",
+    "B": "If x≥y / यनद x≥y",
+    "C": "If x<y / यनद x<y",
+    "D": "If x≤y / यनद x≤y",
+    "E": "If x = y or no relation can be established between\nस्थानपत िही ंनकया जा सकता है"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (65-69): In each of these questions, two\nsolve both the equations and give answer\nइनमें स ेप्रत्येक प्रश् में दो समीकरण (I) और (II) कदए गए हैं।\nदेना है।"
+  },
+  {
+   "id": "2024-q70",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q70 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "676",
+    "B": "484",
+    "C": "576",
+    "D": "625",
+    "E": "841"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (70-74): What approximate value will\nfollowing questions? (You are not expected to calcu\nकनम्नकिक्तित प्रश्ो ोंमें प्रश्र्ाचक ढ़चह्न (?) के स्थान पर क्या अन\nकरने की अपेक्षा नही ोंकी जाती है)"
+  },
+  {
+   "id": "2024-q71",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q71 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "6",
+    "B": "18",
+    "C": "21",
+    "D": "25",
+    "E": "7\nx and y / यनद x = y या x और y के बीच क ई संबंध\nx and y / यनद x = y या x और y के बीच क ई संबंध\ncome in place of question mark (?) in the\nulate the exact value)\nनुमाकनत मान आएगा? (आपसे सटीक मान की गणना"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (70-74): What approximate value will\nfollowing questions? (You are not expected to calcu\nकनम्नकिक्तित प्रश्ो ोंमें प्रश्र्ाचक ढ़चह्न (?) के स्थान पर क्या अन\nकरने की अपेक्षा नही ोंकी जाती है)"
+  },
+  {
+   "id": "2024-q72",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q72 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "49",
+    "B": "52",
+    "C": "43",
+    "D": "41",
+    "E": "59"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (70-74): What approximate value will\nfollowing questions? (You are not expected to calcu\nकनम्नकिक्तित प्रश्ो ोंमें प्रश्र्ाचक ढ़चह्न (?) के स्थान पर क्या अन\nकरने की अपेक्षा नही ोंकी जाती है)"
+  },
+  {
+   "id": "2024-q73",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q73 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "853",
+    "B": "881",
+    "C": "837",
+    "D": "813",
+    "E": "809"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (70-74): What approximate value will\nfollowing questions? (You are not expected to calcu\nकनम्नकिक्तित प्रश्ो ोंमें प्रश्र्ाचक ढ़चह्न (?) के स्थान पर क्या अन\nकरने की अपेक्षा नही ोंकी जाती है)"
+  },
+  {
+   "id": "2024-q74",
+   "section": "Quantitative Aptitude",
+   "topic": "Approximation",
+   "question": "⚠️ The expression for Q74 is printed as an image in the source paper and could not be extracted, so this question cannot be solved as shown.",
+   "options": {
+    "A": "243",
+    "B": "234",
+    "C": "221",
+    "D": "207",
+    "E": "298"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (70-74): What approximate value will\nfollowing questions? (You are not expected to calcu\nकनम्नकिक्तित प्रश्ो ोंमें प्रश्र्ाचक ढ़चह्न (?) के स्थान पर क्या अन\nकरने की अपेक्षा नही ोंकी जाती है)"
+  },
+  {
+   "id": "2024-q75",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man invested Rs 20000 in two different schemes, i.e., A and B. Schemes A and B offer 10%\nand 20% p.a. compound interest respectively for two years. If the ratio of the total amount\nreceived by man from schemes A to B is 11:16, then find the amount invested in the scheme B.\nएक व्यखि िे दो अिग-अिग योििाओ,ं यािी A और B में 20000 रुपये का ढ़ििेश ढ़कया। योििा A और B दो\nिषों के ढ़िए क्रमशः 10% और 20% प्रढ़त िषण चक्रिृखि ब्याि प्रदाि करती हैं। यढ़द योििा A और B से व्यखि\nद्वारा प्राप्त कु ि राढ़श का अिुपात 11:16 है, तो योििा B में ढ़ििेश की गई राढ़श ज्ञात कीढ़िए।",
+   "options": {
+    "A": "Rs 9000 / 9000 रुपये",
+    "B": "Rs 11000 / 11000 रुपये",
+    "C": "Rs 14000 / 14000 रुपये",
+    "D": "Rs 8000 / 8000 रुपये",
+    "E": "None of these / इनमें से कोई नही ं"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2024-q76",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "There are two schools, A and B, and the sum of total\nmales in school A and total females in school B is 160. The\nratio of males in schools A and B is 2:3, and the ratio of\nfemales in schools A and B is 3:4, respectively. If the difference\nbetween the total males in schools A and B together and that\nof females is 60, then find the males in school B.\nदो स्कू ि यािी A और B हैं, और स्कू ि A में कु ि पुरुषो ंऔर स्कू ि B में कु ि मढ़हिाओ ंका योग 160 है। स्कू ि A\nऔर B में पुरुषो ंका अिुपात 2 : 3 है, और स्कू ि A और B में मढ़हिाओ ंका अिुपात क्रमशः 3 : 4 है। यढ़द स्कू ि\nA और B में कु ि पुरुषो ंकी संख्या और स्कू ि A और B में कु ि मढ़हिाओ ं की संख्या के बीच का अंतर 60 ह,ै तो\nस्कू ि B में पुरुषो ंकी संख्या ज्ञात कीढ़िए।",
+   "options": {
+    "A": "100",
+    "B": "60",
+    "C": "80",
+    "D": "120",
+    "E": "150"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2024-q77",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "A man invested of Rs P in simple interest at R% p.a. for two years and received interest of\nRs 320. If he invested same sum in simple interest at 5% p.a. for 8 years and received amount of\nRs 2240, then find R.\nएक व्यखि िे P रुपए को दो िषों के ढ़िए R% प्रढ़त िषण सािारर् ब्याि पर ढ़ििेश ढ़कया और 320 रुपए ब्याि\nप्राप्त ढ़कया। यढ़द उसिे समाि राढ़श को 8 िषों के ढ़िए 5% प्रढ़त िषण सािारर् ब्याि पर ढ़ििेश ढ़कया और 2240\nरुपए की राढ़श प्राप्त ढ़कया, तो R ज्ञात कीढ़िए।",
+   "options": {
+    "A": "20",
+    "B": "8",
+    "C": "15",
+    "D": "12",
+    "E": "10"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2024-q78",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The cost price of article A is equals to selling price of the article B. if article A is sold at the\n𝟏\n𝟑𝟑 % profit and article B is sold at the 50% profit and the sum of the cost price of article B and\n𝟑\nselling price of article A is Rs. 672, then find the cost price of article A?\n𝟏\nर्स्तु A का क्रय मूल्य र्स्तु B के कर्क्रय मूल्य के बराबर है। यकद र्स्तु A को 𝟑𝟑 % िाभ पर बेचा जाता है और र्स्तु\n𝟑\nB को 50% िाभ पर बेचा जाता है तथा र्स्तु B के क्रय मूल्य और र्स्तु A के कर्क्रय मूल्य का योग 672 रुपये है, तो\nर्स्तु A का क्रय मूल्य ज्ञात कीकजए।",
+   "options": {
+    "A": "Rs. 224 /224 रुपये",
+    "B": "Rs. 336 /336 रुपये",
+    "C": "Rs. 380 /380 रुपये",
+    "D": "Rs. 420 /420 रुपये",
+    "E": "Rs. 448 /448 रुपये"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2024-q79",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "The area of a rectangular field having length 128m and breadth 16m is equal to the area\n𝟏\nof an isosceles right-angle triangle. If the radius of a sphere is 𝟏𝟐 % of the hypotenuse of the\n𝟐\nisosceles right-angle triangle, then find out the total surface area of sphere?\n128 मीटर िोंबाई और 16 मीटर चौड़ाई र्ािे एक आयताकार मैदान का क्षेत्रफि एक समकद्वबाहु समकोण कत्रभुज\n𝟏\nके क्षेत्रफि के बराबर है। यकद एक गोिे की कत्रज्या, समकद्वबाहु समकोण कत्रभुज के कणव की 𝟏𝟐 % है, तो गोिे का\n𝟐\nकु ि परष्ठीय क्षेत्रफि ज्ञात कीकजए।",
+   "options": {
+    "A": "512π m2 / 512π वर्ष मीटर",
+    "B": "343π m2 / 343π वर्ष मीटर",
+    "C": "580π m2 / 580π वर्ष मीटर",
+    "D": "494π m2 / 494π वर्ष मीटर",
+    "E": "500π m2 / 500π वर्ष मीटर"
+   },
+   "correctAnswer": "A"
+  },
+  {
+   "id": "2024-q80",
+   "section": "Quantitative Aptitude",
+   "topic": "Arithmetic",
+   "question": "Train A crosses a 230m long platform in 29 second\nplatform in 24 seconds. Train B which is 450m long crosses\nin the same direction. Find how much time will the train A\nटरेन A 230 मीटर िोंबे प्लेटफॉमव को 29 सेकों ड में पार करती है और टरेन\nमें पार करती है। टरेन B जो 450 मीटर िोंबी है, एक ही कदशा में चिते\nटरेन A को 50 मीटर िोंबे पुि को पार करने में ककतना समय िगेगा?",
+   "options": {
+    "A": "16 seconds / 16 सेकं ड",
+    "B": "22 seconds / 22 सेकं ड",
+    "C": "20 seconds / 20 सेकं ड",
+    "D": "17 seconds / 17 सेकं ड",
+    "E": "25 seconds / 25 सेकं ड\nSolutions\nS1. Ans.(e)\nSol.\nS2. Ans.(d)\nSol.\nS3. Ans.(e)\nSol.\nds and train B crosses a 150m long\ntrain A in 160 seconds, while running\ntake to cross a 50m long bridge?\nन B 150 मीटर िोंबे प्लेटफॉमव को 24 सेकों ड\nहुए टरेन A को 160 सेकों ड में पार करती है।\nS4. Ans.(c)\nSol.\nS5. Ans.(e)\nSol.\nS6. Ans.(c)\nSol. 463278293 = 242066082\nS7. Ans.(e)\nSol. “None”\nS8. Ans.(b)\nSol. Final Arrangement is here:\n“The one who was born three persons before Q”\nS9. Ans.(e)\nSol. Final Arrangement is here:\n“Four”\n\nS10. Ans.(d)\nSol. Final Arrangement is here:\n“S, P”\nS11. Ans.(c)\nSol. Final Arrangement is here:\n“R”\nS12. Ans.(c)\nSol. Final Arrangement is here:\n“M was born in the month of April”\nS13. Ans.(c)\nSol. Final Arrangement is here:\n\n“West”\nS14. Ans.(d)\nSol. Final Arrangement is here:\n“36m”\nS15. Ans.(b)\nSol. Final Arrangement is here:\n“10m”\n\nS16. Ans.(e)\nSol.\nS17. Ans.(d)\nSol.\nS18. Ans.(b)\nSol.\n\nS19. Ans.(b)\nSol.\nS20. Ans.(a)\nSol.\nS21. Ans.(e)\nSol.\nS22. Ans.(b)\nSol.\n\nS23. Ans.(d)\nSol.\nS24. Ans.(e)\nSol.\nS25. Ans.(d)\nSol.\nS26. Ans.(c)\nSol.\n\nS27. Ans.(e)\nSol.\nS28. Ans.(e)\nSol.\nS29. Ans.(d)\nSol. DONE, NODE\nS30. Ans.(a)\nSol.\nI. P > K (True)\nII. L ≤ Q (False)\nS31. Ans.(d)\nSol.\nI. S < M (True)\nII. L > R (True)\nS32. Ans.(e)\nSol.\nI. F > Z (False)\nII. D < I (False)\n\nS33. Ans.(c)\nSol. Final Arrangement is here:\n“H”\nS34. Ans.(d)\nSol. Final Arrangement is here:\n“More than three”\nS35. Ans.(e)\nSol. Final Arrangement is here:\n“B and the one who like Blue colour”\nS36. Ans.(d)\nSol. Final Arrangement is here:\n“White”\nS37. Ans.(c)\nSol. Final Arrangement is here:\n“Third to the left”\nS38. Ans.(c)\nSol. Final Arrangement is here:\n\n“Four”\nS39. Ans.(e)\nSol. Final Arrangement is here:\n“V”\nS40. Ans.(b)\nSol. Final Arrangement is here:\n“Grandmother”\nS41. Ans.(b)\nSol.\n\nS42. Ans.(a)\nSol.\nRequired ratio = 500 : 950 = 10:19\nS43. Ans.(e)\nSol.\n\nS44. Ans.(c)\nSol.\nS45. Ans.(c)\nSol.\n\nS46. Ans.(e)\nSol.\nS47. Ans.(b)\nSol.\n\nS48. Ans.(a)\nSol.\nS49. Ans.(e)\nSol.\nS50. Ans.(a)\nSol. Let the speed of the boat in still water and the\nspeed of the current be 5a and a km/hr respectively.\nS51. Ans.(a)\nSol.\nS52. Ans.(e)\nSol.\n\nS53. Ans.(a)\nSol.\nS54. Ans.(b)\nSol.\n\nS55. Ans.(e)\nSol.\nRequired ratio = (22+24) :56\n= 46 : 56\n= 23 : 28\nS56. Ans.(c)\nSol.\nS57. Ans.(c)\nSol. Let the quantity of milk and water in the initial\nATQ,\nmixture be 8a and a liters respectively\nS58. Ans.(b)\nSol.\nS59. Ans.(e)\nSol.\nS60. Ans.(a)\nSol. Wrong number = 38\nThe pattern of the series:\nS61. Ans.(c)\nSol. Wrong number = 28\nThe pattern of the series:\nS62. Ans.(c)\nSol. Wrong number = 488\nThe pattern of the series:\nS63. Ans.(a)\nSol. Wrong number = 444\nThe pattern of the series:\n\nS64. Ans.(b)\nSol. Wrong number = 150\nThe pattern of the series:\nS65. Ans.(e)\nSol.\nS66. Ans.(a)\nSol.\n\nS67. Ans.(d)\nSol.\nS68. Ans.(b)\nSol.\nS69. Ans.(c)\nSol.\nS70. Ans.(c)\nSol.\n\nS71. Ans.(a)\nSol.\nS72. Ans.(b)\nSol.\nS73. Ans.(a)\nSol.\nS74. Ans.(b)\nSol.\nS75. Ans.(b)\nSol.\n\nS76. Ans.(d)\nSol.\nS77. Ans.(e)\nSol.\nS78. Ans.(b)\nSol.\nS79. Ans.(a)\nSol.\n\nS80. Ans.(c)\nSol."
+   },
+   "correctAnswer": "C"
+  }
+ ]
+}

@@ -1,0 +1,590 @@
+{
+ "id": "rrbpo-2020",
+ "questions": [
+  {
+   "id": "2020-q1",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If 2 is subtracted from each even digit and 1 is added to each odd digit in the given number\n‘2145673’, then how many digits will appear more than one in the new number thus formed?",
+   "options": {
+    "A": "None",
+    "B": "One",
+    "C": "Two",
+    "D": "Three",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "explanation": "2 1 4 5 6 7 3\n0 2 2 6 4 8 4\nDirections (2-6):\nFloors Flat-P Flat-Q\n4 D H\n3 G F\n2 C A\n1 B E"
+  },
+  {
+   "id": "2020-q2",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Who among the following lives just below the flat in which G lives?",
+   "options": {
+    "A": "B",
+    "B": "C",
+    "C": "A",
+    "D": "Both (b) and (c)",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (2-6): Study the following information carefully and answer the question given\nbelow-\nEight persons live in a building of four floors such that ground floor is numbered 1 and floor above it\nis 2 and so on up to 4th floor. Each of the floor consist of 2 flats as flat-P, which is in west of flat Q. Flat-\nP of floor-2 is immediately above flat-P of floor-1 and immediately below flat-P of floor-3 and in the\nsame way flat-Q of each floor follow same pattern.\nA lives on an even numbered floor. A lives just above the flat of E. B lives to the west of E. One floor\ngap between D and C. H lives in the east of D. G lives on the 3rd floor. Both F and C live in the different\nflats."
+  },
+  {
+   "id": "2020-q3",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many floors gap between B and H?",
+   "options": {
+    "A": "None",
+    "B": "Two",
+    "C": "One",
+    "D": "Either (a) or (c)",
+    "E": "Either (b) or (c)"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (2-6): Study the following information carefully and answer the question given\nbelow-\nEight persons live in a building of four floors such that ground floor is numbered 1 and floor above it\nis 2 and so on up to 4th floor. Each of the floor consist of 2 flats as flat-P, which is in west of flat Q. Flat-\nP of floor-2 is immediately above flat-P of floor-1 and immediately below flat-P of floor-3 and in the\nsame way flat-Q of each floor follow same pattern.\nA lives on an even numbered floor. A lives just above the flat of E. B lives to the west of E. One floor\ngap between D and C. H lives in the east of D. G lives on the 3rd floor. Both F and C live in the different\nflats."
+  },
+  {
+   "id": "2020-q4",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the direction of G with respect to E?",
+   "options": {
+    "A": "South",
+    "B": "North-east",
+    "C": "North",
+    "D": "East",
+    "E": "North-west"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (2-6): Study the following information carefully and answer the question given\nbelow-\nEight persons live in a building of four floors such that ground floor is numbered 1 and floor above it\nis 2 and so on up to 4th floor. Each of the floor consist of 2 flats as flat-P, which is in west of flat Q. Flat-\nP of floor-2 is immediately above flat-P of floor-1 and immediately below flat-P of floor-3 and in the\nsame way flat-Q of each floor follow same pattern.\nA lives on an even numbered floor. A lives just above the flat of E. B lives to the west of E. One floor\ngap between D and C. H lives in the east of D. G lives on the 3rd floor. Both F and C live in the different\nflats."
+  },
+  {
+   "id": "2020-q5",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following floor does C lives?",
+   "options": {
+    "A": "Floor-1",
+    "B": "Floor-4",
+    "C": "Floor-3",
+    "D": "Floor-2",
+    "E": "None of these"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (2-6): Study the following information carefully and answer the question given\nbelow-\nEight persons live in a building of four floors such that ground floor is numbered 1 and floor above it\nis 2 and so on up to 4th floor. Each of the floor consist of 2 flats as flat-P, which is in west of flat Q. Flat-\nP of floor-2 is immediately above flat-P of floor-1 and immediately below flat-P of floor-3 and in the\nsame way flat-Q of each floor follow same pattern.\nA lives on an even numbered floor. A lives just above the flat of E. B lives to the west of E. One floor\ngap between D and C. H lives in the east of D. G lives on the 3rd floor. Both F and C live in the different\nflats."
+  },
+  {
+   "id": "2020-q6",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following is true regarding H?",
+   "options": {
+    "A": "Floor 4 – Flat P",
+    "B": "Floor3 – Flat Q",
+    "C": "Floor 2- Flat P",
+    "D": "Floor4- Flat Q",
+    "E": "Floor1- Flat Q"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (2-6): Study the following information carefully and answer the question given\nbelow-\nEight persons live in a building of four floors such that ground floor is numbered 1 and floor above it\nis 2 and so on up to 4th floor. Each of the floor consist of 2 flats as flat-P, which is in west of flat Q. Flat-\nP of floor-2 is immediately above flat-P of floor-1 and immediately below flat-P of floor-3 and in the\nsame way flat-Q of each floor follow same pattern.\nA lives on an even numbered floor. A lives just above the flat of E. B lives to the west of E. One floor\ngap between D and C. H lives in the east of D. G lives on the 3rd floor. Both F and C live in the different\nflats."
+  },
+  {
+   "id": "2020-q7",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code of ‘make’ as per the given code language?",
+   "options": {
+    "A": "zm",
+    "B": "mn",
+    "C": "rk",
+    "D": "pc",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "passage": "Direction (7-11): Study the following information carefully\nbelow:\nIn a certain code language\n‘plan to go exam’ is coded as ‘oj kr mn pc’\n‘exam today easy’ is coded as ‘si oj ly’\n‘plan your exam today’ is coded as ‘zm oj si mn ’\n‘make your plan today’ is coded as ‘zm si mn rk’"
+  },
+  {
+   "id": "2020-q8",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code of ‘exam’ as per the given code language?",
+   "options": {
+    "A": "rk",
+    "B": "pc",
+    "C": "kr",
+    "D": "oj",
+    "E": "None of these"
+   },
+   "correctAnswer": "D",
+   "passage": "Direction (7-11): Study the following information carefully\nbelow:\nIn a certain code language\n‘plan to go exam’ is coded as ‘oj kr mn pc’\n‘exam today easy’ is coded as ‘si oj ly’\n‘plan your exam today’ is coded as ‘zm oj si mn ’\n‘make your plan today’ is coded as ‘zm si mn rk’"
+  },
+  {
+   "id": "2020-q9",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code of ‘go’ as per the given code language?",
+   "options": {
+    "A": "pc",
+    "B": "si",
+    "C": "kr",
+    "D": "either ‘pc’ or ‘kr’",
+    "E": "None of these\nand answer the questions given"
+   },
+   "correctAnswer": "D",
+   "passage": "Direction (7-11): Study the following information carefully\nbelow:\nIn a certain code language\n‘plan to go exam’ is coded as ‘oj kr mn pc’\n‘exam today easy’ is coded as ‘si oj ly’\n‘plan your exam today’ is coded as ‘zm oj si mn ’\n‘make your plan today’ is coded as ‘zm si mn rk’"
+  },
+  {
+   "id": "2020-q10",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "What is the code of ‘exam today’ as per the given code language?",
+   "options": {
+    "A": "si oj",
+    "B": "mn kr",
+    "C": "lv si",
+    "D": "zm oj",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Direction (7-11): Study the following information carefully\nbelow:\nIn a certain code language\n‘plan to go exam’ is coded as ‘oj kr mn pc’\n‘exam today easy’ is coded as ‘si oj ly’\n‘plan your exam today’ is coded as ‘zm oj si mn ’\n‘make your plan today’ is coded as ‘zm si mn rk’"
+  },
+  {
+   "id": "2020-q11",
+   "section": "Reasoning Ability",
+   "topic": "Coding-Decoding",
+   "question": "If ‘easy to plan’ is coded as ‘mn ly pc’ then what is the code of ‘go’ as per the given code language?",
+   "options": {
+    "A": "pc",
+    "B": "zm",
+    "C": "kr",
+    "D": "mn",
+    "E": "None of these"
+   },
+   "correctAnswer": "C",
+   "passage": "Direction (7-11): Study the following information carefully\nbelow:\nIn a certain code language\n‘plan to go exam’ is coded as ‘oj kr mn pc’\n‘exam today easy’ is coded as ‘si oj ly’\n‘plan your exam today’ is coded as ‘zm oj si mn ’\n‘make your plan today’ is coded as ‘zm si mn rk’"
+  },
+  {
+   "id": "2020-q12",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "How many pairs of letters are there in the word “GRANDUAL” each of which have as many\nletters between them in the word as they have between them in the English alphabetical series??",
+   "options": {
+    "A": "Three",
+    "B": "Four",
+    "C": "Two",
+    "D": "One",
+    "E": "Five"
+   },
+   "correctAnswer": "C",
+   "explanation": "Solutions\nDirection (13-15):"
+  },
+  {
+   "id": "2020-q13",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "In which direction point P with respect to point M?",
+   "options": {
+    "A": "South",
+    "B": "South-east",
+    "C": "North-east",
+    "D": "East",
+    "E": "None of these"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (13-15): Study the information carefully and answer the questions given below.\nPoint P is 26m west of point S. Point G is 52m north of point P. Point M is 39m east of point G and\npoint K is 13m south of point G. Point H is 39m north of point S."
+  },
+  {
+   "id": "2020-q14",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the shortest distance between point K and point H?",
+   "options": {
+    "A": "13m",
+    "B": "26m",
+    "C": "39m",
+    "D": "25m",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (13-15): Study the information carefully and answer the questions given below.\nPoint P is 26m west of point S. Point G is 52m north of point P. Point M is 39m east of point G and\npoint K is 13m south of point G. Point H is 39m north of point S."
+  },
+  {
+   "id": "2020-q15",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "If Point Z is 13m north of point H, then what is the distance between point M and point Z?",
+   "options": {
+    "A": "13m",
+    "B": "26m",
+    "C": "39m",
+    "D": "25m",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (13-15): Study the information carefully and answer the questions given below.\nPoint P is 26m west of point S. Point G is 52m north of point P. Point M is 39m east of point G and\npoint K is 13m south of point G. Point H is 39m north of point S."
+  },
+  {
+   "id": "2020-q16",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "The number of persons sit between L and Q is same as the number of persons sit between P and\n____?",
+   "options": {
+    "A": "D",
+    "B": "G",
+    "C": "U",
+    "D": "Q",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (16-20): Study the following information carefully and answer the question given\nbelow-\nSeven persons D, G, P, L, J, U and Q are sitting in a row facing to the north. They all have of different\nages. D sits 3rd from one of the extreme ends of the row. Q sits 2nd to the right of D. The number of\npersons sit to the left of Q is same as the number of persons sit to the right of G, who is 20 years old. P\nsits 4th to the left of the one who is 35 years old. Q is not 35 years old. Total age of immediate\nneighbours of D is 75 years. J is 30 years old. P is 20 year older than one of his immediate neighbours.\nU sits to the right of L, who sits immediate to the left of the one who is 25 years old. Q is 5 year\nyounger than P."
+  },
+  {
+   "id": "2020-q17",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "What is the position of J with respect to Q?",
+   "options": {
+    "A": "2nd to the left",
+    "B": "Immediate left",
+    "C": "Immediate right",
+    "D": "4th to the left",
+    "E": "3rd to the right"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (16-20): Study the following information carefully and answer the question given\nbelow-\nSeven persons D, G, P, L, J, U and Q are sitting in a row facing to the north. They all have of different\nages. D sits 3rd from one of the extreme ends of the row. Q sits 2nd to the right of D. The number of\npersons sit to the left of Q is same as the number of persons sit to the right of G, who is 20 years old. P\nsits 4th to the left of the one who is 35 years old. Q is not 35 years old. Total age of immediate\nneighbours of D is 75 years. J is 30 years old. P is 20 year older than one of his immediate neighbours.\nU sits to the right of L, who sits immediate to the left of the one who is 25 years old. Q is 5 year\nyounger than P."
+  },
+  {
+   "id": "2020-q18",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Four of the following five are alike in a certain way and so form a group. Find the one who does\nnot belong to that group?",
+   "options": {
+    "A": "P",
+    "B": "G",
+    "C": "J",
+    "D": "L",
+    "E": "U"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (16-20): Study the following information carefully and answer the question given\nbelow-\nSeven persons D, G, P, L, J, U and Q are sitting in a row facing to the north. They all have of different\nages. D sits 3rd from one of the extreme ends of the row. Q sits 2nd to the right of D. The number of\npersons sit to the left of Q is same as the number of persons sit to the right of G, who is 20 years old. P\nsits 4th to the left of the one who is 35 years old. Q is not 35 years old. Total age of immediate\nneighbours of D is 75 years. J is 30 years old. P is 20 year older than one of his immediate neighbours.\nU sits to the right of L, who sits immediate to the left of the one who is 25 years old. Q is 5 year\nyounger than P."
+  },
+  {
+   "id": "2020-q19",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Who among the following is 40 years old?",
+   "options": {
+    "A": "L",
+    "B": "P",
+    "C": "D",
+    "D": "U",
+    "E": "None of these"
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (16-20): Study the following information carefully and answer the question given\nbelow-\nSeven persons D, G, P, L, J, U and Q are sitting in a row facing to the north. They all have of different\nages. D sits 3rd from one of the extreme ends of the row. Q sits 2nd to the right of D. The number of\npersons sit to the left of Q is same as the number of persons sit to the right of G, who is 20 years old. P\nsits 4th to the left of the one who is 35 years old. Q is not 35 years old. Total age of immediate\nneighbours of D is 75 years. J is 30 years old. P is 20 year older than one of his immediate neighbours.\nU sits to the right of L, who sits immediate to the left of the one who is 25 years old. Q is 5 year\nyounger than P."
+  },
+  {
+   "id": "2020-q20",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Which of the following statement is true?",
+   "options": {
+    "A": "J sits to the right of L",
+    "B": "D sits 3rd to the right of G",
+    "C": "P sits at one of the extreme ends",
+    "D": "None is true",
+    "E": "Q sits immediate right of the one who is 35 years old"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (16-20): Study the following information carefully and answer the question given\nbelow-\nSeven persons D, G, P, L, J, U and Q are sitting in a row facing to the north. They all have of different\nages. D sits 3rd from one of the extreme ends of the row. Q sits 2nd to the right of D. The number of\npersons sit to the left of Q is same as the number of persons sit to the right of G, who is 20 years old. P\nsits 4th to the left of the one who is 35 years old. Q is not 35 years old. Total age of immediate\nneighbours of D is 75 years. J is 30 years old. P is 20 year older than one of his immediate neighbours.\nU sits to the right of L, who sits immediate to the left of the one who is 25 years old. Q is 5 year\nyounger than P."
+  },
+  {
+   "id": "2020-q22",
+   "section": "Reasoning Ability",
+   "topic": "Puzzle",
+   "question": "How many boxes are placed between O and L?",
+   "options": {
+    "A": "One",
+    "B": "More than Five",
+    "C": "Four",
+    "D": "Three",
+    "E": "Two"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (21): Study the following information carefully and answer the given questions.\nSix persons i.e. P, Q, R, S, T and U was born on different days of the same week starting from Monday\nto Saturday, but not necessarily in the same order. P was born on Friday. Two persons were born\nbetween U and P. One person was born between R and S. If T was born immediate before S, then who\namong the following person was born on Wednesday?"
+  },
+  {
+   "id": "2020-q23",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Four of the following five are alike in a certain way and so for\nnot belong to that group?",
+   "options": {
+    "A": "T-Y",
+    "B": "X-L",
+    "C": "K-P",
+    "D": "Q-O",
+    "E": "M-Q"
+   },
+   "correctAnswer": "E"
+  },
+  {
+   "id": "2020-q24",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Which of the following statement is true?",
+   "options": {
+    "A": "L is 3rd from the topmost position",
+    "B": "Two boxes placed between K and M",
+    "C": "Q is above P",
+    "D": "T is placed at bottommost position",
+    "E": "Three boxes placed between Y and M"
+   },
+   "correctAnswer": "C"
+  },
+  {
+   "id": "2020-q25",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "What is the position of Y from the bottommost?",
+   "options": {
+    "A": "Seven",
+    "B": "Eight",
+    "C": "Six",
+    "D": "Five",
+    "E": "Three"
+   },
+   "correctAnswer": "B"
+  },
+  {
+   "id": "2020-q26",
+   "section": "Reasoning Ability",
+   "topic": "Word Swap",
+   "question": "If T and O interchange their positions then which among the\nO?",
+   "options": {
+    "A": "Y",
+    "B": "X",
+    "C": "K",
+    "D": "Q",
+    "E": "None of these"
+   },
+   "correctAnswer": "D"
+  },
+  {
+   "id": "2020-q27",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit in the above arrangement?",
+   "options": {
+    "A": "25",
+    "B": "26",
+    "C": "28",
+    "D": "24",
+    "E": "None of these\nrm a group. Find the one who does\nfollowing box is placed just below\nand answer the question given\ntion. L sits 3rd to the left of M. Five\nhree persons sit between Q and J. Q\npersons sit to the right of Q is four\nthe ends and sit to the right of M."
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (27-31): Study the following information carefully\nbelow-\nA certain number of persons sit in a row facing to the north direct\npersons sit between M and N. J sits immediate to the right of M. Th\ndoes not sit next to N. N is 7th from one of the ends. The number of\nmore than the persons who sit to the left of N. K sits 2nd from one of"
+  },
+  {
+   "id": "2020-q28",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "If two persons sit between X and N, then wha",
+   "options": {
+    "A": "4th to the left",
+    "B": "6th to the left",
+    "C": "5th to the right",
+    "D": "3rd to the left",
+    "E": "7th to the left"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (27-31): Study the following information carefully\nbelow-\nA certain number of persons sit in a row facing to the north direct\npersons sit between M and N. J sits immediate to the right of M. Th\ndoes not sit next to N. N is 7th from one of the ends. The number of\nmore than the persons who sit to the left of N. K sits 2nd from one of"
+  },
+  {
+   "id": "2020-q29",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit between L and J?",
+   "options": {
+    "A": "Five",
+    "B": "None of these",
+    "C": "Seven",
+    "D": "Four",
+    "E": "Three"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (27-31): Study the following information carefully\nbelow-\nA certain number of persons sit in a row facing to the north direct\npersons sit between M and N. J sits immediate to the right of M. Th\ndoes not sit next to N. N is 7th from one of the ends. The number of\nmore than the persons who sit to the left of N. K sits 2nd from one of"
+  },
+  {
+   "id": "2020-q30",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "What is the position of L with respect to Q?",
+   "options": {
+    "A": "8th to the right",
+    "B": "8th to the left",
+    "C": "6th to the right",
+    "D": "5th to the left",
+    "E": "None of these"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (27-31): Study the following information carefully\nbelow-\nA certain number of persons sit in a row facing to the north direct\npersons sit between M and N. J sits immediate to the right of M. Th\ndoes not sit next to N. N is 7th from one of the ends. The number of\nmore than the persons who sit to the left of N. K sits 2nd from one of"
+  },
+  {
+   "id": "2020-q31",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit to the right of the one,",
+   "options": {
+    "A": "Ten",
+    "B": "Seven",
+    "C": "None of these",
+    "D": "Eight",
+    "E": "Eleven"
+   },
+   "correctAnswer": "C",
+   "passage": "Directions (27-31): Study the following information carefully\nbelow-\nA certain number of persons sit in a row facing to the north direct\npersons sit between M and N. J sits immediate to the right of M. Th\ndoes not sit next to N. N is 7th from one of the ends. The number of\nmore than the persons who sit to the left of N. K sits 2nd from one of"
+  },
+  {
+   "id": "2020-q32",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: Z > O = G < I  S > P\nConclusions: I. S > O II. P > G",
+   "options": {
+    "A": "If only conclusion I follows.",
+    "B": "If only conclusion II follows.",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows.",
+    "E": "If both conclusions I and II follow."
+   },
+   "correctAnswer": "A",
+   "passage": "Directions (32-35): In these questions, relation\nthe statements. These statements are followed",
+   "explanation": "I. S > O (True) II. P > G(False)"
+  },
+  {
+   "id": "2020-q33",
+   "section": "Reasoning Ability",
+   "topic": "Syllogism",
+   "question": "Statements: K  M > W  T  Y< Q\nConclusions: I. T < Q II. T < K",
+   "options": {
+    "A": "If only conclusion I follows.",
+    "B": "If only conclusion II follows.",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows.",
+    "E": "If both conclusions I and II follow."
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (32-35): In these questions, relation\nthe statements. These statements are followed",
+   "explanation": "I. T < Q (True) II. T < K (True)"
+  },
+  {
+   "id": "2020-q34",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: J  V < R > M, L> M = I  H\nConclusions: I. V  H II. H  M",
+   "options": {
+    "A": "If only conclusion I follows.",
+    "B": "If only conclusion II follows.",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows.",
+    "E": "If both conclusions I and II follow."
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (32-35): In these questions, relation\nthe statements. These statements are followed",
+   "explanation": "I. V  H(False) II. H  M (True)"
+  },
+  {
+   "id": "2020-q35",
+   "section": "Reasoning Ability",
+   "topic": "Reasoning",
+   "question": "Statement: I = H  B  N < D > L\nConclusions: I. B < N II. L > H\nat is the position of X with respect to L?\nwho sits immediate left of J?\nnships between different elements are shown in\nby two conclusions. Give answer",
+   "options": {
+    "A": "If only conclusion I follows.",
+    "B": "If only conclusion II follows.",
+    "C": "If either conclusion I or II follows",
+    "D": "If neither conclusion I nor II follows.",
+    "E": "If both conclusions I and II follow."
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (32-35): In these questions, relation\nthe statements. These statements are followed",
+   "explanation": "I. B < N (False) II. L > H (False)\n\nDirections (36-40):"
+  },
+  {
+   "id": "2020-q36",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "What is the position of P with respect to K?",
+   "options": {
+    "A": "3rd to the right",
+    "B": "2nd to the left",
+    "C": "Immediate left",
+    "D": "3rd to the left",
+    "E": "5th to the right"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-40): Study the following information carefully and answer the question given\nbelow-\nNine persons sit around a circular table. Some of them are facing to the centre while some are facing\noutside the centre. C sits 2nd to the right of A, who faces inside. Two persons sit between C and G. J sits\n3rd to the left of G. L sits 2nd to the left of J, who does not sit next to C. B sits 3rd to the right of L and is\nan immediate neighbour of P. K sits 4th to the right of H, who does not sit near J. Both B and P face\nsame direction as A. C and G face opposite direction to each other. K does not face outside."
+  },
+  {
+   "id": "2020-q37",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit between J and H, when counted from the left of H?",
+   "options": {
+    "A": "Five",
+    "B": "Six",
+    "C": "Four",
+    "D": "One",
+    "E": "Three"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (36-40): Study the following information carefully and answer the question given\nbelow-\nNine persons sit around a circular table. Some of them are facing to the centre while some are facing\noutside the centre. C sits 2nd to the right of A, who faces inside. Two persons sit between C and G. J sits\n3rd to the left of G. L sits 2nd to the left of J, who does not sit next to C. B sits 3rd to the right of L and is\nan immediate neighbour of P. K sits 4th to the right of H, who does not sit near J. Both B and P face\nsame direction as A. C and G face opposite direction to each other. K does not face outside."
+  },
+  {
+   "id": "2020-q38",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "Four of the following five are alike in a certain way and so form a group. Find the one who does\nnot belong to that group?",
+   "options": {
+    "A": "C-H",
+    "B": "L-K",
+    "C": "B-J",
+    "D": "H-L",
+    "E": "B-P"
+   },
+   "correctAnswer": "D",
+   "passage": "Directions (36-40): Study the following information carefully and answer the question given\nbelow-\nNine persons sit around a circular table. Some of them are facing to the centre while some are facing\noutside the centre. C sits 2nd to the right of A, who faces inside. Two persons sit between C and G. J sits\n3rd to the left of G. L sits 2nd to the left of J, who does not sit next to C. B sits 3rd to the right of L and is\nan immediate neighbour of P. K sits 4th to the right of H, who does not sit near J. Both B and P face\nsame direction as A. C and G face opposite direction to each other. K does not face outside."
+  },
+  {
+   "id": "2020-q39",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons sit between G and H, when counted from the left of G?",
+   "options": {
+    "A": "Three",
+    "B": "Five",
+    "C": "Two",
+    "D": "Four",
+    "E": "None of these"
+   },
+   "correctAnswer": "E",
+   "passage": "Directions (36-40): Study the following information carefully and answer the question given\nbelow-\nNine persons sit around a circular table. Some of them are facing to the centre while some are facing\noutside the centre. C sits 2nd to the right of A, who faces inside. Two persons sit between C and G. J sits\n3rd to the left of G. L sits 2nd to the left of J, who does not sit next to C. B sits 3rd to the right of L and is\nan immediate neighbour of P. K sits 4th to the right of H, who does not sit near J. Both B and P face\nsame direction as A. C and G face opposite direction to each other. K does not face outside."
+  },
+  {
+   "id": "2020-q40",
+   "section": "Reasoning Ability",
+   "topic": "Seating Arrangement",
+   "question": "How many persons face outside from the centre?",
+   "options": {
+    "A": "Three",
+    "B": "Four",
+    "C": "None of these",
+    "D": "Six",
+    "E": "Five\nS1. Ans. (c)\nSol.\n2 1 4 5 6 7 3\n0 2 2 6 4 8 4"
+   },
+   "correctAnswer": "B",
+   "passage": "Directions (36-40): Study the following information carefully and answer the question given\nbelow-\nNine persons sit around a circular table. Some of them are facing to the centre while some are facing\noutside the centre. C sits 2nd to the right of A, who faces inside. Two persons sit between C and G. J sits\n3rd to the left of G. L sits 2nd to the left of J, who does not sit next to C. B sits 3rd to the right of L and is\nan immediate neighbour of P. K sits 4th to the right of H, who does not sit near J. Both B and P face\nsame direction as A. C and G face opposite direction to each other. K does not face outside."
+  }
+ ]
+}

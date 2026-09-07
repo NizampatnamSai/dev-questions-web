@@ -7,6 +7,13 @@ import toast from "react-hot-toast";
 import mockTestData from "../data/ibpspo-mock-test.json";
 import pyqData from "../data/ibpspo-pyq.json";
 import { ENGLISH_RULES, QUANT_FORMULAS, REASONING_RULES } from "../data/ibpspo-formulas";
+import {
+  RRB_OVERVIEW, RRB_PRELIMS, RRB_MAINS, RRB_SYLLABUS,
+  RRB_VS_IBPS_PO, RRB_KEY_FACTS, RRB_STRATEGY,
+} from "../data/ibps-rrb-po";
+import { PO_CUTOFFS, RRB_AP_CUTOFFS, CUTOFF_READING } from "../data/ibps-cutoffs";
+import { CADRE_GUIDE, VACANCY_NOTES } from "../data/bank-vacancies";
+import bundledVacancies from "../data/vacancies.json";
 import { loadPaperQuestions } from "../data/pyqLoader";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
@@ -28,6 +35,34 @@ const SECTION_PLAN = [
     perQuestion: 1.14, negative: -0.285, medium: "English and Hindi",
     topics: "Puzzles & Seating Arrangement, Syllogism, Inequalities, Blood Relations, Direction Sense, Coding-Decoding, Order & Ranking" },
 ];
+
+// IBPS RRB PO Officer Scale I prelims — a DIFFERENT profile, not a variant:
+// two sections of 40, no English, unequal windows (25 min then 20), and a flat
+// 1 mark with a flat -0.25 rather than IBPS's per-section weighting.
+const RRB_SECTION_PLAN = [
+  { name: "Reasoning Ability",     questions: 40, marks: 40, seconds: 25 * 60,
+    perQuestion: 1.0, negative: -0.25, medium: "English and Hindi",
+    topics: "Puzzles & Seating Arrangement, Syllogism, Inequalities, Coding-Decoding, Blood Relations, Direction Sense, Order & Ranking" },
+  { name: "Quantitative Aptitude", questions: 40, marks: 40, seconds: 20 * 60,
+    perQuestion: 1.0, negative: -0.25, medium: "English and Hindi",
+    topics: "Data Interpretation, Simplification, Number Series, Quadratic Equations, Arithmetic word problems" },
+];
+
+// One profile per exam. The mock engine reads the ACTIVE profile rather than a
+// module-level constant, so a paper carries its own section list, timings and
+// marking — an RRB paper run against the IBPS plan would give its two sections
+// 20 minutes each and weight the marks wrongly.
+// Tabs that render their own static content and have no study-topic module
+// behind them. Kept as one list because it is consulted in two places — the
+// loader guard and the sub-category strip — and a tab added to only one of them
+// renders an empty topic list or a stray filter bar.
+const STATIC_TABS = new Set(["pattern", "formulas", "rrb", "cutoffs", "vacancies"]);
+
+const EXAM_PROFILES = {
+  ibps: { id: "ibps", label: "IBPS PO", plan: SECTION_PLAN },
+  rrb:  { id: "rrb",  label: "IBPS RRB PO", plan: RRB_SECTION_PLAN },
+};
+
 // Per-section attack plan. Weights are the typical question counts seen in recent
 // IBPS PO Prelims papers, which is what should drive both preparation and the
 // order you attempt things in during the 20-minute window.
@@ -183,9 +218,9 @@ function buildStrategyContext() {
 const SECTION_NAMES = SECTION_PLAN.map((s) => s.name);
 // Sections present in a given question set, in official order. Used to scope an
 // attempt to what the paper actually contains — see examPlan below.
-function planFor(questions) {
-  const present = SECTION_PLAN.filter((s) => questions.some((q) => q.section === s.name));
-  return present.length ? present : SECTION_PLAN;
+function planFor(questions, plan = SECTION_PLAN) {
+  const present = plan.filter((s) => questions.some((q) => q.section === s.name));
+  return present.length ? present : plan;
 }
 const TOTAL_QUESTIONS = SECTION_PLAN.reduce((n, s) => n + s.questions, 0);
 const TOTAL_MARKS = SECTION_PLAN.reduce((n, s) => n + s.marks, 0);
@@ -811,7 +846,12 @@ export default function IbpsPoPrep() {
   // left the missing section's 20-minute window with no questions in it, and
   // sectionBounds' "section not found" fallback then widened navigation to the
   // WHOLE paper — reopening sections that sectional timing had already closed.
-  const examPlan = useMemo(() => planFor(examQuestions), [examQuestions]);
+  // Which exam the running attempt belongs to. Set when a paper is started;
+  // the AI mock stays on the IBPS profile.
+  const [examProfile, setExamProfile] = useState("ibps");
+  const [mockExam, setMockExam] = useState("ibps");   // which exam the AI mock imitates
+  const activePlan = EXAM_PROFILES[examProfile]?.plan || SECTION_PLAN;
+  const examPlan = useMemo(() => planFor(examQuestions, activePlan), [examQuestions, activePlan]);
   const examSectionNames = useMemo(() => examPlan.map((s) => s.name), [examPlan]);
   const examSection = examSectionNames[sectionIdx] ?? examSectionNames[0];
   const timerRef = useRef(null);
@@ -843,7 +883,7 @@ export default function IbpsPoPrep() {
     // Only prelims/mains/interview have a study-topic module behind them.
     // "pattern" and "formulas" render static content, so asking the loader for
     // an "ibpspo-formulas" category just resolves to an empty list.
-    if (activeTab === "pattern" || activeTab === "formulas") {
+    if (STATIC_TABS.has(activeTab)) {
       setLoading(false);
       return;
     }
@@ -938,13 +978,23 @@ export default function IbpsPoPrep() {
     // A single-section drill is still an AI mock, but its history entry has to
     // say WHICH section — "Mock Test — 1 Aug" tells you nothing when half your
     // attempts are 20-minute English drills.
-    setPaperTitle(examSectionChoice === "all" ? null : `${examSectionChoice} — Sectional`);
+    // Which exam shape to generate. RRB is 40+40 across two sections with no
+    // English, so the request has to say so — generating the IBPS mix and
+    // relabelling it would produce a paper RRB never sets.
+    const profile = EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN;
+    setExamProfile(mockExam);
+    setPaperTitle(
+      examSectionChoice === "all"
+        ? (mockExam === "rrb" ? "IBPS RRB PO — AI Mock" : null)
+        : `${examSectionChoice} — Sectional`,
+    );
     try {
       const { data } = await api.post("/study/ibps-po/generate-mock", {
         count: examSectionChoice === "all"
-          ? TOTAL_QUESTIONS
-          : SECTION_PLAN.find((s) => s.name === examSectionChoice).questions,
+          ? profile.reduce((n, x) => n + x.questions, 0)
+          : (profile.find((x) => x.name === examSectionChoice) || { questions: 35 }).questions,
         section: examSectionChoice === "all" ? undefined : examSectionChoice,
+        exam: mockExam,
       });
       if (data && data.questions && data.questions.length > 0) {
         setGeneratedQuestions(orderBySection(data.questions));
@@ -971,13 +1021,34 @@ export default function IbpsPoPrep() {
   // Paper METADATA only — name, year and per-section counts, enough to render
   // the cards. The questions are fetched by loadPaperQuestions when an attempt
   // starts; see pyqLoader.js for why they are not bundled here.
-  const pyqPapers = useMemo(() => pyqData.papers || [], []);
+  // Papers now span three exams (IBPS PO, SBI PO, IBPS RRB PO), so the list is
+  // filtered rather than shown as one undifferentiated run of 20 cards.
+  const [paperExam, setPaperExam] = useState("all");
+  const allPyqPapers = useMemo(() => pyqData.papers || [], []);
+  const paperExamCounts = useMemo(() => {
+    const c = { all: allPyqPapers.length };
+    allPyqPapers.forEach((p) => {
+      const k = p.id.startsWith("sbipo") ? "sbi" : p.exam || "ibps";
+      c[k] = (c[k] || 0) + 1;
+    });
+    return c;
+  }, [allPyqPapers]);
+  const pyqPapers = useMemo(
+    () =>
+      paperExam === "all"
+        ? allPyqPapers
+        : allPyqPapers.filter(
+            (p) => (p.id.startsWith("sbipo") ? "sbi" : p.exam || "ibps") === paperExam,
+          ),
+    [allPyqPapers, paperExam],
+  );
 
   const startPyqPaper = async (paper) => {
     if (!paper.total) return toast.error("This paper has no questions loaded yet.");
     setLoadingPaperId(paper.id);
     try {
-      const all = await loadPaperQuestions(paper.id, SECTION_PLAN);
+      const paperPlan = EXAM_PROFILES[paper.exam || "ibps"]?.plan || SECTION_PLAN;
+      const all = await loadPaperQuestions(paper.id, paperPlan);
       // Sectional drill on a real paper — planFor() then runs it as a single
       // 20-minute section, so the same engine covers both without a second path.
       const questions =
@@ -987,6 +1058,9 @@ export default function IbpsPoPrep() {
         return;
       }
       const title = examSectionChoice === "all" ? paper.name : `${paper.name} — ${examSectionChoice}`;
+      // Adopt the paper's own exam profile BEFORE beginExam, so its sections get
+      // the right windows (RRB is 25 + 20, not 20 + 20) and the right marking.
+      setExamProfile(paper.exam || "ibps");
       setSavedTestId(null);
       setGeneratedQuestions([]);
       setPaperTitle(title);
@@ -1042,7 +1116,7 @@ export default function IbpsPoPrep() {
     // Derived from the local list, not the examPlan memo — setExamQuestions has
     // not flushed yet at this point, so the memo still holds the PREVIOUS
     // attempt's plan.
-    const plan = planFor(questions);
+    const plan = planFor(questions, activePlan);
     setExamQuestions(questions);
     setReviewMode(false);
     autoSaveCalledRef.current = false;
@@ -1451,6 +1525,9 @@ export default function IbpsPoPrep() {
             { id: "mocktest", label: "✍️ Timed Mock Test" },
             { id: "formulas", label: "🧮 Formulas & Rules" },
             { id: "pattern", label: "📊 Exam Pattern" },
+            { id: "rrb", label: "🚉 RRB PO" },
+            { id: "cutoffs", label: "📉 Cut-offs" },
+            { id: "vacancies", label: "🏦 Vacancies" },
           ].map((t) => {
             const active = activeTab === t.id;
             return (
@@ -1471,7 +1548,7 @@ export default function IbpsPoPrep() {
       )}
 
       {/* Study Sections (Prelims, Mains, Interview) */}
-      {activeTab !== "mocktest" && activeTab !== "pattern" && activeTab !== "formulas" && (
+      {activeTab !== "mocktest" && !STATIC_TABS.has(activeTab) && (
         <>
           <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 space-y-4">
             <div className="flex gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
@@ -1585,6 +1662,40 @@ export default function IbpsPoPrep() {
                 ))}
               </div>
 
+              {/* Which exam to imitate. The two have different papers entirely —
+                  IBPS PO is 100 questions over 3 sections in 60 minutes, RRB PO
+                  is 80 over 2 sections in 45 with no English at all. */}
+              {testMode === "ai" && (
+                <div className="space-y-2">
+                  <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Exam</p>
+                  <div className="flex flex-wrap gap-2">
+                    {Object.values(EXAM_PROFILES).map((ex) => {
+                      const on = mockExam === ex.id;
+                      const q = ex.plan.reduce((n, x) => n + x.questions, 0);
+                      const mins = ex.plan.reduce((n, x) => n + x.seconds, 0) / 60;
+                      return (
+                        <button
+                          key={ex.id}
+                          onClick={() => { setMockExam(ex.id); setExamSectionChoice("all"); }}
+                          className={`flex-1 min-w-[160px] px-3 py-2.5 rounded-xl border text-left transition-all ${
+                            on
+                              ? "border-amber-500 bg-amber-50 dark:bg-amber-900/20"
+                              : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+                          }`}
+                        >
+                          <span className={`block text-sm font-bold ${on ? "text-amber-700 dark:text-amber-300" : "text-slate-700 dark:text-slate-200"}`}>
+                            {ex.label}
+                          </span>
+                          <span className="block text-[10px] text-slate-400 mt-0.5">
+                            {q} Qs · {ex.plan.length} sections · {mins} min
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Sectional drill picker — applies to BOTH sources. A full paper
                   needs an uninterrupted hour; a single section is 20 minutes and
                   fits into a break, which is the only way most people practise. */}
@@ -1594,8 +1705,15 @@ export default function IbpsPoPrep() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {[
-                    { id: "all", label: "Full Paper", meta: `${TOTAL_QUESTIONS} Qs · ${TOTAL_MINUTES} min` },
-                    ...SECTION_PLAN.map((s) => ({
+                    ...(() => {
+                      const pl = testMode === "ai" ? (EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN) : SECTION_PLAN;
+                      return [{
+                        id: "all",
+                        label: "Full Paper",
+                        meta: `${pl.reduce((n, x) => n + x.questions, 0)} Qs · ${pl.reduce((n, x) => n + x.seconds, 0) / 60} min`,
+                      }];
+                    })(),
+                    ...(testMode === "ai" ? (EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN) : SECTION_PLAN).map((s) => ({
                       id: s.name,
                       label: s.name.replace(" Language", "").replace(" Aptitude", "").replace(" Ability", ""),
                       meta: `${s.questions} Qs · ${s.seconds / 60} min`,
@@ -1646,6 +1764,28 @@ export default function IbpsPoPrep() {
                     </div>
                   ) : (
                     <div className="space-y-3">
+                      {/* Exam filter — 20 papers across three different exams
+                          is unusable as a single flat list. */}
+                      <div className="flex flex-wrap gap-2 pb-1">
+                        {[
+                          { id: "all", label: "All papers" },
+                          { id: "ibps", label: "IBPS PO" },
+                          { id: "sbi", label: "SBI PO" },
+                          { id: "rrb", label: "IBPS RRB PO" },
+                        ].filter((f) => paperExamCounts[f.id]).map((f) => (
+                          <button
+                            key={f.id}
+                            onClick={() => setPaperExam(f.id)}
+                            className={`text-xs px-3 py-1.5 rounded-full font-bold transition-all border ${
+                              paperExam === f.id
+                                ? "bg-amber-600 border-amber-600 text-white"
+                                : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-amber-400"
+                            }`}
+                          >
+                            {f.label} ({paperExamCounts[f.id]})
+                          </button>
+                        ))}
+                      </div>
                       {pyqPapers.map((p) => {
                         // Only the sections this paper actually has — it runs
                         // exactly those, so the card must advertise exactly those.
@@ -1654,7 +1794,10 @@ export default function IbpsPoPrep() {
                         const present = (p.sections || []).reduce((m, s) => ({ ...m, [s.name]: s.count }), {});
                         // What this card will actually run, given the sectional
                         // choice above — not what the paper contains in full.
-                        const plan = SECTION_PLAN.filter(
+                        // The paper's own profile — an RRB card must show 25+20
+                        // minutes across two sections, not the IBPS 20/20/20.
+                        const cardPlan = EXAM_PROFILES[p.exam || "ibps"]?.plan || SECTION_PLAN;
+                        const plan = cardPlan.filter(
                           (s) => present[s.name] && (examSectionChoice === "all" || s.name === examSectionChoice),
                         );
                         const runQs = plan.reduce((n, s) => n + present[s.name], 0);
@@ -1729,10 +1872,14 @@ export default function IbpsPoPrep() {
                     a button that generates a 30-question English drill would be
                     a lie about what you are about to sit. */}
                 {(() => {
-                  const chosen = examSectionChoice === "all" ? null : SECTION_PLAN.find((s) => s.name === examSectionChoice);
-                  const mins = chosen ? chosen.seconds / 60 : TOTAL_MINUTES;
-                  const qs = chosen ? chosen.questions : TOTAL_QUESTIONS;
-                  const marks = chosen ? chosen.marks : TOTAL_MARKS;
+                  // Follows the EXAM picker as well as the section picker — this
+                  // read from the IBPS constant, so choosing RRB left the card
+                  // still advertising 100 Qs / 60 min / 3 sections.
+                  const pl = EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN;
+                  const chosen = examSectionChoice === "all" ? null : pl.find((s) => s.name === examSectionChoice);
+                  const mins = chosen ? chosen.seconds / 60 : pl.reduce((n, x) => n + x.seconds, 0) / 60;
+                  const qs = chosen ? chosen.questions : pl.reduce((n, x) => n + x.questions, 0);
+                  const marks = chosen ? chosen.marks : pl.reduce((n, x) => n + x.marks, 0);
                   return (
                     <div className="border-t border-b border-slate-100 dark:border-slate-800 py-4 grid grid-cols-3 gap-4 text-center">
                       <div>
@@ -1765,7 +1912,7 @@ export default function IbpsPoPrep() {
                       </tr>
                     </thead>
                     <tbody className="text-slate-600 dark:text-slate-300">
-                      {SECTION_PLAN.map((s) => (
+                      {(EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN).map((s) => (
                         <tr key={s.name} className="border-b border-slate-50 dark:border-slate-800/60">
                           <td className="py-2 font-medium">{s.name}</td>
                           <td className="py-2 text-right">{s.questions}</td>
@@ -1773,12 +1920,17 @@ export default function IbpsPoPrep() {
                           <td className="py-2 text-right">{s.seconds / 60} min</td>
                         </tr>
                       ))}
-                      <tr className="font-bold text-slate-800 dark:text-slate-100">
-                        <td className="py-2">Total</td>
-                        <td className="py-2 text-right">{TOTAL_QUESTIONS}</td>
-                        <td className="py-2 text-right">{TOTAL_MARKS}</td>
-                        <td className="py-2 text-right">{TOTAL_MINUTES} min</td>
-                      </tr>
+                      {(() => {
+                        const pl = EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN;
+                        return (
+                          <tr className="font-bold text-slate-800 dark:text-slate-100">
+                            <td className="py-2">Total</td>
+                            <td className="py-2 text-right">{pl.reduce((n, x) => n + x.questions, 0)}</td>
+                            <td className="py-2 text-right">{pl.reduce((n, x) => n + x.marks, 0)}</td>
+                            <td className="py-2 text-right">{pl.reduce((n, x) => n + x.seconds, 0) / 60} min</td>
+                          </tr>
+                        );
+                      })()}
                     </tbody>
                   </table>
                 </div>
@@ -1787,8 +1939,26 @@ export default function IbpsPoPrep() {
                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Test Instructions:</h3>
                   <ul className="text-xs text-slate-500 dark:text-slate-400 space-y-2 list-disc list-inside">
                     <li>Questions are dynamically generated by Groq AI — every test is unique. If AI is unavailable, a paper is drawn from the offline bank in the same pattern.</li>
-                    <li><strong>Sectional timing:</strong> 20 minutes per section, attempted in the order above. When a section's time runs out it closes automatically and <strong>cannot be reopened</strong>.</li>
-                    <li>Negative marking is <strong>one fourth</strong> of the marks carried by that question (English −0.25, Quant −0.215, Reasoning −0.285).</li>
+                    {/* Derived, not hardcoded — RRB's windows are 25 and 20, and
+                        its marking is a flat -0.25 rather than IBPS's per-section
+                        values, so stating IBPS numbers here would be wrong. */}
+                    {(() => {
+                      const pl = EXAM_PROFILES[mockExam]?.plan || SECTION_PLAN;
+                      const mins = [...new Set(pl.map((x) => x.seconds / 60))];
+                      const timing = mins.length === 1
+                        ? `${mins[0]} minutes per section`
+                        : pl.map((x) => `${x.name.split(" ")[0]} ${x.seconds / 60} min`).join(", ");
+                      const flat = new Set(pl.map((x) => x.negative)).size === 1;
+                      const neg = flat
+                        ? `a flat ${pl[0].negative} per wrong answer`
+                        : `one fourth of the marks that question carries (${pl.map((x) => `${x.name.split(" ")[0]} ${x.negative}`).join(", ")})`;
+                      return (
+                        <>
+                          <li><strong>Sectional timing:</strong> {timing}, attempted in the order above. When a section's time runs out it closes automatically and <strong>cannot be reopened</strong>.</li>
+                          <li>Negative marking is {neg}.</li>
+                        </>
+                      );
+                    })()}
                     <li>You can <strong>Save</strong> the generated questions and attempt later, or <strong>Start</strong> immediately.</li>
                     <li>Your results are automatically saved once you submit a test.</li>
                   </ul>
@@ -2683,6 +2853,327 @@ export default function IbpsPoPrep() {
         </div>
       )}
 
+      {/* ── IBPS RRB PO (Officer Scale I) ──────────────────────────────────── */}
+      {activeTab === "rrb" && (
+        <div className="space-y-6 max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="glass-card rounded-3xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/20 p-6 space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-3xl">🚉</span>
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{RRB_OVERVIEW.fullName}</h2>
+            </div>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
+              {RRB_OVERVIEW.forPost} · Conducted by {RRB_OVERVIEW.conductedBy}
+            </p>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {RRB_OVERVIEW.stages.map((st, i) => (
+                <span key={st} className="flex items-center gap-2">
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300">
+                    {i + 1}. {st}
+                  </span>
+                  {i < RRB_OVERVIEW.stages.length - 1 && <span className="text-slate-400">→</span>}
+                </span>
+              ))}
+            </div>
+            <p className="text-[13px] text-emerald-800 dark:text-emerald-200 font-medium pt-1">{RRB_OVERVIEW.note}</p>
+          </div>
+
+          {/* Prelims and Mains patterns */}
+          {[
+            { label: "Prelims", data: RRB_PRELIMS, accent: "amber" },
+            { label: "Mains", data: RRB_MAINS, accent: "indigo" },
+          ].map(({ label, data }) => (
+            <div key={label} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+              <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">{label} — Exam Pattern</h3>
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                  {data.totalQuestions} questions · {data.totalMarks} marks · {data.totalMinutes} min
+                  {data.sectionalTiming ? " · sectional timing" : ""}
+                </span>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[560px]">
+                  <thead>
+                    <tr className="text-[10px] uppercase tracking-wider text-slate-400">
+                      <th className="px-4 py-2 font-bold">Section</th>
+                      <th className="px-4 py-2 font-bold text-right">Questions</th>
+                      <th className="px-4 py-2 font-bold text-right">Marks</th>
+                      <th className="px-4 py-2 font-bold text-right">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.sections.map((sec) => (
+                      <tr key={sec.name} className="border-t border-slate-100 dark:border-slate-800/70 align-top">
+                        <td className="px-4 py-3">
+                          <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{sec.name}</p>
+                          {sec.note && <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{sec.note}</p>}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-slate-700 dark:text-slate-200">{sec.questions}</td>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-slate-700 dark:text-slate-200">{sec.marks}</td>
+                        <td className="px-4 py-3 text-sm text-right font-semibold text-amber-600 dark:text-amber-400 whitespace-nowrap">{sec.minutes} min</td>
+                      </tr>
+                    ))}
+                    <tr className="border-t-2 border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-900/40">
+                      <td className="px-4 py-2.5 text-sm font-black text-slate-800 dark:text-slate-100">Total</td>
+                      <td className="px-4 py-2.5 text-sm text-right font-black text-slate-800 dark:text-slate-100">{data.totalQuestions}</td>
+                      <td className="px-4 py-2.5 text-sm text-right font-black text-slate-800 dark:text-slate-100">{data.totalMarks}</td>
+                      <td className="px-4 py-2.5 text-sm text-right font-black text-slate-800 dark:text-slate-100">{data.totalMinutes} min</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="px-5 py-2.5 text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
+                Negative marking: <strong className="text-red-500">−{data.negative}</strong> for every wrong answer. Unattempted questions carry no penalty.
+              </p>
+            </div>
+          ))}
+
+          {/* How RRB PO differs from IBPS PO */}
+          <div className="glass-card rounded-3xl border border-amber-400 dark:border-amber-500 ring-1 ring-amber-400/30 overflow-hidden">
+            <div className="px-5 py-3 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">RRB PO vs IBPS PO — what actually differs</h3>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500 text-white uppercase tracking-wider">★ Read first</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr className="text-[10px] uppercase tracking-wider text-slate-400">
+                    <th className="px-4 py-2 font-bold">Point</th>
+                    <th className="px-4 py-2 font-bold">IBPS RRB PO</th>
+                    <th className="px-4 py-2 font-bold">IBPS PO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {RRB_VS_IBPS_PO.map((row) => (
+                    <tr key={row.point} className="border-t border-slate-100 dark:border-slate-800/70">
+                      <td className="px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-200">{row.point}</td>
+                      <td className="px-4 py-2.5 text-xs text-emerald-700 dark:text-emerald-300 font-medium">{row.rrb}</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500 dark:text-slate-400">{row.ibps}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Syllabus */}
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Syllabus</h3>
+            <p className="text-sm text-slate-500">Section by section, with the stage each one appears in.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4 items-start">
+            {RRB_SYLLABUS.map((sec) => (
+              <div key={sec.section} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">{sec.section}</h4>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">
+                    {sec.stage}
+                  </span>
+                </div>
+                <ul className="p-4 space-y-1.5">
+                  {sec.topics.map((t) => (
+                    <li key={t} className="flex gap-2 text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                      <span className="text-amber-500 flex-shrink-0">•</span>
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Key facts */}
+          <div className="space-y-1 pt-2">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Rules worth knowing</h3>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4 items-start">
+            {RRB_KEY_FACTS.map((f) => (
+              <div key={f.label} className="glass-card rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-1">
+                <p className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">{f.label}</p>
+                <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{f.detail}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Strategy */}
+          <div className="space-y-1 pt-2">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">How to attempt it</h3>
+          </div>
+          <div className="space-y-3">
+            {RRB_STRATEGY.map((s, i) => (
+              <div key={s.title} className="glass-card rounded-2xl border border-slate-200 dark:border-slate-800 p-4 flex gap-4">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div className="space-y-1">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{s.title}</p>
+                  <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{s.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+            <strong className="text-slate-700 dark:text-slate-200">Note:</strong> this page covers the exam pattern and
+            syllabus only. The timed mock tests and previous-year papers elsewhere in this tab are built to the
+            <strong> IBPS PO</strong> pattern (3 sections, 100 questions, 60 minutes), which is not the RRB PO shape —
+            sitting one is still useful practice for Quant and Reasoning, but the timing and section mix differ.
+          </p>
+        </div>
+      )}
+
+      {activeTab === "vacancies" && <VacancyTab />}
+
+      {activeTab === "cutoffs" && (
+        <div className="space-y-6">
+          {/* The correction that matters most: there is no state-wise IBPS PO
+              cut-off, so the page says that before showing any table. */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Previous-year cut-offs</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Last five years, Prelims and Mains, for both exams.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4 space-y-2">
+              <p className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                State-wise applies to RRB only
+              </p>
+              <p className="text-[13px] text-amber-900/80 dark:text-amber-200/80 leading-relaxed">
+                {PO_CUTOFFS.note} IBPS RRB recruits bank by bank and its banks are regional, so RRB
+                cut-offs genuinely are published per state — which is why Andhra Pradesh appears below
+                under RRB and not under PO.
+              </p>
+            </div>
+          </div>
+
+          {/* RRB — Andhra Pradesh */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-5">
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                IBPS RRB PO (Officer Scale I) — {RRB_AP_CUTOFFS.state}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Prelims out of {RRB_AP_CUTOFFS.prelimsOutOf}, Mains out of {RRB_AP_CUTOFFS.mainsOutOf}.
+                A dash means no figure has been reported for the state that year.
+              </p>
+            </div>
+            {RRB_AP_CUTOFFS.years.map((y) => (
+              <div key={y.year} className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{y.year}</span>
+                  <span
+                    className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap ${
+                      y.sources >= 3
+                        ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
+                        : y.sources === 2
+                        ? "bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300"
+                        : "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300"
+                    }`}
+                  >
+                    {y.sources === 1 ? "single source" : `${y.sources} sources agree`}
+                  </span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left min-w-[520px]">
+                    <thead className="bg-slate-50/60 dark:bg-slate-900/40">
+                      <tr>
+                        {["Stage", "General", "OBC", "EWS", "SC", "ST"].map((h) => (
+                          <th key={h} className="px-4 py-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      {[["Prelims", y.prelims], ["Mains", y.mains]].map(([label, row]) => (
+                        <tr key={label}>
+                          <td className="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200">{label}</td>
+                          {["ur", "obc", "ews", "sc", "st"].map((c) => (
+                            <td key={c} className="px-4 py-2.5 text-xs tabular-nums text-slate-600 dark:text-slate-300">
+                              {row && row[c] != null ? row[c].toFixed(2) : <span className="text-slate-300 dark:text-slate-600">—</span>}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {y.caveat && (
+                  <p className="px-4 py-3 text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800">
+                    {y.caveat}
+                  </p>
+                )}
+              </div>
+            ))}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-4 space-y-1">
+              <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Vacancies</p>
+              <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{RRB_AP_CUTOFFS.vacancyNote}</p>
+            </div>
+          </div>
+
+          {/* IBPS PO — category-wise */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-5">
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">IBPS PO — category-wise, all India</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Prelims out of {PO_CUTOFFS.prelimsOutOf}, Mains out of {PO_CUTOFFS.mainsOutOf} (200 objective + 25
+                descriptive), Final out of {PO_CUTOFFS.finalOutOf}.
+              </p>
+            </div>
+            {[["Prelims", "prelims"], ["Mains", "mains"], ["Final", "final"]].map(([label, key]) => (
+              <div key={key} className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700">
+                  <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{label}</span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left min-w-[520px]">
+                    <thead className="bg-slate-50/60 dark:bg-slate-900/40">
+                      <tr>
+                        {["Year", "General", "OBC", "EWS", "SC", "ST"].map((h) => (
+                          <th key={h} className="px-4 py-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      {PO_CUTOFFS.years.map((y) => (
+                        <tr key={y.year}>
+                          <td className="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200">{y.year}</td>
+                          {["ur", "obc", "ews", "sc", "st"].map((c) => (
+                            <td key={c} className="px-4 py-2.5 text-xs tabular-nums text-slate-600 dark:text-slate-300">
+                              {y[key] && y[key][c] != null ? y[key][c].toFixed(2) : <span className="text-slate-300 dark:text-slate-600">—</span>}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+            <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              2021 is reported for the General category only by every source checked, so the other columns
+              are left blank rather than filled in with a guess.
+            </p>
+          </div>
+
+          {/* How to read them */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">How to read these numbers</h3>
+            <div className="grid md:grid-cols-2 gap-4 items-start">
+              {CUTOFF_READING.map((c) => (
+                <div key={c.title} className="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-1">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{c.title}</p>
+                  <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{c.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {activeTab === "pattern" && (
         <div className="space-y-6">
           <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-6">
@@ -3141,6 +3632,591 @@ export default function IbpsPoPrep() {
       )}
 
       <ConfirmModal {...confirmProps} />
+    </div>
+  );
+}
+
+
+// ── Vacancies ─────────────────────────────────────────────────────────────────
+// Data comes from /api/vacancies so counts can be corrected mid-cycle without a
+// frontend release; the bundled JSON is the fallback, so the tab still renders
+// fully when the request fails or the user is offline. Status is DERIVED from
+// the notification dates rather than stored — a stored "Apply now" string would
+// still be claiming that months after the window shut.
+const DAY = 86400000;
+
+function vacancyStatus(row, today) {
+  const d = (s) => (s ? new Date(`${s}T00:00:00`) : null);
+  const from = d(row.apply?.from);
+  const to = d(row.apply?.to);
+  if (!from && row.confirmed === false) {
+    return { tone: "awaited", label: "Notification awaited" };
+  }
+  if (from && today < from) return { tone: "soon", label: `Opens ${fmtDay(from)}` };
+  if (from && to && today <= to) {
+    const left = Math.ceil((to - today) / DAY);
+    return { tone: "open", label: left <= 1 ? "Closes today" : `Apply now — ${left} days left` };
+  }
+  const next = (row.stages || []).find((s) => s.date && d(s.date) >= today);
+  if (next) {
+    const days = Math.ceil((d(next.date) - today) / DAY);
+    return {
+      tone: days <= 14 ? "imminent" : "upcoming",
+      label: days === 0 ? `${next.name} today` : `${next.name} in ${days} day${days === 1 ? "" : "s"}`,
+    };
+  }
+  return (row.stages || []).some((s) => !s.date)
+    ? { tone: "done", label: "Exams done — result stage" }
+    : { tone: "done", label: "Cycle complete" };
+}
+
+function fmtDay(dt) {
+  return dt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+}
+
+const TONE = {
+  open: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300",
+  imminent: "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300",
+  soon: "bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300",
+  awaited: "bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300",
+  upcoming: "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300",
+  done: "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500",
+};
+
+// The pay bar the user cares about. Parsed from the gross/in-hand string rather
+// than stored twice, so the badge can never disagree with the figure shown.
+const PO_BAND = 60000;
+function clearsBand(pay) {
+  const txt = pay?.inHand || pay?.gross || "";
+  const nums = String(txt).replace(/,/g, "").match(/\d{4,}/g);
+  if (!nums) return null;
+  return Math.max(...nums.map(Number)) >= PO_BAND;
+}
+
+// Pattern and syllabus live in a shared library keyed by patternId — IBPS PO
+// and IBPS SO do not share one, but IBPS Clerk and SBI Clerk do, and RRB Scale
+// II and III are identical. Storing them per row would have duplicated the same
+// twelve sections across twenty entries.
+function ExamPattern({ pattern }) {
+  const [open, setOpen] = useState(false);
+  if (!pattern) return null;
+  return (
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full px-3 py-2 flex items-center justify-between gap-2 bg-slate-50 dark:bg-slate-900/40 hover:bg-slate-100 dark:hover:bg-slate-900/70 transition text-left"
+      >
+        <span className="text-[12px] font-bold text-slate-700 dark:text-slate-200">
+          Exam pattern &amp; syllabus
+          <span className="ml-2 font-normal text-slate-500 dark:text-slate-400">{pattern.summary}</span>
+        </span>
+        <span className="text-slate-400 text-xs flex-shrink-0">{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div className="p-3 space-y-4">
+          {pattern.merit && (
+            <p className="text-[12px] text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg px-3 py-2">
+              {pattern.merit}
+            </p>
+          )}
+
+          {pattern.stages.map((st, i) => (
+            <div key={st.name} className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-slate-800 dark:bg-slate-600 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                  {i + 1}
+                </span>
+                <span className="text-[13px] font-bold text-slate-800 dark:text-slate-100">{st.name}</span>
+                {st.qualifying && (
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase tracking-wider">
+                    qualifying
+                  </span>
+                )}
+                {[st.mode, st.duration, st.total, st.negative && `${st.negative} per wrong`]
+                  .filter(Boolean)
+                  .map((x) => (
+                    <span key={x} className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                      {x}
+                    </span>
+                  ))}
+              </div>
+              {st.sections?.length > 0 && (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left min-w-[380px]">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      {st.sections.map((sc) => (
+                        <tr key={sc.name}>
+                          <td className="py-1 pr-3 text-[12px] text-slate-600 dark:text-slate-300">{sc.name}</td>
+                          <td className="py-1 px-2 text-[11px] tabular-nums text-slate-500 dark:text-slate-400 whitespace-nowrap w-16">
+                            {sc.q != null ? `${sc.q} Q` : ""}
+                          </td>
+                          <td className="py-1 px-2 text-[11px] tabular-nums text-slate-500 dark:text-slate-400 whitespace-nowrap w-20">
+                            {sc.marks != null ? `${sc.marks} marks` : ""}
+                          </td>
+                          <td className="py-1 pl-2 text-[11px] tabular-nums text-slate-500 dark:text-slate-400 whitespace-nowrap w-16">
+                            {sc.time || ""}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {st.note && <p className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-relaxed">{st.note}</p>}
+            </div>
+          ))}
+
+          <div className="pt-1 space-y-2">
+            <p className="text-[12px] font-bold text-slate-700 dark:text-slate-200">Syllabus</p>
+            <div className="grid sm:grid-cols-2 gap-2.5 items-start">
+              {pattern.syllabus.map((sy) => (
+                <div key={sy.section} className="rounded-lg border border-slate-200 dark:border-slate-700 p-2.5 space-y-1">
+                  <p className="text-[11.5px] font-bold text-slate-700 dark:text-slate-200">{sy.section}</p>
+                  <ul className="space-y-0.5">
+                    {sy.topics.map((t) => (
+                      <li key={t} className="flex gap-1.5 text-[11.5px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <span className="text-amber-500 flex-shrink-0">•</span>
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function VacancyTab() {
+  const [data, setData] = useState(bundledVacancies);
+  const [live, setLive] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [fetchedAt, setFetchedAt] = useState(null);
+  // Defaults to ON. The tab exists to answer "what officer-level jobs pay
+  // around 60K", and the clerical and Level-4/6 rows drown that out — but they
+  // stay one click away rather than being deleted from the data.
+  const [onlyPO, setOnlyPO] = useState(true);
+  const [sector, setSector] = useState("all");
+  const [sortBy, setSortBy] = useState("vacancies");
+
+  const today = useMemo(() => {
+    const t = new Date();
+    return new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  }, []);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    setFailed(false);
+    try {
+      const { data: fresh } = await api.get("/vacancies");
+      if (fresh?.groups?.length) {
+        setData(fresh);
+        setLive(true);
+        setFetchedAt(new Date());
+      } else {
+        setFailed(true);   // a 200 with no groups is still unusable
+      }
+    } catch {
+      // Keep whatever is already on screen — the bundled copy is stale, not wrong.
+      setFailed(true);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const sectors = useMemo(
+    () => ["all", ...new Set((data.groups || []).map((g) => g.sector))],
+    [data]
+  );
+
+  const groups = useMemo(() => {
+    const n = (r) => r.revised || r.announced || 0;
+    const openRank = (r) => (vacancyStatus(r, today).tone === "open" ? 0 : 1);
+    // A window that has ALREADY SHUT is not "closing soon". Without this guard
+    // the deadline sort led with OICL AO, whose applications closed in Dec 2025,
+    // and buried the RRB block that actually closes this month. Past and
+    // not-yet-notified rows share the same sink value.
+    const deadline = (r) => {
+      const t = r.apply?.to ? new Date(`${r.apply.to}T00:00:00`).getTime() : null;
+      return t !== null && t >= today.getTime() ? t : Number.MAX_SAFE_INTEGER;
+    };
+    const cmp = {
+      vacancies: (a, b) => n(b) - n(a),
+      open: (a, b) => openRank(a) - openRank(b) || deadline(a) - deadline(b) || n(b) - n(a),
+      deadline: (a, b) => deadline(a) - deadline(b) || n(b) - n(a),
+      name: (a, b) => a.exam.localeCompare(b.exam),
+    }[sortBy];
+    return (data.groups || [])
+      .filter((g) => sector === "all" || g.sector === sector)
+      .map((g) => ({ ...g, rows: g.rows.filter((r) => !onlyPO || clearsBand(r.pay)).sort(cmp) }))
+      .filter((g) => g.rows.length)
+      // Sorting inside a group is not enough — with "most vacancies" chosen the
+      // groups themselves have to lead with the biggest, or the largest row on
+      // the page still sits three cards down.
+      .sort((a, b) =>
+        sortBy === "name"
+          ? a.full.localeCompare(b.full)
+          : sortBy === "vacancies"
+          ? b.rows.reduce((t, r) => t + n(r), 0) - a.rows.reduce((t, r) => t + n(r), 0)
+          : sortBy === "deadline"
+          ? // Purely by nearest deadline. Ranking open-status first here (as the
+            // "open" mode does) made the two modes produce an identical order and
+            // would have floated an open-but-later group above one closing sooner.
+            Math.min(...a.rows.map(deadline)) - Math.min(...b.rows.map(deadline))
+          : Math.min(...a.rows.map(openRank)) - Math.min(...b.rows.map(openRank)) ||
+            Math.min(...a.rows.map(deadline)) - Math.min(...b.rows.map(deadline))
+      );
+  }, [data, sector, onlyPO, sortBy, today]);
+
+  const allRows = (data.groups || []).flatMap((g) => g.rows);
+  const shownRows = groups.flatMap((g) => g.rows);
+  const count = (r) => r.revised || r.announced || 0;
+  const total = shownRows.reduce((n, r) => n + count(r), 0);
+  const openNow = shownRows
+    .map((r) => ({ r, st: vacancyStatus(r, today) }))
+    .filter((x) => x.st.tone === "open");
+  const catTotal = (k) => shownRows.reduce((n, r) => n + (r.categories?.[k] || 0), 0);
+
+  return (
+    <div className="space-y-6">
+      {/* Header + refresh */}
+      <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="space-y-1 min-w-0">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+              Government &amp; PSU vacancies
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Officer-level entries across banking, insurance, regulators, central government and
+              engineering. {data.cycle}.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <span
+              className={`text-[9px] font-bold px-2 py-1 rounded-full uppercase tracking-wider ${
+                live
+                  ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
+                  : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
+              }`}
+              title={live ? "Fetched from the server" : "Using the copy bundled with the app"}
+            >
+              {live ? "Live" : "Bundled"}
+            </span>
+            <button
+              onClick={refresh}
+              disabled={refreshing}
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 disabled:opacity-50 transition inline-flex items-center gap-1.5"
+            >
+              <span className={refreshing ? "inline-block animate-spin" : ""}>↻</span>
+              {refreshing ? "Refreshing…" : "Refresh"}
+            </button>
+          </div>
+        </div>
+
+        {failed && (
+          <p className="text-[12px] text-amber-700 dark:text-amber-400">
+            Could not reach the server — showing the bundled list, which may be out of date.
+          </p>
+        )}
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-2">
+          {sectors.map((s) => (
+            <button
+              key={s}
+              onClick={() => setSector(s)}
+              className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition ${
+                sector === s
+                  ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900"
+                  : "bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+              }`}
+            >
+              {s === "all" ? "All sectors" : s}
+            </button>
+          ))}
+          {/* Sort and the pay filter travel together on the right. Two fixes
+              over the first version: the select carried a SEMI-TRANSPARENT dark
+              background (dark:bg-slate-700/60), and a native <select> hands its
+              computed background to the OS popup — the alpha made that popup
+              render light while the options kept inheriting light-grey text, so
+              the list opened but could not be read. It is opaque now, and
+              color-scheme tells the browser to draw the native popup dark,
+              which is the only thing that reliably themes the option list.
+              Both controls also had ml-auto, which shoved them to opposite
+              ends of a wide screen and pushed the button off the card edge. */}
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
+            <label htmlFor="vac-sort" className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              Sort
+            </label>
+            <select
+              id="vac-sort"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="text-[11px] font-semibold px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-100 border border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-indigo-400 focus:outline-none cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+            >
+              {[
+                ["vacancies", "Most vacancies"],
+                ["open", "Notification open first"],
+                ["deadline", "Closing soonest"],
+                ["name", "A–Z"],
+              ].map(([v, label]) => (
+                <option key={v} value={v} className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-100">
+                  {label}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={() => setOnlyPO((v) => !v)}
+              className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                onlyPO
+                  ? "bg-emerald-600 text-white"
+                  : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
+              }`}
+            >
+              ₹60K+ only
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { k: "Posts shown", v: total.toLocaleString("en-IN") },
+            { k: "Recruitments", v: `${shownRows.length} of ${allRows.length}` },
+            { k: "General (UR) seats", v: catTotal("ur").toLocaleString("en-IN") },
+            { k: "OBC seats", v: catTotal("obc").toLocaleString("en-IN") },
+          ].map((s) => (
+            <div key={s.k} className="rounded-2xl border border-slate-200 dark:border-slate-700 p-3.5 text-center">
+              <p className="text-xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">{s.v}</p>
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-0.5">{s.k}</p>
+            </div>
+          ))}
+        </div>
+
+        {openNow.length > 0 && (
+          <div className="rounded-2xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50 dark:bg-emerald-950/30 p-4 space-y-1.5">
+            <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Open right now</p>
+            {openNow.map(({ r, st }) => (
+              <p key={r.exam} className="text-[13px] text-emerald-900/80 dark:text-emerald-200/80 leading-relaxed">
+                <strong>{r.exam}</strong> — {count(r).toLocaleString("en-IN")} posts · {st.label}
+              </p>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {groups.length === 0 && (
+        <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 text-center text-sm text-slate-400">
+          Nothing matches these filters.
+        </div>
+      )}
+
+      {groups.map((g) => {
+        const gTotal = g.rows.reduce((n, r) => n + count(r), 0);
+        return (
+          <div key={g.id} className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{g.full}</h3>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 uppercase tracking-wider">
+                    {g.sector}
+                  </span>
+                </div>
+                <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">{g.blurb}</p>
+              </div>
+              <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">
+                {gTotal.toLocaleString("en-IN")} posts
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {g.rows.map((r) => {
+                const st = vacancyStatus(r, today);
+                const band = clearsBand(r.pay);
+                return (
+                  <div key={r.exam} className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    <div className="px-4 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{r.exam}</p>
+                          {band && (
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300">
+                              ₹60K+
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">{r.post} · {r.cadre}</p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-sm font-bold text-slate-800 dark:text-slate-100 tabular-nums">
+                          {r.announced == null && r.revised == null ? "—" : count(r).toLocaleString("en-IN")}
+                        </span>
+                        <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap ${TONE[st.tone]}`}>
+                          {st.label}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      {r.confirmed === false && (
+                        <p className="text-[12px] font-semibold text-violet-600 dark:text-violet-400">
+                          Not yet notified — the figure shown is an expectation or a previous-cycle count, not a published number.
+                        </p>
+                      )}
+                      {r.revised && r.announced !== r.revised && (
+                        <p className="text-[12px] text-slate-500 dark:text-slate-400">
+                          Announced at {r.announced.toLocaleString("en-IN")}, revised to{" "}
+                          <strong className="text-slate-700 dark:text-slate-200">{r.revised.toLocaleString("en-IN")}</strong>.
+                        </p>
+                      )}
+                      {r.pay && (
+                        <div className="flex flex-wrap gap-2">
+                          {r.pay.level && (
+                            <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                              {r.pay.level}
+                            </span>
+                          )}
+                          {r.pay.basic && (
+                            <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                              Basic ₹{r.pay.basic.toLocaleString("en-IN")}
+                            </span>
+                          )}
+                          {r.pay.gross && (
+                            <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                              Gross {r.pay.gross}
+                            </span>
+                          )}
+                          {r.pay.inHand && (
+                            <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                              In-hand {r.pay.inHand}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      {r.pay?.note && (
+                        <p className="text-[11.5px] text-slate-400 dark:text-slate-500">{r.pay.note}</p>
+                      )}
+                      {r.categories && (
+                        <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-3 space-y-2">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                              Category split
+                            </p>
+                            <span
+                              className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                                r.categories.basis === "published"
+                                  ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
+                                  : "bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300"
+                              }`}
+                            >
+                              {r.categories.basis === "published" ? "published" : "indicative"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                            {[
+                              ["General (UR)", "ur", true],
+                              ["OBC", "obc", true],
+                              ["EWS", "ews", false],
+                              ["SC", "sc", false],
+                              ["ST", "st", false],
+                            ].map(([label, key, big]) => (
+                              <div
+                                key={key}
+                                className={`rounded-lg p-2 text-center ${
+                                  big
+                                    ? "bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20"
+                                    : "bg-slate-50 dark:bg-slate-900/40"
+                                }`}
+                              >
+                                <p className={`tabular-nums font-bold ${big ? "text-sm text-indigo-700 dark:text-indigo-300" : "text-[13px] text-slate-700 dark:text-slate-200"}`}>
+                                  {r.categories[key].toLocaleString("en-IN")}
+                                </p>
+                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</p>
+                              </div>
+                            ))}
+                          </div>
+                          {r.categories.basis !== "published" && (
+                            <p className="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed">
+                              Computed from the standard reservation matrix (SC 15%, ST 7.5%, OBC 27%, EWS 10%) — the
+                              recruiter has not published a split for this one. Use it as a rough guide, not a notified figure.
+                            </p>
+                          )}
+                          {r.categories.note && (
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{r.categories.note}</p>
+                          )}
+                        </div>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {r.apply?.from && (
+                          <span className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                            Apply: {fmtDay(new Date(`${r.apply.from}T00:00:00`))} – {fmtDay(new Date(`${r.apply.to}T00:00:00`))}
+                          </span>
+                        )}
+                        {(r.stages || []).map((s) => (
+                          <span key={s.name} className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                            {s.name}: {s.label}
+                          </span>
+                        ))}
+                      </div>
+                      {r.note && <p className="text-[12.5px] text-slate-600 dark:text-slate-300 leading-relaxed">{r.note}</p>}
+                      <ExamPattern pattern={data.patterns?.[r.patternId]} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {g.footer && <p className="text-[11.5px] text-slate-400 dark:text-slate-500 leading-relaxed pt-1">{g.footer}</p>}
+          </div>
+        );
+      })}
+
+      {/* Cadre guide */}
+      <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+        <div className="space-y-1">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">What the cadres actually mean</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400">PO vs Clerk vs SO vs Scale II — what you would actually be doing.</p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 items-start">
+          {CADRE_GUIDE.map((c) => (
+            <div key={c.cadre} className="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-1.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{c.cadre}</p>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 uppercase tracking-wider whitespace-nowrap">
+                  {c.scale}
+                </span>
+              </div>
+              <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Notes */}
+      <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Worth knowing before you apply</h3>
+        <div className="grid md:grid-cols-2 gap-4 items-start">
+          {VACANCY_NOTES.map((n) => (
+            <div key={n.title} className="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-1">
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{n.title}</p>
+              <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{n.body}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-[11.5px] text-slate-400 dark:text-slate-500">
+          {live && fetchedAt
+            ? `Live from the server, fetched ${fetchedAt.toLocaleTimeString("en-IN")}.`
+            : `Bundled copy, last reviewed ${fmtDay(new Date(`${data.updated}T00:00:00`))}.`}{" "}
+          Always confirm against the recruiter's own notification before you rely on a number.
+        </p>
+      </div>
     </div>
   );
 }

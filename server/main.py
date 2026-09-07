@@ -10,6 +10,7 @@ from db_mongo import init_mongo, col_notify_schedules, col_community_schedule, c
 from scheduler_tasks import fire_scheduled_notifications, fire_challenge_notifications, fire_workboard_notifications, fire_workboard_afternoon_reminder, fire_community_reminder, fire_task_due_date_reminders, fire_typing_race_reminder, fire_sudoku_reminder, fire_weekly_digest, fire_scheduled_tasks, fire_scheduled_messages
 from routers import auth, questions, stats, admin, comments, study
 from routers import challenge, workboard, ask, feedback, profile, discussion, difficulty, gamification, timed_challenge, advanced_study, tasks, coding_questions, dev_tools, resume, notes, project_chat, jobs, meetings, uploads, admin_chat, leaves, travel, game
+from routers import vacancies
 
 app = FastAPI(title="Dev Life API")
 
@@ -166,6 +167,7 @@ app.include_router(resume.router,            prefix="/api/resume")
 app.include_router(notes.router,             prefix="/api/notes")
 app.include_router(project_chat.router,      prefix="/api/project-chat")
 app.include_router(jobs.router,              prefix="/api/jobs")
+app.include_router(vacancies.router,          prefix="/api/vacancies")
 app.include_router(meetings.router,          prefix="/api/meetings")
 app.include_router(uploads.router,           prefix="/api/uploads")
 app.include_router(admin_chat.router,        prefix="/api/admin-chat")
