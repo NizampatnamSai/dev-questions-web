@@ -6,7 +6,7 @@ import { useClickOutside } from "../hooks/useClickOutside";
 // checkmark on the selected row, subtle hover states) replacing the native
 // <select>, which renders inconsistently across browsers/OSes and can't be
 // styled beyond the trigger itself.
-export default function Select({ value, onChange, options, placeholder = "Select…", className = "", disabled = false, variant = "default" }) {
+export default function Select({ value, onChange, options, placeholder = "Select…", className = "", disabled = false, variant = "default", ariaLabel }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useClickOutside(ref, () => setOpen(false), open);
@@ -29,6 +29,10 @@ export default function Select({ value, onChange, options, placeholder = "Select
         type="button"
         disabled={disabled}
         onClick={() => setOpen((v) => !v)}
+        onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={ariaLabel ? `${ariaLabel}: ${current ? current.label : placeholder}` : undefined}
         className={triggerClass}
       >
         <span className="truncate">{current ? current.label : placeholder}</span>

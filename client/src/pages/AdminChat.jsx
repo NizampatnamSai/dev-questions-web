@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import LinkPreview, { firstUrl } from "../components/LinkPreview";
 import { useAuth } from "../context/AuthContext";
 import RichTextEditor, { isRichTextEmpty } from "../components/RichTextEditor";
 import RichTextView from "../components/RichTextView";
@@ -355,6 +356,14 @@ export default function AdminChat() {
   const activeChatRef = useRef(null);
   const messageRefs = useRef({});
   const messagesContainerRef = useRef(null);
+  // Which chat has already been snapped to its newest message. Opening a
+  // conversation should land on the latest message the way every messenger
+  // does; scrolling up from there is the user's business and must not be
+  // undone. Keyed by chat id so switching chats re-arms it, and so loading
+  // OLDER messages (which also changes `messages`) does not re-snap.
+  const initialBottomForRef = useRef(null);
+  // A notification deep-link wants a SPECIFIC message, not the newest one.
+  const skipInitialBottomRef = useRef(false);
   const dateDividerRefs = useRef({}); // dayKey -> {el, label}
   const [floatingDateLabel, setFloatingDateLabel] = useState(null);
 
@@ -618,11 +627,43 @@ export default function AdminChat() {
     // outer page scroll position, which is what caused the whole page to
     // shift up 10-25px every time a conversation was opened (same root
     // cause as the earlier Dev Life Assistant chatbot page-shift bug).
+    // First paint of a newly opened chat: jump straight to the newest message
+    // with no animation. A smooth scroll is wrong here twice over — it shows
+    // the reader a blur of other people's history on the way down, and it
+    // starts before images and link previews have laid out, so it finishes
+    // short of the real bottom. Setting scrollTop directly also keeps the jump
+    // inside the list, avoiding the outer-page shift that scrollIntoView
+    // caused before.
+    if (messages.length && initialBottomForRef.current !== activeChatId) {
+      if (skipInitialBottomRef.current) {
+        // Deep-linked to one message — leave the position to jumpToMessage().
+        initialBottomForRef.current = activeChatId;
+        skipInitialBottomRef.current = false;
+        return;
+      }
+      initialBottomForRef.current = activeChatId;
+      const snap = () => {
+        const el = messagesContainerRef.current;
+        if (el) el.scrollTop = el.scrollHeight;
+      };
+      snap();
+      // Content that finishes loading after this render — avatars, images,
+      // unfurled link cards — grows the list and leaves the first snap above
+      // the true bottom, so re-assert once layout settles.
+      const raf = requestAnimationFrame(snap);
+      const t = setTimeout(snap, 180);
+      setIsNearBottom(true);
+      return () => {
+        cancelAnimationFrame(raf);
+        clearTimeout(t);
+      };
+    }
+
     if (isNearBottom) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, [messages, activeChatId]);
 
   // Recompute the floating date pill whenever the message list changes —
   // covers opening a chat, a new message arriving, and switching chats.
@@ -775,6 +816,7 @@ export default function AdminChat() {
 
   const openChat = async (chatId) => {
     setActiveChatId(chatId);
+    initialBottomForRef.current = null;   // re-arm the snap-to-latest
     setMessages([]);
     setEditingMessageId(null);
     const draft = loadDraft(chatId);
@@ -945,6 +987,9 @@ export default function AdminChat() {
     const chatId = searchParams.get("chatId");
     const messageId = searchParams.get("messageId");
     if (chatId) {
+      // Following a notification to one message must not be overridden by the
+      // snap-to-latest above.
+      if (messageId) skipInitialBottomRef.current = true;
       openChat(chatId).then(() => {
         if (messageId) setTimeout(() => jumpToMessage(messageId), 300);
       });
@@ -1665,6 +1710,10 @@ export default function AdminChat() {
                                 className={mine ? "on-tint" : ""}
                               />
                             )}
+                            {/* Unfurl the first link in the message, Slack-style.
+                                Renders nothing while loading fails or the page
+                                has no usable metadata. */}
+                            <LinkPreview url={firstUrl(m.html)} mine={mine} />
                             <p className={`text-[10px] mt-1 flex items-center gap-1 ${mine ? "text-indigo-200" : "text-slate-400"}`}>
                               {isPinned && <span title="Pinned">📌</span>}
                               {/* Always IST regardless of the viewer's own device timezone —

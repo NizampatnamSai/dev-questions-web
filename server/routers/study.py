@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
 from bson import ObjectId
-from deps import current_user, require_ai_enabled
+from deps import current_user, require_ai_enabled, require_ibps_po_enabled
 from utils.ai import _groq_call, _ollama_text_action, GROQ_MODEL, GROQ_API_KEY
 from db_mongo import (
     col_streaks, col_progress, col_study_reviewed, col_weak_area_insights,
@@ -121,7 +121,7 @@ class InterviewReviewReq(BaseModel):
     userAnswer: str
 
 
-@router.post("/ibps-po/review-interview")
+@router.post("/ibps-po/review-interview", dependencies=[Depends(require_ibps_po_enabled)])
 async def review_ibpspo_interview(req: InterviewReviewReq, _=Depends(require_ai_enabled)):
     if not req.userAnswer.strip():
         return {"feedback": "Please type an answer to be reviewed.", "score": 0, "improvements": ""}
@@ -440,7 +440,7 @@ def _load_fallback_bank() -> list:
         return _json.load(f).get("questions", [])
 
 
-@router.post("/ibps-po/generate-mock")
+@router.post("/ibps-po/generate-mock", dependencies=[Depends(require_ibps_po_enabled)])
 async def generate_ibpspo_mock(req: GenerateMockReq, _=Depends(require_ai_enabled)):
     """Build a full-pattern mock paper.
 
@@ -720,7 +720,7 @@ class PauseMockTestReq(BaseModel):
     visited: list = []
 
 
-@router.post("/ibps-po/mock-tests/save")
+@router.post("/ibps-po/mock-tests/save", dependencies=[Depends(require_ibps_po_enabled)])
 async def save_mock_test(req: SaveMockTestReq, user: dict = Depends(current_user)):
     """Save generated questions for later without starting the exam."""
     doc = {
@@ -737,7 +737,7 @@ async def save_mock_test(req: SaveMockTestReq, user: dict = Depends(current_user
     return {"id": str(result.inserted_id), "title": doc["title"]}
 
 
-@router.get("/ibps-po/mock-tests")
+@router.get("/ibps-po/mock-tests", dependencies=[Depends(require_ibps_po_enabled)])
 async def list_mock_tests(user: dict = Depends(current_user)):
     """List all saved mock tests for the current user (newest first)."""
     cursor = col_mock_tests().find(
@@ -767,7 +767,7 @@ async def list_mock_tests(user: dict = Depends(current_user)):
     return {"tests": tests}
 
 
-@router.get("/ibps-po/mock-tests/{test_id}")
+@router.get("/ibps-po/mock-tests/{test_id}", dependencies=[Depends(require_ibps_po_enabled)])
 async def get_mock_test(test_id: str, user: dict = Depends(current_user)):
     """Load a specific saved mock test (only owner can access)."""
     try:
@@ -791,7 +791,7 @@ async def get_mock_test(test_id: str, user: dict = Depends(current_user)):
     }
 
 
-@router.post("/ibps-po/mock-tests/{test_id}/submit")
+@router.post("/ibps-po/mock-tests/{test_id}/submit", dependencies=[Depends(require_ibps_po_enabled)])
 async def submit_mock_test(test_id: str, req: SubmitMockTestReq, user: dict = Depends(current_user)):
     """Submit answers for a saved test and save results."""
     try:
@@ -813,7 +813,7 @@ async def submit_mock_test(test_id: str, req: SubmitMockTestReq, user: dict = De
     return {"ok": True}
 
 
-@router.post("/ibps-po/mock-tests/{test_id}/pause")
+@router.post("/ibps-po/mock-tests/{test_id}/pause", dependencies=[Depends(require_ibps_po_enabled)])
 async def pause_mock_test(test_id: str, req: PauseMockTestReq, user: dict = Depends(current_user)):
     """Park a half-finished attempt so it can be resumed from the same question,
     section and remaining sectional time."""
@@ -841,7 +841,7 @@ async def pause_mock_test(test_id: str, req: PauseMockTestReq, user: dict = Depe
     return {"ok": True}
 
 
-@router.post("/ibps-po/mock-tests/auto-save")
+@router.post("/ibps-po/mock-tests/auto-save", dependencies=[Depends(require_ibps_po_enabled)])
 async def auto_save_mock_test(req: SaveMockTestReq, user: dict = Depends(current_user)):
     """Auto-save a test that was attempted but not manually saved (called on submit)."""
     doc = {
@@ -858,7 +858,7 @@ async def auto_save_mock_test(req: SaveMockTestReq, user: dict = Depends(current
     return {"id": str(result.inserted_id), "title": doc["title"]}
 
 
-@router.delete("/ibps-po/mock-tests/{test_id}")
+@router.delete("/ibps-po/mock-tests/{test_id}", dependencies=[Depends(require_ibps_po_enabled)])
 async def delete_mock_test(test_id: str, user: dict = Depends(current_user)):
     """Delete a saved mock test (only owner can delete)."""
     try:

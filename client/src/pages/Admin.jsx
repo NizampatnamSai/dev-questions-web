@@ -1591,6 +1591,7 @@ function AppConfigPanel() {
     typing_race_reminder_time: "11:00",
     sudoku_reminder_time: "11:00",
     weekly_digest_time: "09:00",
+    ibps_po_enabled: true,
   });
   const [initialConfig, setInitialConfig] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -1940,6 +1941,24 @@ function AppConfigPanel() {
         offLabel="AI features are OFF for regular users — admins are still exempt. All users were notified."
         warningWhen={!config.ai_features_enabled}
         warningText="🚫 AI features are OFF for all non-admin users"
+      />
+
+      <div className="border-t border-black/5 dark:border-white/10" />
+
+      <ConfigToggleSection
+        config={config}
+        setConfig={setConfig}
+        initialConfig={initialConfig}
+        save={save}
+        saving={saving}
+        icon="🏛️"
+        title="IBPS PO Prep Page"
+        desc="Show or hide the IBPS PO Prep page (/ibps-po). When off, it's removed from the sidebar and search, and anyone opening the link is sent to the dashboard. Admins/sub-admins can still open it."
+        toggleField="ibps_po_enabled"
+        onLabel="IBPS PO Prep is ON — visible to everyone again."
+        offLabel="IBPS PO Prep is OFF — hidden from all non-admin users."
+        warningWhen={!config.ibps_po_enabled}
+        warningText="🚫 IBPS PO Prep is OFF for all non-admin users"
       />
 
       <div className="border-t border-black/5 dark:border-white/10" />

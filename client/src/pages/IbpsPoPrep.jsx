@@ -9,12 +9,19 @@ import pyqData from "../data/ibpspo-pyq.json";
 import { ENGLISH_RULES, QUANT_FORMULAS, REASONING_RULES } from "../data/ibpspo-formulas";
 import {
   RRB_OVERVIEW, RRB_PRELIMS, RRB_MAINS, RRB_SYLLABUS,
-  RRB_VS_IBPS_PO, RRB_KEY_FACTS, RRB_STRATEGY,
+  RRB_VS_IBPS_PO, RRB_KEY_FACTS, RRB_STRATEGY, RRB_MAINS_ESTIMATE, RRB_MAINS_WEIGHTAGE, RRB_MAINS_TOPIC_YEARS,
 } from "../data/ibps-rrb-po";
-import { PO_CUTOFFS, RRB_AP_CUTOFFS, CUTOFF_READING } from "../data/ibps-cutoffs";
+import {
+  PO_CUTOFFS, CUTOFF_READING, RRB_SECTIONAL, RRB_SECTIONAL_SECTIONS,
+  RRB_STATES, RRB_STATE_KEYS, RRB_EXPECTED, RRB_SCALE,
+} from "../data/ibps-cutoffs";
 import { CADRE_GUIDE, VACANCY_NOTES } from "../data/bank-vacancies";
 import bundledVacancies from "../data/vacancies.json";
+import {
+  PCT_FRACTION_TABLE, CHANGE_MULTIPLIERS, SHORTCUT_EXAMPLES, SHORTCUT_NOTES,
+} from "../data/rrb-quant-shortcuts";
 import { loadPaperQuestions } from "../data/pyqLoader";
+import RecruitmentTracker from "../components/recruitment/RecruitmentTracker";
 import ConfirmModal from "../components/ConfirmModal";
 import useConfirm from "../hooks/useConfirm";
 
@@ -56,7 +63,7 @@ const RRB_SECTION_PLAN = [
 // behind them. Kept as one list because it is consulted in two places — the
 // loader guard and the sub-category strip — and a tab added to only one of them
 // renders an empty topic list or a stray filter bar.
-const STATIC_TABS = new Set(["pattern", "formulas", "rrb", "cutoffs", "vacancies"]);
+const STATIC_TABS = new Set(["pattern", "formulas", "rrb", "cutoffs", "vacancies", "tracker"]);
 
 const EXAM_PROFILES = {
   ibps: { id: "ibps", label: "IBPS PO", plan: SECTION_PLAN },
@@ -222,6 +229,36 @@ function planFor(questions, plan = SECTION_PLAN) {
   const present = plan.filter((s) => questions.some((q) => q.section === s.name));
   return present.length ? present : plan;
 }
+// IBPS PO Mains. Same shape as SECTION_PLAN so the Prelims table markup can be
+// reused unchanged, with two differences the Prelims plan never had to express:
+// marks per question are NOT uniform inside a section here either, and the
+// Descriptive paper is typed rather than multiple-choice, so it carries no
+// negative marking at all (negative: null renders as a dash, not "-0.00").
+const MAINS_PLAN = [
+  { name: "Reasoning & Computer Aptitude", questions: 45, marks: 60, seconds: 60 * 60,
+    perQuestion: 1.33, negative: -0.333, medium: "English and Hindi",
+    topics: "Puzzles and Seating Arrangement (the bulk of it), Machine Input-Output, Data Sufficiency, Logical Reasoning, Statement & Assumption, Coding-Decoding, plus Computer Aptitude — fundamentals, MS Office, networking, security" },
+  { name: "Data Analysis & Interpretation", questions: 35, marks: 60, seconds: 45 * 60,
+    perQuestion: 1.71, negative: -0.429, medium: "English and Hindi",
+    topics: "Multi-set and missing-value DI, Caselet DI, Data Sufficiency, Quantity I vs Quantity II, Probability, Permutation & Combination, Arithmetic word problems" },
+  { name: "General / Economy / Banking Awareness", questions: 40, marks: 40, seconds: 35 * 60,
+    perQuestion: 1.0, negative: -0.25, medium: "English and Hindi",
+    topics: "Banking and financial awareness, RBI and monetary policy, current affairs of the last 6 months, government schemes, Budget and Economic Survey, static GK" },
+  { name: "English Language", questions: 35, marks: 40, seconds: 40 * 60,
+    perQuestion: 1.14, negative: -0.285, medium: "English",
+    topics: "Reading Comprehension with inference, Cloze Test, Para Jumbles, Error Detection, Sentence Improvement, Word Usage, Connectors, Paragraph Completion" },
+  { name: "Descriptive — Essay & Letter", questions: 2, marks: 25, seconds: 30 * 60,
+    perQuestion: 12.5, negative: null, medium: "English",
+    descriptive: true,
+    topics: "One essay (roughly 250 words) and one letter — formal, informal or business. Typed, not handwritten. Evaluated only if you clear the objective sections." },
+];
+
+const MAINS_OBJECTIVE = MAINS_PLAN.filter((s) => !s.descriptive);
+const MAINS_TOTAL_QUESTIONS = MAINS_PLAN.reduce((n, s) => n + s.questions, 0);
+const MAINS_TOTAL_MARKS = MAINS_PLAN.reduce((n, s) => n + s.marks, 0);          // 225
+const MAINS_OBJECTIVE_MARKS = MAINS_OBJECTIVE.reduce((n, s) => n + s.marks, 0); // 200
+const MAINS_TOTAL_MINUTES = MAINS_PLAN.reduce((n, s) => n + s.seconds, 0) / 60; // 210
+
 const TOTAL_QUESTIONS = SECTION_PLAN.reduce((n, s) => n + s.questions, 0);
 const TOTAL_MARKS = SECTION_PLAN.reduce((n, s) => n + s.marks, 0);
 const TOTAL_MINUTES = SECTION_PLAN.reduce((n, s) => n + s.seconds, 0) / 60;
@@ -1528,6 +1565,7 @@ export default function IbpsPoPrep() {
             { id: "rrb", label: "🚉 RRB PO" },
             { id: "cutoffs", label: "📉 Cut-offs" },
             { id: "vacancies", label: "🏦 Vacancies" },
+            { id: "tracker", label: "🏛️ Jobs Tracker" },
           ].map((t) => {
             const active = activeTab === t.id;
             return (
@@ -2956,6 +2994,129 @@ export default function IbpsPoPrep() {
             </div>
           </div>
 
+          {/* Vacancies, past cut-offs, projection and sectional — one picker
+              drives all of them, so the figures on screen are always one state. */}
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Cut-offs &amp; vacancies by state</h3>
+            <p className="text-sm text-slate-500">
+              This cycle's seats, every past year on record, and what to aim for — pick a state.
+            </p>
+          </div>
+          <RrbStateCutoffs />
+
+          {/* Mains — questions per topic */}
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mains — how many questions per topic</h3>
+            <p className="text-sm text-slate-500">
+              Reasoning and Quant, 40 questions each. Counts from the last three Mains papers, and a rough
+              estimate for the next one.
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-4 items-start">
+            {[["Reasoning", "reasoning"], ["Quantitative Aptitude", "quant"]].map(([title, key]) => {
+              const rows = RRB_MAINS_ESTIMATE[key];
+              const max = Math.max(...rows.map((r) => r.estimate), 1);
+              return (
+                <div key={key} className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                  <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">{title}</h4>
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                      40 questions
+                    </span>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left min-w-[460px]">
+                      <thead>
+                        <tr className="text-[9px] uppercase tracking-wider text-slate-400 border-b border-slate-100 dark:border-slate-800">
+                          <th className="px-4 py-2 font-bold">Topic</th>
+                          {RRB_MAINS_TOPIC_YEARS.map((y) => (
+                            <th key={y} className="px-2 py-2 font-bold text-right">{y}</th>
+                          ))}
+                          <th className="px-4 py-2 font-bold text-right text-indigo-500 dark:text-indigo-400">Expect</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        {rows.map((r) => (
+                          <tr key={r.topic} className="align-top">
+                            <td className="px-4 py-2.5">
+                              <p className="text-[12.5px] font-semibold text-slate-700 dark:text-slate-200">{r.topic}</p>
+                              {/* bar scaled to the section's biggest topic, so the
+                                  shape of the paper reads at a glance */}
+                              <div className="mt-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-indigo-400 dark:bg-indigo-500"
+                                  style={{ width: `${(r.estimate / max) * 100}%` }}
+                                />
+                              </div>
+                              <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{r.note}</p>
+                            </td>
+                            {r.counts.map((c, i) => {
+                              const y = RRB_MAINS_TOPIC_YEARS[i];
+                              const flag = r.disputed?.includes(y) ? "disputed" : r.residual?.includes(y) ? "residual" : null;
+                              return (
+                                <td key={y} className="px-2 py-2.5 text-right text-[12px] tabular-nums text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                  <span className={c === 0 ? "text-slate-300 dark:text-slate-600" : ""}>{c}</span>
+                                  {flag && (
+                                    <sup
+                                      className="text-orange-500 font-bold ml-0.5"
+                                      title={flag === "disputed" ? "Sources disagree on this count" : "Derived as the remainder of 40 — the source's own figure did not fit"}
+                                    >
+                                      †
+                                    </sup>
+                                  )}
+                                </td>
+                              );
+                            })}
+                            <td className="px-4 py-2.5 text-right whitespace-nowrap">
+                              <span className="text-[15px] font-black tabular-nums text-indigo-700 dark:text-indigo-300">~{r.estimate}</span>
+                              <p className="text-[9.5px] text-slate-400 dark:text-slate-500">
+                                seen {r.low === r.high ? r.low : `${r.low}–${r.high}`}
+                              </p>
+                            </td>
+                          </tr>
+                        ))}
+                        <tr className="font-black text-slate-900 dark:text-white text-[12px]">
+                          <td className="px-4 py-2">Total</td>
+                          {RRB_MAINS_TOPIC_YEARS.map((y, i) => (
+                            <td key={y} className="px-2 py-2 text-right tabular-nums">
+                              {Math.round(rows.reduce((a, r) => a + r.counts[i], 0))}
+                            </td>
+                          ))}
+                          <td className="px-4 py-2 text-right tabular-nums text-indigo-700 dark:text-indigo-300">
+                            {rows.reduce((a, r) => a + r.estimate, 0)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="glass-card rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2">
+            <p className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">How the estimate is made</p>
+            <p className="text-[12.5px] text-slate-600 dark:text-slate-300 leading-relaxed">
+              A recency-weighted average of the three papers — 2025 counts three times, 2024 twice, 2023 once —
+              rounded to whole questions that add up to exactly 40. A topic missing from the latest paper is never
+              rounded up. It is a planning guide, not a forecast: IBPS rotates topics in and out (Direction &amp;
+              Distance and Quadratics both vanished after 2023), and anything that comes as a five-question set —
+              Input-Output, a puzzle, a DI chart — is really all-or-nothing, so an estimate of ~3 means "expect
+              either none or one full set".
+            </p>
+            <ul className="space-y-1 pt-1">
+              {Object.entries(RRB_MAINS_WEIGHTAGE.sources).map(([y, src]) => (
+                <li key={y} className="flex gap-2 text-[11.5px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <span className="font-bold text-slate-600 dark:text-slate-300 flex-shrink-0">{y}</span>
+                  <span>{src}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500">
+              <sup className="text-orange-500 font-bold">†</sup> disputed between sources, or derived as the remainder of
+              40 because the source's own figure did not fit — hover for which.
+            </p>
+          </div>
+
           {/* Syllabus */}
           <div className="space-y-1">
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Syllabus</h3>
@@ -2971,16 +3132,57 @@ export default function IbpsPoPrep() {
                   </span>
                 </div>
                 <ul className="p-4 space-y-1.5">
+                  {/* A section that spans both stages carries its Mains-only
+                      topics separately, so a Prelims candidate can see at a
+                      glance what they can leave alone. */}
+                  {sec.mainsOnly && (
+                    <li className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider pt-0.5 pb-1">
+                      Asked in Prelims and Mains
+                    </li>
+                  )}
                   {sec.topics.map((t) => (
                     <li key={t} className="flex gap-2 text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">
                       <span className="text-amber-500 flex-shrink-0">•</span>
                       <span>{t}</span>
                     </li>
                   ))}
+                  {sec.mainsOnly && (
+                    <>
+                      <li className="flex flex-wrap items-center gap-2 pt-3 pb-1 border-t border-dashed border-slate-200 dark:border-slate-700 mt-2">
+                        <span className="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                          Mains only — not asked in Prelims
+                        </span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
+                          skip for Prelims
+                        </span>
+                      </li>
+                      {sec.mainsOnly.map((t) => (
+                        <li key={t} className="flex gap-2 text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                          <span className="text-indigo-400 flex-shrink-0">•</span>
+                          <span>{t}</span>
+                        </li>
+                      ))}
+                      {sec.mainsNote && (
+                        <li className="text-[11.5px] text-slate-400 dark:text-slate-500 leading-relaxed pt-1.5">
+                          {sec.mainsNote}
+                        </li>
+                      )}
+                    </>
+                  )}
                 </ul>
               </div>
             ))}
           </div>
+
+          {/* Quant speed-maths */}
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Quant shortcuts — percentage to fraction</h3>
+            <p className="text-sm text-slate-500">
+              40 questions in 20 minutes means 30 seconds each. Converting the percentage to a fraction first is
+              the biggest single time saver in the section.
+            </p>
+          </div>
+          <RrbQuantShortcuts />
 
           {/* Key facts */}
           <div className="space-y-1 pt-2">
@@ -3024,6 +3226,8 @@ export default function IbpsPoPrep() {
 
       {activeTab === "vacancies" && <VacancyTab />}
 
+      {activeTab === "tracker" && <RecruitmentTracker onOpenMockTest={() => setActiveTab("mocktest")} />}
+
       {activeTab === "cutoffs" && (
         <div className="space-y-6">
           {/* The correction that matters most: there is no state-wise IBPS PO
@@ -3047,69 +3251,15 @@ export default function IbpsPoPrep() {
             </div>
           </div>
 
-          {/* RRB — Andhra Pradesh */}
+          {/* RRB — state-wise. Same component as the RRB PO tab. */}
           <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-5">
             <div className="space-y-1">
-              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                IBPS RRB PO (Officer Scale I) — {RRB_AP_CUTOFFS.state}
-              </h3>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">IBPS RRB PO (Officer Scale I) — state-wise</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Prelims out of {RRB_AP_CUTOFFS.prelimsOutOf}, Mains out of {RRB_AP_CUTOFFS.mainsOutOf}.
-                A dash means no figure has been reported for the state that year.
+                Vacancies, previous years, the projected band and sectional minimums, per state.
               </p>
             </div>
-            {RRB_AP_CUTOFFS.years.map((y) => (
-              <div key={y.year} className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-                <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{y.year}</span>
-                  <span
-                    className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap ${
-                      y.sources >= 3
-                        ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
-                        : y.sources === 2
-                        ? "bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300"
-                        : "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300"
-                    }`}
-                  >
-                    {y.sources === 1 ? "single source" : `${y.sources} sources agree`}
-                  </span>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left min-w-[520px]">
-                    <thead className="bg-slate-50/60 dark:bg-slate-900/40">
-                      <tr>
-                        {["Stage", "General", "OBC", "EWS", "SC", "ST"].map((h) => (
-                          <th key={h} className="px-4 py-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                            {h}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                      {[["Prelims", y.prelims], ["Mains", y.mains]].map(([label, row]) => (
-                        <tr key={label}>
-                          <td className="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200">{label}</td>
-                          {["ur", "obc", "ews", "sc", "st"].map((c) => (
-                            <td key={c} className="px-4 py-2.5 text-xs tabular-nums text-slate-600 dark:text-slate-300">
-                              {row && row[c] != null ? row[c].toFixed(2) : <span className="text-slate-300 dark:text-slate-600">—</span>}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                {y.caveat && (
-                  <p className="px-4 py-3 text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800">
-                    {y.caveat}
-                  </p>
-                )}
-              </div>
-            ))}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-4 space-y-1">
-              <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Vacancies</p>
-              <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">{RRB_AP_CUTOFFS.vacancyNote}</p>
-            </div>
+            <RrbStateCutoffs />
           </div>
 
           {/* IBPS PO — category-wise */}
@@ -3287,6 +3437,214 @@ export default function IbpsPoPrep() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* ── Mains ─────────────────────────────────────────────────────── */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                IBPS PO Mains — Exam Pattern
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                {MAINS_TOTAL_QUESTIONS} questions · {MAINS_TOTAL_MARKS} marks · {MAINS_TOTAL_MINUTES} minutes.
+                That is {MAINS_OBJECTIVE_MARKS} objective marks across {MAINS_OBJECTIVE.length} sections in{" "}
+                {MAINS_OBJECTIVE.reduce((n, x) => n + x.seconds, 0) / 60} minutes, plus a{" "}
+                {MAINS_PLAN[MAINS_PLAN.length - 1].marks}-mark Descriptive paper in{" "}
+                {MAINS_PLAN[MAINS_PLAN.length - 1].seconds / 60} minutes.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto -mx-2 px-2">
+              <table className="w-full text-sm border-collapse min-w-[640px]">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                    <th className="text-left font-bold py-3 pr-3">Section</th>
+                    <th className="text-right font-bold py-3 px-3">Questions</th>
+                    <th className="text-right font-bold py-3 px-3">Marks</th>
+                    <th className="text-right font-bold py-3 px-3">Marks / Question</th>
+                    <th className="text-right font-bold py-3 px-3">Negative / Question</th>
+                    <th className="text-right font-bold py-3 px-3">Time</th>
+                    <th className="text-left font-bold py-3 pl-3">Medium</th>
+                  </tr>
+                </thead>
+                <tbody className="text-slate-700 dark:text-slate-200">
+                  {MAINS_PLAN.map((s) => (
+                    <tr
+                      key={s.name}
+                      className={`border-b border-slate-100 dark:border-slate-800 ${
+                        s.descriptive ? "bg-indigo-50/50 dark:bg-indigo-500/5" : ""
+                      }`}
+                    >
+                      <td className="py-3 pr-3 font-semibold">
+                        {s.name}
+                        {s.descriptive && (
+                          <span className="ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
+                            typed
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 px-3 text-right tabular-nums">{s.questions}</td>
+                      <td className="py-3 px-3 text-right tabular-nums">{s.marks}</td>
+                      <td className="py-3 px-3 text-right tabular-nums font-semibold text-emerald-600 dark:text-emerald-400">
+                        +{s.perQuestion.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-3 text-right tabular-nums font-semibold text-red-500">
+                        {s.negative === null ? (
+                          <span className="text-slate-300 dark:text-slate-600" title="Descriptive paper — no negative marking">—</span>
+                        ) : (
+                          s.negative
+                        )}
+                      </td>
+                      <td className="py-3 px-3 text-right tabular-nums">{s.seconds / 60} min</td>
+                      <td className="py-3 pl-3 text-slate-500 dark:text-slate-400 text-xs">{s.medium}</td>
+                    </tr>
+                  ))}
+                  <tr className="font-black text-slate-900 dark:text-white">
+                    <td className="py-3 pr-3">Total</td>
+                    <td className="py-3 px-3 text-right tabular-nums">{MAINS_TOTAL_QUESTIONS}</td>
+                    <td className="py-3 px-3 text-right tabular-nums">{MAINS_TOTAL_MARKS}</td>
+                    <td className="py-3 px-3 text-right text-slate-300 dark:text-slate-600">—</td>
+                    <td className="py-3 px-3 text-right text-slate-300 dark:text-slate-600">—</td>
+                    <td className="py-3 px-3 text-right tabular-nums">{MAINS_TOTAL_MINUTES} min</td>
+                    <td className="py-3 pl-3 text-slate-300 dark:text-slate-600">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  icon: "⚖️",
+                  title: "The weighting flips",
+                  body: `Marks per question are far from uniform. Data Analysis is worth ${MAINS_OBJECTIVE[1].perQuestion.toFixed(2)} a question and Reasoning ${MAINS_OBJECTIVE[0].perQuestion.toFixed(2)}, against ${MAINS_OBJECTIVE[2].perQuestion.toFixed(2)} for Awareness. Those two sections alone carry ${MAINS_OBJECTIVE[0].marks + MAINS_OBJECTIVE[1].marks} of the ${MAINS_OBJECTIVE_MARKS} objective marks — 60% of the paper from ${MAINS_OBJECTIVE[0].questions + MAINS_OBJECTIVE[1].questions} questions.`,
+                },
+                {
+                  icon: "⏱️",
+                  title: "Sectional timing again",
+                  body: `Each section has its own window and they are attempted in order — you cannot return to a closed one. The windows are unequal here, unlike Prelims: ${MAINS_OBJECTIVE.map((x) => `${x.name.split(" ")[0]} ${x.seconds / 60}`).join(", ")} minutes.`,
+                },
+                {
+                  icon: "✍️",
+                  title: "Descriptive is separate",
+                  body: `The ${MAINS_PLAN[4].marks}-mark Essay and Letter paper is typed in a ${MAINS_PLAN[4].seconds / 60}-minute window with no negative marking. It is evaluated only for candidates who clear the objective cut-off, so a strong essay cannot rescue a weak objective score.`,
+                },
+              ].map((c) => (
+                <div key={c.title} className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-2">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                    {c.icon} {c.title}
+                  </p>
+                  <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">{c.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-2xl p-4 space-y-2">
+              <p className="text-sm font-bold text-amber-800 dark:text-amber-300">How a Mains score is worked out</p>
+              <p className="text-xs leading-relaxed text-amber-900/80 dark:text-amber-200/80">
+                Say you get 25 Reasoning correct with 6 wrong, 18 Data Analysis correct with 5 wrong,
+                28 Awareness correct with 4 wrong, and 22 English correct with 5 wrong.
+                Reasoning gives {(25 * 1.33).toFixed(2)} − {(6 * 0.333).toFixed(2)} = <strong>{(25 * 1.33 - 6 * 0.333).toFixed(2)}</strong>.
+                Data Analysis gives {(18 * 1.71).toFixed(2)} − {(5 * 0.429).toFixed(2)} = <strong>{(18 * 1.71 - 5 * 0.429).toFixed(2)}</strong>.
+                Awareness gives {(28 * 1.0).toFixed(2)} − {(4 * 0.25).toFixed(2)} = <strong>{(28 * 1.0 - 4 * 0.25).toFixed(2)}</strong>.
+                English gives {(22 * 1.14).toFixed(2)} − {(5 * 0.285).toFixed(2)} = <strong>{(22 * 1.14 - 5 * 0.285).toFixed(2)}</strong>.
+                Objective total = <strong>{(25 * 1.33 - 6 * 0.333 + 18 * 1.71 - 5 * 0.429 + 28 * 1.0 - 4 * 0.25 + 22 * 1.14 - 5 * 0.285).toFixed(2)}</strong> out
+                of {MAINS_OBJECTIVE_MARKS}, before the Descriptive paper is added on top of {MAINS_TOTAL_MARKS}.
+              </p>
+            </div>
+
+            <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-1.5">
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Where the Mains score actually goes</p>
+              <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                Your Prelims marks are discarded once you qualify. The final merit list is built from Mains and
+                the Interview in an <strong>80 : 20</strong> ratio, so this paper is 80% of everything. The
+                Interview carries 100 marks with a 40% minimum (35% for reserved categories).
+              </p>
+            </div>
+          </div>
+
+          {/* Mains syllabus */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mains syllabus, section by section</h3>
+            <div className="space-y-3">
+              {MAINS_PLAN.map((s) => (
+                <div key={s.name} className="border-l-2 border-indigo-400 pl-4 py-1">
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                    {s.name}{" "}
+                    <span className="text-xs font-medium text-slate-400">
+                      · {s.questions} Qs · {s.marks} marks · {s.seconds / 60} min
+                    </span>
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{s.topics}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mains cut-offs */}
+          <div className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 md:p-8 space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Previous years' Mains cut-offs</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Out of {PO_CUTOFFS.mainsOutOf} — that is the {MAINS_OBJECTIVE_MARKS} objective marks plus the{" "}
+                {MAINS_PLAN[4].marks}-mark Descriptive paper. Category-wise, all-India.
+              </p>
+            </div>
+            <div className="overflow-x-auto -mx-2 px-2">
+              <table className="w-full text-sm border-collapse min-w-[520px]">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-200 dark:border-slate-700">
+                    <th className="text-left font-bold py-3 pr-3">Year</th>
+                    {[["General (UR)", "ur"], ["OBC", "obc"], ["EWS", "ews"], ["SC", "sc"], ["ST", "st"]].map(([l, k]) => (
+                      <th key={k} className="text-right font-bold py-3 px-3">{l}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="text-slate-700 dark:text-slate-200">
+                  {PO_CUTOFFS.years.map((y, i) => (
+                    <tr key={y.year} className="border-b border-slate-100 dark:border-slate-800">
+                      <td className="py-3 pr-3 font-semibold">
+                        {y.year}
+                        {i === 0 && (
+                          <span className="ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">
+                            LATEST
+                          </span>
+                        )}
+                      </td>
+                      {["ur", "obc", "ews", "sc", "st"].map((k) => (
+                        <td key={k} className="py-3 px-3 text-right tabular-nums">
+                          {y.mains?.[k] == null ? (
+                            <span className="text-slate-300 dark:text-slate-600" title="Not reported for this cycle">n/a</span>
+                          ) : (
+                            y.mains[k].toFixed(2)
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {(() => {
+              const peak = Math.max(...PO_CUTOFFS.years.map((y) => y.mains?.ur ?? 0));
+              return (
+                <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-4 space-y-1.5">
+                  <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">🎯 What to aim for in Mains</p>
+                  <p className="text-xs leading-relaxed text-emerald-900/80 dark:text-emerald-200/80">
+                    The highest General Mains cut-off across these cycles was <strong>{peak.toFixed(2)}</strong> out
+                    of {PO_CUTOFFS.mainsOutOf} — roughly {Math.round((peak / PO_CUTOFFS.mainsOutOf) * 100)}% of the
+                    paper. Target <strong>{Math.round(peak + 10)}–{Math.round(peak + 18)}</strong>. Mains cut-offs
+                    swing far more than Prelims (2021 sat at 80.75, 2023 at 63.00), because a single hard Data
+                    Analysis section moves the whole cohort.
+                  </p>
+                </div>
+              );
+            })()}
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+              2021 is reported for the General category only by every source checked, so the other columns are left
+              blank rather than filled with a guess. IBPS keeps no public cut-off archive — these come from
+              aggregators, so treat them as a target band, not a threshold.
+            </p>
           </div>
 
           {/* ── Cut-offs ─────────────────────────────────────────────────── */}
@@ -3636,6 +3994,450 @@ export default function IbpsPoPrep() {
   );
 }
 
+
+// The expected band is wanted in two places — the Cut-offs tab and the RRB PO
+// tab — so it lives in one component rather than as two copies of eighty lines
+// of table markup that would drift apart on the first edit. `onSeeHistory`
+// is optional: from the Cut-offs tab the year-by-year table is already on
+// screen, so there is nothing to jump to.
+// Percentage-to-fraction reference for RRB Quant. Every figure comes from
+// rrb-quant-shortcuts.js, which generates them with integer arithmetic — a
+// hand-typed conversion sheet is exactly where a single wrong cell would teach
+// a candidate something false and never be noticed.
+function RrbQuantShortcuts() {
+  const [showAll, setShowAll] = useState(false);
+  // The denominators that actually repay memorising sit at the top; the long
+  // tail is behind a toggle so the card does not open as a wall of 107 chips.
+  const CORE = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
+  const groups = showAll ? PCT_FRACTION_TABLE : PCT_FRACTION_TABLE.filter((g) => CORE.includes(g.den));
+
+  return (
+    <div className="space-y-4">
+      <div className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">Conversion table</h4>
+          <button
+            onClick={() => setShowAll((v) => !v)}
+            className="text-[11px] font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+          >
+            {showAll ? "Show core denominators" : `Show all ${PCT_FRACTION_TABLE.length} denominators`}
+          </button>
+        </div>
+        <div className="p-4 space-y-3">
+          {groups.map((g) => (
+            <div key={g.den} className="flex flex-wrap items-center gap-1.5">
+              <span className="w-10 flex-shrink-0 text-[11px] font-black text-slate-400 dark:text-slate-500 tabular-nums">
+                /{g.den}
+              </span>
+              {g.rows.map((r) => (
+                <span
+                  key={r.fraction}
+                  title={`${r.fraction} = ${r.percent}${r.exact ? "" : " (recurring)"}`}
+                  className={`text-[11.5px] px-2 py-1 rounded-lg tabular-nums border ${
+                    r.exact
+                      ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-300"
+                      : "bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
+                  }`}
+                >
+                  <strong className="font-bold">{r.pretty}</strong>
+                  <span className="text-slate-400 dark:text-slate-500"> = </span>
+                  {r.percent}
+                </span>
+              ))}
+            </div>
+          ))}
+          <p className="text-[11px] text-slate-400 dark:text-slate-500 pt-1">
+            Green means the percentage terminates; grey means it recurs and is written exactly (14²⁄₇%, not 14.28%).
+          </p>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-4 items-start">
+        {/* Increase / decrease multipliers */}
+        <div className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">Increase &amp; decrease as one multiplier</h4>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">"20% more" is ×6/5 — one step, not two.</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left min-w-[300px]">
+              <thead className="bg-slate-50/60 dark:bg-slate-900/40">
+                <tr>
+                  {["Change", "Increase", "Decrease"].map((h) => (
+                    <th key={h} className="px-4 py-2 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {CHANGE_MULTIPLIERS.map((c) => (
+                  <tr key={c.label}>
+                    <td className="px-4 py-1.5 text-[12px] font-semibold text-slate-700 dark:text-slate-200 tabular-nums">{c.label}</td>
+                    <td className="px-4 py-1.5 text-[12px] tabular-nums text-emerald-700 dark:text-emerald-300">×{c.up}</td>
+                    <td className="px-4 py-1.5 text-[12px] tabular-nums text-slate-600 dark:text-slate-300">×{c.down}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Worked examples */}
+        <div className="glass-card rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">The same sum, both ways</h4>
+          </div>
+          <div className="p-4 space-y-3">
+            {SHORTCUT_EXAMPLES.map((e) => (
+              <div key={e.q} className="rounded-2xl border border-slate-200 dark:border-slate-700 p-3 space-y-1.5">
+                <p className="text-[12.5px] font-bold text-slate-800 dark:text-slate-100">{e.q}</p>
+                <p className="text-[11.5px] text-slate-400 dark:text-slate-500 leading-relaxed">
+                  <span className="font-semibold">Long way:</span> {e.slow}
+                </p>
+                <p className="text-[11.5px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">Fraction:</span> {e.fast}
+                </p>
+                <p className="text-[12px] font-black text-emerald-700 dark:text-emerald-300 tabular-nums">= {e.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4 items-start">
+        {SHORTCUT_NOTES.map((n) => (
+          <div key={n.title} className="glass-card rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-1">
+            <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{n.title}</p>
+            <p className="text-[12.5px] text-slate-600 dark:text-slate-300 leading-relaxed">{n.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Sectional minimums, for whichever state is selected. Since 2025 IBPS sets
+// these per state GROUP, so the table must follow the state — Andhra Pradesh
+// (Group 1) needs noticeably more than Rajasthan (Group 3) in the same year.
+function RrbSectionalCutoff({ stateKey }) {
+  const [band, setBand] = useState("general");
+  const st = RRB_STATES[stateKey];
+  const group = st.sectionalGroup;
+  const { years, rows } = RRB_SECTIONAL.byGroup[group];
+  const lastYear = years[years.length - 1];
+  return (
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-4 space-y-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="space-y-0.5">
+          <p className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">Section-wise cut-off</p>
+          <p className="text-[12px] text-slate-500 dark:text-slate-400">
+            Every section has its own minimum, out of {RRB_SECTIONAL.outOf}. Fail one and the total does not matter.
+          </p>
+        </div>
+        <div className="flex rounded-lg bg-slate-100 dark:bg-slate-900/60 p-0.5">
+          {Object.entries(RRB_SECTIONAL.bands).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setBand(k)}
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-md transition whitespace-nowrap ${
+                band === k
+                  ? "bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-dashed border-amber-300 dark:border-amber-800 p-3 space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[12px] font-bold text-slate-800 dark:text-slate-100">Prelims</span>
+          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase tracking-wider">
+            estimate — no history published
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {RRB_SECTIONAL.prelims.estimate.map((e) => (
+            <div key={e.key} className="rounded-lg bg-slate-50 dark:bg-slate-900/40 px-3 py-2">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">{e.name}</p>
+              <p className="text-[15px] font-black tabular-nums text-slate-800 dark:text-slate-100">
+                {e.range[0]}–{e.range[1]}
+                <span className="text-[10px] font-semibold text-slate-400"> / 40</span>
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+          {RRB_SECTIONAL.prelims.source}. {RRB_SECTIONAL.prelims.note}
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+          <span className="text-[12px] font-bold text-slate-800 dark:text-slate-100">Mains</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400">{RRB_SECTIONAL.bands[band]} · out of 40 each</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[520px]">
+            <thead className="bg-slate-50 dark:bg-slate-900/40">
+              <tr>
+                <th className="px-3 py-1.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Section</th>
+                {years.map((y) => (
+                  <th
+                    key={y}
+                    className="px-2 py-1.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right"
+                    title={`${RRB_SECTIONAL.mainsScopes[y].scope} · ${RRB_SECTIONAL.mainsScopes[y].sources} source${RRB_SECTIONAL.mainsScopes[y].sources === 1 ? "" : "s"}`}
+                  >
+                    {y}
+                    {y === lastYear && <sup className="text-orange-500 ml-0.5">*</sup>}
+                  </th>
+                ))}
+                <th className="px-3 py-1.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider text-right">Aim for</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {RRB_SECTIONAL_SECTIONS.map((sec) => {
+                const d = rows[sec.key][band];
+                return (
+                  <tr key={sec.key}>
+                    <td className="px-3 py-1.5">
+                      <p className="text-[12px] font-semibold text-slate-700 dark:text-slate-200">{sec.name}</p>
+                      {sec.pair && <p className="text-[10px] text-slate-400 dark:text-slate-500">or {sec.pair} — you sit one</p>}
+                    </td>
+                    {years.map((y) => (
+                      <td
+                        key={y}
+                        className={`px-2 py-1.5 text-right text-[12px] tabular-nums ${
+                          d.byYear[y] === d.high ? "font-bold text-slate-700 dark:text-slate-200" : "text-slate-500 dark:text-slate-400"
+                        }`}
+                      >
+                        {d.byYear[y].toFixed(2)}
+                      </td>
+                    ))}
+                    <td className="px-3 py-1.5 text-right text-[13px] font-black tabular-nums text-emerald-700 dark:text-emerald-300">
+                      {d.target.toFixed(2)}+
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 leading-relaxed">
+          Bold marks the strictest year for each section; "Aim for" is that figure plus 2. 2022–2024 applied to all
+          states. <sup className="text-orange-500">*</sup>{lastYear} is by state group — {st.state} is in{" "}
+          {RRB_SECTIONAL.groups[group].label}
+          {st.sectionalGroupSources === 1 && " (that placement rests on a single source)"}.
+        </p>
+      </div>
+
+      <ul className="space-y-1">
+        {RRB_SECTIONAL.caveats.map((c) => (
+          <li key={c} className="flex gap-2 text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
+            <span className="text-amber-500 flex-shrink-0">•</span>
+            <span>{c}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Everything state-specific for RRB PO: vacancies, past cut-offs, the projected
+// band, and sectional minimums — all driven by one state picker so the numbers
+// on screen can never be a mix of two states.
+function RrbStateCutoffs() {
+  const [stateKey, setStateKey] = useState("ap");
+  const st = RRB_STATES[stateKey];
+  const exp = RRB_EXPECTED[stateKey];
+  const cats = [["General (UR)", "ur"], ["OBC", "obc"], ["EWS", "ews"], ["SC", "sc"], ["ST", "st"]];
+  const hasFinal = st.years.some((y) => y.final);
+
+  return (
+    <div className="space-y-4">
+      {/* State picker */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">State</span>
+        {RRB_STATE_KEYS.map((k) => (
+          <button
+            key={k}
+            onClick={() => setStateKey(k)}
+            className={`text-[12px] font-semibold px-3 py-1.5 rounded-lg transition ${
+              stateKey === k
+                ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900"
+                : "bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+            }`}
+          >
+            {RRB_STATES[k].state}
+          </button>
+        ))}
+      </div>
+
+      {/* This cycle's vacancies */}
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-4 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+            {exp.cycle} — vacancies
+          </p>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400">{st.bank}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 p-3 text-center">
+            <p className="text-2xl font-black tabular-nums text-emerald-700 dark:text-emerald-300">{st.vacancy2026.po}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700/70 dark:text-emerald-400/70">Officer Scale I</p>
+          </div>
+          <div className="rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 p-3 text-center">
+            <p className="text-2xl font-black tabular-nums text-slate-700 dark:text-slate-200">{st.vacancy2026.clerk}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Office Assistant</p>
+          </div>
+        </div>
+        <p className="text-[12px] text-slate-600 dark:text-slate-300 leading-relaxed">{st.vacancyNote}</p>
+      </div>
+
+      {/* Previous years */}
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 overflow-hidden">
+        <div className="px-4 py-2.5 border-b border-slate-200 dark:border-slate-700">
+          <p className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+            Previous years — {st.state}
+          </p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            Prelims out of {RRB_SCALE.prelimsOutOf}, Mains out of {RRB_SCALE.mainsOutOf}
+            {hasFinal && <> , Final out of {RRB_SCALE.finalOutOf}</>}. A dash means nothing was reported.
+          </p>
+        </div>
+        {st.years.map((y) => (
+          <div key={y.year} className="border-b border-slate-100 dark:border-slate-800 last:border-0">
+            <div className="px-4 py-2 bg-slate-50 dark:bg-slate-900/50 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-[13px] font-bold text-slate-800 dark:text-slate-100">{y.year}</span>
+              <span
+                className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                  y.sources >= 3
+                    ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
+                    : y.sources === 2
+                    ? "bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300"
+                    : "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300"
+                }`}
+              >
+                {y.sources === 1 ? "single source" : `${y.sources} sources agree`}
+              </span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left min-w-[520px]">
+                <thead>
+                  <tr className="text-[9px] uppercase tracking-wider text-slate-400">
+                    {["Stage", ...cats.map(([l]) => l)].map((h) => (
+                      <th key={h} className="px-4 py-1.5 font-bold">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {[["Prelims", y.prelims], ["Mains", y.mains], ...(hasFinal ? [["Final", y.final]] : [])].map(
+                    ([label, row]) => (
+                      <tr key={label}>
+                        <td className="px-4 py-1.5 text-[11.5px] font-semibold text-slate-700 dark:text-slate-200">{label}</td>
+                        {cats.map(([, ck]) => (
+                          <td key={ck} className="px-4 py-1.5 text-[11.5px] tabular-nums text-slate-600 dark:text-slate-300">
+                            {row && row[ck] != null ? row[ck].toFixed(2) : <span className="text-slate-300 dark:text-slate-600">—</span>}
+                          </td>
+                        ))}
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {y.caveat && (
+              <p className="px-4 py-2 text-[11.5px] text-slate-500 dark:text-slate-400 leading-relaxed">{y.caveat}</p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <RrbExpectedCutoff stateKey={stateKey} />
+      <RrbSectionalCutoff stateKey={stateKey} />
+    </div>
+  );
+}
+
+function RrbExpectedCutoff({ stateKey = "ap" }) {
+  const exp = RRB_EXPECTED[stateKey];
+  return (
+    <div className="rounded-2xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50 dark:bg-emerald-950/30 p-4 space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
+          🎯 Expected cut-off — {exp.state}, {exp.cycle}
+        </p>
+        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 uppercase tracking-wider">
+          projection, not published
+        </span>
+      </div>
+
+      {[["Prelims", "prelims", exp.prelimsOutOf], ["Mains", "mains", exp.mainsOutOf]].map(([label, key, outOf]) => (
+        <div key={key} className="rounded-xl border border-emerald-200/70 dark:border-emerald-900/50 bg-white/60 dark:bg-slate-900/40 overflow-hidden">
+          <div className="px-3 py-2 border-b border-emerald-200/70 dark:border-emerald-900/50 flex items-center justify-between">
+            <span className="text-[12px] font-bold text-slate-800 dark:text-slate-100">{label}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400">out of {outOf}</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left min-w-[440px]">
+              <thead className="bg-emerald-50/50 dark:bg-emerald-950/20">
+                <tr>
+                  {["Category", "Past range", "Average", "Aim for", "Years"].map((h) => (
+                    <th key={h} className="px-3 py-1.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-emerald-100 dark:divide-emerald-900/40">
+                {[["General (UR)", "ur"], ["OBC", "obc"], ["EWS", "ews"], ["SC", "sc"], ["ST", "st"]].map(([cl, ck]) => {
+                  const d = exp[key][ck];
+                  return (
+                    <tr key={ck}>
+                      <td className="px-3 py-1.5 text-[12px] font-semibold text-slate-700 dark:text-slate-200">{cl}</td>
+                      {d ? (
+                        <>
+                          <td className="px-3 py-1.5 text-[12px] tabular-nums text-slate-600 dark:text-slate-300">
+                            {d.low.toFixed(2)} – {d.high.toFixed(2)}
+                          </td>
+                          <td className="px-3 py-1.5 text-[12px] tabular-nums text-slate-500 dark:text-slate-400">{d.mean.toFixed(2)}</td>
+                          <td className="px-3 py-1.5 text-[13px] tabular-nums font-bold text-emerald-700 dark:text-emerald-300">
+                            {d.target.toFixed(2)}+
+                          </td>
+                          <td className="px-3 py-1.5 text-[10px] text-slate-400 dark:text-slate-500 tabular-nums">
+                            {d.n} ({d.years.join(", ")})
+                          </td>
+                        </>
+                      ) : (
+                        <td colSpan={4} className="px-3 py-1.5 text-[11.5px] text-slate-400 dark:text-slate-500">
+                          No {label.toLowerCase()} figure has ever been reported for this category in {exp.state} —
+                          nothing to project from.
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+
+      <p className="text-[11.5px] text-emerald-900/80 dark:text-emerald-200/80 leading-relaxed">{exp.method}</p>
+      <ul className="space-y-1">
+        {exp.caveats.map((c) => (
+          <li key={c} className="flex gap-2 text-[11.5px] text-slate-600 dark:text-slate-400 leading-relaxed">
+            <span className="text-amber-500 flex-shrink-0">•</span>
+            <span>{c}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 // ── Vacancies ─────────────────────────────────────────────────────────────────
 // Data comes from /api/vacancies so counts can be corrected mid-cycle without a

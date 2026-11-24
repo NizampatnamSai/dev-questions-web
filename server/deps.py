@@ -97,6 +97,17 @@ async def guest_gate(user: dict | None = Depends(optional_user)) -> dict | None:
     return user
 
 
+async def require_ibps_po_enabled(user: dict = Depends(current_user)) -> dict:
+    """Gate for the IBPS PO Prep endpoints — blocks regular users when the
+    admin has switched the IBPS PO page off. Admin/sub_admin pass through."""
+    if user.get("role") not in ("admin", "sub_admin"):
+        from db_mongo import col_app_config
+        doc = await col_app_config().find_one({"_id": "config"}) or {}
+        if not doc.get("ibps_po_enabled", True):
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "IBPS PO Prep is currently turned off by the admin.")
+    return user
+
+
 async def require_ai_enabled(user: dict = Depends(current_user)) -> dict:
     """Drop-in replacement for Depends(current_user) on any AI-backed
     endpoint — blocks regular users when the admin's global AI on/off switch

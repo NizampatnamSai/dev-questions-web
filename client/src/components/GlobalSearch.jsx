@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { useClickOutside } from "../hooks/useClickOutside";
+import usePublicAppConfig from "../hooks/usePublicAppConfig";
 
 // Keep in sync with Sidebar.jsx BASE_LINKS + admin links
 const PAGES = [
@@ -64,6 +65,7 @@ const PAGES = [
     to: "/ibps-po",
     label: "IBPS PO Prep",
     icon: "🏛️",
+    configFlag: "ibps_po_enabled",
     keywords:
       "ibps po bank banking prelims mains interview mock test exam competitive probationary officer reasoning quantitative aptitude english sectional",
   },
@@ -392,9 +394,12 @@ export default function GlobalSearch() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
 
+  const appConfig = usePublicAppConfig();
+
   const visiblePages = PAGES.filter((p) => {
     if (p.adminOnly && !isAdmin) return false;
     if (p.hideForAdmin && isAdmin) return false;
+    if (p.configFlag && !isAdmin && appConfig?.[p.configFlag] === false) return false;
     return true;
   });
 

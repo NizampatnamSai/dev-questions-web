@@ -28,6 +28,7 @@ import Maintenance from "./pages/Maintenance";
 import GuestModeDisabled from "./pages/GuestModeDisabled";
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
+import usePublicAppConfig, { setPublicAppConfig } from "./hooks/usePublicAppConfig";
 import { WeatherProvider, useWeather } from "./context/WeatherContext";
 import { requestAndRegisterToken, onForegroundMessage } from "./firebase";
 import api from "./api/axios";
@@ -254,6 +255,20 @@ function ProtectedPage({ children, path, fullWidth = false, adminOnly = false, h
   );
 }
 
+// Admin can switch IBPS PO Prep off from the Admin panel — regular users
+// then get bounced to the dashboard (admins/sub-admins are exempt, same as
+// maintenance and AI features). Renders nothing until the config is known so
+// a direct visit doesn't flash the page before redirecting.
+function IbpsPoGate({ children }) {
+  const { user } = useAuth();
+  const config = usePublicAppConfig();
+  const isAdmin = user?.role === "admin" || user?.role === "sub_admin";
+  if (isAdmin) return children;
+  if (!config) return null;
+  if (config.ibps_po_enabled === false) return <Navigate to="/dashboard" replace />;
+  return children;
+}
+
 // Applies weather class to <html> and renders weather effects
 function WeatherEffects() {
   const { activeCondition } = useWeather();
@@ -335,7 +350,10 @@ function AppInner() {
   useEffect(() => {
     api
       .get("/admin/app-config/public")
-      .then(({ data }) => setAppConfig(data))
+      .then(({ data }) => {
+        setAppConfig(data);
+        setPublicAppConfig(data);
+      })
       .catch(() => {});
   }, [location.pathname]);
 
@@ -363,7 +381,10 @@ function AppInner() {
     const interval = setInterval(() => {
       api
         .get("/admin/app-config/public")
-        .then(({ data }) => setAppConfig(data))
+        .then(({ data }) => {
+          setAppConfig(data);
+          setPublicAppConfig(data);
+        })
         .catch(() => {});
     }, 30000);
     return () => clearInterval(interval);
@@ -708,7 +729,9 @@ function AppInner() {
           path="/ibps-po"
           element={
             <ProtectedPage path="/ibps-po">
-              <IbpsPoPrep />
+              <IbpsPoGate>
+                <IbpsPoPrep />
+              </IbpsPoGate>
             </ProtectedPage>
           }
         />

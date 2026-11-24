@@ -10,6 +10,7 @@ import ConfirmModal from "./ConfirmModal";
 import GuestLockedModal from "./GuestLockedModal";
 import { isGuestAllowedPath } from "./ProtectedRoute";
 import SharedToggle from "./Toggle";
+import usePublicAppConfig from "../hooks/usePublicAppConfig";
 
 const BASE_LINKS = [
   // Requested order (top 12)
@@ -44,7 +45,7 @@ const BASE_LINKS = [
   // Remaining, in previous relative order
   { to: "/quiz", label: "Quiz Mode", icon: "🧠" },
   { to: "/study", label: "Study Hub", icon: "📚" },
-  { to: "/ibps-po", label: "IBPS PO Prep", icon: "🏛️" },
+  { to: "/ibps-po", label: "IBPS PO Prep", icon: "🏛️", configFlag: "ibps_po_enabled" },
   { to: "/mock-interview", label: "Mock Interview", icon: "🎯" },
   { to: "/typing-race", label: "Typing Race", icon: "⌨️" },
   { to: "/mini-sudoku", label: "Mini Sudoku", icon: "🧩" },
@@ -232,10 +233,16 @@ function Sidebar() {
 
   const [stateSearch, setStateSearch] = useState("");
 
+  const appConfig = usePublicAppConfig();
   const isAdmin = user?.role === "admin";
-  const baseFiltered = isAdmin
-    ? BASE_LINKS.filter((l) => !l.hideForAdmin)
-    : BASE_LINKS;
+  const isAnyAdmin = isAdmin || user?.role === "sub_admin";
+  // Links tied to an admin on/off switch (configFlag) are hidden from regular
+  // users while that switch is off; admins keep seeing them.
+  const baseFiltered = BASE_LINKS.filter(
+    (l) =>
+      !(isAdmin && l.hideForAdmin) &&
+      !(l.configFlag && !isAnyAdmin && appConfig?.[l.configFlag] === false),
+  );
   const allLinks = isAdmin
     ? [
         ...baseFiltered,

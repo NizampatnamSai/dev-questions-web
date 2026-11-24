@@ -731,6 +731,7 @@ class AppConfigBody(BaseModel):
     typing_race_reminder_time: Optional[str] = None  # "HH:MM" IST, e.g. "11:00"
     sudoku_reminder_time: Optional[str] = None        # "HH:MM" IST, e.g. "11:00"
     weekly_digest_time: Optional[str] = None          # "HH:MM" IST on Monday, e.g. "09:00"
+    ibps_po_enabled: Optional[bool] = None
 
 
 @router.get("/community/unanswered")
@@ -813,7 +814,7 @@ async def get_app_config_public():
     instead, so it isn't needlessly exposed to unauthenticated visitors."""
     doc = await col_app_config().find_one({"_id": "config"})
     if not doc:
-        return {"maintenance": False, "force_update": False, "guest_feedback_enabled": False}
+        return {"maintenance": False, "force_update": False, "guest_feedback_enabled": False, "ibps_po_enabled": True}
     return {
         "maintenance":          doc.get("maintenance", False),
         "maintenance_message":  doc.get("maintenance_message", "We're currently performing maintenance. We'll be back shortly!"),
@@ -822,6 +823,7 @@ async def get_app_config_public():
         "guest_feedback_enabled": doc.get("guest_feedback_enabled", False),
         "guest_mode_enabled": doc.get("guest_mode_enabled", True),
         "guest_mode_message": doc.get("guest_mode_message", "Guest mode is temporarily disabled by the admin. Please log in or create an account to continue."),
+        "ibps_po_enabled": doc.get("ibps_po_enabled", True),
     }
 
 
@@ -845,6 +847,7 @@ async def get_app_config(admin=Depends(_require_admin)):
     doc.setdefault("typing_race_reminder_time", "11:00")
     doc.setdefault("sudoku_reminder_time", "11:00")
     doc.setdefault("weekly_digest_time", "09:00")
+    doc.setdefault("ibps_po_enabled", True)
     return doc
 
 
@@ -893,6 +896,8 @@ async def update_app_config(body: AppConfigBody, admin=Depends(_require_admin)):
         update["sudoku_reminder_time"] = body.sudoku_reminder_time
     if body.weekly_digest_time is not None:
         update["weekly_digest_time"] = body.weekly_digest_time
+    if body.ibps_po_enabled is not None:
+        update["ibps_po_enabled"] = body.ibps_po_enabled
 
     if update:
         await col_app_config().update_one(
