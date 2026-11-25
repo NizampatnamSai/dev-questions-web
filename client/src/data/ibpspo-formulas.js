@@ -444,6 +444,19 @@ export const QUANT_FORMULAS = [
     ],
   },
   {
+    group: "HCF & LCM",
+    items: [
+      { name: "Two numbers", formula: "HCF × LCM = a × b", note: "Holds for exactly two numbers, not three." },
+      { name: "Co-prime numbers", formula: "HCF = 1, so LCM = a × b" },
+      { name: "HCF of fractions", formula: "HCF of numerators / LCM of denominators" },
+      { name: "LCM of fractions", formula: "LCM of numerators / HCF of denominators" },
+      { name: "Greatest number leaving the SAME remainder", formula: "HCF of the differences: HCF(b − a, c − b)", note: "For 34, 90, 104: HCF(56, 14) = 14." },
+      { name: "Greatest number leaving remainders r₁, r₂", formula: "HCF(x − r₁, y − r₂)" },
+      { name: "Least number leaving remainder r in each case", formula: "LCM(a, b, c) + r" },
+      { name: "Least number when (divisor − remainder) = k for all", formula: "LCM(a, b, c) − k", note: "Divided by 4, 5, 6 leaves 3, 4, 5 → k = 1 → 60 − 1 = 59." },
+    ],
+  },
+  {
     // Pure recall. Number Series, Approximation and Mensuration all assume these
     // are instant — spending 20 seconds working out 17² is 20 seconds not spent
     // on the question itself.

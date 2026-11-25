@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { UNANNOUNCED_STATUSES, VACANCY_SCOPE, ELIGIBILITY } from "../../data/recruitment/model.js";
 import { SALARY_CAVEAT, DEDUCTION_MODEL } from "../../data/recruitment/common.js";
 import { fmtDate, mid, inr, ageCutoffFor } from "../../utils/recruitment.js";
-import { StatusBadge, EligibilityBadge, Money, Count, ExtLink, Collapsible, KV, Pill, Prov } from "./ui.jsx";
+import { StatusBadge, EligibilityBadge, Money, Count, ExtLink, Collapsible, KV, Pill, Prov, AutoUpdatedBadge } from "./ui.jsx";
 
 // Full detail for one recruitment cycle: sections A–F of the spec. Rendered as
 // a right-hand drawer on desktop and a full-height sheet on mobile.
@@ -154,6 +154,7 @@ export default function RecruitmentDetail({ row, siblings, onSelect, onClose, on
           <div className="flex flex-wrap items-center gap-1.5">
             <StatusBadge cycle={cycle} />
             <EligibilityBadge elig={elig} />
+            <AutoUpdatedBadge cycle={cycle} />
             {row.pay === "below" && <Pill cls="bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300">▼ Below ₹60k in-hand target</Pill>}
           </div>
           {siblings.length > 1 && (

@@ -33,6 +33,18 @@ export function EligibilityBadge({ elig, short = false }) {
   );
 }
 
+/** Marks a cycle changed by the online check — so it is never mistaken for hand-verified data. */
+export function AutoUpdatedBadge({ cycle }) {
+  if (!cycle?.autoUpdated) return null;
+  const at = new Date(cycle.autoUpdated.at);
+  const when = Number.isNaN(at.getTime()) ? "" : at.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  return (
+    <Pill cls="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300" title={`Updated by the online check${when ? ` on ${when}` : ""}. ${cycle.autoUpdated.evidence || ""} — verify against the notification.`}>
+      🔄 Updated online{when ? ` ${when}` : ""}
+    </Pill>
+  );
+}
+
 /** Provenance marker next to a figure. Colour + text, so it is not colour-only. */
 export function Prov({ p, note }) {
   if (!p) return null;

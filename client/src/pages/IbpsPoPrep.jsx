@@ -7,6 +7,9 @@ import toast from "react-hot-toast";
 import mockTestData from "../data/ibpspo-mock-test.json";
 import pyqData from "../data/ibpspo-pyq.json";
 import { ENGLISH_RULES, QUANT_FORMULAS, REASONING_RULES } from "../data/ibpspo-formulas";
+import { QUANT_CATEGORIES } from "../data/formula-reference";
+import FormulaReference from "../components/formulas/FormulaReference";
+import FormulaLibrary from "../components/formulas/FormulaLibrary";
 import {
   RRB_OVERVIEW, RRB_PRELIMS, RRB_MAINS, RRB_SYLLABUS,
   RRB_VS_IBPS_PO, RRB_KEY_FACTS, RRB_STRATEGY, RRB_MAINS_ESTIMATE, RRB_MAINS_WEIGHTAGE, RRB_MAINS_TOPIC_YEARS,
@@ -899,7 +902,7 @@ export default function IbpsPoPrep() {
   const [savingTest, setSavingTest] = useState(false);
   const [pausing, setPausing] = useState(false);
   const [testMode, setTestMode] = useState("ai"); // ai | pyq
-  const [formulaTab, setFormulaTab] = useState("quant"); // english | quant
+  const [formulaTab, setFormulaTab] = useState("reference"); // reference | english | quant | reasoning
   const [loadingPaperId, setLoadingPaperId] = useState(null); // PYQ paper being fetched
   // "all" = the full 60-minute paper; a section name = a 20-minute sectional
   // drill. Applies to both the AI mock and previous-year papers.
@@ -2757,8 +2760,9 @@ export default function IbpsPoPrep() {
       {/* ── Formulas & Rules — quick-revision sheet ─────────────────────────── */}
       {activeTab === "formulas" && (
         <div className="space-y-6 max-w-5xl mx-auto">
-          <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl">
+          <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl overflow-x-auto scrollbar-thin">
             {[
+              { id: "reference", label: "🔢 Quick Reference" },
               { id: "english", label: `📘 English (${ENGLISH_RULES.reduce((n, g) => n + g.rows.length, 0)})` },
               { id: "quant", label: `🧮 Quant (${QUANT_FORMULAS.reduce((n, g) => n + g.items.length, 0)})` },
               { id: "reasoning", label: `🧩 Reasoning (${REASONING_RULES.reduce((n, g) => n + g.items.length, 0)})` },
@@ -2835,58 +2839,28 @@ export default function IbpsPoPrep() {
             </div>
           )}
 
+          {formulaTab === "reference" && <FormulaReference />}
+
           {/* Quant and Reasoning share an identical {group, items:[{name, formula,
-              note}]} shape, so one renderer covers both rather than a copy. */}
-          {(formulaTab === "quant" || formulaTab === "reasoning") && (
-            <div className="space-y-6">
-              <div className="text-center space-y-1">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
-                  {formulaTab === "quant" ? "Quantitative Aptitude" : "Reasoning Ability"}
-                </h2>
-                <p className="text-sm text-slate-500">
-                  {formulaTab === "quant"
-                    ? `Every formula the ${SECTION_PLAN[1].name} section can ask for, grouped by topic.`
-                    : "Reasoning has no formulas as such, but it has hard rules and fixed conventions that decide marks."}
-                </p>
-              </div>
-              <div className="grid md:grid-cols-2 gap-4 items-start">
-                {(formulaTab === "quant" ? QUANT_FORMULAS : REASONING_RULES).map((g) => (
-                  <div
-                    key={g.group}
-                    className={`glass-card rounded-3xl border overflow-hidden ${
-                      g.important
-                        ? "border-amber-400 dark:border-amber-500 ring-1 ring-amber-400/30"
-                        : "border-slate-200 dark:border-slate-800"
-                    }`}
-                  >
-                    <div className={`px-5 py-3 border-b flex items-center justify-between gap-2 ${
-                      g.important
-                        ? "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800"
-                        : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
-                    }`}>
-                      <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                        {g.group}
-                        {g.important && (
-                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500 text-white uppercase tracking-wider whitespace-nowrap">
-                            ★ Important
-                          </span>
-                        )}
-                      </h3>
-                      <span className="text-[10px] text-slate-400 font-semibold">{g.items.length}</span>
-                    </div>
-                    <div className="divide-y divide-slate-100 dark:divide-slate-800/70">
-                      {g.items.map((it) => (
-                        <div key={it.name} className="px-5 py-3 space-y-1">
-                          <p className="text-xs font-bold text-slate-700 dark:text-slate-200">{it.name}</p>
-                          <p className="text-sm font-mono text-amber-700 dark:text-amber-300 break-words">{it.formula}</p>
-                          {it.note && <p className="text-[11px] text-slate-500 dark:text-slate-400">{it.note}</p>}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+              note}]} shape, so one library component renders both. */}
+          {formulaTab === "quant" && (
+            <FormulaLibrary
+              key="quant"
+              groups={QUANT_FORMULAS}
+              categories={QUANT_CATEGORIES}
+              title="Quantitative Aptitude"
+              subtitle={`Every formula the ${SECTION_PLAN[1].name} section can ask for, grouped by topic.`}
+              searchPlaceholder="Search formulas — e.g. compound interest, trains, HCF"
+            />
+          )}
+          {formulaTab === "reasoning" && (
+            <FormulaLibrary
+              key="reasoning"
+              groups={REASONING_RULES}
+              title="Reasoning Ability"
+              subtitle="Reasoning has no formulas as such, but it has hard rules and fixed conventions that decide marks."
+              searchPlaceholder="Search rules — e.g. syllogism, clock, EJOTY"
+            />
           )}
         </div>
       )}

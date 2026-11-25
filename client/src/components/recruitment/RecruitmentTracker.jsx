@@ -9,6 +9,8 @@ import { RecruitmentTable, RecruitmentCards } from "./RecruitmentTable.jsx";
 import RecruitmentFilters from "./RecruitmentFilters.jsx";
 import RecruitmentDetail from "./RecruitmentDetail.jsx";
 import { Collapsible, ProvenanceLegend, Pill, Count } from "./ui.jsx";
+import OnlineCheckPanel from "./OnlineCheckPanel.jsx";
+import { useOnlineCheck } from "./useOnlineCheck.js";
 
 // Government & Banking Jobs Tracker — one page, three tabs.
 //
@@ -65,7 +67,8 @@ export default function RecruitmentTracker({ onOpenMockTest }) {
   const [openKey, setOpenKey] = useState(null);
   const tabRefs = useRef({});
 
-  const refresh = useCallback(async () => {
+  // Pull the server copy (base data + verified online updates).
+  const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -85,7 +88,10 @@ export default function RecruitmentTracker({ onOpenMockTest }) {
     }
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => { loadData(); }, [loadData]);
+  // Refresh = run (or join) the online check; it reloads the data when done.
+  const online = useOnlineCheck(loadData);
+  const checking = online.phase === "starting" || online.phase === "running";
   useEffect(() => writeLocal(TAB_KEY, tab), [tab]);
   useEffect(() => writeLocal(DOB_KEY, dob), [dob]);
 
@@ -141,7 +147,7 @@ export default function RecruitmentTracker({ onOpenMockTest }) {
     return (
       <div role="alert" className="bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 text-center space-y-3">
         <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Recruitment data could not be loaded.</p>
-        <button type="button" onClick={refresh} className="text-xs font-semibold px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">Retry</button>
+        <button type="button" onClick={loadData} className="text-xs font-semibold px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">Retry</button>
       </div>
     );
   }
@@ -164,12 +170,13 @@ export default function RecruitmentTracker({ onOpenMockTest }) {
             </Pill>
             <button
               type="button"
-              onClick={refresh}
-              disabled={loading}
+              onClick={() => online.start(false)}
+              disabled={checking}
+              title="Check the recruiters online for new notifications and updates"
               className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 disabled:opacity-50 inline-flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
             >
-              <span aria-hidden="true" className={loading ? "inline-block animate-spin" : ""}>↻</span>
-              {loading ? "Checking…" : "Refresh"}
+              <span aria-hidden="true" className={checking ? "inline-block animate-spin" : ""}>↻</span>
+              {checking ? "Checking online…" : "Refresh"}
             </button>
           </div>
         </div>
@@ -177,6 +184,15 @@ export default function RecruitmentTracker({ onOpenMockTest }) {
         <div aria-live="polite" className="empty:hidden">
           {error && <p className="text-[12px] text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 rounded-xl px-3 py-2">{error}</p>}
         </div>
+
+        <OnlineCheckPanel
+          phase={online.phase}
+          run={online.run}
+          info={online.info}
+          onForce={() => online.start(true)}
+          onDismiss={online.dismiss}
+          lastCheckedAt={data.onlineCheck?.lastCheckedAt}
+        />
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Stat label="Total recruitments" value={summary.total} hint={`${summary.examsCount} exams · 2026 & 2027 cycles`} />

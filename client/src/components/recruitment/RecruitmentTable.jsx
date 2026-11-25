@@ -1,6 +1,6 @@
 import { UNANNOUNCED_STATUSES, VACANCY_SCOPE } from "../../data/recruitment/model.js";
 import { fmtDate, mid, inr } from "../../utils/recruitment.js";
-import { StatusBadge, EligibilityBadge, Money, Count, ExtLink, Pill, Prov } from "./ui.jsx";
+import { StatusBadge, EligibilityBadge, Money, Count, ExtLink, Pill, Prov, AutoUpdatedBadge } from "./ui.jsx";
 
 // Recruitment list: a compact sortable table on desktop and stacked cards on
 // smaller screens. Both open the same detail drawer via `onOpen(row)`.
@@ -155,6 +155,7 @@ export function RecruitmentTable({ rows, tab, sort, onSort, onOpen }) {
                     <div className="flex flex-wrap gap-1 mt-1">
                       <EligibilityBadge elig={row.elig} short />
                       <PayFlag row={row} />
+                      <AutoUpdatedBadge cycle={cycle} />
                     </div>
                   </td>
                   <td className="px-3 py-3 text-[12px] text-slate-600 dark:text-slate-300 whitespace-nowrap" title={exam.organization}>{exam.orgShort}</td>
@@ -204,6 +205,7 @@ export function RecruitmentCards({ rows, tab, onOpen }) {
             <div className="flex flex-wrap gap-1">
               <EligibilityBadge elig={row.elig} short />
               <PayFlag row={row} />
+              <AutoUpdatedBadge cycle={cycle} />
             </div>
             <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-[12px]">
               <div>
